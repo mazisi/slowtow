@@ -22,7 +22,6 @@ return new class extends Migration
             ["Public Company","Private Company","Close Corporation","Trust",
              "Partnership","Sole Proprietor","Section 21","Non Resident Company","Foreign Company","Association"]);
             $table->string('gatla');
-            $table->text('notes')->nullable();
             $table->string('address');
             $table->string('postal_address')->nullable();
             $table->string('website');
