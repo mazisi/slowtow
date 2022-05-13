@@ -9,4 +9,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Company extends Model
 {
     use HasFactory, SoftDeletes;
+
+    protected $guarded = [];
+
+
+    public function users()
+    {
+       return $this->hasMany(User::class);
+    }
+
+    public function licences()
+    {
+       return $this->hasMany(Licence::class);
+    }
 }
