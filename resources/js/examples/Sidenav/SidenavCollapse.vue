@@ -1,7 +1,7 @@
 <template>
-  <inetia-link
+  <inertia-link
     :data-bs-toggle="collapse ? 'collapse' : ''"
-    :to="collapse ? `#${collapseRef}` : collapseRef"
+    :href="collapse ? `#${collapseRef}` : collapseRef"
     :aria-controls="collapseRef"
     :aria-expanded="isExpanded"
     class="nav-link"
@@ -17,7 +17,7 @@
     <span class="nav-link-text" :class="isRTL ? ' me-1' : 'ms-1'">{{
       navText
     }}</span>
-  </inetia-link>
+  </inertia-link>
   <div :class="isExpanded ? 'collapse show' : 'collapse'">
     <slot name="list"></slot>
   </div>

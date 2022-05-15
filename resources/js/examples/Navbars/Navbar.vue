@@ -21,7 +21,7 @@
         </div>
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
-            <router-link
+            <inertia-link
               :to="{ name: 'SignIn' }"
               class="px-0 nav-link font-weight-bold lh-1"
               :class="color ? color : 'text-body'"
@@ -29,22 +29,9 @@
               <i class="material-icons" :class="isRTL ? 'ms-sm-2' : 'me-sm-1'">
                 account_circle
               </i>
-            </router-link>
+            </inertia-link>
           </li>
-          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-            <a
-              href="#"
-              @click="toggleSidebar"
-              class="p-0 nav-link text-body lh-1"
-              id="iconNavbarSidenav"
-            >
-              <div class="sidenav-toggler-inner">
-                <i class="sidenav-toggler-line"></i>
-                <i class="sidenav-toggler-line"></i>
-                <i class="sidenav-toggler-line"></i>
-              </div>
-            </a>
-          </li>
+          
           <li class="px-3 nav-item d-flex align-items-center">
             <a
               class="p-0 nav-link lh-1"
@@ -178,6 +165,20 @@
                 </a>
               </li>
             </ul>
+          </li>
+          <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
+            <a
+              href="#"
+              @click="toggleSidebar"
+              class="p-0 nav-link text-body lh-1"
+              id="iconNavbarSidenav"
+            >
+              <div class="sidenav-toggler-inner">
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+                <i class="sidenav-toggler-line"></i>
+              </div>
+            </a>
           </li>
         </ul>
       </div>

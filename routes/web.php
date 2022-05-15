@@ -26,8 +26,8 @@ Route::get('/company',function(){
     return Inertia::render('Company');
 });
 
-Route::get('/about',function(){
-    return Inertia::render('About');
+Route::get('/tables',function(){
+    return Inertia::render('Tables');
 });
 
 

@@ -9,7 +9,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="dashboard"
+          collapseRef="/company"
           navText="Dashboard"
         >
           <template v-slot:icon>
@@ -22,7 +22,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="tables"
+          collapseRef="/tables"
           navText="Tables"
         >
           <template v-slot:icon>

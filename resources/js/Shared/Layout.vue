@@ -1,4 +1,5 @@
 <template>
+
   <sidenav
     :custom_class="color"
     class="fixed-start"
@@ -21,6 +22,7 @@
       :class="[showConfig ? 'show' : '', hideConfigButton ? 'd-none' : '']"
     />
   </main>
+ 
 </template>
 <script>
 import Sidenav from "../examples/Sidenav";

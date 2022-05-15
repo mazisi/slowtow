@@ -5,14 +5,14 @@
     :class="isBlur ? isBlur : 'shadow-none my-2 navbar-transparent w-100'"
   >
     <div class="container px-0">
-      <router-link
+      <inertia-link
         class="navbar-brand font-weight-bolder ms-lg-0 ms-3"
-        to="/dashboard"
+        href="/dashboard"
         v-bind="$attrs"
         :class="isBlur ? 'text-dark' : 'text-white'"
       >
         Material Dashboard 2
-      </router-link>
+      </inertia-link>
       <button
         class="navbar-toggler shadow-none ms-2"
         type="button"
@@ -31,10 +31,10 @@
       <div class="collapse navbar-collapse" id="navigation">
         <ul class="navbar-nav mx-auto">
           <li class="nav-item">
-            <router-link
+            <inertia-link
               class="nav-link d-flex align-items-center me-2 active"
               aria-current="page"
-              to="/dashboard"
+              href="/dashboard"
             >
               <i
                 class="fa fa-chart-pie opacity-6 me-1"
@@ -42,37 +42,37 @@
                 :class="isBlur ? 'text-dark' : 'text-white'"
               ></i>
               Dashboard
-            </router-link>
+            </inertia-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link me-2" to="/profile">
+            <inertia-link class="nav-link me-2" href="/profile">
               <i
                 class="fa fa-user opacity-6 me-1"
                 aria-hidden="true"
                 :class="isBlur ? 'text-dark' : 'text-white'"
               ></i>
               Profile
-            </router-link>
+            </inertia-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link me-2" to="/sign-up">
+            <inertia-link class="nav-link me-2" href="/sign-up">
               <i
                 class="fas fa-user-circle opacity-6 me-1"
                 aria-hidden="true"
                 :class="isBlur ? 'text-dark' : 'text-white'"
               ></i>
               Sign Up
-            </router-link>
+            </inertia-link>
           </li>
           <li class="nav-item">
-            <router-link class="nav-link me-2" to="/sign-in">
+            <inertia-link class="nav-link me-2" href="/sign-in">
               <i
                 class="fas fa-key opacity-6 me-1"
                 aria-hidden="true"
                 :class="isBlur ? 'text-dark' : 'text-white'"
               ></i>
               Sign In
-            </router-link>
+            </inertia-link>
           </li>
         </ul>
         <ul class="navbar-nav d-lg-block d-none">
