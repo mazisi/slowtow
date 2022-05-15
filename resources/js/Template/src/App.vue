@@ -69,14 +69,6 @@ export default {
       "hideConfigButton"
     ])
   },
-  beforeMount() {
-    this.$store.state.isTransparent = "bg-transparent";
-
-    const sidenav = document.getElementsByClassName("g-sidenav-show")[0];
-
-    if (window.innerWidth > 1200) {
-      sidenav.classList.add("g-sidenav-pinned");
-    }
-  }
+ 
 };
 </script>

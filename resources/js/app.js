@@ -1,6 +1,10 @@
 require('./bootstrap');
 
 import { createApp, h } from 'vue';
+import store from "./store";
+import "./assets/css/nucleo-icons.css";
+import "./assets/css/nucleo-svg.css";
+import MaterialDashboard from "./material-dashboard";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { Link } from '@inertiajs/inertia-vue3'
@@ -13,6 +17,8 @@ createInertiaApp({
     setup({ el, app, props, plugin }) {
         return createApp({ render: () => h(app, props) })
             .use(plugin)
+            .use(store)
+            .use(MaterialDashboard)
             .component('InertiaLink', Link)
             .mixin({ methods: { route } })
             .mount(el);
