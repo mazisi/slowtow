@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\CompanyController;
 
 // Route::get('/', function () {
 //     return Inertia::render('Welcome', [
@@ -16,15 +17,18 @@ use Inertia\Inertia;
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->name('dashboard');
 
 Route::get('/',function(){
-    return Inertia::render('Home');
+    return Inertia::render('Auth/Login');
 });
 
-Route::get('/company',function(){
-    return Inertia::render('Company');
-});
+Route::get('/login',[AuthenticatedSessionController::class,'store'])->name('login');
+
+Route::get('/companies',[CompanyController::class,'index'])->name('companies');
+Route::get('/create-company',[CompanyController::class,'create'])->name('create_company');
+Route::get('/view-company',[CompanyController::class,'show'])->name('view_company');
+Route::post('/submit-company',[CompanyController::class,'store'])->name('company.submit');
 
 Route::get('/tables',function(){
     return Inertia::render('Tables');

@@ -9,7 +9,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/company"
+          collapseRef="/dashboard"
           navText="Dashboard"
         >
           <template v-slot:icon>
@@ -22,8 +22,8 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/tables"
-          navText="Tables"
+          collapseRef="/companies?query=companies"
+          navText="Companies"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">table_view</i>
@@ -72,6 +72,25 @@
         </sidenav-collapse>
       </li>
       
+
+
+      <li class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
+
+
+      <li class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="create-company"
+          navText="New Company"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">add</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
       <li class="nav-item">
         <sidenav-collapse
           url="#"
