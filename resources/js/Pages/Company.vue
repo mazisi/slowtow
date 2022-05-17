@@ -1,47 +1,27 @@
 <script>
 import Layout from "../Shared/Layout.vue";
-import ChartHolderCard from "./components/ChartHolderCard.vue";
-import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
-import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
-import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
-import ProjectCard from "./components/ProjectCard.vue";
-import TimelineList from "@/examples/Cards/TimelineList.vue";
-import TimelineItem from "@/examples/Cards/TimelineItem.vue";
-import logoXD from "@/assets/img/small-logos/logo-xd.svg";
-import logoAtlassian from "@/assets/img/small-logos/logo-atlassian.svg";
-import logoSlack from "@/assets/img/small-logos/logo-slack.svg";
-import logoSpotify from "@/assets/img/small-logos/logo-spotify.svg";
-import logoJira from "@/assets/img/small-logos/logo-jira.svg";
-import logoInvision from "@/assets/img/small-logos/logo-invision.svg";
-import team1 from "@/assets/img/team-1.jpg";
-import team2 from "@/assets/img/team-2.jpg";
-import team3 from "@/assets/img/team-3.jpg";
-import team4 from "@/assets/img/team-4.jpg";
 
 export default {
   name: "dashboard-default",
+  props: ['companies'],
   data() {
     return {
-      logoXD,
-      team1,
-      team2,
-      team3,
-      team4,
-      logoAtlassian,
-      logoSlack,
-      logoSpotify,
-      logoJira,
-      logoInvision,
+        form: {
+        item: '',
+      },
+
+      methods: {
+        index(){
+         this.$inertia.replace(this.$route('companies',{item: item}))
+        .then(() => {
+          // code
+        });
+        }
+      },
+
     };
   },
   components: {
-    ChartHolderCard,
-    ReportsBarChart,
-    ReportsLineChart,
-    MiniStatisticsCard,
-    ProjectCard,
-    TimelineList,
-    TimelineItem,
     Layout
 },
 };
@@ -60,36 +40,63 @@ export default {
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
+      <form>
+     <div class="row">
+       <div class="col-3">
+        <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Search Company </label>
+  <input v-model="item" @keyup="index" type="text" class="form-control form-control-default">
+   </div>
+       </div>
+       <div class="col-2">
+        <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Active status: </label>
+  <select class="form-control form-control-default">
+   <option value="Active">Active</option>
+   <option value="Inactive">Inactive</option>
+  </select>
+
+   </div>
+       </div>
+        <div class="col-3">
+        <div class="input-group ">
+  <label class="">Include deleted licences: </label>
+  <input type="checkbox" >
+
+   </div>
+       </div>
+        <div class="col-3">
+        <button type="submit" class="btn btn-info ms-2" >Submit</button>
+       </div>
+       
+     </div>
+     </form>
         <div class="card my-4">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th
-                      class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                    >
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Active
                     </th>
-                    <th
-                      class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
-                    >
-                    
-                     Company Name
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    Company Name
                     </th>
-                    <th
-                      class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
-                    >
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     View
                     </th>
                     
                   </tr>
                 </thead>
                 <tbody>
-                  <tr >
+                  <tr v-for="company in companies" :key="company.id">
                     <td class="align-middle text-center text-sm">
-                      <span class="badge badge-sm bg-gradient-success"
-                        >Active</span
-                      >
+                      <span v-if="company.active == 1" class="badge badge-sm bg-gradient-success">
+                      Active
+                      </span>
+                      <span v-else class="badge badge-sm bg-gradient-danger">
+                      Inactive
+                      </span>
                     </td>
                     <td>
                       <div class="d-flex px-2 py-1">
@@ -98,10 +105,9 @@ export default {
                           <h6 class="mb-0 text-sm">
                
                           <inertia-link
-                            :href="`/view-company`"
+                            :href="`/view-company/${company.slug}`"
                             class="px-0 nav-link font-weight-bold lh-1"
-                            :class="color ? color : 'text-body'"
-                          >Test Company
+                            :class="color ? color : 'text-body'">{{ company.name }}
                           </inertia-link>
                            </h6>                          
                         </div>

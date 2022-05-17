@@ -21,19 +21,17 @@ return new class extends Migration
             $table->enum('company_type',
             ["Public Company","Private Company","Close Corporation","Trust",
              "Partnership","Sole Proprietor","Section 21","Non Resident Company","Foreign Company","Association"]);
-            $table->string('gatla');
-            $table->string('address');
+            $table->string('address')->nullable();
             $table->string('postal_address')->nullable();
-            $table->string('website');
-            $table->string('email');
+            $table->string('website')->nullable();
+            $table->string('email')->nullable();
             $table->string('email1')->nullable();
             $table->string('email2')->nullable();
-            $table->string('tel_number');
+            $table->string('tel_number')->nullable();
             $table->string('tel_number1')->nullable();
             $table->string('fax')->nullable();
-            $table->enum('cipc_certificate_status',['One','Two','Three']);
-            $table->enum('bee_status',['One','Two']);
-            $table->boolean('deactive')->default(1);
+            $table->boolean('active')->default(1);
+            $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
 
