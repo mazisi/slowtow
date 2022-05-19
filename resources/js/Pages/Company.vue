@@ -6,24 +6,17 @@ export default {
   props: ['companies'],
   data() {
     return {
-        form: {
-        item: '',
-      },
-
-      methods: {
-        index(){
-         this.$inertia.replace(this.$route('companies',{item: item}))
-        .then(() => {
-          // code
-        });
-        }
-      },
-
-    };
+      term: '',   
+    }
   },
   components: {
     Layout
 },
+methods: {
+     search(){
+        this.$inertia.replace(this.routes('companies',{term: this.term}))
+        }
+    },
 };
 </script>
 
@@ -45,7 +38,7 @@ export default {
        <div class="col-3">
         <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Search Company </label>
-  <input v-model="item" @keyup="index" type="text" class="form-control form-control-default">
+  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
    </div>
        </div>
        <div class="col-2">

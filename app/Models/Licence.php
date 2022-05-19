@@ -21,5 +21,6 @@ class Licence extends Model
     {
        return $this->hasMany(Document::class);
     }
+
     
 }

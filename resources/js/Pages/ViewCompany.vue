@@ -1,6 +1,6 @@
 <script>
 import Layout from "../Shared/Layout.vue";
-import { Head, Link } from '@inertiajs/inertia-vue3';
+import { Head,Link } from '@inertiajs/inertia-vue3';
 import DefaultProjectCard from "./components/DefaultProjectCard.vue";
 import VmdInput from "@/components/VmdInput.vue";
 import VmdSwitch from "@/components/VmdSwitch.vue";
@@ -16,6 +16,7 @@ export default {
 
   data() {
     return {
+      openModal: false,
         form: {
         company_name: this.company.name,
         company_type: this.company.company_type,
@@ -43,6 +44,12 @@ export default {
         transfer_certificate: null,
         company_id: this.company.id,
       },
+      addUserForm:{//this for modal data
+       full_name: '',
+       company_admin_email: '',
+       company_id: this.company.id,
+
+      },
       showMenu: false,
     };
   },
@@ -60,6 +67,25 @@ export default {
       this.$inertia.post(`/update-company`, this.form,{
        forceFormData: true,
       })
+    },
+
+triggerModal(){
+      this.openModal=true
+    },
+     showModal(){
+        this.myModal = new bootstrap.Modal(document.getElementById('add_userModal'), {})
+        this.myModal.show()
+    },
+
+    addUser(){
+      this.$inertia.post('/add-company-admin', this.addUserForm)
+        .then(() => {
+          form.reset('company_admin_email','full_name')
+        //  Inertia.reload({ only: ['view-company'] })
+        //   alert('User added successfully');
+        })
+
+        
     }
   },
 
@@ -73,12 +99,19 @@ export default {
   },
 };
 </script>
-
+<style>
+  .container-fluid{
+    margin-top: -13.5rem;
+  }
+  .show-company-name{
+    width: 100%;
+  }
+</style>
 <template>
 <Layout>
-<div class="container-fluid">
+<div class="container-fluid" >
     <div
-      class="page-header min-height-300 border-radius-xl mt-4"
+      class="page-header min-height-300 border-radius-xl"
       style="
         background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
       "
@@ -91,15 +124,13 @@ export default {
          
         </div>
         <div class="col-auto my-auto">
-          <div class="h-100 d-flex">
+          <div class="h-100 d-flex justify-between show-company-name">
              <h5 class="mb-1">Company: {{ company.name }}</h5>
-            <Link :href="`/add-user`" class="btn btn-sm btn-info float-end">Add User</Link>
-          </div>
-          
+            <button @click="triggerModal" data-bs-toggle="modal" data-bs-target="#add-user" class="btn btn-sm btn-secondary float-end">Add User</button>
+          <Link :href="`/create-licence/${company.slug}`" class="btn btn-sm btn-secondary float-end">Create Licence</Link>
+          </div>          
         </div>
-        <div
-          class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0"
-        >
+        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
           
         </div>
       </div>
@@ -163,7 +194,7 @@ export default {
  <li class="px-0 border-0 list-group-item">
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #1</label>
-  <input type="text" class="form-control form-control-default" v-model="form.email_address_1" >
+  <input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
    </div>
                    <p v-if="errors.email_address_1" :style="{color: ' #FF5252'}">{{ errors.email_address_1 }}</p>
   </li>
@@ -186,7 +217,7 @@ export default {
                  
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #2</label>
-  <input type="text" class="form-control form-control-default" v-model="form.email_address_2" >
+  <input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
    </div>
                   <p v-if="errors.email_address_2" :style="{color: ' #FF5252'}">{{ errors.email_address_2 }}</p>
                   </li>
@@ -195,7 +226,7 @@ export default {
  
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #3</label>
-  <input type="text" class="form-control form-control-default" v-model="form.email_address_3" >
+  <input type="email" class="form-control form-control-default" v-model="form.email_address_3" >
    </div>
                   <p v-if="errors.email_address_3" :style="{color: ' #FF5252'}">{{ errors.email_address_3 }}</p>
                   </li>
@@ -347,12 +378,12 @@ export default {
                    <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     GATLA 
-                    <input @input="form.gatla_certificate = $event.target.files[0]" multiple type="file" value="" aria-label="..." />                    
+                    <input @input="form.gatla_certificate = $event.target.files[0]" type="file" aria-label="..." />                    
                   </li>
                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     GATLA Valid ?
-                    <input v-model="form.gatla_valid" class="form-check-input ml-2" type="checkbox" value="" aria-label="..." checked />
+                    <input v-model="form.gatla_valid" class="form-check-input ml-2" type="checkbox" aria-label="..." checked />
                   </li>
                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
@@ -376,7 +407,7 @@ export default {
                    <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     Notice of Incorporation
-                    <input @input="form.cipc_notice_of_incorporation = $event.target.files[0]" multiple type="file" aria-label="..." />                    
+                    <input @input="form.cipc_notice_of_incorporation = $event.target.files[0]" type="file" aria-label="..." />                    
                   </li>
                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
@@ -386,12 +417,12 @@ export default {
                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     Certificate
-                    <input  @input="form.cipc_memorandum_of_incorporation = $event.target.files[0]" multiple type="file"  aria-label="..." />
+                    <input @input="form.cipc_memorandum_of_incorporation = $event.target.files[0]" type="file"  aria-label="..." />
                   </li>
                    <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
                     style="background-color: #f4f6f7;">
                     Transfer Certificate
-                    <input @input="form.transfer_certificate = $event.target.files[0]" multiple type="file"  aria-label="..." />
+                    <input @input="form.transfer_certificate = $event.target.files[0]" type="file"  aria-label="..." />
                   </li>
                 </ul>
                 
@@ -411,5 +442,34 @@ export default {
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="add-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+  <form @submit.prevent="addUser">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Add {{ company.name }} Admin</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <input type="hidden" v-model="addUserForm.company_id">
+          <div class="input-group input-group-outline null is-filled">
+          <label class="form-label">Full Name</label>
+          <input type="text" required class="form-control form-control-default" v-model="addUserForm.full_name" >
+          </div>
+          <div class="input-group input-group-outline null is-filled mt-3">
+          <label class="form-label">Email Address</label>
+          <input type="email" required class="form-control form-control-default"  v-model="addUserForm.company_admin_email">
+          </div>
+          
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-secondary">Save</button>
+        </div>
+       </div>
+        </form>
+  </div>
+</div>
   </Layout>
 </template>

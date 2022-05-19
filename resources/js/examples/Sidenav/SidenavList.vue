@@ -17,26 +17,14 @@
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+
+       <li class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/companies?query=companies"
-          navText="Companies"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">table_view</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="billing"
-          navText="Billing"
+          collapseRef="/licences"
+          navText="Licences"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
@@ -48,12 +36,59 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="rtl-page"
-          navText="Rtl"
+          collapseRef="/companies"
+          navText="Companies"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">table_view</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+     
+    
+      <li class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
+
+
+      <li v-if="$page.props.currentRoute == 'companies'" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/create-company"
+          navText="New Company"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">add</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li v-if="$page.props.currentRoute == 'licences'" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/create-licence"
+          navText="New Licence"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">add</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+<hr>
+
+ <li class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/people"
+          navText="People"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
-              >format_textdirection_r_to_l</i
+              >account_circle</i
             >
           </template>
         </sidenav-collapse>
@@ -63,73 +98,44 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="notifications"
-          navText="Notifications"
+          collapseRef="/notifications"
+          navText="Reports"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">notifications</i>
           </template>
         </sidenav-collapse>
       </li>
+
+      <li class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="notifications"
+          navText="Email Comms"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">email</i>
+            
+          </template>
+        </sidenav-collapse>
+      </li>
       
-
-
-      <li class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
-
-
       <li class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="create-company"
-          navText="New Company"
+          collapseRef="/logout"
+          navText="Logout"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">add</i>
+            <i class="material-icons-round opacity-10 fs-5">format_textdirection_r_to_l</i>
           </template>
         </sidenav-collapse>
       </li>
-
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="profile"
-          navText="Profile"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">person</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="sign-in"
-          navText="SignIn"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">login</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="sign-up"
-          navText="SignUp"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">assignment</i>
-          </template>
-        </sidenav-collapse>
-      </li>
+   
     </ul>
    
   </div>
@@ -140,7 +146,7 @@ import SidenavCollapse from "./SidenavCollapse.vue";
 export default {
   name: "SidenavList",
   props: {
-    cardBg: String
+    cardBg: String,
   },
   data() {
     return {

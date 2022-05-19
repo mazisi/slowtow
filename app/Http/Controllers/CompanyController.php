@@ -6,8 +6,9 @@ use Inertia\Inertia;
 use App\Models\Company;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Requests\CompanyValidateRequest;
 use App\Models\CompanyDocument;
+use Illuminate\Support\Facades\Route;
+use App\Http\Requests\CompanyValidateRequest;
 
 
 class CompanyController extends Controller
@@ -15,8 +16,11 @@ class CompanyController extends Controller
     
     public function index(Request $request)
     {
-        $companies = Company::where('name','like','%'.$request->search.'%')->get();
-        return Inertia::render('Company',['companies'=> $companies ]);
+        $companies = Company::when($request->term,function($query,$term){
+         $query->where('name','LIKE','%'.$term.'%');
+        })->get();
+        return Inertia::render('Company',['companies'=> $companies,'currentRoute' => Route::currentRouteName()
+    ]);
     }
 
     public function create()
@@ -38,7 +42,6 @@ class CompanyController extends Controller
                 'tel_number1' => $request->telephone_number_2,
                 'fax' => $request->fax_number,
                 'website' => $request->website,
-                'fax' => $request->fax_number,
                 'address' => $request->business_address,
                 'business_address_postal_code' => $request->business_address_postal_code,
                 'postal_address' => $request->postal_address,
@@ -69,7 +72,6 @@ class CompanyController extends Controller
 
     public function update(Request $request)
     {
-        dd($request);
         $company = Company::whereId($request->company_id)->update([
             'name' => $request->company_name,
             'company_type' => $request->company_type,
@@ -90,53 +92,45 @@ class CompanyController extends Controller
         ]);
         
 
-        if ($request->hasFile('gatla_certificate')) {
-            foreach ($request->gatla_certificate as $file) {                
-                $name = $file->getClientOriginalName();
-                $file->store('company-docs','public');
+        if ($request->hasFile('gatla_certificate')) {   
+                    // $name = $request->gatla_certificate->getClientOriginalName();
+                    $name = $request->gatla_certificate->store('company-docs', 'public');
+                    CompanyDocument::create([
+                        'gatla_certificate' => $name,
+                        'gatla_date' => $request->gatla_date,
+                        'gatla_valid' => $request->gatla_valid,
+                        'company_id' => $request->company_id
+                    ]);     
+               
+        }
+
+        if ($request->hasFile('cipc_notice_of_incorporation')) {
+              
+                $name= $request->cipc_notice_of_incorporation->store('company-docs','public');
                  CompanyDocument::create([
-                    'gatla_certificate' => $name,
-                    'gatla_date' => $request->gatla_date,
-                    'gatla_valid' => $request->gatla_valid,
+                    'cipc_notice_of_incorporation' => $name,
                     'company_id' => $request->company_id
                 ]);                     
             }
-        }
-
-        // if ($request->hasFile('cipc_notice_of_incorporation')) {
-              
-        //     foreach ($request->cipc_notice_of_incorporation as $file) {                
-        //         $name = $file->getClientOriginalName();
-        //         $file->store('company-docs','public');
-        //          CompanyDocument::create([
-        //             'cipc_notice_of_incorporation' => $name,
-        //             'company_id' => $request->company_id
-        //         ]);                     
-        //     }
-        // }
-        // if ($request->hasFile('cipc_memorandum_of_incorporation')) {
-            
-        //     foreach ($request->cipc_memorandum_of_incorporation as $file) {                
-        //         $name = $file->getClientOriginalName();
-        //         $file->store('company-docs','public');
-        //          CompanyDocument::create([
-        //             'cipc_notice_of_incorporation' => $name,
-        //             'company_id' => $request->company_id
-        //         ]);                     
-        //     }
-        // }
+        
+        if ($request->hasFile('cipc_memorandum_of_incorporation')) {
+                            
+                $name =$request->cipc_memorandum_of_incorporation->store('company-docs','public');
+                 CompanyDocument::create([
+                    'cipc_notice_of_incorporation' => $name,
+                    'company_id' => $request->company_id
+                ]);                     
+            }
+        
        
 
         if ($request->hasFile('sars_certificate')) {
-          
-            foreach ($request->sars_certificate as $file) {                
-                $name = $file->getClientOriginalName();
-                $file->store('company-docs','public');
+                $name = $request->sars_certificate->store('company-docs','public');
                  CompanyDocument::create([
                     'sars_certificate' => $name,
                     'company_id' => $request->company_id
                 ]);                     
-            }
+            
         }
 
     }

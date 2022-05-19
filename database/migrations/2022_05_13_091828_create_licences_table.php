@@ -15,22 +15,22 @@ return new class extends Migration
     {
         Schema::create('licences', function (Blueprint $table) {
             $table->id();
-            $table->string('address');
-            $table->string('current_trading_name');
-            $table->string('district');
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->string('trading_name');
+            $table->string('licence_number')->nullable();
+            $table->string('old_licence_number')->nullable();
             $table->string('licence_type');
-            $table->string('liqour_licence_number')->nullable();
+            $table->date('licence_date');
+            $table->date('licence_expire_date')->nullable();
+            $table->string('file_number')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('address')->nullable();
             $table->string('province')->nullable();
-            $table->string('reference_number');
-            $table->string('magistrate')->nullable();
-            $table->string('municipality')->nullable();
-            $table->string('licence_date')->nullable();
-            $table->string('gtla_expire_date')->nullable();
-            $table->string('old_liqour_licence_number');
-            $table->string('liquor_board');
-            $table->string('must_renew');
-            $table->string('active');
-            $table->enum('status',['One','Two','Three']);
+            $table->string('consultant_name')->nullable();
+            $table->string('must_renew')->nullable();
+            $table->boolean('licence_status')->default(1);
+            $table->text('notes')->nullable();
+            $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
         });

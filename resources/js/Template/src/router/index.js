@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Dashboard from "../views/Dashboard.vue";
-import Tables from "../views/Tables.vue";
+import Tables from "../views/Licence.vue";
 import Billing from "../views/Billing.vue";
 import RTL from "../views/Rtl.vue";
 import LicenseDetails  from "../views/LicenseDetails.vue";

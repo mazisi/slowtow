@@ -22,7 +22,9 @@ return new class extends Migration
             ["Public Company","Private Company","Close Corporation","Trust",
              "Partnership","Sole Proprietor","Section 21","Non Resident Company","Foreign Company","Association"]);
             $table->string('address')->nullable();
+            $table->string('business_address_postal_code')->nullable();
             $table->string('postal_address')->nullable();
+            $table->string('postal_address_code')->nullable();
             $table->string('website')->nullable();
             $table->string('email')->nullable();
             $table->string('email1')->nullable();
