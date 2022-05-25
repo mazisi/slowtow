@@ -28,6 +28,7 @@ export default {
         business_address_postal_code: '',
         postal_address: '',
         postal_address_code: '',
+        active: '',
       },
       showMenu: false,
     };
@@ -56,31 +57,33 @@ export default {
   },
 };
 
-
 </script>
-
+<style>
+.columns{
+  margin-bottom: 1rem;
+}
+#active-checkbox{
+  margin-top: 3px;
+  margin-left: 3px;
+}
+</style>
 
 <template>
 <Layout>
 <div class="container-fluid">
-    <div
-      class="page-header min-height-300 border-radius-xl mt-4"
-      style="
-        background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
       ">
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="row gx-4">
+      <div class="row ">
        
         <div class="col-auto my-auto">
           <div class="h-100">
             <h5 class="mb-1">New Company</h5>
           </div>
         </div>
-        <div
-          class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0"
-        >
+        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
           
         </div>
       </div>
@@ -90,28 +93,27 @@ export default {
             <div class="card card-plain h-100">
               <div class="p-3 card-body">
               <form @submit.prevent="submit">
-                <ul class="list-group">
-                 <li class="px-0 border-0 list-group-item">
-                    <vmd-switch
-                      id="flexSwitchCheckDefault"
-                      class="ps-0 ms-0 col-6"
-                      name="flexSwitchCheckDefault"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      checked
-                      >Active Company</vmd-switch
-                    >
-                  </li>
-                 <li class="px-0 border-0 list-group-item">
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Company Name *</label>
-  <input id="" type="text" class="form-control form-control-default" v-model="form.company_name" placeholder="" isrequired="true">
+     <div class="row">
+     <div class="col-md-12 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <label class="form-check-label mb-0 text-body text-truncate">Active Company</label>
+    <input v-model="form.active"  type="checkbox" id="active-checkbox" checked>
+    </div>
+    </div>
+                  
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Company Name *</label>
+    <input type="text" class="form-control form-control-default" v-model="form.company_name" >
+     </div>
+   <div v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</div>
    </div>
-   <p v-if="errors.company_name" :style="{color: ' #FF5252'}">{{ errors.company_name }}</p>
-</li>
-                  <li class="px-0 border-0 list-group-item"><div class="input-group input-group-outline is-filled">
-                  <label class="form-label">Company Type </label>
-                  <select class="form-control form-control-default" v-model="form.company_type" isrequired="true">
-                  <option value="-1">&lt;-- Please select an option --&gt;</option>
+  
+<div class="col-md-4 columns">
+  <div class="input-group input-group-outline is-filled">
+  <label class="form-label">Company Type </label>
+  <select class="form-control form-control-default" v-model="form.company_type" >
+  <option value=" ">&lt;-- Please select an option --&gt;</option>
   <option value="Association">Association</option>
   <option value="Close Corporation">Close Corporation</option>
   <option value="Foreign Company">Foreign Company</option>
@@ -122,114 +124,123 @@ export default {
   <option value="Section 21">Section 21</option>
   <option value="Sole Proprietor">Sole Proprietor</option>
   <option value="Trust">Trust</option>
-                  </select>
-                  </div>
-                  <p v-if="errors.company_type" :style="{color: ' #FF5252'}">{{ errors.company_type }}</p>
-                  </li>
-
-                  <li class="px-0 border-0  list-group-item">
+   </select>
+  </div>
+  <div v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</div>
+ </div>
+<div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Registration Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.reg_number" >
-   </div>
-    <p v-if="errors.reg_number" :style="{color: ' #FF5252'}">{{ errors.reg_number }}</p>
-     </li>
-                  <li class="px-0 border-0 list-group-item">
+  </div>
+ <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
+</div>
+<div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Vat Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.vat_number" >
    </div>
-     <p v-if="errors.vat_number" :style="{color: ' #FF5252'}">{{ errors.vat_number }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
+     <div v-if="errors.vat_number" class="text-danger">{{ errors.vat_number }}</div>
+</div>              
+  <div class="col-md-4 columns">            
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #1</label>
   <input type="text" class="form-control form-control-default" v-model="form.email_address_1" >
    </div>
-                   <p v-if="errors.email_address_1" :style="{color: ' #FF5252'}">{{ errors.email_address_1 }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-                 
+    <div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
+    </div>              
+              
+   <div class="col-md-4 columns">                  
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #2</label>
   <input type="text" class="form-control form-control-default" v-model="form.email_address_2" >
    </div>
-                  <p v-if="errors.email_address_2" :style="{color: ' #FF5252'}">{{ errors.email_address_2 }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
- 
+  <div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
+  </div>
+                  
+              
+  <div class="col-md-4 columns">    
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #3</label>
   <input type="text" class="form-control form-control-default" v-model="form.email_address_3" >
    </div>
-                  <p v-if="errors.email_address_3" :style="{color: ' #FF5252'}">{{ errors.email_address_3 }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-        
+   <div v-if="errors.email_address_3" class="text-danger">{{ errors.email_address_3 }}</div>
+   </div>
+                  
+              
+    <div class="col-md-4 columns">        
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Telephone Number #1</label>
   <input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
    </div>
-                  <p v-if="errors.telephone_number_1" :style="{color: ' #FF5252'}">{{ errors.telephone_number_1 }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
- 
+   <div v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</div>
+   </div>
+                  
+              
+ <div class="col-md-4 columns">    
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Telephone Number #2</label>
   <input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
    </div>
-                  <p v-if="errors.telephone_number_2" :style="{color: ' #FF5252'}">{{ errors.telephone_number_2 }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item is-filled">
-
+ <div v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</div>
+ </div>
+                  
+ 
+<div class="col-md-4 columns">    
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Fax Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.fax_number" >
    </div>
-                  <p v-if="errors.fax_number" :style="{color: ' #FF5252'}">{{ errors.fax_number }}</p>
-                  </li>
-                   <li class="px-0 border-0 list-group-item is-filled">
- 
+   <div v-if="errors.fax_number" class="text-danger">{{ errors.fax_number }}</div>
+   </div>
+                  
+  
+ <div class="col-md-4 columns">    
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Website</label>
   <input type="text" class="form-control form-control-default" v-model="form.website" >
    </div>
-                  <p v-if="errors.website" :style="{color: ' #FF5252'}">{{ errors.website }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-        
+   <div v-if="errors.website" class="text-danger">{{ errors.website }}</div>
+   </div>
+                  
+              
+   <div class="col-md-4 columns">        
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Business Address</label>
   <input type="text" class="form-control form-control-default" v-model="form.business_address" >
    </div>
-                  <p v-if="errors.business_address" :style="{color: ' #FF5252'}">{{ errors.business_address }}</p>
-                  </li>
+  <div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
+  </div>
+                  
 
-                  <li class="px-0 border-0 list-group-item">
-  
+              
+  <div class="col-md-4 columns">    
   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Postal Code</label>
+  <label class="form-label">Business Address Postal Code</label>
   <input type="text" class="form-control form-control-default" v-model="form.business_address_postal_code" >
    </div>
-                  <p v-if="errors.business_address_postal_code" :style="{color: ' #FF5252'}">{{ errors.business_address_postal_code }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item">
-
-        <div class="input-group input-group-outline null is-filled">
+   <div v-if="errors.business_address_postal_code" class="text-danger">{{ errors.business_address_postal_code }}</div>
+  </div>
+                  
+              
+<div class="col-md-4 columns">    
+  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Postal Address</label>
   <input type="text" class="form-control form-control-default" v-model="form.postal_address" >
    </div>
-                  <p v-if="errors.postal_address" :style="{color: ' #FF5252'}">{{ errors.postal_address }}</p>
-                  </li>
-                  <li class="px-0 border-0 list-group-item null is-filled">
+  <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
+  </div>
+                  
+ <div class="col-md-4 columns">    
  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Postal Code</label>
+  <label class="form-label">Postal Address Code</label>
   <input type="text" class="form-control form-control-default" v-model="form.postal_address_code" >
    </div>
-                  <p v-if="errors.postal_address_code" :style="{color: ' #FF5252'}">{{ errors.postal_address_code }}</p>
-                  </li>
-                </ul>
-                <button type="submit" class="btn btn-info ms-2" :style="{float: 'right'}">Create</button>
+ <div v-if="errors.postal_address_code" class="text-danger">{{ errors.postal_address_code }}</div>
+ </div>
+
+  <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
+            </div>
             </form>
               </div>
             </div>

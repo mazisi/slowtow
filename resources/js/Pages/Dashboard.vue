@@ -128,109 +128,7 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-lg-8 col-md-6 mb-md-0 mb-4">
-        <project-card
-          title="Projects"
-          description="<i class='fa fa-check text-info' aria-hidden='true'></i> <span class='font-weight-bold ms-1'>30 done</span> this month"
-          :headers="['Companies', 'Members', 'Budget', 'Progress']"
-          :projects="[
-            {
-              logo: logoXD,
-              title: 'Material XD Material XD Version',
-              members: [team1, team2, team3, team4],
-              budget: '$14,000',
-              progress: { percentage: 60, color: 'info' },
-            },
-            {
-              logo: logoAtlassian,
-              title: 'Add Progress Track',
-              members: [team2, team4],
-              budget: '$3,000',
-              progress: { percentage: 10, color: 'info' },
-            },
-            {
-              logo: logoSlack,
-              title: 'Fix Platform Errors',
-              members: [team3, team1],
-              budget: 'Not set',
-              progress: { percentage: 100, color: 'success' },
-            },
-            {
-              logo: logoSpotify,
-              title: 'Launch our Mobile App',
-              members: [team4, team3, team4, team1],
-              budget: '$20,500',
-              progress: { percentage: 100, color: 'success' },
-            },
-            {
-              logo: logoJira,
-              title: 'Add the New Pricing Page',
-              members: [team4],
-              budget: '$500',
-              progress: { percentage: 25, color: 'info' },
-            },
-            {
-              logo: logoJira,
-              title: 'Redesign New Online Shop',
-              members: [team1, team4],
-              budget: '$2,000',
-              progress: { percentage: 40, color: 'info' },
-            },
-          ]"
-        />
-      </div>
-      <div class="col-lg-4 col-md-6">
-        <timeline-list
-          class="h-100"
-          title="Orders overview"
-          description="<i class='fa fa-arrow-up text-success' aria-hidden='true'></i>
-        <span class='font-weight-bold'>24%</span> this month"
-        >
-          <timeline-item
-            :icon="{
-              component: 'notifications',
-              class: 'text-success',
-            }"
-            title="$2400 Design changes"
-            date-time="22 DEC 7:20 PM"
-          />
-          <TimelineItem
-            :icon="{
-              component: 'code',
-              class: 'text-danger',
-            }"
-            title="New order #1832412"
-            date-time="21 DEC 11 PM"
-          />
-          <TimelineItem
-            :icon="{
-              component: 'shopping_cart',
-              class: 'text-info',
-            }"
-            title="Server payments for April"
-            date-time="21 DEC 9:34 PM"
-          />
-          <TimelineItem
-            :icon="{
-              component: 'credit_card',
-              class: 'text-warning',
-            }"
-            title="New card added for order #4395133"
-            date-time="20 DEC 2:20 AM"
-          />
-          <TimelineItem
-            :icon="{
-              component: 'vpn_key',
-              class: 'text-primary',
-            }"
-            title="Unlock packages for development"
-            date-time="18 DEC 4:54 AM"
-            class="pb-1"
-          />
-        </timeline-list>
-      </div>
-    </div>
+   
   </div>
   </Layout>
 </template>
@@ -240,9 +138,6 @@ import ChartHolderCard from "./components/ChartHolderCard.vue";
 import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
 import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
 import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
-import ProjectCard from "./components/ProjectCard.vue";
-import TimelineList from "@/examples/Cards/TimelineList.vue";
-import TimelineItem from "@/examples/Cards/TimelineItem.vue";
 import logoXD from "@/assets/img/small-logos/logo-xd.svg";
 import logoAtlassian from "@/assets/img/small-logos/logo-atlassian.svg";
 import logoSlack from "@/assets/img/small-logos/logo-slack.svg";
@@ -275,9 +170,6 @@ export default {
     ReportsBarChart,
     ReportsLineChart,
     MiniStatisticsCard,
-    ProjectCard,
-    TimelineList,
-    TimelineItem,
     Layout
 },
 };

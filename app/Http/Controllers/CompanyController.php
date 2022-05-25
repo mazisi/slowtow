@@ -7,24 +7,44 @@ use App\Models\Company;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CompanyDocument;
-use Illuminate\Support\Facades\Route;
 use App\Http\Requests\CompanyValidateRequest;
 
 
 class CompanyController extends Controller
 {
     
-    public function index(Request $request)
-    {
+    public function index(Request $request){
+
+      if($request->term && $request->withThrashed != '' && $request->active_status == 'Active'){
+
         $companies = Company::when($request->term,function($query,$term){
-         $query->where('name','LIKE','%'.$term.'%');
+         $query->where('name','LIKE','%'.$term.'%')
+               ->where('active','1')
+               ->withTrashed();
         })->get();
-        return Inertia::render('Company',['companies'=> $companies,'currentRoute' => Route::currentRouteName()
-    ]);
+    }elseif($request->term && $request->withThrashed != '' ){
+        $companies = Company::when($request->term,function($query,$term){
+            $query->where('name','LIKE','%'.$term.'%')
+                  ->withTrashed();
+           })->get();
+    
+    }elseif($request->term && $request->active_status == 'Active'){
+
+        $companies = Company::when($request->term,function($query,$term){
+            $query->where('name','LIKE','%'.$term.'%')
+                  ->where('active','1');
+           })->get();
+    }elseif($request->term){  
+        $companies = Company::when($request->term,function($query,$term){
+            $query->where('name','LIKE','%'.$term.'%');
+           })->get();      
+    }else{
+        $companies = Company::whereNull('name')->get();
+    }
+        return Inertia::render('Company',['companies'=> $companies]);
     }
 
-    public function create()
-    {
+    public function create() {
         return Inertia::render('CreateNewCompany');
     }
 
@@ -46,6 +66,7 @@ class CompanyController extends Controller
                 'business_address_postal_code' => $request->business_address_postal_code,
                 'postal_address' => $request->postal_address,
                 'postal_address_code' => $request->postal_address_code,
+                'active' => $request->active,
                 'slug' => Str::replace(' ','_',$request->company_name).sha1(time()),
             ]);
 
@@ -89,6 +110,7 @@ class CompanyController extends Controller
             'business_address_postal_code' => $request->business_address_postal_code,
             'postal_address' => $request->postal_address,
             'postal_address_code' => $request->postal_address_code,
+            'active' => $request->active,
         ]);
         
 

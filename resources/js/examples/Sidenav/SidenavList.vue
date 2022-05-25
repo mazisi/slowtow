@@ -1,10 +1,7 @@
 <template>
-  <div
-    class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100"
-    id="sidenav-collapse-main"
-  >
+  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      <li class="nav-item">
+      <li class=" nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -44,12 +41,27 @@
           </template>
         </sidenav-collapse>
       </li>
+      
+ <li class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/people"
+          navText="People">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5"
+              >account_circle</i
+            >
+          </template>
+        </sidenav-collapse>
+      </li>
      
     
       <li class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
 
 
-      <li v-if="$page.props.currentRoute == 'companies'" class="nav-item">
+      <li v-if="$page.props.currentRoute == 'companies' || $page.props.currentRoute == 'view_company'" class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -63,7 +75,21 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences'" class="nav-item">
+      <li v-if="$page.props.currentRoute == 'people' || $page.props.currentRoute == 'view_person'" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/create-person"
+          navText="New Person"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">add</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li v-if="$page.props.currentRoute == 'licences' || $page.props.currentRoute == 'view_licence'" class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -78,27 +104,28 @@
       </li>
 <hr>
 
+
  <li class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/people"
-          navText="People"
-        >
+          collapseRef="/goverify-contacts"
+          navText="Contacts">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
-              >account_circle</i
+              >contacts</i
             >
           </template>
         </sidenav-collapse>
-      </li>
+ </li>
+
       <li class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="/notifications"
+          collapseRef="/reports"
           navText="Reports"
         >
           <template v-slot:icon>
@@ -122,7 +149,7 @@
         </sidenav-collapse>
       </li>
       
-      <li class="nav-item">
+      <li class="nav-item text-danger">
         <sidenav-collapse
           url="#"
           :aria-controls="''"

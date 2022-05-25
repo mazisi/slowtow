@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
             },
             'currentRoute' => fn () => Route::currentRouteName(),
             'success' => fn () => $request->session()->get('success'),
+            'error' => fn () => $request->session()->get('error'),
         ]);
     }
 }

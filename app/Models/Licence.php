@@ -17,9 +17,9 @@ class Licence extends Model
        return $this->belongsTo(Company::class);
     }
 
-    public function documents()
+    public function licence_documents()
     {
-       return $this->hasMany(Document::class);
+       return $this->hasMany(LicenceDocument::class);
     }
 
     

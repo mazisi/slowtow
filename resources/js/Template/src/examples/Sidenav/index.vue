@@ -35,7 +35,7 @@
 <script>
 import SidenavList from "./SidenavList.vue";
 import logo from "@/assets/img/logo.png";
-import logoDark from "@/assets/img/logo-ct-dark.png";
+import logoDark from "@/assets/img/logo.png";
 import { mapState } from "vuex";
 
 export default {

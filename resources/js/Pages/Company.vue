@@ -6,7 +6,9 @@ export default {
   props: ['companies'],
   data() {
     return {
-      term: '',   
+      term: '',
+      withThrashed: '', 
+      active_status: ''  
     }
   },
   components: {
@@ -14,21 +16,27 @@ export default {
 },
 methods: {
      search(){
-        this.$inertia.replace(this.routes('companies',{term: this.term}))
-        }
+        this.$inertia.replace(route('companies',{
+          term: this.term,
+          withThrashed: this.withThrashed,
+          active_status: this.active_status
+          }))
+        },
+
+      
     },
 };
 </script>
-
+<style>
+#with-thrashed{
+  margin-top: 3px;
+  margin-left: 3px;
+}</style>
 <template>
 <Layout>
   <div class="container-fluid">
-    <div
-      class="page-header min-height-300 border-radius-xl mt-4"
-      style="
-        background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      "
-    >
+    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+      ">
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -44,7 +52,7 @@ methods: {
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Active status: </label>
-  <select class="form-control form-control-default">
+  <select @change="search" v-model="active_status" class="form-control form-control-default">
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>
@@ -54,17 +62,16 @@ methods: {
         <div class="col-3">
         <div class="input-group ">
   <label class="">Include deleted licences: </label>
-  <input type="checkbox" >
+  <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
 
    </div>
        </div>
         <div class="col-3">
-        <button type="submit" class="btn btn-info ms-2" >Submit</button>
        </div>
        
      </div>
      </form>
-        <div class="card my-4">
+        <div class=" my-4">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
                 <thead>
@@ -83,13 +90,10 @@ methods: {
                 </thead>
                 <tbody>
                   <tr v-for="company in companies" :key="company.id">
-                    <td class="align-middle text-center text-sm">
-                      <span v-if="company.active == 1" class="badge badge-sm bg-gradient-success">
-                      Active
-                      </span>
-                      <span v-else class="badge badge-sm bg-gradient-danger">
-                      Inactive
-                      </span>
+                    <td class="align-middle text-sm">
+                      <i v-if="company.active == 1" class="fa fa-check text-info" aria-hidden="true"></i>
+                     
+                      <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
                     </td>
                     <td>
                       <div class="d-flex px-2 py-1">
@@ -107,7 +111,8 @@ methods: {
                       </div>
                     </td>
                     <td class="text-center">
-                      <i class="fa fa-eye  " aria-hidden="true"></i>
+                    <inertia-link :href="`/view-company/${company.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
+                      
                     </td>
                     
                   </tr>

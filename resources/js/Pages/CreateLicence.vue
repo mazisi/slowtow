@@ -31,7 +31,7 @@ export default {
          address: '',
          province: '',
          consultant_name: '',
-         must_new: '',
+         must_renew: '',
          notes: '',
         
       },
@@ -68,15 +68,16 @@ export default {
 };
 </script>
 <style>
-  .container-fluid{
-    margin-top: -13.5rem;
-  }
+#active-checkbox {
+  margin-top: 3px;
+  margin-left: 3px;
+}
 </style>
 <template>
 <Layout>
 <div class="container-fluid" >
     <div
-      class="page-header min-height-300 border-radius-xl"
+      class="page-header min-height-100 border-radius-xl"
       style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
       "
     >
@@ -102,11 +103,11 @@ export default {
             <div class="card card-plain h-100">
               <div class="p-3 card-body">
                 <ul class="list-group">
-               <li class="px-0 border-0 list-group-item"><div class="form-check form-switch d-flex ps-0 ms-0">
-               <input v-model="form.is_licence_active" checked id="flexSwitchCheckDefault4" class="form-check-input ps-0 ms-0" type="checkbox" 
-               name="flexSwitchCheckDefault4">
-               <label class="form-check-label ms-3 mb-0 text-body text-truncate w-80" 
-               for="flexSwitchCheckDefault4">Licence Active</label></div>
+               <li class="px-0 border-0 list-group-item">
+               <div class="form-check form-switch d-flex ps-0 ms-0">
+              <label class="form-check-label ms-3 mb-0 text-body text-truncate">Licence Active</label>
+               <input id="active-checkbox" v-model="form.is_licence_active" :checked="form.is_licence_active" type="checkbox">
+               </div>
                </li>
   <li class="px-0 border-0 list-group-item">
   <div class="input-group input-group-outline null is-filled">
@@ -169,10 +170,10 @@ export default {
                 
 <ul class="list-group">
  <li class="px-0 border-0 list-group-item">
-                <div class="form-check form-switch d-flex ps-0 ms-0">
-                <input id="flexSwitchCheckDefault" class="form-check-input ps-0 ms-0" type="checkbox" disabled>
-                <label class="form-check-label ms-3 mb-0 text-body text-truncate w-80" for="flexSwitchCheckDefault">Must Renew</label>
-                </div>
+  <div class="form-check form-switch d-flex ps-0 ms-0">
+  <label class="form-check-label ms-3 mb-0 text-body text-truncate ">Must Renew</label>
+  <input id="active-checkbox" type="checkbox" v-model="form.must_renew">
+ </div>
   </li>
  <li class="px-0 border-0 list-group-item">
  

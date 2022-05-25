@@ -1,20 +1,19 @@
 <style>
-  .container-fluid{
-    margin-top: -16rem;
-  }
   .table thead th {
     padding: 0;
     }
+ 
+#with-thrashed{
+  margin-top: 3px;
+  margin-left: 3px;
+}
 </style>
 <template>
 <Layout>
   <div class="container-fluid">
-    <div
-      class="page-header min-height-300 border-radius-xl mt-4"
-      style="
-        background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      "
-    >
+<div class="page-header min-height-100 border-radius-xl mt-4"
+      style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+      ">
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
      <div v-if="success" class="mb-4 font-medium text-sm text-green-600">
@@ -33,7 +32,7 @@
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Active status: </label>
-  <select class="form-control form-control-default">
+  <select @change="search"  v-model="active_status" class="form-control form-control-default">
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>
@@ -43,13 +42,10 @@
         <div class="col-3">
         <div class="input-group ">
   <label class="">Include deleted licences: </label>
-  <input type="checkbox" >
+  <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
 
    </div>
-       </div>
-        <div class="col-3">
-        <button type="submit" class="btn btn-sm btn-secondary ms-2" >Submit</button>
-       </div>
+ </div>
        
      </div>
      </form>
@@ -81,7 +77,7 @@
       <td>{{ licence.licence_number }}</td>
       <td>{{ licence.old_licence_number }}</td>
       <td>{{ licence.company.name }}</td>
-      <td><Link :href="`/view-licence/${licence.slug}`" class="btn btn-sm btn-secondary" >View</Link></td>
+      <td><Link :href="`/view-licence/${licence.slug}`"><i class="material-icons me-sm-1">visibility </i></Link></td>
     </tr>
   </tbody>
 </table>
@@ -95,7 +91,7 @@
 </template>
 <script>
 import Layout from "../Shared/Layout.vue";
-import { Head,Link } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/inertia-vue3';
 export default {
   props: {
     licences: Object,
@@ -104,6 +100,22 @@ export default {
  components: {
     Layout,
     Link
+},
+ data() {
+    return {
+      term: '',
+      withThrashed: '', 
+      active_status: ''  
+    }
+  },
+methods: {
+  search(){
+    this.$inertia.replace(route('licences',{
+      term: this.term,
+      withThrashed: this.withThrashed,
+      active_status: this.active_status
+      }))
+    },
 },
 }
 </script>

@@ -43,6 +43,7 @@ export default {
         cipc_memorandum_of_incorporation: null,
         transfer_certificate: null,
         company_id: this.company.id,
+        active: '',
       },
       addUserForm:{//this for modal data
        full_name: '',
@@ -100,31 +101,23 @@ triggerModal(){
 };
 </script>
 <style>
-  .container-fluid{
-    margin-top: -13.5rem;
-  }
-  .show-company-name{
-    width: 100%;
-  }
+#active-checkbox{
+  margin-top: 3px;
+  margin-left: 3px;
+}
 </style>
 <template>
 <Layout>
 <div class="container-fluid" >
-    <div
-      class="page-header min-height-300 border-radius-xl"
-      style="
-        background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      "
-    >
+<div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+      ">
       <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+</div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row gx-4">
-        <div class="col-auto">
-         
-        </div>
+        
         <div class="col-auto my-auto">
-          <div class="h-100 d-flex justify-between show-company-name">
+          <div class="h-100 d-flex justify-between ">
              <h5 class="mb-1">Company: {{ company.name }}</h5>
             <button @click="triggerModal" data-bs-toggle="modal" data-bs-target="#add-user" class="btn btn-sm btn-secondary float-end">Add User</button>
           <Link :href="`/create-licence/${company.slug}`" class="btn btn-sm btn-secondary float-end">Create Licence</Link>
@@ -143,21 +136,17 @@ triggerModal(){
               <div class="p-3 card-body">
                 <ul class="list-group">
                  <li class="px-0 border-0 list-group-item">
-                    <vmd-switch
-                      id="flexSwitchCheckDefault"
-                      class="ps-0 ms-0"
-                      name="flexSwitchCheckDefault"
-                      label-class="mb-0 text-body text-truncate w-80"
-                      checked
-                      >Active Company</vmd-switch
-                    >
+                  <div class="form-check form-switch d-flex ps-0 ms-0">
+                  <label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
+                  <input id="active-checkbox" type="checkbox" v-model="form.active">
+                  </div>
                   </li>
   <li class="px-0 border-0 list-group-item">
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Company Name *</label>
   <input type="text" class="form-control form-control-default" v-model="form.company_name">
    </div>
-   <p v-if="errors.company_name" :style="{color: ' #FF5252'}">{{ errors.company_name }}</p>
+   <p v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</p>
 </li>
 <li class="px-0 border-0 list-group-item"><div class="input-group input-group-outline is-filled">
                   <label class="form-label">Company Type </label>
@@ -175,28 +164,28 @@ triggerModal(){
   <option value="Trust">Trust</option>
                   </select>
                   </div>
-                  <p v-if="errors.company_type" :style="{color: ' #FF5252'}">{{ errors.company_type }}</p>
+                  <p v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</p>
                   </li>
     <li class="px-0 border-0  list-group-item">
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Registration Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.reg_number" >
    </div>
-    <p v-if="errors.reg_number" :style="{color: ' #FF5252'}">{{ errors.reg_number }}</p>
+    <p v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</p>
      </li>
    <li class="px-0 border-0 list-group-item">
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Vat Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.vat_number" >
    </div>
-     <p v-if="errors.vat_number" :style="{color: ' #FF5252'}">{{ errors.vat_number }}</p>
+     <p v-if="errors.vat_number" class="text-danger">{{ errors.vat_number }}</p>
     </li>
  <li class="px-0 border-0 list-group-item">
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #1</label>
   <input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
    </div>
-                   <p v-if="errors.email_address_1" :style="{color: ' #FF5252'}">{{ errors.email_address_1 }}</p>
+                   <p v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</p>
   </li>
  
                  
@@ -219,7 +208,7 @@ triggerModal(){
   <label class="form-label">Email Address #2</label>
   <input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
    </div>
-                  <p v-if="errors.email_address_2" :style="{color: ' #FF5252'}">{{ errors.email_address_2 }}</p>
+                  <p v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</p>
                   </li>
 
                    <li class="px-0 border-0 list-group-item">
@@ -228,7 +217,7 @@ triggerModal(){
   <label class="form-label">Email Address #3</label>
   <input type="email" class="form-control form-control-default" v-model="form.email_address_3" >
    </div>
-                  <p v-if="errors.email_address_3" :style="{color: ' #FF5252'}">{{ errors.email_address_3 }}</p>
+                  <p v-if="errors.email_address_3" class="text-danger">{{ errors.email_address_3 }}</p>
                   </li>
                   <li class="px-0 border-0 list-group-item">
         
@@ -236,7 +225,7 @@ triggerModal(){
   <label class="form-label">Telephone Number #1</label>
   <input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
    </div>
-                  <p v-if="errors.telephone_number_1" :style="{color: ' #FF5252'}">{{ errors.telephone_number_1 }}</p>
+                  <p v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</p>
                   </li>
                   <li class="px-0 border-0 list-group-item">
  
@@ -244,7 +233,7 @@ triggerModal(){
   <label class="form-label">Telephone Number #2</label>
   <input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
    </div>
-                  <p v-if="errors.telephone_number_2" :style="{color: ' #FF5252'}">{{ errors.telephone_number_2 }}</p>
+                  <p v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</p>
                   </li>
                   <li class="px-0 border-0 list-group-item is-filled">
 
@@ -252,7 +241,7 @@ triggerModal(){
   <label class="form-label">Fax Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.fax_number" >
    </div>
-                  <p v-if="errors.fax_number" :style="{color: ' #FF5252'}">{{ errors.fax_number }}</p>
+                  <p v-if="errors.fax_number" class="text-danger">{{ errors.fax_number }}</p>
                   </li>
                    
                 </ul>
@@ -281,7 +270,7 @@ triggerModal(){
   <label class="form-label">Website</label>
   <input type="text" class="form-control form-control-default" v-model="form.website" >
    </div>
-                  <p v-if="errors.website" :style="{color: ' #FF5252'}">{{ errors.website }}</p>
+                  <p v-if="errors.website" class="text-danger">{{ errors.website }}</p>
                   </li>
                   <li class="px-0 border-0 list-group-item">
         
@@ -289,7 +278,7 @@ triggerModal(){
   <label class="form-label">Business Address</label>
   <input type="text" class="form-control form-control-default" v-model="form.business_address" >
    </div>
-                  <p v-if="errors.business_address" :style="{color: ' #FF5252'}">{{ errors.business_address }}</p>
+                  <p v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</p>
                   </li>
 
                   <li class="px-0 border-0 list-group-item">
@@ -298,7 +287,7 @@ triggerModal(){
   <label class="form-label">Postal Code</label>
   <input type="text" class="form-control form-control-default" v-model="form.business_address_postal_code" >
    </div>
-                  <p v-if="errors.business_address_postal_code" :style="{color: ' #FF5252'}">{{ errors.business_address_postal_code }}</p>
+                  <p v-if="errors.business_address_postal_code" class="text-danger">{{ errors.business_address_postal_code }}</p>
                   </li>
                   <li class="px-0 border-0 list-group-item">
 
@@ -306,14 +295,14 @@ triggerModal(){
   <label class="form-label">Postal Address</label>
   <input type="text" class="form-control form-control-default" v-model="form.postal_address" >
    </div>
-                  <p v-if="errors.postal_address" :style="{color: ' #FF5252'}">{{ errors.postal_address }}</p>
+                  <p v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</p>
                   </li>
                   <li class="px-0 border-0 list-group-item null is-filled">
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Postal Code</label>
   <input type="text" class="form-control form-control-default" v-model="form.postal_address_code" >
    </div>
-                  <p v-if="errors.postal_address_code" :style="{color: ' #FF5252'}">{{ errors.postal_address_code }}</p>
+                  <p v-if="errors.postal_address_code" class="text-danger">{{ errors.postal_address_code }}</p>
                   </li>
                 </ul>
               </div>
@@ -434,7 +423,7 @@ triggerModal(){
          
       
         </div>
-<button type="submit" class="btn btn-info ms-2">Save</button>
+<button type="submit" class="btn btn-secondary ms-2">Save</button>
 
         
 </form>

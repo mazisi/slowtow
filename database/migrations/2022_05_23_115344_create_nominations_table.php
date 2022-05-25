@@ -13,12 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('licence_documents', function (Blueprint $table) {
+        Schema::create('nominations', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
+            $table->string('document')->nullable();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
-            $table->string('document_name')->nullable();
-            $table->string('document_type')->nullable();
-            $table->string('document_file')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +30,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('licence_documents');
+        Schema::table('nominations', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

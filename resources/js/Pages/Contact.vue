@@ -1,0 +1,100 @@
+<style>
+ 
+  .table thead th {
+    padding: 0;
+    }
+    .upload-btn{
+      float: right!important;
+    }
+</style>
+<template>
+<Layout>
+  <div class="container-fluid">
+<div class="page-header min-height-100 border-radius-xl mt-4"
+      style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+      ">
+      <span class="mask bg-gradient-success opacity-6"></span>
+    </div>
+   
+    <div class="card card-body mx-3 mx-md-4 mt-n6">
+      <div class="col-12">
+      <div class="row">
+      <div class="col-2"></div>
+      <div v-if="success" class="col-6" 
+      x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+      <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+      <span class="text-sm">{{ success }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+      </button>
+      </div>
+      </div>
+
+      <div v-else-if="error" class="col-6" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+      <div class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
+      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+      <span class="text-sm">{{ error }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+      </button>
+      </div>
+      </div>
+<div v-else-if="!error" class="col-6"></div>
+      <div class="col-2"></div>
+      <div class="col-2">
+  <Link :href="`/upload-contacts`" class="btn btn-sm btn-secondary upload-btn">Upload</Link>
+</div>
+      </div>
+
+        <div class="">
+          <div class=" px-0 pb-2">
+          <div class="table-responsive p-0">
+<table class="table table-hover table-bordered border-secondary">
+      <thead lass="table-light">
+    <tr>
+       <th>Full Name</th>
+      <th>Middle Name</th>
+      <th>Last Name</th>
+      <th>Business Phone</th>
+      <th>Mobile Phone</th>
+      <th>Email</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="contact in contacts" :key="contact.id">
+     <td>{{ contact.first_name }}</td>
+      <td>{{ contact.middle_name }}</td>
+      <td>{{ contact.last_name }}</td>
+      <td>{{ contact.business_phone }}</td>
+      <td>{{ contact.mobile_phone }}</td>
+      <td>{{ contact.email }}</td>
+      <td><Link :href="`/delete-contact/${contact.id}`"><i class="material-icons text-danger">delete</i></Link></td>
+    </tr>
+   
+  </tbody>
+
+  </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </Layout>
+</template>
+<script>
+import Layout from "../Shared/Layout.vue";
+import { useForm ,Link } from '@inertiajs/inertia-vue3';
+export default {
+  props: {
+    contacts: Object,
+    success: String,
+  },
+ components: {
+    Layout,
+    Link,
+    useForm
+},
+}
+</script>

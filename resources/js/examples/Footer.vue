@@ -11,32 +11,15 @@
               <a
                 href="https://www.creative-tim.com"
                 class="nav-link text-muted"
-                target="_blank"
-                >Creative Tim</a
+                target="_blank"> You are logged in as: {{ user.name }}</a
               >
             </li>
             <li class="nav-item">
               <a
-                href="https://www.creative-tim.com/presentation"
+                href="#"
                 class="nav-link text-muted"
                 target="_blank"
-                >About Us</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                href="https://www.creative-tim.com/blog"
-                class="nav-link text-muted"
-                target="_blank"
-                >Blog</a
-              >
-            </li>
-            <li class="nav-item">
-              <a
-                href="https://www.creative-tim.com/license"
-                class="nav-link pe-0 text-muted"
-                target="_blank"
-                >License</a
+                > Copyright &copy; {{ new Date().getFullYear() }} Slotow Family Trust </a
               >
             </li>
           </ul>
@@ -47,7 +30,14 @@
 </template>
 
 <script>
+import { computed } from 'vue';
+import { usePage } from '@inertiajs/inertia-vue3';
+
 export default {
   name: "app-footer",
+    setup() {
+    const user = computed(() => usePage().props.value.auth.user)
+    return { user }
+  },
 };
 </script>

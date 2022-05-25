@@ -1,11 +1,7 @@
 
 <template>
-  <div
-    class="page-header align-items-start min-vh-100"
-    style="
-      background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
-    "
-  >
+  <div class="page-header align-items-start min-vh-100" style="background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
+    ">
     <span class="mask bg-gradient-dark opacity-6"></span>
     <div class="container my-auto">
       <div class="row">
@@ -42,7 +38,7 @@
   <div class="mb-3">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Email</label>
-    <input v-model="form.email"  type="email" class="form-control form-control-default">
+    <input v-model="form.email" type="email" autocomplete="on" class="form-control form-control-default">
     </div>
     <p v-if="errors.email" :style="{color: ' #FF5252'}">{{ errors.email }}</p>
   </div>
@@ -81,13 +77,12 @@
       <div class="container">
         <div class="row align-items-center justify-content-lg-between">
           <div class="col-12 col-md-6 my-auto">
-            <div class="copyright text-center text-sm text-white text-lg-start">
+            <div class="copyright text-center float-right text-sm text-white text-lg-start">
               © {{ new Date().getFullYear() }}, Copyright &copy;
               <a
                 href="#"
                 class="font-weight-bold text-white"
-                target="_blank"
-                >Goverify</a
+                target="_blank">Slotow Family Trust</a
               >
             </div>
           </div>

@@ -5,9 +5,7 @@
     class="fixed-start"
     v-if="showSidenav"
   />
-  <main
-    class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden"
-  >
+  <main class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden">
     <!-- nav -->
     <navbar
       :class="[isNavFixed ? navbarFixed : '', isAbsolute ? absolute : '']"
@@ -17,16 +15,12 @@
     />
     <slot/>
     <app-footer v-show="showFooter" />
-    <configurator
-      :toggle="toggleConfigurator"
-      :class="[showConfig ? 'show' : '', hideConfigButton ? 'd-none' : '']"
-    />
+ 
   </main>
  
 </template>
 <script>
 import Sidenav from "../examples/Sidenav";
-import Configurator from "@/examples/Configurator.vue";
 import Navbar from "@/examples/Navbars/Navbar.vue";
 import AppFooter from "@/examples/Footer.vue";
 import { mapMutations, mapState } from "vuex";
@@ -35,7 +29,6 @@ export default {
   name: "App",
   components: {
     Sidenav,
-    Configurator,
     Navbar,
     AppFooter
   },
@@ -53,7 +46,6 @@ export default {
       "showSidenav",
       "showNavbar",
       "showFooter",
-      "showConfig",
       "hideConfigButton"
     ])
   }

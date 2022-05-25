@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('licence_documents', function (Blueprint $table) {
+        Schema::create('contacts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('licence_id')->constrained()->onDelete('cascade');
-            $table->string('document_name')->nullable();
-            $table->string('document_type')->nullable();
-            $table->string('document_file')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('middle_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('business_phone')->nullable();
+            $table->string('mobile_phone')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +32,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('licence_documents');
+        Schema::dropIfExists('contacts');
     }
 };
