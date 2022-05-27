@@ -93,7 +93,8 @@ class CompanyController extends Controller
 
     public function update(Request $request)
     {
-        $company = Company::whereId($request->company_id)->update([
+        $company = Company::whereId($request->company_id)->first();
+        $company->update([
             'name' => $request->company_name,
             'company_type' => $request->company_type,
             'reg_number' => $request->reg_number,
@@ -112,7 +113,9 @@ class CompanyController extends Controller
             'postal_address_code' => $request->postal_address_code,
             'active' => $request->active,
         ]);
-        
+        if($company){
+            return to_route('view_company',['slug'=> $company->slug]);
+        }
 
         if ($request->hasFile('gatla_certificate')) {   
                     // $name = $request->gatla_certificate->getClientOriginalName();

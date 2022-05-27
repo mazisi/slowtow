@@ -1,3 +1,11 @@
+<style>
+.navbar-vertical.navbar-expand-xs .navbar-nav .nav-link {
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+   
+}
+</style>
+
 <template>
   <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
@@ -57,7 +65,7 @@
         </sidenav-collapse>
       </li>
      
-    
+    <hr>
       <li class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
 
 
@@ -99,6 +107,20 @@
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">add</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li v-if="$page.props.currentRoute == 'licences' || $page.props.currentRoute == 'view_licence'" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/transfer"
+          navText="Transfer"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">change_circle</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -148,7 +170,18 @@
           </template>
         </sidenav-collapse>
       </li>
-      
+      <hr>
+
+   <li class="nav-item">
+  <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
+    <div class="text-center d-flex align-items-center justify-content-center me-2">
+    <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>
+    <span class="nav-link-text ms-1">Back</span>
+  </a>
+  <div class="collapse"></div>
+</li>
+
+      <hr>
       <li class="nav-item text-danger">
         <sidenav-collapse
           url="#"
@@ -184,6 +217,12 @@ export default {
   },
   components: {
     SidenavCollapse
+  },
+  methods: {
+    goBack(){
+      history.go(-1)
+    }
   }
 };
 </script>
+

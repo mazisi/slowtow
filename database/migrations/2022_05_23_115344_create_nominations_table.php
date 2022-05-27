@@ -18,6 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('document')->nullable();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
+            $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
         });

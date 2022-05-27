@@ -13,6 +13,6 @@ class People extends Model
     protected $guarded = [];
 
     public function nominations(){
-        return $this->belongsToMany(Nomination::class);
+        return $this->belongsToMany(Nomination::class)->withPivot('relationship','terminated_at','id');
     }
 }

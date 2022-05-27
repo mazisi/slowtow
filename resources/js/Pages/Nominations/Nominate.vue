@@ -107,6 +107,7 @@ export default {
     </div>
      <p v-if="errors.nomination_date" class="text-danger">{{ errors.nomination_date }}</p>
   </div>
+
 <div class="col-md-6 columns">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect

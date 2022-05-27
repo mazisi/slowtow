@@ -49,7 +49,7 @@ export default {
        full_name: '',
        company_admin_email: '',
        company_id: this.company.id,
-
+       slug: this.company.slug,
       },
       showMenu: false,
     };
@@ -80,11 +80,6 @@ triggerModal(){
 
     addUser(){
       this.$inertia.post('/add-company-admin', this.addUserForm)
-        .then(() => {
-          form.reset('company_admin_email','full_name')
-        //  Inertia.reload({ only: ['view-company'] })
-        //   alert('User added successfully');
-        })
 
         
     }
@@ -129,7 +124,7 @@ triggerModal(){
       </div>
       <div class="row">
       <form @submit.prevent="submit">
-      <input type="hidden" v-model="form.company_id">
+      <input type="hidden" v-model="form.slug">
         <div class="mt-3 row">
           <div class="col-12 col-md-6 col-xl-4 position-relative">
             <div class="card card-plain h-100">
@@ -441,17 +436,26 @@ triggerModal(){
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-       <input type="hidden" v-model="addUserForm.company_id">
+       <input type="hidden" v-model="addUserForm.slug">
           <div class="input-group input-group-outline null is-filled">
           <label class="form-label">Full Name</label>
           <input type="text" required class="form-control form-control-default" v-model="addUserForm.full_name" >
           </div>
-          <div class="input-group input-group-outline null is-filled mt-3">
+          <p v-if="errors.full_name" class="text-danger">{{ errors.full_name }}</p>
+          <div class="input-group input-group-outline null is-filled mt-3 mb-3">
           <label class="form-label">Email Address</label>
           <input type="email" required class="form-control form-control-default"  v-model="addUserForm.company_admin_email">
           </div>
-          
+          <p v-if="errors.company_admin_email" class="text-danger">{{ errors.company_admin_email }}</p>
+
+      <div v-if="success" class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+      <span class="text-sm">{{ success }}</span></span>
+      <button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+      </button></div>
+      
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-secondary">Save</button>

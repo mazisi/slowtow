@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\NominationController;
 use App\Http\Controllers\LicenceDocsController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 
 // Route::get('/', function () {
@@ -22,6 +23,7 @@ use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 //         'phpVersion' => PHP_VERSION,
 //     ]);
 // });
+Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -64,9 +66,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-person', [PersonController::class,'store'])->name('submit_person');
         Route::get('/view-person/{slug}', [PersonController::class,'show'])->name('view_person');
         Route::post('/update-person', [PersonController::class,'update'])->name('update_person');
+        Route::post('/delete-person/{slug}', [PersonController::class,'destroy'])->name('delete_person');
+       
 
         Route::get('/nominate/{slug}',[NominationController::class,'index'])->name('nominate');
         Route::post('/submit-nomination', [NominationController::class,'store'])->name('submit_nomination');
-        
+        Route::get('/nominations/{slug}',[NominationController::class,'nominations'])->name('nominations');
+        Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
+        Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
 
     });

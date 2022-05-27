@@ -286,7 +286,7 @@ export default {
 <div v-if="form.valid_fingerprint == 'yes'" class="col-md-4 columns">
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">FingerPrints Valid Until?</label>
-    <input type="date" class="form-control form-control-default" v-model="form.fingerprint_valid_until">
+    <input type="date" required class="form-control form-control-default" v-model="form.fingerprint_valid_until">
 </div>
  <div v-if="errors.valid_fingerprint" class="text-danger">{{ errors.valid_fingerprint }}</div>
 </div>

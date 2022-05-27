@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 class PersonController extends Controller
 {
     public function index(){
-        $people = People::latest()->get();
+        $people = People::get();
         return Inertia::render('People/Person',['people' => $people]);
     }
 
@@ -21,6 +21,7 @@ class PersonController extends Controller
     }
 
     public function store(ValidatePeople $request){
+        
         $person = People::create([
         'name'=> $request->name,
         'active'=> $request->active,
@@ -56,8 +57,8 @@ class PersonController extends Controller
     }
 
     public function show($slug){
-        $person = People::whereSlug($slug)->first();
-        return Inertia::render('People/ViewPerson',['person' => $person]);
+        $person = People::with('nominations')->whereSlug($slug)->first();
+        return Inertia::render('People/ViewPerson',['person' => $person,'isFromViewPersonPage'=> true]);
     }
 
     public function update(ValidatePeople $request){
@@ -93,4 +94,14 @@ class PersonController extends Controller
         }
         return Redirect::route('people')->with('error','Error updating person.');
     }
+
+    public function destroy($slug){
+        $del = People::whereSlug($slug)->firstOrFail();
+        if($del->delete()){
+            return Redirect::route('people')->with('success','Person deleted succesfully.');
+        }
+        return Redirect::route('people')->with('error','Error updated person.');
+    }
+
+    
 }

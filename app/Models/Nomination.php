@@ -12,7 +12,11 @@ class Nomination extends Model
 
     protected $guarded = [];
 
-    public function persons(){
-        return $this->belongsToMany(People::class);
+    public function people(){
+        return $this->belongsToMany(People::class)->withPivot('relationship','terminated_at','id');
+    }
+
+    public function licence(){
+        return $this->belongsTo(Licence::class);
     }
 }

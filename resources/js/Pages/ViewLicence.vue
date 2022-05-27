@@ -2,8 +2,6 @@
 import Layout from "../Shared/Layout.vue";
 import { Head,Link } from '@inertiajs/inertia-vue3';
 import DefaultProjectCard from "./components/DefaultProjectCard.vue";
-import setNavPills from "@/assets/js/nav-pills.js";
-import setTooltip from "@/assets/js/tooltip.js";
 import { HalfCircleSpinner } from 'epic-spinners';
 
 export default {
@@ -68,12 +66,6 @@ name: "dashboard-default",
     },
 
   },
-
-  mounted() {
-    this.$store.state.isAbsolute = true;
-    setNavPills();
-    setTooltip();
-  },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },
@@ -99,8 +91,13 @@ name: "dashboard-default",
 <div class="col-auto my-auto">
 <div class="h-100 d-flex">
 <h5 class="mb-1">New Licence for: {{ licence.company.name }}</h5>
+<div class="d-flex float-end">
+<Link :href="`/nominate/${licence.slug }`" class="btn btn-sm btn-secondary ms-2 justify-content-center">Nominate</Link>
+<Link :href="`/nominations/${licence.slug }`" class="btn btn-sm btn-secondary ms-2 justify-content-center">Nominations</Link>
 </div>
-<Link :href="`/nominate/${licence.slug }`" class="btn btn-sm btn-secondary ms-2 d-flex justify-content-center">Nominate</Link>
+</div>
+
+
 
 </div>
 

@@ -17,6 +17,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('nomination_id')->constrained()->onDelete('cascade');
             $table->foreignId('people_id')->constrained()->onDelete('cascade');
+            $table->string('relationship')->nullable();
+            $table->timestamp('terminated_at')->nullable();
             $table->timestamps();
         });
     }
