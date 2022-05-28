@@ -50,6 +50,7 @@ class PersonController extends Controller
         'valid_fingerprint_valid_until' => $request->valid_fingerprint_valid_until,
         'slug' => Str::replace(' ','_',$request->name).'_'.sha1(time()),
         ]);
+        
         if($person){
            return Redirect::route('people')->with('success','Person created succesfully.');
         }
@@ -58,7 +59,7 @@ class PersonController extends Controller
 
     public function show($slug){
         $person = People::with('nominations')->whereSlug($slug)->first();
-        return Inertia::render('People/ViewPerson',['person' => $person,'isFromViewPersonPage'=> true]);
+        return Inertia::render('People/ViewPerson',['person' => $person]);
     }
 
     public function update(ValidatePeople $request){

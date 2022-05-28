@@ -1,9 +1,6 @@
 <script>
 import Layout from "../Shared/Layout.vue";
 import DefaultProjectCard from "./components/DefaultProjectCard.vue";
-import VmdSwitch from "@/components/VmdSwitch.vue";
-import setNavPills from "@/assets/js/nav-pills.js";
-import setTooltip from "@/assets/js/tooltip.js";
 
 export default {
   name: "profile-overview",
@@ -43,14 +40,7 @@ export default {
   },
   components: {
     DefaultProjectCard,
-    VmdSwitch,
     Layout,
-  },
-
-  mounted() {
-    this.$store.state.isAbsolute = true;
-    setNavPills();
-    setTooltip();
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;

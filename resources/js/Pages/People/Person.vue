@@ -56,7 +56,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr v-for="person in people"  :key="person.id">
+    <tr v-for="person in people" :key="person.id">
       <td>
         <div class="d-flex px-2 py-1">
           <div class="d-flex flex-column ">
@@ -85,9 +85,19 @@
 
             </div>
           </div>
+          
         </div>
+        {{ links }}
       </div>
+      <!-- <nav aria-label="Page navigation float-right">
+  <ul class="pagination">
+    <li class="page-item"><a v-if="links.length > 3" class="page-link" href="#">Prev</a></li>
+    <li v-for="(link, key) in links" class="page-item"><a class="page-link" href="#">1</a></li>
+    <li class="page-item"><a class="page-link" href="#">Next</a></li>
+  </ul>
+</nav> -->
     </div>
+    
   </div>
 
   </Layout>
@@ -98,7 +108,8 @@ import { useForm ,Link } from '@inertiajs/inertia-vue3';
 export default {
   props: {
     success: String,
-    people: Object
+    people: Object,
+    links: Array,
   },
  components: {
     Layout,

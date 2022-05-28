@@ -10,9 +10,11 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LicenceController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\NominationController;
-use App\Http\Controllers\LicenceDocsController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\InsertTypesController;
+use App\Http\Controllers\LicenceDocsController;
+use App\Http\Controllers\TransferLicenceController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 
 // Route::get('/', function () {
@@ -37,7 +39,11 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(['middleware' => ['auth']], function () { 
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+        //update password
+        Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
+        Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');
 
+        
         Route::post('/add-company-admin',[AddCompanyAdminController::class,'store']);
 
         Route::get('/companies',[CompanyController::class,'index'])->name('companies');
@@ -52,6 +58,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-licence/{id}',[LicenceController::class,'store'])->name('submit_licence');
         Route::post('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
+
+
+        /**
+         * Get transfer licence page.
+         * Not that it goes to TransferLicenceController
+         * just to avoid bloting LicenceController
+         */
+        Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
+
 
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');

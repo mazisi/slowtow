@@ -2,10 +2,6 @@
 import Layout from "../Shared/Layout.vue";
 import { Head,Link } from '@inertiajs/inertia-vue3';
 import DefaultProjectCard from "./components/DefaultProjectCard.vue";
-import VmdInput from "@/components/VmdInput.vue";
-import VmdSwitch from "@/components/VmdSwitch.vue";
-import setNavPills from "@/assets/js/nav-pills.js";
-import setTooltip from "@/assets/js/tooltip.js";
 
 export default {
   name: "profile-overview",
@@ -56,8 +52,6 @@ export default {
   },
   components: {
     DefaultProjectCard,
-    VmdInput,
-    VmdSwitch,
     Layout,
     Link,
     Head,
@@ -85,11 +79,6 @@ triggerModal(){
     }
   },
 
-  mounted() {
-    this.$store.state.isAbsolute = true;
-    setNavPills();
-    setTooltip();
-  },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },
@@ -110,18 +99,29 @@ triggerModal(){
 </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row gx-4">
-        
-        <div class="col-auto my-auto">
-          <div class="h-100 d-flex justify-between ">
-             <h5 class="mb-1">Company: {{ company.name }}</h5>
-            <button @click="triggerModal" data-bs-toggle="modal" data-bs-target="#add-user" class="btn btn-sm btn-secondary float-end">Add User</button>
-          <Link :href="`/create-licence/${company.slug}`" class="btn btn-sm btn-secondary float-end">Create Licence</Link>
-          </div>          
-        </div>
-        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
-          
-        </div>
-      </div>
+<div class="col-auto">
+
+</div>
+<div class="row">
+<div class="col-lg-6 col-7">
+<h6 class="mb-1">Company: {{ company.name }}</h6>
+</div>
+<div class="col-lg-6 col-5 my-auto text-end">
+<div class="dropdown float-lg-end pe-4">
+<a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+ <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+</a>
+<ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
+<li><Link :href="`#!`" @click="triggerModal" data-bs-toggle="modal" data-bs-target="#add-user" class="dropdown-item border-radius-md">Add User</Link></li>
+<li><Link :href="`/create-licence/${company.slug}`" class="dropdown-item border-radius-md"> Create Licence</Link></li>
+<li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
+</ul>
+</div>
+</div>
+</div>
+
+
+</div>
       <div class="row">
       <form @submit.prevent="submit">
       <input type="hidden" v-model="form.slug">

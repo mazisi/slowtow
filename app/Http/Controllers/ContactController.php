@@ -47,12 +47,12 @@ class ContactController extends Controller{
                 }
             
                 fclose ( $handle );
-                return redirect(route('contacts'))->with('success','Contacts uploaded successfully.');
+                return to_route('contacts')->with('success','Contacts uploaded successfully.');
             }else{
-                return redirect(route('contacts'))->with('error','Error uploading contacts.');
+                return to_route('contacts')->with('error','Error uploading contacts.');
             }
         }else{
-            return redirect(route('contacts'))->with('error', 'Uploaded file is not a valid csv file.');
+            return to_route('contacts')->with('error', 'Uploaded file is not a valid csv file.');
           }
     
     }

@@ -13,8 +13,32 @@
         :class="isRTL ? 'px-0' : 'me-sm-4'"
         id="navbar"
       >
+
+
+   <!-- <div v-if="success" :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
+      x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+      <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+      <span class="text-sm">{{ success }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+      </button>
+      </div>
+      </div>
+
+      <div v-else-if="error" :class="isRTL ? 'me-md-auto' : 'ms-md-auto'" x-data="{ show: true }" 
+      x-show="show" x-init="setTimeout(() => show = false, 3000)">
+      <div class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
+      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+      <span class="text-sm">{{ error }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+      </button>
+      </div>
+      </div> -->
+
+
+
         <div
-          class="pe-md-3 d-flex align-items-center"
+          class="invisible pe-md-3 d-flex align-items-center"
           :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
         >
           <vmd-input id="search" label="Search here" />
@@ -33,15 +57,9 @@
           </li>
           
           <li class="px-3 nav-item d-flex align-items-center">
-            <a
-              class="p-0 nav-link lh-1"
-              @click="toggleConfigurator"
-              :class="color ? color : 'text-body'"
-            >
-              <i class="material-icons fixed-plugin-button-nav cursor-pointer">
-                settings
-              </i>
-            </a>
+            <inertia-link :href="`/settings`" class="p-0 nav-link lh-1" :class="color ? color : 'text-body'">
+              <i class="material-icons fixed-plugin-button-nav cursor-pointer">settings</i>
+            </inertia-link >
           </li>
           <li
             class="nav-item dropdown d-flex align-items-center"

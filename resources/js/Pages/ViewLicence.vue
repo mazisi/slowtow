@@ -88,17 +88,23 @@ name: "dashboard-default",
 <div class="col-auto">
 
 </div>
-<div class="col-auto my-auto">
-<div class="h-100 d-flex">
-<h5 class="mb-1">New Licence for: {{ licence.company.name }}</h5>
-<div class="d-flex float-end">
-<Link :href="`/nominate/${licence.slug }`" class="btn btn-sm btn-secondary ms-2 justify-content-center">Nominate</Link>
-<Link :href="`/nominations/${licence.slug }`" class="btn btn-sm btn-secondary ms-2 justify-content-center">Nominations</Link>
+<div class="row">
+<div class="col-lg-6 col-7">
+<h6 class="mb-1">View Licence for: {{ licence.company.name }}</h6>
+</div>
+<div class="col-lg-6 col-5 my-auto text-end">
+<div class="dropdown float-lg-end pe-4">
+<a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+ <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+</a>
+<ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
+<li><Link :href="`/nominate/${licence.slug }`" class="dropdown-item border-radius-md">Nominate</Link></li>
+<li><Link :href="`/nominations/${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
+<li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Transfer Licence</Link></li>
+<li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
+</ul>
 </div>
 </div>
-
-
-
 </div>
 
 

@@ -90,6 +90,7 @@ export default {
   props: {
     contacts: Object,
     success: String,
+    errors: Object,
   },
  components: {
     Layout,

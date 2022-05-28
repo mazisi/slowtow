@@ -8,8 +8,9 @@
         <a v-if="isRTL" :class="color" class="opacity-5 ps-2" href="#"
           >لوحات القيادة</a
         >
-        <a v-else :class="color" class="opacity-8" href="#">Pages</a>
+        <!-- <a v-else :class="color" class="opacity-8" href="#!">Pages</a> -->
       </li>
+   
       <li
         class="text-sm breadcrumb-item active"
         :class="color"
@@ -17,6 +18,8 @@
       >
         {{ currentPage }}
       </li>
+
+     
     </ol>
     <h6 class="mb-0 font-weight-bolder" :class="color">
       {{ currentPage }}
@@ -30,6 +33,7 @@ import { mapState } from "vuex";
 export default {
   name: "breadcrumbs",
   props: {
+    success: String,
     currentPage: {
       type: String,
       required: "",
@@ -38,7 +42,8 @@ export default {
       type: String,
       default: "text-dark",
     },
-  },
+    
+   },
   computed: {
     ...mapState(["isRTL"]),
   },

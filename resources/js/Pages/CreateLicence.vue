@@ -2,8 +2,6 @@
 import Layout from "../Shared/Layout.vue";
 import { Head,Link } from '@inertiajs/inertia-vue3';
 import DefaultProjectCard from "./components/DefaultProjectCard.vue";
-import setNavPills from "@/assets/js/nav-pills.js";
-import setTooltip from "@/assets/js/tooltip.js";
 import { HalfCircleSpinner } from 'epic-spinners'
 
 export default {
@@ -57,11 +55,6 @@ export default {
 
   },
 
-  mounted() {
-    this.$store.state.isAbsolute = true;
-    setNavPills();
-    setTooltip();
-  },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },

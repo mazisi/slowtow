@@ -111,13 +111,16 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences' || $page.props.currentRoute == 'view_licence'" class="nav-item">
+      <li v-if="$page.props.currentRoute == 'licences' 
+            || $page.props.currentRoute == 'view_licence' 
+            || $page.props.currentRoute == 'view_nomination'"
+            class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
           collapseRef="/transfer"
-          navText="Transfer"
+          navText="New Transfer"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">change_circle</i>

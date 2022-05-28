@@ -85,15 +85,13 @@ class LicenceController extends Controller
         return redirect(route('licences'))->with('success','Licence created successfully.');
     }
 
-    public function show($slug)
-    {
+    public function show($slug){
         $licence = Licence::with('company','licence_documents')->whereSlug($slug)->firstOrFail();
         $licence_dropdowns = LicenceType::get();
         return Inertia::render('ViewLicence',['licence' => $licence,'licence_dropdowns' => $licence_dropdowns]);
     }
 
-    public function update(Request $request,$slug)
-    {
+    public function update(Request $request,$slug){
         $update = Licence::whereSlug($slug)->update([
             "trading_name" => $request->trading_name,
             "licence_type" => $request->licence_type,

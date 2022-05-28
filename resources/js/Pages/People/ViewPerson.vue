@@ -37,8 +37,8 @@ export default {
       valid_fingerprint: this.person.valid_fingerprint,
       fingerprint_valid_until: this.person.fingerprint_valid_until,
       active: this.person.active,
-      position: this.person.nominations[0].pivot.relationship,
       slug: this.person.slug,
+      
     }
     };
   },
@@ -136,16 +136,7 @@ export default {
      </div>
    <div v-if="errors.initials" class="text-danger">{{ errors.initials }}</div>
    </div>
- <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Position</label>
-    <select class="form-control form-control-default" v-model="form.position" >
-    <option value="Manager">Manager</option>
-    <option value="Director">Director</option>
-    </select>
-     </div>
-   <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
-   </div>
+
 <div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Date of Birth</label>
@@ -317,8 +308,8 @@ export default {
  </div>
  
   <div class="d-flex">
-  <button v-if="isFromViewNominationPage" @click="terminate" type="button" class="btn btn-sm btn-danger">Terminate</button>
-  <button v-if="isFromViewPersonPage" @click="deletePerson" type="button" class="btn btn-sm btn-danger">Delete</button>
+  
+  <button @click="deletePerson" type="button" class="btn btn-sm btn-danger">Delete</button>
   
   <div :style="{float: 'right'}">
   <button type="submit" class="btn btn-sm btn-secondary ms-2" >Update</button>

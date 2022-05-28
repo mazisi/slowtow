@@ -1,3 +1,74 @@
+<script>
+import Layout from "../../Shared/Layout.vue";
+
+export default {
+  name: "dashboard-default",
+ props: {
+    errors: Object,
+    person: Object,
+  },
+  data() {
+    return {
+      showMenu: false,
+      form: {
+      name: this.person.name,
+      initials: this.person.initials,
+      surname: this.person.surname,
+      date_of_birth: this.person.date_of_birth,
+      id_number: this.person.id_number,
+      passport_number: this.person.passport_number,
+      id_or_passport: this.person.id_or_passport,
+      email_address_1: this.person.email_address_1,
+      email_adddress_2: this.person.email_adddress_2,
+      cell_number: this.person.cell_number,
+      fax_number: this.person.fax_number,
+      telephone: this.person.telephone,
+      postal_code: this.person.postal_code,
+      work_address: this.person.work_address,
+      work_address_postal_code: this.person.work_address_postal_code,
+      home_address: this.person.home_address,
+      home_address_postal_code: this.person.home_address_postal_code,
+      valid_certified_id: this.person.valid_certified_id,
+      valid_saps_clearance: this.person.valid_saps_clearance,
+      saps_clearance_valid_until: this.person.saps_clearance_valid_until,
+      passport_valid_until: this.person.passport_valid_until,
+      valid_fingerprint: this.person.valid_fingerprint,
+      fingerprint_valid_until: this.person.fingerprint_valid_until,
+      status: this.person.status,
+      active: this.person.active,
+      slug: this.person.slug,
+      position: this.person.nominations[0].pivot.relationship,
+      
+    }
+    };
+  },
+    methods: {
+      submit() {
+          this.$inertia.post(`/update-person`, this.form)
+        },
+
+      deletePerson() {
+      if (confirm('Are you sure you want to delete this person?')) {
+        this.$inertia.post(`/delete-person/${this.person.slug}`)
+      }
+
+    },
+    terminate(){
+      if (confirm('Are you sure you want to terminate this person?')) {
+        this.$inertia.post(`/terminate-person/${this.person.nominations[0].pivot.id}/${this.person.slug}`)
+      }
+    }
+  },
+  components: {
+    Layout,
+  },
+
+  beforeUnmount() {
+    this.$store.state.isAbsolute = false;
+  },
+};
+
+</script>
 <style>
 .columns{
   margin-bottom: 1rem;
@@ -7,24 +78,38 @@
   margin-left: 3px;
 }
 </style>
+
 <template>
 <Layout>
-  <div class="container-fluid">
+<div class="container-fluid">
     <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
       ">
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="col-12">
-      <h5>Nominee: <span>{{ person.name }} {{ person.initials }} {{ person.surname }}</span></h5>
-        <div class=" my-4">
-            <div class="table-responsive p-0">
-            <form @submit.prevent="update">
-            <div class="row">
+      <div class="row ">
+       
+        <div class="col-auto my-auto">
+          <div class="h-100">
+            <h5 class="mb-1">Person: {{ person.name }} {{ person.initials }} {{ person.surname }}</h5>
+          </div>
+        </div>
+        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
+          
+        </div>
+      </div>
+      <div class="row">
+        <div class="mt-3 row">
+          <div class="col-12 col-md-12 col-xl-12 position-relative">
+            <div class="card card-plain h-100">
+              <div class="p-3 card-body">
+<form @submit.prevent="submit">
+<input type="hidden" v-model="form.slug">
+<div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active Person</label>
-<input v-model="form.active"  type="checkbox" id="active-checkbox" :checked="form.active == '1'">
+<input v-model="form.active"  type="checkbox" id="active-checkbox" :checked="form.active">
 </div>
 </div>
                   
@@ -51,8 +136,7 @@
      </div>
    <div v-if="errors.initials" class="text-danger">{{ errors.initials }}</div>
    </div>
-
-   <div class="col-md-4 columns">
+ <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Position</label>
     <select class="form-control form-control-default" v-model="form.position" >
@@ -62,7 +146,6 @@
      </div>
    <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
    </div>
-
 <div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Date of Birth</label>
@@ -166,6 +249,20 @@
    </div>
  <div v-if="errors.work_address" class="text-danger">{{ errors.work_address }}</div>
  </div>
+
+ <div class="col-md-4 columns">    
+ <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Nomination Status</label>
+  <select class="form-control form-control-default" v-model="form.status" >
+   <option value="">value1</option>
+   <option value="">value2</option>
+   <option value="">value3</option>
+  </select>
+   </div>
+ <div v-if="errors.status" class="text-danger">{{ errors.status }}</div>
+ </div>
+
+
  <div class="col-md-4 columns">    
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Work Address Postal Code</label>
@@ -220,7 +317,7 @@
 <div v-if="form.valid_fingerprint == 'yes'" class="col-md-4 columns">
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">FingerPrints Valid Until?</label>
-    <input type="date" required class="form-control form-control-default" v-model="form.valid_fingerprint_valid_until">
+    <input type="date" class="form-control form-control-default" v-model="form.fingerprint_valid_until">
 </div>
  <div v-if="errors.valid_fingerprint" class="text-danger">{{ errors.valid_fingerprint }}</div>
 </div>
@@ -228,75 +325,30 @@
 <div v-if="form.id_or_passport == 'passport'" class="col-md-4 columns">    
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Passport Valid Until?</label>
-  <input type="date" required class="form-control form-control-default" v-model="form.passport_valid_until" >
+  <input type="date" class="form-control form-control-default" v-model="form.passport_valid_until" >
    </div>
  <div v-if="errors.passport_valid_until" class="text-danger">{{ errors.passport_valid_until }}</div>
  </div>
-  <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Update</button></div>
+ 
+  <div class="d-flex">
+  <button @click="terminate" type="button" class="btn btn-sm btn-danger">Terminate</button>
+  
+  <div :style="{float: 'right'}">
+  <button type="submit" class="btn btn-sm btn-secondary ms-2" >Update</button>
+  </div>
+  </div>
             </div>
             </form>
+              </div>
             </div>
+            <hr class="vertical dark" />
           </div>
+      <!-- //tasks were here -->
+        
         </div>
+        
       </div>
     </div>
+  </div>
   </Layout>
 </template>
-
-<script>
-import Layout from "../../Shared/Layout.vue";
-export default {
-  name: "dashboard-default",
-  props: {
-    errors: Object,
-    person: Object
-  },
-
-   data() {
-    return {
-      showMenu: false,
-      form: {
-      name: this.person.name,
-      initials: this.person.initials,
-      surname: this.person.surname,
-      date_of_birth: this.person.date_of_birth,
-      id_number: this.person.id_number,
-      passport_number: this.person.passport_number,
-      id_or_passport: this.person.id_or_passport,
-      email_address_1: this.person.email_address_1,
-      email_adddress_2: this.person.email_adddress_2,
-      cell_number: this.person.cell_number,
-      fax_number: this.person.fax_number,
-      telephone: this.person.telephone,
-      postal_code: this.person.postal_code,
-      work_address: this.person.work_address,
-      work_address_postal_code: this.person.work_address_postal_code,
-      home_address: this.person.home_address,
-      home_address_postal_code: this.person.home_address_postal_code,
-      valid_certified_id: this.person.valid_certified_id,
-      valid_saps_clearance: this.person.valid_saps_clearance,
-      saps_clearance_valid_until: this.person.saps_clearance_valid_until,
-      passport_valid_until: this.person.passport_valid_until,
-      valid_fingerprint: this.person.valid_fingerprint,
-      fingerprint_valid_until: this.person.valid_fingerprint_valid_until,
-      active: this.person.active,
-      position: this.person.nominations[0].pivot.relationship,
-    }
-    };
-  },
-    methods: {
-      update() {
-          this.$inertia.post(`/update-person`, this.form)
-          .then(() => {
-              
-            })
-        },
-  },
-  
-  components: {
-    Layout
-    },
-
-};
-</script>
-

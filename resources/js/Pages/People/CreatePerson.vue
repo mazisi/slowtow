@@ -1,7 +1,5 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
-import setNavPills from "@/assets/js/nav-pills.js";
-import setTooltip from "@/assets/js/tooltip.js";
 
 export default {
   name: "profile-overview",
@@ -49,12 +47,6 @@ export default {
   },
   components: {
     Layout,
-  },
-
-  mounted() {
-    this.$store.state.isAbsolute = true;
-    setNavPills();
-    setTooltip();
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
