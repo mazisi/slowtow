@@ -97,7 +97,8 @@ name: "dashboard-default",
 <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
  <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
 </a>
-<ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
+<ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+<li><Link :href="`/renew-licence/${licence.slug }`" class="dropdown-item border-radius-md">Renew Licence</Link></li>
 <li><Link :href="`/nominate/${licence.slug }`" class="dropdown-item border-radius-md">Nominate</Link></li>
 <li><Link :href="`/nominations/${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
 <li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Transfer Licence</Link></li>

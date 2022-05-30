@@ -54,7 +54,7 @@ export default {
 };
 
 </script>
-<style>
+<style scoped>
 .columns{
   margin-bottom: 1rem;
 }

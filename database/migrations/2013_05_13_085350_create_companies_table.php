@@ -32,7 +32,7 @@ return new class extends Migration
             $table->string('tel_number')->nullable();
             $table->string('tel_number1')->nullable();
             $table->string('fax')->nullable();
-            $table->boolean('active')->default(1);
+            $table->boolean('active')->default(1)->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

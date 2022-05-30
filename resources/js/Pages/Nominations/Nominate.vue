@@ -20,7 +20,7 @@ export default {
          nomination_date: '',
          nomination_document: '',
          slug: this.licence.slug,
-         values: [], 
+         company: null, 
       },
       showMenu: false,
       options: this.nominees,
@@ -104,14 +104,14 @@ export default {
 <div class="col-md-6 columns">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
-       v-model="form.values"
+       v-model="form.company"
         mode="tags"
-        placeholder="Search people"
+        placeholder="Search..."
         :options="options"
         :searchable="true"
       />
     </div>
-    <p v-if="errors.values" class="text-danger">{{ errors.values }}</p>
+    <p v-if="errors.company" class="text-danger">{{ errors.company }}</p>
 </div>
  </div>
 <div>

@@ -63,7 +63,22 @@
             >
           </template>
         </sidenav-collapse>
-      </li>
+  </li>
+
+   <li class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/temp-licences"
+          navText="Temporary Licences">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5"
+              >timer</i
+            >
+          </template>
+        </sidenav-collapse>
+  </li>
      
     <hr>
       <li class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
@@ -124,6 +139,21 @@
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">change_circle</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li v-if="$page.props.currentRoute == 'temp_licences' 
+               || $page.props.currentRoute == 'create_temp_licence'
+               || $page.props.currentRoute == 'view_temp_licence'" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/create-temp-licence"
+          navText="New Temp Licence">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">add</i>
           </template>
         </sidenav-collapse>
       </li>

@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\NominationController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
+use App\Http\Controllers\LicenceRenewalController;
+use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
@@ -59,13 +61,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
 
+        Route::get('/renew-licence/{slug}',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
 
-        /**
-         * Get transfer licence page.
-         * Not that it goes to TransferLicenceController
-         * just to avoid bloting LicenceController
-         */
         Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
+        Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');
 
 
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
@@ -90,4 +89,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
 
+        Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');
+        Route::get('/create-temp-licence', [TemporalLicenceController::class,'create'])->name('create_temp_licence');
+        Route::post('/submit-temp-licence', [TemporalLicenceController::class,'store'])->name('store_temp_licence');
+        Route::get('/view-temp-licence/{slug}', [TemporalLicenceController::class,'show'])->name('view_temp_licence');
+        Route::post('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
+        Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy'])->name('update_temp_licence');
+        
     });
