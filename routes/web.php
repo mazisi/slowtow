@@ -62,6 +62,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
 
         Route::get('/renew-licence/{slug}',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
+        //renew licence.submit
+        Route::post('/sumbmit-licence-renewal/{id}/{slug}',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
+        Route::get('/view-temp-licence/{slug}',[LicenceRenewalController::class,'viewLicence'])->name('view_temp_licence');
+
 
         Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
         Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');

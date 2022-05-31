@@ -26,5 +26,10 @@ class Licence extends Model
        return $this->hasMany(Nomination::class);
     }
 
+    public function licence_renewals()
+    {
+       return $this->hasMany(LicenceRenewal::class);
+    }
+
     
 }
