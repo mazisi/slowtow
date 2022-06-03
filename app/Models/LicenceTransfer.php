@@ -10,4 +10,8 @@ class LicenceTransfer extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = [];
+
+    public function licence(){
+       return $this->belongsTo(Licence::class);
+    }
 }

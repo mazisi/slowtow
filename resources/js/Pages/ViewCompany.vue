@@ -7,7 +7,9 @@ export default {
   name: "profile-overview",
   props: {
     errors: Object,
-    company: Object
+    company: Object,
+    success: String,
+    error: String,
   },
 
   data() {
@@ -98,7 +100,7 @@ triggerModal(){
       <span class="mask bg-gradient-success opacity-6"></span>
 </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="row gx-4">
+ <div class="row gx-4">
 <div class="col-auto">
 
 </div>
@@ -308,117 +310,10 @@ triggerModal(){
             </div>
           </div>
         </div>
-        <div class="row ">
-   
-          <div class="mt-3 row">
-          <div class="col-12 col-md-6 col-xl-4 position-relative">
-            <div class="card card-plain h-100">
-            <div class="p-3 pb-0 card-header" >
-                <h6 class="mb-0" >SARS Documents</h6>
-              </div>
-              <div class="p-3 card-body">
-                <ul class="list-group">
-            <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    SARS Certificate
-                    <input @input="form.sars_certificate = $event.target.files[0]" multiple type="file" value="" aria-label="..." />                    
-                  </li>
-      <progress v-if="form.progress" :value="form.progress.percentage" max="100">
-      {{ form.progress.percentage }}%
-    </progress>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    SARS Certificate Valid ?
-                    <input v-model="form.sars_certificate_valid" class="form-check-input ml-2" type="checkbox" value="" aria-label="..." checked />
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    <input v-model="form.sars_certificate_date" type="date"  aria-label="..." />
-                    Date
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    BEE Certificate
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    BEE Status
-                    <input v-model="form.bee_status" type="text"  aria-label="..." />
-                    </li>
-                 
-                </ul>
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
-          <div class="col-12 col-md-6 col-xl-4 position-relative">
-            <div class="card card-plain h-100">
-              <div class="p-3 pb-0 card-header" >
-                <h6 class="mb-0" >GATLA Documents</h6>
-              </div>
-              <div class="p-3 card-body">
-                
-                <ul class="list-group">
-                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    GATLA 
-                    <input @input="form.gatla_certificate = $event.target.files[0]" type="file" aria-label="..." />                    
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    GATLA Valid ?
-                    <input v-model="form.gatla_valid" class="form-check-input ml-2" type="checkbox" aria-label="..." checked />
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    <input  v-model="form.gatla_date" type="date"  aria-label="..." />
-                    Date
-                  </li>
-                </ul>
-                
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
-          <div class="col-12 col-md-6 col-xl-4 position-relative">
-            <div class="card card-plain h-100">
-              <div class="p-3 pb-0 card-header" >
-                <h6 class="mb-0" >CIPC Documents</h6>
-              </div>
-              <div class="p-3 card-body">
-                
-                <ul class="list-group">
-                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    Notice of Incorporation
-                    <input @input="form.cipc_notice_of_incorporation = $event.target.files[0]" type="file" aria-label="..." />                    
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    Memorandum of Association
-                    <input class="form-check-input ml-2" type="file" aria-label="..."  />
-                  </li>
-                  <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    Certificate
-                    <input @input="form.cipc_memorandum_of_incorporation = $event.target.files[0]" type="file"  aria-label="..." />
-                  </li>
-                   <li class=" list-group-item d-flex align-items-center border-0 mb-2 rounded"
-                    style="background-color: #f4f6f7;">
-                    Transfer Certificate
-                    <input @input="form.transfer_certificate = $event.target.files[0]" type="file"  aria-label="..." />
-                  </li>
-                </ul>
-                
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
-        </div>
-         
       
-        </div>
+<div class="float-end">
 <button type="submit" class="btn btn-secondary ms-2">Save</button>
+</div>
 
         
 </form>

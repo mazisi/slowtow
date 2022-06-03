@@ -7,7 +7,10 @@ export default {
  props: {
     errors: Object,
     licence: Object,
-    companies_dropdown: Array
+    companies_dropdown: Array,
+    success: String,
+    error: String,
+
   },
   data() {
     return {
@@ -18,6 +21,7 @@ export default {
       new_company: null,
       date: null,
       status: null,
+      licence_id: this.licence.id
       },
       options: this.companies_dropdown,
     };
@@ -58,27 +62,7 @@ export default {
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="row ">
-       
-        <div class="col-auto my-auto ">
-          <div class="h-100 d-flex">
-            <h5 class="mb-1">Transfer Licence</h5>
-             <h5 v-if="success" class="mb-1 text-success" style="margin-left: 3rem;" x-data="{ show: true }" 
-             x-show="show" x-init="setTimeout(() => show = false, 3000)">{{ success }}</h5>
-
-             <h5 v-if="error" class="mb-1 text-danger" style="margin-left: 3rem;" x-data="{ show: true }" 
-             x-show="show" x-init="setTimeout(() => show = false, 3000)">{{ error }}</h5>
-
-      
-          </div>
-         
-
-      
-        </div>
-        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
-          
-        </div>
-      </div>
+     
       <div class="row">
         <div class="mt-3 row">
           <div class="col-12 col-md-12 col-xl-12 position-relative">
@@ -86,7 +70,8 @@ export default {
               <div class="p-3 card-body">
   <form @submit.prevent="submit">
 <div class="row">
-<input type="hidden" v-model="form.old_company_id">                  
+<input type="hidden" v-model="form.old_company_id"> 
+<input type="hidden" v-model="form.licence_id">                 
   <div class="col-md-6 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Old Company *</label>

@@ -114,8 +114,9 @@ class CompanyController extends Controller
             'active' => $request->active,
         ]);
         if($company){
-            return to_route('view_company',['slug'=> $company->slug]);
+            return to_route('view_company',['slug'=> $company->slug])->with('success','Company updated successfully.');
         }
+        return to_route('view_company',['slug'=> $company->slug])->with('error','Error occured while updating company.');
 
         if ($request->hasFile('gatla_certificate')) {   
                     // $name = $request->gatla_certificate->getClientOriginalName();

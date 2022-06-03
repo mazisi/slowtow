@@ -10,6 +10,7 @@ export default {
     nominees: Array,
     licence: Object,
     success: String,
+    error: String,
   },
 
   data() {
@@ -20,7 +21,7 @@ export default {
          nomination_date: '',
          nomination_document: '',
          slug: this.licence.slug,
-         company: null, 
+         people: null, 
       },
       showMenu: false,
       options: this.nominees,
@@ -104,17 +105,17 @@ export default {
 <div class="col-md-6 columns">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
-       v-model="form.company"
+       v-model="form.people"
         mode="tags"
         placeholder="Search..."
         :options="options"
         :searchable="true"
       />
     </div>
-    <p v-if="errors.company" class="text-danger">{{ errors.company }}</p>
+    <p v-if="errors.people" class="text-danger">{{ errors.people }}</p>
 </div>
  </div>
-<div>
+<div class="float-end">
   <button type="submit" class="btn btn-secondary ms-2 d-flex justify-content-center">Save</button>
 </div>
 

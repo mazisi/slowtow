@@ -28,7 +28,7 @@ return new class extends Migration
             $table->string('province')->nullable();
             $table->string('consultant_name')->nullable();
             $table->string('must_renew')->nullable();
-            $table->boolean('licence_status')->default(1);
+            $table->string('licence_status')->nullable();
             $table->text('notes')->nullable();
             $table->string('slug');
             $table->softDeletes();

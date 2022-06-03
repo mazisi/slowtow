@@ -18,7 +18,7 @@ export default {
       surname: this.person.surname,
       date_of_birth: this.person.date_of_birth,
       id_number: this.person.id_number,
-      passport_number: this.person.passport_number,
+      passport_number: this.person.passport,
       id_or_passport: this.person.id_or_passport,
       email_address_1: this.person.email_address_1,
       email_adddress_2: this.person.email_adddress_2,
@@ -307,13 +307,11 @@ export default {
  <div v-if="errors.passport_valid_until" class="text-danger">{{ errors.passport_valid_until }}</div>
  </div>
  
-  <div class="d-flex">
+  <div class="d-flex float-end">
   
   <button @click="deletePerson" type="button" class="btn btn-sm btn-danger">Delete</button>
   
-  <div :style="{float: 'right'}">
   <button type="submit" class="btn btn-sm btn-secondary ms-2" >Update</button>
-  </div>
   </div>
             </div>
             </form>

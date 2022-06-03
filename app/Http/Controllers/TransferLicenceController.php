@@ -27,6 +27,7 @@ class TransferLicenceController extends Controller
            "status" => "required",//check me and put enum validation
        ]);
        $transfer = LicenceTransfer::create([
+        'licence_id'=> $request->licence_id,
         'company_id'=> $request->old_company_id,
         'new_company_id' => $request->new_company,
         'date' => $request->date,
@@ -38,9 +39,14 @@ class TransferLicenceController extends Controller
          Licence::where('company_id',$request->old_company_id)->update([
                                 'company_id' => $transfer->new_company_id
          ]);
-         return to_route('view_licence',['slug' => $slug])->with('success','Licence transfered successfully.');
+         return to_route('transfer_history',['slug' => $slug])->with('success','Licence transfered successfully.');
        }
-       return to_route('view_licence',['slug' => $slug])->with('errror','Oopps!!! An error occured while attempting licence transfer.');
+       return to_route('transfer_history',['slug' => $slug])->with('errror','Oopps!!! An error occured while attempting licence transfer.');
 
+      }
+
+      public function transferHistory($slug){
+        $licence = Licence::with('transfers','company','new_company')->whereSlug($slug)->first();
+        return Inertia::render('Licences/TransferHistory',['licence' => $licence]);
       }
 }

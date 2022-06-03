@@ -69,7 +69,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
         Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');
-
+        Route::get('/transfer-history/{slug}',[TransferLicenceController::class,'transferHistory'])->name('transfer_history');
 
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');
@@ -92,6 +92,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/nominations/{slug}',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
+        Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
 
         Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');
         Route::get('/create-temp-licence', [TemporalLicenceController::class,'create'])->name('create_temp_licence');

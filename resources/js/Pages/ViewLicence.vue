@@ -11,6 +11,7 @@ name: "dashboard-default",
     licence_dropdowns: Object,
     licence: Object,
     success: String,
+    error: String
   },
 
   data() {
@@ -58,11 +59,8 @@ name: "dashboard-default",
     },
 
     updateLicence() {
-      this.loading=true;
+      // this.loading=true;
       this.$inertia.post(`/update-licence/${this.licence.slug}`, this.form)
-       .then(() => {
-          this.loading=false;
-        })
     },
 
   },
@@ -72,23 +70,23 @@ name: "dashboard-default",
 };
 </script>
 <style>
+.columns{
+  margin-bottom: 1rem;
+}
 #active-checkbox{
   margin-top: 3px;
   margin-left: 3px;
 }</style>
+
 <template>
 <Layout>
 <div class="container-fluid">
-<div class="page-header min-height-100 border-radius-xl" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-">
-<span class="mask bg-gradient-success opacity-6"></span>
-</div>
-<div class="card card-body mx-3 mx-md-4 mt-n6">
-<div class="row gx-4">
-<div class="col-auto">
-
-</div>
-<div class="row">
+    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+      ">
+      <span class="mask bg-gradient-success opacity-6"></span>
+    </div>
+    <div class="card card-body mx-3 mx-md-4 mt-n6">
+     <div class="row">
 <div class="col-lg-6 col-7">
 <h6 class="mb-1">View Licence for: {{ licence.company.name }}</h6>
 </div>
@@ -99,119 +97,109 @@ name: "dashboard-default",
 </a>
 <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
 <li><Link :href="`/renew-licence/${licence.slug }`" class="dropdown-item border-radius-md">Renew Licence</Link></li>
+<li><Link :href="`/renew-licence/${licence.slug }`" class="dropdown-item border-radius-md">Licence Renewals</Link></li>
+<li><hr></li>
+<li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Transfer Licence</Link></li>
+<li><Link :href="`/transfer-history/${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
+<li><hr></li>
 <li><Link :href="`/nominate/${licence.slug }`" class="dropdown-item border-radius-md">Nominate</Link></li>
 <li><Link :href="`/nominations/${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
-<li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Transfer Licence</Link></li>
+<li><hr></li>
+<li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Alter Licence</Link></li>
+<li><Link :href="`/transfer-history/${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
+
+<li><hr class="text-danger"></li>
 <li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
 </ul>
 </div>
 </div>
 </div>
-
-
-</div>
+      <div class="row">
+        <div class="mt-3 row">
+          <div class="col-12 col-md-12 col-xl-12 position-relative">
+            <div class="card card-plain h-100">
+              <div class="p-3 card-body">
+  <form @submit.prevent="updateLicence">
 <div class="row">
-<form @submit.prevent="updateLicence">
-<div class="mt-3 row">
-<div class="col-12 col-md-6 col-xl-4 position-relative">
-<div class="card card-plain h-100">
-<div class="p-3 card-body">
-<ul class="list-group">
-<li class="px-0 border-0 list-group-item">
-<div class=" form-switch d-flex ps-0 ms-0">
-<label class="form-check-label text-body text-truncate">Active</label>
+<div class="col-md-6 columns">
+<div class=" d-flex ps-0 ms-0  is-filled">
+<label class=" mb-0 text-body text-truncate">Active</label>
 <input v-model="form.is_licence_active" id="active-checkbox" type="checkbox" :checked="form.is_licence_active">
 </div>
-</li>
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Trading Name *</label>
-<input type="text" class="form-control form-control-default" v-model="form.trading_name">
 </div>
-<p v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</p>
-</li>
 
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline is-filled">
-<label class="form-label">Licence Type *</label>
-<select v-model="form.licence_type" class="form-control form-control-default">
+   <div class="col-md-6 columns">                  
+   <div class=" null is-filled">
+  <label class="form-label">Must Renew</label>
+ <input v-model="form.must_renew" id="active-checkbox" type="checkbox" :checked="form.must_renew">
+   </div>
+  <div v-if="errors.must_renew" class="text-danger">{{ errors.must_renew }}</div>
+  </div>
+                  
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Trading Name *</label>
+    <input type="text" required class="form-control form-control-default" v-model="form.trading_name">
+     </div>
+  <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
+   </div>
+  
+  <div class="col-md-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Licence Type *</label>
+  <select v-model="form.licence_type" class="form-control form-control-default">
 <option value=" ">&lt;-- Please select an option --&gt;</option>
 <option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
 </select>
+  </div>
+ <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
-<p v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</p>
-</li>
 
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.licence_number">
-</div>
-<p v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</p>
-</li>
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Old Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
-</div>
-<p v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</p>
-</li>
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Date</label>
-<input type="date" class="form-control form-control-default" v-model="form.licence_date">
-</div>
-<p v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</p>
-</li>
-<li class="px-0 border-0 list-group-item">
+ <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Licence Number</label>
+    <input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
+     </div>
+   <div v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</div>
+   </div>
 
+<div class="col-md-4 columns">
+   <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Licence Date</label>
+  <input type="date" class="form-control form-control-default" v-model="form.licence_date">
+   </div>
+     <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
+</div>  
+<div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Expiry Date</label>
-<input type="date" class="form-control form-control-default" v-model="form.licence_expiry_date" >
+  <label class="form-label">Licence Expiry Date</label>
+  <input type="date" class="form-control form-control-default" v-model="form.licence_expiry_date" >
 </div>
-<p v-if="errors.licence_expiry_date" class="text-danger">{{ errors.licence_expiry_date }}</p>
-</li>
-<li class="px-0 border-0 list-group-item">
+<div v-if="errors.licence_expiry_date" class="text-danger">{{ errors.licence_expiry_date }}</div>
+</div>
 
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">File Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.file_number" >
-</div>
-</li>
-</ul>
-</div>
-</div>
-<hr class="vertical dark" />
-</div>
-<div class="col-12 col-md-6 col-xl-4 position-relative">
-<div class="card card-plain h-100">
+  <div class="col-md-4 columns">            
+ <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">File Number</label>
+  <input type="text" class="form-control form-control-default" v-model="form.file_number">
+   </div>
+  <div v-if="errors.file_number" class="text-danger">{{ errors.file_number }}</div>
+  </div>              
+              
 
-<div class="p-3 card-body">
+                  
+              
+  <div class="col-md-4 columns">    
+   <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Account Number</label>
+  <input type="text" class="form-control form-control-default" v-model="form.account_number" >
+   </div>
+   <div v-if="errors.account_number" class="text-danger">{{ errors.account_number }}</div>
+   </div>
 
-<ul class="list-group">
-<li class="px-0 border-0 list-group-item">
-<div class="d-flex ps-0 ms-0">
-<label class="form-check-label text-body text-truncate">Must Renew</label>
-<input v-model="form.must_renew" id="active-checkbox" type="checkbox" :checked="form.must_renew">
-</div>
-</li>
-
-<li class="px-0 border-0 list-group-item">
-
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Account Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.account_number" >
-</div>
-</li>
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address</label>
-<textarea class="form-control form-control-default" v-model="form.address"></textarea>
-</div>
-</li>
-<li class="px-0 border-0 list-group-item is-filled">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
+<div class="col-md-4 columns">    
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Province</label>
 <select class="form-control form-control-default" v-model="form.province" >
 <option value="" selected=""></option>
 <option value="Eastern Cape">Eastern Cape</option>
@@ -224,97 +212,40 @@ name: "dashboard-default",
 <option value="North West">North West</option>
 <option value="Western Cape">Western Cape</option>
 </select>
-
 </div>
-</li>
-<li class="px-0 border-0 list-group-item is-filled">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Consultant Name</label>
-<input v-model="form.consultant_name" type="text" class="form-control form-control-default" >
+<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
 </div>
-</li>
-
-<li class="px-0 border-0 list-group-item">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Notes</label>
-<textarea v-model="form.notes" class="form-control form-control-default" rows="6"></textarea>
-</div>
-</li>
-<button type="submit" class="btn btn-secondary ms-2 d-flex justify-content-center">
-<span class="mr-5" v-if="loading">
-<div class="half-circle-spinner">
-<div class="circle circle-1"></div>
-<div class="circle circle-2"></div>
-</div>
-</span>
-Save
-</button>
-</ul>
-
-</div>
-</div>
+                  
   
-<hr class="vertical dark" />
-</div>
-<div class="mt-4 col-12 col-xl-4 mt-xl-0">
-<div class="card card-plain h-100">
-<div class="p-3 pb-0 card-header">
-<h6 class="mb-0" >Licence Documents</h6>
-</div>
-<div class="p-3 card-body">
-            <!-- Tabs content -->
-<div class="tab-content" id="ex1-content">
-<div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-
-<button type="button" data-bs-toggle="modal" data-bs-target="#add-licence" class="btn btn-sm btn-secondary ms-2 d-flex justify-content-center">Upload</button>
-<hr>
-<h6 class="mb-0" >Duplicate Licence Documents</h6>
-<button type="button" data-bs-toggle="modal" data-bs-target="#add-licence" class="btn btn-sm btn-secondary ms-2 d-flex justify-content-center">Upload</button>
-
-<hr>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</form>
-</div>
-</div>
-</div>
-
-  <div class="modal fade" id="add-licence" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Add Licence Document</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-<form  @submit.prevent="originalLicenceUpload">
-<input type="hidden" v-model="licence_doc_upload_form.licence_id">
-<ul class="list-group mb-0">
-<li class="px-0 border-0 list-group-item is-filled">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Original Licence Name</label>
-<input v-model="licence_doc_upload_form.licence_doc_name" type="text" class="form-control form-control-default" >
-</div>
-</li>
-<li class="list-group-item d-flex align-items-center border-0 mb-2 rounded" style="background-color: rgb(244, 246, 247);">
-<span>Original Licence</span> <br>
-<input @input="licence_doc_upload_form.original_licence = $event.target.files[0]" type="file" aria-label="...">
-</li>
-<button type="submit" class="btn btn-sm btn-secondary ms-2 d-flex justify-content-center">Upload</button>
-</ul>
-</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-secondary">Save</button>
+ <div class="col-md-4 columns">    
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Consultant Name</label>
+  <input type="text" class="form-control form-control-default" v-model="form.consultant_name" >
+   </div>
+   <div v-if="errors.consultant_name" class="text-danger">{{ errors.consultant_name }}</div>
+   </div>
+             
+ <div class="col-md-12 columns">    
+   <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Address</label>
+  <textarea class="form-control form-control-default" v-model="form.address"></textarea>
+   </div>
+ <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
+ </div>
+  <div>
+  <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button></div>
+            </div>
+            </form>
+              </div>
+            </div>
+            <hr class="vertical dark" />
+          </div>
+      <!-- //tasks were here -->
+        
         </div>
-       </div>
+        
+      </div>
+    </div>
   </div>
-</div>
-
-</Layout>
+  </Layout>
 </template>

@@ -16,7 +16,7 @@ export default {
       surname: this.person.surname,
       date_of_birth: this.person.date_of_birth,
       id_number: this.person.id_number,
-      passport_number: this.person.passport_number,
+      passport_number: this.person.passport,
       id_or_passport: this.person.id_or_passport,
       email_address_1: this.person.email_address_1,
       email_adddress_2: this.person.email_adddress_2,
@@ -37,6 +37,8 @@ export default {
       status: this.person.status,
       active: this.person.active,
       slug: this.person.slug,
+      nomination_slug: this.person.nominations[0].slug,//update nomination table--status
+      id: this.person.nominations[0].pivot.id,//id in pivot nomination_people
       position: this.person.nominations[0].pivot.relationship,
       
     }
@@ -44,7 +46,7 @@ export default {
   },
     methods: {
       submit() {
-          this.$inertia.post(`/update-person`, this.form)
+          this.$inertia.post(`/update-nominee`, this.form)
         },
 
       deletePerson() {
@@ -105,6 +107,8 @@ export default {
               <div class="p-3 card-body">
 <form @submit.prevent="submit">
 <input type="hidden" v-model="form.slug">
+<input type="hidden" v-model="id">
+<input type="hidden" v-model="form.nomination_slug">
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
@@ -112,7 +116,7 @@ export default {
 <input v-model="form.active"  type="checkbox" id="active-checkbox" :checked="form.active">
 </div>
 </div>
-                  
+    
   <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Name *</label>

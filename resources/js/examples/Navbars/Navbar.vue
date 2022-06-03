@@ -14,27 +14,23 @@
         id="navbar"
       >
 
-
-   <!-- <div v-if="success" :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
-      x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+   <div v-if="($page.props.success && showFlashMessage)">
       <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
       <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ success }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+      <span class="text-sm">{{ $page.props.success  }}</span></span><button @click="showFlashMessage = false" type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
       <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
       </button>
       </div>
       </div>
 
-      <div v-else-if="error" :class="isRTL ? 'me-md-auto' : 'ms-md-auto'" x-data="{ show: true }" 
-      x-show="show" x-init="setTimeout(() => show = false, 3000)">
+      <div v-else-if="($page.props.error && showFlashMessage)">
       <div class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
       <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ error }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+      <span class="text-sm">{{ $page.props.error }}</span></span><button @click="showFlashMessage = false" type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
       <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
       </button>
       </div>
-      </div> -->
-
+      </div>
 
 
         <div
@@ -213,6 +209,7 @@ export default {
   data() {
     return {
       showMenu: false,
+      showFlashMessage: true,
     };
   },
   props: ["minNav", "color"],

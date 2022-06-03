@@ -21,7 +21,7 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->time('start_time')->nullable();
             $table->date('end_date')->nullable();
-            $table->time('end_ime')->nullable();
+            $table->time('end_time')->nullable();
             $table->enum('province',['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape']);
             $table->string('municipality')->nullable();
             $table->string('extent_of_financial_honest')->nullable();

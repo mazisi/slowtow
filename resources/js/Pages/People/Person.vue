@@ -16,32 +16,7 @@
    
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
-      <div class="row">
-      <div class="col-2"></div>
-      <div v-if="success" class="col-6" 
-      x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-      <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ success }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-      </button>
-      </div>
-      </div>
-
-      <div v-else-if="error" class="col-6" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-      <div class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
-      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ error }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-      </button>
-      </div>
-      </div>
-<div v-else-if="!error" class="col-6"></div>
-      <div class="col-2"></div>
-      <div class="col-2">
- 
-</div>
-      </div>
+    
 
         <div class="">
           <div class=" px-0 pb-2">

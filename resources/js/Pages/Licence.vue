@@ -16,9 +16,6 @@
       ">
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
-     <div v-if="success" class="mb-4 font-medium text-sm text-green-600">
-              {{ success }}
-        </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
       <form>

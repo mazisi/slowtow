@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('licence_transfers', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->integer('new_company_id');
             $table->date('date');

@@ -28,6 +28,13 @@ class Company extends Model
        return $this->hasMany(Licence::class);
     }
 
+    public function new_licence()
+    {//when its transfered
+       return $this->hasMany(Licence::class,'id');
+    }
+
+   
+
     public function temporal_licences()
     {
        return $this->hasMany(TemporalLicence::class);

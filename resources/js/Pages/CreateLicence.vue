@@ -10,6 +10,7 @@ export default {
     licence_dropdowns: Object,
     company: Object,
     success: String,
+    error: String,
   },
 
   data() {
@@ -46,10 +47,10 @@ export default {
 
   methods: {
     submit() {
-      this.loading=true;
+      // this.loading=true;
       this.$inertia.post(`/submit-licence/${this.company.slug}`, this.form)
        .then(() => {
-          this.loading=false;
+          // this.loading=false;
         })
     },
 
@@ -150,6 +151,13 @@ export default {
    </div>
    <p v-if="errors.licence_expiry_date" class="text-danger">{{ errors.licence_expiry_date }}</p>
    </li>
+   <li class="px-0 border-0 list-group-item">
+ 
+   <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">File Number</label>
+  <input type="text" class="form-control form-control-default" v-model="form.file_number" >
+   </div>
+ </li>
    
 </ul>
               </div>
@@ -168,13 +176,7 @@ export default {
   <input id="active-checkbox" type="checkbox" v-model="form.must_renew">
  </div>
   </li>
- <li class="px-0 border-0 list-group-item">
  
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">File Number</label>
-  <input type="text" class="form-control form-control-default" v-model="form.file_number" >
-   </div>
- </li>
  <li class="px-0 border-0 list-group-item">
         
    <div class="input-group input-group-outline null is-filled">
@@ -185,7 +187,7 @@ export default {
   <li class="px-0 border-0 list-group-item">
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Address</label>
-  <textarea class="form-control form-control-default" v-model="form.address"></textarea>
+  <textarea class="form-control form-control-default" rows="6" v-model="form.address"></textarea>
    </div>
   </li>
   <li class="px-0 border-0 list-group-item is-filled">
@@ -256,6 +258,7 @@ export default {
             </div>
           </div>
         </div>
+<div class="float-end">
 <button type="submit" class="btn btn-secondary ms-2 d-flex justify-content-center">
  <span class="mr-5" v-if="loading">
   <div class="half-circle-spinner">
@@ -264,7 +267,8 @@ export default {
 </div>
 </span>
 Save
-</button>
+</button></div>
+
 
         
 </form>
