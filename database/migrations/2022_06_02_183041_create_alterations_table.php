@@ -16,7 +16,10 @@ return new class extends Migration
         Schema::create('alterations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
-            $table->
+            $table->date('date');
+            $table->enum('status',['Pending','Complete']);
+            $table->string('slug');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -28,6 +31,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alterations');
+        Schema::table('alterations', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };

@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->string('liquor_licence_number')->nullable();
+            $table->string('active')->nullable();
             $table->text('premises_description')->nullable();
             $table->date('start_date')->nullable();
             $table->time('start_time')->nullable();

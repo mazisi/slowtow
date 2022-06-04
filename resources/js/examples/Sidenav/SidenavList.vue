@@ -113,7 +113,7 @@
       </li>
 
       <li v-if="$page.props.currentRoute == 'licences' || $page.props.currentRoute == 'view_licence'" class="nav-item">
-        <sidenav-collapse
+        <sidenav-collapse class="d-none"
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
@@ -130,7 +130,7 @@
             || $page.props.currentRoute == 'view_licence' 
             || $page.props.currentRoute == 'view_nomination'"
             class="nav-item">
-        <sidenav-collapse
+        <sidenav-collapse class="d-none"
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
@@ -190,11 +190,11 @@
       </li>
 
       <li class="nav-item">
-        <sidenav-collapse
+        <sidenav-collapse @click="alertIt"
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          collapseRef="notifications"
+          collapseRef="#!"
           navText="Email Comms"
         >
           <template v-slot:icon>
@@ -254,6 +254,9 @@ export default {
   methods: {
     goBack(){
       history.go(-1)
+    },
+    alertIt(){
+      alert('Comming Soon...')
     }
   }
 };

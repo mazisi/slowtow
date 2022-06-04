@@ -15,34 +15,58 @@ class LicenceController extends Controller
 
         if($request->term && $request->withThrashed != '' && $request->active_status == 'Active'){
 
-            $licences = Licence::with('company')->when($request->term,function($query,$term){
-             $query->where('trading_name','LIKE','%'.$term.'%')
-                   ->where('licence_status','1')
-                   ->withTrashed();
-            })->get();
+
+            $licences = Licence::with(["company"])
+                            ->orWhereHas('company', function($query) use($request){
+                                $query->where('name', 'like', '%'.$request->term.'%');
+                            })->orWhere('trading_name','LIKE','%'.$request->term.'%')
+                            ->where('licence_status','1')
+                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+                            ->get();
+
         }elseif($request->term && $request->withThrashed != '' ){
-            $licences = Licence::with('company')->when($request->term,function($query,$term){
-                $query->where('trading_name','LIKE','%'.$term.'%')
-                      ->withTrashed();
-               })->get();
+           
+               $licences = Licence::with(["company"])
+                            ->orWhereHas('company', function($query) use($request){
+                                $query->where('name', 'like', '%'.$request->term.'%');
+                            })->orWhere('trading_name','LIKE','%'.$request->term.'%')
+                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+                            ->withTrashed()
+                            ->get();
         
         }elseif($request->term && $request->active_status == 'Active'){
     
-            $licences = Licence::with('company')->when($request->term,function($query,$term){
-                $query->where('trading_name','LIKE','%'.$term.'%')
-                      ->where('active','1');
-               })->get();
+               $licences = Licence::with(["company"])
+               ->orWhereHas('company', function($query) use($request){
+                   $query->where('name', 'like', '%'.$request->term.'%');
+               })->orWhere('trading_name','LIKE','%'.$request->term.'%')
+               ->where('licence_status','1')
+               ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+               ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+               ->get();
+               
         }elseif($request->term){
-            $licences = Licence::with('company')->when($request->term,function($query,$term){
-                $query->where('trading_name','LIKE','%'.$term.'%');
-               })->get();
+            $licences = Licence::with(["company"])
+                            ->orWhereHas('company', function($query) use($request){
+                                $query->where('name', 'like', '%'.$request->term.'%');
+                            })->orWhere('trading_name','LIKE','%'.$request->term.'%')
+                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+                            ->get();
         
         }elseif($request->term && $request->withThrashed != '' && $request->active_status == 'Inactive'){
-            $licences = Licence::with('company')->when($request->term,function($query,$term){
-                $query->where('trading_name','LIKE','%'.$term.'%')
-                      ->where('licence_status','!=','1')
-                      ->withTrashed();
-         })->get();
+                    $licences = Licence::with(["company"])
+                            ->orWhereHas('company', function($query) use($request){
+                                $query->where('name', 'like', '%'.$request->term.'%');
+                            })
+                            ->orWhere('trading_name','LIKE','%'.$request->term.'%')
+                            ->where('licence_status','!=','1')
+                            ->withTrashed()
+                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+                            ->get();
 
         }else{
             $licences = Licence::with('company')->whereNull('trading_name')->get();

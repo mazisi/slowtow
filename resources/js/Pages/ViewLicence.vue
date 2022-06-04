@@ -96,7 +96,6 @@ name: "dashboard-default",
  <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
 </a>
 <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-<li><Link :href="`/renew-licence/${licence.slug }`" class="dropdown-item border-radius-md">Renew Licence</Link></li>
 <li><Link :href="`/renew-licence/${licence.slug }`" class="dropdown-item border-radius-md">Licence Renewals</Link></li>
 <li><hr></li>
 <li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Transfer Licence</Link></li>
@@ -105,8 +104,7 @@ name: "dashboard-default",
 <li><Link :href="`/nominate/${licence.slug }`" class="dropdown-item border-radius-md">Nominate</Link></li>
 <li><Link :href="`/nominations/${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
 <li><hr></li>
-<li><Link :href="`/transfer-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Alter Licence</Link></li>
-<li><Link :href="`/transfer-history/${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
+<li><Link :href="`/alter-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Alter Licence</Link></li>
 
 <li><hr class="text-danger"></li>
 <li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>

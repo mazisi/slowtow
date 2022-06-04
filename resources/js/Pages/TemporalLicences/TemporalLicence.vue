@@ -6,8 +6,9 @@ export default {
   props: ['licences'],
   data() {
     return {
-      term: '',
+     term: '',
       withThrashed: '', 
+      active_status: '' 
     }
   },
   components: {
@@ -15,12 +16,12 @@ export default {
 },
 methods: {
      search(){
-       if(this.term > 4){
           this.$inertia.replace(route('temp_licences',{
           term: this.term,
-          withThrashed: this.withThrashed
+          withThrashed: this.withThrashed,
+          active_status: this.active_status
           }))
-       }
+      
         
         },
 
@@ -42,27 +43,32 @@ methods: {
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
-      <form>
      <div class="row">
-       <div class="cpl-xs-12 col-md-3 col-lg-3">
+       <div class="col-3">
         <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Search Temporal Licence </label>
+  <label class="form-label">Search Licence </label>
   <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
    </div>
        </div>
- 
-        <div class="col-md-6 col-lg-6 col-xs-12">
+       <div class="col-2">
+        <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Active status: </label>
+  <select @change="search"  v-model="active_status" class="form-control form-control-default">
+   <option value="Active">Active</option>
+   <option value="Inactive">Inactive</option>
+  </select>
+
+   </div>
+       </div>
+        <div class="col-3">
         <div class="input-group ">
   <label class="">Include deleted licences: </label>
   <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
 
    </div>
-       </div>
-        <div class="col-3">
-       </div>
+ </div>
        
      </div>
-     </form>
         <div class=" my-4">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">

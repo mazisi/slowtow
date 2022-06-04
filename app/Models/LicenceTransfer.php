@@ -14,4 +14,9 @@ class LicenceTransfer extends Model
     public function licence(){
        return $this->belongsTo(Licence::class);
     }
+
+    public function old_company()
+    {
+       return $this->belongsTo(Company::class,'licence_transfare','old_company_id','licence_id');
+    }
 }

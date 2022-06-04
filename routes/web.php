@@ -12,6 +12,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\NominationController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
+use App\Http\Controllers\AlterLicenceController;
 use App\Http\Controllers\LicenceRenewalController;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
@@ -65,12 +66,17 @@ Route::group(['middleware' => ['auth']], function () {
         //renew licence.submit
         Route::post('/sumbmit-licence-renewal/{id}/{slug}',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
         Route::get('/view-temp-licence/{slug}',[LicenceRenewalController::class,'viewLicence'])->name('view_temp_licence');
-
+        Route::delete('/delete-licence-renewal/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
+        
 
         Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
         Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');
         Route::get('/transfer-history/{slug}',[TransferLicenceController::class,'transferHistory'])->name('transfer_history');
 
+        Route::get('/alter-licence/{slug}',[AlterLicenceController::class,'alterLicence'])->name('alter_licence');
+        Route::post('/submit-altered-licence/{licence_id}',[AlterLicenceController::class,'store'])->name('alter_licence.submit');
+        Route::delete('/delete-altered-licence/{slug}',[AlterLicenceController::class,'destroy'])->name('delete_altered_licence.submit');
+        
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');

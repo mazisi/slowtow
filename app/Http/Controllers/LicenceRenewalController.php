@@ -39,4 +39,13 @@ class LicenceRenewalController extends Controller
         $licence = TemporalLicence::whereSlug($slug)->first();
         return Inertia::render('Licences/ViewTemporalLicence',['licence' => $licence]);
     }
+
+    public function destroy($slug)
+    {
+        $renewal = LicenceRenewal::whereSlug($slug)->first();
+        if($renewal->delete()){
+            return back()->with('success','Renewal deleted successful.');
+        }
+        return back()->with('error','Error deleting renewal.');
+    }
 }

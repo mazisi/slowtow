@@ -23,21 +23,21 @@ class TransferLicenceController extends Controller
        $request->validate([
            "new_company" => "required|exists:companies,id",
            "date" => "required|date",
-           "old_company_id" => "required|exists:licences,company_id",
+           "old_company_id" => "required|exists:companies,id",
            "status" => "required",//check me and put enum validation
        ]);
        $transfer = LicenceTransfer::create([
         'licence_id'=> $request->licence_id,
-        'company_id'=> $request->old_company_id,
-        'new_company_id' => $request->new_company,
+        'company_id'=> $request->new_company,
+        'old_company_id' => $request->old_company_id,
         'date' => $request->date,
         'status' => $request->status,
-        'slug' => 'trans_from_'.$request->old_company.sha1(time())
+        'slug' => 'transfred_from_'.$request->old_company.sha1(time())
        ]);
 
        if($transfer){
          Licence::where('company_id',$request->old_company_id)->update([
-                                'company_id' => $transfer->new_company_id
+                                'company_id' => $request->old_company_id
          ]);
          return to_route('transfer_history',['slug' => $slug])->with('success','Licence transfered successfully.');
        }
@@ -46,7 +46,7 @@ class TransferLicenceController extends Controller
       }
 
       public function transferHistory($slug){
-        $licence = Licence::with('transfers','company','new_company')->whereSlug($slug)->first();
+        $licence = Licence::with('transfers','old_company')->whereSlug($slug)->first();
         return Inertia::render('Licences/TransferHistory',['licence' => $licence]);
       }
 }

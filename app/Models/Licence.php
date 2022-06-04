@@ -17,10 +17,7 @@ class Licence extends Model
        return $this->belongsTo(Company::class);
     }
 
-    public function new_company()
-    {
-       return $this->belongsTo(Company::class,'new_company_id');
-    }
+   
 
     public function licence_documents()
     {
@@ -31,6 +28,11 @@ class Licence extends Model
        return $this->hasMany(Nomination::class);
     }
 
+    public function alterations()
+    {
+       return $this->hasMany(Alteration::class);
+    }
+
     public function licence_renewals()
     {
        return $this->hasMany(LicenceRenewal::class);
@@ -38,7 +40,12 @@ class Licence extends Model
 
     public function transfers()
     {
-       return $this->hasMany(LicenceTransfer::class);
+       return $this->belongsToMany(Company::class, 'licence_transfers','licence_id','company_id' );
+    }
+
+    public function old_company()
+    {
+       return $this->belongsToMany(Company::class,'licence_transfers','licence_id','old_company_id');
     }
 
 

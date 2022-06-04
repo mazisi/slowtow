@@ -16,8 +16,34 @@
    
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
-    
+ 
+     <div class="row mb-4">
+       <div class="col-3">
+        <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Search Person </label>
+  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
+   </div>
+       </div>
+       <div class="col-2">
+        <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Active status: </label>
+  <select @change="search"  v-model="active_status" class="form-control form-control-default">
+   <option value="Active">Active</option>
+   <option value="Inactive">Inactive</option>
+  </select>
 
+   </div>
+       </div>
+        <div class="col-3">
+        <div class="input-group ">
+  <label class="">Include deleted people: </label>
+  <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
+
+   </div>
+ </div>
+       
+     </div>
+    
         <div class="">
           <div class=" px-0 pb-2">
           <div class="table-responsive p-0">
@@ -85,6 +111,22 @@ export default {
     success: String,
     people: Object,
     links: Array,
+  },
+  data(){
+    return{
+       term: '',
+      withThrashed: '', 
+      active_status: '' 
+    }
+  },
+  methods: {
+    search(){
+    this.$inertia.replace(route('people',{
+      term: this.term,
+      withThrashed: this.withThrashed,
+      active_status: this.active_status
+      }))
+    },
   },
  components: {
     Layout,

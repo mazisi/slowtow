@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->integer('new_company_id');
+            $table->integer('old_company_id');
             $table->date('date');
             $table->enum('status',['Pending','Completed','Declined']);
             $table->string('slug');

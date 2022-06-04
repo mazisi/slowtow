@@ -11,8 +11,53 @@ use Illuminate\Support\Facades\Redirect;
 
 class PersonController extends Controller
 {
-    public function index(){
-        $people = People::get();
+    public function index(Request $request){
+        if($request->term && $request->withThrashed != '' && $request->active_status == 'Active'){
+
+
+            $licences = Licence::with(["company"])->orWhere('trading_name','LIKE','%'.$request->term.'%')
+                            ->where('licence_status','1')
+                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+                            ->get();
+
+        }elseif($request->term && $request->withThrashed != '' ){
+           
+               $licences = People::with(["company"])->orWhere('trading_name','LIKE','%'.$request->term.'%')
+                            ->orWhere('initials','LIKE','%'.$request->term.'%')
+                            ->orWhere('surname','LIKE','%'.$request->term.'%')
+                            ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
+                            ->withTrashed()
+                            ->get();
+        
+        }elseif($request->term && $request->active_status == 'Active'){
+    
+               $people = People::where('name', 'like', '%'.$request->term.'%')
+                                ->orWhere('initials','LIKE','%'.$request->term.'%')
+                                ->orWhere('surname','LIKE','%'.$request->term.'%')
+                                ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
+                                ->whereActive('1')
+                                ->get();
+               
+        }elseif($request->term){
+            $people = People::where('name','LIKE','%'.$request->term.'%')
+                            ->orWhere('initials','LIKE','%'.$request->term.'%')
+                            ->orWhere('surname','LIKE','%'.$request->term.'%')
+                            ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
+                            ->get();
+        
+        }elseif($request->term && $request->withThrashed != '' && $request->active_status == 'Inactive'){
+                    $people = People::where('name','LIKE','%'.$request->term.'%')
+                            ->where('active','!=','1')
+                            ->withTrashed()
+                            ->orWhere('initials','LIKE','%'.$request->term.'%')
+                            ->orWhere('surname','LIKE','%'.$request->term.'%')
+                            ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
+                            ->get();
+
+        }else{
+            $people = People::whereNull('id')->get();
+        }
         return Inertia::render('People/Person',['people' => $people]);
     }
 

@@ -20,7 +20,7 @@
                     Current Company
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    New Company
+                    Old Company
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Licence Trading Name
@@ -36,28 +36,31 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="transfer in licence.transfers" :key="transfer.id">
-                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{ transfer.id }}</div></td>
+                  <tr >
+                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{licence.id}}</div></td>
                     <td>
-                      <div class="d-flex px-2 py-1">
+                      <div class="d-flex px-2 py-1" v-for="currentCompany in licence.transfers">
                        
                         <div class="d-flex flex-column justify-content-left">
-                        <inertia-link :href="`/view-company/${licence.company.slug}`">
+                        <inertia-link :href="`/view-company/`">
                           <h6 class="mb-0 text-sm">
-                         {{ licence.company.name }}
+                          {{currentCompany.name}}
                            </h6>    
                            </inertia-link>                      
                         </div>
                       </div>
                     </td>
-                    <td class="text-center">
-                    new_company
+                    <td class="text-center" >
+                    <div v-for="oldCompany in licence.company">
+                    {{ oldCompany }}
+                    </div>
+                    
                     </td>
                      <td class="text-center">
-                    {{ licence.trading_name }}
+                    hh
                     </td>
-                     <td class="text-center">{{ transfer.date }}</td>
-                     <td>{{ transfer.status }}</td>
+                     <td class="text-center">date</td>
+                     <td>ttt</td>
                   </tr>
                   
                  

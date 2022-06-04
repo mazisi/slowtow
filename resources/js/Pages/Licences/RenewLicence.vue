@@ -35,6 +35,11 @@ name: "dashboard-default",
     getRenewalYear(date){
       let computed_date = new Date(date).getFullYear();
       return computed_date + 1;    
+    },
+    deleteRenewal(slug){
+      if (confirm('Are you sure you want to delete this renewal?')) {
+      this.$inertia.delete(`/delete-licence-renewal/${slug}`)
+    }
     }
   },
   beforeUnmount() {
@@ -64,22 +69,10 @@ name: "dashboard-default",
 
 </div>
 <div class="row">
-<div class="col-lg-4 col-4">
-<h6 class="mb-1">Renewal Information:  {{ licence.trading_name }}</h6>
+<div class="col-lg-12">
+<h6 class="mb-1">Renewal Information For:  {{ licence.trading_name }}</h6>
 </div>
 
-<div class="col-lg-6 col-4" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-<div v-if="success" class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ success }}</span></span>
-</div>
-
-<div v-if="error" class="alert text-white alert-primary alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span>
-<span class="alert-text"> 
-<span class="text-sm">{{ error }}</span></span>
-</div>
-</div>
 
 
 </div>
@@ -100,7 +93,7 @@ name: "dashboard-default",
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Date</th>
         <th class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Year</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Status</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Drocess Date</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Process Date</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
@@ -124,8 +117,11 @@ name: "dashboard-default",
         <td class="align-middle text-center">
           ????
         </td>
-        <td class="align-middle text-center">
-        <Link class="btn btn-sm btn-secondary" :href="`/view-temp-licence/${renewal.slug}`">View</Link>
+        <td class="align-middle text-end">
+        <div class="d-flex align-middle text-end">
+        <Link  :href="`#!`" @click="deleteRenewal(renewal.slug)"><i class="fa fa-trash-o  text-danger" aria-hidden="true"></i></Link>
+        <Link  :href="`/view-temp-licence/`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
+        </div>
         </td>
       </tr>
 

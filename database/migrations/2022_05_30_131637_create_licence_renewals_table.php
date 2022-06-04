@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('date');
             $table->enum('status',['Pending','Processed','Complete']);
             $table->string('slug');
+            $table->softDeletes();
             $table->timestamps();
         });
     }
@@ -30,6 +31,8 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('licence_renewals');
+        Schema::table('licence_renewals', function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 };
