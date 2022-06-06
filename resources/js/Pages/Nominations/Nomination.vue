@@ -7,7 +7,7 @@
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
-      <h5>Nominees for: <span v-if="nominations.length">{{ nominations[0].licence.trading_name }}</span></h5>
+      <h5>Nominees for: <span v-if="nominations.length > 0">{{ nominations[0].licence.trading_name }}</span></h5>
         <div class=" my-4">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
@@ -44,10 +44,14 @@
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Terminated Date
                     </th>
-                    
+
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
+                    </th> -->
+                 
                   </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="$props.nominations.length > 0">
                   <tr v-for="people in nominations[0].people" :key="people.id">
                     <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{ people.id }}</div></td>
                     <td>
@@ -79,9 +83,23 @@
                      <td class="text-center">
                      <span v-if="people.pivot.terminated_at">{{ new Date(people.pivot.terminated_at).toLocaleString().split(',')[0] }}</span>
                      </td>
+                     <!-- <td class="text-center">
+                      <inertia-link :href="`/view-company/${people.pivot.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
+                      </td> -->
                   </tr>
                   
                  
+                </tbody>
+                <tbody v-else>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>No nominations found</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
                 </tbody>
               </table>
             </div>

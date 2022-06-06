@@ -30,8 +30,6 @@ class Company extends Model
 
     
 
-   
-
     public function temporal_licences()
     {
        return $this->hasMany(TemporalLicence::class);

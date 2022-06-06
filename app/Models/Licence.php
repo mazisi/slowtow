@@ -40,7 +40,7 @@ class Licence extends Model
 
     public function transfers()
     {
-       return $this->belongsToMany(Company::class, 'licence_transfers','licence_id','company_id' );
+       return $this->belongsToMany(Company::class, 'licence_transfers','licence_id','company_id' )->withPivot('date','status','slug');
     }
 
     public function old_company()

@@ -111,8 +111,10 @@ class LicenceController extends Controller
 
     public function show($slug){
         $licence = Licence::with('company','licence_documents')->whereSlug($slug)->firstOrFail();
+    
         $licence_dropdowns = LicenceType::get();
-        return Inertia::render('ViewLicence',['licence' => $licence,'licence_dropdowns' => $licence_dropdowns]);
+        return Inertia::render('ViewLicence',['licence' => $licence,
+                                            'licence_dropdowns' => $licence_dropdowns]);
     }
 
     public function update(Request $request,$slug){
@@ -135,5 +137,14 @@ class LicenceController extends Controller
             return redirect(route('view_licence',['slug' => $slug]))->with('success','Licence updated successfully.');
         }
         return redirect(route('view_licence',['slug' => $slug]))->with('error','Error updating licence.');
+    }
+
+    public function destroy($slug)
+    {
+        $licence = Licence::whereSlug($slug)->first();
+        if($licence->delete()){
+           return to_route('licences')->with('success','Licences deleted successfully.');
+        }
+        return to_route('licences')->with('error','Error deleting licence.');
     }
 }

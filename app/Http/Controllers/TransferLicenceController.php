@@ -32,21 +32,59 @@ class TransferLicenceController extends Controller
         'old_company_id' => $request->old_company_id,
         'date' => $request->date,
         'status' => $request->status,
-        'slug' => 'transfred_from_'.$request->old_company.sha1(time())
+        'slug' => $request->old_company.sha1(time())
        ]);
 
        if($transfer){
          Licence::where('company_id',$request->old_company_id)->update([
-                                'company_id' => $request->old_company_id
+                                'company_id' => $request->new_company
          ]);
          return to_route('transfer_history',['slug' => $slug])->with('success','Licence transfered successfully.');
        }
        return to_route('transfer_history',['slug' => $slug])->with('errror','Oopps!!! An error occured while attempting licence transfer.');
 
       }
-
+/**
+       * View all licence transfer history for a certain licence
+       */
       public function transferHistory($slug){
         $licence = Licence::with('transfers','old_company')->whereSlug($slug)->first();
         return Inertia::render('Licences/TransferHistory',['licence' => $licence]);
+      }
+
+      /**
+       * View Individual licence transfer history
+       */
+      public function viewTransferedLicence($slug)
+      {
+        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company')->whereSlug($slug)->first();
+        return Inertia::render('Licences/ViewTransferedLicence',['view_transfer' => $view_transfer]);
+      }
+
+      public function update(Request $request)
+      {
+        $request->validate([
+          'status' => 'required',
+          'transfer_date'=> 'required|date'
+        ]);
+        $update = LicenceTransfer::whereSlug($request->slug)->update([
+          'status' => $request->status,
+          'date' => $request->transfer_date
+        ]);
+        if ($update) {
+          return back()->with('success','Licence transfer updated successfully.');
+        }
+        return back()->with('error','Error updating transfered licence.');
+      }
+
+      /**
+       * Remove licence transfer
+       */
+      public function destroy($slug,$licence_slug){
+        $licence = LicenceTransfer::whereSlug($slug)->first();
+        if ($licence->delete()) {
+          return to_route('transfer_history',['slug' => $licence_slug])->with('success','Licence transfer deleted successfully.');
+        }
+        return to_route('transfer_history',['slug' => $licence_slug])->with('error','Error deleting transfered licence.');
       }
 }

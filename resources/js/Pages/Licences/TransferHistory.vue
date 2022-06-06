@@ -31,18 +31,20 @@
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Status
                     </th>
-                    
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
+                    </th>
                     
                   </tr>
                 </thead>
                 <tbody>
-                  <tr >
-                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{licence.id}}</div></td>
+                  <tr v-for=" (  currentCompany, index  )   in licence.transfers" :key="index" >
+                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{currentCompany.id}}</div></td>
                     <td>
-                      <div class="d-flex px-2 py-1" v-for="currentCompany in licence.transfers">
+                      <div class="d-flex px-2 py-1" >
                        
                         <div class="d-flex flex-column justify-content-left">
-                        <inertia-link :href="`/view-company/`">
+                        <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                           <h6 class="mb-0 text-sm">
                           {{currentCompany.name}}
                            </h6>    
@@ -50,17 +52,18 @@
                         </div>
                       </div>
                     </td>
-                    <td class="text-center" >
-                    <div v-for="oldCompany in licence.company">
-                    {{ oldCompany }}
-                    </div>
-                    
-                    </td>
+                    <td class="text-center">{{ licence.old_company[index].name}}</td>
                      <td class="text-center">
-                    hh
+                     {{ licence.trading_name }}
                     </td>
-                     <td class="text-center">date</td>
-                     <td>ttt</td>
+                     <td class="text-center"> {{ currentCompany.pivot.date}}</td>
+                     <td>{{ currentCompany.pivot.status}}</td>
+                      <td class="text-center">
+                    <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
+                    <i class="fa fa-eye  " aria-hidden="true"></i>
+                    </inertia-link>
+                      
+                    </td>
                   </tr>
                   
                  

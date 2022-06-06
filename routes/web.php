@@ -61,6 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-licence/{id}',[LicenceController::class,'store'])->name('submit_licence');
         Route::post('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
+        Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
         Route::get('/renew-licence/{slug}',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
         //renew licence.submit
@@ -72,6 +73,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
         Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');
         Route::get('/transfer-history/{slug}',[TransferLicenceController::class,'transferHistory'])->name('transfer_history');
+        Route::get('/view-transfered-licence/{slug}',[TransferLicenceController::class,'viewTransferedLicence'])->name('view-transfered_licence');
+        Route::delete('/delete-licence-transfer/{slug}/{licence_slug}',[TransferLicenceController::class,'destroy'])->name('delete_licence_transfer');
+        Route::patch('/update-licence-transfer',[TransferLicenceController::class,'update'])->name('update_licence_transfer');
 
         Route::get('/alter-licence/{slug}',[AlterLicenceController::class,'alterLicence'])->name('alter_licence');
         Route::post('/submit-altered-licence/{licence_id}',[AlterLicenceController::class,'store'])->name('alter_licence.submit');

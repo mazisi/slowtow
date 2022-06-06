@@ -29,7 +29,7 @@ name: "dashboard-default",
 
   methods: {
     submit() {
-      this.$inertia.patch(`/submit-altered-licence/${this.licence.id}`, this.form)
+      this.$inertia.post(`/submit-altered-licence/${this.licence.id}`, this.form)
     },
 
     deleteAlteration(slug){
@@ -112,7 +112,7 @@ name: "dashboard-default",
         <td class="align-end float-end">
         <div class="d-flex align-middle text-center">
         <Link  :href="`#!`" @click="deleteAlteration(alter.slug)"><i class="fa fa-trash-o  text-danger" aria-hidden="true"></i></Link>
-        <Link  :href="`/view-temp-licence/${alter.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
+        <Link  :href="`#!`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
         </div>
         </td>
       </tr>

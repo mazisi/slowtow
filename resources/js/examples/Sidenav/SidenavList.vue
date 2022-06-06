@@ -189,7 +189,7 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item">
+      <li :class="isActive">
         <sidenav-collapse @click="alertIt"
           url="#"
           :aria-controls="''"

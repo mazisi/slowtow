@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LicenceTransfer extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
     protected $guarded = [];
 
     public function licence(){
@@ -17,6 +16,6 @@ class LicenceTransfer extends Model
 
     public function old_company()
     {
-       return $this->belongsTo(Company::class,'licence_transfare','old_company_id','licence_id');
+       return $this->belongsTo(Company::class,'licence_transfer','old_company_id','licence_id')->withPivot('status','slug','date');
     }
 }

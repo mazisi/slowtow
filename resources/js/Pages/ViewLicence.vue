@@ -41,6 +41,7 @@ name: "dashboard-default",
       licence_id: this.licence.id
      },    
       showMenu: false,
+      showNominationMessage: false,
     };
   },
   components: {
@@ -62,6 +63,12 @@ name: "dashboard-default",
       // this.loading=true;
       this.$inertia.post(`/update-licence/${this.licence.slug}`, this.form)
     },
+
+     deleteLicence(){
+      if(confirm('Are you sure you want to delete this licence??')){
+        this.$inertia.delete(`/delete-licence/${this.licence.slug}`)
+      }      
+    }
 
   },
   beforeUnmount() {
@@ -90,6 +97,8 @@ name: "dashboard-default",
 <div class="col-lg-6 col-7">
 <h6 class="mb-1">View Licence for: {{ licence.company.name }}</h6>
 </div>
+
+
 <div class="col-lg-6 col-5 my-auto text-end">
 <div class="dropdown float-lg-end pe-4">
 <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
@@ -102,12 +111,16 @@ name: "dashboard-default",
 <li><Link :href="`/transfer-history/${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
 <li><hr></li>
 <li><Link :href="`/nominate/${licence.slug }`" class="dropdown-item border-radius-md">Nominate</Link></li>
+
 <li><Link :href="`/nominations/${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
+
+
 <li><hr></li>
 <li><Link :href="`/alter-licence/${licence.slug }`" class="dropdown-item border-radius-md"> Alter Licence</Link></li>
 
 <li><hr class="text-danger"></li>
-<li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
+<li><button @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
+<i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</button></li>
 </ul>
 </div>
 </div>

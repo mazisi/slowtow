@@ -21,7 +21,6 @@ return new class extends Migration
             $table->date('date');
             $table->enum('status',['Pending','Completed','Declined']);
             $table->string('slug');
-            $table->softDeletes();
             $table->timestamps();
         });
     }
