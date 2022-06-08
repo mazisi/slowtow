@@ -3,6 +3,7 @@
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\CompanyController;
@@ -111,4 +112,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
         Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy'])->name('update_temp_licence');
         
+
+        Route::get('/tasks',[TaskController::class,'index'])->name('tasks');
+        Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');
+
     });
