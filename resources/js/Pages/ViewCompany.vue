@@ -6,6 +6,7 @@ import DefaultProjectCard from "./components/DefaultProjectCard.vue";
 export default {
   name: "profile-overview",
   props: {
+    tasks: Object,
     errors: Object,
     company: Object,
     success: String,
@@ -15,6 +16,7 @@ export default {
   data() {
     return {
       openModal: false,
+      body_max: 100,
         form: {
         company_name: this.company.name,
         company_type: this.company.company_type,
@@ -50,6 +52,13 @@ export default {
        slug: this.company.slug,
       },
       showMenu: false,
+      //handle task creation..
+       createTask: this.$inertia.form({
+        body: '',
+        model_type: 'Company',
+        model_id: this.company.id,
+      }),
+
     };
   },
   components: {
@@ -66,6 +75,23 @@ export default {
       })
     },
 
+    // store task
+    submitTask() {
+      this.createTask.post('/submit-task',this.createTask)
+      this.createTask.body = ''
+    },
+
+    deleteTask(task_id){
+      if(confirm('Are you sure??')){
+        this.$inertia.delete(`/delete-task/${task_id}`)
+      }
+    },
+     checkBodyLength(){//Monitor task body length..
+        if(this.createTask.body.length > this.body_max){
+            this.createTask.body = this.createTask.body.substring(0,this.body_max)
+        }
+     },
+
 triggerModal(){
       this.openModal=true
     },
@@ -76,8 +102,6 @@ triggerModal(){
 
     addUser(){
       this.$inertia.post('/add-company-admin', this.addUserForm)
-
-        
     }
   },
 
@@ -115,7 +139,7 @@ triggerModal(){
 </a>
 <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
 <li><Link :href="`#!`" @click="triggerModal" data-bs-toggle="modal" data-bs-target="#add-user" class="dropdown-item border-radius-md">Add User</Link></li>
-<li><Link :href="`/create-licence/${company.slug}`" class="dropdown-item border-radius-md"> Create Licence</Link></li>
+
 <li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
 </ul>
 </div>
@@ -316,12 +340,95 @@ triggerModal(){
 </div>
 
         
-</form>
+      </form>
         
       </div>
+
+      <div class="row">
+      <h6 class="text-center">People Linked To : Company Name</h6>
+      <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Active
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    Company Name
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    View
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="align-middle text-sm">
+                                         
+                      <i class="fa fa-times text-danger" aria-hidden="true"></i>
+                    </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                       
+                        <div class="d-flex flex-column justify-content-left">
+                          <h6 class="mb-0 text-sm">
+               
+                          Company name
+                           </h6>                          
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-center">
+                    <inertia-link :href="`#`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
+                      
+                    </td>
+                    
+                  </tr>
+                  
+                 
+                </tbody>
+              </table>
+            </div>
+            <hr>
+            <h6 class="text-center text-decoration-underline">Notes</h6>
+            </div>
+<div class="row">
+       <div class="col-xl-8">
+      <div class="row">
+        <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
+         <div class="alert text-white alert-secondary alert-dismissible fade show font-weight-light" role="alert">
+         <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+         <span class="text-sm">{{ task.body }}</span>
+         </span>
+         <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
+         data-bs-dismiss="alert" aria-label="Close">
+         <span aria-hidden="true" class="text-lg font-weight-bold">×</span></button>
+         </div>
+        </div>
+        
+      </div>
+     
+    </div>
+
+    <div class="col-xl-4">
+    <form @submit.prevent="submitTask">
+
+ <div class="col-12 columns">    
+ <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">New Task<span class="text-danger pl-6">{{ body_max - createTask.body.length}}/{{ body_max }}</span></label>
+  <textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+   </div>
+ <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
+ </div>
+
+
+<button type="submit" class="btn btn-sm btn-info ms-2 mt-4 float-end justify-content-center">Save</button>
+</form>
     </div>
   </div>
-
+  </div>
+</div>
   <div class="modal fade" id="add-user" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog">
   <form @submit.prevent="addUser">

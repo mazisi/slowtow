@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Licence;
@@ -17,8 +18,8 @@ class NominationController extends Controller
      * Get nominate page...
      * Return Nominate.vue where you select people & create nomination. 
      */
-    public function index($slug){
-        $licence = Licence::whereSlug($slug)->firstOrFail();
+    public function index(Request $request){
+        $licence = Licence::whereSlug($request->slug)->firstOrFail();
         $nominees = People::pluck('name','id');
         return Inertia::render('Nominations/Nominate',['licence' => $licence,'nominees' => $nominees]);
     }
@@ -49,8 +50,8 @@ class NominationController extends Controller
     /**
      * Get all nominations belonging to a certain licence.
      */
-    public function nominations($slug){
-        $nom = Licence::whereSlug($slug)->firstOrFail();
+    public function nominations(Request $request){
+        $nom = Licence::whereSlug($request->slug)->firstOrFail();
         $nominations = Nomination::with('licence','people')->where('licence_id',$nom->id)->get();
         return Inertia::render('Nominations/Nomination',['nominations' => $nominations]);
     }
@@ -59,8 +60,9 @@ class NominationController extends Controller
      * Vue nominee.
      */
     public function viewIndividualNomination($slug){
-        $person = People::with('nominations')->whereSlug($slug)->firstOrFail();
-        return Inertia::render('Nominations/ViewIndividualNomination',['person' => $person]);
+        $person = People::with('nominations')->whereSlug($slug)->first();
+        $tasks = Task::where('model_type','Nomination')->where('model_id',$person->id)->whereUserId(auth()->id())->get();
+        return Inertia::render('Nominations/ViewIndividualNomination',['person' => $person,'tasks' => $tasks]);
     }
 
     /**

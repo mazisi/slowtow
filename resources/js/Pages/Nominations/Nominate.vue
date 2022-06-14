@@ -62,26 +62,7 @@ export default {
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row gx-4">
-        <div class="col-auto">
-         <div v-if="success" class="col-6" 
-      x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-      <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ success }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-      </button>
-      </div>
-      </div>
-
-      <div v-else-if="error" class="col-6" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-      <div class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
-      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ error }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-      </button>
-      </div>
-      </div>
-        </div>
+      
         <div class="col-auto my-auto">
           <div class="h-100 d-flex">
              <h5 class="mb-1">Add Nomination for: {{ licence.trading_name }}</h5>

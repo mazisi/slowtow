@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use Illuminate\Support\Str;
@@ -104,7 +105,8 @@ class PersonController extends Controller
 
     public function show($slug){
         $person = People::with('nominations')->whereSlug($slug)->first();
-        return Inertia::render('People/ViewPerson',['person' => $person]);
+        $tasks = Task::where('model_type','Person')->where('model_id',$person->id)->whereUserId(auth()->id())->get();
+        return Inertia::render('People/ViewPerson',['person' => $person,'tasks' => $tasks]);
     }
 
     public function update(ValidatePeople $request){

@@ -14,19 +14,31 @@ class TaskController extends Controller
     }
     public function store(Request $request)
     {
-        $table->foreignId('')->constrained()->onDelete('cascade');
-            $table->string('model_type')->nullable();
-            $table->string('model_id')->nullable();
-            $table->string('title');
-            $table->date('date')->nullable();
-            $table->time('time')->nullable();
-            $table->enum('priority',['Low','Medium','High'])->nullable();
-            $table->string('body');
-            $table->string('slug');
-
-        Task::create([
+    $request->validate([
+        'body'=> 'required|max:300',
+        'model_id' => 'required',
+         'model_type' => 'required',
+         'taskDate' => 'required|date',
+         ]);
+        $add_task = Task::create([
             'user_id' => auth()->id(),
-            'model_type'
+            'model_type'=> $request->model_type,
+            'model_id' => $request->model_id,
+            'date' => $request->taskDate,
+            'body' => $request->body
         ]);
+        if($add_task){
+            return back()->with('success','Task added successfully');
+        }
+        return back()->with('error','Error adding task!!!');
+    }
+
+    public function destroy($id)
+    {
+       $task = Task::find($id);
+       if($task->delete()){
+        return back()->with('success','Task deleted successfully.');
+        }
+        return back()->with('error','Error deleting task!!!');
     }
 }

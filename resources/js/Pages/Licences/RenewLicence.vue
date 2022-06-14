@@ -15,8 +15,8 @@ name: "dashboard-default",
   data() {
     return {
         form: {
-         renewal_date: null,
-         renewal_status: null
+         renewal_date: '',
+         licence_id: this.licence.id,
       },
       showMenu: false,
     };
@@ -29,7 +29,7 @@ name: "dashboard-default",
 
   methods: {
     submit() {
-      this.$inertia.post(`/sumbmit-licence-renewal/${this.licence.id}/${this.licence.slug}`, this.form)
+      this.$inertia.post(`/submit-licence-renewal`, this.form)
     },
 
     getRenewalYear(date){
@@ -40,11 +40,14 @@ name: "dashboard-default",
       if (confirm('Are you sure you want to delete this renewal?')) {
       this.$inertia.delete(`/delete-licence-renewal/${slug}`)
     }
-    }
-  },
-  beforeUnmount() {
+    },
+    beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },
+  
+  },
+  
+  
 };
 </script>
 <style>
@@ -70,7 +73,7 @@ name: "dashboard-default",
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">Renewal Information For:  {{ licence.trading_name }}</h6>
+<h6 class="mb-1">Renewal Information:  {{ licence.trading_name }}</h6>
 </div>
 
 
@@ -82,7 +85,7 @@ name: "dashboard-default",
 <div class="row">
 
 <div class="mt-3 row">
-<div class="col-12 col-md-6 col-xl-9 position-relative">
+<div class="col-12 col-md-6 col-xl-8 position-relative">
 <div class="card card-plain h-100">
 <div class="p-3 card-body">
 
@@ -93,7 +96,6 @@ name: "dashboard-default",
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Date</th>
         <th class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Year</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Status</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Process Date</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
@@ -102,7 +104,7 @@ name: "dashboard-default",
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="text-center">{{ new Date(renewal.date).toLocaleString().split(',')[0] }}</h6>
+              <h6 class="text-center">{{ renewal.date }}</h6>
             </div>
           </div>
         </td>
@@ -110,12 +112,12 @@ name: "dashboard-default",
           {{ this.getRenewalYear(renewal.date)  }}
         </td>
         <td class="align-middle text-center text-sm">
-        <span v-if="renewal.status == 'Pending'" class="badge bg-warning text-default">{{ renewal.status }}</span>
-        <span v-if="renewal.status == 'Processed'" class="badge bg-primary text-default">{{ renewal.status }}</span>
+        <span v-if="renewal.status == 'Invoiced'" class="badge bg-dark text-default">{{ renewal.status }}</span>
+        <span v-if="renewal.status == 'Paid'" class="badge bg-info text-default">{{ renewal.status }}</span>
+        <span v-if="renewal.status == 'Get Client Docs'" class="badge bg-light text-default">{{ renewal.status }}</span>
+        <span v-if="renewal.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ renewal.status }}</span>
+        <span v-if="renewal.status == 'Issued'" class="badge bg-secondary text-default">{{ renewal.status }}</span>
         <span v-if="renewal.status == 'Complete'" class="badge bg-success text-default">{{ renewal.status }}</span>
-        </td>
-        <td class="align-middle text-center">
-          ????
         </td>
         <td class="align-middle text-end">
         <div class="d-flex align-middle text-end">
@@ -142,10 +144,10 @@ name: "dashboard-default",
 <hr class="vertical dark" />
 </div>
 
-<div class="mt-4 col-12 col-xl-3 mt-xl-0">
+<div class="mt-4 col-12 col-xl-4 mt-xl-0">
 <div class="card card-plain h-100">
 <div class="p-3 pb-0 card-header">
-<h6 class="mb-0" >New Renewal</h6>
+<h6>Process Renewal For: {{ new Date().getFullYear() }}</h6>
 </div>
 <div class="p-3 card-body">
             <!-- Tabs content -->
@@ -155,22 +157,12 @@ name: "dashboard-default",
 <div class="col-12 columns">    
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Renewal Date</label>
-  <input v-model="form.renewal_date" type="date" class="form-control form-control-default" >
-   </div>
+  <input v-model="form.renewal_date" type="date" min="2022-12-01" class="form-control form-control-default" >
+ </div>
  <p v-if="errors.renewal_date" class="text-danger">{{ errors.renewal_date }}</p>
  </div>
 
- <div class="col-12 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Status</label>
-  <select v-model="form.renewal_status" class="form-control form-control-default">
-  <option value="Pending">Pending</option>
-  <option value="Processed">Processed</option>
-  <option value="Complete">Complete</option>
-  </select>
-   </div>
-<p v-if="errors.renewal_status" class="text-danger">{{ errors.renewal_status }}</p>
-</div>
+ 
 
 <button type="submit" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Save</button>
 </form>

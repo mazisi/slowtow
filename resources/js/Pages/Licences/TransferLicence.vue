@@ -1,6 +1,8 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
+import { Link } from '@inertiajs/inertia-vue3';
+
 
 export default {
   name: "profile-overview",
@@ -21,7 +23,14 @@ export default {
       new_company: null,
       date: null,
       status: null,
-      licence_id: this.licence.id
+      licence_id: this.licence.id,
+      deposit_invoice_type: '',
+      is_deposit_paid: '',
+      client_invoiced_checkbox: '',//status
+      client_invoiced_type: '',//check if radio is maual
+      invoice_date: '',
+      billable_item: '',
+      include_vat: '',
       },
       options: this.companies_dropdown,
     };
@@ -36,7 +45,8 @@ export default {
   },
   components: {
     Layout,
-    Multiselect
+    Multiselect,
+    Link
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -52,6 +62,9 @@ export default {
   margin-top: 3px;
   margin-left: 3px;
 }
+.status-heading{
+  font-weight: 700;
+}
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
@@ -62,7 +75,12 @@ export default {
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-     
+      <div class="row">
+  <div class="col-lg-6 col-7">
+   <h5>New Transfer for: {{ licence.trading_name }}</h5>
+  </div>
+  <div class="col-lg-6 col-5 my-auto text-end"></div>
+</div>
       <div class="row">
         <div class="mt-3 row">
           <div class="col-12 col-md-12 col-xl-12 position-relative">
@@ -71,19 +89,41 @@ export default {
   <form @submit.prevent="submit">
 <div class="row">
 <input type="hidden" v-model="form.old_company_id"> 
-<input type="hidden" v-model="form.licence_id">                 
-  <div class="col-md-6 columns">
+<input type="hidden" v-model="form.licence_id"> 
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.is_deposit_paid" type="checkbox">
+<label class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
+</div>
+</div>     
+<hr>
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label mb-0 text-body text-truncate">Scanned Deposit Invoice</label>
+</div>
+</div> 
+
+<hr>
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.transfer_details" type="checkbox">
+<label class="form-check-label text-body text-truncate status-heading">Collate Transfer Details</label>
+</div>
+</div> 
+
+  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Old Company *</label>
+    <label class="form-label">Current Company *</label>
     <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" v-model="form.old_company" >
      </div>
    <div v-if="errors.old_company" class="text-danger">{{ errors.old_company }}</div>
    </div>
-  <div class="col-md-6 columns">
+  <div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
      v-model="form.new_company"
-        placeholder="Search company"
+        placeholder="Transfer to...."
         :options="options"
         :searchable="true"
       />
@@ -91,27 +131,33 @@ export default {
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>
 
- <div class="col-md-6 columns">
+ <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
+    <label class="form-label">Transfer Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.date" >
      </div>
    <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
    </div>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Status</label>
-  <select v-model="form.status" required class="form-control form-control-default">
-    <option value="">Please review this dropdown values</option>
-    <option value="Pending">Pending</option>
-    <option value="Completed">Completed</option>
-    <option value="Declined">Declined</option>
-  </select>
-</div>
-<div v-if="errors.status" class="text-danger">{{ errors.status }}</div>
-</div>
 <hr>
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.client_invoiced_checkbox" type="checkbox">
+<label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+</div>
+</div> 
+
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label mb-0 text-body text-truncate">Invoice</label>
+</div>
+</div> 
+
+
+
+   
 <h6 class="text-center">Documents Related Fields</h6>
 <div>
   <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Transfer</button></div>

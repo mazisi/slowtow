@@ -40,9 +40,6 @@ export default {
     methods: {
       submit() {
           this.$inertia.post(`/submit-person`, this.form)
-          .then(() => {
-              
-            })
         },
   },
   components: {

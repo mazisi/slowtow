@@ -1,9 +1,11 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
+import { Head,Link } from '@inertiajs/inertia-vue3';
 
 export default {
   name: "dashboard-default",
  props: {
+    tasks: Object,
     errors: Object,
     person: Object,
     isFromViewNominationPage: Boolean,
@@ -39,11 +41,34 @@ export default {
       active: this.person.active,
       slug: this.person.slug,
       
-    }
+    },
+     body_max: 255,
+      //handle task creation..
+       createTask: this.$inertia.form({
+        body: '',
+        model_type: 'Person',
+        model_id: this.person.id,
+      }),
     };
   },
     methods: {
-      submit() {
+       // store task
+    submitTask() {
+      this.createTask.post('/submit-task',this.createTask)
+      this.createTask.body = ''
+    },
+    checkBodyLength(){
+        if(this.createTask.body.length > this.body_max){
+            this.createTask.body = this.createTask.body.substring(0,this.body_max)
+        }
+     },
+
+    deleteTask(task_id){
+      if(confirm('Are you sure??')){
+        this.$inertia.delete(`/delete-task/${task_id}`)
+      }
+    },
+      submit() {//Update person
           this.$inertia.post(`/update-person`, this.form)
         },
 
@@ -61,6 +86,8 @@ export default {
   },
   components: {
     Layout,
+    Link,
+    Head
   },
 
   beforeUnmount() {
@@ -76,6 +103,10 @@ export default {
 #active-checkbox{
   margin-top: 3px;
   margin-left: 3px;
+}
+.display-text-length{
+  margin-left: 10rem;
+  font-size: 14px;
 }
 </style>
 
@@ -307,7 +338,7 @@ export default {
  <div v-if="errors.passport_valid_until" class="text-danger">{{ errors.passport_valid_until }}</div>
  </div>
  
-  <div class="d-flex float-end">
+  <div class="d-flex">
   
   <button @click="deletePerson" type="button" class="btn btn-sm btn-danger">Delete</button>
   
@@ -324,6 +355,47 @@ export default {
         </div>
         
       </div>
+
+      <div class="row">
+       <div class="col-xl-8">
+      <div class="row">
+        <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-6 col-md-6 mb-xl-0">
+          <div class="card card-blog border border-success mb-4">
+            <div class="p-3 card-body">
+              <p class="mb-4 text-sm">{{ task.body.slice(0, 300) }}</p>
+              <div class="d-flex align-items-center justify-content-between">
+                <div class="avatar-group ">
+                <Link :href='`#!`'  @click="deleteTask(task.id)"><i class="fa fa-trash text-danger"></i></Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h6 v-if="!tasks" class="text-center">No tasks found.</h6>
+      </div>
+     
+    </div>
+
+    <div class="col-xl-4">
+    <div class="ps-3 d-flex">
+        <h6>New Task </h6>
+        <p class="text-end text-danger display-text-length">{{ body_max - createTask.body.length}}/{{ body_max }}</p>
+      </div>
+     <form @submit.prevent="submitTask">
+
+ <div class="col-12 columns">    
+ <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Task Body</label>
+  <textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="6" ></textarea>
+   </div>
+ <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
+ </div>
+
+
+<button type="submit" class="btn btn-sm btn-info ms-2 mt-4 float-end justify-content-center">Save</button>
+</form>
+    </div>
+       </div>
     </div>
   </div>
   </Layout>

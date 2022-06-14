@@ -2,36 +2,52 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Inertia\Inertia;
 use App\Models\Licence;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\TemporalLicence;
-use Illuminate\Http\Request;
-use Inertia\Inertia;
+use Illuminate\Support\Facades\DB;
 
 class LicenceRenewalController extends Controller
 {
-    public function renewLicence($slug){
-        $licence = Licence::with('company')->whereSlug($slug)->first();
+    public function renewLicence(Request $request){
+        $licence = Licence::with('company')->whereSlug($request->slug)->first();
         $renewals = LicenceRenewal::where('licence_id',$licence->id)->get();
        return Inertia::render('Licences/RenewLicence',['licence' => $licence,'renewals' => $renewals]);
     }
 
 
-    public function store(Request $request,$id,$slug){
+    public function store(Request $request){
+       
         $request->validate([
-            'renewal_date' => 'required|date',
-            'renewal_status' => 'required'
+            'renewal_date' => 'required',
         ]);
+
+        $posted_date = strtotime($request->renewal_date);//Just force every date format to 'Y-m-d'
+        $new_date = date('Y-m-d',$posted_date);
+    
+        $check_renewal = LicenceRenewal::where('licence_id',$request->licence_id)
+                                        ->where('date',Str::substr($new_date, 0, 4))->first();
+        if (!is_null($check_renewal)) {
+           return back()->with('error', 'Licence already renewed for '.Str::substr($new_date, 0, 4));
+        }
+
+        // if($check_renewal->date >= Str::substr($new_date, 0, 4)){
+        //     return back()->with('error', 'Licence already renewed for '.Str::substr($new_date, 0, 4));
+        // }
+
         $renew = LicenceRenewal::create([
-            'licence_id' => $id,
-            'date' => $request->renewal_date,
-            'status' => $request->renewal_status,
+            'licence_id' => $request->licence_id,
+            'date' => Str::substr($new_date, 0, 4),
             'slug' => sha1(time())
         ]);
         if($renew){
-            return to_route('renew_licence',['slug' => $slug])->with('success','Licence renewed successfully.');
+         return back()->with('success','Licence renewed successfully.');
         }
-        return to_route('renew_licence',['slug' => $slug])->with('error','An error occured while renewing licence.');
+        return back()->with('error','An error occured while renewing licence.');
     }
 
 

@@ -8,6 +8,7 @@ use App\Models\Licence;
 use App\Models\LicenceType;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\Task;
 
 class LicenceController extends Controller
 {
@@ -15,8 +16,7 @@ class LicenceController extends Controller
 
         if($request->term && $request->withThrashed != '' && $request->active_status == 'Active'){
 
-
-            $licences = Licence::with(["company"])
+            $licences = Licence::with(["company","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
                                 $query->where('name', 'like', '%'.$request->term.'%');
                             })->orWhere('trading_name','LIKE','%'.$request->term.'%')
@@ -27,7 +27,7 @@ class LicenceController extends Controller
 
         }elseif($request->term && $request->withThrashed != '' ){
            
-               $licences = Licence::with(["company"])
+               $licences = Licence::with(["company","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
                                 $query->where('name', 'like', '%'.$request->term.'%');
                             })->orWhere('trading_name','LIKE','%'.$request->term.'%')
@@ -38,7 +38,7 @@ class LicenceController extends Controller
         
         }elseif($request->term && $request->active_status == 'Active'){
     
-               $licences = Licence::with(["company"])
+               $licences = Licence::with(["company","licence_type"])
                ->orWhereHas('company', function($query) use($request){
                    $query->where('name', 'like', '%'.$request->term.'%');
                })->orWhere('trading_name','LIKE','%'.$request->term.'%')
@@ -48,7 +48,7 @@ class LicenceController extends Controller
                ->get();
                
         }elseif($request->term){
-            $licences = Licence::with(["company"])
+            $licences = Licence::with(["company","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
                                 $query->where('name', 'like', '%'.$request->term.'%');
                             })->orWhere('trading_name','LIKE','%'.$request->term.'%')
@@ -57,7 +57,7 @@ class LicenceController extends Controller
                             ->get();
         
         }elseif($request->term && $request->withThrashed != '' && $request->active_status == 'Inactive'){
-                    $licences = Licence::with(["company"])
+                    $licences = Licence::with(["company","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
                                 $query->where('name', 'like', '%'.$request->term.'%');
                             })
@@ -69,52 +69,52 @@ class LicenceController extends Controller
                             ->get();
 
         }else{
-            $licences = Licence::with('company')->whereNull('trading_name')->get();
+            $licences = Licence::with('company','licence_type')->whereNull('trading_name')->get();
         }
-        return Inertia::render('Licence',['licences' => $licences]);
+        return Inertia::render('Licences/Licence',['licences' => $licences]);
     }
 
-    public function create($slug){
-        $company = Company::whereSlug($slug)->firstOrFail();
+    public function create(){
+        $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
-        return Inertia::render('CreateLicence',['licence_dropdowns' => $licence_dropdowns,
-        'company' => $company]);
+        return Inertia::render('Licences/CreateLicence',['licence_dropdowns' => $licence_dropdowns,
+        'companies' => $companies]);
     }
 
-    public function store(Request $request,$slug){
+    public function store(Request $request){
        
         $request->validate([
             "trading_name" => "required",
             "licence_type" => "required",
-            "licence_date" => "required",
+            "company" => "required|exists:companies,id",
+            "province" => "required",
         ]);
-        $get_comp = Company::whereSlug($slug)->first();
         Licence::create([
             "trading_name" => $request->trading_name,
             "licence_type" => $request->licence_type,
             "licence_date" => $request->licence_date,
-            "company_id"   => $get_comp->id,
+            "company_id"   => $request->company,
             "licence_number" => $request->licence_number,
             "old_licence_number" => $request->old_licence_number,
-            "licence_expire_date" => $request->licence_expire_date,
-            "file_number" => $request->file_number,
-            "account_number" => $request->account_number,
+            "licence_expiry_date" => $request->licence_expiry_date,
             "address" => $request->address,
             "province" => $request->province,
-            "consultant_name" => $request->consultant_name,
-            "must_renew" => $request->must_renew,
-            "licence_status" => $request->is_licence_active,
+            "is_licence_active" => $request->is_licence_active,
             'slug' => Str::replace(' ','_',$request->trading_name).sha1(time()),
         ]);
         return redirect(route('licences'))->with('success','Licence created successfully.');
     }
 
-    public function show($slug){
-        $licence = Licence::with('company','licence_documents')->whereSlug($slug)->firstOrFail();
+    public function show(Request $request){
+        $licence = Licence::with('company','licence_documents')->whereSlug($request->slug)->first();
     
         $licence_dropdowns = LicenceType::get();
-        return Inertia::render('ViewLicence',['licence' => $licence,
-                                            'licence_dropdowns' => $licence_dropdowns]);
+        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+
+        return Inertia::render('Licences/ViewLicence',['licence' => $licence,
+                                            'licence_dropdowns' => $licence_dropdowns,
+                                             'tasks' => $tasks
+                                            ]);
     }
 
     public function update(Request $request,$slug){
@@ -125,13 +125,9 @@ class LicenceController extends Controller
             "licence_number" => $request->licence_number,
             "old_licence_number" => $request->old_licence_number,
             "licence_expire_date" => $request->licence_expire_date,
-            "file_number" => $request->file_number,
-            "account_number" => $request->account_number,
             "address" => $request->address,
             "province" => $request->province,
-            "consultant_name" => $request->consultant_name,
-            "must_renew" => $request->must_renew,
-            "licence_status" => $request->is_licence_active,
+            "is_licence_active" => $request->is_licence_active,
         ]);
         if($update){
             return redirect(route('view_licence',['slug' => $slug]))->with('success','Licence updated successfully.');

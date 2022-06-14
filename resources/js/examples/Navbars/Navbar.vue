@@ -209,9 +209,36 @@ export default {
   data() {
     return {
       showMenu: false,
-      showFlashMessage: true,
+      showFlashMessage: false,
     };
   },
+  watch: {
+    '$page.props.success': {
+      handler(newVal,preVal) {
+        if(this.$page.props.success != null){
+          this.showFlashMessage = true
+        }
+        
+        if(this.$page.props.success != null){
+          this.showFlashMessage = true
+        } 
+      },
+      deep: true,
+    },
+
+    '$page.props.error': {
+      handler(newVal,preVal) {
+        if(this.$page.props.error != null){
+          this.showFlashMessage = true
+        }
+        
+        if(this.$page.props.error != null){
+          this.showFlashMessage = true
+        } 
+      },
+      deep: true,
+    },
+    },
   props: ["minNav", "color"],
   created() {
     this.minNav;

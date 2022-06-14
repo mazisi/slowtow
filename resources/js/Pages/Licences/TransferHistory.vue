@@ -7,7 +7,16 @@
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
-      <h5>Transfers for: {{ licence.trading_name }}</h5>
+      <div class="row">
+  <div class="col-lg-6 col-7">
+   <h5>Transfers for: {{ licence.trading_name }}</h5>
+  </div>
+  <div class="col-lg-6 col-5 my-auto text-end">
+    <div class="dropdown float-lg-end pe-4">
+     <Link :href="`/transfer-licence?slug=${$page.props.slug}`" class="btn btn-sm btn-secondary">New Transfer</Link>
+    </div>
+  </div>
+</div>
         <div class=" my-4">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
@@ -79,6 +88,8 @@
 
 <script>
 import Layout from "../../Shared/Layout.vue";
+import { Link } from '@inertiajs/inertia-vue3'
+
 export default {
   name: "dashboard-default",
   props: {
@@ -88,7 +99,8 @@ export default {
   },
   
   components: {
-    Layout
+    Layout,
+    Link
     },
 
 };

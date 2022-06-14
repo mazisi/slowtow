@@ -18,12 +18,8 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('model_type')->nullable();
             $table->string('model_id')->nullable();
-            $table->string('title');
-            $table->date('date')->nullable();
-            $table->time('time')->nullable();
-            $table->enum('priority',['Low','Medium','High'])->nullable();
-            $table->string('body');
-            $table->string('slug');
+            $table->timestamp('date');
+            $table->text('body');
             $table->timestamps();
         });
     }

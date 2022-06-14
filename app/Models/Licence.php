@@ -33,6 +33,11 @@ class Licence extends Model
        return $this->hasMany(Alteration::class);
     }
 
+    public function licence_type()
+    {
+       return $this->hasOne(LicenceType::class,'id');
+    }
+
     public function licence_renewals()
     {
        return $this->hasMany(LicenceRenewal::class);

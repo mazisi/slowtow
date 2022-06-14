@@ -19,64 +19,73 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
       <div class="row">
-      <div class="col-2"></div>
-      <div v-if="success" class="col-6" 
-      x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-      <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ success }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-      </button>
-      </div>
-      </div>
-
-      <div v-else-if="error" class="col-6" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
-      <div class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
-      <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-      <span class="text-sm">{{ error }}</span></span><button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-      </button>
-      </div>
-      </div>
-<div v-else-if="!error" class="col-6"></div>
-      <div class="col-2"></div>
-      <div class="col-2">
-  <Link :href="`/upload-contacts`" class="btn btn-sm btn-secondary upload-btn">Upload</Link>
+  <div class="col-lg-6 col-7">
+    <h6>Contacts</h6>
+    <p class="text-sm mb-0"><span class="font-weight-bold ms-1">{{ contacts.length }}</span> total</p>
+  </div>
+  <div class="col-lg-6 col-5 my-auto text-end">
+  <Link class="btn btn-sm btn-secondary mr-2" :href="`/upload-contacts`">Upload</Link>
+    <Link class="btn btn-sm btn-danger" :href="`/`">Clear All</Link>
+  </div>
 </div>
-      </div>
 
-        <div class="">
-          <div class=" px-0 pb-2">
-          <div class="table-responsive p-0">
-<table class="table table-hover table-bordered border-secondary">
-      <thead lass="table-light">
-    <tr>
-       <th>Full Name</th>
-      <th>Middle Name</th>
-      <th>Last Name</th>
-      <th>Business Phone</th>
-      <th>Mobile Phone</th>
-      <th>Email</th>
-      <th>Action</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="contact in contacts" :key="contact.id">
-     <td>{{ contact.first_name }}</td>
-      <td>{{ contact.middle_name }}</td>
-      <td>{{ contact.last_name }}</td>
-      <td>{{ contact.business_phone }}</td>
-      <td>{{ contact.mobile_phone }}</td>
-      <td>{{ contact.email }}</td>
-      <td><Link :href="`/delete-contact/${contact.id}`"><i class="material-icons text-danger">delete</i></Link></td>
-    </tr>
-   
-  </tbody>
-
-  </table>
+        <div class=" my-4">
+            <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      First Name
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    Middle Name
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Last Name
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Business Phone
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Mobile Phone
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Email
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="contact in contacts" :key="contact.id">
+                    <td class="align-middle text-sm">
+                      {{ contact.first_name }}
+                    </td>
+                    <td>
+                      <div class="d-flex px-2 py-1">
+                       
+                        <div class="d-flex flex-column justify-content-left">
+                          <h6 class="mb-0 text-sm">
+                           {{ contact.middle_name }}
+                           </h6>                          
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-center"><h6 class="mb-0 text-sm">{{ contact.last_name }}</h6></td>
+                    <td class="text-center">{{ contact.business_phone }}</td>
+                    <td class="text-center">{{ contact.mobile_phone }}</td>
+                    <td class="text-center">{{ contact.email }}</td>
+                    <td class="text-center">
+                    <Link :href='`#!`'><i @click="deleteSingleContact(contact.id)" class="fa fa-trash text-danger"></i></Link></td>
+                  </tr>
+                  
+                 
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
       </div>
     </div>
   </div>
@@ -90,12 +99,20 @@ export default {
   props: {
     contacts: Object,
     success: String,
+    error: String,
     errors: Object,
   },
  components: {
     Layout,
     Link,
     useForm
+},
+methods: {
+  deleteSingleContact(id){
+    if(confirm('Are you sure??')){
+        this.$inertia.post(`/delete-contact/${id}`)
+    }
+  }
 },
 }
 </script>

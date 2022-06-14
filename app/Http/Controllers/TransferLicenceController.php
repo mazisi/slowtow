@@ -10,8 +10,8 @@ use App\Models\LicenceTransfer;
 
 class TransferLicenceController extends Controller
 {
-    public function index($slug){//NB..licence slug
-        $licence = Licence::with('company')->whereSlug($slug)->first();
+    public function index(Request $request){//NB..licence slug
+        $licence = Licence::with('company')->whereSlug($request->slug)->first();
         $companies_dropdown = Company::where('id','!=',$licence->company_id)->pluck('name','id');//get companies list
         return Inertia::render('Licences/TransferLicence',
                                                 ['licence' => $licence,
@@ -47,8 +47,8 @@ class TransferLicenceController extends Controller
 /**
        * View all licence transfer history for a certain licence
        */
-      public function transferHistory($slug){
-        $licence = Licence::with('transfers','old_company')->whereSlug($slug)->first();
+      public function transferHistory(Request $request){
+        $licence = Licence::with('transfers','old_company')->whereSlug($request->slug)->first();
         return Inertia::render('Licences/TransferHistory',['licence' => $licence]);
       }
 

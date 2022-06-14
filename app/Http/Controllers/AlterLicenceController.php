@@ -2,15 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\AlterationRequest;
-use App\Models\Alteration;
-use App\Models\Licence;
 use Inertia\Inertia;
+use App\Models\Licence;
+use App\Models\Alteration;
+use Illuminate\Http\Request;
+use App\Http\Requests\AlterationRequest;
 
 class AlterLicenceController extends Controller
 {
-    public function alterLicence($slug){
-        $licence = Licence::with('alterations')->whereSlug($slug)->first();
+
+  public function index(Request $request){//return nominations page
+    $licence = Licence::with('alterations')->whereSlug($request->slug)->first();
+    return Inertia::render('Licences/Alteration',['licence'=> $licence]);
+  }
+
+    public function newAlteration(Request $request){
+        $licence = Licence::with('alterations')->whereSlug($request->slug)->first();
         return Inertia::render('Licences/AlterLicence',['licence'=> $licence]);
     }
 

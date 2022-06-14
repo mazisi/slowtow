@@ -10,6 +10,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LicenceController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\EmailCommsController;
 use App\Http\Controllers\NominationController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
@@ -57,28 +58,32 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-company',[CompanyController::class,'update'])->name('company.update');
 
         Route::get('/licences',[LicenceController::class,'index'])->name('licences');
-        Route::get('/create-licence/{slug}',[LicenceController::class,'create'])->name('create_licence');
-        Route::get('/view-licence/{slug}',[LicenceController::class,'show'])->name('view_licence');
-        Route::post('/submit-licence/{id}',[LicenceController::class,'store'])->name('submit_licence');
+        Route::get('/create-licence',[LicenceController::class,'create'])->name('create_licence');
+        Route::get('/view-licence',[LicenceController::class,'show'])->name('view_licence');
+        Route::post('/submit-licence',[LicenceController::class,'store'])->name('submit_licence');
         Route::post('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
-        Route::get('/renew-licence/{slug}',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
+      
+         // Get licence renewals.
+        Route::get('/renew-licence',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
+
         //renew licence.submit
-        Route::post('/sumbmit-licence-renewal/{id}/{slug}',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
+        Route::post('/submit-licence-renewal',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
         Route::get('/view-temp-licence/{slug}',[LicenceRenewalController::class,'viewLicence'])->name('view_temp_licence');
         Route::delete('/delete-licence-renewal/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
         
 
-        Route::get('/transfer-licence/{slug}',[TransferLicenceController::class,'index'])->name('transfer_licence');
+        Route::get('/transfer-licence',[TransferLicenceController::class,'index'])->name('transfer_licence');
         Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');
-        Route::get('/transfer-history/{slug}',[TransferLicenceController::class,'transferHistory'])->name('transfer_history');
+        Route::get('/transfer-history',[TransferLicenceController::class,'transferHistory'])->name('transfer_history');
         Route::get('/view-transfered-licence/{slug}',[TransferLicenceController::class,'viewTransferedLicence'])->name('view-transfered_licence');
         Route::delete('/delete-licence-transfer/{slug}/{licence_slug}',[TransferLicenceController::class,'destroy'])->name('delete_licence_transfer');
         Route::patch('/update-licence-transfer',[TransferLicenceController::class,'update'])->name('update_licence_transfer');
 
-        Route::get('/alter-licence/{slug}',[AlterLicenceController::class,'alterLicence'])->name('alter_licence');
+        Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');
+        Route::get('/new-alteration',[AlterLicenceController::class,'newAlteration'])->name('new_alteration');
         Route::post('/submit-altered-licence/{licence_id}',[AlterLicenceController::class,'store'])->name('alter_licence.submit');
         Route::delete('/delete-altered-licence/{slug}',[AlterLicenceController::class,'destroy'])->name('delete_altered_licence.submit');
         
@@ -98,9 +103,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete-person/{slug}', [PersonController::class,'destroy'])->name('delete_person');
        
 
-        Route::get('/nominate/{slug}',[NominationController::class,'index'])->name('nominate');
+        Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
         Route::post('/submit-nomination', [NominationController::class,'store'])->name('submit_nomination');
-        Route::get('/nominations/{slug}',[NominationController::class,'nominations'])->name('nominations');
+        Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
         Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
@@ -113,7 +118,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy'])->name('update_temp_licence');
         
 
-        Route::get('/tasks',[TaskController::class,'index'])->name('tasks');
         Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');
+        Route::delete('/delete-task/{id}',[TaskController::class,'destroy'])->name('delete_task');
+
+        Route::get('/email-comms', [EmailCommsController::class,'index'])->name('email_comms');
+        Route::get('/email-comms/transfers', [EmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
+        Route::get('/email-comms/send-mail/{slug}/{licence_variation}', [EmailCommsController::class,'processMail'])->name('send_mail');
 
     });

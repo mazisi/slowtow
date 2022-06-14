@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CompanyDocument;
 use App\Http\Requests\CompanyValidateRequest;
-
+use App\Models\Task;
 
 class CompanyController extends Controller
 {
@@ -80,10 +80,9 @@ class CompanyController extends Controller
 
     public function show($slug)
     {
-        $company = Company::whereSlug($slug)->firstOr(function(){
-            return Inertia::render('_404.vue');
-        });
-        return Inertia::render('ViewCompany',['company'=> $company]);
+        $company = Company::with('users')->whereSlug($slug)->first();
+        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->get();
+        return Inertia::render('ViewCompany',['company'=> $company, 'tasks' => $tasks]);
     }
 
     public function edit($id)

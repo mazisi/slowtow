@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->integer('old_company_id');
             $table->date('date');
-            $table->enum('status',['Pending','Completed','Declined']);
+            $table->string('status')->nullable();
             $table->string('slug');
             $table->timestamps();
         });

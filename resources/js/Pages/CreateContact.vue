@@ -6,6 +6,10 @@
     .upload-btn{
       float: right!important;
     }
+    #has-header{
+  margin-top: 3px;
+  margin-left: 3px;
+}
 </style>
 <template>
 <Layout>
@@ -34,7 +38,7 @@
  <ul class="list-group">
   <div class="d-flex">
   <label>Tick if first row is a header</label>
-    <input v-model="form.header" type="checkbox">
+    <input v-model="form.header" type="checkbox" id="has-header">
   </div>
 <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded" style="background-color: #f4f6f7;">
 <input @input="form.csv_file = $event.target.files[0]" type="file"  aria-label="..." />

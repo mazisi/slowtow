@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->date('date');
-            $table->enum('status',['Pending','Complete']);
+            $table->string('status')->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

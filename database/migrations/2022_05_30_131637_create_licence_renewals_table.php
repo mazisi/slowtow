@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('licence_renewals', function (Blueprint $table) {
             $table->id();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
-            $table->date('date');
-            $table->enum('status',['Pending','Processed','Complete']);
+            $table->string('date');
+            $table->string('status')->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();
