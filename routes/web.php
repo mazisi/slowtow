@@ -104,6 +104,7 @@ Route::group(['middleware' => ['auth']], function () {
        
 
         Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
+        Route::post('/fetch-table-data-on-search',[NominationController::class,'fetchPeopleData'])->name('fetch_table_data');
         Route::post('/submit-nomination', [NominationController::class,'store'])->name('submit_nomination');
         Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');

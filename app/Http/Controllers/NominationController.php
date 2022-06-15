@@ -30,22 +30,22 @@ class NominationController extends Controller
     public function store(Request $request){
         $request->validate([
             "nomination_date" => "required|date",
-            "people" => "required"
+            "people*" => "required",
+            'status*' => 'required' 
         ]);
-        $licence = Licence::whereSlug($request->slug)->firstOrFail();
         $nom = Nomination::create([
             "date" => $request->nomination_date,
-            "licence_id" => $licence->id,
-            "status" => $request->status,
-            "slug" => 'licence='.Str::replace('','_',$licence->trading_name).sha1(time())
+            "licence_id" => $request->licence_id,
+            "status" => last($request->status),
+            "slug" => sha1(time())
         ]);
         if($nom){ 
             foreach($request->people as $val){//people are IDs from multiple select.;
                 $nom->people()->attach($val);
             }
-             return to_route('nominations',['slug' => $request->slug])->with('success','Nominees created successfully');
+             return to_route('nominations',['slug'=>$request->licence_slug])->with('success','Nominees created successfully');
          }
-             return to_route('nominations',['slug' => $request->slug])->with('error','Error creating nominees.');
+             return to_route('nominations',['slug'=>$request->licence_slug])->with('error','Error creating nominees.');
     }
     /**
      * Get all nominations belonging to a certain licence.
@@ -113,5 +113,15 @@ class NominationController extends Controller
            return to_route('view_nomination',['slug' => $request->slug])->with('success','Person updated succesfully.');
         }
         return to_route('view_nomination',['slug' => $request->slug])->with('error','Error updating person.');
+    }
+/**
+ * Fetch people data on multi select.
+ */
+    public function fetchPeopleData(Request $request){dd($request->people);
+        if(count($request->people)){
+
+        }
+        $people = People::whereIn('id', $request->people)->get();dd($people);
+        return back();
     }
 }

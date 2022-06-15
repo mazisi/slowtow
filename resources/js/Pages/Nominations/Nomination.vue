@@ -67,7 +67,8 @@
                       <div class="d-flex px-2 py-1">
                        
                         <div class="d-flex flex-column justify-content-left">
-                        <inertia-link :href="`/view-nomination/${people.slug}`">
+                        <!-- <inertia-link :href="`/view-nomination/${people.slug}`"> -->
+                        <inertia-link :href="`#!`" @click="alertMsg">
                           <h6 class="mb-0 text-sm">
                          {{ people.name }} {{ people.initials }} {{ people.surname }}
                            </h6>    
@@ -131,6 +132,11 @@ export default {
     Layout,
     Link
     },
+    methods:{
+      alertMsg(){
+        alert('View Nomination Page Not Yet Done');
+      }
+    }
 
 };
 </script>

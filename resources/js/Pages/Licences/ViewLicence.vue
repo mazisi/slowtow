@@ -138,10 +138,10 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active</label>
- <input id="active-checkbox" v-model="form.is_licence_active" type="checkbox">
+ <input id="active-checkbox" type="checkbox" :checked="licence.is_licence_active == '1'">
 </div>
 </div>
-                  
+
   <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Trading Name *</label>

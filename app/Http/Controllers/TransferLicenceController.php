@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\Company;
 use App\Models\Licence;
@@ -24,9 +25,11 @@ class TransferLicenceController extends Controller
            "new_company" => "required|exists:companies,id",
            "date" => "required|date",
            "old_company_id" => "required|exists:companies,id",
-           "status" => "required",//check me and put enum validation
+           "status" =>"required|in:Deposit Paid,Collate Transfer Details,Client Invoiced,Client Paid,Transfer Logded,Certificate Received,Transfer Complete And Delivered"
        ]);
-       $transfer = LicenceTransfer::create([
+
+
+      $transfer = LicenceTransfer::create([
         'licence_id'=> $request->licence_id,
         'company_id'=> $request->new_company,
         'old_company_id' => $request->old_company_id,
@@ -58,7 +61,8 @@ class TransferLicenceController extends Controller
       public function viewTransferedLicence($slug)
       {
         $view_transfer = LicenceTransfer::with('licence.company','licence.old_company')->whereSlug($slug)->first();
-        return Inertia::render('Licences/ViewTransferedLicence',['view_transfer' => $view_transfer]);
+        $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->whereUserId(auth()->id())->get();
+        return Inertia::render('Licences/ViewTransferedLicence',['view_transfer' => $view_transfer,'tasks' => $tasks]);
       }
 
       public function update(Request $request)

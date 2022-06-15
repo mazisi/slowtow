@@ -95,7 +95,8 @@ export default {
   props: {
     licence: Object,
     success: String,
-    error: String
+    error: String,
+    errors: Object
   },
   
   components: {

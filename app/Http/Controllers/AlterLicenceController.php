@@ -24,14 +24,14 @@ class AlterLicenceController extends Controller
     public function store(AlterationRequest $request,$licence_id){
           $alter = Alteration::create([
             'licence_id' => $licence_id,
-            'date' => $request->alter_date,
-            'status'  => $request->alter_status,
+            'date' => $request->alteration_date,
+            'status'  => last($request->status),
             'slug' => sha1(time()),
           ]);
           if($alter){
-            return back()->with('success','Licence altered successfully.');
+            return to_route('alterations',['slug' => $request->licence_slug])->with('success','Licence altered successfully.');
           }
-          return back()->with('error','An error occured while altering licence.');
+          return to_route('alterations',['slug' => $request->licence_slug])->with('error','An error occured while altering licence.');
     }
 
     public function destroy($slug)

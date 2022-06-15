@@ -22,15 +22,9 @@ export default {
       old_company_id: this.licence.company_id,
       new_company: null,
       date: null,
-      status: null,
       licence_id: this.licence.id,
-      deposit_invoice_type: '',
-      is_deposit_paid: '',
-      client_invoiced_checkbox: '',//status
-      client_invoiced_type: '',//check if radio is maual
-      invoice_date: '',
-      billable_item: '',
-      include_vat: '',
+      status: '',
+      
       },
       options: this.companies_dropdown,
     };
@@ -92,13 +86,13 @@ export default {
 <input type="hidden" v-model="form.licence_id"> 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.is_deposit_paid" type="checkbox">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Deposit Paid">
 <label class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
 </div>
 </div>     
 <hr>
 <div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<div class="form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Scanned Deposit Invoice</label>
 </div>
 </div> 
@@ -107,7 +101,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.transfer_details" type="checkbox">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Collate Transfer Details">
 <label class="form-check-label text-body text-truncate status-heading">Collate Transfer Details</label>
 </div>
 </div> 
@@ -134,7 +128,7 @@ export default {
  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Transfer Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.date" >
+    <input type="date" class="form-control form-control-default" v-model="form.date">
      </div>
    <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
    </div>
@@ -143,7 +137,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.client_invoiced_checkbox" type="checkbox">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Client Invoiced">
 <label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div> 
@@ -153,14 +147,66 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Invoice</label>
 </div>
+</div> <hr>
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Client Paid">
+<label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+</div>
 </div> 
 
 
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label mb-0 text-body text-truncate">????</label>
+</div>
+</div> <hr>
 
-   
-<h6 class="text-center">Documents Related Fields</h6>
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Transfer Logded">
+<label class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
+</div>
+</div> 
+
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label mb-0 text-body text-truncate">Logded Transfer File</label>
+</div>
+</div> <hr>
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Certificate Received">
+<label class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
+</div>
+</div> 
+
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label mb-0 text-body text-truncate">Transfer Certificate File</label>
+</div>
+</div> <hr>
+
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.status" type="radio" value="Transfer Complete And Delivered">
+<label class="form-check-label text-body text-truncate status-heading"> Transfer Complete &amp; Delivered</label>
+</div>
+</div> 
+
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label mb-0 text-body text-truncate">Transfer Certificate File</label>
+</div>
+</div> <hr>
 <div>
-  <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Transfer</button></div>
+  <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
             </div>
             </form>
               </div>
