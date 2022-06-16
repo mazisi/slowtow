@@ -10,6 +10,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\LicenceController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ConsultantController;
 use App\Http\Controllers\EmailCommsController;
 use App\Http\Controllers\NominationController;
 use App\Http\Controllers\InsertTypesController;
@@ -92,9 +93,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
         Route::get('/delete-contact/{id}',[ContactController::class,'destroy'])->name('delete_contact');
 
+        //Reports
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
 
-        
+        //Consultants
+        Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
+        Route::get('/create-consultant',[ConsultantController::class,'create'])->name('create_consultant');
+        Route::post('/submit-consultant',[ConsultantController::class,'store'])->name('submit_consultant');
+        Route::get('/view-consultant/{slug}',[ConsultantController::class,'show'])->name('view_consultant');
+        Route::get('/unlink-consultant/{id}',[ConsultantController::class,'unlinkConsultant'])->name('unlink_consultant');
+
         Route::get('/people', [PersonController::class,'index'])->name('people');
         Route::get('/create-person', [PersonController::class,'create'])->name('create_person');
         Route::post('/submit-person', [PersonController::class,'store'])->name('submit_person');

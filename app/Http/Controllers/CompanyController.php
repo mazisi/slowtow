@@ -80,7 +80,7 @@ class CompanyController extends Controller
 
     public function show($slug)
     {
-        $company = Company::with('users')->whereSlug($slug)->first();
+        $company = Company::with('users','consultants')->whereSlug($slug)->first();
         $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->get();
         return Inertia::render('ViewCompany',['company'=> $company, 'tasks' => $tasks]);
     }

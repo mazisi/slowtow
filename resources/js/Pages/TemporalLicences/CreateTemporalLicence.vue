@@ -13,14 +13,9 @@ export default {
       showMenu: false,
       form: {
         liquor_licence_number: null,
-        premises_description: null,
         start_date: null,
-        start_time: null,
         end_date: null,
-        end_time: null,
-        province: null,
-        municipality: null,
-        extent_of_financial_honest: null,
+        is_company_or_person: null,
         company: null
     },
     options: this.companies,
@@ -96,13 +91,6 @@ export default {
    <div v-if="errors.start_date" class="text-danger">{{ errors.start_date }}</div>
    </div>
 
-   <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Start Time</label>
-    <input type="time" required class="form-control form-control-default" v-model="form.start_time" >
-    </div>
-   <div v-if="errors.start_time" class="text-danger">{{ errors.start_time }}</div>
-   </div>
 
 <div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
@@ -113,14 +101,18 @@ export default {
 </div>  
 
 <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">End Time</label>
-    <input type="time" required class="form-control form-control-default" v-model="form.end_time" >
-    </div>
-   <div v-if="errors.end_time" class="text-danger">{{ errors.end_time }}</div>
-   </div>
+<div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Province</label>
+  <select v-model="form.is_company_or_person" required class="form-control form-control-default">
+    <option value=" ">Select province</option>
+    <option value="Company">Company</option>
+    <option value="Person">Person</option>
+    </select>
+</div>
+<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
+</div>
 
-   <div class="col-md-4 columns">
+   <div class="col-md-4 columns" v-if="form.is_company_or_person =='Company'">
     <div class="input-group input-group-outline null is-filled ">
      <Multiselect
        v-model="form.company"
@@ -131,47 +123,19 @@ export default {
   </div>
   <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
   </div>
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Province</label>
-  <select v-model="form.province" required class="form-control form-control-default">
-    <option value=" ">Select province</option>
-    <option value="Eastern Cape">Eastern Cape</option>
-    <option value="Free State">Free State</option>
-    <option value="Gauteng" selected="">Gauteng</option>
-    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-    <option value="Limpopo">Limpopo</option>
-    <option value="Mpumalanga">Mpumalanga</option>
-    <option value="Northern Cape">Northern Cape</option>
-    <option value="North West">North West</option>
-    <option value="Western Cape">Western Cape</option>
-    </select>
-</div>
-<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
-</div>
 
-<div class="col-md-4 columns">            
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Municipality</label>
-  <input type="text" class="form-control form-control-default" v-model="form.municipality">
-   </div>
-    <div v-if="errors.municipality" class="text-danger">{{ errors.municipality }}</div>
-    </div> 
- <div class="col-md-4 columns">                  
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label"> Extent Of Financial Interest By Applicant</label>
-  <input type="text" class="form-control form-control-default" v-model="form.extent_of_financial_honest" >
-   </div>
-  <div v-if="errors.extent_of_financial_honest" class="text-danger">{{ errors.extent_of_financial_honest }}</div>
+  <div class="col-md-4 columns" v-if="form.is_company_or_person =='Person'">
+    <div class="input-group input-group-outline null is-filled ">
+     <Multiselect
+       v-model="form.company"
+        placeholder="Search Person..."
+        :options="options"
+        :searchable="true"
+      />
+  </div>
+  <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
   </div>
 
-    <div class="col-md-12 columns">
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Premises Description</label>
-  <input class="form-control form-control-default" v-model="form.premises_description">
-  </div>
- <div v-if="errors.premises_description" class="text-danger">{{ errors.premises_description }}</div>
-</div>
 
   
     

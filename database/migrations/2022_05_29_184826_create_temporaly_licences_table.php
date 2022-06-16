@@ -18,14 +18,8 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->string('liquor_licence_number')->nullable();
             $table->string('active')->nullable();
-            $table->text('premises_description')->nullable();
             $table->date('start_date')->nullable();
-            $table->time('start_time')->nullable();
             $table->date('end_date')->nullable();
-            $table->time('end_time')->nullable();
-            $table->enum('province',['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape']);
-            $table->string('municipality')->nullable();
-            $table->string('extent_of_financial_honest')->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

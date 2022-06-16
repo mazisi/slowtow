@@ -55,6 +55,7 @@ export default {
       //handle task creation..
        createTask: this.$inertia.form({
         body: '',
+        taskDate: null,
         model_type: 'Company',
         model_id: this.company.id,
       }),
@@ -90,6 +91,12 @@ export default {
         if(this.createTask.body.length > this.body_max){
             this.createTask.body = this.createTask.body.substring(0,this.body_max)
         }
+     },
+
+    unlinkPerson(full_name,id){
+      if(confirm(full_name + ' will be removed from this company...Continue..??')){
+        this.$inertia.delete(`/unlink-person/${id}`)
+      }
      },
 
 triggerModal(){
@@ -343,45 +350,48 @@ triggerModal(){
       </form>
         
       </div>
-
+<hr>
       <div class="row">
-      <h6 class="text-center">People Linked To : Company Name</h6>
+      <h5 class="text-center text-decoration-underline">People Linked To : {{ company.name }}</h5>
       <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      Active
-                    </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Company Name
+                    Full Name
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    View
+                    ID Number
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Position
+                    </th>
+
+                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Percentage
+                    </th>
+
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
                     </th>
                     
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td class="align-middle text-sm">
-                                         
-                      <i class="fa fa-times text-danger" aria-hidden="true"></i>
-                    </td>
+                  <tr v-for="person in company.consultants">
                     <td>
                       <div class="d-flex px-2 py-1">
-                       
-                        <div class="d-flex flex-column justify-content-left">
-                          <h6 class="mb-0 text-sm">
-               
-                          Company name
-                           </h6>                          
-                        </div>
+                    
+                    <div class="d-flex flex-column">
+                      <Link :href="`/view-consultant/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.first_name }} {{ person.last_name }}</h6></Link>                          
+                    </div>
                       </div>
                     </td>
+                    <td class="text-center">{{ person.identity_number }}</td>
+                    <td class="text-center">{{ person.pivot.position }}</td>
+                    <td class="text-center">{{ person.pivot.percentage }}</td>
                     <td class="text-center">
-                    <inertia-link :href="`#`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
-                      
+                    <button @click="unlinkPerson(person.first_name + ' ' + person.last_name,person.pivot.id )" type="button" class="btn btn-secondary btn-sm">Unlink</button>
                     </td>
                     
                   </tr>
@@ -413,7 +423,13 @@ triggerModal(){
 
     <div class="col-xl-4">
     <form @submit.prevent="submitTask">
-
+<div class="col-md-12" style="margin-bottom: 1rem;">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" required class="form-control form-control-default" v-model="createTask.taskDate" >
+     </div>
+   <div v-if="errors.taskDate" class="text-danger">{{ errors.taskDate }}</div>
+   </div>
  <div class="col-12 columns">    
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">New Task<span class="text-danger pl-6">{{ body_max - createTask.body.length}}/{{ body_max }}</span></label>
