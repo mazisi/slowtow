@@ -60,9 +60,9 @@ class NominationController extends Controller
      * Vue nominee.
      */
     public function viewIndividualNomination($slug){
-        $person = People::with('nominations')->whereSlug($slug)->first();
-        $tasks = Task::where('model_type','Nomination')->where('model_id',$person->id)->whereUserId(auth()->id())->get();
-        return Inertia::render('Nominations/ViewIndividualNomination',['person' => $person,'tasks' => $tasks]);
+        $nomination = Nomination::with('licence','people')->whereSlug($slug)->first();
+        $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->whereUserId(auth()->id())->get();
+        return Inertia::render('Nominations/ViewIndividualNomination',['nomination' => $nomination,'tasks' => $tasks]);
     }
 
     /**

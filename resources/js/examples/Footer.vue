@@ -9,7 +9,7 @@
           >
             <li class="nav-item">
               <inertia-link
-                href="/settings"
+                href="#!"
                 class="nav-link text-muted"
                 target="_blank"> You are logged in as: {{ user.name }}</inertia-link>
             </li>

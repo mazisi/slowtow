@@ -128,7 +128,7 @@ export default {
 <div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Old Licence Number</label>
-  <input type="date" class="form-control form-control-default" v-model="form.old_licence_number" >
+  <input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
    </div>
      <div v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</div>
 </div>  

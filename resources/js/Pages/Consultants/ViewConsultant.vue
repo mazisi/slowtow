@@ -6,7 +6,8 @@ export default {
   name: "profile-overview",
  props: {
     errors: Object,
-    consultant: Object
+    consultant: Object,
+    companies: Object
   },
   data() {
     return {
@@ -25,7 +26,7 @@ export default {
   },
     methods: {
       submit() {
-          this.$inertia.post(`/submit-consultant`, this.form)
+          this.$inertia.patch(`/update-consultant/${this.consultant.slug}`, this.form)
         },
   },
   components: {
@@ -60,7 +61,8 @@ export default {
        
         <div class="col-auto my-auto">
           <div class="h-100">
-            <h5 class="mb-1">Consultant Info: {{ consultant.first_name }} {{ consultant.last_name }}</h5>
+            <h6 class="mb-1">Consultant Info: {{ consultant.first_name }} {{ consultant.last_name }}
+            <span class="text-success">[Company: {{ this.consultant.companies[0].name }}]</span></h6>
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
@@ -114,7 +116,7 @@ export default {
   </div>
 
 
-  <!-- <div class="col-md-4 columns">
+  <div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
      v-model="form.company"
@@ -124,7 +126,7 @@ export default {
         />
     </div>
  <div v-if="errors.people" class="text-danger">{{ errors.people }}</div>
-</div> -->
+</div>
 <hr>
 <h6 class="text-center">Documents Fields</h6>
 

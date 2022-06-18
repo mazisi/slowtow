@@ -95,7 +95,7 @@ export default {
 
     unlinkPerson(full_name,id){
       if(confirm(full_name + ' will be removed from this company...Continue..??')){
-        this.$inertia.delete(`/unlink-person/${id}`)
+        this.$inertia.delete(`/unlink-consultant/${id}`)
       }
      },
 
@@ -378,7 +378,7 @@ triggerModal(){
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="person in company.consultants">
+                  <tr v-for="person in company.consultants" :key="person.id">
                     <td>
                       <div class="d-flex px-2 py-1">
                     

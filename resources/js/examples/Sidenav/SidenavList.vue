@@ -262,15 +262,6 @@
       </li>
       <!-- <<<<<<<<<<<<<<<<<<<<<<<<===============Licence variations Ends ==============>>>>>>>>>>>>>>>> -->
 
- <li class="nav-item">
-  <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
-    <div class="text-center d-flex align-items-center justify-content-center me-2">
-    <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>
-    <span class="nav-link-text ms-1">Back</span>
-  </a>
-  <div class="collapse"></div>
-</li>
-
 
       <li v-if="$page.props.currentRoute == 'temp_licences' 
                || $page.props.currentRoute == 'create_temp_licence'
@@ -302,6 +293,15 @@
           </template>
         </sidenav-collapse>
       </li>
+      
+      <li class="nav-item">
+  <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
+    <div class="text-center d-flex align-items-center justify-content-center me-2">
+    <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>
+    <span class="nav-link-text ms-1">Back</span>
+  </a>
+  <div class="collapse"></div>
+</li>
 <hr>
 
 
@@ -363,21 +363,7 @@
   <div class="collapse"></div>
 </li>
 
-      <hr>
-      <li class="nav-item text-danger">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="/logout"
-          navText="Logout"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">format_textdirection_r_to_l</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-   
+
     </ul>
    
   </div>

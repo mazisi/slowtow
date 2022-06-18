@@ -11,13 +11,7 @@
         <!-- <a v-else :class="color" class="opacity-8" href="#!">Pages</a> -->
       </li>
    
-      <li
-        class="text-sm breadcrumb-item active"
-        :class="color"
-        aria-current="page"
-      >
-        {{ currentPage }}
-      </li>
+      
 
      
     </ol>

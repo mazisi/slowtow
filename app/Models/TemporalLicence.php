@@ -16,4 +16,9 @@ class TemporalLicence extends Model
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function consultant()
+    {
+        return $this->belongsTo(Consultant::class);
+    }
 }

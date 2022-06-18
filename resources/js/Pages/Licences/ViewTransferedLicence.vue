@@ -27,7 +27,7 @@ export default {
       slug: this.view_transfer.slug,
       licence_slug: this.view_transfer.licence.slug,
       licence_id: this.view_transfer.id,
-      status: '',
+      status: this.view_transfer.status,
       
       },
       options: this.companies_dropdown,
@@ -249,6 +249,7 @@ export default {
       </div>
 
       <div class="row"><hr>
+      <h6 class="text-center">Notes</h6>
        <div class="col-xl-8">
       <div class="row">
         <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">

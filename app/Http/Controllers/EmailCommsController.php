@@ -18,7 +18,7 @@ class EmailCommsController extends Controller
      * Renewals bcoz they are on default tag..
      */
     public function index(){
-        $with_invoiced_statuses = LicenceRenewal::with('licence')->where('status','Invoiced')->get();
+        $with_invoiced_statuses = LicenceRenewal::with('licence')->where('status','Renewal Received')->get();
         $with_paid_statuses = LicenceRenewal::with('licence')->where('status','Paid')->get();
         $with_get_client_docs_statuses = LicenceRenewal::with('licence')->where('status','Get Client Docs')->get();
         $with_awaiting_liquor_board_statuses = LicenceRenewal::with('licence')->where('status','Awaiting Liquor Board')->get();

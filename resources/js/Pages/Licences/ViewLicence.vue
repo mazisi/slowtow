@@ -103,7 +103,7 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
        <div class="row">
 <div class="col-lg-6 col-7">
-<h6 class="mb-1">Licence Info: {{ licence.company.name }}</h6>
+<h6 class="mb-1">Licence Info: {{ licence.trading_name }}</h6>
 </div>
 
 
@@ -233,7 +233,54 @@ export default {
             </div>
             <hr class="vertical dark" />
           </div>
-    <div class="row"><hr>
+
+          <hr>
+
+           <div class="row">
+      <h6 class="text-center mb-2 ">Companies Linked To : {{ licence.trading_name }}</h6>
+      <div class="table-responsive p-0">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    Active
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Company Name
+                    </th>
+
+                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Company Type
+                    </th>
+
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
+                    </th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td v-if="licence.company.active !== null" class=" text-sm">Active</td>
+                    <td v-else class=" text-sm text-danger">InActive</td>
+                    <td class="align-middle text-sm">
+                      <Link class="text-sm text-center align-middle" :href="`/view-company/${licence.company.slug}`"><h6 class="mb-0 ">{{ licence.company.name }}</h6></Link>
+                    </td>
+                    <td class="text-center align-middle text-sm">{{ licence.company.company_type }}</td>
+                    <td class="text-center">
+                    <Link :href="`/view-company/${licence.company.slug}`" class="btn btn-secondary btn-sm">View</Link>
+                    </td>
+                    
+                  </tr>
+                  
+                 
+                </tbody>
+              </table>
+            </div>
+            <hr>
+            <h6 class="text-center text-decoration-underline">Notes</h6>
+            </div>
+    <div class="row">
        <div class="col-xl-8">
       <div class="row">
         <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">

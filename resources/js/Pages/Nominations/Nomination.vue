@@ -22,9 +22,6 @@
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      ID
-                    </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                     Full Name
                     </th>
@@ -54,21 +51,16 @@
                     Terminated Date
                     </th>
 
-                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Action
-                    </th> -->
                  
                   </tr>
                 </thead>
                 <tbody v-if="$props.nominations.length > 0">
                   <tr v-for="people in nominations[0].people" :key="people.id">
-                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{ people.id }}</div></td>
                     <td>
                       <div class="d-flex px-2 py-1">
                        
                         <div class="d-flex flex-column justify-content-left">
-                        <!-- <inertia-link :href="`/view-nomination/${people.slug}`"> -->
-                        <inertia-link :href="`#!`" @click="alertMsg">
+                        <inertia-link :href="`/view-nomination/${nominations[0].slug}`">
                           <h6 class="mb-0 text-sm">
                          {{ people.name }} {{ people.initials }} {{ people.surname }}
                            </h6>    
@@ -131,11 +123,6 @@ export default {
   components: {
     Layout,
     Link
-    },
-    methods:{
-      alertMsg(){
-        alert('View Nomination Page Not Yet Done');
-      }
     }
 
 };

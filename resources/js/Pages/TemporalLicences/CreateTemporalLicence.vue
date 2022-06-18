@@ -7,6 +7,7 @@ export default {
  props: {
     errors: Object,
     companies: Array,
+    people: Array
   },
   data() {
     return {
@@ -15,10 +16,12 @@ export default {
         liquor_licence_number: null,
         start_date: null,
         end_date: null,
-        is_company_or_person: null,
-        company: null
+        company: null,
+        consultant: null,
+        belongs_to: ''
     },
     options: this.companies,
+    persons: this.people,
     };
   },
     methods: {
@@ -102,17 +105,17 @@ export default {
 
 <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Province</label>
-  <select v-model="form.is_company_or_person" required class="form-control form-control-default">
+  <label class="form-label">Company/Consultant?</label>
+  <select v-model="form.belongs_to" required class="form-control form-control-default">
     <option value=" ">Select province</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>
     </select>
 </div>
-<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
+<div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
 </div>
 
-   <div class="col-md-4 columns" v-if="form.is_company_or_person =='Company'">
+   <div class="col-md-4 columns" v-if="form.belongs_to =='Company'">
     <div class="input-group input-group-outline null is-filled ">
      <Multiselect
        v-model="form.company"
@@ -124,16 +127,16 @@ export default {
   <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
   </div>
 
-  <div class="col-md-4 columns" v-if="form.is_company_or_person =='Person'">
+  <div class="col-md-4 columns" v-if="form.belongs_to =='Person'">
     <div class="input-group input-group-outline null is-filled ">
      <Multiselect
-       v-model="form.company"
+       v-model="form.consultant"
         placeholder="Search Person..."
-        :options="options"
+        :options="persons"
         :searchable="true"
       />
   </div>
-  <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
+  <div v-if="errors.consultant" class="text-danger">{{ errors.consultant }}</div>
   </div>
 
 

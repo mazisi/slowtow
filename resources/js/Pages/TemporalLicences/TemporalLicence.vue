@@ -1,9 +1,14 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
+import { Link } from "@inertiajs/inertia-vue3";
 
 export default {
-  name: "dashboard-default",
-  props: ['licences'],
+  props: {
+  licences: Object,
+  success: String,
+  error: Object,
+  errors: Object
+  },
   data() {
     return {
      term: '',
@@ -12,7 +17,8 @@ export default {
     }
   },
   components: {
-    Layout
+    Layout,
+    Link
 },
 methods: {
      search(){
@@ -43,17 +49,18 @@ methods: {
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
+      <form>
      <div class="row">
        <div class="col-3">
         <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Search Licence </label>
+  <label class="form-label">Search Company </label>
   <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
    </div>
        </div>
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Active status: </label>
-  <select @change="search"  v-model="active_status" class="form-control form-control-default">
+  <select @change="search" v-model="active_status" class="form-control form-control-default">
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>
@@ -66,9 +73,12 @@ methods: {
   <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
 
    </div>
- </div>
+       </div>
+        <div class="col-3">
+       </div>
        
      </div>
+     </form>
         <div class=" my-4">
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">
@@ -90,26 +100,32 @@ methods: {
                   <tr v-for="licence in licences" :key="licence.id">
                     <td class="align-middle text-sm">
                     <div class="d-flex flex-column justify-content-center">
-                    <h6 class="mb-0 text-sm justify-content-center">{{ licence.liquor_licence_number }}</h6></div>
+                    <Link :href="`/view-temp-licence/${licence.slug}`">
+                    <h6 class="mb-0 text-sm justify-content-center">{{ licence.liquor_licence_number }}</h6>
+                    </Link>
+                    
+                    </div>
                       
                     </td>
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                       
-                        <div class="d-flex flex-column justify-content-left">
-                          <h6 class="mb-0 text-sm">
-               
-                          <inertia-link
-                            :href="`/view-temp-licence/${licence.slug}`"
+                    <td v-if="licence.consultant == null">
+                          <h6 class="mb-0 text-sm">               
+                          <Link :href="`/view-temp-licence/${licence.slug}`"
                             class="px-0 nav-link font-weight-bold lh-1"
                             :class="color ? color : 'text-body'">{{ licence.company.name }}
-                          </inertia-link>
-                           </h6>                          
-                        </div>
-                      </div>
+                          </Link>
+                           </h6>
+                    </td>
+
+                    <td v-if="licence.company ==null">
+                          <h6 class="mb-0 text-sm">
+                           <Link :href="`/view-temp-licence/${licence.slug}`"
+                            >
+                            {{ licence.consultant.first_name }} {{ licence.consultant.last_name }}
+                          </Link>
+                           </h6>
                     </td>
                     <td class="text-center">
-                    <inertia-link :href="`/view-temp-licence/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
+                    <Link :href="`/view-temp-licence/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
                       
                     </td>
                     

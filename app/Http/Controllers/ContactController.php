@@ -11,11 +11,11 @@ class ContactController extends Controller{
 
     public function index(){
         $contacts = Contact::latest()->get();
-        return Inertia::render('Contact',['contacts' => $contacts]);
+        return Inertia::render('Contacts/Contact',['contacts' => $contacts]);
     }
 
     public function create(){
-        return Inertia::render('CreateContact');
+        return Inertia::render('Contacts/CreateContact');
     }
 
     public function store(Request $request){
@@ -63,6 +63,12 @@ class ContactController extends Controller{
         return redirect(route('contacts'))->with('success','Contact deleted successfully.');
        }
        return redirect(route('contacts'))->with('error','Error deleting contact.');
+    }
+
+    public function destroyAll()
+    {
+        Contact::truncate();
+        return redirect(route('contacts'))->with('success','All contacts deleted successfully.');
     }
 
 }

@@ -72,8 +72,9 @@ Route::group(['middleware' => ['auth']], function () {
 
         //renew licence.submit
         Route::post('/submit-licence-renewal',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
-        Route::get('/view-temp-licence/{slug}',[LicenceRenewalController::class,'viewLicence'])->name('view_temp_licence');
+        Route::get('/view-licence-renewal/{slug}',[LicenceRenewalController::class,'show'])->name('view_licence_renewal');
         Route::delete('/delete-licence-renewal/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
+        Route::patch('/update-renewal',[LicenceRenewalController::class,'update'])->name('update_licence_renewal');
         
 
         Route::get('/transfer-licence',[TransferLicenceController::class,'index'])->name('transfer_licence');
@@ -92,6 +93,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
         Route::get('/delete-contact/{id}',[ContactController::class,'destroy'])->name('delete_contact');
+        Route::delete('/delete-all-contacts',[ContactController::class,'destroyAll'])->name('delete__all_contacts');
 
         //Reports
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
@@ -101,7 +103,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create-consultant',[ConsultantController::class,'create'])->name('create_consultant');
         Route::post('/submit-consultant',[ConsultantController::class,'store'])->name('submit_consultant');
         Route::get('/view-consultant/{slug}',[ConsultantController::class,'show'])->name('view_consultant');
-        Route::get('/unlink-consultant/{id}',[ConsultantController::class,'unlinkConsultant'])->name('unlink_consultant');
+        Route::delete('/unlink-consultant/{id}',[ConsultantController::class,'unlinkConsultant'])->name('unlink_consultant');
+        Route::patch('/update-consultant/{slug}',[ConsultantController::class,'update'])->name('update_consultant');
+
 
         Route::get('/people', [PersonController::class,'index'])->name('people');
         Route::get('/create-person', [PersonController::class,'create'])->name('create_person');

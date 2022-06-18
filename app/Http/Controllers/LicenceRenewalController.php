@@ -16,7 +16,7 @@ class LicenceRenewalController extends Controller
     public function renewLicence(Request $request){
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
         $renewals = LicenceRenewal::where('licence_id',$licence->id)->get();
-       return Inertia::render('Licences/RenewLicence',['licence' => $licence,'renewals' => $renewals]);
+       return Inertia::render('Renewals/Renewals',['licence' => $licence,'renewals' => $renewals]);
     }
 
 
@@ -51,9 +51,9 @@ class LicenceRenewalController extends Controller
     }
 
 
-    public function viewLicence($slug){
-        $licence = TemporalLicence::whereSlug($slug)->first();
-        return Inertia::render('Licences/ViewTemporalLicence',['licence' => $licence]);
+    public function show($slug){
+        $renewal = LicenceRenewal::with('licence')->whereSlug($slug)->first();
+        return Inertia::render('Renewals/ViewLicenceRenewal',['renewal' => $renewal]);
     }
 
     public function destroy($slug)
@@ -63,5 +63,21 @@ class LicenceRenewalController extends Controller
             return back()->with('success','Renewal deleted successful.');
         }
         return back()->with('error','Error deleting renewal.');
+    }
+
+    public function update(Request $request){
+       $request->validate([
+        'renewal_date' => 'required',
+        'renewal_id' => 'required'
+       ]);
+       $update = LicenceRenewal::whereId($request->renewal_id)->update([
+        'date' => $request->renewal_date,
+        'status' => last($request->status)
+       ]);
+       if($update){
+        return back()->with('success','Renewal updated successfully.');
+       }
+       return back()->with('error','Sorry..An error occured.');
+
     }
 }

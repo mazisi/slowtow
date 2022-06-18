@@ -14,7 +14,7 @@
   <div class="col-lg-6 col-5 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
      <div class="input-group input-group-outline null is-filled">
-    <input type="text" class="form-control form-control-default" placeholder="Search...">
+    <input type="text" v-model="queryString" @keyup="search" class="form-control form-control-default" placeholder="Search...">
    </div>
     </div>
   </div>
@@ -48,7 +48,7 @@
                 <tbody>
                   <tr v-for="consultant in consultants" :key="consultant.id">
                     <td class="align-middle text-sm">
-                   <inertia-link class="" :href="`#!`" >
+                   <inertia-link class="" :href="`/view-consultant/${consultant.slug}`" >
                           <h6 class="mb-0 text-sm">
                          {{ consultant.first_name }}
                            </h6>    
@@ -56,7 +56,7 @@
                     </td>
                    
                    <td class="text-center">
-                        <inertia-link class="text-center" :href="`#!`" >
+                        <inertia-link class="text-center" :href="`/view-consultant/${consultant.slug}`" >
                           <h6 class="mb-0 text-sm">
                          {{ consultant.last_name }}
                            </h6>    
@@ -64,7 +64,7 @@
                     </td>
 
                     <td v-for="get_company in consultant.companies" class="text-center">
-                     <inertia-link class="text-center" :href="`#!`" >
+                     <inertia-link class="text-center" :href="`/view-consultant/${consultant.slug}`" >
                           <h6 class="mb-0 text-sm">
                          {{ get_company.name }}
                            </h6>    
@@ -79,7 +79,7 @@
                     {{ percentage.pivot.percentage }}
                     </td>
                       <td class="text-center">
-                    <inertia-link :href="`#`">
+                    <inertia-link :href="`view-consultant/${consultant.slug}`">
                     <i class="fa fa-eye  " aria-hidden="true"></i>
                     </inertia-link>
                       
@@ -109,10 +109,23 @@ export default {
     error: String,
     errors: Object
   },
+  data() {
+    return {
+      queryString: '',
+    }
+  },
   
   components: {
     Layout,
     Link
+    },
+
+    methods: {
+      search(){
+        this.$inertia.replace(route('consultants',{
+          q: this.queryString
+          }))
+        },
     },
 
 };
