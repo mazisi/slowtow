@@ -23,7 +23,7 @@ export default {
       new_company: null,
       date: null,
       licence_id: this.licence.id,
-      status: '',
+      status: [],
       
       },
       options: this.companies_dropdown,
@@ -47,6 +47,14 @@ export default {
   },
 };
 
+//The following are status keys
+// 1 => Deposit Paid
+// 2 => Collate Transfer Details
+// 3 => Client Invoiced
+// 4 => Client Paid
+// 5 => Transfer Logded
+// 6 => Certificate Received
+//7 => Transfer Complete And Delivered
 </script>
 <style>
 .columns{
@@ -86,7 +94,7 @@ export default {
 <input type="hidden" v-model="form.licence_id"> 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Deposit Paid">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="1">
 <label class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
 </div>
 </div>     
@@ -101,7 +109,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Collate Transfer Details">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="2">
 <label class="form-check-label text-body text-truncate status-heading">Collate Transfer Details</label>
 </div>
 </div> 
@@ -137,7 +145,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Client Invoiced">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="3">
 <label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div> 
@@ -151,7 +159,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Client Paid">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="4">
 <label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -165,7 +173,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Transfer Logded">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="5">
 <label class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
 </div>
 </div> 
@@ -179,7 +187,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Certificate Received">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
 <label class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
 </div>
 </div> 
@@ -194,7 +202,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Transfer Complete And Delivered">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="7">
 <label class="form-check-label text-body text-truncate status-heading"> Transfer Complete &amp; Delivered</label>
 </div>
 </div> 

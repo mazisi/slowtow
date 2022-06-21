@@ -88,7 +88,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/new-alteration',[AlterLicenceController::class,'newAlteration'])->name('new_alteration');
         Route::post('/submit-altered-licence/{licence_id}',[AlterLicenceController::class,'store'])->name('alter_licence.submit');
         Route::delete('/delete-altered-licence/{slug}',[AlterLicenceController::class,'destroy'])->name('delete_altered_licence.submit');
-        
+        Route::get('/view-alteration/{slug}',[AlterLicenceController::class,'show'])->name('view_alteration');
+        Route::patch('/update-alteration',[AlterLicenceController::class,'update'])->name('update_alteration');
+
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
@@ -121,7 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
-        Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
+        Route::patch('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
 
         Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');
         Route::get('/create-temp-licence', [TemporalLicenceController::class,'create'])->name('create_temp_licence');
@@ -136,6 +138,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/email-comms', [EmailCommsController::class,'index'])->name('email_comms');
         Route::get('/email-comms/transfers', [EmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
+        Route::get('/email-comms/nominations', [EmailCommsController::class,'getNominations'])->name('get_nominations');
         Route::get('/email-comms/send-mail/{slug}/{licence_variation}', [EmailCommsController::class,'processMail'])->name('send_mail');
 
     });

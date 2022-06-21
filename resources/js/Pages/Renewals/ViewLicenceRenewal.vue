@@ -48,7 +48,10 @@ export default {
         this.form.status.push(event)
       }
       
-    }
+    },
+    beforeUnmount() {
+    this.$store.state.isAbsolute = false;
+  },
         
   },
 
@@ -58,9 +61,7 @@ export default {
     Multiselect,
     Link
   },
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
+  
 };
 //The following are status keys
 // 1 => Renewal Received

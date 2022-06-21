@@ -43,7 +43,7 @@ export default {
         cipc_memorandum_of_incorporation: null,
         transfer_certificate: null,
         company_id: this.company.id,
-        active: '',
+        active: this.company.active,
       },
       addUserForm:{//this for modal data
        full_name: '',
@@ -112,6 +112,10 @@ triggerModal(){
     }
   },
 
+  assignActiveValue(event){
+      this.form.active = event
+    },
+
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },
@@ -166,7 +170,8 @@ triggerModal(){
                  <li class="px-0 border-0 list-group-item">
                   <div class="form-check form-switch d-flex ps-0 ms-0">
                   <label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
-                  <input id="active-checkbox" type="checkbox" v-model="form.active">
+                  <input id="active-checkbox" type="checkbox" :checked="form.active == '1'"
+                   @input="assignActiveValue($event.target.value)">
                   </div>
                   </li>
   <li class="px-0 border-0 list-group-item">

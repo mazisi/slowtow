@@ -6,55 +6,95 @@ use Inertia\Inertia;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceTransfer;
 use App\Http\Controllers\Traits\RenewalMailer;
-use App\Http\Controllers\Traits\transferMailer;
+use App\Http\Controllers\Traits\TransferMailer;
 use App\Http\Controllers\Traits\AlterationMailer;
 use App\Http\Controllers\Traits\NominationMailer;
+use App\Models\Nomination;
 
 class EmailCommsController extends Controller
 {
-    use RenewalMailer, transferMailer, AlterationMailer, NominationMailer;
+    use RenewalMailer, TransferMailer, AlterationMailer, NominationMailer;
     /**
      * Return licence renewal..
      * Renewals bcoz they are on default tag..
+     * 
+       * The following are status keys:
+       *   1 => Renewal Received
+       *  2 => Client Invoiced
+       *  3 => Client Paid
+       * 4 => Renewal Processed
+       * 5 => Renewal Complete & Delivered
      */
     public function index(){
-        $with_invoiced_statuses = LicenceRenewal::with('licence')->where('status','Renewal Received')->get();
-        $with_paid_statuses = LicenceRenewal::with('licence')->where('status','Paid')->get();
-        $with_get_client_docs_statuses = LicenceRenewal::with('licence')->where('status','Get Client Docs')->get();
-        $with_awaiting_liquor_board_statuses = LicenceRenewal::with('licence')->where('status','Awaiting Liquor Board')->get();
-        $with_issued_statuses = LicenceRenewal::with('licence')->where('status','Issued')->get();
-        $with_complete_statuses = LicenceRenewal::with('licence')->where('status','Complete')->get();
+        $with_renewal_received_status = LicenceRenewal::with('licence')->where('status','1')->get();
+        $with_client_invoiced_status = LicenceRenewal::with('licence')->where('status','2')->get();
+        $with_client_paid_status = LicenceRenewal::with('licence')->where('status','3')->get();
+        $with_renewal_processed_status = LicenceRenewal::with('licence')->where('status','4')->get();
+        $with_renewal_complete_status = LicenceRenewal::with('licence')->where('status','5')->get();
         
         return Inertia::render('EmailComms/EmailComm',[
 
-            'with_invoiced_statuses' => $with_invoiced_statuses,
-            'with_paid_statuses' => $with_paid_statuses,
-            'with_get_client_docs_statuses' => $with_get_client_docs_statuses,
-            'with_awaiting_liquor_board_statuses' => $with_awaiting_liquor_board_statuses,
-            'with_issued_statuses' => $with_issued_statuses,
-            'with_complete_statuses' => $with_complete_statuses
+            'with_renewal_received_status' => $with_renewal_received_status,
+            'with_client_invoiced_status' => $with_client_invoiced_status,
+            'with_client_paid_status' => $with_client_paid_status,
+            'with_renewal_processed_status' => $with_renewal_processed_status,
+            'with_renewal_complete_status' => $with_renewal_complete_status
         ]);
     }
 
     /**
      * Get licence transfers..
+     * The following are status keys:
+        * 1 => Deposit Paid
+        * 2 => Collate Transfer Details
+        * 3 => Client Invoiced
+        * 4 => Client Paid
+        * 5 => Transfer Logded
+        * 6 => Certificate Received
+        *7 => Transfer Complete And Delivered
      */
     public function getLicenceTransfers(){
 
-        $with_transfer_statuses = LicenceTransfer::with('licence')->where('status','Invoiced')->get();
-        $with_paid_statuses = LicenceTransfer::with('licence')->where('status','Paid')->get();
-        $with_get_client_docs_statuses = LicenceTransfer::with('licence')->where('status','Get Client Docs')->get();
-        $with_awaiting_liquor_board_statuses = LicenceTransfer::with('licence')->where('status','Awaiting Liquor Board')->get();
-        $with_issued_statuses = LicenceTransfer::with('licence')->where('status','Issued')->get();
-        $with_complete_statuses = LicenceTransfer::with('licence')->where('status','Complete')->get();
+        $with_deposit_paid_status = LicenceTransfer::with('licence')->whereStatus('1')->get();
+        $with_client_invoiced_status = LicenceTransfer::with('licence')->whereStatus('3')->get();
+        $with_get_client_paid_status = LicenceTransfer::with('licence')->whereStatus('4')->get();
+        $with_transfer_logded_status = LicenceTransfer::with('licence')->whereStatus('5')->get();
+        $with_certificate_received_status = LicenceTransfer::with('licence')->whereStatus('6')->get();
+        $with_complete_status = LicenceTransfer::with('licence')->whereStatus('7')->get();
 
         return Inertia::render('EmailComms/Transfer',[
-            'with_transfer_statuses' => $with_transfer_statuses,
-            'with_paid_statuses' => $with_paid_statuses,
-            'with_get_client_docs_statuses' => $with_get_client_docs_statuses,
-            'with_awaiting_liquor_board_statuses' => $with_awaiting_liquor_board_statuses,
-            'with_issued_statuses' => $with_issued_statuses,
-            'with_complete_statuses' => $with_complete_statuses
+            'with_deposit_paid_status' => $with_deposit_paid_status,
+            'with_client_invoiced_status' => $with_client_invoiced_status,
+            'with_get_client_paid_status' => $with_get_client_paid_status,
+            'with_transfer_logded_status' => $with_transfer_logded_status,
+            'with_certificate_received_status' => $with_certificate_received_status,
+            'with_complete_status' => $with_complete_status
+        ]);
+    }
+
+    /**
+     * Get Nominations Comms.
+     * //The following are status keys:
+    * 1 => Client Invoiced
+    * 2 => Nomination Paid
+    * 3 => Nomination Lodged
+    * 4 => Certificate Received
+    * 5 => Nomination Complete And Delivered
+     */
+    public function getNominations(){
+
+        $with_client_invoiced_status = Nomination::with('licence')->whereStatus('1')->get();
+        $with_nomination_paid_status = Nomination::with('licence')->whereStatus('2')->get();
+        $with_nomination_logded_status = Nomination::with('licence')->whereStatus('3')->get();
+        $with_certificate_received_status = Nomination::with('licence')->whereStatus('4')->get();
+        $with_complete_status = Nomination::with('licence')->whereStatus('5')->get();
+
+        return Inertia::render('EmailComms/Nomination',[
+            'with_client_invoiced_status' => $with_client_invoiced_status,
+            'with_nomination_paid_status' => $with_nomination_paid_status,
+            'with_nomination_logded_status' => $with_nomination_logded_status,
+            'with_certificate_received_status' => $with_certificate_received_status,
+            'with_complete_status' => $with_complete_status
         ]);
     }
 
@@ -64,30 +104,27 @@ class EmailCommsController extends Controller
             
             case 'renewals':
                 $this->renewalMailer($slug);
+                return back()->with('success','Email Sent Successfully.');
                 break;
             case 'alterations':
                 $this->alterationMailer($slug);
                 break;
             case 'transfers':
                 $this->transferMailer($slug);
+                return back()->with('success','Email Sent Successfully.');
                 break;
             case 'nominations':
                 $this->nominationMailer($slug);
+                return back()->with('success','Email Sent Successfully.');
                 break;
             case 'new-app':
                 $this->newAppMailer($slug);
                 break;
     
             default:
-                # code...
+            return back()->with('error','An error occured.Please try again.');
                 break;
         }
     }
-    /**
-     * Send nomination mail..
-     */
 
-    public function sendMail(){
-        # code...
-    }
 }

@@ -23,11 +23,10 @@ export default {
       new_company: this.view_transfer.licence.company.name,
       old_company: this.view_transfer.licence.old_company[0].name,
       transfer_date: this.view_transfer.date,
-      status: this.view_transfer.status,
       slug: this.view_transfer.slug,
-      licence_slug: this.view_transfer.licence.slug,
+      // licence_slug: this.view_transfer.licence.slug,
       licence_id: this.view_transfer.id,
-      status: this.view_transfer.status,
+      status: [],
       
       },
       options: this.companies_dropdown,
@@ -44,7 +43,7 @@ export default {
   },
     methods: {
       submit() {
-          this.$inertia.post(`/transfer-licence-submit/${this.view_transfer.slug}`, this.form)
+          this.$inertia.patch(`/update-licence-transfer`, this.form)
           .then(() => {
               
             })
@@ -65,6 +64,14 @@ export default {
             this.createTask.body = this.createTask.body.substring(0,this.body_max)
         }
      },
+
+     pushData(event){
+      if(this.form.status.includes(event)){
+        return;
+      }else{
+        this.form.status.push(event)
+      }      
+    },
   },
   components: {
     Layout,
@@ -75,6 +82,14 @@ export default {
     this.$store.state.isAbsolute = false;
   },
 };
+//The following are status keys:
+// 1 => Deposit Paid
+// 2 => Collate Transfer Details
+// 3 => Client Invoiced
+// 4 => Client Paid
+// 5 => Transfer Logded
+// 6 => Certificate Received
+//7 => Transfer Complete And Delivered
 
 </script>
 <style>
@@ -100,7 +115,7 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-   <h5>New Transfer for: {{ view_transfer.licence.trading_name }}</h5>
+   <h5>Transfer Info for: {{ view_transfer.licence.trading_name }}</h5>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end"></div>
 </div>
@@ -112,10 +127,10 @@ export default {
   <form @submit.prevent="submit">
 <div class="row">
 <input type="hidden" v-model="form.old_company_id"> 
-<input type="hidden" v-model="form.licence_id"> 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" :checked="view_transfer.status == 'Deposit Paid'">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="1" :checked="view_transfer.status >= '1'">
 <label class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
 </div>
 </div>     
@@ -130,29 +145,26 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" value="Collate Transfer Details" type="radio" :checked="view_transfer.status == 'Collate Transfer Details'">
+<input id="active-checkbox" value="2" type="checkbox" @input="pushData($event.target.value)" 
+ :checked="view_transfer.status >= '2'">
 <label class="form-check-label text-body text-truncate status-heading">Collate Transfer Details</label>
 </div>
 </div> 
 
   <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Transfered From Company *</label>
+    <label class="form-label">Transfered To</label>
+    <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" v-model="form.new_company" >
+     </div>
+   <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
+   </div>
+<div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Transfered From</label>
     <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" v-model="form.old_company" >
      </div>
    <div v-if="errors.old_company" class="text-danger">{{ errors.old_company }}</div>
    </div>
-  <div class="col-md-4 columns">
-  <div class="input-group input-group-outline null is-filled">
-     <Multiselect
-     v-model="form.new_company"
-        placeholder="Transfer to...."
-        :options="options"
-        :searchable="true"
-      />
-    </div>
- <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
-</div>
 
  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
@@ -166,7 +178,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" :checked="view_transfer.status == 'Client Invoiced'" value="Client Invoiced">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ :checked="view_transfer.status >= '3'" value="3">
 <label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div> 
@@ -180,7 +193,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Client Paid" :checked="view_transfer.status == 'Client Paid'">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="4" :checked="view_transfer.status >= '4'">
 <label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -194,7 +208,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Transfer Logded" :checked="view_transfer.status == 'Transfer Logded'">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="5" :checked="view_transfer.status >= '5'">
 <label class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
 </div>
 </div> 
@@ -208,7 +223,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Certificate Received" :checked="view_transfer.status == 'Certificate Received'">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="6" :checked="view_transfer.status >= '6'">
 <label class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
 </div>
 </div> 
@@ -223,7 +239,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="radio" value="Transfer Complete And Delivered" :checked="view_transfer.status == 'Transfer Complete And Delivered'">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="7" :checked="view_transfer.status == '7'">
 <label class="form-check-label text-body text-truncate status-heading"> Transfer Complete &amp; Delivered</label>
 </div>
 </div> 
@@ -252,14 +269,15 @@ export default {
       <h6 class="text-center">Notes</h6>
        <div class="col-xl-8">
       <div class="row">
-        <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-         <div class="alert text-white alert-secondary alert-dismissible fade show font-weight-light" role="alert">
+         <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
+         <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
          <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
          <span class="text-sm">{{ task.body }}</span>
          </span>
          <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
          data-bs-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true" class="text-lg font-weight-bold">×</span></button>
+         <i class="far fa-trash-alt me-2" aria-hidden="true"></i></button>
+         <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
          </div>
         </div>
         <h6 v-if="!tasks" class="text-center">No tasks found.</h6>

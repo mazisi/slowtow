@@ -24,8 +24,7 @@ class TransferLicenceController extends Controller
        $request->validate([
            "new_company" => "required|exists:companies,id",
            "date" => "required|date",
-           "old_company_id" => "required|exists:companies,id",
-           "status" =>"required|in:Deposit Paid,Collate Transfer Details,Client Invoiced,Client Paid,Transfer Logded,Certificate Received,Transfer Complete And Delivered"
+           "old_company_id" => "required|exists:companies,id"
        ]);
 
 
@@ -34,7 +33,7 @@ class TransferLicenceController extends Controller
         'company_id'=> $request->new_company,
         'old_company_id' => $request->old_company_id,
         'date' => $request->date,
-        'status' => $request->status,
+        'status' => last($request->status),
         'slug' => $request->old_company.sha1(time())
        ]);
 
@@ -68,11 +67,10 @@ class TransferLicenceController extends Controller
       public function update(Request $request)
       {
         $request->validate([
-          'status' => 'required',
           'transfer_date'=> 'required|date'
         ]);
         $update = LicenceTransfer::whereSlug($request->slug)->update([
-          'status' => $request->status,
+          'status' => last($request->status),
           'date' => $request->transfer_date
         ]);
         if ($update) {

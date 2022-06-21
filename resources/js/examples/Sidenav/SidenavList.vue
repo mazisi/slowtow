@@ -342,7 +342,9 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'email_comms'}"
+          :class="{ active: $page.props.currentRoute == 'email_comms'
+          || $page.props.currentRoute == 'get_licence_transfers'
+          || $page.props.currentRoute == 'get_nominations'}"
           collapseRef="/email-comms"
           navText="Email Comms"
         >

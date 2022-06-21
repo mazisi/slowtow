@@ -70,6 +70,9 @@ export default {
             this.createTask.body = this.createTask.body.substring(0,this.body_max)
         }
      },
+     assignActiveValue(event){
+      this.form.is_licence_active = event
+    }
   },
   components: {
     Layout,
@@ -138,7 +141,8 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active</label>
- <input id="active-checkbox" type="checkbox" :checked="licence.is_licence_active == '1'">
+ <input id="active-checkbox" type="checkbox" value="1"
+ @input="assignActiveValue($event.target.value)" :checked="licence.is_licence_active == '1'">
 </div>
 </div>
 
@@ -284,13 +288,14 @@ export default {
        <div class="col-xl-8">
       <div class="row">
         <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-         <div class="alert text-white alert-secondary alert-dismissible fade show font-weight-light" role="alert">
+         <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
          <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
          <span class="text-sm">{{ task.body }}</span>
          </span>
          <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
          data-bs-dismiss="alert" aria-label="Close">
-         <span aria-hidden="true" class="text-lg font-weight-bold">×</span></button>
+         <i class="far fa-trash-alt me-2" aria-hidden="true"></i></button>
+         <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
          </div>
         </div>
         <h6 v-if="!tasks" class="text-center">No tasks found.</h6>

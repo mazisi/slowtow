@@ -40,17 +40,17 @@
     <label class="form-label">Email</label>
     <input v-model="form.email" type="email" autocomplete="on" class="form-control form-control-default">
     </div>
-    <p v-if="errors.email" :style="{color: ' #FF5252'}">{{ errors.email }}</p>
+    <p v-if="errors.email" class="text-danger">{{ errors.email }}</p>
   </div>
   <div class="mb-3">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Password</label>
     <input v-model="form.password" type="password" class="form-control form-control-default" >
     </div>
-    <p v-if="errors.password" :style="{color: ' #FF5252'}">{{ errors.password }}</p>
+    <p v-if="errors.password" class="text-danger">{{ errors.password }}</p>
   </div>
   <div class="form-check form-switch d-flex">
-  <input v-model="form.remember"  class="form-check-input" type="checkbox" >
+  <input v-model="form.remember"  class="form-check-input" type="checkbox">
   <label class="form-check-label ms-3" for="rememberMe">Remember me</label>
    </div>
   <div class="text-center">

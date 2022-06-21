@@ -28,15 +28,21 @@ export default {
   },
     methods: {
       submit() {
-          this.$inertia.post(`/submit-nomination`, this.form)
+          this.$inertia.patch(`/update-nominee`, this.form)
           .then(() => {
               
             })
         },
-
         fetchTableData(){
           this.$inertia.post(`/fetch-table-data-on-search`, this.form)
-        }
+        },
+    pushData(event){
+      if(this.form.status.includes(event)){
+        return;
+      }else{
+        this.form.status.push(event)
+      }      
+    },
         
   },
 
@@ -50,7 +56,12 @@ export default {
     this.$store.state.isAbsolute = false;
   },
 };
-
+//The following are status keys:
+// 1 => Client Invoiced
+// 2 => Nomination Paid
+// 3 => Nomination Lodged
+// 4 => Certificate Received
+// 5 => Nomination Complete And Delivered
 </script>
 <style>
 .columns{
@@ -90,14 +101,16 @@ export default {
 <input type="hidden" v-model="form.slug">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="Client Invoiced">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)"
+:checked="nomination.status >= '1'" value="1">
 <label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>     
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="Nomination Paid">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)"
+:checked="nomination.status >= '2'" value="2">
 <label class="form-check-label text-body text-truncate status-heading">Nomination  Paid</label>
 </div>
 </div> <hr>
@@ -106,7 +119,7 @@ export default {
 
 <div class="col-md-6 columns">
     <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Nominee *</label>
+    <label class="form-label">Nominee </label>
     <input type="text" class="form-control form-control-default" v-model="form.nominee" readonly>
     </div>
      <p v-if="errors.nominee" class="text-danger">{{ errors.nominee }}</p>
@@ -114,7 +127,7 @@ export default {
 
 <div class="col-md-6 columns">
     <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Nomination Date *</label>
+    <label class="form-label">Nomination Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.nomination_date">
     </div>
      <p v-if="errors.nomination_date" class="text-danger">{{ errors.nomination_date }}</p>
@@ -123,7 +136,8 @@ export default {
 <label>Required Documents</label><hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="Nomination Lodged">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)"
+:checked="nomination.status >= '3'" value="3">
 <label class="form-check-label text-body text-truncate status-heading">Nomination Lodged</label>
 </div>
 </div> 
@@ -132,7 +146,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="Certificate Received">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)"
+:checked="nomination.status == '4'" value="4">
 <label class="form-check-label text-body text-truncate status-heading">Certificate Received</label>
 </div>
 </div> 
@@ -155,7 +170,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="Nomination Complete And Delivered">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)"
+:checked="nomination.status >= '5'" value="5">
 <label class="form-check-label text-body text-truncate status-heading"> Nomination Complete &amp; Delivered</label>
 </div>
 </div> 

@@ -20,16 +20,10 @@
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     
-    <div class="card card-body mx-3 mx-md-4 mt-n6">
+    <div class="card mx-3 mx-md-4 mt-n6">
       <div class="col-12">
-      <div class="row">
-      <div class="col-8"></div>
-      <div class="col-2"></div>
-      <div class="col-2">
-</div>
-      </div>
-
-  <div class="card">
+  
+  <div class=" card-body">
     <div class="p-3 pb-0 card-header" >
           <h6 class="mb-0" >Upload CSV Document</h6>
         </div>

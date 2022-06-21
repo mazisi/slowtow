@@ -5,12 +5,12 @@ import Layout from "../../Shared/Layout.vue";
 export default {
   name: "dashboard-default",
   props: {
-    with_transfer_statuses: Object,
-    with_paid_statuses: Object,
-    with_get_client_docs_statuses: Object,
-    with_awaiting_liquor_board_statuses: Object,
-    with_issued_statuses: Object,
-    with_complete_statuses: Object
+    with_deposit_paid_status: Object,
+    with_client_invoiced_status: Object,
+    with_get_client_paid_status: Object,
+    with_transfer_logded_status: Object,
+    with_certificate_received_status: Object,
+    with_complete_status: Object
   },
   data() {
     return {
@@ -45,6 +45,9 @@ methods: {
     //On navigation click get transfer data
     getLicenceTransfers(){
       this.$inertia.get('/email-comms/transfers');
+    },
+    getNominations(){
+      this.$inertia.get('/email-comms/nominations');
     }
 
       
@@ -68,16 +71,16 @@ methods: {
 
   <li class="nav-item" role="presentation">
     <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white " id="Renewals" data-bs-toggle="pill" data-bs-target="#renewals" 
-    type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
+    type="button" role="tab" aria-controls="renewals" aria-selected="true">Invoice Renewals</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   
   <li class="nav-item" role="presentation">
     <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4 active" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-    type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
+    type="button" role="tab" aria-controls="transfers" aria-selected="false">Invoice Transfers</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <li class="nav-item" role="presentation">
-    <button class="nav-link btn btn-secondary text-white" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-    type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
+    <button @click="getNominations" class="nav-link btn btn-secondary text-white" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
+    type="button" role="tab" aria-controls="nominations" aria-selected="false">Invoice Nominations</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
   <li class="nav-item" role="presentation">
@@ -89,9 +92,9 @@ methods: {
 
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
-  <h5 class="text-center">Transfers</h5>
+  <h5 class="text-center">Invoice Transfers</h5>
   <div class="table-responsive p-0">
-  <h6 class="text-danger">Invoiced</h6>
+  <h6 class="text-danger">Deposit Paid</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -104,13 +107,17 @@ methods: {
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="with_transfer_status in with_transfer_statuses" :key="with_transfer_status.id">
+      <tr v-for="with_deposit_paid in with_deposit_paid_status" :key="with_deposit_paid.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_transfer_status.licence.trading_name }}</h6>
+              
+              <Link :href="`/view-transfered-licence/${with_deposit_paid.slug}`" 
+               class="text-secondary text-center font-weight-bold text-xs">
+               <h6 class="mb-0 text-sm">{{ with_deposit_paid.licence.trading_name }}</h6>
+               </Link>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_transfer_status.date).getFullYear() }}/{{ this.getRenewalYear(with_transfer_status.date)  }} </p>
+              Renewal For: {{ new Date(with_deposit_paid.date).getFullYear() }}/{{ this.getRenewalYear(with_deposit_paid.date)  }} </p>
             </div>
           </div>
         </td>
@@ -118,23 +125,22 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
         <!-- <td class="align-middle text-center text-sm">
-          <span v-if="with_transfer_status.status == 'Invoiced'" class="badge bg-dark text-default">{{ with_transfer_status.status }}</span>
-        <span v-if="with_transfer_status.status == 'Paid'" class="badge bg-info text-default">{{ with_transfer_status.status }}</span>
-        <span v-if="with_transfer_status.status == 'Get Client Docs'" class="badge bg-light text-default">{{ with_transfer_status.status }}</span>
-        <span v-if="with_transfer_status.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ with_transfer_status.status }}</span>
-        <span v-if="with_transfer_status.status == 'Issued'" class="badge bg-secondary text-default">{{ with_transfer_status.status }}</span>
-        <span v-if="with_transfer_status.status == 'Complete'" class="badge bg-success text-default">{{ with_transfer_status.status }}</span>
+          <span v-if="with_deposit_paid.status == 'Invoiced'" class="badge bg-dark text-default">{{ with_deposit_paid.status }}</span>
+        <span v-if="with_deposit_paid.status == 'Paid'" class="badge bg-info text-default">{{ with_deposit_paid.status }}</span>
+        <span v-if="with_deposit_paid.status == 'Get Client Docs'" class="badge bg-light text-default">{{ with_deposit_paid.status }}</span>
+        <span v-if="with_deposit_paid.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ with_deposit_paid.status }}</span>
+        <span v-if="with_deposit_paid.status == 'Issued'" class="badge bg-secondary text-default">{{ with_deposit_paid.status }}</span>
+        <span v-if="with_deposit_paid.status == 'Complete'" class="badge bg-success text-default">{{ with_deposit_paid.status }}</span>
         </td> -->
         <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_transfer_status.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ with_deposit_paid.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_transfer_status.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${with_deposit_paid.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
-        
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
+        <Link :href="`/view-transfered-licence/${with_deposit_paid.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
       
@@ -147,7 +153,7 @@ methods: {
 
 
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Paid</h6>
+  <h6 class="text-danger">Client Invoiced</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -158,13 +164,16 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="with_paid_status in with_paid_statuses" :key="with_paid_status.id">
+      <tr v-for="with_client_invoiced in with_client_invoiced_status" :key="with_client_invoiced.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_paid_status.licence.trading_name }}</h6>
+              <Link :href="`/view-transfered-licence/${with_client_invoiced.slug}`" 
+               class="text-secondary text-center font-weight-bold text-xs">
+               <h6 class="mb-0 text-sm">{{ with_client_invoiced.licence.trading_name }}</h6>
+               </Link>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_paid_status.date).getFullYear() }}/{{ this.getRenewalYear(with_paid_status.date)  }} </p>
+              Renewal For: {{ new Date(with_client_invoiced.date).getFullYear() }}/{{ this.getRenewalYear(with_client_invoiced.date)  }} </p>
             </div>
           </div>
         </td>
@@ -172,15 +181,15 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_paid_status.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ with_client_invoiced.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_paid_status.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${with_client_invoiced.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
+        <Link :href="`/view-transfered-licence/${with_client_invoiced.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
      
@@ -191,7 +200,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Awaiting Client Docs </h6>
+  <h6 class="text-danger"> Client Paid </h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -203,13 +212,16 @@ methods: {
     </thead>
     <tbody>
     <!-- <h6 v-if="$props.with_get_client_docs_statuses.length <= 0" class="text-center">No licences awaiting client docs</h6> -->
-      <tr v-for="with_get_client_docs_status in with_get_client_docs_statuses" :key="with_get_client_docs_status.id">
+      <tr v-for="with_get_client_paid in with_get_client_paid_status" :key="with_get_client_paid.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_get_client_docs_status.licence.trading_name }}</h6>
+               <Link :href="`/view-transfered-licence/${with_get_client_paid.slug}`" 
+               class="text-secondary text-center font-weight-bold text-xs">
+               <h6 class="mb-0 text-sm">{{ with_get_client_paid.licence.trading_name }}</h6>
+               </Link>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_get_client_docs_status.date).getFullYear() }}/{{ this.getRenewalYear(with_get_client_docs_status.date)  }} </p>
+              Renewal For: {{ new Date(with_get_client_paid.date).getFullYear() }}/{{ this.getRenewalYear(with_get_client_paid.date)  }} </p>
             </div>
           </div>
         </td>
@@ -217,15 +229,15 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_get_client_docs_status.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ with_get_client_paid.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_get_client_docs_status.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${with_get_client_paid.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
+        <Link :href="`/view-transfered-licence/${with_get_client_paid.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
       
@@ -236,7 +248,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Awaiting Liquor Board</h6>
+  <h6 class="text-danger">Transfer Logded</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -247,13 +259,16 @@ methods: {
       </tr>
     </thead>
     <tbody>
-       <tr v-for="with_awaiting_liquor_board_status in with_awaiting_liquor_board_statuses" :key="with_awaiting_liquor_board_status.id">
+       <tr v-for="with_transfer_logded in with_transfer_logded_status" :key="with_transfer_logded.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_awaiting_liquor_board_status.licence.trading_name }}</h6>
+              <Link :href="`/view-transfered-licence/${with_transfer_logded.slug}`" 
+               class="text-secondary text-center font-weight-bold text-xs">
+               <h6 class="mb-0 text-sm">{{ with_transfer_logded.licence.trading_name }}</h6>
+               </Link>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_awaiting_liquor_board_status.date).getFullYear() }}/{{ this.getRenewalYear(with_awaiting_liquor_board_status.date)  }} </p>
+              Renewal For: {{ new Date(with_transfer_logded.date).getFullYear() }}/{{ this.getRenewalYear(with_transfer_logded.date)  }} </p>
             </div>
           </div>
         </td>
@@ -261,15 +276,15 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_awaiting_liquor_board_status.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ with_transfer_logded.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_awaiting_liquor_board_status.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${with_transfer_logded.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
+        <Link :href="`/view-transfered-licence/${with_transfer_logded.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
    
@@ -279,7 +294,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Issued</h6>
+  <h6 class="text-danger">Certificate Received</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -290,13 +305,16 @@ methods: {
       </tr>
     </thead>
     <tbody>
-       <tr v-for="with_issued_status in with_issued_statuses" :key="with_issued_status.id">
+       <tr v-for="with_certificate_received in with_certificate_received_status" :key="with_certificate_received.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_issued_status.licence.trading_name }}</h6>
+              <Link :href="`/view-transfered-licence/${with_certificate_received.slug}`" 
+               class="text-secondary text-center font-weight-bold text-xs">
+               <h6 class="mb-0 text-sm">{{ with_certificate_received.licence.trading_name }}</h6>
+               </Link>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_issued_status.date).getFullYear() }}/{{ this.getRenewalYear(with_issued_status.date)  }} </p>
+              Renewal For: {{ new Date(with_certificate_received.date).getFullYear() }}/{{ this.getRenewalYear(with_certificate_received.date)  }} </p>
             </div>
           </div>
         </td>
@@ -304,15 +322,15 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_issued_status.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ with_certificate_received.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_issued_status.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${with_certificate_received.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
+        <Link :href="`/view-transfered-licence/${with_certificate_received.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
    
@@ -322,7 +340,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Complete</h6>
+  <h6 class="text-danger">Transfer Complete And Delivered</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -333,13 +351,16 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="with_complete_status in with_complete_statuses" :key="with_complete_status.id">
+      <tr v-for="with_complete in with_complete_status" :key="with_complete.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_complete_status.licence.trading_name }}</h6>
+              <Link :href="`/view-transfered-licence/${with_complete.slug}`" 
+               class="text-secondary text-center font-weight-bold text-xs">
+               <h6 class="mb-0 text-sm">{{ with_complete.licence.trading_name }}</h6>
+               </Link>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_complete_status.date).getFullYear() }}/{{ this.getRenewalYear(with_complete_status.date)  }} </p>
+              Renewal For: {{ new Date(with_complete.date).getFullYear() }}/{{ this.getRenewalYear(with_complete.date)  }} </p>
             </div>
           </div>
         </td>
@@ -347,15 +368,15 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_complete_status.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ with_complete.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_complete_status.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${with_complete.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
+         <Link :href="`/view-transfered-licence/${with_complete.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
    
@@ -367,20 +388,26 @@ methods: {
   </div>
 
   <div class="tab-pane fade" id="transfers" role="tabpanel" aria-labelledby="Transfers">
-  <h5>Transfers</h5>
-  This is some placeholder content the Contact tab's associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility and styling. 
-  You can use it with tabs, pills, and any other .nav-powered navigation.
+ <div class="text-center">
+  <div class="spinner-grow text-success" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+  </div>
   </div>
 
   <div class="tab-pane fade" id="nominations" role="tabpanel" aria-labelledby="Nominations">
-   <h5>Nominations</h5>
-  This is some placeholder content the Contact tab's associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility
-   and styling. You can use it with tabs, pills, and any other .nav-powered navigation.</div>
+  <div class="text-center">
+  <div class="spinner-grow text-success" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+  </div></div>
 
    <div class="tab-pane fade" id="alterations" role="tabpanel" aria-labelledby="Alterations">
-   <h5>Alterations</h5>
-  Alterations is some placeholder content the Contact tab's associated content. Clicking another tab will toggle the visibility of this one for the next. The tab JavaScript swaps classes to control the content visibility
-   and styling. You can use it with tabs, pills, and any other .nav-powered navigation.</div>
+ <div class="text-center">
+  <div class="spinner-grow text-success" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+  </div></div>
 
 </div>
 

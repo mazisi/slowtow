@@ -87,7 +87,7 @@ export default {
      <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <label class="form-check-label mb-0 text-body text-truncate">Active Company</label>
-    <input v-model="form.active"  type="checkbox" id="active-checkbox" checked>
+    <input v-model="form.active"  type="checkbox" id="active-checkbox" value="1">
     </div>
     </div>
                   
