@@ -62,7 +62,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create-licence',[LicenceController::class,'create'])->name('create_licence');
         Route::get('/view-licence',[LicenceController::class,'show'])->name('view_licence');
         Route::post('/submit-licence',[LicenceController::class,'store'])->name('submit_licence');
-        Route::post('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
+        Route::patch('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
@@ -118,7 +118,7 @@ Route::group(['middleware' => ['auth']], function () {
        
 
         Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
-        Route::post('/fetch-table-data-on-search',[NominationController::class,'fetchPeopleData'])->name('fetch_table_data');
+        // Route::post('/remove-selected-nominee',[NominationController::class,'fetchSelectedNominees'])->name('fetch_table_data');
         Route::post('/submit-nomination', [NominationController::class,'store'])->name('submit_nomination');
         Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');

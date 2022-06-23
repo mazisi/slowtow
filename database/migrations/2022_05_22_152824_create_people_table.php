@@ -15,25 +15,18 @@ return new class extends Migration
     {
         Schema::create('people', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('full_name');
             $table->string('active')->nullable();
-            $table->string('initials')->nullable();
-            $table->string('surname');
             $table->string('date_of_birth')->nullable();
             $table->string('id_number')->nullable();
             $table->enum('id_or_passport',['i_d','passport']);
             $table->string('identity_number')->unique()->nullable();
             $table->string('passport')->unique()->nullable();
             $table->string('email_address_1')->nullable();
-            $table->string('email_adddress_2')->nullable();
+            $table->string('email_address_2')->nullable();
             $table->string('cell_number')->nullable();
-            $table->string('fax_number')->nullable();
             $table->string('telephone')->nullable();
-            $table->string('home_address')->nullable();
-            $table->string('home_address_postal_code')->nullable();
-            $table->string('postal_code')->nullable();
-            $table->string('work_address')->nullable();
-            $table->string('work_address_postal_code')->nullable();
+            $table->string('position')->nullable();
             $table->date('passport_valid_until')->nullable();
             $table->enum('valid_saps_clearance',['yes','no','requested']);
             $table->enum('valid_certified_id',['yes','no','requested']);

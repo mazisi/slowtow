@@ -55,9 +55,9 @@
    </div>
   <div class="text-center">
   
-  <button type="submit" class="btn mb-0 bg-gradient-success btn-md w-100 null my-4 mb-2 d-flex justify-content-center"> 
+  <button :disabled="form.processing" type="submit" class="btn mb-0 bg-gradient-success btn-md w-100 null my-4 mb-2 d-flex justify-content-center"> 
 
-  <span class="mr-5" v-if="loading">
+  <span class="mr-5" v-if="form.processing">
   <div class="half-circle-spinner">
   <div class="circle circle-1"></div>
   <div class="circle circle-2"></div>
@@ -94,54 +94,37 @@
 </template>
 
 <script>
-import Navbar from "@/examples/PageLayout/Navbar.vue";
-import VmdInput from "@/components/VmdInput.vue";
-import VmdSwitch from "@/components/VmdSwitch.vue";
-import VmdButton from "@/components/VmdButton.vue";
-import { mapMutations } from "vuex";
+import { useForm } from '@inertiajs/inertia-vue3';
 import { HalfCircleSpinner } from 'epic-spinners'
 
-export default {  
+export default {
   name: "sign-in",
  props: {
     errors: Object,
   },
-  data() {
-    return {
-      loading: false,
-       form: {
+
+  setup () {
+
+    const form = useForm({
         email: '',
         password: '',
-        remember: '',
-      },
-    };
-  },
-    
-  components: {
-    HalfCircleSpinner,
-    Navbar,
-    VmdInput,
-    VmdSwitch,
-    VmdButton,
-  },
-  beforeMount() {
-    this.toggleEveryDisplay();
-    this.toggleHideConfig();
-  },
-  beforeUnmount() {
-    this.toggleEveryDisplay();
-    this.toggleHideConfig();
-  },
-  methods: {
-    ...mapMutations(["toggleEveryDisplay", "toggleHideConfig"]),
-      submit() {
-      this.loading=true;
-      this.$inertia.post('/login', this.form)
-        .then(() => {
-          this.loading=false;
-        })
+        remember: '',   
+    })
+
+    function submit() {
+      form.post('/login', {
+        onFinish: () => form.reset('password'),
+      })
+      
     }
+
+    return { form, submit }
+  },
+
+   components: {
+    HalfCircleSpinner
   },
   
 };
+
 </script>

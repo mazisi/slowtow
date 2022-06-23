@@ -21,17 +21,18 @@ return new class extends Migration
             $table->enum('company_type',
             ["Public Company","Private Company","Close Corporation","Trust",
              "Partnership","Sole Proprietor","Section 21","Non Resident Company","Foreign Company","Association"]);
-            $table->string('address')->nullable();
+            $table->string('business_address')->nullable();
+            $table->string('business_province')->nullable();
             $table->string('business_address_postal_code')->nullable();
             $table->string('postal_address')->nullable();
-            $table->string('postal_address_code')->nullable();
+            $table->string('postal_province')->nullable();
+            $table->string('postal_code')->nullable();
             $table->string('website')->nullable();
             $table->string('email')->nullable();
             $table->string('email1')->nullable();
             $table->string('email2')->nullable();
             $table->string('tel_number')->nullable();
             $table->string('tel_number1')->nullable();
-            $table->string('fax')->nullable();
             $table->string('active')->nullable();
             $table->string('slug');
             $table->softDeletes();

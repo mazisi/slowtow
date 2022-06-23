@@ -17,11 +17,19 @@ class NominationController extends Controller
     /**
      * Get nominate page...
      * Return Nominate.vue where you select people & create nomination. 
+     * For some reason,wc i dont know,search data(term) comes via Symphony\InputBag!!!!
      */
     public function index(Request $request){
+
+        if($request->has('term')){
+            $selected_nominees = People::whereIn('id', $request->input('term'))->get();
+        }else{
+            $selected_nominees = '';
+        }
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
-        $nominees = People::pluck('name','id');
-        return Inertia::render('Nominations/Nominate',['licence' => $licence,'nominees' => $nominees]);
+        $nominees = People::pluck('full_name','id');
+        return Inertia::render('Nominations/Nominate',['licence' => $licence,'nominees' => $nominees,
+        'selected_nominees' => $selected_nominees]);
     }
     /**
      * Insert nomination.
@@ -95,11 +103,16 @@ class NominationController extends Controller
 /**
  * Fetch people data on multi select.
  */
-    public function fetchPeopleData(Request $request){dd($request->people);
-        if(count($request->people)){
-
-        }
-        $people = People::whereIn('id', $request->people)->get();dd($people);
-        return back();
-    }
+    //  public function fetchSelectedNominees(Request $request){
+    //     if(count($request->people)){
+    //         $selected_nominees = People::whereIn('id', $request->people)->get();
+    //     }else{
+    //         $selected_nominees = '';
+    //     }
+    //     $licence = Licence::whereSlug($request->slug)->firstOrFail();
+    //     $nominees = People::pluck('full_name','id');
+    //     return Inertia::render('Nominations/Nominate',['selected_nominees' => $selected_nominees,'licence' => 
+    //                                                     $licence,'nominees' => $nominees,
+    //                                                     'nominees' => $nominees]);
+    // }
 }

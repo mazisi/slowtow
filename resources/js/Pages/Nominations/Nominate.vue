@@ -1,7 +1,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link,usePage } from '@inertiajs/inertia-vue3';
 
 
 export default {
@@ -11,21 +11,25 @@ export default {
     licence: Object,
     success: String,
     error: String,
-    people: Object
+    selected_nominees: Array
 
   },
   data() {
     return {
       showMenu: false,
       form: {
+         nominees: '',//
          nomination_date: '',
          licence_id: this.licence.id,
          licence_slug: this.licence.slug,
-         people: [], 
          status: [],
-      
       },
-      options: this.nominees,
+
+      searchForm: {
+        people: [], 
+        slug: this.licence.slug
+      },
+      options: this.nominees
     };
   },
     methods: {
@@ -37,7 +41,13 @@ export default {
         },
 
         fetchTableData(){
-          this.$inertia.post(`/fetch-table-data-on-search`, this.form)
+          this.$inertia.replace(route('nominate',{
+          term: this.searchForm.people,slug: this.licence.slug
+          }))
+        },
+
+        removeSelectedNominee(id){
+          this.selected_nominees.splice(id,1)
         }
         
   },
@@ -46,11 +56,22 @@ export default {
   components: {
     Layout,
     Multiselect,
-    Link
+    Link,
+    usePage
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },
+
+  // created() {
+  //  if(this.searchForm.people.length > 0){
+  //   window.addEventListener('beforeunload', function(event) {
+  //        event.returnValue = 'Write something'
+  //        this.$router.push('/')
+  //     })
+  //  }
+  //   },
+   
 };
 
 //The following are status keys:
@@ -108,28 +129,31 @@ export default {
 <label class="form-check-label text-body text-truncate status-heading">Nomination  Paid</label>
 </div>
 </div> <hr>
-<label>Payment Document</label><hr>
+<label>Payment Document </label><hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label text-body text-truncate status-heading">Select Nominees To Add/Terminate</label>
+<p v-for="nomine in selected_nominees">
+{{nomine.id }}
+</p>
 </div>
 </div>
   <div class="col-md-10 columns">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
-     v-model="form.people"
+     v-model="searchForm.people"
         placeholder="Search Nominees...."
         mode="tags"
         :options="options"
         :searchable="true"
+        @select="fetchTableData"
         />
     </div>
  <div v-if="errors.people" class="text-danger">{{ errors.people }}</div>
 </div>
 
-<!-- <div class="col-md-12 columns">
- <div class="table-responsive p-0">
+ <div class="table-responsive mb-2">
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
@@ -154,19 +178,22 @@ export default {
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Status
                     </th>
+
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
+                    </th>
                     
                   </tr>
                 </thead>
                 
 
                  <tbody>
-                  <tr v-for="person in people" :key="person.id" >
-                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{currentCompany.id}}</div></td>
+                  <tr v-for="person in selected_nominees" :key="person.id" >
                     <td>
                       <div class="d-flex px-2 py-1" >
                        
                     <div class="d-flex flex-column justify-content-left">
-                    <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.name }} {{ person.surname }}</h6></Link>                  
+                    <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }} </h6></Link>                  
                     </div>
                       </div>
                     </td>
@@ -176,15 +203,20 @@ export default {
                      <td>{{ person.valid_certified_id }}</td>
                       <td class="text-center">{{ person.valid_saps_clearance }}</td>
                       <td class="text-center">Status</td>
+                      <td class="text-center">
+                      <i @click="removeSelectedNominee(person.id)" 
+                      style="cursor: pointer;"
+                      class="material-icons-round text-danger fs-10">highlight_off</i>
+                      </td>
                   </tr>
                   
                  
                 </tbody>
               </table>
             </div>
-</div> -->
 
-<div class="col-md-2 columns">
+
+<div class="col-md-4 columns mt-2">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Nomination Date *</label>
     <input type="date" class="form-control form-control-default" v-model="form.nomination_date">

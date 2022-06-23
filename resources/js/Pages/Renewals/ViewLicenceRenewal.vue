@@ -1,74 +1,74 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
-import Multiselect from '@vueform/multiselect';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import { Inertia } from '@inertiajs/inertia';
 
+import { ref } from 'vue';
 
 export default {
- props: {
+  props: {
     errors: Object,
-    renewal: Object,
+    licence_dropdowns: Object,
+    licence: Object,
     success: String,
-    error: String
-
+    error: String,
+    renewal: Object,
   },
-  data() {
-    return {
-      showMenu: false,
-      form: {
-         renewal_date: this.renewal.date,
-         status: [],
-         is_checked: this.renewal.status,
-         renewal_status: 'Renewal Received',
-         renewal_id: this.renewal.id,      
-      },
-    };
-  },
-    methods: {
-      submit() {
-          this.$inertia.patch(`/update-renewal`, this.form)
-          .then(() => {
-              
-            })
-        },
 
-        fetchTableData(){
-          this.$inertia.post(`/fetch-table-data-on-search`, this.form)
-        },
+  setup (props) {
+    const year = ref(new Date().getFullYear());
 
-      getRenewalYear(date){
+    const form = useForm({
+      year: props.renewal.date,
+      licence_id: props.renewal.id,
+      status: [],
+      is_checked: props.renewal.status,
+      renewal_id: props.renewal.id    
+    })
+
+
+
+    function updateRenewal() {
+      // Inertia.patch('/update-renewal', form)
+      form.patch('/update-renewal', {
+        preserveScroll: true,
+      })
+      
+    }
+
+    function getRenewalYear(date){
       let computed_date = new Date(date).getFullYear();
       return computed_date + 1;    
-    },
+    }
 
-    pushData(event){
-      if(this.form.status.includes(event)){
+    function pushData(status_value){
+      if(this.form.status.includes(status_value)){
         return;
       }else{
-        this.form.status.push(event)
+        this.form.status.push(status_value)
       }
       
-    },
-    beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
-        
-  },
+    }
 
-  
-  components: {
+    return { year,form, updateRenewal, getRenewalYear, pushData }
+  },
+   components: {
     Layout,
-    Multiselect,
-    Link
+    Link,
+    Head,
+    Datepicker
   },
   
 };
 //The following are status keys
-// 1 => Renewal Received
+// 1 => Client Quoted
 // 2 => Client Invoiced
 // 3 => Client Paid
-// 4 => Renewal Processed
-// 5 => Renewal Complete & Delivered
+// 4 => Payment To Liquor Board
+// 5 => Renewal Complete
+
 </script>
 <style>
 .columns{
@@ -103,15 +103,33 @@ export default {
           <div class="col-12 col-md-12 col-xl-12 position-relative">
             <div class="card card-plain h-100">
               <div class="p-3 card-body">
-  <form @submit.prevent="submit">
+  <form @submit.prevent="updateRenewal">
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" type="checkbox" 
 :checked="form.is_checked >= '1'"
 @input="pushData($event.target.value)" value="1">
-<label class="form-check-label text-body text-truncate status-heading">Renewal Received</label>
+<label class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
+<ul class="list-group">
+<li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+<div class="avatar me-3">
+<img src="/vue-material-dashboard-2/img/kal-visuals-square.779cce2b.jpg" alt="Doc" class="shadow null border-radius-lg">
+</div>
+<div class="d-flex align-items-start flex-column justify-content-center">
+<h6 class="mb-0 text-sm">Doc Name.</h6><p class="mb-0 text-xs">3Mb</p>
+</div>
+
+<a class="mb-0 btn btn-link ps-0 ms-auto" href="javascript:;">
+<i class="fa fa-upload h5 text-info" aria-hidden="true"></i>
+</a>
+<a class="mb-0 btn btn-link ps-0 ms-auto" href="javascript:;">
+<i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+</a>
+
+</li>
+</ul>
 </div>     
 <hr>
 <div class="col-md-12 columns">
@@ -123,14 +141,11 @@ export default {
 </div>
 </div> <hr>
 
-<div class="col-md-3 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Renewal Year *</label>
-    <input type="number" class="form-control form-control-default" v-model="form.renewal_date" 
-    :min="renewal.date" step="1">
-    </div>
-     <p v-if="errors.renewal_date" class="text-danger">{{ errors.renewal_date }}</p>
-  </div>
+  <div class="col-md-6 columns">
+<Datepicker v-model="form.year" yearPicker />
+<p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
+</div>
+
   <div class="col-md-3 columns">
     <label class="form-label">Scanned Renewal Form</label>
   </div>
@@ -151,7 +166,7 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" value="4"
 :checked="form.is_checked >= '4'">
-<label class="form-check-label text-body text-truncate status-heading">Renewal Processed</label>
+<label class="form-check-label text-body text-truncate status-heading">Payment To Liquor Board</label>
 </div>
 </div> 
 
@@ -170,8 +185,12 @@ export default {
 </div>
 </div> 
 
-<div>
-  <button type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">Save</button></div>
+<div class="text-danger">
+  <div v-if="form.isDirty" class="text-xs d-flex">There are unsaved changes.</div>
+  <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden">Loading...</span> Save</button>
+</div>
             </div>
             </form>
               </div>

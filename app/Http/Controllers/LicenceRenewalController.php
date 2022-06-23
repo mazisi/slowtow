@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use Inertia\Inertia;
 use App\Models\Licence;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
-use App\Models\TemporalLicence;
-use Illuminate\Support\Facades\DB;
 
 class LicenceRenewalController extends Controller
 {
@@ -23,25 +19,18 @@ class LicenceRenewalController extends Controller
     public function store(Request $request){
        
         $request->validate([
-            'renewal_date' => 'required',
+            'year' => 'required',
         ]);
 
-        $posted_date = strtotime($request->renewal_date);//Just force every date format to 'Y-m-d'
-        $new_date = date('Y-m-d',$posted_date);
-    
         $check_renewal = LicenceRenewal::where('licence_id',$request->licence_id)
-                                        ->where('date',Str::substr($new_date, 0, 4))->first();
+                                        ->where('date',$request->year)->first();
         if (!is_null($check_renewal)) {
-           return back()->with('error', 'Licence already renewed for '.Str::substr($new_date, 0, 4));
+           return back()->with('error', 'Licence already renewed for '.$request->year);
         }
-
-        // if($check_renewal->date >= Str::substr($new_date, 0, 4)){
-        //     return back()->with('error', 'Licence already renewed for '.Str::substr($new_date, 0, 4));
-        // }
 
         $renew = LicenceRenewal::create([
             'licence_id' => $request->licence_id,
-            'date' => Str::substr($new_date, 0, 4),
+            'date' => $request->year,
             'slug' => sha1(time())
         ]);
         if($renew){
@@ -67,11 +56,11 @@ class LicenceRenewalController extends Controller
 
     public function update(Request $request){
        $request->validate([
-        'renewal_date' => 'required',
+        'year' => 'required',
         'renewal_id' => 'required'
        ]);
        $update = LicenceRenewal::whereId($request->renewal_id)->update([
-        'date' => $request->renewal_date,
+        'date' => $request->year,
         'status' => last($request->status)
        ]);
        if($update){

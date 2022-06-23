@@ -25,7 +25,6 @@ class ValidatePeople extends FormRequest
     {
         return [
             'name' => 'required|string|max:200',
-            'surname' => 'required|string|max:200',
             'id_or_passport' => 'required|in:i_d,passport',
             'valid_saps_clearance' => 'required|in:yes,no,requested',
             'valid_fingerprint' => 'required|in:yes,no,requested',

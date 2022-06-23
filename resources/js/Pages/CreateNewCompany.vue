@@ -1,9 +1,238 @@
+<template>
+<Layout>
+<div class="container-fluid">
+<div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+">
+<span class="mask bg-gradient-success opacity-6"></span>
+</div>
+<div class="card card-body mx-3 mx-md-4 mt-n6">
+<div class="row">
+<div class="col-lg-6 col-7">
+<h6 class="mb-1">New Company </h6>
+</div>
+
+</div>
+
+
+
+<div class="row">
+<div class="mt-3 ">
+<form class="row" @submit.prevent="submit">
+<input type="hidden" v-model="form.slug">
+<div class="col-8 col-md-8 col-xl-8 position-relative">
+<div class="card card-plain h-100">
+<div class="p-3 card-body">
+<div class="row">
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
+<input id="active-checkbox" type="checkbox" value="1" >
+</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled ">
+<label class="form-label">Company Name *</label>
+<input type="text" class="form-control form-control-default" v-model="form.company_name">
+</div>
+<div v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled ">
+<label class="form-label">Company Type </label>
+<select class="form-control form-control-default" v-model="form.company_type" isrequired="true">
+<option value="-1">&lt;-- Please select an option --&gt;</option>
+<option value="Association">Association</option>
+<option value="Close Corporation">Close Corporation</option>
+<option value="Foreign Company">Foreign Company</option>
+<option value="Non Resident Company">Non Resident Company</option>
+<option value="Partnership">Partnership</option>
+<option value="Private Company">Private Company</option>
+<option value="Public Company">Public Company</option>
+<option value="Section 21">Section 21</option>
+<option value="Sole Proprietor">Sole Proprietor</option>
+<option value="Trust">Trust</option>
+</select>
+</div>
+<div v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Registration Number</label>
+<input type="text" class="form-control form-control-default" v-model="form.reg_number" >
+</div>
+<div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled ">
+<label class="form-label">Vat Number</label>
+<input type="text" class="form-control form-control-default" v-model="form.vat_number" >
+</div>
+<div v-if="errors.vat_number" class="text-danger">{{ errors.vat_number }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Email Address #1</label>
+<input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
+</div>
+<div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
+</div>  
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Email Address #2</label>
+<input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
+</div>
+<div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Email Address #3</label>
+<input type="email" class="form-control form-control-default" v-model="form.email_address_3" >
+</div>
+<div v-if="errors.email_address_3" class="text-danger">{{ errors.email_address_3 }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Telephone Number #1</label>
+<input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
+</div>
+<div v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Telephone Number #2</label>
+<input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
+</div>
+<div v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</div>
+</div>
+
+<div class="col-md-6 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Website</label>
+<input type="url" class="form-control form-control-default" v-model="form.website" >
+</div>
+<div v-if="errors.website" class="text-danger">{{ errors.website }}</div>
+</div>
+
+
+
+</div>
+
+</div>
+</div>
+<hr class="vertical dark" />
+</div>
+
+<div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
+<div class="row">
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Business Address</label>
+<input type="text" class="form-control form-control-default" v-model="form.business_address" >
+</div>
+<div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
+</div>           
+<div class="col-6 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Province</label>
+<select class="form-control form-control-default" v-model="form.business_province" >
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+<div v-if="errors.business_province" class="text-danger">{{ errors.business_province }}</div>
+</div>
+
+<div class="col-6 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Code</label>
+<input  type="text" class="form-control form-control-default" v-model="form.business_address_postal_code">
+</div>
+
+</div>
+
+<hr>
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Address</label>
+<input type="text" class="form-control form-control-default" v-model="form.postal_address" >
+</div>
+<div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
+</div>           
+<div class="col-6 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Province</label>
+<select class="form-control form-control-default" v-model="form.postal_province" >
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+<div v-if="errors.postal_province" class="text-danger">{{ errors.postal_province }}</div>
+</div>
+
+<div class="col-6 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Code</label>
+<input  type="text" class="form-control form-control-default" v-model="form.postal_code">
+</div>
+
+</div>
+
+
+
+
+</div>
+</div>
+<div>
+<button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button>
+</div>
+</form>
+<hr>
+</div>
+</div>
+
+
+
+</div>
+</div>
+</Layout>
+</template>
+<style>
+  #active-checkbox{
+    margin-top: 3px;
+    margin-left: 3px;
+  }
+  .columns{
+      margin-bottom: 1rem;
+    }
+</style>
+
 <script>
 import Layout from "../Shared/Layout.vue";
-import DefaultProjectCard from "./components/DefaultProjectCard.vue";
 
 export default {
-  name: "profile-overview",
  props: {
     errors: Object,
   },
@@ -22,9 +251,11 @@ export default {
         telephone_number_2: '',
         website: '',
         business_address: '',
+        business_province: '',
         business_address_postal_code: '',
         postal_address: '',
-        postal_address_code: '',
+        postal_province: '',
+        postal_code: '',
         active: '',
       },
       showMenu: false,
@@ -39,7 +270,6 @@ export default {
     }
   },
   components: {
-    DefaultProjectCard,
     Layout,
   },
   beforeUnmount() {
@@ -48,200 +278,5 @@ export default {
 };
 
 </script>
-<style>
-.columns{
-  margin-bottom: 1rem;
-}
-#active-checkbox{
-  margin-top: 3px;
-  margin-left: 3px;
-}
-</style>
 
-<template>
-<Layout>
-<div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
-    <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="row ">
-       
-        <div class="col-auto my-auto">
-          <div class="h-100">
-            <h5 class="mb-1">New Company</h5>
-          </div>
-        </div>
-        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
-          
-        </div>
-      </div>
-      <div class="row">
-        <div class="mt-3 row">
-          <div class="col-12 col-md-12 col-xl-12 position-relative">
-            <div class="card card-plain h-100">
-              <div class="p-3 card-body">
-              <form @submit.prevent="submit">
-     <div class="row">
-     <div class="col-md-12 columns">
-    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <label class="form-check-label mb-0 text-body text-truncate">Active Company</label>
-    <input v-model="form.active"  type="checkbox" id="active-checkbox" value="1">
-    </div>
-    </div>
-                  
-  <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Company Name *</label>
-    <input type="text" class="form-control form-control-default" v-model="form.company_name" >
-     </div>
-   <div v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</div>
-   </div>
-  
-<div class="col-md-4 columns">
-  <div class="input-group input-group-outline is-filled">
-  <label class="form-label">Company Type </label>
-  <select class="form-control form-control-default" v-model="form.company_type" >
-  <option value=" ">&lt;-- Please select an option --&gt;</option>
-  <option value="Association">Association</option>
-  <option value="Close Corporation">Close Corporation</option>
-  <option value="Foreign Company">Foreign Company</option>
-  <option value="Non Resident Company">Non Resident Company</option>
-  <option value="Partnership">Partnership</option>
-  <option value="Private Company">Private Company</option>
-  <option value="Public Company">Public Company</option>
-  <option value="Section 21">Section 21</option>
-  <option value="Sole Proprietor">Sole Proprietor</option>
-  <option value="Trust">Trust</option>
-   </select>
-  </div>
-  <div v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</div>
- </div>
-<div class="col-md-4 columns">
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Registration Number</label>
-  <input type="text" class="form-control form-control-default" v-model="form.reg_number" >
-  </div>
- <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
-</div>
-<div class="col-md-4 columns">
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Vat Number</label>
-  <input type="text" class="form-control form-control-default" v-model="form.vat_number" >
-   </div>
-     <div v-if="errors.vat_number" class="text-danger">{{ errors.vat_number }}</div>
-</div>              
-  <div class="col-md-4 columns">            
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Email Address #1</label>
-  <input type="text" class="form-control form-control-default" v-model="form.email_address_1" >
-   </div>
-    <div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
-    </div>              
-              
-   <div class="col-md-4 columns">                  
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Email Address #2</label>
-  <input type="text" class="form-control form-control-default" v-model="form.email_address_2" >
-   </div>
-  <div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
-  </div>
-                  
-              
-  <div class="col-md-4 columns">    
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Email Address #3</label>
-  <input type="text" class="form-control form-control-default" v-model="form.email_address_3" >
-   </div>
-   <div v-if="errors.email_address_3" class="text-danger">{{ errors.email_address_3 }}</div>
-   </div>
-                  
-              
-    <div class="col-md-4 columns">        
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Telephone Number #1</label>
-  <input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
-   </div>
-   <div v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</div>
-   </div>
-                  
-              
- <div class="col-md-4 columns">    
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Telephone Number #2</label>
-  <input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
-   </div>
- <div v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</div>
- </div>
-                  
- 
-<div class="col-md-4 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Fax Number</label>
-  <input type="text" class="form-control form-control-default" v-model="form.fax_number" >
-   </div>
-   <div v-if="errors.fax_number" class="text-danger">{{ errors.fax_number }}</div>
-   </div>
-                  
-  
- <div class="col-md-4 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Website</label>
-  <input type="text" class="form-control form-control-default" v-model="form.website" >
-   </div>
-   <div v-if="errors.website" class="text-danger">{{ errors.website }}</div>
-   </div>
-                  
-              
-   <div class="col-md-4 columns">        
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Business Address</label>
-  <input type="text" class="form-control form-control-default" v-model="form.business_address" >
-   </div>
-  <div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
-  </div>
-                  
 
-              
-  <div class="col-md-4 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Business Address Postal Code</label>
-  <input type="text" class="form-control form-control-default" v-model="form.business_address_postal_code" >
-   </div>
-   <div v-if="errors.business_address_postal_code" class="text-danger">{{ errors.business_address_postal_code }}</div>
-  </div>
-                  
-              
-<div class="col-md-4 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Postal Address</label>
-  <input type="text" class="form-control form-control-default" v-model="form.postal_address" >
-   </div>
-  <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
-  </div>
-                  
- <div class="col-md-4 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Postal Address Code</label>
-  <input type="text" class="form-control form-control-default" v-model="form.postal_address_code" >
-   </div>
- <div v-if="errors.postal_address_code" class="text-danger">{{ errors.postal_address_code }}</div>
- </div>
-
-  <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
-            </div>
-            </form>
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
-      <!-- //tasks were here -->
-        
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  </Layout>
-</template>

@@ -1,66 +1,3 @@
-<script>
-import Layout from "../../Shared/Layout.vue";
-
-export default {
-  name: "profile-overview",
- props: {
-    errors: Object,
-  },
-  data() {
-    return {
-      showMenu: false,
-      form: {
-      name: null,
-      initials: null,
-      surname: null,
-      date_of_birth: null,
-      id_number: null,
-      passport_number: null,
-      id_or_passport: null,
-      email_address_1: null,
-      email_adddress_2: null,
-      cell_number: null,
-      fax_number:null,
-      telephone: null,
-      postal_code: null,
-      work_address: null,
-      work_address_postal_code: null,
-      home_address: null,
-      home_address_postal_code: null,
-      valid_certified_id: null,
-      valid_saps_clearance: '',
-      saps_clearance_valid_until: null,
-      passport_valid_until: null,
-      valid_fingerprint: null,
-      fingerprint_valid_until: null,
-      active: null,
-    }
-    };
-  },
-    methods: {
-      submit() {
-          this.$inertia.post(`/submit-person`, this.form)
-        },
-  },
-  components: {
-    Layout,
-  },
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
-};
-
-</script>
-<style scoped>
-.columns{
-  margin-bottom: 1rem;
-}
-#active-checkbox{
-  margin-top: 3px;
-  margin-left: 3px;
-}
-</style>
-
 <template>
 <Layout>
 <div class="container-fluid">
@@ -90,7 +27,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active Person</label>
-<input v-model="form.active"  type="checkbox" id="active-checkbox" checked>
+<input v-model="form.active"  type="checkbox" id="active-checkbox" value="1">
 </div>
 </div>
                   
@@ -110,13 +47,6 @@ export default {
  <div v-if="errors.surname" class="text-danger">{{ errors.surname }}</div>
 </div>
 
- <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Initials</label>
-    <input type="text" class="form-control form-control-default" v-model="form.initials" >
-     </div>
-   <div v-if="errors.initials" class="text-danger">{{ errors.initials }}</div>
-   </div>
 
 <div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
@@ -180,16 +110,7 @@ export default {
    <div v-if="errors.cell_number" class="text-danger">{{ errors.cell_number }}</div>
    </div>
                   
-  
- <div class="col-md-4 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Fax Number</label>
-  <input type="text" class="form-control form-control-default" v-model="form.fax_number" >
-   </div>
-   <div v-if="errors.fax_number" class="text-danger">{{ errors.fax_number }}</div>
-   </div>
-                  
-              
+    
    <div class="col-md-4 columns">        
   <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Telephone Number</label>
@@ -198,36 +119,13 @@ export default {
    <div v-if="errors.telephone" class="text-danger">{{ errors.telephone }}</div>
   </div>
      
-  <div class="col-md-4 columns">    
+  <div class="col-md-4 columns">        
   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Home Address </label>
-  <input type="text" class="form-control form-control-default" v-model="form.home_address" >
+  <label class="form-label">Position</label>
+  <input type="tel" class="form-control form-control-default" v-model="form.position" >
    </div>
-   <div v-if="errors.home_address" class="text-danger">{{ errors.home_address }}</div>
+   <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
   </div>
-  
-                  
- <div class="col-md-4 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Home Address Postal Code</label>
-  <input type="text" class="form-control form-control-default" v-model="form.home_address_postal_code" >
-   </div>
- <div v-if="errors.home_address_postal_code" class="text-danger">{{ errors.home_address_postal_code }}</div>
- </div>
- <div class="col-md-4 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Work Address</label>
-  <input type="text" class="form-control form-control-default" v-model="form.work_address" >
-   </div>
- <div v-if="errors.work_address" class="text-danger">{{ errors.work_address }}</div>
- </div>
- <div class="col-md-4 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Work Address Postal Code</label>
-  <input type="text" class="form-control form-control-default" v-model="form.work_address_postal_code" >
-   </div>
- <div v-if="errors.work_address_postal_code" class="text-danger">{{ errors.work_address_postal_code }}</div>
- </div>
 <hr>
 <h6 class="text-center">Documents Related Fields</h6>
 <div class="col-md-4 columns">
@@ -303,3 +201,65 @@ export default {
   </div>
   </Layout>
 </template>
+
+<style scoped>
+  .columns{
+    margin-bottom: 1rem;
+  }
+
+  #active-checkbox{
+    margin-top: 3px;
+    margin-left: 3px;
+  }
+</style>
+
+<script>
+import Layout from "../../Shared/Layout.vue";
+
+export default {
+ props: {
+    errors: Object,
+  },
+  data() {
+    return {
+        showMenu: false,
+        form: {
+        name: null,
+        surname: null,
+        date_of_birth: null,
+        id_number: null,
+        passport_number: null,
+        id_or_passport: null,
+        email_address_1: null,
+        email_adddress_2: null,
+        cell_number: null,
+        position:null,
+        telephone: null,
+        valid_certified_id: null,
+        valid_saps_clearance: '',
+        saps_clearance_valid_until: null,
+        passport_valid_until: null,
+        valid_fingerprint: null,
+        fingerprint_valid_until: null,
+        active: null,
+        }
+    };
+  },
+  methods: {
+      submit() {
+          this.$inertia.post(`/submit-person`, this.form)
+        },
+  },
+
+  components: {
+    Layout,
+  },
+  
+  beforeUnmount() {
+    this.$store.state.isAbsolute = false;
+  },
+};
+
+</script>
+
+

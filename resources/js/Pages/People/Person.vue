@@ -3,7 +3,10 @@
   .table thead th {
     padding: 0;
     }
-
+#with-thrashed{
+  margin-top: 3px;
+  margin-left: 3px;
+}
 </style>
 <template>
 <Layout>
@@ -43,7 +46,6 @@
  </div>
        
      </div>
-    
         <div class="">
           <div class=" px-0 pb-2">
           <div class="table-responsive p-0">
@@ -73,7 +75,7 @@
       </td>
       <td class="align-middle text-center text-sm">
       <Link :href="`/view-person/${person.slug}`">
-      <h6 class="mb-0 text-sm">{{ person.name }} {{ person.surname }}</h6></Link>
+      <h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>
       </td>
       <td class="align-middle d-flex justify-content-center">
       <Link :href="`/view-person/${person.slug}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">

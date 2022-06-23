@@ -42,7 +42,7 @@
         <ul class="navbar-nav justify-content-end">
           <li class="nav-item d-flex align-items-center">
             <inertia-link
-              :href="`logout`"
+              :href="`/logout`"
               class="px-0 nav-link font-weight-bold lh-1 "
               :class="color ? color : 'text-body'"
             >
@@ -93,9 +93,6 @@ export default {
           this.showFlashMessage = true
         }
         
-        if(this.$page.props.success != null){
-          this.showFlashMessage = true
-        } 
       },
       deep: true,
     },
