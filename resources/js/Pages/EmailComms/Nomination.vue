@@ -70,16 +70,16 @@ methods: {
 
   <li class="nav-item" role="presentation">
     <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white " id="Renewals" data-bs-toggle="pill" data-bs-target="#renewals" 
-    type="button" role="tab" aria-controls="renewals" aria-selected="true">Invoice Renewals</button>
+    type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   
   <li class="nav-item" role="presentation">
     <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-    type="button" role="tab" aria-controls="transfers" aria-selected="false">Invoice Transfers</button>
+    type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <li class="nav-item" role="presentation">
     <button @click="getNominations" class="nav-link btn btn-secondary text-white active" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-    type="button" role="tab" aria-controls="nominations" aria-selected="false">Invoice Nominations</button>
+    type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
   <li class="nav-item" role="presentation">
@@ -91,7 +91,7 @@ methods: {
 
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
-  <h5 class="text-center">Invoice Nominations</h5>
+  <h5 class="text-center"> Nominations</h5>
   <div class="table-responsive p-0">
   <h6 class="text-danger">Client Invoiced</h6>
   <table class="table align-items-center mb-0">

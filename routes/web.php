@@ -118,12 +118,14 @@ Route::group(['middleware' => ['auth']], function () {
        
 
         Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
-        // Route::post('/remove-selected-nominee',[NominationController::class,'fetchSelectedNominees'])->name('fetch_table_data');
         Route::post('/submit-nomination', [NominationController::class,'store'])->name('submit_nomination');
         Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
         Route::patch('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
+        Route::post('/add-selected-nominees',[NominationController::class,'addSelectedNominees']);
+        Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController::class,'detachNominee']);
+
 
         Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');
         Route::get('/create-temp-licence', [TemporalLicenceController::class,'create'])->name('create_temp_licence');
@@ -140,5 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/email-comms/transfers', [EmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
         Route::get('/email-comms/nominations', [EmailCommsController::class,'getNominations'])->name('get_nominations');
         Route::get('/email-comms/send-mail/{slug}/{licence_variation}', [EmailCommsController::class,'processMail'])->name('send_mail');
-
+ 
+        Route::post('email-comms/filter-by-month', [EmailCommsController::class,'index']);
+        
     });

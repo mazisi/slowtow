@@ -2,6 +2,8 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Link } from '@inertiajs/inertia-vue3';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
 
 
 export default {
@@ -17,32 +19,40 @@ export default {
   data() {
     return {
       showMenu: false,
+      options: this.nominees,
       form: {
          nomination_date: this.nomination.date,
          licence_id: '',
-         nominee: this.nomination.people[0].name + ' ' + this.nomination.people[0].surname,
-         status: []      
+        nomination_year: this.nomination.year        
       },
-      options: this.nominees,
+
+      //This handles attachment of nominees 
+      nomineeForm: {
+      selected_nominess: [],
+      nomination_id: this.nomination.id
+      },
+
+      //detach nominee
+      nomineeForm: {
+      selected_nominess: [],
+      nomination_id: this.nomination.id
+      },
+      
     };
   },
     methods: {
-      submit() {
+
+      saveNominneesToDatabase() {
+          this.$inertia.post(`/add-selected-nominees`, this.nomineeForm)
+        },
+
+        removeSelectedNominee(nominee_id){
+          this.$inertia.post(`/detach-nominee/${this.nomination.id}/${nominee_id}`)
+        },
+
+        submit() {
           this.$inertia.patch(`/update-nominee`, this.form)
-          .then(() => {
-              
-            })
         },
-        fetchTableData(){
-          this.$inertia.post(`/fetch-table-data-on-search`, this.form)
-        },
-    pushData(event){
-      if(this.form.status.includes(event)){
-        return;
-      }else{
-        this.form.status.push(event)
-      }      
-    },
         
   },
 
@@ -50,7 +60,8 @@ export default {
   components: {
     Layout,
     Multiselect,
-    Link
+    Link,
+    Datepicker
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -68,7 +79,7 @@ export default {
   margin-bottom: 1rem;
 }
 #active-checkbox{
-  margin-top: 3px;
+  margin-top: -10px;
   margin-left: 3px;
 }
 .status-heading{
@@ -116,21 +127,88 @@ export default {
 </div> <hr>
 <label>Payment Document</label><hr>
 
-
-<div class="col-md-6 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Nominee </label>
-    <input type="text" class="form-control form-control-default" v-model="form.nominee" readonly>
+<div class="col-md-10 columns">
+  <div class="input-group input-group-outline null is-filled">
+     <Multiselect
+      v-model="nomineeForm.selected_nominess"
+        placeholder="Search Nominees...."
+        mode="tags"
+        :options="options"
+        :searchable="true"
+        
+        />
     </div>
-     <p v-if="errors.nominee" class="text-danger">{{ errors.nominee }}</p>
-  </div>
+ <div v-if="errors.people" class="text-danger">{{ errors.people }}</div>
+</div>
+<div class="col-md-2 columns"><button @click="saveNominneesToDatabase" type="button" class="btn btn-sm btn-secondary">Add</button></div>
 
+<div class="table-responsive mb-2">
+              <table class="table align-items-center mb-0">
+                <thead>
+                  <tr>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                      Full Name
+                    </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    Relationship
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    DOB
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Contact Number
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Certified ID
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                   SAPS CLEARANCE
+                    </th>
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Status
+                    </th>
+
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Action
+                    </th>
+                    
+                  </tr>
+                </thead>
+             
+
+                 <tbody>
+                  <tr v-for="person in nomination.people" :key="person.id" >
+                    <td>
+                      <div class="d-flex px-2 py-1" >
+                       
+                    <div class="d-flex flex-column justify-content-left">
+                    <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }} </h6></Link>                  
+                    </div>
+                      </div>
+                    </td>
+                    <td class="text-center">Relationship</td>
+                     <td class="text-center">{{ person.date_of_birth }}</td>
+                     <td class="text-center"> {{ person.cell_number }}</td>
+                     <td>{{ person.valid_certified_id }}</td>
+                      <td class="text-center">{{ person.valid_saps_clearance }}</td>
+                      <td class="text-center">Status</td>
+                      <td class="text-center">
+                      <i @click="removeSelectedNominee(person.id)" 
+                      style="cursor: pointer;"
+                      class="material-icons-round text-danger fs-10">highlight_off</i>
+                      </td>
+                  </tr>
+                  
+                 
+                </tbody>
+              </table>
+ </div>
+<hr>
 <div class="col-md-6 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Nomination Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.nomination_date">
-    </div>
-     <p v-if="errors.nomination_date" class="text-danger">{{ errors.nomination_date }}</p>
+    <label class="form-label">Nomination Date </label>
+    <Datepicker v-model="form.nomination_year" yearPicker />
+ 
+     <p v-if="errors.nomination_year" class="text-danger">{{ errors.nomination_year }}</p>
   </div>
 <hr>
 <label>Required Documents</label><hr>

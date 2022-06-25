@@ -1,283 +1,123 @@
-<script>
-import Layout from "../../Shared/Layout.vue";
-import Multiselect from '@vueform/multiselect';
-import { Link,usePage } from '@inertiajs/inertia-vue3';
-
-
-export default {
- props: {
-   errors: Object,
-    nominees: Array,
-    licence: Object,
-    success: String,
-    error: String,
-    selected_nominees: Array
-
-  },
-  data() {
-    return {
-      showMenu: false,
-      form: {
-         nominees: '',//
-         nomination_date: '',
-         licence_id: this.licence.id,
-         licence_slug: this.licence.slug,
-         status: [],
-      },
-
-      searchForm: {
-        people: [], 
-        slug: this.licence.slug
-      },
-      options: this.nominees
-    };
-  },
-    methods: {
-      submit() {
-          this.$inertia.post(`/submit-nomination`, this.form)
-          .then(() => {
-              
-            })
-        },
-
-        fetchTableData(){
-          this.$inertia.replace(route('nominate',{
-          term: this.searchForm.people,slug: this.licence.slug
-          }))
-        },
-
-        removeSelectedNominee(id){
-          this.selected_nominees.splice(id,1)
-        }
-        
-  },
-
-  
-  components: {
-    Layout,
-    Multiselect,
-    Link,
-    usePage
-  },
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
-
-  // created() {
-  //  if(this.searchForm.people.length > 0){
-  //   window.addEventListener('beforeunload', function(event) {
-  //        event.returnValue = 'Write something'
-  //        this.$router.push('/')
-  //     })
-  //  }
-  //   },
-   
-};
-
-//The following are status keys:
-// 1 => Client Invoiced
-// 2 => Nomination Paid
-// 3 => Nomination Lodged
-// 4 => Certificate Received
-// 5 => Nomination Complete And Delivered
-</script>
-<style>
-.columns{
-  margin-bottom: 1rem;
-}
-#active-checkbox{
-  margin-top: 3px;
-  margin-left: 3px;
-}
-.status-heading{
-  font-weight: 700;
-}
-</style>
-<style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
 <div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
-    <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="row">
-  <div class="col-lg-6 col-7">
-   <h5>New Nomination for: {{ licence.trading_name }}</h5>
-  </div>
-  <div class="col-lg-6 col-5 my-auto text-end"></div>
+<div class="page-header min-height-100 border-radius-xl" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
+">
+<span class="mask bg-gradient-success opacity-6"></span>
 </div>
-      <div class="row">
-        <div class="mt-3 row">
-          <div class="col-12 col-md-12 col-xl-12 position-relative">
-            <div class="card card-plain h-100">
-              <div class="p-3 card-body">
-  <form @submit.prevent="submit">
+<div class="card card-body mx-3 mx-md-4 mt-n6">
+<div class="row gx-4">
+<div class="col-auto">
+
+</div>
 <div class="row">
-<input type="hidden" v-model="form.slug">
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="1">
-<label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+<div class="col-lg-12">
+<h6 class="mb-1">New Nomination For:  {{ licence.trading_name }}</h6>
 </div>
-</div>     
-<hr>
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="2">
-<label class="form-check-label text-body text-truncate status-heading">Nomination  Paid</label>
-</div>
-</div> <hr>
-<label>Payment Document </label><hr>
-
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label text-body text-truncate status-heading">Select Nominees To Add/Terminate</label>
-<p v-for="nomine in selected_nominees">
-{{nomine.id }}
-</p>
-</div>
-</div>
-  <div class="col-md-10 columns">
-  <div class="input-group input-group-outline null is-filled">
-     <Multiselect
-     v-model="searchForm.people"
-        placeholder="Search Nominees...."
-        mode="tags"
-        :options="options"
-        :searchable="true"
-        @select="fetchTableData"
-        />
-    </div>
- <div v-if="errors.people" class="text-danger">{{ errors.people }}</div>
 </div>
 
+
+</div>
+<div class="row">
+
+<div class="mt-3 row">
+<div class="col-4 position-relative">
  <div class="table-responsive mb-2">
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      Full Name
+                      Nomination Year
                     </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Relationship
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    DOB
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Contact Number
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Certified ID
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                   SAPS CLEARANCE
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Status
-                    </th>
-
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Action
                     </th>
-                    
                   </tr>
                 </thead>
-                
-
                  <tbody>
-                  <tr v-for="person in selected_nominees" :key="person.id" >
+                  <tr v-for="nom in nomination_years" :key="nom.id" >
                     <td>
-                      <div class="d-flex px-2 py-1" >
-                       
-                    <div class="d-flex flex-column justify-content-left">
-                    <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }} </h6></Link>                  
+                      <div class="text-center" >                       
+                   
+                     <Link :href="`/view-nomination/${nom.slug}`">
+                      <h6 class="mb-0 text-sm">{{ nom.year }}</h6>
+                     </Link>                  
                     </div>
-                      </div>
                     </td>
-                    <td class="text-center">Relationship</td>
-                     <td class="text-center">{{ person.date_of_birth }}</td>
-                     <td class="text-center"> {{ person.cell_number }}</td>
-                     <td>{{ person.valid_certified_id }}</td>
-                      <td class="text-center">{{ person.valid_saps_clearance }}</td>
-                      <td class="text-center">Status</td>
                       <td class="text-center">
-                      <i @click="removeSelectedNominee(person.id)" 
-                      style="cursor: pointer;"
-                      class="material-icons-round text-danger fs-10">highlight_off</i>
+                      <Link :href='`/view-nomination/${nom.slug}`' class="btn btn-sm btn-secondary">View</Link>
                       </td>
                   </tr>
-                  
-                 
-                </tbody>
+                  </tbody>
               </table>
-            </div>
+            </div></div>
 
+<div class="col-4 col-md-6 col-xl-8 position-relative">
+<div class="card card-plain h-100">
+<div class="p-3 card-body">
+<form @submit.prevent="submit">
+<Datepicker v-model="form.year" yearPicker />
+<p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
 
-<div class="col-md-4 columns mt-2">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Nomination Date *</label>
-    <input type="date" class="form-control form-control-default" v-model="form.nomination_date">
-    </div>
-     <p v-if="errors.nomination_date" class="text-danger">{{ errors.nomination_date }}</p>
-  </div>
-<hr>
-<label>Required Documents</label><hr>
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="3">
-<label class="form-check-label text-body text-truncate status-heading">Nomination Lodged</label>
+<button class="btn btn-sm btn-secondary mt-3 float-end justify-content-center" type="submit" >
+  <span v-if="form.processing" class="spinner-border mt-1 spinner-border-sm" role="status" aria-hidden="true"></span>
+  Submit
+</button>
+
+</form>
+
 </div>
-</div> 
-<label>Logded Nomination File</label><hr>
-
-
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="4">
-<label class="form-check-label text-body text-truncate status-heading">Certificate Received</label>
 </div>
-</div> 
 
-
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label mb-0 text-body text-truncate"> Nomination Certificate File</label>
 </div>
-</div> <hr>
 
-
-
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label mb-0 text-body text-truncate">Transfer Certificate File</label>
 </div>
-</div> <hr>
 
-
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="5">
-<label class="form-check-label text-body text-truncate status-heading"> Nomination Complete &amp; Delivered</label>
 </div>
-</div> 
-
-<div>
-  <button type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
-            </div>
-            </form>
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
-      <!-- //tasks were here -->
-        
-        </div>
-        
-      </div>
-    </div>
-  </div>
-  </Layout>
+</div>
+</div>
+</Layout>
 </template>
+
+<script>
+import Layout from "../../Shared/Layout.vue";
+import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
+import { ref } from 'vue';
+
+export default {
+  props: {
+    errors: Object,
+    licence: Object,
+    success: String,
+    error: String,
+    nomination_years: Object
+  },
+
+  setup (props) {
+    const year = ref(new Date().getFullYear());
+
+    const form = useForm({
+      year: null,
+      licence_id: props.licence.id
+    })
+
+    function submit() {
+      form.post('/submit-nomination', {
+        onFinish: () => form.reset('password'),
+      })
+    }
+
+    return { year,form, submit }
+  },
+   components: {
+    Layout,
+    Link,
+    Head,
+    Datepicker
+  },
+  
+};
+</script>

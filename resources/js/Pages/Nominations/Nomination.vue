@@ -62,7 +62,7 @@
                         <div class="d-flex flex-column justify-content-left">
                         <inertia-link :href="`/view-nomination/${nominations[0].slug}`">
                           <h6 class="mb-0 text-sm">
-                         {{ people.name }} {{ people.initials }} {{ people.surname }}
+                         {{ people.full_name }}
                            </h6>    
                            </inertia-link>                      
                         </div>

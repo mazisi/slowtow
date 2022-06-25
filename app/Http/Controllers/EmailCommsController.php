@@ -3,13 +3,14 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Nomination;
+use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceTransfer;
 use App\Http\Controllers\Traits\RenewalMailer;
 use App\Http\Controllers\Traits\TransferMailer;
 use App\Http\Controllers\Traits\AlterationMailer;
 use App\Http\Controllers\Traits\NominationMailer;
-use App\Models\Nomination;
 
 class EmailCommsController extends Controller
 {
@@ -19,18 +20,62 @@ class EmailCommsController extends Controller
      * Renewals bcoz they are on default tag..
      * 
        * The following are status keys:
-       *   1 => Renewal Received
-       *  2 => Client Invoiced
-       *  3 => Client Paid
-       * 4 => Renewal Processed
-       * 5 => Renewal Complete & Delivered
+       *  1 => Client Quoted
+        * 2 => Client Invoiced
+        * 3 => Client Paid
+        * 4 => Payment To Liquor Board
+        * 5 => Renewal Complete
      */
-    public function index(){
-        $with_renewal_received_status = LicenceRenewal::with('licence')->where('status','1')->get();
-        $with_client_invoiced_status = LicenceRenewal::with('licence')->where('status','2')->get();
-        $with_client_paid_status = LicenceRenewal::with('licence')->where('status','3')->get();
-        $with_renewal_processed_status = LicenceRenewal::with('licence')->where('status','4')->get();
-        $with_renewal_complete_status = LicenceRenewal::with('licence')->where('status','5')->get();
+   
+    public function index(Request $request){
+        $month =$request->month;
+
+        $with_renewal_received_status = LicenceRenewal::with("licence")->when($month, function($query,$month) use($request){
+            $query->whereHas('licence', function($query) use($month,$request){
+                $query->whereMonth('licence_date', $month)
+                ->when(!is_null(request('province')), function ($query) use ($request) {
+                    $query->where('province',$request->province);
+                });
+            });
+            })->where('status','1')->get();
+    
+       $with_client_invoiced_status = LicenceRenewal::with("licence")->when($month, function($query,$month) use($request){
+        $query->whereHas('licence', function($query) use($month,$request){
+            $query->whereMonth('licence_date', $month)
+            ->when(!is_null(request('province')), function ($query) use ($request) {
+                $query->where('province',$request->province);
+            });
+        });
+            })->where('status','2')->get();
+
+
+            $with_client_paid_status = LicenceRenewal::with("licence")->when($month, function($query,$month) use($request){
+                $query->whereHas('licence', function($query) use($month,$request){
+                    $query->whereMonth('licence_date', $month)
+                    ->when(!is_null(request('province')), function ($query) use ($request) {
+                        $query->where('province',$request->province);
+                    });
+                });
+            })->where('status','3')->get();
+
+            $with_renewal_processed_status = LicenceRenewal::with("licence")->when($month, function($query,$month) use($request){
+                $query->whereHas('licence', function($query) use($month,$request){
+                    $query->whereMonth('licence_date', $month)
+                    ->when(!is_null(request('province')), function ($query) use ($request) {
+                        $query->where('province',$request->province);
+                    });
+                });
+            })->where('status','4')->get();
+
+            $with_renewal_complete_status = LicenceRenewal::with("licence")->when($month, function($query,$month) use($request){
+                $query->whereHas('licence', function($query) use($month,$request){
+                    $query->whereMonth('licence_date', $month)
+                    ->when(!is_null(request('province')), function ($query) use ($request) {
+                        $query->where('province',$request->province);
+                    });
+                });
+            })->where('status','5')->get();
+   
         
         return Inertia::render('EmailComms/EmailComm',[
 
@@ -41,6 +86,7 @@ class EmailCommsController extends Controller
             'with_renewal_complete_status' => $with_renewal_complete_status
         ]);
     }
+
 
     /**
      * Get licence transfers..

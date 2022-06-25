@@ -97,7 +97,7 @@ export default {
   margin-bottom: 1rem;
 }
 #active-checkbox{
-  margin-top: 3px;
+  margin-top: -10px;   
   margin-left: 3px;
 }
 .status-heading{

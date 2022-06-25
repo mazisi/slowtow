@@ -16,9 +16,8 @@ export default {
   },
   data() {
     return {
-      term: '',
-      withThrashed: '', 
-      active_status: ''  
+      month: null,
+      province: null,
     }
   },
   components: {
@@ -26,13 +25,12 @@ export default {
     Link
 },
 methods: {
-     search(){
-        this.$inertia.replace(route('companies',{
-          term: this.term,
-          withThrashed: this.withThrashed,
-          active_status: this.active_status
+     filter(){
+        this.$inertia.replace(route('email_comms',{
+             month: this.month,
+             province: this.province,
           }))
-        },
+     },
 
     getRenewalYear(date){
       let computed_date = new Date(date).getFullYear();
@@ -77,16 +75,16 @@ methods: {
   <li class="nav-item" role="presentation">
     <button @click="getLicenceRenewals" class="nav-link btn btn-secondary btn-outline-success text-white active" id="Renewals" 
     data-bs-toggle="pill" data-bs-target="#renewals" 
-    type="button" role="tab" aria-controls="renewals" aria-selected="true">Invoice Renewals</button>
+    type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   
   <li class="nav-item" role="presentation">
     <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-    type="button" role="tab" aria-controls="transfers" aria-selected="false">Invoice Transfers</button>
+    type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <li class="nav-item" role="presentation">
     <button @click="getNominations" class="nav-link btn btn-secondary text-white" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-    type="button" role="tab" aria-controls="nominations" aria-selected="false">Invoice Nominations</button>
+    type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
   <li class="nav-item" role="presentation">
@@ -98,9 +96,48 @@ methods: {
 
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
-  <h5 class="text-center">Invoice Renewals</h5>
+  <div class="row">
+  <div class="col-3 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Filter By Month</label>
+<select @change="filter" class="form-control form-control-default" v-model="month">
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+</div>
+
+</div>
+
+<div class="col-3 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Filter By Province</label>
+<select @change="filter" class="form-control form-control-default" v-model="province">
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+</div>
+</div>
+  <h5 class="text-center">Renewals</h5>
   <div class="table-responsive p-0">
-  <h6 class="text-danger">Renewal Received</h6>
+  <h6 class="text-danger">Client Quoted</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -243,7 +280,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Renewal Processed</h6>
+  <h6 class="text-danger">Payment To Liquor Board</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>

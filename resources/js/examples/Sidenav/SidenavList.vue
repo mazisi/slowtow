@@ -53,21 +53,6 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'consultants'}"
-          collapseRef="/consultants"
-          navText="Consultants">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5"
-              >people_alt</i
-            >
-          </template>
-        </sidenav-collapse>
-  </li>
       
  <li class="nav-item">
         <sidenav-collapse

@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('nominations', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
+            $table->year('year')->nullable();
             $table->string('document')->nullable();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->string('status')->nullable();

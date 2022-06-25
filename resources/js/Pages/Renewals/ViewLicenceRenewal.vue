@@ -75,7 +75,7 @@ export default {
   margin-bottom: 1rem;
 }
 #active-checkbox{
-  margin-top: 3px;
+  margin-top: -8px;
   margin-left: 3px;
 }
 .status-heading{
@@ -122,7 +122,7 @@ export default {
 </div>
 
 <a class="mb-0 btn btn-link ps-0 ms-auto" href="javascript:;">
-<i class="fa fa-upload h5 text-info" aria-hidden="true"></i>
+<i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
 </a>
 <a class="mb-0 btn btn-link ps-0 ms-auto" href="javascript:;">
 <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>

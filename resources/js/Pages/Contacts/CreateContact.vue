@@ -1,16 +1,3 @@
-<style>
- 
-  .table thead th {
-    padding: 0;
-    }
-    .upload-btn{
-      float: right!important;
-    }
-    #has-header{
-  margin-top: 3px;
-  margin-left: 3px;
-}
-</style>
 <template>
 <Layout>
   <div class="container-fluid">
@@ -53,6 +40,19 @@
 
   </Layout>
 </template>
+
+<style>
+ 
+  .table thead th {
+    padding: 0;
+    }
+    .upload-btn{
+      float: right!important;
+    }
+    #has-header{
+  margin-left: 3px;
+}
+</style>
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm } from '@inertiajs/inertia-vue3';

@@ -208,7 +208,6 @@
   }
 
   #active-checkbox{
-    margin-top: 3px;
     margin-left: 3px;
   }
 </style>

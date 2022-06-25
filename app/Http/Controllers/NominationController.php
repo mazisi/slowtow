@@ -20,16 +20,9 @@ class NominationController extends Controller
      * For some reason,wc i dont know,search data(term) comes via Symphony\InputBag!!!!
      */
     public function index(Request $request){
-
-        if($request->has('term')){
-            $selected_nominees = People::whereIn('id', $request->input('term'))->get();
-        }else{
-            $selected_nominees = '';
-        }
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
-        $nominees = People::pluck('full_name','id');
-        return Inertia::render('Nominations/Nominate',['licence' => $licence,'nominees' => $nominees,
-        'selected_nominees' => $selected_nominees]);
+        $nomination_years = Nomination::get(['slug', 'year']);
+        return Inertia::render('Nominations/Nominate',['licence' => $licence,'nomination_years' => $nomination_years]);
     }
     /**
      * Insert nomination.
@@ -37,23 +30,24 @@ class NominationController extends Controller
      */
     public function store(Request $request){
         $request->validate([
-            "nomination_date" => "required|date",
-            "people*" => "required",
-            'status*' => 'required' 
+            "year" => "required",
+            "licence_id" => "required|exists:licences,id"
         ]);
+        $exist = Nomination::where('licence_id',$request->licence_id)
+                                    ->where('year',$request->year)->first();
+        if (!is_null($exist)) {
+           return back()->with('error', 'Sorry...Nomination for '.$request->year.' already exist.');
+        }
+
         $nom = Nomination::create([
-            "date" => $request->nomination_date,
+            "year" => $request->year,
             "licence_id" => $request->licence_id,
-            "status" => last($request->status),
             "slug" => sha1(time())
         ]);
         if($nom){ 
-            foreach($request->people as $val){//people are IDs from multiple select.;
-                $nom->people()->attach($val);
-            }
-             return to_route('nominations',['slug'=>$request->licence_slug])->with('success','Nominees created successfully');
+           return back()->with('success','Nomination created successfully.');
          }
-             return to_route('nominations',['slug'=>$request->licence_slug])->with('error','Error creating nominees.');
+         return back()->with('error','Error creating nomination.');
     }
     /**
      * Get all nominations belonging to a certain licence.
@@ -69,8 +63,12 @@ class NominationController extends Controller
      */
     public function viewIndividualNomination($slug){
         $nomination = Nomination::with('licence','people')->whereSlug($slug)->first();
+        $nominees = People::pluck('full_name','id');
         $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->whereUserId(auth()->id())->get();
-        return Inertia::render('Nominations/ViewIndividualNomination',['nomination' => $nomination,'tasks' => $tasks]);
+        return Inertia::render('Nominations/ViewIndividualNomination',[
+            'nomination' => $nomination,
+            'nominees' => $nominees,
+            'tasks' => $tasks]);
     }
 
     /**
@@ -100,19 +98,25 @@ class NominationController extends Controller
         }
         return to_route('view_nomination',['slug' => $request->slug])->with('error','Error updating person.');
     }
-/**
- * Fetch people data on multi select.
- */
-    //  public function fetchSelectedNominees(Request $request){
-    //     if(count($request->people)){
-    //         $selected_nominees = People::whereIn('id', $request->people)->get();
-    //     }else{
-    //         $selected_nominees = '';
-    //     }
-    //     $licence = Licence::whereSlug($request->slug)->firstOrFail();
-    //     $nominees = People::pluck('full_name','id');
-    //     return Inertia::render('Nominations/Nominate',['selected_nominees' => $selected_nominees,'licence' => 
-    //                                                     $licence,'nominees' => $nominees,
-    //                                                     'nominees' => $nominees]);
-    // }
+
+    public function addSelectedNominees(Request $request){
+        $nom = Nomination::find($request->nomination_id);
+         foreach($request->selected_nominess as $selected){
+            $exist = DB::table('nomination_people')
+                         ->where('nomination_id',$nom->id)
+                         ->where('people_id',$selected)
+                         ->first();
+            if(!is_null($exist)){
+               continue;
+            }
+            $nom->people()->attach($selected);
+         }
+         return to_route('view_nomination',['slug' =>$nom->slug]);
+    }
+
+    public function detachNominee($nomination_id,$nominee_id){
+        $nom = Nomination::find($nomination_id);
+        $nom->people()->detach($nominee_id);
+        return back();
+    }
 }

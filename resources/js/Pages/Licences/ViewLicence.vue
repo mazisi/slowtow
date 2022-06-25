@@ -255,7 +255,6 @@ data-bs-dismiss="alert" aria-label="Close">
       margin-bottom: 1rem;
     }
     #active-checkbox{
-      margin-top: 3px;
       margin-left: 3px;
     }
 </style>

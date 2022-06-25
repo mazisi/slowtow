@@ -78,7 +78,7 @@
                     <td class="text-center">{{ contact.mobile_phone }}</td>
                     <td class="text-center">{{ contact.email }}</td>
                     <td class="text-center">
-                    <Link :href='`#!`'><i @click="deleteSingleContact(contact.id)" class="fa fa-trash text-danger"></i></Link></td>
+                    <Link :href='`#!`'><i @click="deleteSingleContact(contact.id)" class="fa fa-trash-o text-danger"></i></Link></td>
                   </tr>
                   
                  
