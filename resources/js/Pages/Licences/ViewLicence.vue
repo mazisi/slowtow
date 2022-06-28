@@ -70,7 +70,7 @@
 v-model="form.change_company"
 :options="options"
 :searchable="true"
-placeholder="Change Company"
+placeholder="Search Company..."
 class="form-label"
 />
 <!-- <i class="fa fa-times"></i> -->
@@ -109,12 +109,79 @@ class="form-label"
 </div>
 <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
 </div>
-
+<h6 class="text-center">Documents</h6>
 </div>
 
-</div>
-</div>
+{{ licence.licence_documents[0].document_type }}
+
+<div class="row">
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="licence.licence_documents !== null 
+    && licence.licence_documents[0].document_type == 'Original-Licence'">
+  <Link v-for="doc in licence.licence_documents" :key="doc.id" :href="`#!`">
+  <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+  </Link>
+    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence</h6>
+      <p class="mb-0 text-xs">Hi! I need more information..</p>
+    </div>
+    <button @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i></div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Duplicate Original</h6>
+      <p class="mb-0 text-xs">Awesome work, can you..</p>
+    </div>
+    <button @click="getDocType('Duplicate-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
 <hr class="vertical dark" />
+</div>
+
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i></div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
+      <p class="mb-0 text-xs">Hi! I need more information..</p>
+    </div>
+    <button @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
+      <p class="mb-0 text-xs">Awesome work, can you..</p>
+    </div>
+    <button @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
+</div>
+
+
+</div>
+</div>
+<!-- <hr class="vertical dark" /> -->
 </div>
 
 <div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
@@ -149,7 +216,6 @@ class="form-label"
 <label class="form-label">Postal Code</label>
 <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
 </div>
-
 </div>
 
 </div>
@@ -188,10 +254,7 @@ Action
 <td class="text-center">
 <Link :href="`/view-company/${licence.company.slug}`" class="btn btn-secondary btn-sm">View</Link>
 </td>
-
 </tr>
-
-
 </tbody>
 </table>
 </div>
@@ -246,6 +309,66 @@ data-bs-dismiss="alert" aria-label="Close">
 </div>
 </div>
 </div>
+
+
+<!-- upload original licence -->
+
+<div class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="uploadOriginalLicenceDoc">
+      <input type="hidden" v-model="originalLicenceForm.doc_type">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Document Name</label>
+        <input type="text" required class="form-control form-control-default" 
+         v-model="originalLicenceForm.doc_name" >
+        </div>
+        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
+        </div>
+
+        <div class="col-md-12 columns">
+        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
+         <input type="file" @input="originalLicenceForm.original_licence_doc = $event.target.files"
+         hidden id="licence-doc" multiple accept=".pdf"/>
+         <div v-if="errors.original_licence_doc" class="text-danger">{{ errors.original_licence_doc }}</div>
+       </div>
+       <div class="col-md-12">
+          <progress v-if="originalLicenceForm.progress" :value="originalLicenceForm.progress.percentage" max="100">
+         {{ originalLicenceForm.progress.percentage }}%
+         </progress>
+         </div>
+         </div>   
+
+  <div class="col-md-12" v-if="success">
+   <div class="alert text-white alert-primary alert-dismissible fade show font-weight-light" role="alert">
+   <span class="alert-icon"><i class=""></i></span>
+   <span class="alert-text"> 
+   <span class="text-sm">{{ success }}</span></span>
+   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
+    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+    </button>
+    </div>
+    </div>
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" :disabled="originalLicenceForm.processing">
+         <span v-if="originalLicenceForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+Original 
 </Layout>
 </template>
 
@@ -257,6 +380,7 @@ data-bs-dismiss="alert" aria-label="Close">
     #active-checkbox{
       margin-left: 3px;
     }
+  
 </style>
 
 <style src="@vueform/multiselect/themes/default.css"></style>
@@ -264,7 +388,9 @@ data-bs-dismiss="alert" aria-label="Close">
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia'
+import { ref } from 'vue'
 
 export default {
  props: {
@@ -276,85 +402,120 @@ export default {
     tasks: Object,
     companies: Object
   },
-  data() {
-    return {
-         showMenu: false,
-         body_max: 100,
-         options: this.companies,
-         show_current_company: true,
-         change_company: false,
+  
+  
+  setup (props) {
+        let showMenu = false;
+        let body_max = 100;
+        let options = props.companies;
+        let show_current_company = ref(true);
+        let change_company = ref(false);
 
-         form: {
-         trading_name: this.licence.trading_name,
-         licence_type: this.licence.licence_type,
-         is_licence_active: this.licence.is_licence_active,
-         licence_number: this.licence.licence_number,
-         old_licence_number: this.licence.old_licence_number,
-         licence_date: this.licence.licence_date,
-         postal_code: this.licence.postal_code,
-         address: this.licence.address,
-         province: this.licence.province,
-         company: this.licence.company.name,
-         company_id: this.licence.company.id,
-         change_company: '',
-        },
-        
-      //Now handle task creation..
-       createTask: this.$inertia.form({
+    const form = useForm({
+         trading_name: props.licence.trading_name,
+         licence_type: props.licence.licence_type,
+         is_licence_active: props.licence.is_licence_active,
+         licence_number: props.licence.licence_number,
+         old_licence_number: props.licence.old_licence_number,
+         licence_date: props.licence.licence_date,
+         postal_code: props.licence.postal_code,
+         address: props.licence.address,
+         province: props.licence.province,
+         company: props.licence.company.name,
+         company_id: props.licence.company.id,
+         change_company: '',  
+    })
+
+//Now handle task creation..
+       const createTask = useForm({
           body: '',
           model_type: 'Licence',
-          model_id: this.licence.id,
+          model_id: props.licence.id,
           taskDate: new Date().getDate()+'/'+(new Date().getMonth()+1)+'/'+new Date().getFullYear()
-       }),
-      
-    };
-  },
-  methods: {
-        changeCompany(){
-          this.show_current_company=false,
-          this.change_company=true
-        },
-        updateLicence() {
-      // this.loading=true;
-         this.$inertia.patch(`/update-licence/${this.licence.slug}`, this.form)
-        },
+       })
+//Insert original licence 
+       const originalLicenceForm = useForm({
+          original_licence_doc: [],
+          licence_id: props.licence.id,
+          doc_name: null,
+          doc_type: null,
+       })
+ 
+      function getDocType(doc_type){
+        this.originalLicenceForm.doc_type = doc_type;
+      }
 
-        deleteLicence(){
+     function changeCompany(){
+          this.show_current_company=false;
+          this.change_company=true;
+      }
+
+      function updateLicence() {
+         form.patch(`/update-licence/${props.licence.slug}`, {
+          preserveScroll: true,
+        })    
+        }
+
+        function uploadOriginalLicenceDoc(){
+          originalLicenceForm.post(`/upload-licence-document`, {
+          preserveScroll: true,
+          onSuccess: () => originalLicenceForm.reset()
+        })    
+        }
+
+       function deleteLicence(){
           if(confirm('Are you sure you want to delete this licence??')){
-            this.$inertia.delete(`/delete-licence/${this.licence.slug}`)
+            Inertia.delete(`/delete-licence/${props.licence.slug}`)
           }      
-        },
+        }
         // store task
-        submitTask() {
-          this.createTask.post('/submit-task',this.createTask)
-          this.createTask.body = ''
-        },
+        function submitTask() {
+          createTask.post('/submit-task', {
+            onSuccess: () => form.reset('body'),
+           })
+        }
 
-        deleteTask(task_id){//delete task
+        function deleteTask(task_id){//delete task
           if(confirm('Are you sure??')){
-            this.$inertia.delete(`/delete-task/${task_id}`)
+            Inertia.delete(`/delete-task/${task_id}`)
           }
-        },
-          checkBodyLength(){//Monitor task body length..
+        }
+          function checkBodyLength(){//Monitor task body length..
             if(this.createTask.body.length > this.body_max){
                 this.createTask.body = this.createTask.body.substring(0,this.body_max)
             }
-        },
-        assignActiveValue(event){
-          this.form.is_licence_active = event
         }
-  },
+        function assignActiveValue(checkbox_value){
+          this.form.is_licence_active = checkbox_value
+        }
 
-  components: {
+    return {
+      showMenu,
+      createTask,
+      body_max,
+      show_current_company,
+      change_company,
+      options,
+      form,
+      changeCompany,
+      updateLicence,
+      deleteLicence,
+      submitTask,
+      deleteTask,
+      checkBodyLength,
+      assignActiveValue,
+      originalLicenceForm,
+      uploadOriginalLicenceDoc,
+      getDocType
+    }
+  },
+   components: {
     Layout,
-    Multiselect,
-    Link
+    Link,
+    Head,
+    Multiselect
   },
-
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
+  
 };
-
 </script>
 

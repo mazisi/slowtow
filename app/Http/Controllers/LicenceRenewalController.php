@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Inertia\Inertia;
 use App\Models\Licence;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 
@@ -59,11 +60,21 @@ class LicenceRenewalController extends Controller
         'year' => 'required',
         'renewal_id' => 'required'
        ]);
-       $update = LicenceRenewal::whereId($request->renewal_id)->update([
+
+       $ren = LicenceRenewal::find($request->renewal_id);
+        if(!is_null($ren->status) && empty($request->status)){
+            $db_status = $ren->status;
+            $status = $db_status;
+        }elseif(!empty($request->status)){
+            $sorted_statuses = Arr::sort($request->status);
+            $status = last($sorted_statuses);
+        }
+
+       $ren->update([
         'date' => $request->year,
-        'status' => last($request->status)
+        'status' => $status
        ]);
-       if($update){
+       if($ren){
         return back()->with('success','Renewal updated successfully.');
        }
        return back()->with('error','Sorry..An error occured.');

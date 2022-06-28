@@ -10,7 +10,7 @@ use App\Models\Nomination;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Http\Requests\ValidatePeople;
+use Illuminate\Support\Arr;
 
 class NominationController extends Controller
 {
@@ -85,18 +85,28 @@ class NominationController extends Controller
          return to_route('view-nomination',['slug' => $slug])->with('error','Error updating person.');
     }
 
-    public function update(ValidatePeople $request){dd('see me');
-        $nom = Nomination::whereSlug($request->slug)->update([
-            "date" => $request->nomination_date,
-            "licence_id" => $request->licence_id,
-            "status" => last($request->status),
+    public function update(Request $request){
+        
+        $request->validate([
+            'nomination_year' => 'required',
+            'nomination_id' => 'required|exists:nominations,id'
         ]);
-        if($nom){//id is pivot id(nomination_people table)
-            DB::table('nomination_people')->whereId($request->id)->update(['relationship' => $request->position]);
-            Nomination::whereSlug($request->nomination_slug)->update(['status' => $request->status]);
-           return to_route('view_nomination',['slug' => $request->slug])->with('success','Person updated succesfully.');
+        $nom= Nomination::find($request->nomination_id);
+        if(!is_null($nom->status) && empty($request->status)){
+            $db_status = $nom->status;
+            $status = $db_status;
+        }elseif(!empty($request->status)){
+            $sorted_statuses = Arr::sort($request->status);
+            $status = last($sorted_statuses);
         }
-        return to_route('view_nomination',['slug' => $request->slug])->with('error','Error updating person.');
+        $nom->update([
+            "year" => $request->nomination_year,
+            "status" => $status,
+        ]);
+        if($nom){
+           return back()->with('success','Nomination updated succesfully.');
+        }
+        return back()->with('error','Error updating nomination.');
     }
 
     public function addSelectedNominees(Request $request){

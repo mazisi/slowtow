@@ -63,8 +63,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/view-licence',[LicenceController::class,'show'])->name('view_licence');
         Route::post('/submit-licence',[LicenceController::class,'store'])->name('submit_licence');
         Route::patch('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
-        Route::post('/upload-licence-document',[LicenceDocsController::class,'store'])->name('submit_licence_doc');
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
+
+        Route::post('/upload-licence-document',[LicenceDocsController::class,'store']);
 
       
          // Get licence renewals.
@@ -122,7 +123,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
-        Route::patch('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
+        Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
         Route::post('/add-selected-nominees',[NominationController::class,'addSelectedNominees']);
         Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController::class,'detachNominee']);
 

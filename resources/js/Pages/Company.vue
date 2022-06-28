@@ -29,7 +29,7 @@ methods: {
 </script>
 <style>
 #with-thrashed{
-  margin-top: 3px;
+  margin-top: -10px;
   margin-left: 3px;
 }</style>
 <template>

@@ -44,13 +44,16 @@ export default {
     }
 
     function pushData(status_value){
-      if(this.form.status.includes(status_value)){
-        return;
-      }else{
-        this.form.status.push(status_value)
+         if (event.target.checked) {
+            if(this.form.status.includes(status_value)){
+                return;
+              }else{
+                this.form.status.push(status_value)
+              } 
+          }else if(!event.target.checked){
+          // alert('unticked')
+          }
       }
-      
-    }
 
     return { year,form, updateRenewal, getRenewalYear, pushData }
   },
@@ -75,7 +78,7 @@ export default {
   margin-bottom: 1rem;
 }
 #active-checkbox{
-  margin-top: -8px;
+  margin-top: -10px;
   margin-left: 3px;
 }
 .status-heading{

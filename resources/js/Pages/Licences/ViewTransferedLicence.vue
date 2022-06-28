@@ -65,13 +65,17 @@ export default {
         }
      },
 
-     pushData(event){
-      if(this.form.status.includes(event)){
-        return;
-      }else{
-        this.form.status.push(event)
-      }      
-    },
+     pushData(status_value){
+         if (event.target.checked) {
+         if(this.form.status.includes(status_value)){
+                   return;
+                  }else{
+                    this.form.status.push(status_value)
+                  } 
+          }else if(!event.target.checked){
+          // alert('unticked')
+          }
+      }
   },
   components: {
     Layout,

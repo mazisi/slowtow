@@ -93,8 +93,14 @@ class LicenceController extends Controller
         return redirect(route('licences'))->with('success','Licence created successfully.');
     }
 
+    /**
+     * Yes i colud have eager loaded licence with('documents')
+     * but the way frontend is structured.
+     * And also that its multiple
+     */
     public function show(Request $request){
         $licence = Licence::with('company','licence_documents')->whereSlug($request->slug)->first();
+        
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
@@ -132,12 +138,13 @@ class LicenceController extends Controller
         return back()->with('error','Error updating licence.');
     }
 
-    public function destroy($slug)
-    {
+    public function destroy($slug){
         $licence = Licence::whereSlug($slug)->first();
         if($licence->delete()){
            return to_route('licences')->with('success','Licences deleted successfully.');
         }
         return to_route('licences')->with('error','Error deleting licence.');
     }
+
+    
 }
