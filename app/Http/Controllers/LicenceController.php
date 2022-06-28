@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Models\LicenceDocument;
 use App\Models\LicenceType;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -100,7 +101,7 @@ class LicenceController extends Controller
      */
     public function show(Request $request){
         $licence = Licence::with('company','licence_documents')->whereSlug($request->slug)->first();
-        
+        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','')
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();

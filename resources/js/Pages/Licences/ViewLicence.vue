@@ -112,7 +112,6 @@ class="form-label"
 <h6 class="text-center">Documents</h6>
 </div>
 
-{{ licence.licence_documents[0].document_type }}
 
 <div class="row">
 <div class="col-md-6 columns">
