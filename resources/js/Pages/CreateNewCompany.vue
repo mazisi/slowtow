@@ -42,15 +42,14 @@
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Company Type </label>
 <select class="form-control form-control-default" v-model="form.company_type" isrequired="true">
-<option value="-1">&lt;-- Please select an option --&gt;</option>
 <option value="Association">Association</option>
-<option value="Close Corporation">Close Corporation</option>
-<option value="Foreign Company">Foreign Company</option>
-<option value="Non Resident Company">Non Resident Company</option>
+<option value="Close Corporation CC">Close Corporation  CC</option>
+<option value="Individual">Individual</option>
+<option value="Non-profit Organization (NPO)">Non-profit Organization (NPO)</option>
 <option value="Partnership">Partnership</option>
-<option value="Private Company">Private Company</option>
+<option value="Private Company  (Proprietary) Limited">Private Company  (Proprietary) Limited</option>
 <option value="Public Company">Public Company</option>
-<option value="Section 21">Section 21</option>
+<option value="Sole Proprietor">Sole Proprietor</option>
 <option value="Sole Proprietor">Sole Proprietor</option>
 <option value="Trust">Trust</option>
 </select>
@@ -99,7 +98,7 @@
 
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Telephone Number #1</label>
+<label class="form-label">Phone Number #1</label>
 <input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
 </div>
 <div v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</div>
@@ -107,7 +106,7 @@
 
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Telephone Number #2</label>
+<label class="form-label">Phone Number #2</label>
 <input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
 </div>
 <div v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</div>
@@ -134,11 +133,28 @@
 <div class="row">
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address</label>
+<label class="form-label">Business Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.business_address" >
 </div>
 <div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
-</div>           
+</div> 
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Business Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.business_address2" >
+</div>
+<div v-if="errors.business_address2" class="text-danger">{{ errors.business_address2 }}</div>
+</div> 
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Business Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.business_address3" >
+</div>
+<div v-if="errors.business_address3" class="text-danger">{{ errors.business_address3 }}</div>
+</div> 
+
 <div class="col-6 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
@@ -169,11 +185,26 @@
 
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address</label>
+<label class="form-label">Postal Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.postal_address" >
 </div>
 <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
-</div>           
+</div> 
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.postal_address2" >
+</div>
+<div v-if="errors.postal_address2" class="text-danger">{{ errors.postal_address2 }}</div>
+</div> 
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.postal_address3" >
+</div>
+<div v-if="errors.postal_address3" class="text-danger">{{ errors.postal_address }}</div>
+</div> 
+
 <div class="col-6 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
@@ -251,9 +282,13 @@ export default {
         telephone_number_2: '',
         website: '',
         business_address: '',
+        business_address2: '',
+        business_address3: '',
         business_province: '',
         business_address_postal_code: '',
         postal_address: '',
+        postal_address2: '',
+        postal_address3: '',
         postal_province: '',
         postal_code: '',
         active: '',

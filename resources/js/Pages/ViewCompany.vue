@@ -37,7 +37,8 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
-<input id="active-checkbox" type="checkbox" :checked="form.active == '1'" @input="assignActiveValue($event.target.value)">
+<input id="active-checkbox" type="checkbox" :checked="form.active == '1'" 
+@input="assignActiveValue($event.target.value)" value="1">
 </div>
 </div>
 
@@ -52,16 +53,15 @@
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Company Type </label>
-<select class="form-control form-control-default" v-model="form.company_type" isrequired="true">
-<option value="-1">&lt;-- Please select an option --&gt;</option>
+<select class="form-control form-control-default" v-model="form.company_type">
 <option value="Association">Association</option>
-<option value="Close Corporation">Close Corporation</option>
-<option value="Foreign Company">Foreign Company</option>
-<option value="Non Resident Company">Non Resident Company</option>
+<option value="Close Corporation CC">Close Corporation  CC</option>
+<option value="Individual">Individual</option>
+<option value="Non-profit Organization (NPO)">Non-profit Organization (NPO)</option>
 <option value="Partnership">Partnership</option>
-<option value="Private Company">Private Company</option>
+<option value="Private Company  (Proprietary) Limited">Private Company  (Proprietary) Limited</option>
 <option value="Public Company">Public Company</option>
-<option value="Section 21">Section 21</option>
+<option value="Sole Proprietor">Sole Proprietor</option>
 <option value="Sole Proprietor">Sole Proprietor</option>
 <option value="Trust">Trust</option>
 </select>
@@ -110,7 +110,7 @@
 
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Telephone Number #1</label>
+<label class="form-label">Phone Number 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
 </div>
 <div v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</div>
@@ -118,7 +118,7 @@
 
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Telephone Number #2</label>
+<label class="form-label">Phone Number 2</label>
 <input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
 </div>
 <div v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</div>
@@ -134,7 +134,103 @@
 <div v-if="errors.website" class="text-danger">{{ errors.website }}</div>
 </div>
 
+<h6 class="text-center">Company Documents</h6>
 
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="contrib_cert !== ''">
+    <a v-for="doc in contrib_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Contribution Certificate</h6>
+      <p v-if="contrib_cert.length > 0" class="mb-0 text-xs">Name: {{ contrib_cert[0].document_name }}</p>
+      <p v-if="contrib_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(contrib_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+
+    <button  v-if="contrib_cert.length > 0" @click="deleteDocument(contrib_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Contribution-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="bee_cert !== ''">
+    <a v-for="doc in bee_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">BEE Certificate</h6>
+      <p v-if="bee_cert.length > 0" class="mb-0 text-xs">Name: {{ bee_cert[0].document_name }}</p>
+      <p v-if="bee_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(bee_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+
+    <button  v-if="bee_cert.length > 0" @click="deleteDocument(bee_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+   
+    <button v-else @click="getDocType('BEE-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
+
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="cipc_cert !== ''">
+    <a v-for="doc in cipc_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">CIPC Certificate</h6>
+       <p v-if="cipc_cert.length > 0" class="mb-0 text-xs">Name: {{ cipc_cert[0].document_name }}</p>
+       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="cipc_cert.length > 0" @click="deleteDocument(cipc_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('CIPC-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+ <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="lta_cert !== ''">
+    <a v-for="doc in lta_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">LTA Certificate</h6>
+      <p v-if="lta_cert.length > 0" class="mb-0 text-xs">Name: {{ lta_cert[0].document_name }}</p>
+      <p v-if="lta_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(lta_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="lta_cert.length > 0" @click="deleteDocument(lta_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+    <button v-else @click="getDocType('LTA-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
 
 </div>
 
@@ -147,11 +243,28 @@
 <div class="row">
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address</label>
+<label class="form-label">Business Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.business_address" >
 </div>
 <div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
-</div>           
+</div>  
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Business Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.business_address2" >
+</div>
+<div v-if="errors.business_address2" class="text-danger">{{ errors.business_address2 }}</div>
+</div> 
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Business Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.business_address3" >
+</div>
+<div v-if="errors.business_address3" class="text-danger">{{ errors.business_address3 }}</div>
+</div> 
+
 <div class="col-6 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
@@ -182,11 +295,27 @@
 
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address</label>
+<label class="form-label">Postal Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.postal_address" >
 </div>
 <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
-</div>           
+</div>  
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.postal_address2" >
+</div>
+<div v-if="errors.postal_address2" class="text-danger">{{ errors.postal_address2 }}</div>
+</div> 
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.postal_address3" >
+</div>
+<div v-if="errors.postal_address3" class="text-danger">{{ errors.postal_address }}</div>
+</div> 
+
 <div class="col-6 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
@@ -212,10 +341,6 @@
 </div>
 
 </div>
-
-
-
-
 </div>
 </div>
 <div>
@@ -226,10 +351,67 @@
 </div>
 </div>
 
+<div class="row">
+<div class="col-sm-12 col-lg-4"></div>
+<div class="col-sm-12 col-lg-4">
+<h6 class="text-center">People Linked To : {{ company.name }}</h6>
+</div>
+<div class="col-sm-12 col-lg-4 text-end">
+<button data-bs-toggle="modal" data-bs-target="#add-people" type="button" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Add</button></div>
 
+<div class="table-responsive p-0">
+<table class="table align-items-center mb-0">
+<thead>
+  <tr>
+    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+    Trading Name
+    </th>
+    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+    Licence Number
+    </th>
+    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+    Licence Date
+    </th>
+
+    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+    View
+    </th>
+    
+  </tr>
+</thead>
+<tbody>
+  <tr v-for="licence in company.licences" :key="licence.id">
+    <td>
+      <div class="d-flex px-2">
+    
+    <div class="d-flex flex-column">
+      <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name }}</h6></Link>                          
+    </div>
+      </div>
+    </td>
+    <td class="text-center">{{ licence.licence_number }}</td>
+    <td class="text-center">{{ licence.licence_date }}</td>
+    <td class="text-center">
+    <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 btn btn-sm btn-secondary ms-2 float-end justify-content-center">View</Link>
+    </td>
+    
+  </tr>
+  
+  
+</tbody>
+</table>
+</div>
+<hr>
+</div>
 
 <div class="row">
-<h5 class="text-center text-decoration-underline">People Linked To : {{ company.name }}</h5>
+<div class="col-sm-12 col-lg-4"></div>
+<div class="col-sm-12 col-lg-4">
+<h6 class="text-center">People Linked To : {{ company.name }}</h6>
+</div>
+<div class="col-sm-12 col-lg-4 text-end">
+<button data-bs-toggle="modal" data-bs-target="#add-people" type="button" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Add</button></div>
+
 <div class="table-responsive p-0">
 <table class="table align-items-center mb-0">
 <thead>
@@ -238,10 +420,13 @@
     Full Name
     </th>
     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-    ID Number
+    Position
     </th>
     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-    Position
+    Director
+    </th>
+    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+    Shareholder
     </th>
 
     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -251,19 +436,26 @@
   </tr>
 </thead>
 <tbody>
-  <tr v-for="person in company.consultants" :key="person.id">
+  <tr v-for="person in company.people" :key="person.id">
     <td>
-      <div class="d-flex px-2 py-1">
+      <div class="d-flex px-2">
     
     <div class="d-flex flex-column">
-      <Link :href="`/view-consultant/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.first_name }} {{ person.last_name }}</h6></Link>                          
+      <Link :href="`/view-consultant/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>                          
     </div>
       </div>
     </td>
-    <td class="text-center">{{ person.identity_number }}</td>
     <td class="text-center">{{ person.pivot.position }}</td>
-    <td class="text-center">
-    <button @click="unlinkPerson(person.first_name + ' ' + person.last_name,person.pivot.id )" type="button" class="btn btn-secondary btn-sm">Unlink</button>
+    <td class="text-center">{{ person.pivot.director }}</td>
+    <td class="text-center">{{ person.pivot.shareholder }}</td>
+    <td class="text-end float-end ">
+    <div class="d-flex float-end ">
+    <button data-bs-toggle="modal" data-bs-target="#get-modal-data" 
+    @click="getPersonEditModalData(person.pivot.position, person.pivot.director, person.full_name, person.pivot.shareholder,person.pivot.id)" type="button" 
+    class="mx-2 btn btn-sm btn-secondary ms-2 float-end justify-content-center">Edit</button>
+    <button @click="unlinkPerson(person.full_name )" type="button" 
+    class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Unlink</button>
+    </div>
     </td>
     
   </tr>
@@ -286,9 +478,6 @@
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
-data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button>
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
@@ -321,10 +510,177 @@ data-bs-dismiss="alert" aria-label="Close">
 </form>
 </div>
 </div>
+
 </div>
+</div>
+
+<div class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="submitDocuments">
+      <input type="hidden" v-model="documentsForm.doc_type">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Document Name</label>
+        <input type="text" required class="form-control form-control-default" 
+         v-model="documentsForm.doc_name" >
+        </div>
+        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
+        </div>
+
+        <div class="col-md-12 columns" v-if="documentsForm.doc_type !== 'CIPC-Certificate'">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Expiry Date</label>
+        <input type="date" required class="form-control form-control-default" 
+         v-model="documentsForm.expiry_date" >
+        </div>
+        <div v-if="errors.expiry_date" class="text-danger">{{ errors.expiry_date }}</div>
+        </div>
+
+        <div class="col-md-12 columns">
+        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
+         <input type="file" @input="documentsForm.document = $event.target.files[0]"
+         hidden id="licence-doc" accept=".pdf"/>
+         <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+       </div>
+       <div class="col-md-12">
+          <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
+         {{ documentsForm.progress.percentage }}%
+         </progress>
+         </div>
+         </div>   
+
+  <div class="col-md-12" v-if="success">
+   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+   <span class="alert-icon"><i class=""></i></span>
+   <span class="alert-text"> 
+   <span class="text-sm">{{ success }}</span></span>
+   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
+    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+    </button>
+    </div>
+    </div>
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" :disabled="documentsForm.processing">
+         <span v-if="documentsForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal" id="add-people" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add People</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="submitPeople">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns">
+  <div class="input-group input-group-outline null is-filled">
+     <Multiselect
+        v-model="addPeopleForm.people"
+        mode="tags"
+        placeholder="Search People...."
+        :options="people_options"
+        :searchable="true"
+      />
+    </div>
+ <div v-if="errors.people" class="text-danger">{{ errors.people }}</div>
+</div>
+</div>  
+ </div>
+  
+<div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+  <button type="submit" class="btn btn-primary" :disabled="addPeopleForm.processing">
+    <span v-if="addPeopleForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Save</button>
+</div>
+</form>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="get-modal-data" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Edit {{ editPerson.full_name }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="updatePerson">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-6 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Position</label>
+        <input type="text" required class="form-control form-control-default" v-model="editPerson.position">
+        </div>
+        <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
+        </div>
+        <div class="col-md-6 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Director</label>
+        <select class="form-control form-control-default" v-model="editPerson.director" >
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+        </select>
+        </div>
+        <div v-if="errors.director" class="text-danger">{{ errors.director }}</div>
+        </div>
+
+        <div class="col-md-6 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Shareholder</label>
+        <select class="form-control form-control-default" v-model="editPerson.shareholder" >
+        <option value="No">No</option>
+        <option value="Yes">Yes</option>
+        </select>
+        </div>
+        <div v-if="errors.shareholder" class="text-danger">{{ errors.shareholder }}</div>
+        </div>
+        </div>   
+
+  <div class="col-md-12" v-if="success">
+   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+   <span class="alert-icon"><i class=""></i></span>
+   <span class="alert-text"> 
+   <span class="text-sm">{{ success }}</span></span>
+   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
+    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+    </button>
+    </div>
+    </div>
+      </div>
+  {{ message }}
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" :disabled="editPerson.processing">
+         <span v-if="editPerson.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
 </div>
 </Layout>
 </template>
+<style src="@vueform/multiselect/themes/default.css"></style>
 <style>
   #active-checkbox{
     margin-top: 3px;
@@ -333,28 +689,37 @@ data-bs-dismiss="alert" aria-label="Close">
   .columns{
       margin-bottom: 1rem;
     }
+    
 </style>
 
 <script>
 import Layout from "../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia';
+import Multiselect from '@vueform/multiselect';
 
 export default {
  props: {
     tasks: Object,
     errors: Object,
     company: Object,
+    people: Array,
+    contrib_cert: Object,
+    bee_cert: Object,
+    cipc_cert: Object,
+    lta_cert: Object,
     success: String,
     error: String,
+    message: String
  },  
   
   setup (props) {
     let showMenu = false;
-    let openModal = false;
     let body_max = 100;
+    let people_options = props.people;    
 
     const form = useForm({
-          company_name: props.company.name,
+            company_name: props.company.name,
             company_type: props.company.company_type,
             reg_number: props.company.reg_number,
             vat_number: props.company.vat_number,
@@ -365,21 +730,16 @@ export default {
             telephone_number_2: props.company.tel_number1,
             website: props.company.website,
             business_address: props.company.business_address,
+            business_address2: props.company.business_address2,
+            business_address3: props.company.business_address3,
             business_province: props.company.business_province,
             business_address_postal_code: props.company.business_address_postal_code,
             postal_address: props.company.postal_address,
+            postal_address2: props.company.postal_address2,
+            postal_address3: props.company.postal_address3,
             postal_province: props.company.postal_province,
             postal_code: props.company.postal_code,
-            sars_certificate: null,
-            sars_certificate_valid: '',
-            bee_status: '',
-            gatla_certificate: null,
-            gatla_valid: '',
-            gatla_date: '',
-            cipc_notice_of_incorporation: null,
-            cipc_memorandum_of_incorporation: null,
-            transfer_certificate: null,
-            company_id: props.company.id,
+           company_id: props.company.id,
             active: props.company.active,
             province: props.company.business_province 
     })
@@ -390,6 +750,69 @@ export default {
           model_type: 'Company',
           model_id: props.company.id,
       })
+
+      const documentsForm = useForm({
+            document: null,
+            doc_name: null,
+            expiry_date: null,
+            doc_type: null,
+            company_id: props.company.id,
+      })
+
+      const addPeopleForm = useForm({
+          people: [],
+        })
+
+      const editPerson = useForm({
+          position: null,
+          director: null,
+          full_name: null,
+          shareholder: null,
+          pivot_id: null,
+        })
+          function getPersonEditModalData(position,director,full_name,shareholder,pivot_id){
+            this.editPerson.position = position;
+            this.editPerson.director = director;
+            this.editPerson.full_name = full_name;
+            this.editPerson.shareholder = shareholder;
+            this.editPerson.pivot_id = pivot_id;
+          }
+        function updatePerson(){
+           editPerson.patch(`/update-company-people`, {
+           preserveScroll: true,
+           onSuccess: (page) => {
+            //do something..
+           },
+          })  
+        }
+
+        function submitPeople(){
+          addPeopleForm.post(`/add-people-to-company/${props.company.id}`, {
+           preserveScroll: true,
+           onSuccess: (page) => {
+            addPeopleForm.reset();
+           },
+          })  
+        }
+
+      function submitDocuments(){
+          documentsForm.post(`/submit-company-documents`, {
+          preserveScroll: true,
+          onSuccess: (page) => {
+            documentsForm.reset();
+          },
+        })    
+        }
+
+      function getDocType(doc_type){
+        this.documentsForm.doc_type = doc_type;
+      }
+
+      function deleteDocument(id){
+          if(confirm('Document will be deleted permanently!! Continue??')){
+            Inertia.delete(`/delete-company-document/${id}`)
+          }
+        }
 
     function submit() {
       form.post('/update-company', {
@@ -443,15 +866,36 @@ export default {
         }
         
       }
-    return { submit,submitTask,deleteTask,
-             checkBodyLength,addUser,
-            unlinkPerson,assignActiveValue,
-             redirectToWebsite,body_max, createTask,form }
+    return {
+      submit,
+      submitTask,
+      deleteTask,
+      checkBodyLength,
+      addUser,
+      unlinkPerson,
+      assignActiveValue,
+      redirectToWebsite,
+      body_max,
+      createTask,
+      people_options,
+      form,
+      documentsForm,
+      getDocType,
+      submitDocuments,
+      deleteDocument,
+      addPeopleForm,
+      submitPeople,
+      getPersonEditModalData,
+      editPerson,
+      updatePerson,
+    }
   },
+
    components: {
     Layout,
     Link,
-    Head
+    Head,
+    Multiselect
   },
   
 };

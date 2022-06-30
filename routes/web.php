@@ -13,6 +13,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ConsultantController;
 use App\Http\Controllers\EmailCommsController;
 use App\Http\Controllers\NominationController;
+use App\Http\Controllers\CompanyDocsController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
 use App\Http\Controllers\AlterLicenceController;
@@ -57,6 +58,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/view-company/{slug}',[CompanyController::class,'show'])->name('view_company');
         Route::post('/submit-company',[CompanyController::class,'store'])->name('company.submit');
         Route::post('/update-company',[CompanyController::class,'update'])->name('company.update');
+        Route::post('/submit-company-documents',[CompanyDocsController::class,'store']);
+        Route::delete('/delete-company-document/{id}',[CompanyDocsController::class,'destroy']);
+        Route::post('/add-people-to-company/{company_id}',[CompanyController::class,'attachPeopleToCompany']);
+        Route::patch('/update-company-people',[CompanyController::class,'updatePeople']);
 
         Route::get('/licences',[LicenceController::class,'index'])->name('licences');
         Route::get('/create-licence',[LicenceController::class,'create'])->name('create_licence');
@@ -66,6 +71,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store']);
+        Route::delete('/delete-licence-document/{id}',[LicenceDocsController::class,'destroy'])->name('delete_licence_doc');
 
       
          // Get licence renewals.
@@ -76,6 +82,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/view-licence-renewal/{slug}',[LicenceRenewalController::class,'show'])->name('view_licence_renewal');
         Route::delete('/delete-licence-renewal/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
         Route::patch('/update-renewal',[LicenceRenewalController::class,'update'])->name('update_licence_renewal');
+        Route::post('/submit-renewal-document',[LicenceRenewalController::class,'uploadDocuments']);
+        Route::delete('/delete-renewal-document/{id}',[LicenceRenewalController::class,'deleteDocument']);
         
 
         Route::get('/transfer-licence',[TransferLicenceController::class,'index'])->name('transfer_licence');
@@ -115,7 +123,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-person', [PersonController::class,'store'])->name('submit_person');
         Route::get('/view-person/{slug}', [PersonController::class,'show'])->name('view_person');
         Route::post('/update-person', [PersonController::class,'update'])->name('update_person');
-        Route::post('/delete-person/{slug}', [PersonController::class,'destroy'])->name('delete_person');
+        Route::delete('/delete-person/{slug}', [PersonController::class,'destroy'])->name('delete_person');
+        Route::post('/upload-person-documents', [PersonController::class,'uploadDocument']);
+        Route::delete('/delete-person-document/{slug}', [PersonController::class,'deleteDocument']);
        
 
         Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
@@ -126,6 +136,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
         Route::post('/add-selected-nominees',[NominationController::class,'addSelectedNominees']);
         Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController::class,'detachNominee']);
+        Route::post('/submit-nomination-document',[NominationController::class,'uploadDocument']);
+        Route::delete('/delete-nomination-document/{id}',[NominationController::class,'deleteDocument']);
 
 
         Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');

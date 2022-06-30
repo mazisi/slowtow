@@ -36,7 +36,10 @@ class LicenceController extends Controller
                ->orWhere('licence_number','LIKE','%'.$request->term.'%')
                ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
                ->get();
-               
+        }elseif($request->active_status == 'All'){
+
+          $licences = Licence::with(["company","licence_type"])->get();
+
         }elseif($request->term){
             $licences = Licence::with(["company","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
@@ -101,20 +104,27 @@ class LicenceController extends Controller
      */
     public function show(Request $request){
         $licence = Licence::with('company','licence_documents')->whereSlug($request->slug)->first();
-        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','')
+        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->get();
+        $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->get();
+        $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->get();
+        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->get();
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
 
-        return Inertia::render('Licences/ViewLicence',['licence' => $licence,
+        return Inertia::render('Licences/ViewLicence',[
+                                            'licence' => $licence,
                                             'licence_dropdowns' => $licence_dropdowns,
                                              'tasks' => $tasks,
-                                             'companies' => $companies
+                                             'companies' => $companies,
+                                             'original_lic' => $original_lic,
+                                             'duplicate_original_lic' => $duplicate_original_lic,
+                                             'original_lic_delivered' => $original_lic_delivered,
+                                             'duplicate_original_lic_delivered' => $duplicate_original_lic_delivered,
                                             ]);
     }
 
-    public function update(Request $request,$slug){
-        
+    public function update(Request $request,$slug){        
         if(empty($request->change_company)){
             $company_var = $request->company_id;
         }else{

@@ -96,9 +96,9 @@
  <div class="col-md-4 columns">    
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Email Address #2</label>
-  <input type="email" class="form-control form-control-default" v-model="form.email_adddress_2" >
+  <input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
    </div>
- <div v-if="errors.email_adddress_2" class="text-danger">{{ errors.email_adddress_2 }}</div>
+ <div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
  </div>
                   
  
@@ -126,65 +126,7 @@
    </div>
    <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
   </div>
-<hr>
-<h6 class="text-center">Documents Related Fields</h6>
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Valid Certified ID?</label>
-  <select v-model="form.valid_certified_id" class="form-control form-control-default">
-    <option value="no">No</option>
-    <option value="yes">Yes</option>
-    <option value="requested">Requested</option>
-  </select>
-</div>
- <div v-if="errors.valid_certified_id" class="text-danger">{{ errors.valid_certified_id }}</div>
-</div>
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Valid SAPS Clearance?</label>
-  <select v-model="form.valid_saps_clearance" class="form-control form-control-default">
-    <option value="no" >No</option>
-    <option value="yes">Yes</option>
-    <option value="requested">Requested</option>
-  </select>
-</div>
- <div v-if="errors.valid_saps_clearance" class="text-danger">{{ errors.valid_saps_clearance }}</div>
-</div>
-<div v-if="form.valid_saps_clearance == 'yes'" class="col-md-4 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">SAPS Clearance Valid Until?</label>
-  <input type="date" class="form-control form-control-default" v-model="form.saps_clearance_valid_until" >
-   </div>
- <div v-if="errors.saps_clearance_valid_until" class="text-danger">{{ errors.saps_clearance_valid_until }}</div>
- </div>
 
- <div class="col-md-4 columns">
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Valid FingerPrints?</label>
-  <select v-model="form.valid_fingerprint" class="form-control form-control-default">
-    <option value="no" >No</option>
-    <option value="yes">Yes</option>
-    <option value="requested">Requested</option>
-  </select>
-</div>
- <div v-if="errors.valid_fingerprint" class="text-danger">{{ errors.valid_fingerprint }}</div>
-</div>
-
-<div v-if="form.valid_fingerprint == 'yes'" class="col-md-4 columns">
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">FingerPrints Valid Until?</label>
-    <input type="date" required class="form-control form-control-default" v-model="form.fingerprint_valid_until">
-</div>
- <div v-if="errors.valid_fingerprint" class="text-danger">{{ errors.valid_fingerprint }}</div>
-</div>
-
-<div v-if="form.id_or_passport == 'passport'" class="col-md-4 columns">    
- <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Passport Valid Until?</label>
-  <input type="date" class="form-control form-control-default" v-model="form.passport_valid_until" >
-   </div>
- <div v-if="errors.passport_valid_until" class="text-danger">{{ errors.passport_valid_until }}</div>
- </div>
   <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
             </div>
             </form>
@@ -230,7 +172,7 @@ export default {
         passport_number: null,
         id_or_passport: null,
         email_address_1: null,
-        email_adddress_2: null,
+        email_address_2: null,
         cell_number: null,
         position:null,
         telephone: null,

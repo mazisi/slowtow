@@ -22,15 +22,20 @@ class Company extends Model
        return $this->belongsToMany(User::class);
     }
 
+    public function people()
+    {
+       return $this->belongsToMany(People::class)->withPivot('position','shareholder','director','id');
+    }
+
     public function licences()
     {
        return $this->hasMany(Licence::class);
     }
 
-    public function consultants()
-    {
-        return $this->belongsToMany(Consultant::class)->withPivot('position','percentage','id');
-    }
+   //   public function consultants()
+   //   {
+   //    return $this->belongsToMany(Consultant::class)->withPivot('position','percentage','id');
+   //  }
     
 
     public function temporal_licences()

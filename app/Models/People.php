@@ -15,4 +15,13 @@ class People extends Model
     public function nominations(){
         return $this->belongsToMany(Nomination::class)->withPivot('relationship','terminated_at','id');
     }
+
+    public function company(){
+       return $this->belongsToMany(Company::class);
+    }
+
+    public function people_documents()
+    {
+        return $this->hasMany(PeopleDocument::class);
+    }
 }

@@ -23,8 +23,9 @@ class EmailCommsController extends Controller
        *  1 => Client Quoted
         * 2 => Client Invoiced
         * 3 => Client Paid
-        * 4 => Payment To Liquor Board
-        * 5 => Renewal Complete
+        * 4 => Payment To The Liquor Board
+        * 5 => Renewal Issued
+        * 6 => Renewal Complete
      */
    
     public function index(Request $request){

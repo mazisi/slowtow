@@ -11,7 +11,7 @@
 <h6 class="mb-1">Person Info: {{ person.full_name }}</h6>
 </div>
 <div class="col-lg-6 col-5 my-auto text-end">
-<button @click="deletePerson" type="button" class="btn btn-sm btn-danger">Delete</button></div>
+<button @click="deletePerson(person.full_name)" type="button" class="btn btn-sm btn-danger">Delete</button></div>
 </div>
 <div class="row">
 <div class="mt-3 row">
@@ -47,7 +47,7 @@
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">ID or Passport</label>
 <select v-model="form.id_or_passport" required class="form-control form-control-default">
-<option value="i_d">Identity Number</option>
+<option value="i_d">ID Number</option>
 <option value="passport">Passport</option>
 </select>
 </div>
@@ -56,7 +56,7 @@
 
 <div v-if="form.id_or_passport == 'i_d'" class="col-md-4 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Identity Number</label>
+<label class="form-label">ID Number</label>
 <input required type="text" class="form-control form-control-default" v-model="form.id_number" placeholder="Enter ID Number">
 </div>
 <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
@@ -84,9 +84,9 @@
 <div class="col-md-4 columns">    
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Email Address #2</label>
-<input type="email" class="form-control form-control-default" v-model="form.email_adddress_2" >
+<input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
 </div>
-<div v-if="errors.email_adddress_2" class="text-danger">{{ errors.email_adddress_2 }}</div>
+<div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
 </div>
 
 
@@ -117,69 +117,122 @@
 </div>
 
 <hr>
-<h6 class="text-center">Documents Related Fields</h6>
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Valid Certified ID?</label>
-<select v-model="form.valid_certified_id" class="form-control form-control-default">
-<option value="no">No</option>
-<option value="yes">Yes</option>
-<option value="requested">Requested</option>
-</select>
-</div>
-<div v-if="errors.valid_certified_id" class="text-danger">{{ errors.valid_certified_id }}</div>
-</div>
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Valid SAPS Clearance?</label>
-<select v-model="form.valid_saps_clearance" class="form-control form-control-default">
-<option value="no" >No</option>
-<option value="yes">Yes</option>
-<option value="requested">Requested</option>
-</select>
-</div>
-<div v-if="errors.valid_saps_clearance" class="text-danger">{{ errors.valid_saps_clearance }}</div>
-</div>
-<div v-if="form.valid_saps_clearance == 'yes'" class="col-md-4 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">SAPS Clearance Valid Until?</label>
-<input type="date" class="form-control form-control-default" v-model="form.saps_clearance_valid_until" >
-</div>
-<div v-if="errors.saps_clearance_valid_until" class="text-danger">{{ errors.saps_clearance_valid_until }}</div>
-</div>
+<h6 class="text-center">Documents</h6>
 
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Valid FingerPrints?</label>
-<select v-model="form.valid_fingerprint" class="form-control form-control-default">
-<option value="no" >No</option>
-<option value="yes">Yes</option>
-<option value="requested">Requested</option>
-</select>
-</div>
-<div v-if="errors.valid_fingerprint" class="text-danger">{{ errors.valid_fingerprint }}</div>
-</div>
+<div class="row">
+<div class="col-3">
+  <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="id_document !== null">
+    <a :href="`/storage/${id_document.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
 
-<div v-if="form.valid_fingerprint == 'yes'" class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">FingerPrints Valid Until?</label>
-<input type="date" class="form-control form-control-default" v-model="form.fingerprint_valid_until">
-</div>
-<div v-if="errors.valid_fingerprint" class="text-danger">{{ errors.valid_fingerprint }}</div>
-</div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">ID Document</h6>
+      <p v-if="id_document !== null" class="mb-0 text-xs">{{ id_document.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Id Not Uploaded</p>
+    </div>
 
-<div v-if="form.id_or_passport == 'passport'" class="col-md-4 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Passport Valid Until?</label>
-<input type="date" class="form-control form-control-default" v-model="form.passport_valid_until" >
+    <button v-if="id_document !== null" @click="deleteDocument('ID Document',id_document.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('ID Document')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
 </div>
-<div v-if="errors.passport_valid_until" class="text-danger">{{ errors.passport_valid_until }}</div>
+<div class="col-3">
+  <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="police_clearance !== null">
+    <a :href="`/storage/${police_clearance.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Police Clearance</h6>
+      <p v-if="police_clearance !== null" class="mb-0 text-xs">Name:{{ police_clearance.document_name }}</p>
+      <p v-if="police_clearance !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(police_clearance.expiry_date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Police Clearance Not Uploaded</p>
+    </div>
+    <button v-if="police_clearance !== null" @click="deleteDocument('Police Clearance',police_clearance.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+    <button v-else @click="getDocType('Police Clearance')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
+<div class="col-3">
+  <ul class="list-group">
+ <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="passport_doc !== null">
+    <a :href="`/storage/${passport_doc.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Passport</h6>
+      <p v-if="passport_doc !== null" class="mb-0 text-xs">{{ passport_doc.document_name }}</p>
+      <p v-if="passport_doc !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(passport_doc.expiry_date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Passport Not Uploaded</p>
+    </div>
+
+    <button v-if="passport_doc !== null" @click="deleteDocument('Passport',passport_doc.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Passport')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
+<div class="col-3">
+  <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="work_permit_doc !== null">
+    <a :href="`/storage/${work_permit_doc.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Work Permit</h6>
+      <p v-if="work_permit_doc !== null" class="mb-0 text-xs">{{ work_permit_doc.document_name }}</p>
+      <p v-if="work_permit_doc !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(work_permit_doc.expiry_date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Work Permit Not Uploaded</p>
+    </div>
+
+    <button v-if="work_permit_doc !== null" @click="deleteDocument('Work Permit',work_permit_doc.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Work Permit')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
 </div>
 
 
 </div>
 <div class="d-flex float-end" style="float: right;">
-<button type="submit" class="btn btn-sm btn-secondary ms-2" >Update</button>
+ <button :disabled="form.processing" class="btn btn-sm btn-secondary ms-2" type="submit">
+  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  Update
+</button>
 </div>
 </form>
 </div>
@@ -200,9 +253,9 @@
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
+<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button>
+<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
@@ -230,12 +283,79 @@ data-bs-dismiss="alert" aria-label="Close">
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
-
-<button type="submit" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center">Save</button>
+<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center" type="submit">
+  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  Save
+</button>
 </form>
 </div>
 </div>
 </div>
+</div>
+
+<div class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload <span class="text-success">{{ uploadDoc.doc_type }}</span> Document</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="submitDocument">
+      <input type="hidden" v-model="uploadDoc.doc_type">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Document Name</label>
+        <input type="text" required class="form-control form-control-default" 
+         v-model="uploadDoc.doc_name" >
+        </div>
+        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
+        </div>
+
+        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'ID Document'">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Expiry Date</label>
+        <input type="date" required class="form-control form-control-default" 
+         v-model="uploadDoc.doc_expiry" >
+        </div>
+        <div v-if="errors.doc_expiry" class="text-danger">{{ errors.doc_expiry }}</div>
+        </div>
+
+        <div class="col-md-12 columns">
+        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
+         <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+         hidden id="licence-doc" accept=".pdf"/>
+         <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+       </div>
+       <div class="col-md-12">
+          <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
+         {{ uploadDoc.progress.percentage }}%
+         </progress>
+         </div>
+         </div>   
+
+  <div class="col-md-12" v-if="message">
+   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+   <span class="alert-icon"><i class=""></i></span>
+   <span class="alert-text"> 
+   <span class="text-sm">{{ message }}</span></span>
+   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
+    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+    </button>
+    </div>
+    </div>
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing">
+         <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
 </div>
 </Layout>
 </template>
@@ -246,109 +366,133 @@ data-bs-dismiss="alert" aria-label="Close">
       margin-bottom: 1rem;
     }
     #active-checkbox{
-      margin-top: 3px;
+      margin-top: -3px;
       margin-left: 3px;
     }
     .display-text-length{
       margin-left: 10rem;
       font-size: 14px;
     }
+    .fa-file-pdf{
+      font-size: 30em;
+    }
 </style>
 
-<script>
+<script setup>
+import { useForm } from '@inertiajs/inertia-vue3';
 import Layout from "../../Shared/Layout.vue";
-import { Head,Link } from '@inertiajs/inertia-vue3';
+import { ref } from "vue";
+import { Inertia } from '@inertiajs/inertia';
 
-export default {
-
-  props: {
+const props = defineProps({
       tasks: Object,
       errors: Object,
       person: Object,
-      isFromViewNominationPage: Boolean,
-      isFromViewPersonPage: Boolean
-  },
-  data() {
-    return {
-      showMenu: false,
-      body_max: 100,
+      message: String,
+      success: String,
+      error: String,
+      id_document: Object,
+      police_clearance: Object,
+      passport_doc: Object,
+      work_permit_doc: Object
+});
 
-      form: {
-        name: this.person.full_name,
-        date_of_birth: this.person.date_of_birth,
-        id_number: this.person.id_number,
-        passport_number: this.person.passport,
-        id_or_passport: this.person.id_or_passport,
-        email_address_1: this.person.email_address_1,
-        email_adddress_2: this.person.email_adddress_2,
-        cell_number: this.person.cell_number,
-        position: this.person.position,
-        telephone: this.person.telephone,
-        valid_certified_id: this.person.valid_certified_id,
-        valid_saps_clearance: this.person.valid_saps_clearance,
-        saps_clearance_valid_until: this.person.saps_clearance_valid_until,
-        passport_valid_until: this.person.passport_valid_until,
-        valid_fingerprint: this.person.valid_fingerprint,
-        fingerprint_valid_until: this.person.fingerprint_valid_until,
-        active: '',
-        slug: this.person.slug,      
-    },
-     createTask: this.$inertia.form({
-        body: '',
-        model_type: 'Person',
-        model_id: this.person.id,
-        taskDate: ''
-      }),
-    };
-  },
-    methods: {
-    
-    submitTask() {
-      this.createTask.post('/submit-task',this.createTask)
-      this.createTask.body = ''
-    },
 
-    checkBodyLength(){
-        if(this.createTask.body.length > this.body_max){
-            this.createTask.body = this.createTask.body.substring(0,this.body_max)
+const form = useForm({
+       name: props.person.full_name,
+        date_of_birth: props.person.date_of_birth,
+        id_number: props.person.id_number,
+        passport_number: props.person.passport,
+        id_or_passport: props.person.id_or_passport,
+        email_address_1: props.person.email_address_1,
+        email_address_2: props.person.email_address_2,
+        cell_number: props.person.cell_number,
+        position: props.person.position,
+        telephone: props.person.telephone,
+        valid_saps_clearance: props.person.valid_saps_clearance,
+        saps_clearance_valid_until: props.person.saps_clearance_valid_until,
+        passport_valid_until: props.person.passport_valid_until,
+        valid_fingerprint: props.person.valid_fingerprint,
+        fingerprint_valid_until: props.person.fingerprint_valid_until,
+        active: props.person.active,
+        slug: props.person.slug,      
+});
+
+    const createTask = useForm({
+          body: '',
+          model_type: 'Person',
+          model_id: props.person.id,
+          taskDate: ''     
+    });
+
+    const uploadDoc = useForm({
+          doc_type: null,
+          document: null,
+          doc_expiry: null,
+          doc_name: null,
+          people_id: props.person.id
+    });
+
+      const submitDocument = () => {
+        uploadDoc.post('/upload-person-documents', {
+           onSuccess: () => uploadDoc.reset(),
+        })
+      }
+
+      const getDocType = (doc_type) => {
+        uploadDoc.doc_type = doc_type;
+      }
+
+      const deleteDocument = (document_name,slug) => {
+        if(confirm(document_name + ' will be deleted permanently...Continue ??')){
+          Inertia.delete(`/delete-person-document/${slug}`, {
+            //
+          })
         }
-     },
-
-    deleteTask(task_id){
-      if(confirm('Are you sure??')){
-        this.$inertia.delete(`/delete-task/${task_id}`)
       }
-    },
+      
+      
+    const submitTask = () => {
+      createTask.post('/submit-task', {
+          onSuccess: () => createTask.reset(),
+      })
+    };
 
-    updatePerson() {
-        this.$inertia.post(`/update-person`, this.form)
-      },
+    const updatePerson = () => {
+      form.post('/update-person', {
+          onSuccess: () => createTask.reset(),
+      })
+    };
 
-      deletePerson() {
-      if (confirm('Are you sure you want to delete this person?')) {
-        this.$inertia.post(`/delete-person/${this.person.slug}`)
-      }
+    const assignActiveValue = (active_value) => {
+      form.active = active_value
+    };
 
-    },
-    terminate(){
-      if (confirm('Are you sure you want to terminate this person?')) {
-        this.$inertia.post(`/terminate-person/${this.person.nominations[0].pivot.id}/${this.person.slug}`)
-      }
-    },
-    assignActiveValue(event){
-      this.form.active = event
-    },
-  },
-  components: {
-    Layout,
-    Link,
-    Head
-  },
+    const deletePerson = (full_name) => {
+         if (confirm('Are you sure you want to delete ' + full_name + '??')) {
+            Inertia.delete(`/delete-person/${props.person.slug}`)
+          }
+      };
 
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
-};
+      const computeExpiryDate = (date_param) => {
+        return new Date(date_param).toLocaleString().split(',')[0]
+      };
 
+      const deleteTask = (task_id) => {
+         if(confirm('Are you sure??')){
+            createTask.delete(`/delete-task/${task_id}`, {
+                onFinish: () => createTask.reset(),
+            })
+          }
+      };
+
+ 
+     const body_max = ref(100);
+     let checkBodyLength = () => {
+        if(createTask.body.length > body_max){
+            createTask.body = createTask.body.substring(0,body_max)
+        }
+     }
+  
 </script>
 

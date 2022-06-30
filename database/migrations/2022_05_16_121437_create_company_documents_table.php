@@ -16,15 +16,11 @@ return new class extends Migration
         Schema::create('company_documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->boolean('sars_certificate_valid')->nullable();
-            $table->date('sars_certificate_date')->nullable();
-            $table->string('gatla_valid')->nullable();
-            $table->date('gatla_date')->nullable();
-            $table->string('gatla_certificate')->nullable();
-            $table->string('bee_status')->nullable();
-            $table->string('cipc_notice_of_incorporation')->nullable();
-            $table->string('cipc_memorandum_of_incorporation')->nullable();
-            $table->string('transfer_certificate')->nullable();
+            $table->text('document_file')->nullable();
+            $table->text('document_name')->nullable();
+            $table->date('expiry_date')->nullable();
+            $table->text('document_type')->nullable();
+            $table->string('file_path')->nullable();
             $table->timestamps();
         });
     }

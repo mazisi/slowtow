@@ -8,12 +8,13 @@ use App\Models\People;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ValidatePeople;
+use App\Models\PeopleDocument;
 use Illuminate\Support\Facades\Redirect;
 
 class PersonController extends Controller
 {
     public function index(Request $request){
-        if($request->term && $request->withThrashed != '' && $request->active_status == 'Active'){
+        if($request->term && $request->active_status == 'Active'){
 
 
             // $people = People::where('full_name','LIKE','%'.$request->term.'%')
@@ -22,12 +23,9 @@ class PersonController extends Controller
             //                 ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
             //                 ->get();
 
-        }elseif($request->term && $request->withThrashed != '' ){
+        }elseif($request->active_status == 'All' ){
            
-               $people = People::with(["company"])->orWhere('full_name','LIKE','%'.$request->term.'%')
-                            ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
-                            ->withTrashed()
-                            ->get();
+            $people = People::latest()->get();
         
         }elseif($request->term && $request->active_status == 'Active'){
     
@@ -71,17 +69,12 @@ class PersonController extends Controller
         'identity_number' => $request->identity_number,
         'passport' => $request->passport_number,
         'email_address_1' => $request->email_address_1,
-        'email_adddress_2' => $request->email_adddress_2,
+        'email_address_2' => $request->email_address_2,
         'cell_number' => $request->cell_number,
         'telephone' => $request->telephone,
         'position' => $request->position,
         'passport_valid_until' => $request->passport_valid_until,
-        'valid_saps_clearance' => $request->valid_saps_clearance,
-        'valid_certified_id' => $request->valid_certified_id,
-        'saps_clearance_valid_until' => $request->saps_clearance_valid_until,
-        'valid_fingerprint' => $request->valid_fingerprint,
-        'valid_fingerprint_valid_until' => $request->valid_fingerprint_valid_until,
-        'slug' => Str::replace(' ','_',$request->name).' '.Str::replace(' ','_',$request->surname).'_'.sha1(time()),
+         'slug' => Str::replace(' ','_',$request->name).' '.Str::replace(' ','_',$request->surname).'_'.sha1(time()),
         ]);
         
         if($person){
@@ -91,10 +84,20 @@ class PersonController extends Controller
     }
 
     public function show($slug){
-        $person = People::with('nominations')->whereSlug($slug)->first();
+        $person = People::with('nominations','people_documents')->whereSlug($slug)->first();
+        $id_document = PeopleDocument::where('people_id',$person->id)->where('doc_type','ID Document')->first();
+        $police_clearance = PeopleDocument::where('people_id',$person->id)->where('doc_type','Police Clearance')->first();
+        $passport_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Passport')->first();
+        $work_permit_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Work Permit')->first();
         $tasks = Task::where('model_type','Person')->where('model_id',$person->id)->whereUserId(auth()->id())->get();
-        return Inertia::render('People/ViewPerson',['person' => $person,'tasks' => $tasks]);
-    }
+        return Inertia::render('People/ViewPerson',[
+            'person' => $person,
+            'tasks' => $tasks,
+           'id_document' => $id_document,
+            'police_clearance' => $police_clearance,
+            'passport_doc' => $passport_doc,
+            'work_permit_doc' => $work_permit_doc]);
+            }
 
     public function update(ValidatePeople $request){
         $person = People::whereSlug($request->slug)->update([
@@ -106,16 +109,11 @@ class PersonController extends Controller
         'identity_number' => $request->identity_number,
         'passport' => $request->passport_number,
         'email_address_1' => $request->email_address_1,
-        'email_address_2' => $request->email_adddress_2,
+        'email_address_2' => $request->email_address_2,
         'cell_number' => $request->cell_number,
         'position' => $request->position,
         'telephone' => $request->telephone,
         'passport_valid_until' => $request->passport_valid_until,
-        'valid_saps_clearance' => $request->valid_saps_clearance,
-        'valid_certified_id' => $request->valid_certified_id,
-        'saps_clearance_valid_until' => $request->saps_clearance_valid_until,
-        'valid_fingerprint' => $request->valid_fingerprint,
-        'valid_fingerprint_valid_until' => $request->valid_fingerprint_valid_until,
         ]);
         if($person){
            return back()->with('success','Person updated succesfully.');
@@ -129,6 +127,41 @@ class PersonController extends Controller
             return Redirect::route('people')->with('success','Person deleted succesfully.');
         }
         return Redirect::route('people')->with('error','Error updated person.');
+    }
+
+
+    public function uploadDocument(Request $request){
+        $request->validate([
+            "document"=> "required|mimes:pdf",
+            "doc_name" => "required|string|max:255",
+            "people_id" => "required|exists:people,id",
+            "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document"
+            ]);;
+        
+          $store_file = $request->document->store('peopleDocuments','public'); 
+           $upload = PeopleDocument::create([
+                "people_id" => $request->people_id,
+                "document_name" => $request->doc_name,
+                "document" => $store_file,
+                "doc_type" => $request->doc_type,
+                "expiry_date" => $request->doc_expiry,
+                "path" => "app/public/",
+                "slug" => sha1(time())
+               ]);
+       if($upload){
+        return back()->with('message','Document uploaded successfully.');
+       }
+        return back()->with('success','Error uploading document.');
+    
+    }
+
+    public function deleteDocument($slug){
+        $model = PeopleDocument::whereSlug($slug)->first();
+        if(!is_null($model->document)){
+            unlink(public_path('storage/'.$model->document));
+            $model->delete();
+            return back()->with('success','Document removed successfully.');
+        }
     }
 
     

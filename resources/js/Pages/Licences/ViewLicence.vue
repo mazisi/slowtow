@@ -112,34 +112,46 @@ class="form-label"
 <h6 class="text-center">Documents</h6>
 </div>
 
-
 <div class="row">
 <div class="col-md-6 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="licence.licence_documents !== null 
-    && licence.licence_documents[0].document_type == 'Original-Licence'">
-  <Link v-for="doc in licence.licence_documents" :key="doc.id" :href="`#!`">
-  <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-  </Link>
-    
+    <div class="me-3" v-if="original_lic !== ''">
+    <a v-for="doc in original_lic" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence</h6>
-      <p class="mb-0 text-xs">Hi! I need more information..</p>
+      <p v-if="original_lic.length > 0" class="mb-0 text-xs">{{ original_lic[0].document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
     </div>
-    <button @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="original_lic.length > 0" @click="deleteDocument(original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
+
+
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i></div>
+    <div class="me-3" v-if="duplicate_original_lic !== ''">
+    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original</h6>
-      <p class="mb-0 text-xs">Awesome work, can you..</p>
+      <p v-if="duplicate_original_lic.length > 0" class="mb-0 text-xs">{{ duplicate_original_lic[0].document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
     </div>
-    <button @click="getDocType('Duplicate-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" 
+    <button  v-if="duplicate_original_lic.length > 0" @click="deleteDocument(duplicate_original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Duplicate-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
@@ -151,25 +163,44 @@ class="form-label"
 <div class="col-md-6 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i></div>
+    <div class="me-3" v-if="original_lic_delivered !== ''">
+    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
-      <p class="mb-0 text-xs">Hi! I need more information..</p>
+      <p v-if="original_lic_delivered.length > 0" class="mb-0 text-xs">{{ original_lic_delivered[0].document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
     </div>
-    <button @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+
+    <button  v-if="original_lic_delivered.length > 0" @click="deleteDocument(original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
+
+
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i>
+    <div class="me-3" v-if="duplicate_original_lic_delivered !== ''">
+    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
-      <p class="mb-0 text-xs">Awesome work, can you..</p>
+       <p v-if="duplicate_original_lic_delivered.length > 0" class="mb-0 text-xs">{{ duplicate_original_lic_delivered[0].document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
     </div>
-    <button @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="duplicate_original_lic_delivered.length > 0" @click="deleteDocument(duplicate_original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
@@ -268,9 +299,9 @@ Action
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
+<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button>
+<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
@@ -310,7 +341,7 @@ data-bs-dismiss="alert" aria-label="Close">
 </div>
 
 
-<!-- upload original licence -->
+<!-- upload doc -->
 
 <div class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -334,8 +365,8 @@ data-bs-dismiss="alert" aria-label="Close">
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
-         <input type="file" @input="originalLicenceForm.original_licence_doc = $event.target.files"
-         hidden id="licence-doc" multiple accept=".pdf"/>
+         <input type="file" @input="originalLicenceForm.original_licence_doc = $event.target.files[0]"
+         hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.original_licence_doc" class="text-danger">{{ errors.original_licence_doc }}</div>
        </div>
        <div class="col-md-12">
@@ -346,7 +377,7 @@ data-bs-dismiss="alert" aria-label="Close">
          </div>   
 
   <div class="col-md-12" v-if="success">
-   <div class="alert text-white alert-primary alert-dismissible fade show font-weight-light" role="alert">
+   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
    <span class="alert-icon"><i class=""></i></span>
    <span class="alert-text"> 
    <span class="text-sm">{{ success }}</span></span>
@@ -367,7 +398,7 @@ data-bs-dismiss="alert" aria-label="Close">
     </div>
   </div>
 </div>
-Original 
+ 
 </Layout>
 </template>
 
@@ -399,7 +430,11 @@ export default {
     success: String,
     error: String,
     tasks: Object,
-    companies: Object
+    companies: Object,
+    original_lic: Object,
+    duplicate_original_lic: Object,
+    original_lic_delivered: Object,
+    duplicate_original_lic_delivered: Object
   },
   
   
@@ -434,7 +469,7 @@ export default {
        })
 //Insert original licence 
        const originalLicenceForm = useForm({
-          original_licence_doc: [],
+          original_licence_doc: null,
           licence_id: props.licence.id,
           doc_name: null,
           doc_type: null,
@@ -460,6 +495,12 @@ export default {
           preserveScroll: true,
           onSuccess: () => originalLicenceForm.reset()
         })    
+        }
+
+        function deleteDocument(id){
+          if(confirm('Document will be deleted permanently!! Continue??')){
+            Inertia.delete(`/delete-licence-document/${id}`)
+          }
         }
 
        function deleteLicence(){
@@ -505,7 +546,8 @@ export default {
       assignActiveValue,
       originalLicenceForm,
       uploadOriginalLicenceDoc,
-      getDocType
+      getDocType,
+      deleteDocument
     }
   },
    components: {

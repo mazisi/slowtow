@@ -25,9 +25,9 @@
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                     Full Name
                     </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Relationship
-                    </th>
+                    </th> -->
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Cell Number
                     </th>
@@ -68,9 +68,9 @@
                         </div>
                       </div>
                     </td>
-                    <td class="text-center">
+                    <!-- <td class="text-center">
                     {{ people.pivot.relationship }}
-                    </td>
+                    </td> -->
                      <td class="text-center">
                     {{ people.cell_number }}
                     </td>

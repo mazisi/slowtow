@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Inertia\Inertia;
+use App\Models\People;
 use App\Models\Company;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CompanyDocument;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CompanyValidateRequest;
-use App\Models\Task;
 
 class CompanyController extends Controller
 {
@@ -63,9 +65,13 @@ class CompanyController extends Controller
                 'fax' => $request->fax_number,
                 'website' => $request->website,
                 'business_address' => $request->business_address,
+                'business_address2' => $request->business_address2,
+                'business_address3' => $request->business_address3,
                 'business_province' => $request->business_province,
                 'business_address_postal_code' => $request->business_address_postal_code,
                 'postal_address' => $request->postal_address,
+                'postal_address2' => $request->postal_address2,
+                'postal_address3' => $request->postal_address3,
                 'postal_province' => $request->postal_province,
                 'postal_code' => $request->postal_code,
                 'active' => $request->active,
@@ -80,20 +86,27 @@ class CompanyController extends Controller
     }
 
 
-    public function show($slug)
-    {
-        $company = Company::with('users','consultants')->whereSlug($slug)->first();
+    public function show($slug){
+        $company = Company::with('users','licences','people')->whereSlug($slug)->first();
+        $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->get();
+        $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->get();
+        $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->get();
+        $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->get();
         $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->get();
-        return Inertia::render('ViewCompany',['company'=> $company, 'tasks' => $tasks]);
+        $people = People::pluck('full_name','id');
+        
+        return Inertia::render('ViewCompany',[
+            'company'=> $company,
+            'people' => $people,
+             'tasks' => $tasks,
+             'contrib_cert' => $contrib_cert,
+             'bee_cert' => $bee_cert,
+             'cipc_cert' => $cipc_cert,
+             'lta_cert' => $lta_cert
+            ]);
     }
 
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request)
-    {
+    public function update(Request $request){
         $company = Company::whereId($request->company_id)->first();
         $company->update([
             'name' => $request->company_name,
@@ -107,9 +120,13 @@ class CompanyController extends Controller
             'tel_number1' => $request->telephone_number_2,            
             'website' => $request->website,            
             'business_address' => $request->business_address,
+            'business_address2' => $request->business_address2,
+             'business_address3' => $request->business_address3,
             'business_province' => $request->business_province,
             'business_address_postal_code' => $request->business_address_postal_code,
             'postal_address' => $request->postal_address,
+            'postal_address2' => $request->postal_address2,
+            'postal_address3' => $request->postal_address3,
             'postal_province' => $request->postal_province,
             'postal_code' => $request->postal_code,
             'active' => $request->active,
@@ -119,53 +136,37 @@ class CompanyController extends Controller
         }
         return to_route('view_company',['slug'=> $company->slug])->with('error','Error occured while updating company.');
 
-        if ($request->hasFile('gatla_certificate')) {   
-                    // $name = $request->gatla_certificate->getClientOriginalName();
-                    $name = $request->gatla_certificate->store('company-docs', 'public');
-                    CompanyDocument::create([
-                        'gatla_certificate' => $name,
-                        'gatla_date' => $request->gatla_date,
-                        'gatla_valid' => $request->gatla_valid,
-                        'company_id' => $request->company_id
-                    ]);     
-               
-        }
-
-        if ($request->hasFile('cipc_notice_of_incorporation')) {
-              
-                $name= $request->cipc_notice_of_incorporation->store('company-docs','public');
-                 CompanyDocument::create([
-                    'cipc_notice_of_incorporation' => $name,
-                    'company_id' => $request->company_id
-                ]);                     
-            }
-        
-        if ($request->hasFile('cipc_memorandum_of_incorporation')) {
-                            
-                $name =$request->cipc_memorandum_of_incorporation->store('company-docs','public');
-                 CompanyDocument::create([
-                    'cipc_notice_of_incorporation' => $name,
-                    'company_id' => $request->company_id
-                ]);                     
-            }
-        
-       
-
-        if ($request->hasFile('sars_certificate')) {
-                $name = $request->sars_certificate->store('company-docs','public');
-                 CompanyDocument::create([
-                    'sars_certificate' => $name,
-                    'company_id' => $request->company_id
-                ]);                     
-            
-        }
 
     }
 
-    public function destroy($id)
-    {
-        //
+    public function attachPeopleToCompany(Request $request,$company_id){
+        $company = Company::find($company_id);
+        foreach ($request->people as $person) {
+            $exist = DB::table('company_people')
+                         ->where('company_id',$company->id)
+                         ->where('people_id',$person)
+                         ->first();
+            if(!is_null($exist)){
+               continue;
+            }
+            $company->people()->attach($person);
+        }
+        return back()->with('message','People selected successfully.');            
+        
     }
+
    
-
+public function updatePeople(Request $request){
+    $update = DB::table('company_people')
+    ->whereId($request->pivot_id)
+    ->update([
+        'position' => $request->position,
+        'director' => $request->director,
+        'shareholder' => $request->shareholder,
+        'updated_at' => now(),
+    ]);
+    if($update){
+        return back()->with('message', $request->full_name.' updated successfully.'); 
+    }
+}
 }

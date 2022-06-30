@@ -17,8 +17,8 @@
 </div>
 <div class="col-md-6 col-xl-3 col-lg-3">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Active status: </label>
-<select @change="search"  v-model="active_status" class="form-control form-control-default">
+<label class="form-label">Filter: </label>
+<select @change="search" v-model="active_status" class="form-control form-control-default">
 <option value="All">All</option>
 <option value="Active">Active</option>
 <option value="Inactive">Inactive</option>
@@ -104,7 +104,7 @@ export default {
       search(){
          this.$inertia.replace(route('licences',{
           term: this.term,
-          all: this.all,
+          active_status: this.active_status,
           }))
         },
     },

@@ -28,11 +28,7 @@ return new class extends Migration
             $table->string('telephone')->nullable();
             $table->string('position')->nullable();
             $table->date('passport_valid_until')->nullable();
-            $table->enum('valid_saps_clearance',['yes','no','requested']);
-            $table->enum('valid_certified_id',['yes','no','requested']);
-            $table->date('saps_clearance_valid_until')->nullable();
-            $table->enum('valid_fingerprint',['yes','no','requested']);
-            $table->date('valid_fingerprint_valid_until')->nullable();
+           
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

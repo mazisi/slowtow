@@ -15,10 +15,9 @@ class TaskController extends Controller
     public function store(Request $request)
     {
     $request->validate([
-        'body'=> 'required|max:300',
+        'body'=> 'required|max:100',
         'model_id' => 'required',
          'model_type' => 'required',
-         'taskDate' => 'required|date',
          ]);
         $add_task = Task::create([
             'user_id' => auth()->id(),
