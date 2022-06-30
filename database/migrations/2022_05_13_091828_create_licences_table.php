@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('licence_type');
             $table->date('licence_date')->nullable();
             $table->string('address')->nullable();
+            $table->string('address2')->nullable();
+            $table->string('address3')->nullable();
             $table->string('province')->nullable();
             $table->string('postal_code')->nullable();
             $table->string('is_licence_active')->nullable();

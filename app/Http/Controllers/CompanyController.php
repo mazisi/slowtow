@@ -17,19 +17,19 @@ class CompanyController extends Controller
     
     public function index(Request $request){
 
-      if($request->term && $request->withThrashed != '' && $request->active_status == 'Active'){
+      if($request->term && $request->active_status == 'Active'){
 
         $companies = Company::when($request->term,function($query,$term){
          $query->where('name','LIKE','%'.$term.'%')
-               ->where('active','1')
-               ->withTrashed();
+               ->where('active','1');
         })->get();
-    }elseif($request->term && $request->withThrashed != '' ){
-        $companies = Company::when($request->term,function($query,$term){
-            $query->where('name','LIKE','%'.$term.'%')
-                  ->withTrashed();
-           })->get();
-    
+    }elseif($request->active_status == "All" ){
+        $companies = Company::get();
+    }elseif($request->term ){
+            $companies = Company::when($request->term,function($query,$term){
+                $query->where('name','LIKE','%'.$term.'%')
+                      ->withTrashed();
+               })->get();
     }elseif($request->term && $request->active_status == 'Active'){
 
         $companies = Company::when($request->term,function($query,$term){

@@ -5,9 +5,11 @@ import { Link,useForm } from '@inertiajs/inertia-vue3';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
+import { ref } from "vue";
 
 const props = defineProps({
     errors: Object,
+    tasks: Object,
     nominees: Array,
     licence: Object,
     success: String,
@@ -27,11 +29,12 @@ const props = defineProps({
     nomination_delivered: Object,//doc
 });
 let options = props.nominees;
+const body_max = ref(100);
 
 const updateForm = useForm({
         nomination_year: props.nomination.year,
         nomination_id: props.nomination.id,
-        client_paid_date: props.client_paid_date,
+        client_paid_date: props.nomination.client_paid_date,
         status: [],      
 });
 
@@ -43,6 +46,13 @@ const uploadDoc = useForm({
       nomination_id: props.nomination.id    
     })
 
+    const createTask = useForm({
+          body: '',
+          model_type: 'Nomination',
+          model_id: props.nomination.id,
+          taskDate: ''     
+    });
+
 const nomineeForm = useForm({//This handles attachment of nominees 
         selected_nominess: [],
         nomination_id: props.nomination.id
@@ -50,6 +60,12 @@ const nomineeForm = useForm({//This handles attachment of nominees
 
 const getDocType = (doc_type) => {
   uploadDoc.doc_type = doc_type
+}
+
+const submitTask = () => {
+      createTask.post('/submit-task', {
+          onSuccess: () => createTask.reset(),
+      })
 }
 
 function submitDocument(){
@@ -85,6 +101,11 @@ const updateNomination = () => {
     updateForm.post(`/update-nominee`)
 }
 
+const checkBodyLength = () => {
+        if(createTask.body.length > body_max){
+            createTask.body = createTask.body.substring(0,body_max)
+        }
+     }
 
 const pushData = (status_value) => {
      if (event.target.checked) {
@@ -157,7 +178,7 @@ function alertCompile(){
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/${client_quoted.document}`" target="_blank">
+    <a :href="`/storage/app/public/${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -188,7 +209,7 @@ function alertCompile(){
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/${client_invoiced.document}`" target="_blank">
+    <a :href="`/storage/app/public/${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -238,7 +259,7 @@ function alertCompile(){
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liquor_board !== null">
-    <a :href="`/storage/${liquor_board.document}`" target="_blank">
+    <a :href="`/storage/app/public/${liquor_board.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -329,7 +350,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_forms !== null">
-    <a :href="`/storage/${nomination_forms.document}`" target="_blank">
+    <a :href="`/storage/app/public/${nomination_forms.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -351,7 +372,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="proof_of_payment !== null">
-    <a :href="`/storage/${proof_of_payment.document}`" target="_blank">
+    <a :href="`/storage/app/public/${proof_of_payment.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -374,7 +395,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="attorney_doc !== null">
-    <a :href="`/storage/${attorney_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/${attorney_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -396,7 +417,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certified_id_doc !== null">
-    <a :href="`/storage/${certified_id_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/${certified_id_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -418,7 +439,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance_doc !== null">
-    <a :href="`/storage/${police_clearance_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/${police_clearance_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -440,7 +461,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="latest_renewal_doc !== null">
-    <a :href="`/storage/${latest_renewal_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/${latest_renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -475,7 +496,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded !== null">
-    <a :href="`/storage/${nomination_logded.document}`" target="_blank">
+    <a :href="`/storage/app/public/${nomination_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -510,7 +531,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
-    <a :href="`/storage/${nomination_issued.document}`" target="_blank">
+    <a :href="`/storage/app/public/${nomination_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -544,7 +565,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
-    <a :href="`/storage/${nomination_delivered.document}`" target="_blank">
+    <a :href="`/storage/app/public/${nomination_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -583,6 +604,51 @@ Save</button>
 </div>
 <!-- //tasks were here -->
 
+</div>
+
+<div class="row">
+<hr>
+<h6 class="text-center">Notes</h6>
+<div class="col-xl-8">
+<div class="row">
+<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
+<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+<span class="text-sm">{{ task.body }}</span>
+</span>
+<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
+data-bs-dismiss="alert" aria-label="Close">
+<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
+</div>
+</div>
+<h6 v-if="!tasks" class="text-center">No tasks found.</h6>
+</div>
+
+</div>
+
+<div class="col-xl-4">
+<form @submit.prevent="submitTask">
+<div class="col-md-12 columns">
+<label class="form-check-label text-body text-truncate status-heading">New Note:
+<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
+</div>
+
+<div class="col-12 columns">    
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">New Task<span class="text-danger pl-6">
+({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
+<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+</div>
+<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
+</div>
+
+<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center" type="submit">
+  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  Save
+</button>
+</form>
+</div>
 </div>
 
 </div>

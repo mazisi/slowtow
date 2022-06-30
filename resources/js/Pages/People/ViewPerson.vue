@@ -43,7 +43,7 @@
 </div>
 <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
 </div>  
-<div class="col-md-4 columns">
+<!-- <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">ID or Passport</label>
 <select v-model="form.id_or_passport" required class="form-control form-control-default">
@@ -52,9 +52,9 @@
 </select>
 </div>
 <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div>
+</div> -->
 
-<div v-if="form.id_or_passport == 'i_d'" class="col-md-4 columns">            
+<div class="col-md-4 columns">            
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">ID Number</label>
 <input required type="text" class="form-control form-control-default" v-model="form.id_number" placeholder="Enter ID Number">
@@ -62,7 +62,7 @@
 <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
 </div>              
 
-<div v-if="form.id_or_passport == 'passport'" class="col-md-4 columns">                  
+<div class="col-md-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Passport Number</label>
 <input type="text" required class="form-control form-control-default" v-model="form.passport_number" placeholder="Enter Passport Number">
@@ -256,7 +256,7 @@
 <!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
 <i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
 <h6 v-if="!tasks" class="text-center">No tasks found.</h6>
@@ -267,11 +267,8 @@ data-bs-dismiss="alert" aria-label="Close">
 <div class="col-xl-4">
 <form @submit.prevent="submitTask">
 <div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Date</label>
-<input type="date" required class="form-control form-control-default" v-model="createTask.taskDate" >
-</div>
-<div v-if="errors.taskDate" class="text-danger">{{ errors.taskDate }}</div>
+<label class="form-check-label text-body text-truncate status-heading">New Note:
+<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
 </div>
 
 <div class="col-12 columns">    

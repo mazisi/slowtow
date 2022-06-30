@@ -140,7 +140,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="contrib_cert !== ''">
-    <a v-for="doc in contrib_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in contrib_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -164,7 +164,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="bee_cert !== ''">
-    <a v-for="doc in bee_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in bee_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -190,7 +190,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="cipc_cert !== ''">
-    <a v-for="doc in cipc_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in cipc_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -211,7 +211,7 @@
 
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="lta_cert !== ''">
-    <a v-for="doc in lta_cert" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in lta_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -354,7 +354,7 @@
 <div class="row">
 <div class="col-sm-12 col-lg-4"></div>
 <div class="col-sm-12 col-lg-4">
-<h6 class="text-center">People Linked To : {{ company.name }}</h6>
+<h6 class="text-center">Licences Linked To : {{ company.name }}</h6>
 </div>
 <div class="col-sm-12 col-lg-4 text-end">
 <button data-bs-toggle="modal" data-bs-target="#add-people" type="button" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Add</button></div>
@@ -478,7 +478,7 @@
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
 <h6 v-if="!tasks" class="text-center">No tasks found.</h6>
@@ -488,12 +488,9 @@
 
 <div class="col-xl-4">
 <form @submit.prevent="submitTask">
-<div class="col-md-12" style="margin-bottom: 1rem;">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Date</label>
-<input type="date" required class="form-control form-control-default" v-model="createTask.taskDate" >
-</div>
-<div v-if="errors.taskDate" class="text-danger">{{ errors.taskDate }}</div>
+<div class="col-md-12 columns">
+<label class="form-check-label text-body text-truncate status-heading">New Note:
+<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
 </div>
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">

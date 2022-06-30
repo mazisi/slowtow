@@ -55,7 +55,7 @@
    </div>
      <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
 </div>  
-<div class="col-md-4 columns">
+<!-- <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">
   <label class="form-label">ID or Passport</label>
   <select v-model="form.id_or_passport" required class="form-control form-control-default">
@@ -64,9 +64,9 @@
   </select>
 </div>
 <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div>
+</div> -->
 
-  <div v-if="form.id_or_passport == 'i_d'" class="col-md-4 columns">            
+  <div class="col-md-4 columns">            
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Identity Number</label>
   <input required type="text" class="form-control form-control-default" v-model="form.id_number" placeholder="Enter ID Number">
@@ -74,7 +74,7 @@
     <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
     </div>              
               
-   <div v-if="form.id_or_passport == 'passport'" class="col-md-4 columns">                  
+   <div class="col-md-4 columns">                  
    <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Passport Number</label>
   <input type="text" required class="form-control form-control-default" v-model="form.passport_number" placeholder="Enter Passport Number">

@@ -90,11 +90,27 @@
 
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address</label>
+<label class="form-label">Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.address">
 </div>
 <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
-</div>           
+</div>
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.address2">
+</div>
+<div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
+</div> 
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.address3">
+</div>
+<div v-if="errors.address3" class="text-danger">{{ errors.address3 }}</div>
+</div> 
+
 <div class="col-12 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
@@ -174,6 +190,8 @@ export default {
           old_licence_number: '',
           licence_date: null,
           address: '',
+          address2: '',
+          address3: '',
           province: '',
           company: '',   
     })

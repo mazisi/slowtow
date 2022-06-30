@@ -117,7 +117,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic !== ''">
-    <a v-for="doc in original_lic" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in original_lic" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -138,7 +138,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic !== ''">
-    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -164,7 +164,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic_delivered !== ''">
-    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -187,7 +187,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic_delivered !== ''">
-    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`/storage/${doc.document_file}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -218,11 +218,25 @@ class="form-label"
 
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address</label>
+<label class="form-label">Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.address">
 </div>
 <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
-</div>           
+</div>  
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.address2">
+</div>
+<div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
+</div> 
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.address3">
+</div>
+<div v-if="errors.address3" class="text-danger">{{ errors.address3 }}</div>
+</div>         
 <div class="col-12 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
@@ -302,7 +316,7 @@ Action
 <!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
 <i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
 <h6 v-if="!tasks" class="text-center">No tasks found.</h6>
@@ -313,11 +327,8 @@ data-bs-dismiss="alert" aria-label="Close">
 <div class="col-xl-4">
 <form @submit.prevent="submitTask">
 <div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Date</label>
-<input type="date" required  class="form-control form-control-default" v-model="createTask.taskDate" >
-</div>
-<div v-if="errors.taskDate" class="text-danger">{{ errors.taskDate }}</div>
+<label class="form-check-label text-body text-truncate status-heading">New Note:
+<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
 </div>
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">
@@ -454,6 +465,8 @@ export default {
          licence_date: props.licence.licence_date,
          postal_code: props.licence.postal_code,
          address: props.licence.address,
+         address2: props.licence.address2,
+         address3: props.licence.address3,
          province: props.licence.province,
          company: props.licence.company.name,
          company_id: props.licence.company.id,

@@ -24,9 +24,7 @@ class ValidatePeople extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:200',
-            'id_or_passport' => 'required|in:i_d,passport',
-            'identity_number' => 'unique:people,identity_number'
+            'name' => 'required|string|max:200'
         ];
     }
 }

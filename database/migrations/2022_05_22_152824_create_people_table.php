@@ -19,8 +19,7 @@ return new class extends Migration
             $table->string('active')->nullable();
             $table->string('date_of_birth')->nullable();
             $table->string('id_number')->nullable();
-            $table->enum('id_or_passport',['i_d','passport']);
-            $table->string('identity_number')->unique()->nullable();
+            $table->string('id_or_passport')->nullable();
             $table->string('passport')->unique()->nullable();
             $table->string('email_address_1')->nullable();
             $table->string('email_address_2')->nullable();
