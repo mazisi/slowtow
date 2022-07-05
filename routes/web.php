@@ -21,7 +21,7 @@ use App\Http\Controllers\LicenceRenewalController;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
-use App\Http\Controllers\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\MergeDocumentController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 
 // Route::get('/', function () {
@@ -62,6 +62,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/delete-company-document/{id}',[CompanyDocsController::class,'destroy']);
         Route::post('/add-people-to-company/{company_id}',[CompanyController::class,'attachPeopleToCompany']);
         Route::patch('/update-company-people',[CompanyController::class,'updatePeople']);
+
+        Route::delete('/unlink-person/{id}',[CompanyController::class,'unlinkPerson'])->name('unlink_person');
+
 
         Route::get('/licences',[LicenceController::class,'index'])->name('licences');
         Route::get('/create-licence',[LicenceController::class,'create'])->name('create_licence');
@@ -130,7 +133,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
         Route::post('/submit-nomination', [NominationController::class,'store'])->name('submit_nomination');
-        Route::get('/nominations',[NominationController::class,'nominations'])->name('nominations');
+        Route::get('/nominations',[NominationController::class,'index'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
         Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
@@ -138,6 +141,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController::class,'detachNominee']);
         Route::post('/submit-nomination-document',[NominationController::class,'uploadDocument']);
         Route::delete('/delete-nomination-document/{id}',[NominationController::class,'deleteDocument']);
+
+        Route::post('/merge-document',[MergeDocumentController::class,'merge'])->name('merge');
 
 
         Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');

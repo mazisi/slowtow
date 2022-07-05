@@ -29,7 +29,6 @@ const props = defineProps({
     nomination_delivered: Object,//doc
 });
 let options = props.nominees;
-const body_max = ref(100);
 
 const updateForm = useForm({
         nomination_year: props.nomination.year,
@@ -87,24 +86,39 @@ function deleteDocument(id){
         return new Date(date_param).toLocaleString().split(',')[0]
     };
 
-const saveNominneesToDatabase = () => {
+let show_modal = ref(true);
+let saveNominneesToDatabase = () => {
     nomineeForm.post('/add-selected-nominees', {
-        onSuccess: () => nomineeForm.reset(),
+      preserveScroll: true,
+       onSuccess: () => { 
+        show_modal = false;        
+         let dismiss =  document.querySelector('.modal-backdrop') 
+          dismiss.remove();
+          nomineeForm.reset();
+      },
     })
 }
+
 
 const removeSelectedNominee = (nominee_id) => {
     Inertia.post(`/detach-nominee/${props.nomination.id}/${nominee_id}`)
 }
 
+
 const updateNomination = () => {
     updateForm.post(`/update-nominee`)
 }
 
-const checkBodyLength = () => {
+const mergeDocument = () => {
+    updateForm.post(`/merge-document`)
+}
+
+const body_max = 100;
+let checkBodyLength = () => {
         if(createTask.body.length > body_max){
             createTask.body = createTask.body.substring(0,body_max)
         }
+        
      }
 
 const pushData = (status_value) => {
@@ -119,9 +133,7 @@ const pushData = (status_value) => {
           }
 }
 
-function alertCompile(){
-  alert('We have to get api fo this functionality...Please Confirm')
-}
+
 // 1= > Client Quoted
 // 2 => Client Invoiced
 // 3 => Client Paid
@@ -480,7 +492,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 </div>
 
 <div class="text-end">
-<button type="button" @click="alertCompile" class="btn btn-sm btn-secondary">Compile &amp; Merge</button>
+<button type="button" @click="mergeDocument" class="btn btn-sm btn-secondary">Compile &amp; Merge</button>
 </div>
 <hr>
 
@@ -655,7 +667,7 @@ data-bs-dismiss="alert" aria-label="Close">
 </div>
 </div>
 
-<div class="modal fade" id="pop-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal fade" id="pop-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

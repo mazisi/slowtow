@@ -14,36 +14,27 @@ use Illuminate\Support\Facades\Redirect;
 class PersonController extends Controller
 {
     public function index(Request $request){
-        if($request->term && $request->active_status == 'Active'){
+        if(!empty($request->term) && $request->active_status == 'Active'){
 
+            $people = People::where('full_name','LIKE','%'.$request->term.'%')
+                            ->where('licence_status','1')
+                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+                            ->get();
 
-            // $people = People::where('full_name','LIKE','%'.$request->term.'%')
-            //                 ->where('licence_status','1')
-            //                 ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-            //                 ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-            //                 ->get();
-
-        }elseif($request->active_status == 'All' ){
+        }elseif($request->active_status == 'All' && empty($request->term)){
            
             $people = People::latest()->get();
         
-        }elseif($request->term && $request->active_status == 'Active'){
-    
-               $people = People::where('full_name', 'like', '%'.$request->term.'%')
-                                ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
-                                ->orWhere('email_address_2','LIKE','%'.$request->term.'%')
-                                ->whereActive('1')
-                                ->get();
-               
-        }elseif($request->term){
+        }elseif(!empty($request->term) && empty($request->active_status)){
             $people = People::where('full_name','LIKE','%'.$request->term.'%')
                             ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
                             ->orWhere('email_address_2','LIKE','%'.$request->term.'%')
                             ->get();
         
-        }elseif($request->term && $request->withThrashed != '' && $request->active_status == 'Inactive'){
+        }elseif(!empty($request->term)  && $request->active_status == 'Inactive'){
                     $people = People::where('full_name','LIKE','%'.$request->term.'%')
-                            ->where('active','!=','1')
+                            ->whereNull('active')
                             ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
                             ->orWhere('email_address_2','LIKE','%'.$request->term.'%')
                             ->get();
@@ -64,6 +55,7 @@ class PersonController extends Controller
         'full_name'=> $request->name.' '.$request->surname,
         'active'=> $request->active,
         'date_of_birth' => $request->date_of_birth,
+        'id_or_passport' => $request->id_or_passport,
         'id_number' => $request->id_number,
         'passport' => $request->passport_number,
         'email_address_1' => $request->email_address_1,
@@ -102,6 +94,7 @@ class PersonController extends Controller
         'full_name'=> $request->name,
         'active'=> $request->active,
         'date_of_birth' => $request->date_of_birth,
+        'id_or_passport' => $request->id_or_passport,
         'id_number' => $request->id_number,
         'passport' => $request->passport_number,
         'email_address_1' => $request->email_address_1,

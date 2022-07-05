@@ -73,7 +73,7 @@ v-model="form.change_company"
 placeholder="Search Company..."
 class="form-label"
 />
-<!-- <i class="fa fa-times"></i> -->
+
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
 
@@ -124,7 +124,7 @@ class="form-label"
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence</h6>
       <p v-if="original_lic.length > 0" class="mb-0 text-xs">{{ original_lic[0].document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
     <button  v-if="original_lic.length > 0" @click="deleteDocument(original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
@@ -145,7 +145,7 @@ class="form-label"
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original</h6>
       <p v-if="duplicate_original_lic.length > 0" class="mb-0 text-xs">{{ duplicate_original_lic[0].document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
     <button  v-if="duplicate_original_lic.length > 0" @click="deleteDocument(duplicate_original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
@@ -172,7 +172,7 @@ class="form-label"
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
       <p v-if="original_lic_delivered.length > 0" class="mb-0 text-xs">{{ original_lic_delivered[0].document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
     <button  v-if="original_lic_delivered.length > 0" @click="deleteDocument(original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -194,7 +194,7 @@ class="form-label"
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
        <p v-if="duplicate_original_lic_delivered.length > 0" class="mb-0 text-xs">{{ duplicate_original_lic_delivered[0].document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded Yet.</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
     <button  v-if="duplicate_original_lic_delivered.length > 0" @click="deleteDocument(duplicate_original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
@@ -290,13 +290,13 @@ Action
 </thead>
 <tbody>
 <tr>
-<td v-if="licence.company.active !== null" class=" text-sm">Active</td>
-<td v-else class=" text-sm text-danger">InActive</td>
+<td v-if="licence.company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
+<td v-else class=" text-sm text-danger"><i class="fa fa-times"></i></td>
 <td class="align-middle text-sm">
 <Link class="text-sm text-center align-middle" :href="`/view-company/${licence.company.slug}`"><h6 class="mb-0 ">{{ licence.company.name }}</h6></Link>
 </td>
 <td class="text-center">
-<Link :href="`/view-company/${licence.company.slug}`" class="btn btn-secondary btn-sm">View</Link>
+<Link :href="`/view-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
 </td>
 </tr>
 </tbody>
@@ -458,7 +458,7 @@ export default {
 
     const form = useForm({
          trading_name: props.licence.trading_name,
-         licence_type: props.licence.licence_type,
+         licence_type: props.licence.licence_type_id,
          is_licence_active: props.licence.is_licence_active,
          licence_number: props.licence.licence_number,
          old_licence_number: props.licence.old_licence_number,

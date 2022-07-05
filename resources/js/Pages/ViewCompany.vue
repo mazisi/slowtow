@@ -356,8 +356,7 @@
 <div class="col-sm-12 col-lg-4">
 <h6 class="text-center">Licences Linked To : {{ company.name }}</h6>
 </div>
-<div class="col-sm-12 col-lg-4 text-end">
-<button data-bs-toggle="modal" data-bs-target="#add-people" type="button" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Add</button></div>
+
 
 <div class="table-responsive p-0">
 <table class="table align-items-center mb-0">
@@ -392,7 +391,8 @@
     <td class="text-center">{{ licence.licence_number }}</td>
     <td class="text-center">{{ licence.licence_date }}</td>
     <td class="text-center">
-    <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 btn btn-sm btn-secondary ms-2 float-end justify-content-center">View</Link>
+    <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 ms-2 justify-content-center">
+    <i class="fa fa-eye"></i></Link>
     </td>
     
   </tr>
@@ -410,7 +410,7 @@
 <h6 class="text-center">People Linked To : {{ company.name }}</h6>
 </div>
 <div class="col-sm-12 col-lg-4 text-end">
-<button data-bs-toggle="modal" data-bs-target="#add-people" type="button" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Add</button></div>
+<button @click="show_modal = true" data-bs-toggle="modal" data-bs-target="#add-people" type="button" class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Add</button></div>
 
 <div class="table-responsive p-0">
 <table class="table align-items-center mb-0">
@@ -422,13 +422,7 @@
     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
     Position
     </th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-    Director
-    </th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-    Shareholder
-    </th>
-
+  
     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
     Action
     </th>
@@ -446,15 +440,13 @@
       </div>
     </td>
     <td class="text-center">{{ person.pivot.position }}</td>
-    <td class="text-center">{{ person.pivot.director }}</td>
-    <td class="text-center">{{ person.pivot.shareholder }}</td>
     <td class="text-end float-end ">
     <div class="d-flex float-end ">
-    <button data-bs-toggle="modal" data-bs-target="#get-modal-data" 
+    <a data-bs-toggle="modal" data-bs-target="#get-modal-data" 
     @click="getPersonEditModalData(person.pivot.position, person.pivot.director, person.full_name, person.pivot.shareholder,person.pivot.id)" type="button" 
-    class="mx-2 btn btn-sm btn-secondary ms-2 float-end justify-content-center">Edit</button>
-    <button @click="unlinkPerson(person.full_name )" type="button" 
-    class="btn btn-sm btn-secondary ms-2 float-end justify-content-center">Unlink</button>
+    class="mx-2 ms-2 float-end justify-content-center"><i class="fas fa-edit"></i></a>
+    <a @click="unlinkPerson(person.full_name, person.pivot.id )" type="button" 
+    class=" ms-2 float-end text-danger justify-content-center"><i class="fas fa-unlink"></i></a>
     </div>
     </td>
     
@@ -577,7 +569,7 @@
 </div>
 
 
-<div class="modal" id="add-people" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal" id="add-people" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -623,33 +615,12 @@
       <form @submit.prevent="updatePerson">
       <div class="modal-body">      
         <div class="row">
-        <div class="col-md-6 columns">
+        <div class="col-md-12 columns">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Position</label>
         <input type="text" required class="form-control form-control-default" v-model="editPerson.position">
         </div>
         <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
-        </div>
-        <div class="col-md-6 columns">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Director</label>
-        <select class="form-control form-control-default" v-model="editPerson.director" >
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-        </select>
-        </div>
-        <div v-if="errors.director" class="text-danger">{{ errors.director }}</div>
-        </div>
-
-        <div class="col-md-6 columns">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Shareholder</label>
-        <select class="form-control form-control-default" v-model="editPerson.shareholder" >
-        <option value="No">No</option>
-        <option value="Yes">Yes</option>
-        </select>
-        </div>
-        <div v-if="errors.shareholder" class="text-danger">{{ errors.shareholder }}</div>
         </div>
         </div>   
 
@@ -686,7 +657,9 @@
   .columns{
       margin-bottom: 1rem;
     }
-    
+
+
+
 </style>
 
 <script>
@@ -694,6 +667,7 @@ import Layout from "../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Multiselect from '@vueform/multiselect';
+import { ref } from 'vue'
 
 export default {
  props: {
@@ -713,7 +687,8 @@ export default {
   setup (props) {
     let showMenu = false;
     let body_max = 100;
-    let people_options = props.people;    
+    let people_options = props.people;
+    let show_modal = ref(true);  
 
     const form = useForm({
             company_name: props.company.name,
@@ -732,8 +707,8 @@ export default {
             business_province: props.company.business_province,
             business_address_postal_code: props.company.business_address_postal_code,
             postal_address: props.company.postal_address,
-            postal_address2: props.company.postal_address2,
-            postal_address3: props.company.postal_address3,
+            postal_address2: props.company.postal_code2,
+            postal_address3: props.company.postal_code3,
             postal_province: props.company.postal_province,
             postal_code: props.company.postal_code,
            company_id: props.company.id,
@@ -774,11 +749,12 @@ export default {
             this.editPerson.shareholder = shareholder;
             this.editPerson.pivot_id = pivot_id;
           }
-        function updatePerson(){
+        function updatePerson(){//Update when you adit position 
+        
            editPerson.patch(`/update-company-people`, {
            preserveScroll: true,
-           onSuccess: (page) => {
-            //do something..
+           onSuccess: () => {
+            //         
            },
           })  
         }
@@ -786,7 +762,11 @@ export default {
         function submitPeople(){
           addPeopleForm.post(`/add-people-to-company/${props.company.id}`, {
            preserveScroll: true,
-           onSuccess: (page) => {
+           onSuccess: (page) => { 
+            this.show_modal = false;
+          let dismiss =  document.querySelector('.modal-backdrop') 
+         
+           dismiss.remove();
             addPeopleForm.reset();
            },
           })  
@@ -811,7 +791,7 @@ export default {
           }
         }
 
-    function submit() {
+    function submit() {//Update company details
       form.post('/update-company', {
         preserveScroll: true,
       })
@@ -841,7 +821,7 @@ export default {
 
       function unlinkPerson(full_name,id){
         if(confirm(full_name + ' will be removed from this company...Continue..??')){
-          createTask.delete(`/unlink-consultant/${id}`,{
+          createTask.delete(`/unlink-person/${id}`,{
           ///do something
         })
         }
@@ -885,6 +865,7 @@ export default {
       getPersonEditModalData,
       editPerson,
       updatePerson,
+      show_modal
     }
   },
 

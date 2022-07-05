@@ -5,11 +5,25 @@ import Layout from "../../Shared/Layout.vue";
 export default {
   name: "dashboard-default",
   props: {
-    with_nomination_paid_status: Object,
+    with_client_quoted_status: Object,
     with_client_invoiced_status: Object,
+    with_client_paid_status: Object,
+    with_payment_to_liquor_board_status: Object,
+    with_select_nominees_status: Object,
+    with_documents_required_status: Object,
     with_nomination_logded_status: Object,
-    with_certificate_received_status: Object,
-    with_complete_status: Object
+    with_nomination_issued_status: Object,
+    with_delivered_status: Object
+
+    // 1= > Client Quoted
+// 2 => Client Invoiced
+// 3 => Client Paid
+// 4 => Payment to the Liquor Board
+// 5 => Select nominees
+// 6 => Documents Required 
+// 7 => Nomination Lodged 
+// 8 => Nomination issued
+// 9 => Nomination Delievered
   },
   data() {
     return {
@@ -93,7 +107,7 @@ methods: {
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
   <h5 class="text-center"> Nominations</h5>
   <div class="table-responsive p-0">
-  <h6 class="text-danger">Client Invoiced</h6>
+  <h6 class="text-danger">Client Quoted</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -106,13 +120,13 @@ methods: {
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="with_client_invoiced in with_client_invoiced_status" :key="with_client_invoiced.id">
+      <tr v-for="status in with_client_quoted_status" :key="status.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_client_invoiced.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_client_invoiced.date).getFullYear() }}/{{ this.getRenewalYear(with_client_invoiced.date)  }} </p>
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
             </div>
           </div>
         </td>
@@ -120,22 +134,22 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
         <!-- <td class="align-middle text-center text-sm">
-          <span v-if="with_client_invoiced.status == 'Invoiced'" class="badge bg-dark text-default">{{ with_client_invoiced.status }}</span>
-        <span v-if="with_client_invoiced.status == 'Paid'" class="badge bg-info text-default">{{ with_client_invoiced.status }}</span>
-        <span v-if="with_client_invoiced.status == 'Get Client Docs'" class="badge bg-light text-default">{{ with_client_invoiced.status }}</span>
-        <span v-if="with_client_invoiced.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ with_client_invoiced.status }}</span>
-        <span v-if="with_client_invoiced.status == 'Issued'" class="badge bg-secondary text-default">{{ with_client_invoiced.status }}</span>
-        <span v-if="with_client_invoiced.status == 'Complete'" class="badge bg-success text-default">{{ with_client_invoiced.status }}</span>
+          <span v-if="status.status == 'Invoiced'" class="badge bg-dark text-default">{{ status.status }}</span>
+        <span v-if="status.status == 'Paid'" class="badge bg-info text-default">{{ status.status }}</span>
+        <span v-if="status.status == 'Get Client Docs'" class="badge bg-light text-default">{{ status.status }}</span>
+        <span v-if="status.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ status.status }}</span>
+        <span v-if="status.status == 'Issued'" class="badge bg-secondary text-default">{{ status.status }}</span>
+        <span v-if="status.status == 'Complete'" class="badge bg-success text-default">{{ status.status }}</span>
         </td> -->
         <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_client_invoiced.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_client_invoiced.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <Link :href="`/view-nomination/${with_client_invoiced.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
@@ -149,7 +163,7 @@ methods: {
 
 
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Nomination Paid</h6>
+  <h6 class="text-danger">Client Invoiced</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -160,13 +174,13 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="with_nomination_paid in with_nomination_paid_status" :key="with_nomination_paid.id">
+      <tr v-for="status in with_client_invoiced_status" :key="status.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_nomination_paid.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_nomination_paid.date).getFullYear() }}/{{ this.getRenewalYear(with_nomination_paid.date)  }} </p>
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
             </div>
           </div>
         </td>
@@ -174,14 +188,14 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_nomination_paid.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_nomination_paid.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <Link :href="`/view-nomination/${with_nomination_paid.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
@@ -193,7 +207,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger"> Nomination Lodged </h6>
+  <h6 class="text-danger"> Client Paid </h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -205,13 +219,13 @@ methods: {
     </thead>
     <tbody>
     <!-- <h6 v-if="$props.with_get_client_docs_statuses.length <= 0" class="text-center">No licences awaiting client docs</h6> -->
-      <tr v-for="with_nomination_logded in with_nomination_logded_status" :key="with_nomination_logded.id">
+      <tr v-for="status in with_client_paid_status" :key="with_nomination_logded.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_nomination_logded.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_nomination_logded.date).getFullYear() }}/{{ this.getRenewalYear(with_nomination_logded.date)  }} </p>
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
             </div>
           </div>
         </td>
@@ -219,13 +233,13 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_nomination_logded.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_nomination_logded.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
-        <Link :href="`/view-nomination/${with_nomination_logded.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
@@ -237,7 +251,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Certificate Received</h6>
+  <h6 class="text-danger">Payment To The Liquor Board</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -248,13 +262,13 @@ methods: {
       </tr>
     </thead>
     <tbody>
-       <tr v-for="with_certificate_received in with_certificate_received_status" :key="with_certificate_received.id">
+       <tr v-for="status in with_payment_to_liquor_board_status" :key="status.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_certificate_received.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_certificate_received.date).getFullYear() }}/{{ this.getRenewalYear(with_certificate_received.date)  }} </p>
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
             </div>
           </div>
         </td>
@@ -262,14 +276,14 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_certificate_received.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_certificate_received.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-         <Link :href="`/view-nomination/${with_certificate_received.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+         <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
@@ -280,7 +294,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Certificate Received</h6>
+  <h6 class="text-danger">Document Required</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -291,13 +305,13 @@ methods: {
       </tr>
     </thead>
     <tbody>
-       <tr v-for="with_certificate_received in with_certificate_received_status" :key="with_certificate_received.id">
+       <tr v-for="status in with_documents_required_status" :key="status.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_certificate_received.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_certificate_received.date).getFullYear() }}/{{ this.getRenewalYear(with_certificate_received.date)  }} </p>
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
             </div>
           </div>
         </td>
@@ -305,10 +319,10 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_certificate_received.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_certificate_received.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
@@ -323,7 +337,7 @@ methods: {
 
 <hr>
 <div class="table-responsive p-0">
-  <h6 class="text-danger">Nomination Complete And Delivered</h6>
+  <h6 class="text-danger">Nomination Logded</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -334,13 +348,13 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="with_complete in with_complete_status" :key="with_complete.id">
+      <tr v-for="status in with_nomination_logded_status" :key="status.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_complete.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_complete.date).getFullYear() }}/{{ this.getRenewalYear(with_complete.date)  }} </p>
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
             </div>
           </div>
         </td>
@@ -348,14 +362,100 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">????</p>
         </td>
                 <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_complete.date }}</span>
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_complete.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-       <Link :href="`/view-nomination/${with_complete.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+       <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
+        </td>
+      </tr>
+   
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<div class="table-responsive p-0">
+  <h6 class="text-danger">Nomination Issued</h6>
+  <table class="table align-items-center mb-0">
+    <thead>
+      <tr>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="status in with_nomination_issued_status" :key="status.id">
+        <td>
+          <div class="d-flex px-2 py-1">
+            <div class="d-flex flex-column justify-content-center">
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
+              <p class="text-xs mb-0"> 
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">????</p>
+        </td>
+                <td class="align-middle text-center">
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
+        </td>
+        <td class="align-middle text-center">
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-envelope"></i> Send </Link>
+
+        
+       <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-eye"></i> View </Link>
+        </td>
+      </tr>
+   
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<div class="table-responsive p-0">
+  <h6 class="text-danger">Nomination Delivered</h6>
+  <table class="table align-items-center mb-0">
+    <thead>
+      <tr>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="status in with_delivered_status" :key="status.id">
+        <td>
+          <div class="d-flex px-2 py-1">
+            <div class="d-flex flex-column justify-content-center">
+              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
+              <p class="text-xs mb-0"> 
+              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
+            </div>
+          </div>
+        </td>
+        <td>
+          <p class="text-xs font-weight-bold mb-0">????</p>
+        </td>
+                <td class="align-middle text-center">
+        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
+        </td>
+        <td class="align-middle text-center">
+        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <i class="fa fa-envelope"></i> Send </Link>
+
+        
+       <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>

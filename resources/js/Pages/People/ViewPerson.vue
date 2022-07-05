@@ -43,7 +43,7 @@
 </div>
 <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
 </div>  
-<!-- <div class="col-md-4 columns">
+<div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">ID or Passport</label>
 <select v-model="form.id_or_passport" required class="form-control form-control-default">
@@ -52,9 +52,9 @@
 </select>
 </div>
 <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div> -->
+</div>
 
-<div class="col-md-4 columns">            
+<div class="col-md-4 columns" v-if="form.id_or_passport == 'i_d'">            
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">ID Number</label>
 <input required type="text" class="form-control form-control-default" v-model="form.id_number" placeholder="Enter ID Number">
@@ -62,7 +62,7 @@
 <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
 </div>              
 
-<div class="col-md-4 columns">                  
+<div class="col-md-4 columns" v-if="form.id_or_passport == 'passport'">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Passport Number</label>
 <input type="text" required class="form-control form-control-default" v-model="form.passport_number" placeholder="Enter Passport Number">
@@ -120,7 +120,7 @@
 <h6 class="text-center">Documents</h6>
 
 <div class="row">
-<div class="col-3">
+<div class="col-3" v-if="form.id_or_passport == 'i_d'">
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document !== null">
@@ -140,6 +140,34 @@
     </button>
 
     <button v-else @click="getDocType('ID Document')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
+
+<div class="col-3" v-if="form.id_or_passport == 'passport'">
+  <ul class="list-group">
+ <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="passport_doc !== null">
+    <a :href="`/storage/${passport_doc.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Passport</h6>
+      <p v-if="passport_doc !== null" class="mb-0 text-xs">{{ passport_doc.document_name }}</p>
+      <p v-if="passport_doc !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(passport_doc.expiry_date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Passport Not Uploaded</p>
+    </div>
+
+    <button v-if="passport_doc !== null" @click="deleteDocument('Passport',passport_doc.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Passport')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
@@ -170,33 +198,7 @@
   </li>
 </ul>
 </div>
-<div class="col-3">
-  <ul class="list-group">
- <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="passport_doc !== null">
-    <a :href="`/storage/${passport_doc.document}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-    </a>
-    </div>
 
-    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Passport</h6>
-      <p v-if="passport_doc !== null" class="mb-0 text-xs">{{ passport_doc.document_name }}</p>
-      <p v-if="passport_doc !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(passport_doc.expiry_date) }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Passport Not Uploaded</p>
-    </div>
-
-    <button v-if="passport_doc !== null" @click="deleteDocument('Passport',passport_doc.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-    </button>
-
-    <button v-else @click="getDocType('Passport')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-upload" aria-hidden="true"></i>
-    </button>
-  </li>
-</ul>
-</div>
 <div class="col-3">
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -484,7 +486,7 @@ const form = useForm({
       };
 
  
-     const body_max = ref(100);
+     const body_max = 100;
      let checkBodyLength = () => {
         if(createTask.body.length > body_max){
             createTask.body = createTask.body.substring(0,body_max)

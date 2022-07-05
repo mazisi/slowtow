@@ -23,7 +23,6 @@ class TaskController extends Controller
             'user_id' => auth()->id(),
             'model_type'=> $request->model_type,
             'model_id' => $request->model_id,
-            'date' => $request->taskDate,
             'body' => $request->body
         ]);
         if($add_task){

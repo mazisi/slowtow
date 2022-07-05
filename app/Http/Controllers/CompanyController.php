@@ -17,29 +17,34 @@ class CompanyController extends Controller
     
     public function index(Request $request){
 
-      if($request->term && $request->active_status == 'Active'){
+      if(!empty($request->term) && $request->active_status == 'Active'){
 
         $companies = Company::when($request->term,function($query,$term){
          $query->where('name','LIKE','%'.$term.'%')
-               ->where('active','1');
+               ->whereNotNull('active');
         })->get();
-    }elseif($request->active_status == "All" ){
+
+        // $companies = Company::with(["company","licence_type"])
+        //          ->whereNotNull('is_licence_active')
+        //         ->where(function($query) use($request){
+        //         $query->where('trading_name','LIKE','%'.$request->term.'%')
+        //         ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+        //         ->orWhere('old_licence_number','LIKE','%'.$request->term.'%');
+        //         })->get();
+    }elseif($request->active_status == "All" && empty($request->term)){
         $companies = Company::get();
-    }elseif($request->term ){
+    }elseif(!empty($request->term) && empty($request->active_status) ){
             $companies = Company::when($request->term,function($query,$term){
-                $query->where('name','LIKE','%'.$term.'%')
-                      ->withTrashed();
+                $query->where('name','LIKE','%'.$term.'%');
                })->get();
-    }elseif($request->term && $request->active_status == 'Active'){
+
+    }elseif(!empty($request->term) && $request->active_status == 'Inactive'){
 
         $companies = Company::when($request->term,function($query,$term){
             $query->where('name','LIKE','%'.$term.'%')
-                  ->where('active','1');
+                  ->whereNull('active');
            })->get();
-    }elseif($request->term){  
-        $companies = Company::when($request->term,function($query,$term){
-            $query->where('name','LIKE','%'.$term.'%');
-           })->get();      
+    
     }else{
         $companies = Company::whereNull('name')->get();
     }
@@ -62,7 +67,6 @@ class CompanyController extends Controller
                 'email2' => $request->email_address_3,
                 'tel_number' => $request->telephone_number_1,
                 'tel_number1' => $request->telephone_number_2,
-                'fax' => $request->fax_number,
                 'website' => $request->website,
                 'business_address' => $request->business_address,
                 'business_address2' => $request->business_address2,
@@ -70,8 +74,8 @@ class CompanyController extends Controller
                 'business_province' => $request->business_province,
                 'business_address_postal_code' => $request->business_address_postal_code,
                 'postal_address' => $request->postal_address,
-                'postal_address2' => $request->postal_address2,
-                'postal_address3' => $request->postal_address3,
+                'postal_code2' => $request->postal_address2,
+                'postal_code3' => $request->postal_address3,
                 'postal_province' => $request->postal_province,
                 'postal_code' => $request->postal_code,
                 'active' => $request->active,
@@ -125,8 +129,8 @@ class CompanyController extends Controller
             'business_province' => $request->business_province,
             'business_address_postal_code' => $request->business_address_postal_code,
             'postal_address' => $request->postal_address,
-            'postal_address2' => $request->postal_address2,
-            'postal_address3' => $request->postal_address3,
+            'postal_code2' => $request->postal_address2,
+            'postal_code3' => $request->postal_address3,
             'postal_province' => $request->postal_province,
             'postal_code' => $request->postal_code,
             'active' => $request->active,
@@ -169,4 +173,15 @@ public function updatePeople(Request $request){
         return back()->with('message', $request->full_name.' updated successfully.'); 
     }
 }
+  /**
+     * Unlink person from company.
+     */
+    public function unlinkPerson($id){
+       $unlink = DB::table('company_people')->where('id',$id)->delete();
+       if($unlink){
+        return back()->with('success','Person removed successfully.');            
+        }
+        return back()->with('error','Error..Something went wrong.');
+    }
+
 }

@@ -130,18 +130,24 @@ class EmailCommsController extends Controller
      */
     public function getNominations(){
 
-        $with_client_invoiced_status = Nomination::with('licence')->whereStatus('1')->get();
-        $with_nomination_paid_status = Nomination::with('licence')->whereStatus('2')->get();
-        $with_nomination_logded_status = Nomination::with('licence')->whereStatus('3')->get();
-        $with_certificate_received_status = Nomination::with('licence')->whereStatus('4')->get();
-        $with_complete_status = Nomination::with('licence')->whereStatus('5')->get();
+    $with_client_quoted_status = Nomination::with('licence')->whereStatus('1')->get();
+    $with_client_invoiced_status = Nomination::with('licence')->whereStatus('2')->get();
+    $with_client_paid_status = Nomination::with('licence')->whereStatus('3')->get();
+    $with_payment_to_liquor_board_status = Nomination::with('licence')->whereStatus('4')->get();
+    $with_documents_required_status = Nomination::with('licence')->whereStatus('6')->get();
+    $with_nomination_logded_status = Nomination::with('licence')->whereStatus('7')->get();
+    $with_nomination_issued_status = Nomination::with('licence')->whereStatus('8')->get();
+    $with_delivered_status = Nomination::with('licence')->whereStatus('9')->get();
 
         return Inertia::render('EmailComms/Nomination',[
+            'with_client_quoted_status' => $with_client_quoted_status,
             'with_client_invoiced_status' => $with_client_invoiced_status,
-            'with_nomination_paid_status' => $with_nomination_paid_status,
+            'with_client_paid_status' => $with_client_paid_status,
+            'with_payment_to_liquor_board_status' => $with_payment_to_liquor_board_status,
+            'with_documents_required_status' => $with_documents_required_status,
             'with_nomination_logded_status' => $with_nomination_logded_status,
-            'with_certificate_received_status' => $with_certificate_received_status,
-            'with_complete_status' => $with_complete_status
+            'with_nomination_issued_status' => $with_nomination_issued_status,
+            'with_delivered_status' => $with_delivered_status
         ]);
     }
 

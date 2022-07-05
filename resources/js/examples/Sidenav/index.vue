@@ -23,8 +23,8 @@
           class="navbar-brand-img h-100"
           alt="main_logo"
         />
-        <span class="ms-2 font-weight-bold text-white"
-          >GO VERIFY</span
+        <!-- <span class="ms-2 font-weight-bold text-white"
+          >GO VERIFY</span -->
         >
       </inertia-link>
     </div>
@@ -34,8 +34,8 @@
 </template>
 <script>
 import SidenavList from "./SidenavList.vue";
-import logo from "@/assets/img/logo-ct.png";
-import logoDark from "@/assets/img/logo-ct-dark.png";
+import logo from "@/assets/img/slowtow.png";
+import logoDark from "@/assets/img/slowtow.png";
 import { mapState } from "vuex";
 
 export default {
@@ -46,7 +46,6 @@ export default {
   data() {
     return {
       logo,
-      logoDark,
     };
   },
   computed: {

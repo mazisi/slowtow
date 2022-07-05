@@ -16,10 +16,10 @@ return new class extends Migration
         Schema::create('licences', function (Blueprint $table) {
             $table->id();
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->foreignId('licence_type_id')->constrained()->onDelete('cascade');
             $table->string('trading_name');
             $table->string('licence_number')->nullable();
             $table->string('old_licence_number')->nullable();
-            $table->string('licence_type');
             $table->date('licence_date')->nullable();
             $table->string('address')->nullable();
             $table->string('address2')->nullable();

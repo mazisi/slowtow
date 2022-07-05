@@ -15,32 +15,27 @@ class LicenceController extends Controller
 {
     public function index(Request $request){
 
-        if($request->term && $request->active_status == 'Active'){
+        if(!empty($request->term) && $request->active_status == 'Active'){
 
-            $licences = Licence::with(["company","licence_type"])
-                            ->orWhereHas('company', function($query) use($request){
-                                $query->where('name', 'like', '%'.$request->term.'%');
-                            })->orWhere('trading_name','LIKE','%'.$request->term.'%')
-                            ->where('licence_status','1')
-                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-                            ->get();
-
-        }elseif($request->term && $request->active_status == 'Active'){
-    
                $licences = Licence::with(["company","licence_type"])
-               ->orWhereHas('company', function($query) use($request){
-                   $query->where('name', 'like', '%'.$request->term.'%');
-               })->orWhere('trading_name','LIKE','%'.$request->term.'%')
-               ->where('licence_status','1')
-               ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-               ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-               ->get();
-        }elseif($request->active_status == 'All'){
+                 ->whereNotNull('is_licence_active')
+                ->where(function($query) use($request){
+                    $query->where('trading_name','LIKE','%'.$request->term.'%')
+                    ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                    ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+
+                    ->orWhereHas('company', function($query) use($request){
+                    $query->where('name', 'like', '%'.$request->term.'%');
+                });
+                })->get();
+
+
+        }elseif($request->active_status == 'All' && empty($request->term)){
 
           $licences = Licence::with(["company","licence_type"])->get();
 
-        }elseif($request->term){
+        }elseif(!empty($request->term) && empty($request->active_status)){
+
             $licences = Licence::with(["company","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
                                 $query->where('name', 'like', '%'.$request->term.'%');
@@ -49,16 +44,32 @@ class LicenceController extends Controller
                             ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
                             ->get();
         
-        }elseif($request->term  && $request->active_status == 'Inactive'){
+        }elseif(!empty($request->term)  && $request->active_status == 'Inactive'){
+
                     $licences = Licence::with(["company","licence_type"])
-                            ->orWhereHas('company', function($query) use($request){
-                                $query->where('name', 'like', '%'.$request->term.'%');
-                            })
-                            ->orWhere('trading_name','LIKE','%'.$request->term.'%')
-                            ->where('licence_status','!=','1')
-                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-                            ->get();
+                         ->whereNull('is_licence_active')
+                        ->where(function($query) use($request){
+                    $query->where('trading_name','LIKE','%'.$request->term.'%')
+                    ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                    ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+
+                    ->orWhereHas('company', function($query) use($request){
+                    $query->where('name', 'like', '%'.$request->term.'%');
+                });
+                })->get();
+
+    }elseif(!empty($request->term)  && $request->active_status == 'All'){
+
+                    $licences = Licence::with(["company","licence_type"])
+                        ->where(function($query) use($request){
+                    $query->where('trading_name','LIKE','%'.$request->term.'%')
+                    ->orWhere('licence_number','LIKE','%'.$request->term.'%')
+                    ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+
+                    ->orWhereHas('company', function($query) use($request){
+                    $query->where('name', 'LIKE', '%'.$request->term.'%');
+                });
+                })->get();
 
         }else{
             $licences = Licence::with('company','licence_type')->whereNull('trading_name')->get();
@@ -83,7 +94,7 @@ class LicenceController extends Controller
         ]);
         Licence::create([
             "trading_name" => $request->trading_name,
-            "licence_type" => $request->licence_type,
+            "licence_type_id" => $request->licence_type,
             "licence_date" => $request->licence_date,
             "company_id"   => $request->company,
             "licence_number" => $request->licence_number,
@@ -126,7 +137,7 @@ class LicenceController extends Controller
                                             ]);
     }
 
-    public function update(Request $request,$slug){        
+    public function update(Request $request,$slug){    
         if(empty($request->change_company)){
             $company_var = $request->company_id;
         }else{
@@ -135,7 +146,7 @@ class LicenceController extends Controller
         }
         $update = Licence::whereSlug($slug)->update([
             "trading_name" => $request->trading_name,
-            "licence_type" => $request->licence_type,
+            "licence_type_id" => $request->licence_type,
             "licence_date" => $request->licence_date,
             "licence_number" => $request->licence_number,
             "old_licence_number" => $request->old_licence_number,

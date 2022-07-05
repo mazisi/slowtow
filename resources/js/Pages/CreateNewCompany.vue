@@ -26,7 +26,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
-<input id="active-checkbox" type="checkbox" value="1" >
+<input id="active-checkbox" type="checkbox" value="1" v-model="form.active">
 </div>
 </div>
 
