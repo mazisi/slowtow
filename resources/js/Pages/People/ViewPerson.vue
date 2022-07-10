@@ -30,7 +30,7 @@
 
 <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Full Name *</label>
+<label class="form-label">Full Name And Surname *</label>
 <input type="text" required class="form-control form-control-default" v-model="form.name" >
 </div>
 <div v-if="errors.name" class="text-danger">{{ errors.name }}</div>
@@ -42,38 +42,20 @@
 <input type="date" class="form-control form-control-default" v-model="form.date_of_birth" >
 </div>
 <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
-</div>  
-<div class="col-md-4 columns">
+</div>               
+
+<div class="col-md-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">ID or Passport</label>
-<select v-model="form.id_or_passport" required class="form-control form-control-default">
-<option value="i_d">ID Number</option>
-<option value="passport">Passport</option>
-</select>
+<label class="form-label">ID/Passport Number</label>
+<input type="text" class="form-control form-control-default" v-model="form.id_or_passport">
 </div>
 <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div>
-
-<div class="col-md-4 columns" v-if="form.id_or_passport == 'i_d'">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">ID Number</label>
-<input required type="text" class="form-control form-control-default" v-model="form.id_number" placeholder="Enter ID Number">
-</div>
-<div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
-</div>              
-
-<div class="col-md-4 columns" v-if="form.id_or_passport == 'passport'">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Passport Number</label>
-<input type="text" required class="form-control form-control-default" v-model="form.passport_number" placeholder="Enter Passport Number">
-</div>
-<div v-if="errors.passport_number" class="text-danger">{{ errors.passport_number }}</div>
 </div>
 
 
 <div class="col-md-4 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address #1</label>
+<label class="form-label">Email Address</label>
 <input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
 </div>
 <div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
@@ -83,7 +65,7 @@
 
 <div class="col-md-4 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address #2</label>
+<label class="form-label">Email Address</label>
 <input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
 </div>
 <div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
@@ -92,7 +74,7 @@
 
 <div class="col-md-4 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Cellphone Number</label>
+<label class="form-label">Phone Number</label>
 <input type="text" class="form-control form-control-default" v-model="form.cell_number" >
 </div>
 <div v-if="errors.cell_number" class="text-danger">{{ errors.cell_number }}</div>
@@ -102,25 +84,18 @@
 
 <div class="col-md-4 columns">        
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Telephone Number</label>
+<label class="form-label">Work Number</label>
 <input type="tel" class="form-control form-control-default" v-model="form.telephone" >
 </div>
 <div v-if="errors.telephone" class="text-danger">{{ errors.telephone }}</div>
 </div>
 
-<div class="col-md-4 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Position</label>
-<input type="text" class="form-control form-control-default" v-model="form.position" >
-</div>
-<div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
-</div>
 
 <hr>
 <h6 class="text-center">Documents</h6>
 
 <div class="row">
-<div class="col-3" v-if="form.id_or_passport == 'i_d'">
+<div class="col-3">
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document !== null">
@@ -132,7 +107,7 @@
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">ID Document</h6>
       <p v-if="id_document !== null" class="mb-0 text-xs">{{ id_document.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Id Not Uploaded</p>
+      <p v-else class="mb-0 text-xs text-danger">ID Not Uploaded</p>
     </div>
 
     <button v-if="id_document !== null" @click="deleteDocument('ID Document',id_document.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -147,7 +122,7 @@
 </ul>
 </div>
 
-<div class="col-3" v-if="form.id_or_passport == 'passport'">
+<div class="col-3">
   <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc !== null">
@@ -292,7 +267,7 @@ data-bs-dismiss="alert" aria-label="Close">
 </div>
 </div>
 
-<div class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_doc_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -303,15 +278,6 @@ data-bs-dismiss="alert" aria-label="Close">
       <input type="hidden" v-model="uploadDoc.doc_type">
       <div class="modal-body">      
         <div class="row">
-        <div class="col-md-12 columns">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Document Name</label>
-        <input type="text" required class="form-control form-control-default" 
-         v-model="uploadDoc.doc_name" >
-        </div>
-        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
-        </div>
-
         <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'ID Document'">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Expiry Date</label>
@@ -377,13 +343,15 @@ data-bs-dismiss="alert" aria-label="Close">
     }
 </style>
 
-<script setup>
+<script>
 import { useForm } from '@inertiajs/inertia-vue3';
 import Layout from "../../Shared/Layout.vue";
 import { ref } from "vue";
 import { Inertia } from '@inertiajs/inertia';
 
-const props = defineProps({
+export default {
+
+props:{
       tasks: Object,
       errors: Object,
       person: Object,
@@ -394,19 +362,17 @@ const props = defineProps({
       police_clearance: Object,
       passport_doc: Object,
       work_permit_doc: Object
-});
+},
 
+setup (props) {
 
 const form = useForm({
        name: props.person.full_name,
         date_of_birth: props.person.date_of_birth,
-        id_number: props.person.id_number,
-        passport_number: props.person.passport,
         id_or_passport: props.person.id_or_passport,
         email_address_1: props.person.email_address_1,
         email_address_2: props.person.email_address_2,
         cell_number: props.person.cell_number,
-        position: props.person.position,
         telephone: props.person.telephone,
         valid_saps_clearance: props.person.valid_saps_clearance,
         saps_clearance_valid_until: props.person.saps_clearance_valid_until,
@@ -428,21 +394,28 @@ const form = useForm({
           doc_type: null,
           document: null,
           doc_expiry: null,
-          doc_name: null,
           people_id: props.person.id
     });
 
-      const submitDocument = () => {
+      let show_doc_modal = ref(true);
+
+      function submitDocument () {
         uploadDoc.post('/upload-person-documents', {
-           onSuccess: () => uploadDoc.reset(),
+           onSuccess: () => { 
+            this.show_doc_modal = false;
+            let dismiss =  document.querySelector('.modal-backdrop')     
+            dismiss.remove();
+            uploadDoc.reset()
+           },
         })
       }
 
-      const getDocType = (doc_type) => {
+      function getDocType (doc_type) {
+        this.show_doc_modal = true;
         uploadDoc.doc_type = doc_type;
       }
 
-      const deleteDocument = (document_name,slug) => {
+      function deleteDocument (document_name,slug) {
         if(confirm(document_name + ' will be deleted permanently...Continue ??')){
           Inertia.delete(`/delete-person-document/${slug}`, {
             //
@@ -451,33 +424,33 @@ const form = useForm({
       }
       
       
-    const submitTask = () => {
+    function submitTask () {
       createTask.post('/submit-task', {
           onSuccess: () => createTask.reset(),
       })
     };
 
-    const updatePerson = () => {
+    function updatePerson () {
       form.post('/update-person', {
           onSuccess: () => createTask.reset(),
       })
     };
 
-    const assignActiveValue = (active_value) => {
+    function assignActiveValue (active_value) {
       form.active = active_value
     };
 
-    const deletePerson = (full_name) => {
+    function deletePerson (full_name) {
          if (confirm('Are you sure you want to delete ' + full_name + '??')) {
             Inertia.delete(`/delete-person/${props.person.slug}`)
           }
       };
 
-      const computeExpiryDate = (date_param) => {
+      function computeExpiryDate (date_param) {
         return new Date(date_param).toLocaleString().split(',')[0]
       };
 
-      const deleteTask = (task_id) => {
+      function deleteTask(task_id){
          if(confirm('Are you sure??')){
             createTask.delete(`/delete-task/${task_id}`, {
                 onFinish: () => createTask.reset(),
@@ -487,11 +460,20 @@ const form = useForm({
 
  
      const body_max = 100;
-     let checkBodyLength = () => {
+     function checkBodyLength(){
         if(createTask.body.length > body_max){
             createTask.body = createTask.body.substring(0,body_max)
         }
      }
-  
+     return{
+        form,checkBodyLength,body_max,deleteTask,computeExpiryDate,deletePerson,
+        assignActiveValue,updatePerson,submitTask,deleteDocument,getDocType,submitDocument,
+        show_doc_modal,uploadDoc,createTask
+     }
+},
+ components: {
+    Layout
+  },
+}
 </script>
 

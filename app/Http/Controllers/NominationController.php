@@ -161,14 +161,13 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     
     public function uploadDocument(Request $request){
         $request->validate([
-            "document"=> "required|mimes:pdf",
-            "doc_name" => "required|string|max:255",
+            "document"=> "required|mimes:pdf"
             ]);
-        
+            $get_file_name = explode(".",$request->document->getClientOriginalName());
            $store_file = $request->document->store('nominationDocuments','public'); 
             $save_file = NominationDocument::create([
                 "nomination_id" => $request->nomination_id,
-                "document_name" => $request->doc_name,
+                "document_name" => $get_file_name[0],
                 "document" => $store_file,
                 "date" => $request->date,
                 "doc_type" => $request->doc_type,

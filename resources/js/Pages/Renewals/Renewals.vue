@@ -34,7 +34,7 @@
 <tr>
 <th class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Year</th>
 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Renewal Status</th>
-<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+<th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">View</th>
 </tr>
 </thead>
 <tbody>
@@ -57,7 +57,7 @@
 <td class="align-middle text-end" >
 <div class="d-flex align-middle text-end" style="margin-left: 3rem;">
 <Link :href="`/view-licence-renewal/${renewal.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
-<Link :href="`#!`" @click="deleteRenewal(renewal.slug)"><i class="fa fa-trash-o  text-danger" aria-hidden="true"></i></Link>
+<!-- <Link :href="`#!`" @click="deleteRenewal(renewal.slug)"><i class="fa fa-trash-o  text-danger" aria-hidden="true"></i></Link> -->
 </div>
 </td>
 </tr>

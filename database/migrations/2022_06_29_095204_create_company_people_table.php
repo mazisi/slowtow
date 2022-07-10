@@ -18,8 +18,6 @@ return new class extends Migration
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->foreignId('people_id')->constrained()->onDelete('cascade');
             $table->string('position')->nullable();
-            $table->string('director')->nullable()->default('No');
-            $table->string('shareholder')->nullable()->default('No');
             $table->timestamps();
         });
     }

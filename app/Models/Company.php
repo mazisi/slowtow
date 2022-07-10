@@ -24,7 +24,7 @@ class Company extends Model
 
     public function people()
     {
-       return $this->belongsToMany(People::class)->withPivot('position','shareholder','director','id');
+       return $this->belongsToMany(People::class)->withPivot('position','id');
     }
 
     public function licences()

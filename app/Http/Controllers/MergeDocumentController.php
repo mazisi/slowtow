@@ -2,170 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+use App\Models\NominationDocument;
+use setasign\Fpdi\Fpdi;
 
-class MergeDocumentController extends Controller
-{
-    // Cloud API asynchronous "PDF Merging" job example.
-// Allows to avoid timeout errors when processing huge or scanned PDF documents.
+class MergeDocumentController extends Controller{
 
+    public function merge($id){ 
 
-// The authentication key (API Key).
-// Get your own by registering at https://app.pdf.co
-public $apiKey = "mazisimsebele18@gmail.com_0e00850b749cef084c8dbf71eed7e1e9ef78909f8ae35ea11e0df45f959a1639e7e696dc";
+       $nominations =  NominationDocument::where('nomination_id',$id)->get();
 
-// Direct URLs of PDF files to merge. Check another example if you need to upload local files to the cloud.
-// You can also upload your own file into PDF.co and use it as url. Check "Upload File" samples for code snippets: https://github.com/bytescout/pdf-co-api-samples/tree/master/File%20Upload/    
-public $sourceFiles = array(
-    "public/storage/nominationDocuments/ACBV4x3CODGZndAHr3sGof0FBkYO5vxc3p1AMxzk.pdf", 
-    "public/storage/nominationDocuments/egWIm6PJ4cLsUznnfhOxo2mKYDPiuxW4jWkRGwHD.pdf");
+          $merger = PDFMerger::init();
 
+          foreach ($nominations as $nom) {
+            $merger->addPDF(public_path('/storage/').$nom->document, 'all');
+          }
+          $fileName = time().'.pdf';
+          $merger->merge();
 
-// Prepare URL for `Merge PDF` API call
-public function merge(){
-$url = "https://api.pdf.co/v1/pdf/merge";
-
-// Prepare requests params
-$parameters = array();
-$parameters["url"] = join(",", $this->sourceFiles);
-$parameters["async"] = true; // (!) Make asynchronous job
-
-// Create Json payload
-$data = json_encode($parameters);
-
-// Create request
-$curl = curl_init();
-curl_setopt($curl, CURLOPT_HTTPHEADER, array("x-api-key: " . $this->apiKey, "Content-type: application/json"));
-curl_setopt($curl, CURLOPT_URL, $url);
-curl_setopt($curl, CURLOPT_POST, true);
-curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-
-// Execute request
-$result = curl_exec($curl);
-
-if (curl_errno($curl) == 0){
-    $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    
-    if ($status_code == 200)
-    {
-        $json = json_decode($result, true);
+          $merger->save(public_path($fileName));
         
-        if (!isset($json["error"]) || $json["error"] == false){
-            // URL of generated PDF file that will available after the job completion
-            $resultFileUrl = $json["url"];
-            // Asynchronous job ID
-            $jobId = $json["jobId"];
-            
-            // Check the job status in a loop
-            do{
-                $status = $this->CheckJobStatus($jobId, $this->apiKey); // Possible statuses: "working", "failed", "aborted", "success".
-                
-                // Display timestamp and status (for demo purposes)
-                echo "<p>" . date(DATE_RFC2822) . ": " . $status . "</p>";
-                
-                if ($status == "success")
-                {
-                    // Display link to the file with conversion results
-                    echo "<div><h2>Conversion Result:</h2><a href='" . $resultFileUrl . "' target='_blank'>" . $resultFileUrl . "</a></div>";
-                    break;
-                }
-                else if ($status == "working"){
-                    // Pause for a few seconds
-                    sleep(3);
-                }
-                else 
-                {
-                    echo $status . "<br/>";
-                    break;
-                }
-            }
-            while (true);
-        }
-        else
-        {
-            // Display service reported error
-            echo "<p>Error: " . $json["message"] . "</p>"; 
-        }
+          return response()->download(public_path($fileName));
+
     }
-    else
-    {
-        // Display request error
-        echo "<p>Status code: " . $status_code . "</p>"; 
-        echo "<p>" . $result . "</p>"; 
-    }
-}
-else
-{
-    // Display CURL error
-    echo "Error: " . curl_error($curl);
-}
-
-// Cleanup
-curl_close($curl);
-}
-
-
-function CheckJobStatus($jobId, $apiKey){
-    $status = null;
-    
-	// Create URL
-    $url = "https://api.pdf.co/v1/job/check";
-    
-    // Prepare requests params
-    $parameters = array();
-    $parameters["jobid"] = $jobId;
-
-    // Create Json payload
-    $data = json_encode($parameters);
-
-    // Create request
-    $curl = curl_init();
-    curl_setopt($curl, CURLOPT_HTTPHEADER, array("x-api-key: " . $apiKey, "Content-type: application/json"));
-    curl_setopt($curl, CURLOPT_URL, $url);
-    curl_setopt($curl, CURLOPT_POST, true);
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-    
-    // Execute request
-    $result = curl_exec($curl);
-    
-    if (curl_errno($curl) == 0)
-    {
-        $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        
-        if ($status_code == 200)
-        {
-            $json = json_decode($result, true);
-        
-            if (!isset($json["error"]) || $json["error"] == false)
-            {
-                $status = $json["status"];
-            }
-            else
-            {
-                // Display service reported error
-                echo "<p>Error: " . $json["message"] . "</p>"; 
-            }
-        }
-        else
-        {
-            // Display request error
-            echo "<p>Status code: " . $status_code . "</p>"; 
-            echo "<p>" . $result . "</p>"; 
-        }
-    }
-    else
-    {
-        // Display CURL error
-        echo "Error: " . curl_error($curl);
-    }
-    
-    // Cleanup
-    curl_close($curl);
-    
-    return $status;
-}
-
 
 }

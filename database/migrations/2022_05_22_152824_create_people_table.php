@@ -25,7 +25,6 @@ return new class extends Migration
             $table->string('email_address_2')->nullable();
             $table->string('cell_number')->nullable();
             $table->string('telephone')->nullable();
-            $table->string('position')->nullable();
             $table->date('passport_valid_until')->nullable();
            
             $table->string('slug');

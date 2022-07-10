@@ -31,8 +31,9 @@ export default {
       licence_id: props.renewal.id,
       status: [],
       is_checked: props.renewal.status,
-      renewal_id: props.renewal.id    
-    })
+      client_paid_at: props.renewal.client_paid_at,
+      renewal_id: props.renewal.id,
+     })
 
     const uploadDoc = useForm({
       document: null,
@@ -192,11 +193,11 @@ export default {
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
-    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
@@ -227,24 +228,31 @@ export default {
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
-    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
 <hr>
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
 @input="pushData($event.target.value)" value="3" :checked="form.is_checked >= '3'">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
+ <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+     </div>
+   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+   </div> 
 <hr>
 
 <div class="col-md-12 columns">
@@ -264,10 +272,10 @@ export default {
 </div>
 </div> 
 
-<div class="col-md-6 columns">
+<!-- <div class="col-md-6 columns">
 <Datepicker v-model="form.year" yearPicker />
 <p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
-</div>
+</div> -->
 
 <div class="col-md-6" style="margin-top: -1rem;">
 <ul class="list-group">
@@ -283,11 +291,11 @@ export default {
       <p v-if="renewal_issued !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_issued.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;" v-else>
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
@@ -321,11 +329,11 @@ export default {
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
-    <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Renewal Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>

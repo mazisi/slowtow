@@ -36,7 +36,7 @@
 <div class="row">
 <div class="mt-3 ">
 <form class="row" @submit.prevent="updateLicence">
-<div class="col-8 col-md-8 col-xl-8 position-relative">
+<div class="col-6 col-md-6 col-xl-6 position-relative">
 <div class="card card-plain h-100">
 <div class="p-3 card-body">
 
@@ -49,7 +49,7 @@
 </div>
 </div>
 
-<div class="col-md-6 columns">
+<div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Trading Name *</label>
 <input type="text" required class="form-control form-control-default" v-model="form.trading_name" >
@@ -57,7 +57,17 @@
 <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
 </div>
 
-<div class="col-md-6 columns" v-if="show_current_company">
+
+
+<div class="col-md-12 columns">
+<div class="input-group input-group-outline null is-filled ">
+<label class="form-label">Licence Number</label>
+<input type="text" class="form-control form-control-default" v-model="form.licence_number" >
+</div>
+<div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
+</div>
+
+<div class="col-md-12 columns" v-if="show_current_company">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label mb-4">Current Company</label>
 <input type="text" @focus="changeCompany" class="form-control form-control-default" v-model="form.company" >
@@ -65,7 +75,7 @@
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
 
-<div class="col-md-6 columns" v-if="change_company">
+<div class="col-md-12 columns" v-if="change_company">
 <Multiselect
 v-model="form.change_company"
 :options="options"
@@ -77,7 +87,7 @@ class="form-label"
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
 
-<div class="col-md-6 columns">
+<div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Licence Type *</label>
 <select v-model="form.licence_type" class="form-control form-control-default">
@@ -87,31 +97,88 @@ class="form-label"
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.licence_number" >
-</div>
-<div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
-</div>
-
-<div class="col-md-6 columns">
+<div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Old Licence Number</label>
 <input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
 </div>
 <div v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</div>
 </div>  
-<div class="col-md-6 columns">
+<div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Original Issue Of Licence Date</label>
+<label class="form-label">Date of Original Issue</label>
 <input type="date" class="form-control form-control-default" v-model="form.licence_date">
 </div>
 <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
 </div>
-<h6 class="text-center">Documents</h6>
+
 </div>
 
+
+
+
+</div>
+</div>
+<!-- <hr class="vertical dark" /> -->
+</div>
+<div class="col-6 col-md-6 col-xl-6 position-relative">
+<div class="col-12 columns invisible">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 1</label>
+<input type="text" class="form-control form-control-default">
+</div>
+</div>  
+
+
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 1</label>
+<input type="text" class="form-control form-control-default" v-model="form.address">
+</div>
+<div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
+</div>  
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 2</label>
+<input type="text" class="form-control form-control-default" v-model="form.address2">
+</div>
+<div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
+</div> 
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Address Line 3</label>
+<input type="text" class="form-control form-control-default" v-model="form.address3">
+</div>
+<div v-if="errors.address3" class="text-danger">{{ errors.address3 }}</div>
+</div>         
+<div class="col-12 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Province</label>
+<select class="form-control form-control-default" v-model="form.province" >
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
+</div>
+
+<div class="col-12 columns">            
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Postal Code</label>
+<input  type="text" class="form-control form-control-default" v-model="form.postal_code">
+</div>
+</div>
+</div>
+
+<h6 class="text-center">Documents</h6>
 <div class="row">
 <div class="col-md-6 columns">
 <ul class="list-group">
@@ -206,62 +273,6 @@ class="form-label"
   </li>
 </ul>
 </div>
-</div>
-
-
-</div>
-</div>
-<!-- <hr class="vertical dark" /> -->
-</div>
-
-<div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
-
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address Line 1</label>
-<input type="text" class="form-control form-control-default" v-model="form.address">
-</div>
-<div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
-</div>  
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address Line 2</label>
-<input type="text" class="form-control form-control-default" v-model="form.address2">
-</div>
-<div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
-</div> 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address Line 3</label>
-<input type="text" class="form-control form-control-default" v-model="form.address3">
-</div>
-<div v-if="errors.address3" class="text-danger">{{ errors.address3 }}</div>
-</div>         
-<div class="col-12 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.province" >
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
-</select>
-</div>
-<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
-</div>
-
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Code</label>
-<input  type="text" class="form-control form-control-default" v-model="form.postal_code">
-</div>
-</div>
-
 </div>
 <div>
 <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button>
@@ -366,15 +377,6 @@ data-bs-dismiss="alert" aria-label="Close">
       <div class="modal-body">      
         <div class="row">
         <div class="col-md-12 columns">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Document Name</label>
-        <input type="text" required class="form-control form-control-default" 
-         v-model="originalLicenceForm.doc_name" >
-        </div>
-        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
-        </div>
-
-        <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
          <input type="file" @input="originalLicenceForm.original_licence_doc = $event.target.files[0]"
          hidden id="licence-doc" accept=".pdf"/>
@@ -421,7 +423,7 @@ data-bs-dismiss="alert" aria-label="Close">
     #active-checkbox{
       margin-left: 3px;
     }
-  
+
 </style>
 
 <style src="@vueform/multiselect/themes/default.css"></style>
@@ -484,7 +486,6 @@ export default {
        const originalLicenceForm = useForm({
           original_licence_doc: null,
           licence_id: props.licence.id,
-          doc_name: null,
           doc_type: null,
        })
  

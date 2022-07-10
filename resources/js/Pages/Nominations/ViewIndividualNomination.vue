@@ -39,7 +39,6 @@ const updateForm = useForm({
 
 const uploadDoc = useForm({
       document: null,
-      doc_name: null,
       doc_type: null,
       date: null,
       nomination_id: props.nomination.id    
@@ -110,7 +109,7 @@ const updateNomination = () => {
 }
 
 const mergeDocument = () => {
-    updateForm.post(`/merge-document`)
+    updateForm.post(`/merge-document/${props.nomination.id}`)
 }
 
 const body_max = 100;
@@ -199,10 +198,10 @@ const pushData = (status_value) => {
        <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -230,10 +229,10 @@ const pushData = (status_value) => {
        <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li>
 </ul>
@@ -281,10 +280,10 @@ const pushData = (status_value) => {
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="liquor_board !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(liquor_board.date) }}</p>
     </div>
-    <a v-if="liquor_board !== null" @click="deleteDocument(liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="liquor_board !== null" @click="deleteDocument(liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -299,7 +298,7 @@ const pushData = (status_value) => {
 :checked="nomination.status >= '5'" value="5" class="active-checkbox">
 </div>
 
-<label for="Select nominees" class="form-check-label text-body text-truncate status-heading">Select Nominees To Add/Terminate</label>
+<label for="Select nominees" class="form-check-label text-body text-truncate status-heading">Select Person(s) To Nominate</label>
 </div>
 <div class="col-md-1">
 <button type="button" data-bs-toggle="modal" data-bs-target="#pop-modal" class="btn btn-sm btn-secondary">Add</button>
@@ -310,10 +309,10 @@ const pushData = (status_value) => {
 <thead>
 <tr>
 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-Full Name
+Full Name And Surname
 </th>
 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-DOB
+Date OF Birth
 </th>
 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
 ID Number
@@ -341,6 +340,11 @@ Action
 <i @click="removeSelectedNominee(person.id)" 
 style="cursor: pointer;"
 class="material-icons-round text-danger fs-10">highlight_off</i>
+<Link :href="`/view-person/${person.slug}`">
+<i @click="removeSelectedNominee(person.id)" 
+style="cursor: pointer;"
+class="material-icons-round text-secondary fs-10">visibility</i>
+</Link>
 </td>
 </tr>
 
@@ -492,7 +496,7 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
 </div>
 
 <div class="text-end">
-<button type="button" @click="mergeDocument" class="btn btn-sm btn-secondary">Compile &amp; Merge</button>
+<a :href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary">Compile &amp; Merge</a>
 </div>
 <hr>
 
@@ -518,10 +522,10 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="nomination_logded !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(nomination_logded.date) }}</p>
     </div>
-    <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -552,10 +556,10 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
        <p v-if="nomination_issued !== null" class="mb-0 text-xs">{{ nomination_issued.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -587,10 +591,10 @@ class="material-icons-round text-danger fs-10">highlight_off</i>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="nomination_delivered !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(nomination_delivered.date) }}</p>
     </div>
-    <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li>   
 </ul>
@@ -625,12 +629,12 @@ Save</button>
 <div class="row">
 <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
 <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+<span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
+<button @click="deleteTask(task.id)" type="button" class="btn-close d-flex mr-4 justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
+Expire: 23/09/2022</button>
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
@@ -705,7 +709,7 @@ mode="tags"
   
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="nomineeForm.processing">
+        <button type="submit" class="btn btn-secondary" :disabled="nomineeForm.processing">
          <span v-if="nomineeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>
@@ -725,17 +729,8 @@ mode="tags"
       <input type="hidden" v-model="uploadDoc.doc_type">
       <div class="modal-body">      
         <div class="row">
-        <div class="col-md-12 columns">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Document Name</label>
-        <input type="text" required class="form-control form-control-default" 
-         v-model="uploadDoc.doc_name" >
-        </div>
-        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
-        </div>
 
-        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
-        ">
+        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
         <input type="date" required class="form-control form-control-default" 

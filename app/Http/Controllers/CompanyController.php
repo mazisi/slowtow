@@ -96,6 +96,7 @@ class CompanyController extends Controller
         $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->get();
         $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->get();
         $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->get();
+        $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->get();
         $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->get();
         $people = People::pluck('full_name','id');
         
@@ -106,7 +107,8 @@ class CompanyController extends Controller
              'contrib_cert' => $contrib_cert,
              'bee_cert' => $bee_cert,
              'cipc_cert' => $cipc_cert,
-             'lta_cert' => $lta_cert
+             'lta_cert' => $lta_cert,
+             'company_doc' => $company_doc
             ]);
     }
 
@@ -160,15 +162,10 @@ class CompanyController extends Controller
     }
 
    
-public function updatePeople(Request $request){
+public function updatePeople(Request $request,$pivot_id){
     $update = DB::table('company_people')
-    ->whereId($request->pivot_id)
-    ->update([
-        'position' => $request->position,
-        'director' => $request->director,
-        'shareholder' => $request->shareholder,
-        'updated_at' => now(),
-    ]);
+    ->whereId($pivot_id)
+    ->update(['position' => $request->position]);
     if($update){
         return back()->with('message', $request->full_name.' updated successfully.'); 
     }

@@ -56,8 +56,6 @@ class PersonController extends Controller
         'active'=> $request->active,
         'date_of_birth' => $request->date_of_birth,
         'id_or_passport' => $request->id_or_passport,
-        'id_number' => $request->id_number,
-        'passport' => $request->passport_number,
         'email_address_1' => $request->email_address_1,
         'email_address_2' => $request->email_address_2,
         'cell_number' => $request->cell_number,
@@ -95,12 +93,9 @@ class PersonController extends Controller
         'active'=> $request->active,
         'date_of_birth' => $request->date_of_birth,
         'id_or_passport' => $request->id_or_passport,
-        'id_number' => $request->id_number,
-        'passport' => $request->passport_number,
         'email_address_1' => $request->email_address_1,
         'email_address_2' => $request->email_address_2,
         'cell_number' => $request->cell_number,
-        'position' => $request->position,
         'telephone' => $request->telephone,
         'passport_valid_until' => $request->passport_valid_until,
         ]);
@@ -122,15 +117,15 @@ class PersonController extends Controller
     public function uploadDocument(Request $request){
         $request->validate([
             "document"=> "required|mimes:pdf",
-            "doc_name" => "required|string|max:255",
             "people_id" => "required|exists:people,id",
             "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document"
-            ]);;
-        
+            ]);
+
+          $get_file_name = explode(".",$request->document->getClientOriginalName());
           $store_file = $request->document->store('peopleDocuments','public'); 
            $upload = PeopleDocument::create([
                 "people_id" => $request->people_id,
-                "document_name" => $request->doc_name,
+                "document_name" => $get_file_name[0],
                 "document" => $store_file,
                 "doc_type" => $request->doc_type,
                 "expiry_date" => $request->doc_expiry,

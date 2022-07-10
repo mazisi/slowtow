@@ -41,6 +41,7 @@
 <th>Licence Date</th>
 <th>Licence Type</th>
 <th>Company</th>
+<th>View</th>
 </tr>
 </thead>
 <tbody>
@@ -50,6 +51,10 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company.name }}</Link></td>
+<td class="text-center">
+<Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
+
+</td>
 </tr>
 </tbody>
 </table>

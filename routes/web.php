@@ -61,7 +61,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-company-documents',[CompanyDocsController::class,'store']);
         Route::delete('/delete-company-document/{id}',[CompanyDocsController::class,'destroy']);
         Route::post('/add-people-to-company/{company_id}',[CompanyController::class,'attachPeopleToCompany']);
-        Route::patch('/update-company-people',[CompanyController::class,'updatePeople']);
+        Route::patch('/update-position/{id}',[CompanyController::class,'updatePeople']);
 
         Route::delete('/unlink-person/{id}',[CompanyController::class,'unlinkPerson'])->name('unlink_person');
 
@@ -142,7 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-nomination-document',[NominationController::class,'uploadDocument']);
         Route::delete('/delete-nomination-document/{id}',[NominationController::class,'deleteDocument']);
 
-        Route::post('/merge-document',[MergeDocumentController::class,'merge'])->name('merge');
+        Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');
 
 
         Route::get('/temp-licences', [TemporalLicenceController::class,'index'])->name('temp_licences');

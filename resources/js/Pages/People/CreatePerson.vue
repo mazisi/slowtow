@@ -56,47 +56,18 @@
      <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
 </div>  
 
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">ID or Passport</label>
-<select v-model="form.id_or_passport" required class="form-control form-control-default">
-<option value="i_d">ID Number</option>
-<option value="passport">Passport</option>
-</select>
-</div>
-<div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div>
-<div class="col-md-4 columns" v-if="form.id_or_passport == 'i_d'">
-<div class="input-group input-group-outline null is-filled">
-  <label class="form-label">ID or Passport</label>
-  <select v-model="form.id_or_passport" required class="form-control form-control-default">
-    <option value="i_d">Identity Number</option>
-    <option value="passport">Passport</option>
-  </select>
-</div>
-<div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div>
-
-  <div class="col-md-4 columns" v-if="form.id_or_passport == 'passport'">            
+  <div class="col-md-4 columns">            
  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Identity Number</label>
-  <input required type="text" class="form-control form-control-default" v-model="form.id_number" placeholder="Enter ID Number">
+  <label class="form-label">ID/Passport Number</label>
+  <input required type="text" class="form-control form-control-default" v-model="form.id_or_passport">
    </div>
-    <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
-    </div>              
-              
-   <div class="col-md-4 columns">                  
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Passport Number</label>
-  <input type="text" required class="form-control form-control-default" v-model="form.passport_number" placeholder="Enter Passport Number">
-   </div>
-  <div v-if="errors.passport_number" class="text-danger">{{ errors.passport_number }}</div>
-  </div>
+    <div v-if="errors.id_or_passport" class="text-danger">{{ errors.i_d_or_passport }}</div>
+    </div>  
                   
               
   <div class="col-md-4 columns">    
    <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Email Address #1</label>
+  <label class="form-label">Email Address</label>
   <input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
    </div>
    <div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
@@ -106,7 +77,7 @@
               
  <div class="col-md-4 columns">    
    <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Email Address #2</label>
+  <label class="form-label">Email Address</label>
   <input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
    </div>
  <div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
@@ -115,7 +86,7 @@
  
 <div class="col-md-4 columns">    
   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Cellphone Number</label>
+  <label class="form-label">Phone Number</label>
   <input type="text" class="form-control form-control-default" v-model="form.cell_number" >
    </div>
    <div v-if="errors.cell_number" class="text-danger">{{ errors.cell_number }}</div>
@@ -124,19 +95,12 @@
     
    <div class="col-md-4 columns">        
   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Telephone Number</label>
+  <label class="form-label">Work Number</label>
   <input type="tel" class="form-control form-control-default" v-model="form.telephone" >
    </div>
    <div v-if="errors.telephone" class="text-danger">{{ errors.telephone }}</div>
   </div>
-     
-  <div class="col-md-4 columns">        
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Position</label>
-  <input type="tel" class="form-control form-control-default" v-model="form.position" >
-   </div>
-   <div v-if="errors.position" class="text-danger">{{ errors.position }}</div>
-  </div>
+    
 
   <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
             </div>
@@ -179,13 +143,11 @@ export default {
         name: null,
         surname: null,
         date_of_birth: null,
-        id_number: null,
-        passport_number: null,
         id_or_passport: null,
+        passport_number: null,
         email_address_1: null,
         email_address_2: null,
         cell_number: null,
-        position:null,
         telephone: null,
         valid_certified_id: null,
         valid_saps_clearance: '',

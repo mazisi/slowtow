@@ -9,15 +9,14 @@ class CompanyDocsController extends Controller
 {
     public function store(Request $request){
         $request->validate([
-            "document"=> "required|mimes:pdf",
-            "doc_name" => "required|string|max:255",
+            "document"=> "required|mimes:pdf"
             ]);
         
-     
+          $get_file_name = explode(".",$request->document->getClientOriginalName());
            $store_file = $request->document->store('companyDocuments','public'); 
            $comp = CompanyDocument::create([
                 "company_id" => $request->company_id,
-                "document_name" => $request->doc_name,
+                "document_name" => $get_file_name[0],
                 "document_file" => $store_file,
                 "document_type" => $request->doc_type,
                 "expiry_date" => $request->expiry_date,

@@ -37,7 +37,7 @@ class LicenceRenewalController extends Controller
             'slug' => sha1(time())
         ]);
         if($renew){
-         return back()->with('success','Licence renewed successfully.');
+         return to_route('view_licence_renewal',['slug' => $renew->slug ])->with('success','Licence renewed successfully.');
         }
         return back()->with('error','An error occured while renewing licence.');
     }
@@ -76,6 +76,7 @@ class LicenceRenewalController extends Controller
        ]);
 
        $ren = LicenceRenewal::find($request->renewal_id);
+       $status = null;
         if(!is_null($ren->status) && empty($request->status)){
             $db_status = $ren->status;
             $status = $db_status;
@@ -86,7 +87,8 @@ class LicenceRenewalController extends Controller
 
        $ren->update([
         'date' => $request->year,
-        'status' => $status
+        'status' => $status,
+        'client_paid_at' => $request->client_paid_at
        ]);
        if($ren){
         return back()->with('success','Renewal updated successfully.');
@@ -96,14 +98,14 @@ class LicenceRenewalController extends Controller
 
     public function uploadDocuments(Request $request){
         $request->validate([
-            "document"=> "required|mimes:pdf",
-            "doc_name" => "required|string|max:255",
+            "document"=> "required|mimes:pdf"
             ]);
-        
+
+            $get_file_name = explode(".",$request->document->getClientOriginalName());
            $store_file = $request->document->store('renewalDocuments','public'); 
             $save_file = RenewalDocument::create([
                 "licence_renewal_id" => $request->renewal_id,
-                "document_name" => $request->doc_name,
+                "document_name" => $get_file_name[0],
                 "document" => $store_file,
                 "date" => $request->date,
                 "doc_type" => $request->doc_type,
