@@ -1,4 +1,4 @@
-<script setup>
+<script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Link,useForm } from '@inertiajs/inertia-vue3';
@@ -7,141 +7,168 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
 import { ref } from "vue";
 
-const props = defineProps({
-    errors: Object,
-    tasks: Object,
-    nominees: Array,
-    licence: Object,
-    success: String,
-    error: String,
-    nomination: Object,
-    client_quoted: Object,//doc
-    client_invoiced: Object,//doc
-    liquor_board: Object,//doc
-    nomination_forms: Object,//doc
-    proof_of_payment: Object,//doc
-    attorney_doc: Object,//doc
-    certified_id_doc: Object,//doc
-    police_clearance_doc: Object,//doc
-    latest_renewal_doc: Object,//doc
-    nomination_logded: Object,//doc
-    nomination_issued: Object,//doc
-    nomination_delivered: Object,//doc
-});
-let options = props.nominees;
+export default{
+  props:{
+      errors: Object,
+      tasks: Object,
+      nominees: Array,
+      licence: Object,
+      success: String,
+      error: String,
+      nomination: Object,
+      client_quoted: Object,//doc
+      client_invoiced: Object,//doc
+      liquor_board: Object,//doc
+      nomination_forms: Object,//doc
+      proof_of_payment: Object,//doc
+      attorney_doc: Object,//doc
+      certified_id_doc: Object,//doc
+      police_clearance_doc: Object,//doc
+      latest_renewal_doc: Object,//doc
+      nomination_logded: Object,//doc
+      nomination_issued: Object,//doc
+      nomination_delivered: Object,//doc
+  },
 
-const updateForm = useForm({
-        nomination_year: props.nomination.year,
-        nomination_id: props.nomination.id,
-        client_paid_date: props.nomination.client_paid_date,
-        status: [],      
-});
+  setup (props) {
+      let options = props.nominees;
+      let show_modal = ref(true);
 
-const uploadDoc = useForm({
-      document: null,
-      doc_type: null,
-      date: null,
-      nomination_id: props.nomination.id    
-    })
+      const updateForm = useForm({
+              nomination_year: props.nomination.year,
+              nomination_id: props.nomination.id,
+              client_paid_date: props.nomination.client_paid_date,
+              status: [],      
+      });
 
-    const createTask = useForm({
-          body: '',
-          model_type: 'Nomination',
-          model_id: props.nomination.id,
-          taskDate: ''     
-    });
+      const uploadDoc = useForm({
+            document: null,
+            doc_type: null,
+            date: null,
+            nomination_id: props.nomination.id    
+          })
 
-const nomineeForm = useForm({//This handles attachment of nominees 
-        selected_nominess: [],
-        nomination_id: props.nomination.id
-});
+          const createTask = useForm({
+                body: '',
+                model_type: 'Nomination',
+                model_id: props.nomination.id,
+                taskDate: ''     
+          });
 
-const getDocType = (doc_type) => {
-  uploadDoc.doc_type = doc_type
-}
+      const nomineeForm = useForm({//This handles attachment of nominees 
+              selected_nominess: [],
+              nomination_id: props.nomination.id
+      });
 
-const submitTask = () => {
-      createTask.post('/submit-task', {
-          onSuccess: () => createTask.reset(),
-      })
-}
+      function getDocType(doc_type) {
+        uploadDoc.doc_type = doc_type
+        this.show_modal = true
+      }
 
-function submitDocument(){
-      uploadDoc.post('/submit-nomination-document', {
-        preserveScroll: true,
-        onSuccess: () => uploadDoc.reset(),
-      })
-    }
+      function submitTask() {
+            createTask.post('/submit-task', {
+                onSuccess: () => createTask.reset(),
+            })
+      }
 
-function deleteDocument(id){
-    if(confirm('Document will be deleted permanently...Continue ??')){
-      Inertia.delete(`/delete-nomination-document/${id}`, {
-        //
-      })
-    }
-  }
-
- function computeDocumentDate(date_param){
-        return new Date(date_param).toLocaleString().split(',')[0]
-    };
-
-let show_modal = ref(true);
-let saveNominneesToDatabase = () => {
-    nomineeForm.post('/add-selected-nominees', {
-      preserveScroll: true,
-       onSuccess: () => { 
-        show_modal = false;        
-         let dismiss =  document.querySelector('.modal-backdrop') 
-          dismiss.remove();
-          nomineeForm.reset();
-      },
-    })
-}
-
-
-const removeSelectedNominee = (nominee_id) => {
-    Inertia.post(`/detach-nominee/${props.nomination.id}/${nominee_id}`)
-}
-
-
-const updateNomination = () => {
-    updateForm.post(`/update-nominee`)
-}
-
-const mergeDocument = () => {
-    updateForm.post(`/merge-document/${props.nomination.id}`)
-}
-
-const body_max = 100;
-let checkBodyLength = () => {
-        if(createTask.body.length > body_max){
-            createTask.body = createTask.body.substring(0,body_max)
-        }
-        
-     }
-
-const pushData = (status_value) => {
-     if (event.target.checked) {
-         if(updateForm.status.includes(status_value)){
-                   return;
-                  }else{
-                    updateForm.status.push(status_value)
-                  } 
-          }else if(!event.target.checked){
-            updateForm.status.pop()
+      function submitDocument(){
+            uploadDoc.post('/submit-nomination-document', {
+              preserveScroll: true,
+              onSuccess: () => { 
+                this.show_modal = false;
+                let dismiss = document.querySelector('.modal-backdrop') 
+                dismiss.remove();
+                uploadDoc.reset();
+           },
+            })
           }
+
+      function deleteDocument(id){
+          if(confirm('Document will be deleted permanently...Continue ??')){
+            Inertia.delete(`/delete-nomination-document/${id}`, {
+              //
+            })
+          }
+        }
+
+      function computeDocumentDate(date_param){
+              return new Date(date_param).toLocaleString().split(',')[0]
+          };
+
+
+      function saveNominneesToDatabase() {
+          nomineeForm.post('/add-selected-nominees', {
+            preserveScroll: true,
+            onSuccess: () => { 
+              show_modal = false;        
+              let dismiss = document.querySelector('.modal-backdrop');
+                dismiss.remove();
+                nomineeForm.reset();
+            },
+          })
+      }
+
+
+      function removeSelectedNominee(nominee_id) {
+          Inertia.post(`/detach-nominee/${props.nomination.id}/${nominee_id}`)
+      }
+
+
+      function updateNomination() {
+          updateForm.post(`/update-nominee`)
+      }
+
+      // const mergeDocument = () => {
+      //     updateForm.post(`/merge-document/${props.nomination.id}`)
+      // }
+
+      const body_max = 100;
+
+      function checkBodyLength() {
+              if(createTask.body.length > body_max){
+                  createTask.body = createTask.body.substring(0,body_max)
+              }
+              
+          }
+
+      function pushData(status_value) {
+          if (event.target.checked) {
+              if(updateForm.status.includes(status_value)){
+                        return;
+                        }else{
+                          updateForm.status.push(status_value)
+                        } 
+                }else if(!event.target.checked){
+                  updateForm.status.pop()
+                }
+      }
+      
+      return{options,pushData,checkBodyLength,body_max,updateNomination,
+            removeSelectedNominee,saveNominneesToDatabase,show_modal,
+            computeDocumentDate,deleteDocument,submitDocument,submitTask,
+            getDocType,nomineeForm,createTask,uploadDoc,updateForm
+
+
+      }
+  },
+
+   components: {
+    Layout,
+    Link,
+    Multiselect,
+    Datepicker
+  },
+
+  // 1= > Client Quoted
+  // 2 => Client Invoiced
+  // 3 => Client Paid
+  // 4 => Payment to the Liquor Board
+  // 5 => Select nominees
+  // 6 => Documents Required 
+  // 7 => Nomination Lodged 
+  // 8 => Nomination issued
+  // 9 => Nomination Delievered
 }
-
-
-// 1= > Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Payment to the Liquor Board
-// 5 => Select nominees
-// 6 => Documents Required 
-// 7 => Nomination Lodged 
-// 8 => Nomination issued
-// 9 => Nomination Delievered
 </script>
 <style>
 .columns{
@@ -601,14 +628,14 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 </div>
 <hr>
 
-<div class="col-md-6 columns">
+<!-- <div class="col-md-6 columns">
 <label class="form-label">Nomination Year </label>
 <Datepicker v-model="updateForm.nomination_year" yearPicker />
 <p v-if="errors.nomination_year" class="text-danger">{{ errors.nomination_year }}</p>
-</div>
+</div> -->
 
 <div>
-<button type="submit" :style="{float: 'right'}" class="btn btn-primary" :disabled="updateForm.processing">
+<button type="submit" :style="{float: 'right'}" class="btn btn-sm btn-secondary" :disabled="updateForm.processing">
 <span v-if="updateForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
 Save</button>
 </div>
@@ -632,9 +659,9 @@ Save</button>
 <span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<button @click="deleteTask(task.id)" type="button" class="btn-close d-flex mr-4 justify-content-center align-items-center" 
+<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex mr-4 justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
-Expire: 23/09/2022</button>
+Expire: 23/09/2022</button> -->
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
@@ -659,9 +686,9 @@ Expire: 23/09/2022</button>
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center" type="submit">
+<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
   <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Save
+  Save Note
 </button>
 </form>
 </div>
@@ -718,7 +745,7 @@ mode="tags"
   </div>
 </div>
 
-<div class="modal fade" id="document-upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal fade" id="document-upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

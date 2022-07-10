@@ -124,6 +124,31 @@
 
 <div class="col-3">
   <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="police_clearance !== null">
+    <a :href="`/storage/${police_clearance.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Police Clearance</h6>
+      <p v-if="police_clearance !== null" class="mb-0 text-xs">Name:{{ police_clearance.document_name }}</p>
+      <p v-if="police_clearance !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(police_clearance.expiry_date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Police Clearance Not Uploaded</p>
+    </div>
+    <button v-if="police_clearance !== null" @click="deleteDocument('Police Clearance',police_clearance.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+    <button v-else @click="getDocType('Police Clearance')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
+
+<div class="col-3">
+  <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc !== null">
     <a :href="`/storage/${passport_doc.document}`" target="_blank">
@@ -149,30 +174,7 @@
   </li>
 </ul>
 </div>
-<div class="col-3">
-  <ul class="list-group">
-  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="police_clearance !== null">
-    <a :href="`/storage/${police_clearance.document}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-    </a>
-    </div>
-    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Police Clearance</h6>
-      <p v-if="police_clearance !== null" class="mb-0 text-xs">Name:{{ police_clearance.document_name }}</p>
-      <p v-if="police_clearance !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(police_clearance.expiry_date) }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Police Clearance Not Uploaded</p>
-    </div>
-    <button v-if="police_clearance !== null" @click="deleteDocument('Police Clearance',police_clearance.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-    </button>
-    <button v-else @click="getDocType('Police Clearance')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-upload" aria-hidden="true"></i>
-    </button>
-  </li>
-</ul>
-</div>
+
 
 <div class="col-3">
   <ul class="list-group">

@@ -46,13 +46,13 @@
 </div>
 </div>
 </td>
-
 <td class="align-middle text-center text-sm">
 <span v-if="renewal.status == '1'" class="badge bg-dark text-default">Client Quoted</span>
 <span v-if="renewal.status == '2'" class="badge bg-info text-default">Client Invoiced</span>
 <span v-if="renewal.status == '3'" class="badge bg-light text-default">Client Paid</span>
 <span v-if="renewal.status == '4'" class="badge bg-warning text-default">Payment To Liquor Board</span>
-<span v-if="renewal.status == '5'" class="badge bg-secondary text-default">Renewal Complete</span>
+<span v-if="renewal.status == '5'" class="badge bg-secondary text-default">Renewal Issued</span>
+<span v-if="renewal.status == '6'" class="badge bg-secondary text-default">Renewal Complete</span>
 </td>
 <td class="align-middle text-end" >
 <div class="d-flex align-middle text-end" style="margin-left: 3rem;">

@@ -51,7 +51,7 @@
 </div>
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address #1</label>
+<label class="form-label">Email Address</label>
 <input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
 </div>
 <div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
@@ -68,7 +68,6 @@
 <option value="Private Company  -(Proprietary) Limited">Private Company&#160;&#160;&#160;&#160;&#160;-(Proprietary) Limited</option>
 <option value="Public Company">Public Company&#160;&#160;&#160;&#160;&#160;-Limited</option>
 <option value="Sole Proprietor">Sole Proprietor</option>
-<option value="Sole Proprietor">Sole Proprietor</option>
 <option value="Trust">Trust&#160;&#160;&#160;&#160;&#160;-IT</option>
 </select>
 </div>
@@ -77,7 +76,7 @@
   
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address #2</label>
+<label class="form-label">Email Address</label>
 <input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
 </div>
 <div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
@@ -94,7 +93,7 @@
 
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address #3</label>
+<label class="form-label">Email Address</label>
 <input type="email" class="form-control form-control-default" v-model="form.email_address_3" >
 </div>
 <div v-if="errors.email_address_3" class="text-danger">{{ errors.email_address_3 }}</div>
@@ -531,7 +530,7 @@
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
-<button :disabled="createTask.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center" type="submit">
+<button :disabled="createTask.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Submit</button>
 

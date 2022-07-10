@@ -57,16 +57,6 @@
 <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
 </div>
 
-
-
-<div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.licence_number" >
-</div>
-<div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
-</div>
-
 <div class="col-md-12 columns" v-if="show_current_company">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label mb-4">Current Company</label>
@@ -87,6 +77,7 @@ class="form-label"
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
 
+
 <div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Licence Type *</label>
@@ -99,18 +90,28 @@ class="form-label"
 
 <div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Old Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
-</div>
-<div v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</div>
-</div>  
-<div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled">
 <label class="form-label">Date of Original Issue</label>
 <input type="date" class="form-control form-control-default" v-model="form.licence_date">
 </div>
 <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
 </div>
+
+<div class="col-md-12 columns">
+<div class="input-group input-group-outline null is-filled ">
+<label class="form-label">Licence Number</label>
+<input type="text" class="form-control form-control-default" v-model="form.licence_number" >
+</div>
+<div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
+</div>
+
+<div class="col-md-12 columns">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Old Licence Number</label>
+<input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
+</div>
+<div v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</div>
+</div>  
+
 
 </div>
 
@@ -351,7 +352,7 @@ data-bs-dismiss="alert" aria-label="Close">
 </div>
 
 
-<button type="submit" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center">Save</button>
+<button type="submit" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center">Save</button>
 </form>
 </div>
 </div>
@@ -365,7 +366,7 @@ data-bs-dismiss="alert" aria-label="Close">
 
 <!-- upload doc -->
 
-<div class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -387,18 +388,7 @@ data-bs-dismiss="alert" aria-label="Close">
          {{ originalLicenceForm.progress.percentage }}%
          </progress>
          </div>
-         </div>   
-
-  <div class="col-md-12" v-if="success">
-   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-   <span class="alert-icon"><i class=""></i></span>
-   <span class="alert-text"> 
-   <span class="text-sm">{{ success }}</span></span>
-   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
-    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-    </button>
-    </div>
-    </div>
+         </div>
       </div>
   
       <div class="modal-footer">
@@ -457,6 +447,7 @@ export default {
         let options = props.companies;
         let show_current_company = ref(true);
         let change_company = ref(false);
+        let show_modal = ref(true); 
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -491,6 +482,7 @@ export default {
  
       function getDocType(doc_type){
         this.originalLicenceForm.doc_type = doc_type;
+        this.show_modal = true
       }
 
      function changeCompany(){
@@ -507,7 +499,12 @@ export default {
         function uploadOriginalLicenceDoc(){
           originalLicenceForm.post(`/upload-licence-document`, {
           preserveScroll: true,
-          onSuccess: () => originalLicenceForm.reset()
+          onSuccess: () => { 
+          this.show_modal = false;
+          let dismiss =  document.querySelector('.modal-backdrop')    
+          dismiss.remove();
+          originalLicenceForm.reset();
+         },
         })    
         }
 
@@ -547,6 +544,7 @@ export default {
       showMenu,
       createTask,
       body_max,
+      show_modal,
       show_current_company,
       change_company,
       options,

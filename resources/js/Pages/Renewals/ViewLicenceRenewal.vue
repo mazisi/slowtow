@@ -25,19 +25,18 @@ export default {
   setup (props) {
     const year = ref(new Date().getFullYear());
     const body_max = ref(100);
+    let show_modal = ref(true);  
 
     const form = useForm({
       year: props.renewal.date,
       licence_id: props.renewal.id,
       status: [],
-      is_checked: props.renewal.status,
       client_paid_at: props.renewal.client_paid_at,
       renewal_id: props.renewal.id,
      })
 
     const uploadDoc = useForm({
       document: null,
-      doc_name: null,
       doc_type: null,
       date: null,
       renewal_id: props.renewal.id    
@@ -63,7 +62,8 @@ export default {
       }
 
     function getDocType(doc_type){
-      this.uploadDoc.doc_type = doc_type      
+      this.uploadDoc.doc_type = doc_type 
+      this.show_modal =true   
     }
 
     function deleteDocument(id){
@@ -77,7 +77,12 @@ export default {
     function submitDocument(){
       uploadDoc.post('/submit-renewal-document', {
         preserveScroll: true,
-        onSuccess: () => uploadDoc.reset(),
+        onSuccess: () => { 
+          this.show_modal = false;
+          let dismiss =  document.querySelector('.modal-backdrop')    
+          dismiss.remove();
+          uploadDoc.reset();
+         },
       })
     }
 
@@ -108,14 +113,15 @@ export default {
           }
       }
 
-    return { year,form,body_max,
+    return { year,form,body_max,show_modal,
      updateRenewal,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      computeDocumentDate,deleteDocument,
      createTask,
      submitTask,
-     checkBodyLength}
+     checkBodyLength
+     }
   },
    components: {
     Layout,
@@ -174,7 +180,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-quoted" class="active-checkbox" type="checkbox" 
-:checked="form.is_checked >= '1'"
+:checked="renewal.status >= '1'"
 @input="pushData($event.target.value)" value="1">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
@@ -209,7 +215,7 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
 @input="pushData($event.target.value)" 
-:checked="form.is_checked >= '2'">
+:checked="renewal.status >= '2'">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
@@ -242,7 +248,7 @@ export default {
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
-@input="pushData($event.target.value)" value="3" :checked="form.is_checked >= '3'">
+@input="pushData($event.target.value)" value="3" :checked="renewal.status >= '3'">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -258,7 +264,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="4"
-:checked="form.is_checked >= '4'">
+:checked="renewal.status >= '4'">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
@@ -267,7 +273,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
-@input="pushData($event.target.value)" value="5" :checked="form.is_checked >= '5'">
+@input="pushData($event.target.value)" value="5" :checked="renewal.status >= '5'">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Renewal Issued</label>
 </div>
 </div> 
@@ -309,7 +315,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="delivered" type="checkbox" value="6"
-@input="pushData($event.target.value)" :checked="form.is_checked == '6'">
+@input="pushData($event.target.value)" :checked="renewal.status == '6'">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Renewal Delivered</label>
 </div>
 </div>
@@ -393,7 +399,7 @@ data-bs-dismiss="alert" aria-label="Close">
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center" type="submit">
+<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
   <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   Save
 </button>
@@ -403,7 +409,7 @@ data-bs-dismiss="alert" aria-label="Close">
 </div>
 </div>
 
-<div class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -414,14 +420,6 @@ data-bs-dismiss="alert" aria-label="Close">
       <input type="hidden" v-model="uploadDoc.doc_type">
       <div class="modal-body">      
         <div class="row">
-        <div class="col-md-12 columns">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Document Name</label>
-        <input type="text" required class="form-control form-control-default" 
-         v-model="uploadDoc.doc_name" >
-        </div>
-        <div v-if="errors.doc_name" class="text-danger">{{ errors.doc_name }}</div>
-        </div>
 
         <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
         ">
