@@ -38,6 +38,9 @@ export default{
               nomination_year: props.nomination.year,
               nomination_id: props.nomination.id,
               client_paid_date: props.nomination.client_paid_date,
+              nomination_lodged_at: props.nomination.nomination_lodged_at,
+              nomination_issued_at: props.nomination.nomination_issued_at,
+              nomination_delivered_at: props.nomination.nomination_delivered_at,
               status: [],      
       });
 
@@ -398,14 +401,14 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Signed Nomination Forms </h6>
+      <h6 class="mb-0 text-sm"> Nomination Forms </h6>
        <p v-if="nomination_forms !== null" class="mb-0 text-xs">{{ nomination_forms.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="nomination_forms !== null" @click="deleteDocument(nomination_forms.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Forms Signed')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -465,14 +468,14 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">ID Documents certified</h6>
+      <h6 class="mb-0 text-sm">ID Documents</h6>
        <p v-if="certified_id_doc !== null" class="mb-0 text-xs">{{ certified_id_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="certified_id_doc !== null" @click="deleteDocument(certified_id_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Certified ID')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -487,7 +490,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Police Clearances Certified</h6>
+      <h6 class="mb-0 text-sm">Police Clearances </h6>
        <p v-if="police_clearance_doc !== null" class="mb-0 text-xs">{{ police_clearance_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
@@ -535,7 +538,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 </div>
 </div>
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded !== null">
@@ -547,7 +550,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
       <h6 class="mb-0 text-sm">Document</h6>
        <p v-if="nomination_logded !== null" class="mb-0 text-xs">{{ nomination_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      <p v-if="nomination_logded !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(nomination_logded.date) }}</p>
+      <p v-if="nomination_logded !== null" class="mb-0 text-xs"></p>
     </div>
     <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
@@ -557,6 +560,15 @@ class="material-icons-round text-secondary fs-10">visibility</i>
   </li>  
 </ul>
 </div>
+
+ <div class="col-md-6 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Date</label>
+  <input type="date" class="form-control form-control-default" 
+    v-model="updateForm.nomination_lodged_at" >
+  </div>
+  <div v-if="errors.nomination_lodged_at" class="text-danger">{{ errors.nomination_lodged_at }}</div>
+ </div>
 <hr>
 
 
@@ -570,7 +582,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 </div>
 </div>
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
@@ -591,6 +603,14 @@ class="material-icons-round text-secondary fs-10">visibility</i>
   </li>  
 </ul>
 </div>
+<div class="col-md-6 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Date</label>
+  <input type="date" class="form-control form-control-default" 
+    v-model="updateForm.nomination_issued_at" >
+  </div>
+  <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
+ </div>
 <hr>
 
 
@@ -604,7 +624,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 </div>
 </div> 
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
@@ -616,7 +636,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
       <h6 class="mb-0 text-sm">Document</h6>
        <p v-if="nomination_delivered !== null" class="mb-0 text-xs">{{ nomination_delivered.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      <p v-if="nomination_delivered !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(nomination_delivered.date) }}</p>
+      <p v-if="nomination_delivered !== null" class="mb-0 text-xs"></p>
     </div>
     <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
@@ -626,6 +646,15 @@ class="material-icons-round text-secondary fs-10">visibility</i>
   </li>   
 </ul>
 </div>
+
+<div class="col-md-6 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Date</label>
+  <input type="date" class="form-control form-control-default" 
+    v-model="updateForm.nomination_delivered_at" >
+  </div>
+  <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
+ </div>
 <hr>
 
 <!-- <div class="col-md-6 columns">
@@ -757,7 +786,10 @@ mode="tags"
       <div class="modal-body">      
         <div class="row">
 
-        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'">
+        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
+        && uploadDoc.doc_type !== 'Nomination Lodged'
+        && uploadDoc.doc_type !== 'Nomination Issued'
+        && uploadDoc.doc_type !== 'Nomination Delivered'">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
         <input type="date" required class="form-control form-control-default" 

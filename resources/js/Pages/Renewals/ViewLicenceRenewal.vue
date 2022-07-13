@@ -19,7 +19,8 @@ export default {
     client_invoiced: Object,//doc
     renewal_issued: Object,//doc
     client_quoted: Object,//doc
-    renewal_doc: Object
+    renewal_doc: Object,
+    liqour_board: Object
   },
 
   setup (props) {
@@ -32,6 +33,8 @@ export default {
       licence_id: props.renewal.id,
       status: [],
       client_paid_at: props.renewal.client_paid_at,
+      renewal_issued_at: props.renewal.renewal_issued_at,
+      renewal_delivered_at: props.renewal.renewal_delivered_at,
       renewal_id: props.renewal.id,
      })
 
@@ -268,15 +271,48 @@ export default {
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
+
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="liqour_board !== null">
+    <a :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
+      <p v-if="liqour_board !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(liqour_board.date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
 <hr>
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
 @input="pushData($event.target.value)" value="5" :checked="renewal.status >= '5'">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Renewal Issued</label>
 </div>
 </div> 
+
+<div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.renewal_issued_at">
+     </div>
+   <div v-if="errors.renewal_issued_at" class="text-danger">{{ errors.renewal_issued_at }}</div>
+   </div>
 
 <!-- <div class="col-md-6 columns">
 <Datepicker v-model="form.year" yearPicker />
@@ -312,13 +348,21 @@ export default {
 
 
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="delivered" type="checkbox" value="6"
 @input="pushData($event.target.value)" :checked="renewal.status == '6'">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Renewal Delivered</label>
 </div>
 </div>
+
+<div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+     </div>
+   <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+   </div>
 
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -422,7 +466,8 @@ data-bs-dismiss="alert" aria-label="Close">
         <div class="row">
 
         <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
-        ">
+        && uploadDoc.doc_type !== 'Renewal Issued'
+        && uploadDoc.doc_type !== 'Renewal Delivered'">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
         <input type="date" required class="form-control form-control-default" 
@@ -443,17 +488,6 @@ data-bs-dismiss="alert" aria-label="Close">
          </progress>
          </div>
          </div>   
-
-  <div class="col-md-12" v-if="message">
-   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-   <span class="alert-icon"><i class=""></i></span>
-   <span class="alert-text"> 
-   <span class="text-sm">{{ message }}</span></span>
-   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
-    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-    </button>
-    </div>
-    </div>
       </div>
   
       <div class="modal-footer">

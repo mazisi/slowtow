@@ -46,9 +46,9 @@ class NominationController extends Controller
             "slug" => sha1(time())
         ]);
         if($nom){ 
-           return back()->with('success','Nomination created successfully.');
+           return to_route('view_nomination',['slug' => $nom->slug])->with('success','Nomination created successfully.');
          }
-         return back()->with('error','Error creating nomination.');
+         return to_route('view_nomination',['slug' => $nom->slug])->with('error','Error creating nomination.');
     }
     /**
      * Get all nominations belonging to a certain licence.
@@ -70,10 +70,10 @@ class NominationController extends Controller
 $client_quoted = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Quoted')->first();
 $client_invoiced = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Invoiced')->first();
 $liquor_board = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Payment To The Liquor Board')->first();
-$nomination_forms = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Forms Signed')->first();
+$nomination_forms = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Forms')->first();
 $proof_of_payment = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Proof of Payment')->first();
 $attorney_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Power of Attorney')->first();
-$certified_id_doc =  NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Certified ID')->first();
+$certified_id_doc =  NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','ID Document')->first();
 $police_clearance_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Police Clearances')->first();
 $latest_renewal_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Latest Renewal/Licence')->first();
 $nomination_logded = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Lodged')->first();
@@ -130,7 +130,10 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         $nom->update([
             "year" => $request->nomination_year,
             "status" => $status,
-            "client_paid_date" => $request->client_paid_date
+            "client_paid_date" => $request->client_paid_date,
+            "nomination_lodged_at" => $request->nomination_lodged_at,
+            "nomination_issued_at" => $request->nomination_issued_at,
+            "nomination_delivered_at" => $request->nomination_delivered_at
         ]);
         if($nom){
            return back()->with('success','Nomination updated succesfully.');

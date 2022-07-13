@@ -36,6 +36,7 @@
   <table class="table table-striped table-hover">
 <thead>
 <tr>
+<th>Active</th>
 <th>Trading Name</th>
 <th>Licence Number</th>
 <th>Licence Date</th>
@@ -46,6 +47,8 @@
 </thead>
 <tbody>
 <tr v-for="licence in licences" :key="licence.id">
+<td v-if="licence.is_licence_active == '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
+<td v-else><i class="fa fa-timex text-danger" aria-hidden="true"></i></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>

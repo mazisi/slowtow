@@ -61,14 +61,14 @@
 <label class="form-label">Company Type </label>
 <select class="form-control form-control-default" v-model="form.company_type">
 <option value="Association">Association</option>
-<option value="Close Corporation -CC">Close Corporation&#160;&#160;&#160;&#160;&#160;-CC</option>
+<option value="Close Corporation -CC">Close Corporation&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-CC</option>
 <option value="Individual">Individual</option>
-<option value="Non-profit Organization -(NPO)">Non-profit Organization&#160;&#160;&#160;&#160;&#160;-NPO</option>
+<option value="Non-profit Organization -(NPO)">Non-profit Organization&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-NPO</option>
 <option value="Partnership">Partnership</option>
-<option value="Private Company  -(Proprietary) Limited">Private Company&#160;&#160;&#160;&#160;&#160;-(Proprietary) Limited</option>
-<option value="Public Company">Public Company&#160;&#160;&#160;&#160;&#160;-Limited</option>
+<option value="Private Company  -(Proprietary) Limited">Private Company&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-  (Proprietary) Limited</option>
+<option value="Public Company">Public Company&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-Limited</option>
 <option value="Sole Proprietor">Sole Proprietor</option>
-<option value="Trust">Trust&#160;&#160;&#160;&#160;&#160;-IT</option>
+<option value="Trust">Trust&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-IT</option>
 </select>
 </div>
 <div v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</div>
@@ -471,9 +471,9 @@
     </div>
       </div>
     </td>
-    <td class="text-center">
-    <div class="input-group input-group-outline null is-filled">
-    <div class="mb-3">
+    <td class="mx-8">
+    <div class="input-group input-group-outline null mx-5 is-filled">
+    <div class="mb-3 mx-10">
   <input :value="person.pivot.position" @input="getPositionValue($event.target.value)"
   name="position" class="form-control form-control-sm form-control-default" id="formFileSm" type="text">
 </div>
@@ -541,7 +541,7 @@
 </div>
 </div>
 
-<div class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -573,17 +573,6 @@
          </progress>
          </div>
          </div>   
-
-  <div class="col-md-12" v-if="success">
-   <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-   <span class="alert-icon"><i class=""></i></span>
-   <span class="alert-text"> 
-   <span class="text-sm">{{ success }}</span></span>
-   <button type="button" class="btn-close d-flex justify-content-center align-items-center"
-    data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true" class="text-lg font-weight-bold">×</span>
-    </button>
-    </div>
-    </div>
       </div>
   
       <div class="modal-footer">
@@ -756,14 +745,18 @@ export default {
       function submitDocuments(){
           documentsForm.post(`/submit-company-documents`, {
           preserveScroll: true,
-          onSuccess: (page) => {
+          onSuccess: () => {
             documentsForm.reset();
+           this.show_modal = false;
+           let dismiss =  document.querySelector('.modal-backdrop')    
+           dismiss.remove();
           },
         })    
         }
 
       function getDocType(doc_type){
         this.documentsForm.doc_type = doc_type;
+        this.show_modal = true
       }
 
       function deleteDocument(id){

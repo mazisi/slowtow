@@ -49,6 +49,7 @@ class LicenceRenewalController extends Controller
         $renewal_issued = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Issued')->first();
         $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
         $renewal_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Delivered')->first();
+        $liqour_board = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Payment To The Liquor Board')->first();
         $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->whereUserId(auth()->id())->get();
         return Inertia::render('Renewals/ViewLicenceRenewal',[
             'renewal' => $renewal,
@@ -56,7 +57,8 @@ class LicenceRenewalController extends Controller
             'client_invoiced' => $client_invoiced,
             'renewal_issued' => $renewal_issued,
             'client_quoted'  => $client_quoted,
-            'renewal_doc' => $renewal_doc
+            'renewal_doc' => $renewal_doc,
+            'liqour_board' => $liqour_board
         ]);
     }
 
@@ -88,7 +90,9 @@ class LicenceRenewalController extends Controller
        $ren->update([
         'date' => $request->year,
         'status' => $status,
-        'client_paid_at' => $request->client_paid_at
+        'client_paid_at' => $request->client_paid_at,
+        'renewal_issued_at' => $request->renewal_issued_at,
+        'renewal_delivered_at' => $request->renewal_delivered_at
        ]);
        if($ren){
         return back()->with('success','Renewal updated successfully.');
