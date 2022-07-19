@@ -18,8 +18,12 @@ class LoginController extends Controller
  
         if (Auth::attempt($credentials,$request->remember)) {
             $request->session()->regenerate();
- 
-            return redirect()->intended('dashboard');
+            if(auth()->user()->hasRole('company-admin')){
+                return to_route('company_dashboard');
+            }else{
+                return to_route('slowtow_dashboard');
+            }
+            
         }
  
         return back()->withErrors([

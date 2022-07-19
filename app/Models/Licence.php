@@ -35,7 +35,7 @@ class Licence extends Model
 
     public function licence_type()
     {
-       return $this->hasOne(LicenceType::class,'id');
+       return $this->belongsTo(LicenceType::class);
     }
 
     public function licence_renewals()

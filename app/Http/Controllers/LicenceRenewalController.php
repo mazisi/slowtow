@@ -124,7 +124,7 @@ class LicenceRenewalController extends Controller
     public function deleteDocument($id){
         $model = RenewalDocument::find($id);
         if(!is_null($model->document)){
-            unlink(public_path('storage/'.$model->document));
+            unlink(public_path('storage/app/public/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

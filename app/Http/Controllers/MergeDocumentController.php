@@ -2,27 +2,38 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\MergedDocument;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 use App\Models\NominationDocument;
-use setasign\Fpdi\Fpdi;
 
 class MergeDocumentController extends Controller{
 
-    public function merge($id){ 
+    public function merge($id){
 
        $nominations =  NominationDocument::where('nomination_id',$id)->get();
 
           $merger = PDFMerger::init();
 
+          $exist = MergedDocument::where('nomination_id',$id)->first();
+          if ($exist) {
+            unlink(storage_path('/app/public/'.$exist->file_name));
+            $exist->delete();
+          }
+
           foreach ($nominations as $nom) {
-            $merger->addPDF(public_path('/storage/').$nom->document, 'all');
+            $merger->addPDF(storage_path('/app/public/').$nom->document, 'all');
           }
           $fileName = time().'.pdf';
           $merger->merge();
 
-          $merger->save(public_path($fileName));
-        
-          return response()->download(public_path($fileName));
+          $store_merged_file = MergedDocument::create([
+            'file_name' => $fileName,'nomination_id' => $id]);
+
+          $merger->save(storage_path('/app/public/'.$fileName));
+          if($store_merged_file){
+            return back()->with('success','Document merged successfully.');
+          }        
+          return back()->with('error','Error uploading document.');
 
     }
 

@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 class HandleInertiaRequests extends Middleware
@@ -38,6 +39,9 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => $request->user(),
+                'has_slowtow_admin_role' => (Auth::check()) ? $request->user()->hasRole('slowtow-admin') : null,
+                'has_company_admin_role' => (Auth::check()) ? $request->user()->hasRole('company-admin') : null,
+                
             ],
             'ziggy' => function () {
                 return (new Ziggy)->toArray();

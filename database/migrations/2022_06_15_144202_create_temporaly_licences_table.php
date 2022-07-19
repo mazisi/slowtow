@@ -15,9 +15,8 @@ return new class extends Migration
     {
         Schema::create('temporal_licences', function (Blueprint $table) {
             $table->id();
-            $table->string('belongs_to')->nullable();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
-            $table->foreignId('consultant_id')->constrained()->onDelete('cascade');
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('people_id')->nullable()->constrained()->onDelete('cascade');
             $table->string('liquor_licence_number')->nullable();
             $table->string('active')->nullable();
             $table->date('start_date')->nullable();

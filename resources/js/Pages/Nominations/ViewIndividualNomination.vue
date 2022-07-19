@@ -118,7 +118,7 @@ export default{
 
 
       function updateNomination() {
-          updateForm.post(`/update-nominee`)
+          updateForm.patch(`/update-nominee`)
       }
 
       // const mergeDocument = () => {
@@ -269,7 +269,7 @@ export default{
 </div>
 
 <hr>
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-paid" type="checkbox" @input="pushData($event.target.value)"
 :checked="nomination.status >= '3'" value="3" class="active-checkbox">
@@ -277,13 +277,17 @@ export default{
 </div>
 </div>
 
- <div class="col-md-6 columns">
+ <div class="col-md-5 columns">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
   <input type="date" class="form-control form-control-default" 
     v-model="updateForm.client_paid_date" >
   </div>
   <div v-if="errors.client_paid_date" class="text-danger">{{ errors.client_paid_date }}</div>
+ </div>
+<div class="col-md-1"></div>
+ <div class="col-md-1 columns">
+  <button @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
 <hr>
 
@@ -525,8 +529,17 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 </ul>
 </div>
 
-<div class="text-end">
-<a :href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary">Compile &amp; Merge</a>
+<div class="text-end ">
+<Link v-if="latest_renewal_doc !== null
+&& police_clearance_doc !== null
+&& certified_id_doc !== null
+&& attorney_doc !== null
+&& proof_of_payment !== null
+&& nomination_forms !== null" 
+:href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
+</Link>
+<a v-if="nomination.merged_document !== null" 
+:href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
 <hr>
 

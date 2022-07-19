@@ -63,7 +63,7 @@ class NominationController extends Controller
      * Vue nominee.
      */
     public function viewIndividualNomination($slug){
-        $nomination = Nomination::with('licence','people')->whereSlug($slug)->first();
+        $nomination = Nomination::with('licence','people','merged_document')->whereSlug($slug)->first();
         $nominees = People::pluck('full_name','id');
         $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->whereUserId(auth()->id())->get();
         
@@ -185,7 +185,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     public function deleteDocument($id){
         $model = NominationDocument::find($id);
         if(!is_null($model->document)){
-            unlink(public_path('storage/'.$model->document));
+            unlink(public_path('storage/app/public/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

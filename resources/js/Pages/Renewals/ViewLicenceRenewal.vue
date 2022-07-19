@@ -248,13 +248,14 @@ export default {
 </ul>
 <hr>
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
 @input="pushData($event.target.value)" value="3" :checked="renewal.status >= '3'">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
+<div class="col-md-1 columns"></div>
  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
@@ -262,7 +263,11 @@ export default {
      </div>
    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
    </div> 
-<hr>
+   
+<div class="col-md-1 columns">
+    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+   <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">

@@ -17,8 +17,8 @@ export default {
         start_date: null,
         end_date: null,
         company: null,
-        consultant: null,
-        belongs_to: ''
+        person: null,
+        belongs_to: null
     },
     options: this.companies,
     persons: this.people,
@@ -130,13 +130,13 @@ export default {
   <div class="col-md-4 columns" v-if="form.belongs_to =='Person'">
     <div class="input-group input-group-outline null is-filled ">
      <Multiselect
-       v-model="form.consultant"
+       v-model="form.person"
         placeholder="Search Person..."
         :options="persons"
         :searchable="true"
       />
   </div>
-  <div v-if="errors.consultant" class="text-danger">{{ errors.consultant }}</div>
+  <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
   </div>
 
 

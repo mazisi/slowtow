@@ -110,7 +110,7 @@ export default {
 methods: {
   deleteSingleContact(id){
     if(confirm('Are you sure??')){
-        this.$inertia.post(`/delete-contact/${id}`)
+        this.$inertia.delete(`/delete-contact/${id}`)
     }
   },
   clearAll(){

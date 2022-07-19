@@ -9,12 +9,27 @@
 <template>
   <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      <li class=" nav-item">
+      <li class=" nav-item" v-if="$page.props.auth.has_company_admin_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'dashboard'}"
+          :class="{ active:  $page.props.currentRoute == 'company_dashboard'}"
+          collapseRef="/company/dashboard"
+          navText="Dashboard"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">dashboard</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li class=" nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'slowtow-admin-dashboard'}"
           collapseRef="/dashboard"
           navText="Dashboard"
         >
@@ -24,21 +39,51 @@
         </sidenav-collapse>
       </li>
 
-       <li class="nav-item">
+       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'licences'}"
           collapseRef="/licences"
-          navText="Licences"
-        >
+          navText="Licences">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
           </template>
         </sidenav-collapse>
       </li>
-      <li class="nav-item">
+
+      <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'licences'}"
+          :collapseRef="route('company_admin_licences')"
+          navText="Licences">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+
+
+      <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'my_companies'}"
+          collapseRef="/company/my-companies"
+          navText="Companies">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">table_view</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -54,6 +99,8 @@
       </li>
 
       
+
+
  <li class="nav-item">
         <sidenav-collapse
           url="#"
@@ -70,7 +117,24 @@
         </sidenav-collapse>
   </li>
 
-   <li class="nav-item">
+   <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'my_temp_licences'}"
+          collapseRef="/company/my-temp-licences"
+          navText="Temporary Licences">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5"
+              >timer</i
+            >
+          </template>
+        </sidenav-collapse>
+  </li>
+
+
+   <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"

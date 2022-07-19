@@ -16,7 +16,7 @@
 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
 </a>
 <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
-<li><Link :href="`#!`" @click="triggerModal" data-bs-toggle="modal" data-bs-target="#add-user" class="dropdown-item border-radius-md">Add User</Link></li>
+<li><Link :href="`#!`" @click="show_modal=true" data-bs-toggle="modal" data-bs-target="#add-company-admin" class="dropdown-item border-radius-md">Add Company Admin</Link></li>
 
 <li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
 </ul>
@@ -623,6 +623,41 @@
   </div>
 </div>
 
+<div v-if="show_modal" class="modal" id="add-company-admin" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add <span class="text-success">{{ company.name }}</span> Admin</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="addCompanyUser">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns">
+          <div class="input-group input-group-outline null is-filled">
+            <Multiselect
+                v-model="addCompanyUserForm.person_id"
+                placeholder="Search Person...."
+                :options="people_options"
+                :searchable="true"
+              />
+            </div>
+        <div v-if="errors.person_id" class="text-danger">{{ errors.person_id }}</div>
+        </div>
+         </div>   
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-secondary" :disabled="addCompanyUserForm.processing">
+         <span v-if="addCompanyUserForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 </Layout>
 </template>
@@ -709,9 +744,24 @@ export default {
             company_id: props.company.id,
       })
 
+
       const addPeopleForm = useForm({
           people: [],
         })
+
+//Add company admin
+        const addCompanyUserForm = useForm({person_id: null, company_id: props.company.id })
+        function addCompanyUser(){
+        addCompanyUserForm.post(`/add-company-admin`, {
+        preserveScroll: true,
+           onSuccess: () => { 
+            this.show_modal = false;
+            let dismiss =  document.querySelector('.modal-backdrop') 
+            dismiss.remove();
+            addCompanyUserForm.reset();
+           },
+          }) 
+      } 
 
       const editPerson = useForm({position: null,})
         
@@ -801,9 +851,7 @@ export default {
         }
       }
 
-      function addUser(){
-        this.$inertia.post('/add-company-admin', this.addUserForm)
-      } 
+      
 
       function assignActiveValue(event){
         this.form.active = event
@@ -822,7 +870,8 @@ export default {
       submitTask,
       deleteTask,
       checkBodyLength,
-      addUser,
+      addCompanyUser,
+      addCompanyUserForm,
       unlinkPerson,
       assignActiveValue,
       redirectToWebsite,

@@ -95,7 +95,7 @@ class TemporalLicenceController extends Controller
 
     public function create() {
         $companies = Company::pluck('name','id');
-        $people = Consultant::pluck('first_name','id');
+        $people = People::pluck('full_name','id');
         return Inertia::render('TemporalLicences/CreateTemporalLicence',['companies' => $companies,'people' => $people]);
     }
 
@@ -106,25 +106,23 @@ class TemporalLicenceController extends Controller
            'end_date' => 'required|date',
            'belongs_to' => 'required|in:Person,Company'
            ]);
-           if(is_null($request->consultant)){
+           if(is_null($request->person)){
             $request->validate(['company' => 'required']);
             $temp = TemporalLicence::create([
                 'company_id' => $request->company,
                 'liquor_licence_number' => $request->liquor_licence_number,
                 'end_date' => $request->end_date,
                 'start_date' => $request->start_date,
-                'belongs_to' => $request->belongs_to,
                 'slug' => sha1(time()),
                 ]);
 
-           }elseif($request->belongs_to == 'Person'){
-            $request->validate(['consultant' => 'required']);
+           }else{
+            $request->validate(['person' => 'required|exists:people,id']);
             $temp = TemporalLicence::create([
-                'consultant_id' => $request->consultant,
+                'people_id' => $request->person,
                 'liquor_licence_number' => $request->liquor_licence_number,
                 'end_date' => $request->end_date,
                 'start_date' => $request->start_date,
-                'belongs_to' => $request->belongs_to,
                 'slug' => sha1(time()),
                 ]);
 

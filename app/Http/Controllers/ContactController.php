@@ -56,7 +56,7 @@ class ContactController extends Controller{
     
     }
 
-    public function destroy($id){
+    public function destroy($id){dd($id);
        $contact = Contact::find($id);
        if($contact->delete()){
         return redirect(route('contacts'))->with('success','Contact deleted successfully.');

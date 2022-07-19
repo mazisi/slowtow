@@ -32,11 +32,14 @@ use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 //         'phpVersion' => PHP_VERSION,
 //     ]);
 // });
+
+Route::group([], __DIR__.'/company_admin.php');
+
 Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
 
-Route::get('/dashboard', function () {
+Route::get('/slowtow-admin-dashboard', function () {
     return Inertia::render('Dashboard');
-})->name('dashboard');
+})->name('slowtow_dashboard');
 
 Route::group(['middleware' => ['guest']], function () { 
  Route::get('/',function(){return Inertia::render('Auth/Login');})->name('home');
@@ -45,6 +48,7 @@ Route::group(['middleware' => ['guest']], function () {
 });
 
 Route::group(['middleware' => ['auth']], function () { 
+    
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
         //update password
         Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
@@ -106,7 +110,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
-        Route::get('/delete-contact/{id}',[ContactController::class,'destroy'])->name('delete_contact');
+        Route::delete('/delete-contact/{id}',[ContactController::class,'destroy'])->name('delete_contact');
         Route::delete('/delete-all-contacts',[ContactController::class,'destroyAll'])->name('delete__all_contacts');
 
         //Reports
@@ -136,7 +140,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/nominations',[NominationController::class,'index'])->name('nominations');
         Route::get('/view-nomination/{slug}',[NominationController::class,'viewIndividualNomination'])->name('view_nomination');
         Route::post('/terminate-person/{id}/{slug}', [NominationController::class,'terminate'])->name('terminate_person');
-        Route::post('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
+        Route::patch('/update-nominee',[NominationController::class,'update'])->name('update_nominee');
         Route::post('/add-selected-nominees',[NominationController::class,'addSelectedNominees']);
         Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController::class,'detachNominee']);
         Route::post('/submit-nomination-document',[NominationController::class,'uploadDocument']);

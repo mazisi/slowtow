@@ -19,4 +19,9 @@ class Nomination extends Model
     public function licence(){
         return $this->belongsTo(Licence::class);
     }
+
+    public function merged_document()
+    {
+        return $this->hasOne(MergedDocument::class);
+    }
 }

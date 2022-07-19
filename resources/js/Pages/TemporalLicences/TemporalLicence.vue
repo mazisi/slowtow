@@ -38,6 +38,7 @@ methods: {
 <style>
 #with-thrashed{
   margin-left: 3px;
+  margin-top: -10px;
 }</style>
 <template>
 <Layout>

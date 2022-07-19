@@ -60,7 +60,6 @@ class PersonController extends Controller
         'email_address_2' => $request->email_address_2,
         'cell_number' => $request->cell_number,
         'telephone' => $request->telephone,
-        'position' => $request->position,
         'passport_valid_until' => $request->passport_valid_until,
          'slug' => Str::replace(' ','_',$request->name).' '.Str::replace(' ','_',$request->surname).'_'.sha1(time()),
         ]);
