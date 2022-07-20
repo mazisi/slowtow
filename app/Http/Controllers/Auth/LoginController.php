@@ -31,8 +31,18 @@ class LoginController extends Controller
         ])->onlyInput('email');
     }
 
-    public function logout(Request $request)
+/**
+ * Decide dashboard if user is  authenticated
+ */
+    public function redirect_to_dash()
     {
+        if(auth()->user()->hasRole('company-admin')){
+            return to_route('company_dashboard');
+        }else{
+            return to_route('slowtow_dashboard');
+        }
+    }
+    public function logout(Request $request){
         Auth::logout();
      
         $request->session()->invalidate();

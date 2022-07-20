@@ -24,14 +24,6 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\MergeDocumentController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 
-// Route::get('/', function () {
-//     return Inertia::render('Welcome', [
-//         'canLogin' => Route::has('login'),
-//         'canRegister' => Route::has('register'),
-//         'laravelVersion' => Application::VERSION,
-//         'phpVersion' => PHP_VERSION,
-//     ]);
-// });
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -41,15 +33,20 @@ Route::get('/slowtow-admin-dashboard', function () {
     return Inertia::render('Dashboard');
 })->name('slowtow_dashboard');
 
+Route::get('/dashboard',[LoginController::class,'redirect_to_dash'])->name('dashboard');
+
 Route::group(['middleware' => ['guest']], function () { 
+
  Route::get('/',function(){return Inertia::render('Auth/Login');})->name('home');
 
   Route::post('/login',[LoginController::class,'authenticate'])->name('login');
 });
 
+
 Route::group(['middleware' => ['auth']], function () { 
-    
-        Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+    Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+    Route::group(['middleware' => ['role:slowtow-admin']], function () {
+        
         //update password
         Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
         Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');
@@ -168,3 +165,4 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('email-comms/filter-by-month', [EmailCommsController::class,'index']);
         
     });
+});

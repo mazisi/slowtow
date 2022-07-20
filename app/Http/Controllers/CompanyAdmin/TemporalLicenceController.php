@@ -8,12 +8,13 @@ use App\Models\Company;
 use App\Models\Consultant;
 use App\Models\TemporalLicence;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class TemporalLicenceController extends Controller
 {
-    public function index(){
-       $licences = TemporalLicence::where('people_id',auth()->user()->people_id)->get();  dd($licences);
-        return Inertia::render('CompanyAdminDash/TemporalLicence',['licences' => $licences]);
+    public function index(Request $request){
+        $licences = TemporalLicence::with('company','people')->where('people_id',auth()->user()->people_id)->get();
+        return Inertia::render('CompanyAdminDash/Licences/TemporalLicence',['licences' => $licences]);
     }
 
     public function create() {

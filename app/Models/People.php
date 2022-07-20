@@ -24,4 +24,10 @@ class People extends Model
     {
         return $this->hasMany(PeopleDocument::class);
     }
+
+    public function temporal_licences()
+    {
+        return $this->hasMany(TemporalLicence::class);
+    }
+
 }

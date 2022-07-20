@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class InsertTypesController extends Controller
 {
-  public function insert(){
+  public function insert(){dd('ok');
   $inserts = collect([ 
   ["type" => "Club liquor licence"],
   ["type" => "Dance Hall liquor licence"],
