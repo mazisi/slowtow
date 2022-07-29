@@ -92,7 +92,9 @@ class LicenceRenewalController extends Controller
         'status' => $status,
         'client_paid_at' => $request->client_paid_at,
         'renewal_issued_at' => $request->renewal_issued_at,
-        'renewal_delivered_at' => $request->renewal_delivered_at
+        'renewal_delivered_at' => $request->renewal_delivered_at,
+        'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at
+        
        ]);
        if($ren){
         return back()->with('success','Renewal updated successfully.');

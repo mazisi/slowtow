@@ -133,7 +133,9 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             "client_paid_date" => $request->client_paid_date,
             "nomination_lodged_at" => $request->nomination_lodged_at,
             "nomination_issued_at" => $request->nomination_issued_at,
-            "nomination_delivered_at" => $request->nomination_delivered_at
+            "nomination_delivered_at" => $request->nomination_delivered_at,
+            "payment_to_liquor_board_at" => $request->payment_to_liquor_board_at
+            
         ]);
         if($nom){
            return back()->with('success','Nomination updated succesfully.');

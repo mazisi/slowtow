@@ -24,13 +24,25 @@ class CompanyController extends Controller
                ->whereNotNull('active');
         })->get();
 
-        // $companies = Company::with(["company","licence_type"])
-        //          ->whereNotNull('is_licence_active')
-        //         ->where(function($query) use($request){
-        //         $query->where('trading_name','LIKE','%'.$request->term.'%')
-        //         ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-        //         ->orWhere('old_licence_number','LIKE','%'.$request->term.'%');
-        //         })->get();
+    }elseif(!empty($request->term) && $request->active_status == 'Active' && !empty($request->company_type)){
+            $companies = Company::where(function($query) use($request){
+                                $query->where('name','LIKE','%'.$term.'%')
+                                ->whereNull('active')
+                                ->orWhere('company_type','LIKE','%'.$request->company_type.'%')
+                                ->orWhere('reg_number','LIKE','%'.$request->term.'%');
+                                })->get();
+
+    }elseif(empty($request->term) && $request->active_status == 'Inactive' && !empty($request->company_type)){
+        $companies = Company::whereNull('active')
+                            ->where(function($query) use($request){
+                                $query->where('company_type','LIKE','%'.$request->company_type.'%')
+                            ->orWhere('reg_number','LIKE','%'.$request->term.'%')
+                            ->where('name','LIKE','%'.$request->term.'%');
+                                })->get();
+
+    }elseif(empty($request->term) && !empty($request->company_type) && $request->active_status == ''){
+        $companies = Company::where('company_type','LIKE','%'.$request->company_type.'%')->get();
+
     }elseif($request->active_status == "All" && empty($request->term)){
         $companies = Company::get();
     }elseif(!empty($request->term) && empty($request->active_status) ){

@@ -33,6 +33,7 @@ export default {
       licence_id: props.renewal.id,
       status: [],
       client_paid_at: props.renewal.client_paid_at,
+      payment_to_liquor_board_at: props.renewal.payment_to_liquor_board_at,
       renewal_issued_at: props.renewal.renewal_issued_at,
       renewal_delivered_at: props.renewal.renewal_delivered_at,
       renewal_id: props.renewal.id,
@@ -269,13 +270,28 @@ export default {
    </div>
    <hr>
 
-<div class="col-md-12 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="4"
 :checked="renewal.status >= '4'">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
+
+<div class="col-md-1 columns"></div>
+ <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
+     </div>
+   <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+   </div> 
+   <div class="col-md-1 columns">
+    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+
+
+
 
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">

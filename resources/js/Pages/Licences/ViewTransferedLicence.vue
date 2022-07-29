@@ -135,17 +135,31 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
  value="1" :checked="view_transfer.status >= '1'">
-<label class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
+<label class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div>     
+
+
 <hr>
+
 <div class="col-md-12 columns">
-<div class="form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label mb-0 text-body text-truncate">Scanned Deposit Invoice</label>
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="2" :checked="view_transfer.status >= '2'">
+<label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div> 
 
 <hr>
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" type="checkbox" @input="pushData($event.target.value)" 
+ value="3" :checked="view_transfer.status >= '3'">
+<label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+</div>
+</div> 
+
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">

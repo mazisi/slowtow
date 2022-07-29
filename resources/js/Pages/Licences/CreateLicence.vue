@@ -23,7 +23,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active</label>
-<input id="active-checkbox" type="checkbox" value="1" v-model="form.is_licence_active">
+<input id="active-checkbox" type="checkbox" value="1" :checked="form.is_licence_active == '1'" >
 </div>
 </div>
 
@@ -185,7 +185,7 @@ export default {
     const form = useForm({
           trading_name: '',
           licence_type: '',
-          is_licence_active: '',
+          is_licence_active: '1',
           licence_number: '',
           old_licence_number: '',
           licence_date: null,

@@ -9,17 +9,19 @@
 <div class="col-12">
 <form>
 <div class="row">
-<div class="col-md-6 col-xl-4 col-lg-6">
+<div class="col-md-1 col-xl-1 col-lg-1"><i class="fa fa-search" aria-hidden="true"></i></div>
+<div class="col-md-10 col-xl-10 col-lg-10">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Search Licence </label>
 <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
 </div>
 </div>
 <div class="col-1"></div>
-<div class="col-md-6 col-xl-2 col-lg-2">
+<div class="col-1"></div>
+<div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Filter: </label>
 <select @change="search" v-model="active_status" class="form-control form-control-default">
+<option :value="''" disabled selected>Act/Iact</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
 <option value="Inactive">Inactive</option>
@@ -28,19 +30,19 @@
 </div>
 </div>
 
-<div class="col-md-6 col-xl-3 col-lg-3">
+<div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Filter By Licence Type: </label>
 <select @change="search" v-model="licence_type" class="form-control form-control-default">
+<option :value="''" disabled selected>Licence Type</option>
 <option v-for='licence_type in all_licence_types' :value=licence_type.id> {{ licence_type.licence_type }}</option>
 </select>
 </div>
 </div>
 
-<div class="col-md-6 col-xl-2 col-lg-2">
+<div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Filter By Licence Date: </label>
 <select @change="search" v-model="licence_date" class="form-control form-control-default">
+<option :value="''" disabled selected>Licence Date</option>
 <option value="01">January</option>
 <option value="02">February</option>
 <option value="03">March</option>
@@ -56,7 +58,7 @@
 </select>
 </div>
 </div>
-
+<div class="col-md-1 col-xl-1 col-lg-1 filters"></div>
 
 
 </div>
@@ -72,7 +74,7 @@
 <th>Trading Name</th>
 <th>Licence Number</th>
 <th>Licence Date</th>
-<th class="text-center">Licence Type</th>
+<th>Licence Type</th>
 <th>Company</th>
 <th>View</th>
 </tr>
@@ -84,7 +86,7 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>
-<td class="text-center"><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
+<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company.name }}</Link></td>
 <td class="text-center">
 <Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
@@ -103,7 +105,9 @@
 </template>
 
 <style>
-
+.filters{
+ margin-top: 10px;
+}
   .table thead th {
     padding: 0;
     }

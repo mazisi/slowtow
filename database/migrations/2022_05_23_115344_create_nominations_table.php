@@ -23,6 +23,7 @@ return new class extends Migration
             $table->date('nomination_lodged_at')->nullable();
             $table->date('nomination_issued_at')->nullable();
             $table->date('nomination_delivered_at')->nullable();
+            $table->date('payment_to_liquor_board_at')->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

@@ -326,6 +326,14 @@
 <hr>
 
 <div class="col-12 columns">            
+<div class="input-group input-group-outline is-filled">
+<input style="margin-top: -6px; margin-right: 3px;" @change="copyBusinessAddress" type="checkbox" v-model="form.copy_address" >
+<label>Same as Business Address</label>
+</div>
+<div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
+</div> 
+
+<div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Postal Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.postal_address" >
@@ -475,7 +483,9 @@
     <div class="input-group input-group-outline null mx-5 is-filled">
     <div class="mb-3 mx-10">
   <input :value="person.pivot.position" @input="getPositionValue($event.target.value)"
-  name="position" class="form-control form-control-sm form-control-default" id="formFileSm" type="text">
+  name="position" class="" id="formFileSm" type="text" style="border: none;background-color: transparent;
+resize: none;
+outline: none;">
 </div>
 </div>
 </td>
@@ -727,8 +737,21 @@ export default {
             postal_code: props.company.postal_code,
            company_id: props.company.id,
             active: props.company.active,
-            province: props.company.business_province 
+            province: props.company.business_province,
+            copy_address: false
     })
+
+    function copyBusinessAddress(){
+      if(form.copy_address){
+        form.copy_address = true;
+        form.postal_address = form.business_address;
+      }else{
+        form.copy_address = false;
+        form.postal_address = ''
+      }
+    }
+
+
 
       const createTask = useForm({
           body: '',
@@ -888,7 +911,8 @@ export default {
       editPerson,
       getPositionValue,
       updatePerson,
-      show_modal
+      show_modal,
+      copyBusinessAddress
     }
   },
 

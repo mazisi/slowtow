@@ -8,7 +8,8 @@ export default {
     return {
       term: '',
       withThrashed: '', 
-      active_status: ''  
+      active_status: '' ,
+      company_type: ''  
     }
   },
   components: {
@@ -18,7 +19,8 @@ methods: {
      search(){
         this.$inertia.replace(route('companies',{
           term: this.term,
-          active_status: this.active_status
+          active_status: this.active_status,
+          company_type: this.company_type
           }))
         },
 
@@ -30,7 +32,12 @@ methods: {
 #with-thrashed{
   margin-top: -10px;
   margin-left: 3px;
-}</style>
+}
+.filters{
+ margin-top: 10px;
+}
+
+</style>
 <template>
 <Layout>
 <div class="container-fluid">
@@ -42,25 +49,44 @@ methods: {
 <div class="col-12">
 <form>
 <div class="row">
-<div class="col-3">
+<div class="col-1"><i class="fa fa-search" aria-hidden="true"></i></div>
+<div class="col-10 ">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Search Company </label>
 <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
 </div>
 </div>
-<div class="col-2">
+
+
+<div class="col-1"></div>
+<div class="col-4 filters">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Active status: </label>
 <select @change="search" v-model="active_status" class="form-control form-control-default">
+<option :value="''" disabled selected>Act/Iact</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
 <option value="Inactive">Inactive</option>
 </select>
+</div>
+</div>
 
+<div class="col-4 filters">
+<div class="input-group input-group-outline null is-filled">
+<select @change="search" v-model="company_type" class="form-control form-control-default">
+<option :value="''" disabled selected>Company Type</option>
+<option value="Association">Association</option>
+<option value="Close Corporation CC">Close Corporation  CC</option>
+<option value="Individual">Individual</option>
+<option value="Non-profit Organization (NPO)">Non-profit Organization (NPO)</option>
+<option value="Partnership">Partnership</option>
+<option value="Private Company  (Proprietary) Limited">Private Company  (Proprietary) Limited</option>
+<option value="Public Company">Public Company</option>
+<option value="Sole Proprietor">Sole Proprietor</option>
+<option value="Sole Proprietor">Sole Proprietor</option>
+<option value="Trust">Trust</option>
+</select>
 </div>
 </div>
-<div class="col-3">
-</div>
+<div class="col-1"></div>
 
 </div>
 </form>
@@ -74,6 +100,13 @@ Active
 </th>
 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
 Company Name
+</th>
+
+<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+Company Type
+</th>
+<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+ Registration Number
 </th>
 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
 View
@@ -89,18 +122,29 @@ View
 <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
 </td>
 <td>
-<div class="d-flex px-2 py-1">
-
-<div class="d-flex flex-column justify-content-left">
 <h6 class="mb-0 text-sm">
-
 <inertia-link
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.name }}
 </inertia-link>
-</h6>                          
-</div>
-</div>
+</h6>   
 </td>
+
+<td>
+<h6 class="mb-0 text-sm">
+<inertia-link
+:href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.company_type }}
+</inertia-link>
+</h6>   
+</td>
+
+<td>
+<h6 class="mb-0 text-sm">
+<inertia-link
+:href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.reg_number }}
+</inertia-link>
+</h6>   
+</td>
+
 <td class="text-center">
 <inertia-link :href="`/view-company/${company.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
 

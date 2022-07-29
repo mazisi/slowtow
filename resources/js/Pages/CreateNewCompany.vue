@@ -26,7 +26,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
-<input id="active-checkbox" type="checkbox" value="1" v-model="form.active">
+<input id="active-checkbox" type="checkbox" value="1" :checked="form.active == '1'" >
 </div>
 </div>
 
@@ -41,7 +41,7 @@
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Company Type </label>
-<select class="form-control form-control-default" v-model="form.company_type" isrequired="true">
+<select class="form-control form-control-default" v-model="form.company_type" >
 <option value="Association">Association</option>
 <option value="Close Corporation CC">Close Corporation  CC</option>
 <option value="Individual">Individual</option>
@@ -291,7 +291,7 @@ export default {
         postal_address3: '',
         postal_province: '',
         postal_code: '',
-        active: '',
+        active: '1',
       },
       showMenu: false,
     };

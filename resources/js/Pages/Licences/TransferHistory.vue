@@ -22,23 +22,15 @@
               <table class="table align-items-center mb-0">
                 <thead>
                   <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      ID
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                    Previous Licence Holder
                     </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Current Company
+                    Current Licence Holder
                     </th>
+                    
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Old Company
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Licence Trading Name
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Transfer Date
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Status
+                    Stage
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Action
@@ -48,7 +40,7 @@
                 </thead>
                 <tbody>
                   <tr v-for=" (  currentCompany, index  )   in licence.transfers" :key="index" >
-                    <td class="align-middle text-sm"><div class="d-flex px-2 py-1">{{currentCompany.id}}</div></td>
+                    <td class="text-center">{{ licence.old_company[index].name}}</td>
                     <td>
                       <div class="d-flex px-2 py-1" >
                        
@@ -61,11 +53,6 @@
                         </div>
                       </div>
                     </td>
-                    <td class="text-center">{{ licence.old_company[index].name}}</td>
-                     <td class="text-center">
-                     {{ licence.trading_name }}
-                    </td>
-                     <td class="text-center"> {{ currentCompany.pivot.date}}</td>
                      <td>{{ currentCompany.pivot.status}}</td>
                       <td class="text-center">
                     <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">

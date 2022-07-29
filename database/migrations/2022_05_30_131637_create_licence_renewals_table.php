@@ -21,6 +21,7 @@ return new class extends Migration
             $table->date('client_paid_at')->nullable();
             $table->date('renewal_issued_at')->nullable();
             $table->date('renewal_delivered_at')->nullable();
+            $table->date('payment_to_liquor_board_at')->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

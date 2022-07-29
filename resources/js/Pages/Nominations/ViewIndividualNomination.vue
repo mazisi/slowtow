@@ -41,6 +41,7 @@ export default{
               nomination_lodged_at: props.nomination.nomination_lodged_at,
               nomination_issued_at: props.nomination.nomination_issued_at,
               nomination_delivered_at: props.nomination.nomination_delivered_at,
+              payment_to_liquor_board_at: props.nomination.payment_to_liquor_board_at,
               status: [],      
       });
 
@@ -292,13 +293,25 @@ export default{
 <hr>
 
 
-<div class="col-md-12 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="liquor-board" type="checkbox" @input="pushData($event.target.value)"
 :checked="nomination.status >= '4'" value="4" class="active-checkbox">
 <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div>
+ <div class="col-md-5 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Date</label>
+  <input type="date" class="form-control form-control-default" 
+    v-model="updateForm.payment_to_liquor_board_at" >
+  </div>
+  <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+ </div>
+<div class="col-md-1"></div>
+ <div class="col-md-1 columns">
+  <button @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+ </div>
 
 <div class="col-md-12 columns">
 <ul class="list-group">
@@ -450,7 +463,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Power Of Attorney And Resolution Signed</h6>
+      <h6 class="mb-0 text-sm">Signed Power Of Attorney And Resolution </h6>
        <p v-if="attorney_doc !== null" class="mb-0 text-xs">{{ attorney_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
@@ -538,6 +551,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 && nomination_forms !== null" 
 :href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
 </Link>
+<button class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
 <a v-if="nomination.merged_document !== null" 
 :href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
