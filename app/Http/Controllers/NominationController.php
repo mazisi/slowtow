@@ -110,7 +110,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         if($person){
             return to_route('view-nomination',['slug' => $slug])->with('success','Person updated succesfully.');
         }
-         return to_route('view-nomination',['slug' => $slug])->with('error','Error updating person.');
+         return back()->with('error','Error updating person.');
     }
 
     public function update(Request $request){

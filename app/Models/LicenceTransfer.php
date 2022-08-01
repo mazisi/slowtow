@@ -14,6 +14,11 @@ class LicenceTransfer extends Model
        return $this->belongsTo(Licence::class);
     }
 
+    public function transfer_documents()
+    {
+       return $this->hasMany(TransferDocument::class);
+    }
+
     public function old_company()
     {
        return $this->belongsTo(Company::class,'licence_transfer','old_company_id','licence_id')->withPivot('status','slug','date');

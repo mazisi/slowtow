@@ -23,7 +23,7 @@ use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\MergeDocumentController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
-
+use App\Http\Controllers\TransferDocsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -93,9 +93,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/transfer-licence',[TransferLicenceController::class,'index'])->name('transfer_licence');
         Route::post('/transfer-licence-submit/{slug}',[TransferLicenceController::class,'store'])->name('transfer_licence.submit');
         Route::get('/transfer-history',[TransferLicenceController::class,'transferHistory'])->name('transfer_history');
-        Route::get('/view-transfered-licence/{slug}',[TransferLicenceController::class,'viewTransferedLicence'])->name('view-transfered_licence');
+        Route::get('/view-transfered-licence/{slug}',[TransferLicenceController::class,'viewTransferedLicence'])->name('view_transfered_licence');
         Route::delete('/delete-licence-transfer/{slug}/{licence_slug}',[TransferLicenceController::class,'destroy'])->name('delete_licence_transfer');
         Route::patch('/update-licence-transfer',[TransferLicenceController::class,'update'])->name('update_licence_transfer');
+
+
+        Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
+
 
         Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');
         Route::get('/new-alteration',[AlterLicenceController::class,'newAlteration'])->name('new_alteration');

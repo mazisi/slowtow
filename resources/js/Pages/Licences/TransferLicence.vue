@@ -1,7 +1,8 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { ref } from 'vue';
 
 
 export default {
@@ -14,28 +15,38 @@ export default {
     error: String,
 
   },
-  data() {
-    return {
-      showMenu: false,
-      form: {
-      old_company: this.licence.company.name,
-      old_company_id: this.licence.company_id,
-      new_company: null,
-      date: null,
-      licence_id: this.licence.id,
-      status: [],
+
+  setup (props) {
+    let showMenu = false;
+    let options = props.companies_dropdown;
+
+    const form = useForm({
+          old_company: props.licence.company.name,
+          old_company_id: props.licence.company_id,
+          new_company: null,
+          date: null,
+          licence_id: props.licence.id,
+          status: [],
+    })
+        function submit(){
+           form.post(`/transfer-licence-submit/${props.licence.slug}`, {
+           preserveScroll: true,
+           onSuccess: () => {
+            //  do something..       
+           },
+          })  
+        }
+
+function assignActiveValue(event){
+        this.form.active = event
+      }
       
-      },
-      options: this.companies_dropdown,
-    };
-  },
-    methods: {
-      submit() {
-          this.$inertia.post(`/transfer-licence-submit/${this.licence.slug}`, this.form)
-          .then(() => {
-              
-            })
-        },
+    return {
+      form,
+      submit,
+      options,
+      assignActiveValue,
+    }
   },
   components: {
     Layout,
@@ -67,6 +78,9 @@ export default {
 .status-heading{
   font-weight: 700;
 }
+.fa-cloud-upload{
+  cursor: pointer;
+  }
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
@@ -148,40 +162,20 @@ export default {
     </div>
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>
-<div class="col-md-4 columns"></div>
-   <div class="col-md-4 columns">
-    <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Documents Required</label>
-   </div>
-   <div class="col-md-4 columns"></div>
 
-
-<div class="col-md-4" style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
-   <div class="col-md-4 ">
-    <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Transfer Forms</label>
-   </div>
-   <div class="col-md-4 " style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
-
-
-
-<div class="col-md-4 columns" style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
-   <div class="col-md-4 columns">
-    <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Smoking Affidavit</label>
-   </div>
-   <div class="col-md-4 columns" style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
-
- <!-- <div class="col-md-4 columns">
+   <div class="col-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Transfer Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.date">
      </div>
    <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-   </div> -->
+   </div>
 
 <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="4">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="5">
 <label class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div>  
@@ -190,7 +184,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="5">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Logded</label>
 </div>
 </div>  
@@ -198,7 +192,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="7">
 <label class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>  
@@ -207,7 +201,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="7">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="8">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
@@ -215,7 +209,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="8">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="9">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 
@@ -225,7 +219,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="5">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="10">
 <label class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
 </div>
 </div> 
@@ -233,13 +227,16 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="11">
 <label class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
 </div>
 </div> 
 
 <div>
-  <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
+  <button :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="form.processing">
+  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Create</button>
+</div>
             </div>
             </form>
               </div>
@@ -253,5 +250,8 @@ export default {
       </div>
     </div>
   </div>
+
+
+  
   </Layout>
 </template>
