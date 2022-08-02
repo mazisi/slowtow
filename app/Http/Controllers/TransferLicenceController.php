@@ -69,6 +69,19 @@ class TransferLicenceController extends Controller
         $smoking_affidavict = TransferDocument::where('doc_type','Smoking Affidavit')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $old_poa_res_docs = TransferDocument::where('doc_type','POA & RES')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $current_poa_res_docs = TransferDocument::where('doc_type','POA & RES')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $old_shareholding = TransferDocument::where('doc_type','Shareholding')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $current_shareholding = TransferDocument::where('doc_type','Shareholding')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $old_cipc_certificate = TransferDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $current_cipc_certificate = TransferDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $company_docs = TransferDocument::where('doc_type','Company Documents')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $id_docs = TransferDocument::where('doc_type','ID Documents')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $police_clearance = TransferDocument::where('doc_type','Police Clearance')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $tax_clearance = TransferDocument::where('doc_type','Police Clearance')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $lta_certificate = TransferDocument::where('doc_type','LTA Certificate')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $financial_interest = TransferDocument::where('doc_type','Financial Interests')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $landloard_letter = TransferDocument::where('doc_type','Lease/Landlord Letter')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $representation = TransferDocument::where('doc_type','Representation')->where('licence_transfer_id',$view_transfer->id)->first();
+        $index_page = TransferDocument::where('doc_type','Index page')->where('licence_transfer_id',$view_transfer->id)->first();
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
@@ -78,7 +91,20 @@ class TransferLicenceController extends Controller
           'current_transfer_forms' => $current_transfer_forms,
           'smoking_affidavict' => $smoking_affidavict,
           'old_poa_res_docs' => $old_poa_res_docs,
-          'current_poa_res_docs' => $current_poa_res_docs
+          'current_poa_res_docs' => $current_poa_res_docs,
+          'old_shareholding' => $old_shareholding,
+          'current_shareholding' => $current_shareholding,
+          'old_cipc_certificate' => $old_cipc_certificate,
+          'current_cipc_certificate' => $current_cipc_certificate,
+          'company_docs' => $company_docs,
+          'id_docs' => $id_docs,
+          'police_clearance' => $police_clearance,
+          'tax_clearance' => $tax_clearance,
+          'lta_certificate' => $lta_certificate,
+          'financial_interest' => $financial_interest,
+          'landloard_letter' => $landloard_letter,
+          'representation' => $representation,
+          'index_page' => $index_page
         ]);
       }
 

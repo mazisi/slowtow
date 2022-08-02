@@ -99,6 +99,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
+        Route::post('/merge-transfer-documents',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
 
 
         Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');

@@ -17,7 +17,20 @@ export default {
     current_transfer_forms: Object,
     smoking_affidavict: Object,
     old_poa_res_docs: Object,
-    current_poa_res_docs: Object
+    current_poa_res_docs: Object,
+    old_shareholding: Object,
+    current_shareholding: Object,
+    old_cipc_certificate: Object,
+    current_cipc_certificate: Object,
+    company_docs: Object,
+    id_docs: Object,
+    police_clearance: Object,
+    tax_clearance: Object,
+    lta_certificate: Object,
+    financial_interest: Object,
+    landloard_letter: Object,
+    representation: Object,
+    index_page: Object
   },
 
   setup (props) {
@@ -40,6 +53,10 @@ export default {
       belong_to: '',
       document_number: '',
       document: null
+    })
+    
+    mergeForm = useForm({
+      transfer_id: props.view_transfer.id
     })
 
         function submit(){
@@ -69,7 +86,15 @@ export default {
           documentsForm.belong_to = belong_to
           documentsForm.document_number = document_number
         }
-      
+
+      function mergeDocuments(){
+        mergeForm.post(`/merge-transfer-documents/`, {
+          preserveScroll: true,
+          onSuccess: () => {
+            //do something
+          }
+        })
+      }
 
       function assignActiveValue(event){
         this.form.active = event
@@ -90,6 +115,7 @@ export default {
       
     return {
       pushData,
+      mergeDocuments,
       submitDocuments,
       submit,
       options,
@@ -356,26 +382,96 @@ export default {
 
 
 
-  <div class="col-4 columns" @click="setDocType('Shareholding','Old Licence Holder','D')" data-bs-toggle="modal" data-bs-target="#upload-documents"
-   style="text-align: center;">
-  <i class="fa fa-cloud-upload h5" aria-hidden="true"></i>
+  <div class="col-4 columns" style="text-align: center;">
+  <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="old_shareholding !== null">
+    <a :href="`/storage/app/public/${old_shareholding.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="old_shareholding !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ old_shareholding.document_name }}</p>
+    </div>
+    <a v-if="old_shareholding !== null" @click="deleteDocument(old_shareholding.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Shareholding','Old Licence Holder','C')" data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
   </div>
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Shareholding</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('Shareholding','Current Licence Holder','D')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="current_shareholding !== null">
+    <a :href="`/storage/app/public/${current_shareholding.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="current_shareholding !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ current_shareholding.document_name }}</p>
+    </div>
+    <a v-if="current_shareholding !== null" @click="deleteDocument(current_shareholding.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Shareholding','Current Licence Holder','D')" data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+   </div>
 
 
 
 
-  <div class="col-4 columns"  @click="setDocType('CIPC Certificate','Old Licence Holder','E')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-       style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+  <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="old_cipc_certificate !== null">
+    <a :href="`/storage/app/public/${old_cipc_certificate.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="old_cipc_certificate !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ old_cipc_certificate.document_name }}</p>
+    </div>
+    <a v-if="old_cipc_certificate !== null" @click="deleteDocument(old_cipc_certificate.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('CIPC Certificate','Old Licence Holder','E')" data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">CIPC Certificate</label>
    </div>
-   <div class="col-4 columns"  @click="setDocType('CIPC Certificate','Current Licence Holder','E')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="current_cipc_certificate !== null">
+    <a :href="`/storage/app/public/${current_cipc_certificate.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="current_cipc_certificate !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ current_cipc_certificate.document_name }}</p>
+    </div>
+    <a v-if="current_cipc_certificate !== null" @click="deleteDocument(current_cipc_certificate.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('CIPC Certificate','Current Licence Holder','E')" data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
 
 
 
@@ -386,8 +482,26 @@ export default {
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Company Documents</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('Company Documents','Current Licence Holder','F')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+    <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="company_docs !== null">
+    <a :href="`/storage/app/public/${company_docs.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="company_docs !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ company_docs.document_name }}</p>
+    </div>
+    <a v-if="company_docs !== null" @click="deleteDocument(company_docs.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Company Documents','Current Licence Holder','F')" data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
 
 
 
@@ -395,8 +509,26 @@ export default {
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">ID Documents</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('ID Documents','Current Licence Holder','G')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="id_docs !== null">
+    <a :href="`/storage/app/public/${id_docs.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="id_docs !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ id_docs.document_name }}</p>
+    </div>
+    <a v-if="id_docs !== null" @click="deleteDocument(id_docs.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('ID Documents','Current Licence Holder','G')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
  
  
  
@@ -404,24 +536,79 @@ export default {
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Police Clearances</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('Police Clearances','Current Licence Holder','H')" data-bs-toggle="modal" data-bs-target="#upload-documents"  
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="police_clearance !== null">
+    <a :href="`/storage/app/public/${police_clearance.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="police_clearance !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ police_clearance.document_name }}</p>
+    </div>
+    <a v-if="police_clearance !== null" @click="deleteDocument(police_clearance.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Police Clearances','Current Licence Holder','H')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
+
    
    
    <div class="col-4 columns" style="text-align: center;"><i class="fa fa-times-circle h5" aria-hidden="true"></i></div>
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Tax Clearance</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('Tax Clearance','Current Licence Holder','I')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="tax_clearance !== null">
+    <a :href="`/storage/app/public/${tax_clearance.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="tax_clearance !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ tax_clearance.document_name }}</p>
+    </div>
+    <a v-if="tax_clearance !== null" @click="deleteDocument(tax_clearance.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Tax Clearance','Current Licence Holder','I')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
 
 
    <div class="col-4 columns" style="text-align: center;"><i class="fa fa-times-circle h5" aria-hidden="true"></i></div>
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">LTA Certificate</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('LTA Certificate','Current Licence Holder','J')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+    <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="lta_certificate !== null">
+    <a :href="`/storage/app/public/${lta_certificate.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="lta_certificate !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ lta_certificate.document_name }}</p>
+    </div>
+    <a v-if="lta_certificate !== null" @click="deleteDocument(lta_certificate.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('LTA Certificate','Current Licence Holder','J')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
    
 
 
@@ -429,8 +616,26 @@ export default {
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Financial Interests</label>
    </div>
-   <div class="col-4 columns" @click="setDocType('Financial Interests','Current Licence Holder','K')" data-bs-toggle="modal" data-bs-target="#upload-documents"  
-   style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+   <div class="col-4 columns" style="text-align: center;">
+   <ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="financial_interest !== null">
+    <a :href="`/storage/app/public/${financial_interest.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="financial_interest !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ financial_interest.document_name }}</p>
+    </div>
+    <a v-if="financial_interest !== null" @click="deleteDocument(financial_interest.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Financial Interests','Current Licence Holder','K')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
 
 
 
@@ -440,15 +645,50 @@ export default {
    <div class="col-4 columns">
     <label class="form-label mx-6 " style="border: 2px solid; padding: 5px; border-radius: 5px">Lease/Landlord Letter</label>
    </div>
-<div class="col-4 columns" @click="setDocType('Lease/Landlord Letter','Current Licence Holder','L')" data-bs-toggle="modal" data-bs-target="#upload-documents"   
-style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true"></i></div>
+<div class="col-4 columns" style="text-align: center;">
+<ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="landloard_letter !== null">
+    <a :href="`/storage/app/public/${landloard_letter.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="landloard_letter !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ landloard_letter.document_name }}</p>
+    </div>
+    <a v-if="landloard_letter !== null" @click="deleteDocument(landloard_letter.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Lease/Landlord Letter','Current Licence Holder','L')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
 
 
 <div class="col-1 columns" style="text-align: center;"></div>
 <div class="col-4 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled" @click="setDocType('Representation','Old Licence Holder','M')" data-bs-toggle="modal" data-bs-target="#upload-documents" >
+<div class=" form-switch d-flex ps-0 ms-0  is-filled" >
 <label class="form-check-label text-body text-truncate status-heading">Representation</label>
-<i class="fa fa-cloud-upload h5 mx-5" aria-hidden="true"></i>
+<ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="representation !== null">
+    <a :href="`/storage/app/public/${representation.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="representation !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ representation.document_name }}</p>
+    </div>
+    <a v-if="representation !== null" @click="deleteDocument(representation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Representation','Old Licence Holder','M')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
 </div>
 </div>
 
@@ -465,9 +705,26 @@ style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true">
 
 <div class="col-1 columns" style="text-align: center;"></div>
 <div class="col-4 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled" @click="setDocType('Index Page','Old Licence Holder','N')" data-bs-toggle="modal" data-bs-target="#upload-documents">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled" >
 <label class="form-check-label text-body text-truncate status-heading">Index Page</label>
-<i class="fa fa-cloud-upload h5" style="margin-left: 4.4rem;"></i>
+<ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="index_page !== null">
+    <a :href="`/storage/app/public/${index_page.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="index_page !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ index_page.document_name }}</p>
+    </div>
+    <a v-if="index_page !== null" @click="deleteDocument(index_page.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Index Page','Old Licence Holder','N')"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
 </div>
 </div>
 
@@ -479,14 +736,11 @@ style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true">
 </div>
 </div>
 
-   <!-- <div class="col-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Transfer Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.date">
-     </div>
-   <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-   </div> -->
-
+<div>
+  <button :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="mergeForm.processing">
+  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Compile And Merge</button>
+</div>
 <hr>
 
 <div class="col-md-12 columns">
@@ -556,6 +810,7 @@ style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true">
 </div> 
 
 <div>
+<div v-if="form.isDirty">There are unsaved changes.</div>
   <button :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="form.processing">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Create</button>
@@ -605,8 +860,8 @@ style="text-align: center;"><i class="fa fa-cloud-upload h5" aria-hidden="true">
       </div>
   
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="documentsForm.processing">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-secondary" :disabled="documentsForm.processing">
          <span v-if="documentsForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>

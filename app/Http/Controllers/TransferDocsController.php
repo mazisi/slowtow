@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LicenceTransfer;
 use App\Models\TransferDocument;
 use Illuminate\Http\Request;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class TransferDocsController extends Controller
 {
@@ -26,6 +28,36 @@ class TransferDocsController extends Controller
       return back()->with('success','Document uploaded successfully.');
     
     }
+
+    public function merge(Request $request){
+
+         $nominations =  LicenceTransfer::whereId($request->transfer_id)->first();
+ 
+           $merger = PDFMerger::init();
+ //update licence transfer 'merged doc field
+ //if it exists replace it
+           $exist = MergedDocument::where('nomination_id',$id)->first();
+           if ($exist) {
+             unlink(storage_path('/app/public/'.$exist->file_name));
+             $exist->delete();
+           }
+ 
+           foreach ($nominations as $nom) {
+             $merger->addPDF(storage_path('/app/public/').$nom->document, 'all');
+           }
+           $fileName = time().'.pdf';
+           $merger->merge();
+ 
+           $store_merged_file = MergedDocument::create([
+             'file_name' => $fileName,'nomination_id' => $id]);
+ 
+           $merger->save(storage_path('/app/public/'.$fileName));
+           if($store_merged_file){
+             return back()->with('success','Document merged successfully.');
+           }        
+           return back()->with('error','Error uploading document.');
+ 
+     }
 
     public function destroy($id){
         $model = TransferDocument::find($id);
