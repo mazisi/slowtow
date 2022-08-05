@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('old_company_id');
             $table->date('date');
             $table->string('status')->nullable();
+            $table->string('merged_document')->nullable();
             $table->string('slug');
             $table->timestamps();
         });

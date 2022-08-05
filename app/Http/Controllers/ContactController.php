@@ -9,12 +9,67 @@ use Illuminate\Http\Request;
 class ContactController extends Controller{
 
     public function index(){
-        $contacts = Contact::latest()->get();
+            $contacts = Contact::when(request('q'), function ($query) {
+                return $query->where('first_name', 'LIKE', '%'.request('q').'%')
+                             ->orWhere('last_name', 'LIKE', '%'.request('q').'%')
+                             ->orWhere('email', 'LIKE', '%'.request('q').'%')
+                             ->orWhere('business_phone', 'LIKE', '%'.request('q').'%')
+                             ->orWhere('mobile_phone', 'LIKE', '%'.request('q').'%');
+            })->get();
+        
         return Inertia::render('Contacts/Contact',['contacts' => $contacts]);
     }
 
     public function create(){
         return Inertia::render('Contacts/CreateContact');
+    }
+
+    public function createContact(){
+        return Inertia::render('Contacts/CreateIndividualContact');
+    }
+
+    public function viewContact($id){
+        $contact = Contact::whereId($id)->firstOrFail();
+        return Inertia::render('Contacts/ViewContact',['contact' => $contact]);
+    }
+
+    public function updateIndividualContact(Request $request,$id) {
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email'
+        ]);
+        $model = Contact::whereId($id)->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'business_phone' => $request->business_number,
+            'mobile_phone' => $request->mobile_number,
+        ]);
+        if($model){
+            return to_route('contacts')->with('success','Contact updated succesfully.');
+        }
+        return back()->with('error','Error updating contact.');
+    }
+
+    public function storeIndividualContact(Request $request){
+        $request->validate([
+            'first_name' => 'required|string',
+            'last_name' => 'required|string',
+            'email' => 'required|email'
+        ]);
+
+        $contact = Contact::create([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'business_phone' => $request->business_number,
+            'mobile_phone' => $request->mobile_number,
+        ]);
+        if($contact){
+            return to_route('contacts')->with('success','Contact created succesfully.');
+        }
+        return back()->with('error','Error creating contact.');
     }
 
     public function store(Request $request){
@@ -56,7 +111,7 @@ class ContactController extends Controller{
     
     }
 
-    public function destroy($id){dd($id);
+    public function destroy($id){
        $contact = Contact::find($id);
        if($contact->delete()){
         return redirect(route('contacts'))->with('success','Contact deleted successfully.');
@@ -64,10 +119,6 @@ class ContactController extends Controller{
        return redirect(route('contacts'))->with('error','Error deleting contact.');
     }
 
-    public function destroyAll()
-    {
-        Contact::truncate();
-        return redirect(route('contacts'))->with('success','All contacts deleted successfully.');
-    }
+
 
 }

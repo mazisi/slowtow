@@ -40,20 +40,33 @@
                 </thead>
                 <tbody>
                   <tr v-for=" (  currentCompany, index  )   in licence.transfers" :key="index" >
-                    <td class="text-center">{{ licence.old_company[index].name}}</td>
+                    <td class="text-center">
+                    <div class="d-flex flex-column justify-content-left">
+                        <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
+                          <h6 class="mb-0 text-sm">
+                          {{ licence.old_company[index].name }}
+                           </h6>    
+                          </Link>                      
+                        </div>
+                        </td>
                     <td>
-                      <div class="d-flex px-2 py-1" >
-                       
                         <div class="d-flex flex-column justify-content-left">
-                        <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
+                        <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                           <h6 class="mb-0 text-sm">
                           {{currentCompany.name}}
                            </h6>    
-                           </inertia-link>                      
+                          </Link>                      
                         </div>
-                      </div>
+                     
                     </td>
-                     <td>{{ currentCompany.pivot.status}}</td>
+                     <td v-if="currentCompany.pivot.status == 1"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Quoted</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 2"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Invoiced</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 3"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Paid</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 4"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Collate Transfer Documents</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 5"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Payment To The Liquor Board</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 6"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Activation Fee Paid</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 8"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Issued</Link></td>
+                     <td v-else-if="currentCompany.pivot.status == 9"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Delivered</Link></td>
                       <td class="text-center">
                     <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                     <i class="fa fa-eye  " aria-hidden="true"></i>
@@ -92,5 +105,16 @@ export default {
     },
 
 };
+
+//The following are status keys
+// 1 => Client Quoted
+// 2 => Client Invoiced
+// 3 => Client Paid
+// 4 => Collate Transfer Documents
+// 5 => Payment To The Liquor Board
+// 6 => Transfer Logded
+// 7 => Activation Fee Paid
+// 8 => Transfer Issued
+// 9 => Transfer Delivered
 </script>
 

@@ -1,79 +1,173 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
-import Multiselect from '@vueform/multiselect';
+import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia';
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
+import { ref } from 'vue';
 
 export default {
- props: {
+  props: {
+    tasks: Object,
     errors: Object,
+    licence_dropdowns: Object,
     licence: Object,
-    companies: Array,
-    people: Array,
+    success: String,
+    error: String,
+    client_invoiced: Object,//doc
+    licence_issued: Object,//doc
+    client_quoted: Object,//doc
+    collate: Object,
+    liqour_board: Object,
+    licence_delivered: Object,
+    transfer_logded: Object,
+    company_application_form: Object,
+    company_poa: Object,
+    company_annexure_b: Object,
+    company_annexure_c: Object,
+    company_cipc: Object
+     
   },
-  data() {
-   if(this.licence.company > length){
-    return {
-      showMenu: false,
-      form: {
-        liquor_licence_number: this.licence.liquor_licence_number,
-        start_date: this.licence.start_date,
-        end_date: this.licence.end_date,
-        company: this.licence.company_id,
-        consultant: this.licence.consultant.id,
-        belongs_to: this.licence.belongs_to
-    },
-    options: this.companies,
-    persons: this.people,
-    };
 
-   }else{
-    return {
-      showMenu: false,
-      form: {
-        liquor_licence_number: this.licence.liquor_licence_number,
-        start_date: this.licence.start_date,
-        end_date: this.licence.end_date,
-        company: this.licence.company_id,
-        belongs_to: this.licence.belongs_to
-    },
-    options: this.companies,
-    persons: this.people,
-    };
+  setup (props) {
+    const year = ref(new Date().getFullYear());
+    const body_max = ref(100);
+    let show_modal = ref(true);  
 
-   }
-    
-  },
-    methods: {
-      submit() {
-          this.$inertia.post(`/update-temp-licence/${this.licence.slug}`, this.form)
-        },
-        deleteLicence(){
-          if (confirm('Are you sure you want to delete this temporal licence?')) {
-          this.$inertia.post(`/delete-temp-licence/${this.licence.slug}`, this.form)
-           }
+    const form = useForm({
+      status: [],
+      client_paid_at: props.licence.client_paid_at,
+      payment_to_liquor_board_at: props.licence.payment_to_liquor_board_at,
+      logded_at: props.licence.logded_at,
+      issued_at: props.licence.issued_at,  
+     })
+
+    const uploadDoc = useForm({
+      document: null,
+      doc_type: null,
+      person_or_company: null,
+      merge_number: null,
+      temp_licence_id: props.licence.id    
+    })
+
+    const createTask = useForm({
+          body: '',
+          model_type: 'Temporal Licence',
+          model_id: props.licence.id,
+          taskDate: ''     
+    })
+
+    function submitTask(){
+      createTask.post('/submit-task', {
+          onSuccess: () => createTask.reset(),
+      })
+    }
+
+    function checkBodyLength(){//Monitor task body length..
+          if(this.createTask.body.length > this.body_max){
+              this.createTask.body = this.createTask.body.substring(0,this.body_max)
+          }
+      }
+
+      function submitDocument(){
+            uploadDoc.post('/submit-temporal-licence-document', {
+              preserveScroll: true,
+              onSuccess: () => { 
+                this.show_modal = false;
+                let dismiss =  document.querySelector('.modal-backdrop')    
+                dismiss.remove();
+                uploadDoc.reset();
+              },
+            })
+          }
+
+    function getDocType(doc_type,person_or_company,merge_number){
+      this.uploadDoc.doc_type = doc_type
+      this.uploadDoc.person_or_company = person_or_company
+      this.uploadDoc.merge_number = merge_number
+      this.uploadDoc.show_modal =true   
+    }
+
+    function deleteDocument(id){
+        if(confirm('Document will be deleted permanently...Continue ??')){
+          Inertia.delete(`/delete-renewal-document/${id}`, {
+            //
+          })
         }
+      }
+
+    function updateLicence() {
+      form.patch(`/update-temp-licence/${props.licence.slug}`, {
+        preserveScroll: true,
+      })
+    }
+
+    function getRenewalYear(date){
+      let computed_date = new Date(date).getFullYear();
+      return computed_date + 1;    
+    }
+
+    function computeDocumentDate(date_param){
+        return new Date(date_param).toLocaleString().split(',')[0]
+    };
+
+    function pushData(status_value){
+         if (event.target.checked) {
+            if(this.form.status.includes(status_value)){
+                return;
+              }else{
+                this.form.status.push(status_value)
+              } 
+          }else if(!event.target.checked){
+          // alert('unticked')
+          }
+      }
+
+    return { year,form,body_max,show_modal,
+     updateLicence,
+     getRenewalYear, pushData,uploadDoc,
+     getDocType, submitDocument,
+     computeDocumentDate,deleteDocument,
+     createTask,
+     submitTask,
+     checkBodyLength
+     }
   },
-  components: {
+   components: {
     Layout,
-    Multiselect
+    Link,
+    Head,
+    Datepicker
   },
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
+  
 };
+//The following are status keys
+// 1 => Client Quoted
+// 2 => Client Invoiced
+// 3 => Collate Temporary Licence Documents 
+// 4 => Payment To The Liquor Board 
+// 5 => Temporary Licence Lodged 
+// 6 => Temporary Licence Issued 
+// 7 => Temporary Licence Delivered
 
 </script>
-<style src="@vueform/multiselect/themes/default.css"></style>
-<style scoped>
+<style>
 .columns{
   margin-bottom: 1rem;
 }
-#active-checkbox{
-  margin-top: 3px;
+.active-checkbox{
+  margin-top: -10px;
   margin-left: 3px;
 }
+.status-heading{
+  font-weight: 700;
+}
+.document-names { width: 50%; }
 
+.curser-pointer{ cursor: pointer;}
 </style>
-
+<style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
 <div class="container-fluid">
@@ -82,103 +176,478 @@ export default {
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-     <div class="row">
+      <div class="row">
   <div class="col-lg-6 col-7">
-    <h6 v-if="licence.consultant == null">Temporal Licence For: {{ licence.company.name }}</h6>
-    <h6 v-else>Temporal Licence For: {{ licence.consultant.first_name }} {{ licence.consultant.last_name }}</h6>
- 
+  <h6 v-if="licence.people === null">Temporal Licence For: {{ licence.company.name }}</h6>
+    <h6 v-else>Temporal Licence For: {{ licence.people.full_name }}</h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
-    <button type="button" @click="deleteLicence" class="btn btn-sm btn-danger">Delete</button>
+  
   </div>
 </div>
 
-      <div class="row">
+<div class="row">
         <div class="mt-3 row">
           <div class="col-12 col-md-12 col-xl-12 position-relative">
             <div class="card card-plain h-100">
               <div class="p-3 card-body">
- <form @submit.prevent="submit">
+  <form @submit.prevent="updateLicence">
 <div class="row">
-                  
-  <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Liquor Licence Number</label>
-    <input type="text" required class="form-control form-control-default" v-model="form.liquor_licence_number" >
-     </div>
-   <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
-   </div>
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="client-quoted" class="active-checkbox" type="checkbox" 
+:checked="licence.status >= 1"
+@input="pushData($event.target.value)" value="1">
+<label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
+</div>
+</div> 
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="client_quoted !== null">
+    <a :href="`/storage/app/public/${client_quoted.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>    
+<hr>
+
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
+@input="pushData($event.target.value)" 
+:checked="licence.status >= 2">
+<label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+</div>
+</div> 
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="client_invoiced !== null">
+    <a :href="`/storage/app/public/${client_invoiced.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+      <p v-if="client_invoiced !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(client_invoiced.date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+<hr>
+
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="client-paid" type="checkbox" 
+@input="pushData($event.target.value)" value="3" :checked="licence.status >= 3">
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Collate Temporary Licence Documents </label>
+</div>
+</div> 
+
+<div class="d-flex row">
+  <div class="col-sm-2"></div>
+  <!-- ===============   Company File Upload ===========================-->
+  <div class="col-sm-5">
+    <button type="button" class="btn btn-outline-success document-names">Application Form </button>
+     <i v-if="company_application_form == null"
+      @click="getDocType('Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="company_application_form !== null" @click="deleteDocument({{ company_application_form.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+     <a v-if="company_application_form !== null" :href="`/storage/app/public/${company_application_form.document}`" target="_blank">
+     <i v-if="company_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
+
+
+
+     <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
+      <i class="fa fa-link h5 mx-2 curser-pointer"></i> <br>
+
+       <button type="button" class="btn btn-outline-success document-names">POA &amp; RES</button> 
+       <i v-if="company_poa == null" @click="getDocType('POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
+         class="fa fa-cloud-upload h5 curser-pointer mx-2"></i>
+         <i v-if="company_poa !== null" @click="deleteDocument({{ company_poa.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+     <a v-if="company_poa !== null" :href="`/storage/app/public/${company_poa.document}`" target="_blank">
+     <i v-if="company_poa !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
+
+       <button type="button" class="btn btn-outline-success document-names">Annexure B</button>
+        <i v-if="company_annexure_b == null" @click="getDocType('Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
+        class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
+         <i v-if="company_annexure_b !== null" @click="deleteDocument({{ company_annexure_b.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_annexure_b !== null" :href="`/storage/app/public/${company_annexure_b.document}`" target="_blank">
+        <i v-if="company_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+     <br> 
+
+        <button type="button" class="btn btn-outline-success document-names">Annexure C</button>
+         <i v-if="company_annexure_c == null" @click="getDocType('Annexure C','Company',5)" data-bs-toggle="modal" data-bs-target="#documents" 
+         class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
+        <i v-if="company_annexure_c !== null" @click="deleteDocument({{ company_annexure_c.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_annexure_c !== null" :href="`/storage/app/public/${company_annexure_c.document}`" target="_blank">
+        <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
+
+        <button type="button" class="btn btn-outline-success document-names"> CIPC Certificate</button>
+         <i v-if="company_cipc !== null" @click="getDocType('CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
+         class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
+         <i v-if="company_cipc !== null" @click="deleteDocument({{ company_cipc.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_cipc !== null" :href="`/storage/app/public/${company_cipc.document}`" target="_blank">
+        <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+        <br> 
+    <div class="col-sm-1"> </div>
+  </div>
   
- 
+  <div class="col-sm-5">
+  <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
+     <i class="fa fa-cloud-upload h5 mx-2"></i> 
+     <i class="fa fa-trash-alt h5 text-danger"></i> 
+     <i class="fa fa-pdf h4 text-white"></i> <br> 
+   <button type="button" class="btn btn-outline-success document-names">Representations</button>
+  <i class="fa fa-cloud-upload h5 mx-2"></i> 
+     <i class="fa fa-trash-alt h5 text-danger"></i> 
+     <i class="fa fa-pdf h4 text-white"></i> <br>  
+    <button type="button" class="btn btn-outline-success document-names">Landlord Letter</button>
+     <i class="fa fa-cloud-upload h5 mx-2"></i> 
+     <i class="fa fa-trash-alt h5 text-danger"></i> 
+     <i class="fa fa-pdf h4 text-white"></i> <br>
+     <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
+      <i class="fa fa-cloud-upload h5 mx-2"></i> 
+     <i class="fa fa-trash-alt h5 text-danger"></i> 
+     <i class="fa fa-pdf h4 text-white"></i> <br>
+      <button type="button" class="btn btn-outline-success document-names">Advert/Blurb</button>
+      <i class="fa fa-cloud-upload h5 mx-2"></i> 
+     <i class="fa fa-trash-alt h5 text-danger"></i> 
+     <i class="fa fa-pdf h4 text-white"></i> <br>
+        <button type="button" class="btn btn-outline-success document-names">Plan/Maps</button>
+    <i class="fa fa-cloud-upload h5 mx-2"></i> 
+     <i class="fa fa-trash-alt h5 text-danger"></i> 
+     <i class="fa fa-pdf h4 text-white"></i> <br> 
+  <div class="col-sm-1"> </div>
+</div>
+</div>
+
+<hr>
+
+<div class="col-md-5 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="4"
+:checked="licence.status >= 4">
+<label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
+</div>
+</div> 
+
+<div class="col-md-1 columns"></div>
  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Start Date</label>
-    <input type="date" required class="form-control form-control-default" v-model="form.start_date" >
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
      </div>
-   <div v-if="errors.start_date" class="text-danger">{{ errors.start_date }}</div>
+   <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+   </div> 
+   <div class="col-md-1 columns">
+    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
 
 
+
+
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="liqour_board !== null">
+    <a :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
+      <p v-if="liqour_board !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(liqour_board.date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+<hr>
+
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="issued" type="checkbox" 
+@input="pushData($event.target.value)" value="5" :checked="licence.status >= 5">
+<label for="issued" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Lodged </label>
+</div>
+</div> 
+
 <div class="col-md-4 columns">
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">End Date</label>
-  <input type="date" class="form-control form-control-default" v-model="form.end_date" >
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.issued_at">
+     </div>
+   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
    </div>
-  <div v-if="errors.end_date" class="text-danger">{{ errors.end_date }}</div>
-</div>  
+
+<!-- <div class="col-md-6 columns">
+<Datepicker v-model="form.year" yearPicker />
+<p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
+</div> -->
+
+<div class="col-md-6" style="margin-top: -1rem;">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="licence_issued !== null">
+    <a :href="`/storage/app/public/${licence_issued.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="licence_issued !== null" class="mb-0 text-xs">{{ licence_issued.document_name }}</p>
+      <p v-if="licence_issued !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(licence_issued.date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+    <a v-if="licence_issued !== null" @click="deleteDocument(licence_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+</div>
+<hr>
+
+
+
+
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="delivered" type="checkbox" value="6"
+@input="pushData($event.target.value)" :checked="licence.status == 6">
+<label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Issued</label>
+</div>
+</div>
 
 <div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Company/Consultant?</label>
-  <select v-model="form.belongs_to" required class="form-control form-control-default">
-    <option value=" ">Select province</option>
-    <option value="Company">Company</option>
-    <option value="Person">Person</option>
-    </select>
-</div>
-<div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
-</div>
-
-   <div class="col-md-4 columns" v-if="form.belongs_to =='Company'">
     <div class="input-group input-group-outline null is-filled ">
-     <Multiselect
-       v-model="form.company"
-        placeholder="Search Company..."
-        :options="options"
-        :searchable="true"
-      />
-  </div>
-  <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
-  </div>
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+     </div>
+   <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+   </div>
 
-  <div class="col-md-4 columns" v-if="form.belongs_to =='Person'">
+<!-- <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="licence_delivered !== null">
+    <a :href="`/storage/app/public/${licence_delivered.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
+      <p v-if="licence_delivered !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(licence_delivered.date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>   -->
+
+
+
+
+
+
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="delivered" type="checkbox" value="7"
+@input="pushData($event.target.value)" :checked="licence.status == 7">
+<label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Delivered</label>
+</div>
+</div>
+
+<div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-     <Multiselect
-       v-model="form.consultant"
-        placeholder="Search Person..."
-        :options="persons"
-        :searchable="true"
-      />
-  </div>
-  <div v-if="errors.consultant" class="text-danger">{{ errors.consultant }}</div>
-  </div>
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+     </div>
+   <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+</div>
+
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="licence_delivered !== null">
+    <a :href="`/storage/app/public/${licence_delivered.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
+      <p v-if="licence_delivered !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(licence_delivered.date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>  
 
 
-  
-    
-  <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button></div>
-            </div>
-            </form>
-              </div>
-            </div>
-            <hr class="vertical dark" />
-          </div>
+<div class="text-danger">
+  <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
+  <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden">Loading...</span> Save</button>
+</div>
+</div>
+</form>
+  </div>
+</div>
+<hr class="vertical dark" />
+</div>
       <!-- //tasks were here -->
         
-        </div>
-        
+</div>
+
+</div>
+<hr>
+<div class="row">
+<h6 class="text-center">Notes</h6>
+<div class="col-xl-8">
+<div class="row">
+<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
+<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+<span class="text-sm">{{ task.body }}</span>
+</span>
+<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
+data-bs-dismiss="alert" aria-label="Close">
+<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
+</div>
+</div>
+<h6 v-if="!tasks" class="text-center">No notes found.</h6>
+</div>
+
+</div>
+
+<div class="col-xl-4">
+<form @submit.prevent="submitTask">
+<div class="col-md-12 columns">
+<label class="form-check-label text-body text-truncate status-heading">New Note:
+<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
+</div>
+
+<div class="col-12 columns">    
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">New Task<span class="text-danger pl-6">
+({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
+<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+</div>
+<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
+</div>
+
+<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
+  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  Save
+</button>
+</form>
+</div>
+</div>
+</div>
+</div>
+
+<div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
+      <form @submit.prevent="submitDocument">
+      <input type="hidden" v-model="uploadDoc.doc_type">
+       <input type="hidden" v-model="uploadDoc.person_or_company">
+       <input type="hidden" v-model="uploadDoc.merge_number">
+      <div class="modal-body">      
+        <div class="row">
+
+        <!-- <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
+        && uploadDoc.doc_type !== 'Renewal Issued'
+        && uploadDoc.doc_type !== 'Renewal Delivered'">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Date</label>
+        <input type="date" required class="form-control form-control-default" 
+         v-model="uploadDoc.date" >
+        </div>
+        <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
+        </div> -->
+
+        <div class="col-md-12 columns">
+        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
+         <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+         hidden id="licence-doc" accept=".pdf"/>
+         <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+       </div>
+       <div class="col-md-12">
+          <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
+         {{ uploadDoc.progress.percentage }}%
+         </progress>
+         </div>
+         </div>   
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-secondary" :disabled="uploadDoc.processing">
+         <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
     </div>
   </div>
+</div>
   </Layout>
 </template>

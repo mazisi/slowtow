@@ -17,10 +17,10 @@
     <div class="card-body px-0 pb-2">
  <form @submit.prevent="submit">
  <ul class="list-group">
-  <div class="d-flex">
+  <!-- <div class="d-flex">
   <label>Tick if first row is a header</label>
     <input v-model="form.header" type="checkbox" id="has-header">
-  </div>
+  </div> -->
 <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded" style="background-color: #f4f6f7;">
 <input @input="form.csv_file = $event.target.files[0]" type="file"  aria-label="..." />
 <p v-if="errors.csv_file" class="text-danger">{{ errors.csv_file }}</p>

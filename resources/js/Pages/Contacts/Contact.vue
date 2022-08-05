@@ -19,13 +19,24 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="col-12">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-2">
     <h6>Contacts</h6>
-    <p class="text-sm mb-0"><span class="font-weight-bold ms-1">{{ contacts.length }}</span> total</p>
+    
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
-  <Link class="btn btn-sm btn-secondary mr-2" :href="`/upload-contacts`">Upload</Link>
-    <Link @click="clearAll" class="btn btn-sm btn-danger" :href="`#!`">Clear All</Link>
+  <div class="col-8">
+  <div class="input-group input-group-outline null is-filled">
+<input v-model="q" @keyup="search" type="text" class="form-control form-control-default" placeholder="Search by full name and surname">
+</div>
+  </div>
+  <div class="col-2 my-auto text-end">
+  <div class="dropdown float-lg-end pe-4"><a class="cursor-pointer" id="dropdownTable" 
+  data-bs-toggle="dropdown" aria-expanded="false">
+  <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i></a>
+  <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
+  <li><Link class="dropdown-item border-radius-md" :href="`/upload-contacts`"> Upload </Link></li>
+  <li><Link class="dropdown-item border-radius-md" :href="`/create-contact`"> Create Contact </Link></li>
+  </ul>
+  </div>
   </div>
 </div>
 
@@ -35,22 +46,19 @@
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      First Name
-                    </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Middle Name
+                      First Names
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Last Name
+                    Surname
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Business Phone
+                    Mobile Number
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Mobile Phone
-                    </th>
+                    Business Number
+                    </th>                    
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Email
+                    Email Address
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Action
@@ -61,24 +69,14 @@
                 <tbody>
                   <tr v-for="contact in contacts" :key="contact.id">
                     <td class="align-middle text-sm">
-                      {{ contact.first_name }}
+                      <Link :href='`/view-contact/${contact.id}`'><h6 class="mb-0 text-sm">{{ contact.first_name }}</h6></Link>
                     </td>
-                    <td>
-                      <div class="d-flex px-2 py-1">
-                       
-                        <div class="d-flex flex-column justify-content-left">
-                          <h6 class="mb-0 text-sm">
-                           {{ contact.middle_name }}
-                           </h6>                          
-                        </div>
-                      </div>
-                    </td>
-                    <td class="text-center"><h6 class="mb-0 text-sm">{{ contact.last_name }}</h6></td>
-                    <td class="text-center">{{ contact.business_phone }}</td>
+                    <td class="text-center"><Link :href='`/view-contact/${contact.id}`'><h6 class="mb-0 text-sm">{{ contact.last_name }}</h6></Link></td>
                     <td class="text-center">{{ contact.mobile_phone }}</td>
+                    <td class="text-center">{{ contact.business_phone }}</td>
                     <td class="text-center">{{ contact.email }}</td>
                     <td class="text-center">
-                    <Link :href='`#!`'><i @click="deleteSingleContact(contact.id)" class="fa fa-trash-o text-danger"></i></Link></td>
+                    <Link :href='`/view-contact/${contact.id}`'><i class="fa fa-eye"></i></Link></td>
                   </tr>
                   
                  
@@ -94,7 +92,8 @@
 </template>
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { useForm ,Link } from '@inertiajs/inertia-vue3';
+import { Link } from '@inertiajs/inertia-vue3';
+
 export default {
   props: {
     contacts: Object,
@@ -102,10 +101,12 @@ export default {
     error: String,
     errors: Object,
   },
+  data() {
+    return {q: '' }
+  },
  components: {
     Layout,
-    Link,
-    useForm
+    Link
 },
 methods: {
   deleteSingleContact(id){
@@ -113,11 +114,10 @@ methods: {
         this.$inertia.delete(`/delete-contact/${id}`)
     }
   },
-  clearAll(){
-    if(confirm('All contacts will be deleted..Continue??')){
-        this.$inertia.delete(`/delete-all-contacts`)
-    }
-  }
+  search(){
+     this.$inertia.replace(route('contacts',{q: this.q}))
 },
+},
+
 }
 </script>

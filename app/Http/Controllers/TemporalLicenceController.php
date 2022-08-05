@@ -2,18 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
+use Inertia\Inertia;
+use App\Models\People;
 use App\Models\Company;
 use App\Models\Consultant;
-use App\Models\People;
-use Inertia\Inertia;
-use App\Models\TemporalLicence;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Models\TemporalLicence;
+use App\Models\TemporalLicenceDocument;
 
 class TemporalLicenceController extends Controller
 {
     public function index(Request $request){
         $queryString = request('term');
-        if(!empty($queryString) && $request->withThrashed != '' && $request->active_status == 'Active'){
+        if(!empty($queryString) && !empty($request->withThrashed) && $request->active_status == 'Active'){
 
           
             $licences = TemporalLicence::with(["company"])
@@ -22,12 +25,15 @@ class TemporalLicenceController extends Controller
                             })->orWhereHas('consultant', function($query) use($queryString){
                                 $query->where('first_name', 'like', '%'.$queryString.'%')
                                       ->where('last_name', 'like', '%'.$queryString.'%');
-                                      })->where('active','1')
+                                      })->whereNotNull('active')
                             ->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
                             ->withTrashed()
                             ->get();
+        }elseif(empty($queryString) && empty($request->withThrashed) && $request->active_status == 'Active'){
+
+        $licences = TemporalLicence::with(["company","people"])->whereNotNull('active')->get();
 
         }elseif(!empty($queryString) && !empty($request->withThrashed) ){
             
@@ -129,54 +135,88 @@ class TemporalLicenceController extends Controller
            }
            
            if($temp){
-              return to_route('temp_licences')->with('success','Temporal Licence issued successfully.');
+              return to_route('view_temp_licence',['slug' => $temp->slug])->with('success','Temporal Licence issued successfully.');
            }
-           return to_route('temp_licences')->with('error','AN unknown error occured while creating temporal Licence.');
+           return back()->with('error','AN unknown error occured while creating temporal Licence.');
     }
 
     public function show($slug){
-        $companies = Company::pluck('name','id');
-        $people = Consultant::pluck('first_name','id');
-        $licence = TemporalLicence::with('company','consultant')->whereSlug($slug)->first();
-        return Inertia::render('TemporalLicences/ViewTemporalLicence',
-        ['companies' => $companies,'licence' => $licence,'people' => $people]);
+
+
+
+$companies = Company::pluck('name','id');
+$people = People::pluck('full_name','id');
+$licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
+
+    $client_invoiced = TemporalLicenceDocument::where('doc_type','Client Invoiced')->where('temporal_licence_id',$licence->id)->first();
+    $client_quoted = TemporalLicenceDocument::where('doc_type','Client Quoted')->where('temporal_licence_id',$licence->id)->first();
+    $collate = TemporalLicenceDocument::where('doc_type','Collate Documents')->where('temporal_licence_id',$licence->id)->first();
+    $liqour_board = TemporalLicenceDocument::where('doc_type','Payment To The Liquor Board')->where('temporal_licence_id',$licence->id)->first();
+    $transfer_logded = TemporalLicenceDocument::where('doc_type','Transfer Lodged')->where('temporal_licence_id',$licence->id)->first();
+    $licence_issued = TemporalLicenceDocument::where('doc_type','Licence Issued')->where('temporal_licence_id',$licence->id)->first();
+    $licence_delivered = TemporalLicenceDocument::where('doc_type','Licence Delivered')->where('temporal_licence_id',$licence->id)->first();
+    $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+    
+    //company documents
+    $company_application_form = TemporalLicenceDocument::where('doc_type','Application Form')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();  
+    $company_poa = TemporalLicenceDocument::where('doc_type','POA And RES')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+    $company_annexure_b = TemporalLicenceDocument::where('doc_type','Annexure B')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+    $company_annexure_c = TemporalLicenceDocument::where('doc_type','Annexure C')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+    $company_cipc = TemporalLicenceDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+    
+    return Inertia::render('TemporalLicences/ViewTemporalLicence',
+        ['companies' => $companies,
+        'licence' => $licence,
+        'people' => $people,
+         'client_invoiced' => $client_invoiced,
+         'client_quoted' => $client_quoted,
+         'collate' => $collate,
+         'liqour_board' => $liqour_board,
+         'transfer_logded' => $transfer_logded,
+         'licence_issued' => $licence_issued,
+         'licence_delivered' => $licence_delivered,
+         'tasks' => $tasks,
+         'company_application_form' => $company_application_form,
+         'company_poa' => $company_poa,
+         'company_annexure_b' => $company_annexure_b,
+         'company_annexure_c' => $company_annexure_c,
+         'company_cipc' => $company_cipc
+        ]);
     }
 
 
     public function update(Request $request,$slug){
-        $request->validate([
-            'liquor_licence_number' => 'required',
-            'start_date' => 'required|date',
-            'end_date' => 'required|date',
-            'belongs_to' => 'required|in:Person,Company'
-            ]);
-
-            if(is_null($request->consultant)){
-                $request->validate(['company' => 'required']);
-                $temp = TemporalLicence::whereSlug($slug)->update([
-                    'company_id' => $request->company,
-                    'liquor_licence_number' => $request->liquor_licence_number,
-                    'end_date' => $request->end_date,
-                    'start_date' => $request->start_date,
-                    'belongs_to' => $request->belongs_to
-                    ]);
+        // $request->validate([
+        //     'liquor_licence_number' => 'required',
+        //     'start_date' => 'required|date',
+        //     'end_date' => 'required|date'
+        //     ]);
+        $temp = TemporalLicence::whereSlug($slug)->first();
+        if(!is_null($temp->status) && empty($request->status)){
+            $db_status = $temp->status;
+            $status = $db_status;
+        }elseif(!empty($request->status)){
+            $sorted_statuses = Arr::sort($request->status);
+            $status = last($sorted_statuses);
+        }
+            $temp->update([
+                'company_id' => $request->company,
+                'liquor_licence_number' => $request->liquor_licence_number,
+                'end_date' => $request->end_date,
+                'start_date' => $request->start_date,
+                'client_paid_at' => $request->client_paid_at,
+                'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+                'logded_at' => $request->logded_at,
+                'issued_at' => $request->issued_at,
+                'delivered_at' => $request->delivered_at,
+                "status" => $status,
+                ]);
     
-               }elseif($request->belongs_to == 'Person'){
-                $request->validate(['consultant' => 'required']);
-                $temp = TemporalLicence::whereSlug($slug)->update([
-                    'consultant_id' => $request->consultant,
-                    'liquor_licence_number' => $request->liquor_licence_number,
-                    'end_date' => $request->end_date,
-                    'start_date' => $request->start_date,
-                    'belongs_to' => $request->belongs_to
-                    ]);
-    
-               }
-    
+              
             if($temp){
-               return to_route('temp_licences')->with('success','Temporal Licence updated successfully.');
+               return back()->with('success','Temporal Licence updated successfully.');
             }
-            return to_route('temp_licences')->with('error','AN unknown error occured while updating temporal Licence.');
+            return back()->with('error','An unknown error occured while updating temporal Licence.');
      }
 
      public function destroy($slug){

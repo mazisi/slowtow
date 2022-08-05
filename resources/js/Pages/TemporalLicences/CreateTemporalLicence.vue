@@ -105,9 +105,8 @@ export default {
 
 <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Company/Consultant?</label>
+  <label class="form-label">Company or Individual?</label>
   <select v-model="form.belongs_to" required class="form-control form-control-default">
-    <option value=" ">Select province</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>
     </select>

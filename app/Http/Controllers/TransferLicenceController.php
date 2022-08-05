@@ -82,6 +82,13 @@ class TransferLicenceController extends Controller
         $landloard_letter = TransferDocument::where('doc_type','Lease/Landlord Letter')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $representation = TransferDocument::where('doc_type','Representation')->where('licence_transfer_id',$view_transfer->id)->first();
         $index_page = TransferDocument::where('doc_type','Index page')->where('licence_transfer_id',$view_transfer->id)->first();
+        $client_quoted = TransferDocument::where('doc_type','Client Quoted')->where('licence_transfer_id',$view_transfer->id)->first();
+        $client_invoiced = TransferDocument::where('doc_type','Client Invoiced')->where('licence_transfer_id',$view_transfer->id)->first();
+        $payment_to_liquor_board = TransferDocument::where('doc_type','Payment To The Liquor Board')->where('licence_transfer_id',$view_transfer->id)->first();
+        $transfer_logded = TransferDocument::where('doc_type','Transfer Logded')->where('licence_transfer_id',$view_transfer->id)->first();
+        $activation_fee =  TransferDocument::where('doc_type','Activation Fee Paid')->where('licence_transfer_id',$view_transfer->id)->first();
+        $transfer_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id',$view_transfer->id)->first();
+        $transfer_delivered = TransferDocument::where('doc_type','Transfer Delivered')->where('licence_transfer_id',$view_transfer->id)->first();
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
@@ -104,7 +111,14 @@ class TransferLicenceController extends Controller
           'financial_interest' => $financial_interest,
           'landloard_letter' => $landloard_letter,
           'representation' => $representation,
-          'index_page' => $index_page
+          'index_page' => $index_page,
+          'client_quoted' => $client_quoted,
+          'client_invoiced' => $client_invoiced,
+          'payment_to_liquor_board' => $payment_to_liquor_board,
+          'transfer_logded' => $transfer_logded,
+          'activation_fee' => $activation_fee,
+          'transfer_issued' => $transfer_issued,
+          'transfer_delivered' => $transfer_delivered
         ]);
       }
 

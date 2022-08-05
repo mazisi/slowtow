@@ -31,27 +31,24 @@ class TransferDocsController extends Controller
 
     public function merge(Request $request){
 
-         $nominations =  LicenceTransfer::whereId($request->transfer_id)->first();
+         $exist =  LicenceTransfer::whereId($request->transfer_id)->first();
  
-           $merger = PDFMerger::init();
- //update licence transfer 'merged doc field
- //if it exists replace it
-           $exist = MergedDocument::where('nomination_id',$id)->first();
-           if ($exist) {
-             unlink(storage_path('/app/public/'.$exist->file_name));
+        $merger = PDFMerger::init();
+           
+           if (! is_null($exist->merged_document)) {
+             unlink(public_path('/storage/').$exist->file_name);
              $exist->delete();
            }
- 
-           foreach ($nominations as $nom) {
-             $merger->addPDF(storage_path('/app/public/').$nom->document, 'all');
+           $transfers =  TransferDocument::where('licence_transfer_id',$request->transfer_id)->orderby('num','ASC')->whereNotNull('num')->get();dd($transfers);
+           foreach ($transfers as $transfer) {
+             $merger->addPDF(public_path('/storage/').$transfer->document, 'all');
            }
            $fileName = time().'.pdf';
            $merger->merge();
  
-           $store_merged_file = MergedDocument::create([
-             'file_name' => $fileName,'nomination_id' => $id]);
+           $exist->update(['merged_document' => $fileName]);
  
-           $merger->save(storage_path('/app/public/'.$fileName));
+           $merger->save(public_path('/storage/'.$fileName));
            if($store_merged_file){
              return back()->with('success','Document merged successfully.');
            }        

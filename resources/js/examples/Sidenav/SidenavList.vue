@@ -324,7 +324,7 @@
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_temp_licence'}"
           collapseRef="/create-temp-licence"
-          navText="New Temp Licence">
+          navText="New Temporary Licence">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">add</i>
           </template>

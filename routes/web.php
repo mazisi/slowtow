@@ -17,13 +17,14 @@ use App\Http\Controllers\CompanyDocsController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
 use App\Http\Controllers\AlterLicenceController;
+use App\Http\Controllers\TransferDocsController;
+use App\Http\Controllers\MergeDocumentController;
 use App\Http\Controllers\LicenceRenewalController;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
-use App\Http\Controllers\MergeDocumentController;
+use App\Http\Controllers\TemporalLicenceDocsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
-use App\Http\Controllers\TransferDocsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -99,7 +100,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
-        Route::post('/merge-transfer-documents',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
+        Route::post('/merge-transfer-documents',[TransferDocsController::class,'merge'])->name('transfer_licence_docs');
 
 
         Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');
@@ -111,9 +112,13 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
         Route::get('/upload-contacts',[ContactController::class,'create'])->name('upload_contacts');
+        Route::post('/store-individual-contact',[ContactController::class,'storeIndividualContact'])->name('store_individual_contact');
+        Route::patch('/update-individual-contact/{id}',[ContactController::class,'updateIndividualContact'])->name('update_individual_contact');
+        Route::delete('/delete-individual-contact/{id}',[ContactController::class,'destroy'])->name('delete_individual_contact');
+        Route::get('/create-contact',[ContactController::class,'createContact'])->name('create_contacts');
+        Route::get('/view-contact/{id}',[ContactController::class,'viewContact'])->name('view_contacts');
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
         Route::delete('/delete-contact/{id}',[ContactController::class,'destroy'])->name('delete_contact');
-        Route::delete('/delete-all-contacts',[ContactController::class,'destroyAll'])->name('delete__all_contacts');
 
         //Reports
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
@@ -155,8 +160,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create-temp-licence', [TemporalLicenceController::class,'create'])->name('create_temp_licence');
         Route::post('/submit-temp-licence', [TemporalLicenceController::class,'store'])->name('store_temp_licence');
         Route::get('/view-temp-licence/{slug}', [TemporalLicenceController::class,'show'])->name('view_temp_licence');
-        Route::post('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
+        Route::patch('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
         Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy'])->name('update_temp_licence');
+        
+        Route::post('/submit-temporal-licence-document', [TemporalLicenceDocsController::class,'store']);
         
 
         Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');

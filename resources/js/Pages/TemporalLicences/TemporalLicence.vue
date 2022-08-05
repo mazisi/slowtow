@@ -85,10 +85,10 @@ methods: {
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                     Liqour Licence Number
+                     Event Name
                     </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Company Name
+                    Company/Individual
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     View
@@ -107,7 +107,7 @@ methods: {
                     </div>
                       
                     </td>
-                    <td v-if="licence.consultant == null">
+                    <td v-if="licence.people === null">
                           <h6 class="mb-0 text-sm">               
                           <Link :href="`/view-temp-licence/${licence.slug}`"
                             class="px-0 nav-link font-weight-bold lh-1"
@@ -116,11 +116,10 @@ methods: {
                            </h6>
                     </td>
 
-                    <td v-if="licence.company ==null">
+                    <td v-if="licence.company === null">
                           <h6 class="mb-0 text-sm">
-                           <Link :href="`/view-temp-licence/${licence.slug}`"
-                            >
-                            {{ licence.consultant.first_name }} {{ licence.consultant.last_name }}
+                           <Link :href="`/view-temp-licence/${licence.slug}`">
+                            {{ licence.people.full_name }}
                           </Link>
                            </h6>
                     </td>
