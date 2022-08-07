@@ -27,7 +27,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active Person</label>
-<input v-model="form.active"  type="checkbox" id="active-checkbox" value="1">
+<input  type="checkbox" id="active-checkbox" value="1" :checked="form.active == '1'">
 </div>
 </div>
                   
@@ -155,7 +155,7 @@ export default {
         passport_valid_until: null,
         valid_fingerprint: null,
         fingerprint_valid_until: null,
-        active: null,
+        active: '1',
         }
     };
   },

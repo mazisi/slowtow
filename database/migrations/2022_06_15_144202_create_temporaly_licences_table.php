@@ -26,6 +26,8 @@ return new class extends Migration
             $table->date('logded_at')->nullable();
             $table->date('issued_at')->nullable();
             $table->date('delivered_at')->nullable();
+            $table->date('company_merged_document')->nullable();
+            $table->date('individual_merged_document')->nullable();
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

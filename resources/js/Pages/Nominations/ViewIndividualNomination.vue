@@ -104,7 +104,7 @@ export default{
           nomineeForm.post('/add-selected-nominees', {
             preserveScroll: true,
             onSuccess: () => { 
-              show_modal = false;        
+              this.show_modal = false;        
               let dismiss = document.querySelector('.modal-backdrop');
                 dismiss.remove();
                 nomineeForm.reset();
@@ -348,7 +348,7 @@ export default{
 <label for="Select nominees" class="form-check-label text-body text-truncate status-heading">Select Person(s) To Nominate</label>
 </div>
 <div class="col-md-1">
-<button type="button" data-bs-toggle="modal" data-bs-target="#pop-modal" class="btn btn-sm btn-secondary">Add</button>
+<button @click="show_modal=true" type="button" data-bs-toggle="modal" data-bs-target="#pop-modal" class="btn btn-sm btn-secondary">Add</button>
 </div>
 
 <div class="table-responsive mb-2">
@@ -405,7 +405,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="documents-required" type="checkbox" @input="pushData($event.target.value)"
 :checked="nomination.status >= '6'" value="6" class="active-checkbox">
-<label for="documents-required" class="form-check-label text-body text-truncate status-heading">Documents Required </label>
+<label for="documents-required" class="form-check-label text-body text-truncate status-heading">Collate Nomination Documents </label>
 </div>
 </div>
 

@@ -58,12 +58,11 @@ class TransferDocsController extends Controller
 
     public function destroy($id){
         $model = TransferDocument::find($id);
-        if(!is_null($model->document_file)){
             // unlink(storage_path('app/folder/'.$model->document_file));
-            unlink(public_path('storage/app/public/'.$model->document_file));
+            unlink(public_path('storage/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
-        }
+      
     }
 
 }

@@ -101,7 +101,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
         Route::post('/merge-transfer-documents',[TransferDocsController::class,'merge'])->name('transfer_licence_docs');
-
+        Route::delete('/delete-transfer-document/{document_id}',[TransferDocsController::class,'destroy']);
 
         Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');
         Route::get('/new-alteration',[AlterLicenceController::class,'newAlteration'])->name('new_alteration');
@@ -124,12 +124,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
 
         //Consultants
-        Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
-        Route::get('/create-consultant',[ConsultantController::class,'create'])->name('create_consultant');
-        Route::post('/submit-consultant',[ConsultantController::class,'store'])->name('submit_consultant');
-        Route::get('/view-consultant/{slug}',[ConsultantController::class,'show'])->name('view_consultant');
-        Route::delete('/unlink-consultant/{id}',[ConsultantController::class,'unlinkConsultant'])->name('unlink_consultant');
-        Route::patch('/update-consultant/{slug}',[ConsultantController::class,'update'])->name('update_consultant');
+        // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
+        // Route::get('/create-consultant',[ConsultantController::class,'create'])->name('create_consultant');
+        // Route::post('/submit-consultant',[ConsultantController::class,'store'])->name('submit_consultant');
+        // Route::get('/view-consultant/{slug}',[ConsultantController::class,'show'])->name('view_consultant');
+        // Route::delete('/unlink-consultant/{id}',[ConsultantController::class,'unlinkConsultant'])->name('unlink_consultant');
+        // Route::patch('/update-consultant/{slug}',[ConsultantController::class,'update'])->name('update_consultant');
 
 
         Route::get('/people', [PersonController::class,'index'])->name('people');
@@ -161,9 +161,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-temp-licence', [TemporalLicenceController::class,'store'])->name('store_temp_licence');
         Route::get('/view-temp-licence/{slug}', [TemporalLicenceController::class,'show'])->name('view_temp_licence');
         Route::patch('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
-        Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy'])->name('update_temp_licence');
+        Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy']);
         
         Route::post('/submit-temporal-licence-document', [TemporalLicenceDocsController::class,'store']);
+        Route::delete('/delete-temporal-licence-document/{id}', [TemporalLicenceDocsController::class,'destroy']);
+        Route::post('/merge-temporal-documents/{type}', [TemporalLicenceDocsController::class,'merge']);
         
 
         Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');

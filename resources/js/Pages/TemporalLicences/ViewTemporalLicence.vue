@@ -26,7 +26,25 @@ export default {
     company_poa: Object,
     company_annexure_b: Object,
     company_annexure_c: Object,
-    company_cipc: Object
+    company_cipc: Object,
+    company_id_document: Object,
+    company_representations: Object,
+    company_landlord_letter: Object,
+    company_security_letter: Object,
+    company_advert: Object,
+    company_plan: Object,
+    //individual
+    
+    individual_application_form: Object,
+    power_of_attorney: Object,
+    individual_annexure_b: Object,
+    individual_annexure_c: Object,
+    individual_representations: Object,
+    individual_landlord_letter: Object,
+    individual_security_letter: Object,
+    individual_advert: Object,
+    individual_plan: Object,
+    get_person_id_document: Object
      
   },
 
@@ -40,7 +58,8 @@ export default {
       client_paid_at: props.licence.client_paid_at,
       payment_to_liquor_board_at: props.licence.payment_to_liquor_board_at,
       logded_at: props.licence.logded_at,
-      issued_at: props.licence.issued_at,  
+      issued_at: props.licence.issued_at, 
+      delivered_at: props.licence.delivered_at,  
      })
 
     const uploadDoc = useForm({
@@ -82,16 +101,21 @@ export default {
             })
           }
 
+         const mergeForm = useForm({ temporal_licence_id: props.licence.id})
+          function mergeCompanyDocuments(type){
+            mergeForm.post(`/merge-temporal-documents/${type}`)
+          }
+
     function getDocType(doc_type,person_or_company,merge_number){
       this.uploadDoc.doc_type = doc_type
       this.uploadDoc.person_or_company = person_or_company
       this.uploadDoc.merge_number = merge_number
-      this.uploadDoc.show_modal =true   
+      this.show_modal =true   
     }
 
     function deleteDocument(id){
         if(confirm('Document will be deleted permanently...Continue ??')){
-          Inertia.delete(`/delete-renewal-document/${id}`, {
+          Inertia.delete(`/delete-temporal-licence-document/${id}`, {
             //
           })
         }
@@ -131,7 +155,9 @@ export default {
      computeDocumentDate,deleteDocument,
      createTask,
      submitTask,
-     checkBodyLength
+     checkBodyLength,
+     mergeCompanyDocuments,
+     mergeForm
      }
   },
    components: {
@@ -246,7 +272,6 @@ export default {
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(client_invoiced.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -261,42 +286,69 @@ export default {
 </ul>
 <hr>
 
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="client-paid"  type="checkbox" value="3"
+@input="pushData($event.target.value)" 
+:checked="licence.status >= 3">
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+</div>
+</div> 
+
+<div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+     </div>
+   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+   </div>
+
+<hr>
+
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
-@input="pushData($event.target.value)" value="3" :checked="licence.status >= 3">
+@input="pushData($event.target.value)" value="4" :checked="licence.status >= 4">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Collate Temporary Licence Documents </label>
 </div>
 </div> 
 
-<div class="d-flex row">
+
+<!-- ===============   Company File Uploads ===========================-->
+<div v-if="licence.people_id == null" class="d-flex row">
   <div class="col-sm-2"></div>
-  <!-- ===============   Company File Upload ===========================-->
+  
   <div class="col-sm-5">
     <button type="button" class="btn btn-outline-success document-names">Application Form </button>
-     <i v-if="company_application_form == null"
+     <i v-if="company_application_form === null"
       @click="getDocType('Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
-     <i v-if="company_application_form !== null" @click="deleteDocument({{ company_application_form.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+     <i v-if="company_application_form !== null" @click="deleteDocument(company_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
      <a v-if="company_application_form !== null" :href="`/storage/app/public/${company_application_form.document}`" target="_blank">
      <i v-if="company_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <i class="fa fa-link h5 mx-2 curser-pointer"></i> <br>
+      <a v-if="liqour_board !== null" :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+    <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
+    </a>
+    
+    <a v-else :disabled="true">
+    <i class="fa fa-link h5 mx-2"  aria-hidden="true"></i>
+    </a> <br>
 
        <button type="button" class="btn btn-outline-success document-names">POA &amp; RES</button> 
        <i v-if="company_poa == null" @click="getDocType('POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-cloud-upload h5 curser-pointer mx-2"></i>
-         <i v-if="company_poa !== null" @click="deleteDocument({{ company_poa.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+         <i v-if="company_poa !== null" @click="deleteDocument(company_poa.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
      <a v-if="company_poa !== null" :href="`/storage/app/public/${company_poa.document}`" target="_blank">
      <i v-if="company_poa !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B</button>
         <i v-if="company_annexure_b == null" @click="getDocType('Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-         <i v-if="company_annexure_b !== null" @click="deleteDocument({{ company_annexure_b.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+         <i v-if="company_annexure_b !== null" @click="deleteDocument(company_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_annexure_b !== null" :href="`/storage/app/public/${company_annexure_b.document}`" target="_blank">
         <i v-if="company_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
@@ -304,14 +356,14 @@ export default {
         <button type="button" class="btn btn-outline-success document-names">Annexure C</button>
          <i v-if="company_annexure_c == null" @click="getDocType('Annexure C','Company',5)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <i v-if="company_annexure_c !== null" @click="deleteDocument({{ company_annexure_c.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <i v-if="company_annexure_c !== null" @click="deleteDocument(company_annexure_c.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_annexure_c !== null" :href="`/storage/app/public/${company_annexure_c.document}`" target="_blank">
         <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
         <button type="button" class="btn btn-outline-success document-names"> CIPC Certificate</button>
-         <i v-if="company_cipc !== null" @click="getDocType('CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
+         <i v-if="company_cipc == null" @click="getDocType('CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-         <i v-if="company_cipc !== null" @click="deleteDocument({{ company_cipc.id }})" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+         <i v-if="company_cipc !== null" @click="deleteDocument(company_cipc.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_cipc !== null" :href="`/storage/app/public/${company_cipc.document}`" target="_blank">
         <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br> 
@@ -320,55 +372,222 @@ export default {
   
   <div class="col-sm-5">
   <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
-     <i class="fa fa-cloud-upload h5 mx-2"></i> 
-     <i class="fa fa-trash-alt h5 text-danger"></i> 
-     <i class="fa fa-pdf h4 text-white"></i> <br> 
+     <i v-if="company_id_document == null" @click="getDocType('ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="company_id_document !== null" @click="deleteDocument(company_id_document.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_id_document !== null" :href="`/storage/app/public/${company_id_document.document}`" target="_blank">
+        <i v-if="company_id_document !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
+
+
    <button type="button" class="btn btn-outline-success document-names">Representations</button>
-  <i class="fa fa-cloud-upload h5 mx-2"></i> 
-     <i class="fa fa-trash-alt h5 text-danger"></i> 
-     <i class="fa fa-pdf h4 text-white"></i> <br>  
+  <i v-if="company_representations == null" @click="getDocType('Representations','Company',8)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="company_representations !== null" @click="deleteDocument(company_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_representations !== null" :href="`/storage/app/public/${company_representations.document}`" target="_blank">
+        <i v-if="company_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+     <br>  
+
+
     <button type="button" class="btn btn-outline-success document-names">Landlord Letter</button>
-     <i class="fa fa-cloud-upload h5 mx-2"></i> 
-     <i class="fa fa-trash-alt h5 text-danger"></i> 
-     <i class="fa fa-pdf h4 text-white"></i> <br>
+     <i v-if="company_landlord_letter == null" @click="getDocType('Landlord Letter','Company',9)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="company_landlord_letter  !== null" @click="deleteDocument(company_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_landlord_letter !== null" :href="`/storage/app/public/${company_landlord_letter.document}`" target="_blank">
+        <i v-if="company_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+        <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
-      <i class="fa fa-cloud-upload h5 mx-2"></i> 
-     <i class="fa fa-trash-alt h5 text-danger"></i> 
-     <i class="fa fa-pdf h4 text-white"></i> <br>
+      <i v-if="company_security_letter == null" @click="getDocType('Security Letter','Company',10)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="company_security_letter  !== null" @click="deleteDocument(company_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_security_letter !== null" :href="`/storage/app/public/${company_security_letter.document}`" target="_blank">
+        <i v-if="company_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
+
+
       <button type="button" class="btn btn-outline-success document-names">Advert/Blurb</button>
-      <i class="fa fa-cloud-upload h5 mx-2"></i> 
-     <i class="fa fa-trash-alt h5 text-danger"></i> 
-     <i class="fa fa-pdf h4 text-white"></i> <br>
-        <button type="button" class="btn btn-outline-success document-names">Plan/Maps</button>
-    <i class="fa fa-cloud-upload h5 mx-2"></i> 
-     <i class="fa fa-trash-alt h5 text-danger"></i> 
-     <i class="fa fa-pdf h4 text-white"></i> <br> 
+      <i v-if="company_advert == null" @click="getDocType('Advert/Blurb','Company',11)" 
+      data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+    <i v-if="company_advert  !== null" @click="deleteDocument(company_advert.id)" 
+    class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_advert !== null" :href="`/storage/app/public/${company_advert.document}`" target="_blank">
+        <i v-if="company_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
+
+
+    <button type="button" class="btn btn-outline-success document-names">Plan/Maps</button>
+    <i v-if="company_plan == null" @click="getDocType('Plan/Maps','Company',12)" 
+      data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+    <i v-if="company_plan  !== null" @click="deleteDocument(company_plan.id)" 
+    class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="company_plan !== null" :href="`/storage/app/public/${company_plan.document}`" target="_blank">
+        <i v-if="company_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
+ 
+<button v-if="company_application_form !== null
+&& company_poa !== null
+&& company_annexure_b !== null
+&& company_annexure_c !== null
+&& company_cipc !== null
+&& company_id_document !== null
+&& company_representations !== null
+&& company_landlord_letter !== null
+&& company_security_letter !== null
+&& company_advert !== null
+&& company_plan !== null"
+@click="mergeCompanyDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
+  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
+
+<button v-else type="button" disabled :style="{float: 'right'}" class=" btn btn-sm btn-secondary" >
+  Compile &amp; Merge</button>
+
+  <!-- <button v-if="licence.company_merged_document !== null" type="button" :style="{float: 'right'}" class=" btn btn-sm btn-secondary" >
+  View Merged Document</button> -->
+  </div>
 </div>
+
+
+
+
+
+<!-- ===============   Individual File Uploads ===========================-->
+<div v-if="licence.company_id == null" class="d-flex row">
+  <div class="col-sm-2"></div>
+  
+  <div class="col-sm-5">
+    <button type="button" class="btn btn-outline-success document-names">Application Form </button>
+     <i v-if="individual_application_form === null"
+      @click="getDocType('Application Form','Individual',1)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="individual_application_form !== null" @click="deleteDocument(individual_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+     <a v-if="individual_application_form !== null" :href="`/storage/app/public/${individual_application_form.document}`" target="_blank">
+     <i v-if="individual_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
+
+
+
+     <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
+      <a v-if="liqour_board !== null" :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+    <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
+    </a>
+    
+    <a v-else :disabled="true">
+    <i class="fa fa-link h5 mx-2"  aria-hidden="true"></i>
+    </a> <br>
+
+       <button type="button" class="btn btn-outline-success document-names">Power Of Attorney</button> 
+       <i v-if="power_of_attorney == null" @click="getDocType('Power Of Attorney','Individual',3)" data-bs-toggle="modal" data-bs-target="#documents" 
+         class="fa fa-cloud-upload h5 curser-pointer mx-2"></i>
+         <i v-if="power_of_attorney !== null" @click="deleteDocument(power_of_attorney.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+     <a v-if="power_of_attorney !== null" :href="`/storage/app/public/${power_of_attorney.document}`" target="_blank">
+     <i v-if="power_of_attorney !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
+
+       <button type="button" class="btn btn-outline-success document-names">Annexure B</button>
+        <i v-if="individual_annexure_b == null" @click="getDocType('Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
+        class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
+         <i v-if="individual_annexure_b !== null" @click="deleteDocument(individual_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_annexure_b !== null" :href="`/storage/app/public/${individual_annexure_b.document}`" target="_blank">
+        <i v-if="individual_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+     <br> 
+
+        <button type="button" class="btn btn-outline-success document-names">Annexure C</button>
+         <i v-if="individual_annexure_c == null" @click="getDocType('Annexure C','Individual',5)" data-bs-toggle="modal" data-bs-target="#documents" 
+         class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
+        <i v-if="individual_annexure_c !== null" @click="deleteDocument(individual_annexure_c.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_annexure_c !== null" :href="`/storage/app/public/${individual_annexure_c.document}`" target="_blank">
+        <i v-if="individual_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
+
+
+          <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
+     <a v-if="get_person_id_document !== null" :href="`/storage/app/public/${get_person_id_document.document}`" target="_blank">
+        <i  class="fa fa-link h5 mx-2" ></i></a>
+    <a v-else :href="`#!`">
+        <i  class="fa fa-link h5 mx-2"></i></a> <br> 
+
+    <div class="col-sm-1"> </div>
+  </div>
+  
+  <div class="col-sm-5">
+     <button type="button" class="btn btn-outline-success document-names">Representations</button>
+  <i v-if="individual_representations == null" @click="getDocType('Representations','Individual',7)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="individual_representations !== null" @click="deleteDocument(individual_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_representations !== null" :href="`/storage/app/public/${individual_representations.document}`" target="_blank">
+        <i v-if="individual_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+     <br>  
+
+
+    <button type="button" class="btn btn-outline-success document-names">Landlord Letter</button>
+     <i v-if="individual_landlord_letter == null" @click="getDocType('Landlord Letter','Individual',8)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="individual_landlord_letter  !== null" @click="deleteDocument(individual_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_landlord_letter !== null" :href="`/storage/app/public/${individual_landlord_letter.document}`" target="_blank">
+        <i v-if="individual_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
+        <br>
+     <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
+      <i v-if="individual_security_letter == null" @click="getDocType('Security Letter','Individual',9)" data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+     <i v-if="individual_security_letter  !== null" @click="deleteDocument(individual_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_security_letter !== null" :href="`/storage/app/public/${individual_security_letter.document}`" target="_blank">
+        <i v-if="individual_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
+
+
+      <button type="button" class="btn btn-outline-success document-names">Advert/Blurb</button>
+      <i v-if="individual_advert == null" @click="getDocType('Advert/Blurb','Individual',10)" 
+      data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+    <i v-if="individual_advert  !== null" @click="deleteDocument(individual_advert.id)" 
+    class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_advert !== null" :href="`/storage/app/public/${individual_advert.document}`" target="_blank">
+        <i v-if="individual_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
+
+
+    <button type="button" class="btn btn-outline-success document-names">Plan/Maps</button>
+    <i v-if="individual_plan == null" @click="getDocType('Plan/Maps','Individual',11)" 
+      data-bs-toggle="modal" data-bs-target="#documents" 
+     class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
+    <i v-if="individual_plan  !== null" @click="deleteDocument(individual_plan.id)" 
+    class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
+        <a v-if="individual_plan !== null" :href="`/storage/app/public/${individual_plan.document}`" target="_blank">
+        <i v-if="individual_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
+  <div class="col-sm-1"> </div>
+ 
+<button v-if="individual_application_form !== null
+&& power_of_attorney !== null
+&& individual_annexure_b !== null
+&& individual_annexure_c !== null
+&& individual_representations !== null
+&& individual_landlord_letter !== null
+&& individual_security_letter !== null
+&& individual_advert !== null
+&& individual_plan !== null"
+@click="mergeCompanyDocuments('Individual')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
+  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+  <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
+
+<button v-else type="button" disabled :style="{float: 'right'}" class=" btn btn-sm btn-secondary" >
+  Compile &amp; Merge</button>
+
+  </div>
 </div>
 
 <hr>
 
-<div class="col-md-5 columns">
+<div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="4"
-:checked="licence.status >= 4">
+<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="5"
+:checked="licence.status >= 5">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
 
-<div class="col-md-1 columns"></div>
- <div class="col-md-4 columns">
+
+<div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
      </div>
    <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
-   </div> 
-   <div class="col-md-1 columns">
-    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
-
 
 
 
@@ -383,7 +602,6 @@ export default {
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
-      <p v-if="liqour_board !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(liqour_board.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -401,7 +619,7 @@ export default {
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
-@input="pushData($event.target.value)" value="5" :checked="licence.status >= 5">
+@input="pushData($event.target.value)" value="6" :checked="licence.status >= 6">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Lodged </label>
 </div>
 </div> 
@@ -409,15 +627,10 @@ export default {
 <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.issued_at">
+    <input type="date" class="form-control form-control-default" v-model="form.logded_at">
      </div>
-   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+   <div v-if="errors.logded_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
    </div>
-
-<!-- <div class="col-md-6 columns">
-<Datepicker v-model="form.year" yearPicker />
-<p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
-</div> -->
 
 <div class="col-md-6" style="margin-top: -1rem;">
 <ul class="list-group">
@@ -430,7 +643,6 @@ export default {
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="licence_issued !== null" class="mb-0 text-xs">{{ licence_issued.document_name }}</p>
-      <p v-if="licence_issued !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(licence_issued.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="licence_issued !== null" @click="deleteDocument(licence_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -450,9 +662,54 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="delivered" type="checkbox" value="6"
-@input="pushData($event.target.value)" :checked="licence.status == 6">
+<input class="active-checkbox" id="delivered" type="checkbox" value="7"
+@input="pushData($event.target.value)" :checked="licence.status == 7">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Issued</label>
+</div>
+</div>
+
+<div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.issued_at">
+     </div>
+   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+   </div>
+
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="licence_issued !== null">
+    <a :href="`/storage/app/public/${licence_issued.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="licence_issued !== null" class="mb-0 text-xs">{{ licence_issued.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+
+    <a v-if="licence_issued !== null" @click="deleteDocument(licence_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>  
+<hr>
+
+
+
+
+
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="delivered" type="checkbox" value="8"
+@input="pushData($event.target.value)" :checked="licence.status == 8">
+<label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Delivered</label>
 </div>
 </div>
 
@@ -464,51 +721,7 @@ export default {
    <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
    </div>
 
-<!-- <ul class="list-group">
-  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="licence_delivered !== null">
-    <a :href="`/storage/app/public/${licence_delivered.document}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-    </a>
-    </div>
 
-   <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
-      <p v-if="licence_delivered !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(licence_delivered.date) }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-    </div>
-
-    <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-    </a>
-    <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
-    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
-    </a>
-  </li>
-</ul>   -->
-
-
-
-
-
-
-<div class="col-md-6 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="delivered" type="checkbox" value="7"
-@input="pushData($event.target.value)" :checked="licence.status == 7">
-<label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Delivered</label>
-</div>
-</div>
-
-<div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
-     </div>
-   <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
-</div>
 
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -521,8 +734,7 @@ export default {
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
-      <p v-if="licence_delivered !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(licence_delivered.date) }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
     <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -538,7 +750,7 @@ export default {
 
 <div class="text-danger">
   <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
-  <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+  <button :disabled="form.processing" :style="{float: 'right'}" class="btn  btn-secondary ms-2" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Save</button>
 </div>
