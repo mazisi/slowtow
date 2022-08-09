@@ -18,8 +18,13 @@ return new class extends Migration
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->integer('old_company_id');
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->string('status')->nullable();
+            $table->date('lodged_at')->nullable();
+            $table->date('activation_fee_paid_at')->nullable();
+            $table->date('issued_at')->nullable();
+            $table->date('delivered_at')->nullable();
+            $table->date('payment_to_liquor_board_at')->nullable();
             $table->string('merged_document')->nullable();
             $table->string('slug');
             $table->timestamps();

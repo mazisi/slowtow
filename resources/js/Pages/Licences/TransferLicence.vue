@@ -24,7 +24,6 @@ export default {
           old_company: props.licence.company.name,
           old_company_id: props.licence.company_id,
           new_company: null,
-          date: null,
           licence_id: props.licence.id,
           status: [],
     })
@@ -163,13 +162,13 @@ function assignActiveValue(event){
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>
 
-   <div class="col-4 columns">
+   <!-- <div class="col-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Transfer Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.date">
      </div>
    <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-   </div>
+   </div> -->
 
 <hr>
 

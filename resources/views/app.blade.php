@@ -13,6 +13,8 @@
 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
         <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.tiny.cloud/1/9l6lug40mtg10elrk1ncpkmwgmd9gmu8xggx0h2i8ad8xt82/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
         <script src="{{ mix('js/app.js') }}" defer></script>
         @inertiaHead
         <style>

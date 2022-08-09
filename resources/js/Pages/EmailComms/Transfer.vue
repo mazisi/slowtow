@@ -5,18 +5,15 @@ import Layout from "../../Shared/Layout.vue";
 export default {
   name: "dashboard-default",
   props: {
-    with_deposit_paid_status: Object,
-    with_client_invoiced_status: Object,
-    with_get_client_paid_status: Object,
-    with_transfer_logded_status: Object,
-    with_certificate_received_status: Object,
-    with_complete_status: Object
+    transfers: Object,
+    success: String,
+    error: String
   },
   data() {
     return {
-      term: '',
-      withThrashed: '', 
-      active_status: ''  
+      month: '',
+      province: '',
+      stage: '',
     }
   },
   components: {
@@ -24,11 +21,11 @@ export default {
     Link,
 },
 methods: {
-     search(){
-        this.$inertia.replace(route('companies',{
-          term: this.term,
-          withThrashed: this.withThrashed,
-          active_status: this.active_status
+     filter(){
+        this.$inertia.replace(route('get_licence_transfers',{
+              month: this.month,
+             province: this.province,
+             stage: this.stage,
           }))
         },
 
@@ -92,293 +89,103 @@ methods: {
 
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
+  <div class="row">
+   <div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select v-model="stage" @change="filter" class="form-control form-control-default">
+<option :value="''" disabled selected>Filter By Stage</option>
+<option value="1">Client Quoted With Requirements </option>
+<option value="2">Client Invoiced </option>
+<option value="5">Payment To The Liquor Board</option>
+<option value="6">Transfer Lodged </option>
+<option value="7">Activation Fee Paid </option>
+<option value="8">Transfer Issued </option>
+</select>
+</div>
+
+</div>
+  <div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select v-model="month" @change="filter" class="form-control form-control-default" >
+<option :value="''" disabled selected>Filter By Month</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+</div>
+
+</div>
+
+<div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select @change="filter" class="form-control form-control-default" v-model="province">
+<option :value="''" disabled selected>Filter By Province</option>
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+</div>
+</div>
   <h5 class="text-center">Transfers</h5>
   <div class="table-responsive p-0">
-  <h6 class="text-danger">Deposit Paid</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th> -->
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="with_deposit_paid in with_deposit_paid_status" :key="with_deposit_paid.id">
+      <tr v-for="transfer in transfers" :key="transfer.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              
-              <Link :href="`/view-transfered-licence/${with_deposit_paid.slug}`" 
-               class="text-secondary text-center font-weight-bold text-xs">
-               <h6 class="mb-0 text-sm">{{ with_deposit_paid.licence.trading_name }}</h6>
-               </Link>
+              <h6 class="mb-0 text-sm">{{ transfer.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_deposit_paid.date).getFullYear() }}/{{ this.getRenewalYear(with_deposit_paid.date)  }} </p>
+              Renewal For: {{ new Date(transfer.date).getFullYear() }}/{{ this.getRenewalYear(transfer.date)  }} </p>
             </div>
           </div>
         </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-        <!-- <td class="align-middle text-center text-sm">
-          <span v-if="with_deposit_paid.status == 'Invoiced'" class="badge bg-dark text-default">{{ with_deposit_paid.status }}</span>
-        <span v-if="with_deposit_paid.status == 'Paid'" class="badge bg-info text-default">{{ with_deposit_paid.status }}</span>
-        <span v-if="with_deposit_paid.status == 'Get Client Docs'" class="badge bg-light text-default">{{ with_deposit_paid.status }}</span>
-        <span v-if="with_deposit_paid.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ with_deposit_paid.status }}</span>
-        <span v-if="with_deposit_paid.status == 'Issued'" class="badge bg-secondary text-default">{{ with_deposit_paid.status }}</span>
-        <span v-if="with_deposit_paid.status == 'Complete'" class="badge bg-success text-default">{{ with_deposit_paid.status }}</span>
-        </td> -->
-        <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_deposit_paid.date }}</span>
+        
+        <td class="align-middle text-center text-sm">
+          <span v-if="transfer.status == 1">Client Quoted</span>
+        <span v-if="transfer.status == 2" >Client Invoiced</span>
+        <span v-if="transfer.status == 4" >Payment To Liquor Board</span>
+        <span v-if="transfer.status == 5" >Renewal Issued</span>
+        
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_deposit_paid.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <span class="text-secondary text-xs font-weight-bold">{{ transfer.date }}</span>
+        </td>
+        <td class="align-middle text-center">
+        <Link :href="`/email-comms/get-mail-template/${transfer.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
-        <Link :href="`/view-transfered-licence/${with_deposit_paid.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        
+        <Link :href="`/view-licence-transfer/${transfer.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
       
-   
-    </tbody>
-  </table>
-</div>
-<hr>
-
-
-
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Client Invoiced</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="with_client_invoiced in with_client_invoiced_status" :key="with_client_invoiced.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <Link :href="`/view-transfered-licence/${with_client_invoiced.slug}`" 
-               class="text-secondary text-center font-weight-bold text-xs">
-               <h6 class="mb-0 text-sm">{{ with_client_invoiced.licence.trading_name }}</h6>
-               </Link>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_client_invoiced.date).getFullYear() }}/{{ this.getRenewalYear(with_client_invoiced.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_client_invoiced.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_client_invoiced.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-transfered-licence/${with_client_invoiced.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-     
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger"> Client Paid </h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-    <!-- <h6 v-if="$props.with_get_client_docs_statuses.length <= 0" class="text-center">No licences awaiting client docs</h6> -->
-      <tr v-for="with_get_client_paid in with_get_client_paid_status" :key="with_get_client_paid.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-               <Link :href="`/view-transfered-licence/${with_get_client_paid.slug}`" 
-               class="text-secondary text-center font-weight-bold text-xs">
-               <h6 class="mb-0 text-sm">{{ with_get_client_paid.licence.trading_name }}</h6>
-               </Link>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_get_client_paid.date).getFullYear() }}/{{ this.getRenewalYear(with_get_client_paid.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_get_client_paid.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_get_client_paid.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-transfered-licence/${with_get_client_paid.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-      
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Transfer Logded</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-       <tr v-for="with_transfer_logded in with_transfer_logded_status" :key="with_transfer_logded.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <Link :href="`/view-transfered-licence/${with_transfer_logded.slug}`" 
-               class="text-secondary text-center font-weight-bold text-xs">
-               <h6 class="mb-0 text-sm">{{ with_transfer_logded.licence.trading_name }}</h6>
-               </Link>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_transfer_logded.date).getFullYear() }}/{{ this.getRenewalYear(with_transfer_logded.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_transfer_logded.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_transfer_logded.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-transfered-licence/${with_transfer_logded.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Certificate Received</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-       <tr v-for="with_certificate_received in with_certificate_received_status" :key="with_certificate_received.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <Link :href="`/view-transfered-licence/${with_certificate_received.slug}`" 
-               class="text-secondary text-center font-weight-bold text-xs">
-               <h6 class="mb-0 text-sm">{{ with_certificate_received.licence.trading_name }}</h6>
-               </Link>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_certificate_received.date).getFullYear() }}/{{ this.getRenewalYear(with_certificate_received.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_certificate_received.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_certificate_received.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-transfered-licence/${with_certificate_received.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Transfer Complete And Delivered</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="with_complete in with_complete_status" :key="with_complete.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <Link :href="`/view-transfered-licence/${with_complete.slug}`" 
-               class="text-secondary text-center font-weight-bold text-xs">
-               <h6 class="mb-0 text-sm">{{ with_complete.licence.trading_name }}</h6>
-               </Link>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_complete.date).getFullYear() }}/{{ this.getRenewalYear(with_complete.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_complete.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_complete.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-         <Link :href="`/view-transfered-licence/${with_complete.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
    
     </tbody>
   </table>

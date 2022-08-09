@@ -25,7 +25,6 @@ class TransferLicenceController extends Controller
     public function store(Request $request,$slug){
        $request->validate([
            "new_company" => "required|exists:companies,id",
-           "date" => "required|date",
            "old_company_id" => "required|exists:companies,id"
        ]);
 
@@ -34,7 +33,6 @@ class TransferLicenceController extends Controller
         'licence_id'=> $request->licence_id,
         'company_id'=> $request->new_company,
         'old_company_id' => $request->old_company_id,
-        'date' => $request->date,
         'status' => last($sorted_statuses),
         'slug' => $request->old_company.sha1(time())
        ]);
@@ -127,9 +125,23 @@ class TransferLicenceController extends Controller
         $request->validate([
           'transfer_date'=> 'required|date'
         ]);
+
+        $trans= LicenceTransfer::find($request->licence_id);
+        if(!is_null($trans->status) && empty($request->status)){
+            $db_status = $trans->status;
+            $status = $db_status;
+        }elseif(!empty($request->status)){
+            $sorted_statuses = Arr::sort($request->status);
+            $status = last($sorted_statuses);
+        }
         $update = LicenceTransfer::whereSlug($request->slug)->update([
-          'status' => last($request->status),
-          'date' => $request->transfer_date
+          'status' => $status,
+          'date' => $request->transfer_date,
+          'lodged_at' => $request->lodged_at,
+          'activation_fee_paid_at' => $request->activation_fee_paid_at,
+          'issued_at' => $request->issued_at,
+          'delivered_at' => $request->delivered_at,
+          'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
         ]);
         if ($update) {
           return back()->with('success','Licence transfer updated successfully.');

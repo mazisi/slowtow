@@ -25,6 +25,7 @@ use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\TemporalLicenceDocsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
+use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -174,9 +175,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/email-comms', [EmailCommsController::class,'index'])->name('email_comms');
         Route::get('/email-comms/transfers', [EmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
         Route::get('/email-comms/nominations', [EmailCommsController::class,'getNominations'])->name('get_nominations');
-        Route::get('/email-comms/send-mail/{slug}/{licence_variation}', [EmailCommsController::class,'processMail'])->name('send_mail');
+        Route::get('/email-comms/get-mail-template/{slug}/{licence_variation}', [EmailCommsController::class,'getMailTemplate']);
  
         Route::post('email-comms/filter-by-month', [EmailCommsController::class,'index']);
+
+        //renewals mail dispatcher
+        Route::post('/dispatchRenewalMail', [EmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
+        //transfers mail dispatcher
+        Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
         
     });
 });

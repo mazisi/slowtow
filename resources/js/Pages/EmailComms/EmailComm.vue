@@ -5,12 +5,7 @@ import Layout from "../../Shared/Layout.vue";
 export default {
   name: "dashboard-default",
   props: {
-    with_renewal_received_status: Object,
-    with_client_invoiced_status: Object,
-    with_client_paid_status: Object,
-    with_renewal_processed_status: Object,
-    with_issued_statuses: Object,
-    with_renewal_complete_status: Object,
+    renewals: Object,
     success: String,
     error: String
   },
@@ -18,6 +13,7 @@ export default {
     return {
       month: null,
       province: null,
+      stage: '',
     }
   },
   components: {
@@ -29,6 +25,7 @@ methods: {
         this.$inertia.replace(route('email_comms',{
              month: this.month,
              province: this.province,
+             stage: this.stage,
           }))
      },
 
@@ -97,7 +94,20 @@ methods: {
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
   <div class="row">
-  <div class="col-3 columns">                  
+   <div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select v-model="stage" @change="filter" class="form-control form-control-default">
+<option :value="''" disabled selected>Filter By Stage</option>
+<option value="1">Client Quoted</option>
+<option value="2">Client Invoiced </option>
+<option value="4">Payment to the Liquor Board</option>
+<option value="5">Renewal Issued</option>
+
+</select>
+</div>
+
+</div>
+  <div class="col-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Filter By Month</label>
 <select @change="filter" class="form-control form-control-default" v-model="month">
@@ -118,7 +128,7 @@ methods: {
 
 </div>
 
-<div class="col-3 columns">                  
+<div class="col-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Filter By Province</label>
 <select @change="filter" class="form-control form-control-default" v-model="province">
@@ -137,49 +147,44 @@ methods: {
 </div>
   <h5 class="text-center">Renewals</h5>
   <div class="table-responsive p-0">
-  <h6 class="text-danger">Client Quoted</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th> -->
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="with_renewal_received in with_renewal_received_status" :key="with_renewal_received.id">
+      <tr v-for="renewal in renewals" :key="renewal.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_renewal_received.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ renewal.licence.trading_name }}</h6>
               <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_renewal_received.date).getFullYear() }}/{{ this.getRenewalYear(with_renewal_received.date)  }} </p>
+              Renewal For: {{ new Date(renewal.date).getFullYear() }}/{{ this.getRenewalYear(renewal.date)  }} </p>
             </div>
           </div>
         </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-        <!-- <td class="align-middle text-center text-sm">
-          <span v-if="with_renewal_received.status == 'Invoiced'" class="badge bg-dark text-default">{{ with_renewal_received.status }}</span>
-        <span v-if="with_renewal_received.status == 'Paid'" class="badge bg-info text-default">{{ with_renewal_received.status }}</span>
-        <span v-if="with_renewal_received.status == 'Get Client Docs'" class="badge bg-light text-default">{{ with_renewal_received.status }}</span>
-        <span v-if="with_renewal_received.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ with_renewal_received.status }}</span>
-        <span v-if="with_renewal_received.status == 'Issued'" class="badge bg-secondary text-default">{{ with_renewal_received.status }}</span>
-        <span v-if="with_renewal_received.status == 'Complete'" class="badge bg-success text-default">{{ with_renewal_received.status }}</span>
-        </td> -->
-        <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_renewal_received.date }}</span>
+        
+        <td class="align-middle text-center text-sm">
+          <span v-if="renewal.status == 1">Client Quoted</span>
+        <span v-if="renewal.status == 2" >Client Invoiced</span>
+        <span v-if="renewal.status == 4" >Payment To Liquor Board</span>
+        <span v-if="renewal.status == 5" >Renewal Issued</span>
+        
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_renewal_received.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <span class="text-secondary text-xs font-weight-bold">{{ renewal.date }}</span>
+        </td>
+        <td class="align-middle text-center">
+        <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <Link :href="`/view-licence-renewal/${with_renewal_received.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/view-licence-renewal/${renewal.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
@@ -192,175 +197,6 @@ methods: {
 
 
 
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Client Invoiced</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="with_client_invoiced in with_client_invoiced_status" :key="with_client_invoiced.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_client_invoiced.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_client_invoiced.date).getFullYear() }}/{{ this.getRenewalYear(with_client_invoiced.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_client_invoiced.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_client_invoiced.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-licence-renewal/${with_client_invoiced.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-     
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Client Paid</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-    <!-- <h6 v-if="$props.with_client_paides.length <= 0" class="text-center">No licences awaiting client docs</h6> -->
-      <tr v-for="with_client_paid in with_client_paid_status" :key="with_client_paid.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_client_paid.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_client_paid.date).getFullYear() }}/{{ this.getRenewalYear(with_client_paid.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_client_paid.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_client_paid.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-         <Link :href="`/view-licence-renewal/${with_client_paid.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-      
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Payment To Liquor Board</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-       <tr v-for="with_renewal_processed in with_renewal_processed_status" :key="with_renewal_processed.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_renewal_processed.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_renewal_processed.date).getFullYear() }}/{{ this.getRenewalYear(with_renewal_processed.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_renewal_processed.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_renewal_processed.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-         <Link :href="`/view-licence-renewal/${with_renewal_processed.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Renewal Complete &amp; Delivered</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="with_renewal_complete in with_renewal_complete_status" :key="with_renewal_complete.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ with_renewal_complete.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(with_renewal_complete.date).getFullYear() }}/{{ this.getRenewalYear(with_renewal_complete.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ with_renewal_complete.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${with_renewal_complete.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-licence-renewal/${with_renewal_complete.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
 
 
   </div>
