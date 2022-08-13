@@ -49,19 +49,19 @@ methods: {
 <div class="col-12">
 <form>
 <div class="row">
-<div class="col-1"><i class="fa fa-search" aria-hidden="true"></i></div>
-<div class="col-10 ">
+<div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
+<i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
 <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
 </div>
 </div>
 
 
-<div class="col-1"></div>
-<div class="col-4 filters">
+
+<div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
 <select @change="search" v-model="active_status" class="form-control form-control-default">
-<option :value="''" disabled selected>Act/Iact</option>
+<option :value="''" disabled selected>Active/Inactive Status</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
 <option value="Inactive">Inactive</option>
@@ -69,7 +69,7 @@ methods: {
 </div>
 </div>
 
-<div class="col-4 filters">
+<div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
 <select @change="search" v-model="company_type" class="form-control form-control-default">
 <option :value="''" disabled selected>Company Type</option>
@@ -87,7 +87,6 @@ methods: {
 </div>
 </div>
 <div class="col-1"></div>
-
 </div>
 </form>
 <div class=" my-4">

@@ -53,7 +53,7 @@ class TransferEmailCommsController extends Controller
                 return back()->with('error','Could not send email.');
                     break;
             }
-            if(is_null($get_doc->document)){
+            if(is_null($get_doc)){
                 return back()->with('error','Mail NOT SENT!!!!.Document IS NOT YET UPLOADED.');
             }
             $recipients = [$licence->licence->company->email,$licence->licence->company->email1,$licence->licence->company->email2];

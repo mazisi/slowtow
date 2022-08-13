@@ -140,7 +140,7 @@
 <div class="col-md-6 columns">
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="company_doc !== ''">
-    <a v-for="doc in company_doc" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in company_doc" :key="doc.id" :href="`/storage/app/public/companyDocuments/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -162,7 +162,7 @@
 
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="cipc_cert !== ''">
-    <a v-for="doc in cipc_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in cipc_cert" :key="doc.id" :href="`/storage/app/public/companyDocuments/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -183,7 +183,7 @@
 
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="bee_cert !== ''">
-    <a v-for="doc in bee_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in bee_cert" :key="doc.id" :href="`/storage/app/public/companyDocuments/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -209,7 +209,7 @@
 
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="lta_cert !== ''">
-    <a v-for="doc in lta_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in lta_cert" :key="doc.id" :href="`/storage/app/public/companyDocuments/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -230,7 +230,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="contrib_cert !== ''">
-    <a v-for="doc in contrib_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in contrib_cert" :key="doc.id" :href="`/storage/app/public/companyDocuments/${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>

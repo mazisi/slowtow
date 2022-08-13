@@ -99,7 +99,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document !== null">
-    <a :href="`/storage/${id_document.document}`" target="_blank">
+    <a :href="`/storage/app/public/peopleDocuments/${id_document.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -126,7 +126,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance !== null">
-    <a :href="`/storage/${police_clearance.document}`" target="_blank">
+    <a :href="`/storage/app/public/peopleDocuments/${police_clearance.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -151,7 +151,7 @@
   <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc !== null">
-    <a :href="`/storage/${passport_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/peopleDocuments/${passport_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -180,7 +180,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="work_permit_doc !== null">
-    <a :href="`/storage/${work_permit_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/peopleDocuments/${work_permit_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>

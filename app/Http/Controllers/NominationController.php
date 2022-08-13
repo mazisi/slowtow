@@ -168,17 +168,18 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         $request->validate([
             "document"=> "required|mimes:pdf"
             ]);
-            $get_file_name = explode(".",$request->document->getClientOriginalName());
-           $store_file = $request->document->store('nominationDocuments','public'); 
-            $save_file = NominationDocument::create([
-                "nomination_id" => $request->nomination_id,
-                "document_name" => $get_file_name[0],
-                "document" => $store_file,
-                "date" => $request->date,
-                "doc_type" => $request->doc_type,
-                'path'         => 'app/public/'
-               ]);
-       if($save_file){
+
+           $fileModel = new NominationDocument;
+           $fileName = $request->document->getClientOriginalName();
+           $filePath = $request->file('document')->storeAs('nominationDocuments', $fileName, 'public');
+           $fileModel->document_name = $fileName;
+           $fileModel->document = $fileName;
+           $fileModel->nomination_id = $request->nomination_id;
+           $fileModel->doc_type = $request->doc_type;
+           $fileModel->date = $request->date;
+           $fileModel->path = 'app/public/';
+
+       if($fileModel->save()){
             return back()->with('success','Document uploaded successfully.');
        }
        return back()->with('error','Error uploading document.');

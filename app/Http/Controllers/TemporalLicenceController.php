@@ -23,9 +23,8 @@ class TemporalLicenceController extends Controller
             $licences = TemporalLicence::with(["company"])
                             ->orWhereHas('company', function($query) use($queryString){
                                 $query->where('name', 'like', '%'.$queryString.'%');
-                            })->orWhereHas('consultant', function($query) use($queryString){
-                                $query->where('first_name', 'like', '%'.$queryString.'%')
-                                      ->where('last_name', 'like', '%'.$queryString.'%');
+                            })->orWhereHas('people', function($query) use($queryString){
+                                $query->where('full_name', 'like', '%'.$queryString.'%');                                      
                                       })->whereNotNull('active')
                             ->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
@@ -41,23 +40,21 @@ class TemporalLicenceController extends Controller
                $licences = TemporalLicence::with(["company"])
                             ->orWhereHas('company', function($query) use($queryString){
                                 $query->where('name', 'like', '%'.$queryString.'%');
-                            })->orWhereHas('consultant', function($query) use($queryString){
-                                $query->where('first_name', 'like', '%'.$queryString.'%')
-                                      ->where('last_name', 'like', '%'.$queryString.'%');
-                                      })->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
+                            })->orWhereHas('people', function($query) use($queryString){
+                                $query->where('full_name', 'like', '%'.$queryString.'%');                                      
+                              })->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
                             ->get();
         
         }elseif(!empty($queryString) && $request->active_status == 'Active'){
     
-               $licences = TemporalLicence::with(['company','consultant'])
+               $licences = TemporalLicence::with(['company','people'])
                ->orWhereHas('company', function($query) use($request){
                    $query->where('name', 'like', '%'.$queryString.'%');
                })->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
-               ->orWhereHas('consultant', function($query) use($queryString){
-                $query->where('first_name', 'like', '%'.$queryString.'%')
-                      ->where('last_name', 'like', '%'.$queryString.'%');
+               ->orWhereHas('people', function($query) use($queryString){
+                $query->where('full_name', 'like', '%'.$queryString.'%');                      
                       })->orWhere('start_date','LIKE','%'.$queryString.'%')
                     ->orWhere('end_date','LIKE','%'.$queryString.'%')
                     ->where('active','1')
@@ -65,15 +62,14 @@ class TemporalLicenceController extends Controller
                
         }elseif(!empty($queryString)){
             
-            $licences = TemporalLicence::with('company','consultant')
+            $licences = TemporalLicence::with('company','people')
                             ->where('liquor_licence_number','like','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
                             ->orWhereHas('company', function($query) use($queryString){
                                 $query->where('name', 'like', '%'.$queryString.'%');
-                            })->orWhereHas('consultant', function($query) use($queryString){
-                                $query->where('first_name', 'like', '%'.$queryString.'%')
-                                      ->where('last_name', 'like', '%'.$queryString.'%');
+                            })->orWhereHas('people', function($query) use($queryString){
+                                $query->where('full_name', 'like', '%'.$queryString.'%');                                      
                             })->get();
         
         }elseif(!empty($queryString) && $request->withThrashed != '' && $request->active_status == 'Inactive'){
@@ -81,9 +77,8 @@ class TemporalLicenceController extends Controller
                             ->orWhereHas('company', function($query) use($queryString){
                                 $query->where('name', 'like', '%'.$queryString.'%');
                                 
-                            })->orWhereHas('consultant', function($query) use($queryString){
-                                $query->where('first_name', 'like', '%'.$queryString.'%')
-                                      ->where('last_name', 'like', '%'.$queryString.'%');
+                            })->orWhereHas('people', function($query) use($queryString){
+                                $query->where('full_name', 'like', '%'.$queryString.'%');                                      
                             })
                             ->orWhere('trading_name','LIKE','%'.$queryString.'%')
                             ->where('active','!=','1')
@@ -245,11 +240,6 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
 
 
     public function update(Request $request,$slug){
-        // $request->validate([
-        //     'liquor_licence_number' => 'required',
-        //     'start_date' => 'required|date',
-        //     'end_date' => 'required|date'
-        //     ]);
         $temp = TemporalLicence::whereSlug($slug)->first();
         if(!is_null($temp->status) && empty($request->status)){
             $db_status = $temp->status;

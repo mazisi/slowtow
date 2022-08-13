@@ -35,10 +35,12 @@ export default {
     client_quoted: Object,
     client_invoiced: Object,
     payment_to_liquor_board: Object,
+    original_licence: Object,
     transfer_logded: Object,
     activation_fee: Object,
     transfer_issued: Object,
-    transfer_delivered: Object
+    transfer_delivered: Object,
+    latest_renewal: Object
   },
 
   setup (props) {
@@ -70,7 +72,9 @@ export default {
     })
     
     const mergeForm = useForm({
-      transfer_id: props.view_transfer.id
+      transfer_id: props.view_transfer.id,
+      latest_renewal: props.latest_renewal,
+      original_licence: props.original_licence,
     })
 
      function mergeDocuments(){
@@ -154,9 +158,35 @@ export default {
           }
       }
 
-      
+function is_one_file_uploaded(){
+  // if (props.view_transfer.transfer_documents !==null) {
+  //   return true;
+  // }
+  return props.view_transfer;
+
+ 
+      }
+
+  //  if(payment_to_liquor_board !== null
+// && old_transfer_forms !== null
+// && current_transfer_forms !== null
+// && smoking_affidavict !== null
+// && old_poa_res_docs !== null
+// && current_poa_res_docs !== null
+// && old_shareholding !== null
+// && current_shareholding !== null
+// && old_cipc_certificate !== null
+// && current_cipc_certificate !== null
+// && id_docs !== null
+// && police_clearance !== null
+// && lta_certificate !== null
+// && financial_interest !== null
+// && landloard_letter !== null
+// && representation !== null
+// && index_page !== null    
     return {
       pushData,
+      is_one_file_uploaded,
       mergeForm,
       mergeDocuments,
       submitDocuments,
@@ -246,7 +276,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/app/public/${client_quoted.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -279,7 +309,7 @@ export default {
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/app/public/${client_invoiced.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -344,22 +374,20 @@ export default {
 
  <div class="d-flex row">
  <div class="col-sm-4"></div>
-     <div class="col-sm-5">
-      <button type="button" class="btn btn-outline-success document-names">Documents Required </button>
-       <i class="fa-solid fa-arrow-up-from-bracket"></i>
-       <!-- <i class="fa fa-trash-alt text-danger"></i> -->
-       <i class="fa-duotone fa-file-pdf h4 text-white"></i>
+     <div class="col-sm-5" style="margin-top: -1rem;">
+     
        <br>
 
-       <i v-if="old_transfer_forms == null" @click="setDocType('Transfer Forms','Old Licence Holder','A')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+      <i v-if="old_transfer_forms == null" class="fa fa-times-circle h5 invisible"></i>
+       <i v-if="old_transfer_forms == null" @click="setDocType('Transfer Forms','Old Licence Holder',3)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="old_transfer_forms !== null" target="_blank" :href="`/storage/app/public/${old_transfer_forms.document}`">
+        <a v-if="old_transfer_forms !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${old_transfer_forms.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="old_transfer_forms !== null" @click="deleteDocument(old_transfer_forms.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
         <button type="button" class="btn btn-outline-success document-names">Transfer Forms</button>
-         <i v-if="current_transfer_forms == null" @click="setDocType('Transfer Forms','Current Licence Holder','A')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+         <i v-if="current_transfer_forms == null" @click="setDocType('Transfer Forms','Current Licence Holder',4)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-         <a v-if="current_transfer_forms !== null" target="_blank" :href="`/storage/app/public/${current_transfer_forms.document}`">
+         <a v-if="current_transfer_forms !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_transfer_forms.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="current_transfer_forms !== null" @click="deleteDocument(current_transfer_forms.id)" class="fa fa-trash-o text-danger curser-pointer mx-2 h5" aria-hidden="true"></i>
         <br>
@@ -368,49 +396,52 @@ export default {
         <i class="fa fa-times-circle h5 mx-1 invisible"></i>
         <i class="fa fa-times-circle h5 mx-2 curser-pointer"></i>
         <button type="button" class="btn btn-outline-success document-names">Smoking Affidavit</button>
-        <i v-if="smoking_affidavict == null" @click="setDocType('Smoking Affidavit','Current Licence Holder','B')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="smoking_affidavict == null" @click="setDocType('Smoking Affidavit','Current Licence Holder',5)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="smoking_affidavict !== null" target="_blank" :href="`/storage/app/public/${smoking_affidavict.document}`">
+        <a v-if="smoking_affidavict !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${smoking_affidavict.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="smoking_affidavict !== null" @click="deleteDocument(smoking_affidavict.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i><br>
         
         
-        <i v-if="old_poa_res_docs == null" @click="setDocType('POA & RES','Old Licence Holder','C')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="old_poa_res_docs == null" class="fa fa-times-circle h5 mx-1 invisible"></i>
+        <i v-if="old_poa_res_docs == null" @click="setDocType('POA & RES','Old Licence Holder',6)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="old_poa_res_docs !== null" target="_blank" :href="`/storage/app/public/${old_poa_res_docs.document}`">
+        <a v-if="old_poa_res_docs !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${old_poa_res_docs.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="old_poa_res_docs !== null" @click="deleteDocument(old_poa_res_docs.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
         <button type="button" class="btn btn-outline-success document-names">POA &amp; RES</button>
-       <i v-if="current_poa_res_docs == null" @click="setDocType('POA & RES','Current Licence Holder','C')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+       <i v-if="current_poa_res_docs == null" @click="setDocType('POA & RES','Current Licence Holder',7)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="current_poa_res_docs !== null" target="_blank" :href="`/storage/app/public/${current_poa_res_docs.document}`">
+        <a v-if="current_poa_res_docs !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_poa_res_docs.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="current_poa_res_docs !== null" @click="deleteDocument(current_poa_res_docs.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
         <br>
 
 
-        <i v-if="old_shareholding == null" @click="setDocType('Shareholding','Old Licence Holder','C')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="old_shareholding == null" class="fa fa-times-circle h5 mx-1 invisible"></i>
+        <i v-if="old_shareholding == null" @click="setDocType('Shareholding','Old Licence Holder',10)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="old_shareholding !== null" target="_blank" :href="`/storage/app/public/${old_shareholding.document}`">
+        <a v-if="old_shareholding !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${old_shareholding.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="old_shareholding !== null" @click="deleteDocument(old_shareholding.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
         <button type="button" class="btn btn-outline-success document-names">Shareholding</button>
-        <i v-if="current_shareholding == null" @click="setDocType('Shareholding','Current Licence Holder','D')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="current_shareholding == null" @click="setDocType('Shareholding','Current Licence Holder',12)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="current_shareholding !== null" target="_blank" :href="`/storage/app/public/${current_shareholding.document}`">
+        <a v-if="current_shareholding !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_shareholding.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="current_shareholding !== null"  @click="deleteDocument(current_shareholding.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
          <br>
 
-         <i v-if="old_cipc_certificate == null" @click="setDocType('CIPC Certificate','Old Licence Holder','E')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="old_cipc_certificate == null" class="fa fa-times-circle h5 mx-1 invisible"></i>
+         <i v-if="old_cipc_certificate == null" @click="setDocType('CIPC Certificate','Old Licence Holder',11)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="old_cipc_certificate !== null" target="_blank" :href="`/storage/app/public/${old_cipc_certificate.document}`">
+        <a v-if="old_cipc_certificate !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${old_cipc_certificate.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="old_cipc_certificate !== null" @click="deleteDocument(old_cipc_certificate.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
         <button type="button" class="btn btn-outline-success document-names">CIPC Certificate</button>
-        <i v-if="current_cipc_certificate == null" @click="setDocType('CIPC Certificate','Current Licence Holder','E')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="current_cipc_certificate == null" @click="setDocType('CIPC Certificate','Current Licence Holder',13)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="current_cipc_certificate !== null" target="_blank" :href="`/storage/app/public/${current_cipc_certificate.document}`">
+        <a v-if="current_cipc_certificate !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_cipc_certificate.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="current_cipc_certificate !== null" @click="deleteDocument(current_cipc_certificate.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
          <br>
@@ -418,36 +449,36 @@ export default {
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">Company Documents</button>
-        <i v-if="company_docs == null" @click="setDocType('Company Documents','Current Licence Holder','F')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="company_docs == null" @click="setDocType('Company Documents','Current Licence Holder')" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="company_docs !== null" target="_blank" :href="`/storage/app/public/${company_docs.document}`">
+        <a v-if="company_docs !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${company_docs.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="company_docs !== null" @click="deleteDocument(company_docs.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i><br>
 
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">ID Documents</button>
-        <i v-if="id_docs == null" @click="setDocType('ID Documents','Current Licence Holder','G')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="id_docs == null" @click="setDocType('ID Documents','Current Licence Holder',14)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="id_docs !== null" target="_blank" :href="`/storage/app/public/${id_docs.document}`">
+        <a v-if="id_docs !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${id_docs.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="id_docs !== null" @click="deleteDocument(id_docs.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i><br>
 
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">Police Clearances</button>
-        <i v-if="police_clearance == null" @click="setDocType('Police Clearances','Current Licence Holder','H')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="police_clearance == null" @click="setDocType('Police Clearances','Current Licence Holder',15)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="police_clearance !== null" target="_blank" :href="`/storage/app/public/${police_clearance.document}`">
+        <a v-if="police_clearance !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${police_clearance.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="police_clearance !== null" @click="deleteDocument(police_clearance.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i><br>
 
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">Tax Clearance</button>
-        <i v-if="tax_clearance == null" @click="setDocType('Tax Clearance','Current Licence Holder','I')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="tax_clearance == null" @click="setDocType('Tax Clearance','Current Licence Holder',16)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="tax_clearance !== null" target="_blank" :href="`/storage/app/public/${tax_clearance.document}`">
+        <a v-if="tax_clearance !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${tax_clearance.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="tax_clearance !== null" @click="deleteDocument(tax_clearance.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
          <br>
@@ -455,9 +486,9 @@ export default {
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">LTA Certificate</button>
-        <i v-if="lta_certificate == null" @click="setDocType('LTA Certificate','Current Licence Holder','J')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="lta_certificate == null" @click="setDocType('LTA Certificate','Current Licence Holder',17)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="lta_certificate !== null" target="_blank" :href="`/storage/app/public/${lta_certificate.document}`">
+        <a v-if="lta_certificate !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${lta_certificate.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="lta_certificate !== null" @click="deleteDocument(lta_certificate.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i><br>
 
@@ -465,9 +496,9 @@ export default {
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">Financial Interests</button>
-        <i v-if="financial_interest == null" @click="setDocType('Financial Interests','Current Licence Holder','K')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="financial_interest == null" @click="setDocType('Financial Interests','Current Licence Holder',18)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="financial_interest !== null" target="_blank" :href="`/storage/app/public/${financial_interest.document}`">
+        <a v-if="financial_interest !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${financial_interest.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="financial_interest !== null" @click="deleteDocument(financial_interest.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
          <br>
@@ -475,19 +506,133 @@ export default {
         <i class="fa fa-times-circle invisible h5 mx-1"></i>
         <i class="fa fa-times-circle h5 mx-2"></i>
         <button type="button" class="btn btn-outline-success document-names">Lease/Landlord Letter</button>
-        <i v-if="landloard_letter == null" @click="setDocType('Lease/Landlord Letter','Current Licence Holder','L')" data-bs-toggle="modal" data-bs-target="#upload-documents"
+        <i v-if="landloard_letter == null" @click="setDocType('Lease/Landlord Letter','Current Licence Holder',19)" data-bs-toggle="modal" data-bs-target="#upload-documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
-        <a v-if="landloard_letter !== null" target="_blank" :href="`/storage/app/public/${landloard_letter.document}`">
+        <a v-if="landloard_letter !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${landloard_letter.document}`">
          <i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
          </a><i v-if="landloard_letter !== null" @click="deleteDocument(landloard_letter.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
          <br>
         <div class="col-sm-1"></div>
     
 </div>
+
+
+<div class="row">
+<div class="col-1 columns" style="text-align: center;"></div>
+<div class="col-4 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled" >
+<label class="form-check-label text-body text-truncate status-heading">Representation</label>
+<ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="representation !== null">
+    <a :href="`/storage/app/public/transferDocuments/${representation.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="representation !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ representation.document_name }}</p>
+    </div>
+    <a v-if="representation !== null" @click="deleteDocument(representation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Representation','Old Licence Holder',8)"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
 </div>
 
 
-    
+<div class="col-2  columns"></div>
+<div class="col-4 columns" >
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label text-body text-truncate status-heading">Latest Renewal/Licence</label>
+<i v-if="latest_renewal == null" @click="setDocType('Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents"
+ class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
+<a v-if="latest_renewal !== null" target="_blank" :href="`/storage/app/public/licenceDocuments/${latest_renewal.document}`">
+<i class="fa fa-file-pdf h4 mx-2 text-danger curser-pointer"></i>
+</a><i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+<a target="_blank" v-if="original_licence !== null
+&& latest_renewal == null" :href="`/storage/app/public/transferDocuments/${original_licence.document_file}`"><i class="fa fa-link h5 mx-5" aria-hidden="true"></i></a>
+</div>
+</div>
+<div class="col-1 columns" style="text-align: center;"></div>
+
+</div>
+
+<div class="row">
+<div class="col-1 columns" style="text-align: center;"></div>
+<div class="col-4 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled" >
+<label class="form-check-label text-body text-truncate status-heading">Index Page</label>
+<ul class="list-group" style="margin-top: -1rem;">
+  <li class="px-0 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar" v-if="index_page !== null">
+    <a :href="`/storage/app/public/transferDocuments/${index_page.document}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div  v-if="index_page !== null" class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p class="mb-0 text-xs">{{ index_page.document_name }}</p>
+    </div>
+    <a v-if="index_page !== null" @click="deleteDocument(index_page.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else style="margin-left: 7.8rem;" @click="setDocType('Index Page','Old Licence Holder',1)"  data-bs-toggle="modal" data-bs-target="#upload-documents">
+    <i v-if="index_page == null" class="fa fa-cloud-upload h5 invisible" aria-hidden="true"></i>
+    <i class="fa fa-cloud-upload h5" aria-hidden="true"></i></a>
+  </li> 
+</ul>
+</div>
+</div>
+
+<div class="col-2 columns"></div>
+<div class="col-4 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<label class="form-check-label text-body text-truncate status-heading">Proof Of Payment</label>
+<a v-if="payment_to_liquor_board !== null" :href="`/storage/app/public/transferDocuments/${payment_to_liquor_board.document}`" target="_blank">
+    <i class="fa fa-link h5 " style="margin-left: 5.5rem;"></i>
+ </a>
+
+</div>
+</div>
+
+<div v-if="payment_to_liquor_board !== null
+&& old_transfer_forms !== null
+&& current_transfer_forms !== null
+&& smoking_affidavict !== null
+&& old_poa_res_docs !== null
+&& current_poa_res_docs !== null
+&& old_shareholding !== null
+&& current_shareholding !== null
+&& old_cipc_certificate !== null
+&& current_cipc_certificate !== null
+&& id_docs !== null
+&& police_clearance !== null
+&& lta_certificate !== null
+&& financial_interest !== null
+&& landloard_letter !== null
+&& representation !== null
+&& index_page !== null
+">
+<div v-if="view_transfer.merged_document !==null">
+<a :href="`/storage/app/public/${view_transfer.merged_document}`" target="_blank" :style="{float: 'right'}" class="btn btn-secondary ms-2" >View</a>
+</div>
+  <button @click="mergeDocuments" :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="mergeForm.processing">
+  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Compile And Merge</button>
+
+
+</div>
+<div v-else >
+<button :style="{float: 'right'}" type="button" class="disabled btn btn-secondary ms-2" >
+ Compile And Merge</button>
+ </div>
+ 
+</div>
+ </div>  
 <hr>
 
 
@@ -526,7 +671,7 @@ export default {
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="payment_to_liquor_board !== null">
-    <a :href="`/storage/app/public/${payment_to_liquor_board.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${payment_to_liquor_board.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -568,7 +713,7 @@ export default {
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="transfer_logded !== null">
-    <a :href="`/storage/app/public/${transfer_logded.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${transfer_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -607,7 +752,7 @@ export default {
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="activation_fee !== null">
-    <a :href="`/storage/app/public/${activation_fee.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${activation_fee.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -648,7 +793,7 @@ export default {
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="transfer_issued !== null">
-    <a :href="`/storage/app/public/${transfer_issued.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${transfer_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -687,7 +832,7 @@ export default {
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="transfer_delivered !== null">
-    <a :href="`/storage/app/public/${transfer_delivered.document}`" target="_blank">
+    <a :href="`/storage/app/public/transferDocuments/${transfer_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -710,7 +855,7 @@ export default {
 
 
 <div>
-<div v-if="form.isDirty" class="text-danger">There are unsaved changes.</div>
+<div v-if="form.isDirty" class="text-danger">You have unsaved changes.</div>
   <button :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="form.processing">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>

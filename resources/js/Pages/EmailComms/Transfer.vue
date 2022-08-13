@@ -45,8 +45,8 @@ methods: {
     },
     getNominations(){
       this.$inertia.get('/email-comms/nominations');
-    }
-
+    },
+     alertTempo(){alert('Waiting for data')}
       
     },
 };
@@ -64,7 +64,7 @@ methods: {
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-  <ul class="nav nav-pills mb-3 pt-3" id="pills-tab" role="tablist">
+  <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
 
   <li class="nav-item" role="presentation">
     <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white " id="Renewals" data-bs-toggle="pill" data-bs-target="#renewals" 
@@ -84,13 +84,17 @@ methods: {
     <button class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
   </li>
+  <li class="nav-item" role="presentation">
+    <button @click="alertTempo" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
+  </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
 
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
-  <div class="row">
-   <div class="col-4 columns">                  
+<div class="row">
+<div class="col-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
@@ -148,8 +152,6 @@ methods: {
     <thead>
       <tr>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
@@ -166,16 +168,6 @@ methods: {
           </div>
         </td>
         
-        <td class="align-middle text-center text-sm">
-          <span v-if="transfer.status == 1">Client Quoted</span>
-        <span v-if="transfer.status == 2" >Client Invoiced</span>
-        <span v-if="transfer.status == 4" >Payment To Liquor Board</span>
-        <span v-if="transfer.status == 5" >Renewal Issued</span>
-        
-        </td>
-        <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ transfer.date }}</span>
-        </td>
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${transfer.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>

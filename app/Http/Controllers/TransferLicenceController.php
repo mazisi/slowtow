@@ -6,6 +6,7 @@ use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Models\LicenceDocument;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceTransfer;
@@ -58,7 +59,7 @@ class TransferLicenceController extends Controller
        * View Individual licence transfer individually.
        */
       public function viewTransferedLicence($slug){
-        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company')->whereSlug($slug)->first();
+        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents')->whereSlug($slug)->first();
         $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->whereUserId(auth()->id())->get();
 
@@ -73,8 +74,8 @@ class TransferLicenceController extends Controller
         $current_cipc_certificate = TransferDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $company_docs = TransferDocument::where('doc_type','Company Documents')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $id_docs = TransferDocument::where('doc_type','ID Documents')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $police_clearance = TransferDocument::where('doc_type','Police Clearance')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $tax_clearance = TransferDocument::where('doc_type','Police Clearance')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $police_clearance = TransferDocument::where('doc_type','Police Clearances')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
+        $tax_clearance = TransferDocument::where('doc_type','Tax Clearance')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $lta_certificate = TransferDocument::where('doc_type','LTA Certificate')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $financial_interest = TransferDocument::where('doc_type','Financial Interests')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $landloard_letter = TransferDocument::where('doc_type','Lease/Landlord Letter')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
@@ -87,6 +88,8 @@ class TransferLicenceController extends Controller
         $activation_fee =  TransferDocument::where('doc_type','Activation Fee Paid')->where('licence_transfer_id',$view_transfer->id)->first();
         $transfer_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id',$view_transfer->id)->first();
         $transfer_delivered = TransferDocument::where('doc_type','Transfer Delivered')->where('licence_transfer_id',$view_transfer->id)->first();
+        $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
+        $latest_renewal = TransferDocument::where('doc_type','Latest Renewal')->where('licence_transfer_id',$view_transfer->id)->first();
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
@@ -116,16 +119,14 @@ class TransferLicenceController extends Controller
           'transfer_logded' => $transfer_logded,
           'activation_fee' => $activation_fee,
           'transfer_issued' => $transfer_issued,
-          'transfer_delivered' => $transfer_delivered
+          'transfer_delivered' => $transfer_delivered,
+          'original_licence' => $original_licence,
+          'latest_renewal' => $latest_renewal
         ]);
       }
 
-      public function update(Request $request)
-      {
-        $request->validate([
-          'transfer_date'=> 'required|date'
-        ]);
-
+      public function update(Request $request) {
+      
         $trans= LicenceTransfer::find($request->licence_id);
         if(!is_null($trans->status) && empty($request->status)){
             $db_status = $trans->status;

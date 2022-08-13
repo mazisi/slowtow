@@ -38,7 +38,8 @@ class PersonController extends Controller
                             ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
                             ->orWhere('email_address_2','LIKE','%'.$request->term.'%')
                             ->get();
-
+       }elseif(empty($request->term)  && $request->active_status == 'Active'){
+        $people = People::where('active',1)->get();
         }else{
             $people = People::whereNull('id')->get();
         }
@@ -120,18 +121,18 @@ class PersonController extends Controller
             "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document"
             ]);
 
-          $get_file_name = explode(".",$request->document->getClientOriginalName());
-          $store_file = $request->document->store('peopleDocuments','public'); 
-           $upload = PeopleDocument::create([
-                "people_id" => $request->people_id,
-                "document_name" => $get_file_name[0],
-                "document" => $store_file,
-                "doc_type" => $request->doc_type,
-                "expiry_date" => $request->doc_expiry,
-                "path" => "app/public/",
-                "slug" => sha1(time())
-               ]);
-       if($upload){
+          $fileModel = new PeopleDocument;
+            $fileName = $request->document->getClientOriginalName();
+            $filePath = $request->file('document')->storeAs('peopleDocuments', $fileName, 'public');
+            $fileModel->document_name = $fileName;
+            $fileModel->document = $fileName;
+            $fileModel->people_id = $request->people_id;
+            $fileModel->doc_type = $request->doc_type;
+            $fileModel->expiry_date = $request->doc_expiry;
+            $fileModel->path = "app/public/";
+            $fileModel->slug = sha1(time());
+            
+       if($fileModel->save()){
         return back()->with('message','Document uploaded successfully.');
        }
         return back()->with('success','Error uploading document.');

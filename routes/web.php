@@ -24,6 +24,7 @@ use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\TemporalLicenceDocsController;
+use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 
@@ -183,6 +184,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/dispatchRenewalMail', [EmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
         //transfers mail dispatcher
         Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
+        //nomination mail dispatcher
+        Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
         
     });
 });

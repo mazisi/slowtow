@@ -9,19 +9,19 @@
 <div class="col-12">
 <form>
 <div class="row">
-<div class="col-md-1 col-xl-1 col-lg-1"><i class="fa fa-search" aria-hidden="true"></i></div>
-<div class="col-md-10 col-xl-10 col-lg-10">
+<div  class="col-md-12 col-xl-12 col-lg-12">
+
+
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Search Licence </label>
+<i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
 <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
 </div>
 </div>
-<div class="col-1"></div>
-<div class="col-1"></div>
+
 <div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
 <select @change="search" v-model="active_status" class="form-control form-control-default">
-<option :value="''" disabled selected>Act/Iact</option>
+<option :value="''" disabled selected>Active/Inactive Status</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
 <option value="Inactive">Inactive</option>
@@ -58,7 +58,24 @@
 </select>
 </div>
 </div>
-<div class="col-md-1 col-xl-1 col-lg-1 filters"></div>
+
+<div class="col-md-3 col-xl-3 col-lg-3 filters">
+<div class="input-group input-group-outline null is-filled">
+<select @change="search" v-model="province" class="form-control form-control-default">
+<option :value="''" disabled selected>Province</option>
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+</div>
+
 
 
 </div>
@@ -121,7 +138,6 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
-import debounce from 'lodash/debounce'
 
 
 export default {
@@ -144,7 +160,8 @@ export default {
           all: '', 
           active_status: '',
           licence_type: '',
-          licence_date: ''
+          licence_date: '',
+          province: ''
         }
     },
 
@@ -154,7 +171,8 @@ export default {
           term: this.term,
           active_status: this.active_status,
           licence_type: this.licence_type,
-          licence_date: this.licence_date
+          licence_date: this.licence_date,
+          province: this.province
           }))
         },
     },

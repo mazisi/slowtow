@@ -101,8 +101,12 @@ export default {
             })
           }
 
-         const mergeForm = useForm({ temporal_licence_id: props.licence.id})
-          function mergeCompanyDocuments(type){
+         const mergeForm = useForm({ 
+          temporal_licence_id: props.licence.id,
+          company_id: props.licence.company_id,
+          person_id: props.licence.people_id
+          })
+          function mergeDocuments(type){
             mergeForm.post(`/merge-temporal-documents/${type}`)
           }
 
@@ -156,7 +160,7 @@ export default {
      createTask,
      submitTask,
      checkBodyLength,
-     mergeCompanyDocuments,
+     mergeDocuments,
      mergeForm
      }
   },
@@ -230,7 +234,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/app/public/${client_quoted.document}`" target="_blank">
+    <a :href="`/storage/app/public/temp-licence-documents/${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -264,7 +268,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/app/public/${client_invoiced.document}`" target="_blank">
+    <a :href="`/storage/app/public/temp-licence-documents/${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -324,13 +328,13 @@ export default {
       @click="getDocType('Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_application_form !== null" @click="deleteDocument(company_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="company_application_form !== null" :href="`/storage/app/public/${company_application_form.document}`" target="_blank">
+     <a v-if="company_application_form !== null" :href="`/storage/app/public/temp-licence-documents/${company_application_form.document}`" target="_blank">
      <i v-if="company_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <a v-if="liqour_board !== null" :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+      <a v-if="liqour_board !== null" :href="`/storage/app/public/temp-licence-documents/${liqour_board.document}`" target="_blank">
     <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
     </a>
     
@@ -342,14 +346,14 @@ export default {
        <i v-if="company_poa == null" @click="getDocType('POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-cloud-upload h5 curser-pointer mx-2"></i>
          <i v-if="company_poa !== null" @click="deleteDocument(company_poa.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="company_poa !== null" :href="`/storage/app/public/${company_poa.document}`" target="_blank">
+     <a v-if="company_poa !== null" :href="`/storage/app/public/temp-licence-documents/${company_poa.document}`" target="_blank">
      <i v-if="company_poa !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B</button>
         <i v-if="company_annexure_b == null" @click="getDocType('Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_annexure_b !== null" @click="deleteDocument(company_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_annexure_b !== null" :href="`/storage/app/public/${company_annexure_b.document}`" target="_blank">
+        <a v-if="company_annexure_b !== null" :href="`/storage/app/public/temp-licence-documents/${company_annexure_b.document}`" target="_blank">
         <i v-if="company_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
@@ -357,14 +361,14 @@ export default {
          <i v-if="company_annexure_c == null" @click="getDocType('Annexure C','Company',5)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
         <i v-if="company_annexure_c !== null" @click="deleteDocument(company_annexure_c.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_annexure_c !== null" :href="`/storage/app/public/${company_annexure_c.document}`" target="_blank">
+        <a v-if="company_annexure_c !== null" :href="`/storage/app/public/temp-licence-documents/${company_annexure_c.document}`" target="_blank">
         <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
         <button type="button" class="btn btn-outline-success document-names"> CIPC Certificate</button>
          <i v-if="company_cipc == null" @click="getDocType('CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_cipc !== null" @click="deleteDocument(company_cipc.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_cipc !== null" :href="`/storage/app/public/${company_cipc.document}`" target="_blank">
+        <a v-if="company_cipc !== null" :href="`/storage/app/public/temp-licence-documents/${company_cipc.document}`" target="_blank">
         <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br> 
     <div class="col-sm-1"> </div>
@@ -375,7 +379,7 @@ export default {
      <i v-if="company_id_document == null" @click="getDocType('ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_id_document !== null" @click="deleteDocument(company_id_document.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_id_document !== null" :href="`/storage/app/public/${company_id_document.document}`" target="_blank">
+        <a v-if="company_id_document !== null" :href="`/storage/app/public/temp-licence-documents/${company_id_document.document}`" target="_blank">
         <i v-if="company_id_document !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
@@ -383,7 +387,7 @@ export default {
   <i v-if="company_representations == null" @click="getDocType('Representations','Company',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_representations !== null" @click="deleteDocument(company_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_representations !== null" :href="`/storage/app/public/${company_representations.document}`" target="_blank">
+        <a v-if="company_representations !== null" :href="`/storage/app/public/temp-licence-documents/${company_representations.document}`" target="_blank">
         <i v-if="company_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br>  
 
@@ -392,14 +396,14 @@ export default {
      <i v-if="company_landlord_letter == null" @click="getDocType('Landlord Letter','Company',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_landlord_letter  !== null" @click="deleteDocument(company_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_landlord_letter !== null" :href="`/storage/app/public/${company_landlord_letter.document}`" target="_blank">
+        <a v-if="company_landlord_letter !== null" :href="`/storage/app/public/temp-licence-documents/${company_landlord_letter.document}`" target="_blank">
         <i v-if="company_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
       <i v-if="company_security_letter == null" @click="getDocType('Security Letter','Company',10)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_security_letter  !== null" @click="deleteDocument(company_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_security_letter !== null" :href="`/storage/app/public/${company_security_letter.document}`" target="_blank">
+        <a v-if="company_security_letter !== null" :href="`/storage/app/public/temp-licence-documents/${company_security_letter.document}`" target="_blank">
         <i v-if="company_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -409,7 +413,7 @@ export default {
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_advert  !== null" @click="deleteDocument(company_advert.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_advert !== null" :href="`/storage/app/public/${company_advert.document}`" target="_blank">
+        <a v-if="company_advert !== null" :href="`/storage/app/public/temp-licence-documents/${company_advert.document}`" target="_blank">
         <i v-if="company_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -419,11 +423,12 @@ export default {
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_plan  !== null" @click="deleteDocument(company_plan.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_plan !== null" :href="`/storage/app/public/${company_plan.document}`" target="_blank">
+        <a v-if="company_plan !== null" :href="`/storage/app/public/temp-licence-documents/${company_plan.document}`" target="_blank">
         <i v-if="company_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
 <button v-if="company_application_form !== null
+&& company_id_document !== null
 && company_poa !== null
 && company_annexure_b !== null
 && company_annexure_c !== null
@@ -434,7 +439,7 @@ export default {
 && company_security_letter !== null
 && company_advert !== null
 && company_plan !== null"
-@click="mergeCompanyDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
+@click="mergeDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
 
@@ -460,13 +465,13 @@ export default {
       @click="getDocType('Application Form','Individual',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_application_form !== null" @click="deleteDocument(individual_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="individual_application_form !== null" :href="`/storage/app/public/${individual_application_form.document}`" target="_blank">
+     <a v-if="individual_application_form !== null" :href="`/storage/app/public/temp-licence-documents/${individual_application_form.document}`" target="_blank">
      <i v-if="individual_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <a v-if="liqour_board !== null" :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+      <a v-if="liqour_board !== null" :href="`/storage/app/public/temp-licence-documents/${liqour_board.document}`" target="_blank">
     <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
     </a>
     
@@ -478,14 +483,14 @@ export default {
        <i v-if="power_of_attorney == null" @click="getDocType('Power Of Attorney','Individual',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-cloud-upload h5 curser-pointer mx-2"></i>
          <i v-if="power_of_attorney !== null" @click="deleteDocument(power_of_attorney.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="power_of_attorney !== null" :href="`/storage/app/public/${power_of_attorney.document}`" target="_blank">
+     <a v-if="power_of_attorney !== null" :href="`/storage/app/public/temp-licence-documents/${power_of_attorney.document}`" target="_blank">
      <i v-if="power_of_attorney !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B</button>
         <i v-if="individual_annexure_b == null" @click="getDocType('Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
          <i v-if="individual_annexure_b !== null" @click="deleteDocument(individual_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_annexure_b !== null" :href="`/storage/app/public/${individual_annexure_b.document}`" target="_blank">
+        <a v-if="individual_annexure_b !== null" :href="`/storage/app/public/temp-licence-documents/${individual_annexure_b.document}`" target="_blank">
         <i v-if="individual_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
@@ -493,12 +498,12 @@ export default {
          <i v-if="individual_annexure_c == null" @click="getDocType('Annexure C','Individual',5)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i>
         <i v-if="individual_annexure_c !== null" @click="deleteDocument(individual_annexure_c.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_annexure_c !== null" :href="`/storage/app/public/${individual_annexure_c.document}`" target="_blank">
+        <a v-if="individual_annexure_c !== null" :href="`/storage/app/public/temp-licence-documents/${individual_annexure_c.document}`" target="_blank">
         <i v-if="individual_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
 
           <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
-     <a v-if="get_person_id_document !== null" :href="`/storage/app/public/${get_person_id_document.document}`" target="_blank">
+     <a v-if="get_person_id_document !== null" :href="`/storage/app/public/temp-licence-documents/${get_person_id_document.document}`" target="_blank">
         <i  class="fa fa-link h5 mx-2" ></i></a>
     <a v-else :href="`#!`">
         <i  class="fa fa-link h5 mx-2"></i></a> <br> 
@@ -511,7 +516,7 @@ export default {
   <i v-if="individual_representations == null" @click="getDocType('Representations','Individual',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_representations !== null" @click="deleteDocument(individual_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_representations !== null" :href="`/storage/app/public/${individual_representations.document}`" target="_blank">
+        <a v-if="individual_representations !== null" :href="`/storage/app/public/temp-licence-documents/${individual_representations.document}`" target="_blank">
         <i v-if="individual_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br>  
 
@@ -520,14 +525,14 @@ export default {
      <i v-if="individual_landlord_letter == null" @click="getDocType('Landlord Letter','Individual',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_landlord_letter  !== null" @click="deleteDocument(individual_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_landlord_letter !== null" :href="`/storage/app/public/${individual_landlord_letter.document}`" target="_blank">
+        <a v-if="individual_landlord_letter !== null" :href="`/storage/app/public/temp-licence-documents/${individual_landlord_letter.document}`" target="_blank">
         <i v-if="individual_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
       <i v-if="individual_security_letter == null" @click="getDocType('Security Letter','Individual',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_security_letter  !== null" @click="deleteDocument(individual_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_security_letter !== null" :href="`/storage/app/public/${individual_security_letter.document}`" target="_blank">
+        <a v-if="individual_security_letter !== null" :href="`/storage/app/public/temp-licence-documents/${individual_security_letter.document}`" target="_blank">
         <i v-if="individual_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -537,7 +542,7 @@ export default {
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_advert  !== null" @click="deleteDocument(individual_advert.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_advert !== null" :href="`/storage/app/public/${individual_advert.document}`" target="_blank">
+        <a v-if="individual_advert !== null" :href="`/storage/app/public/temp-licence-documents/${individual_advert.document}`" target="_blank">
         <i v-if="individual_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -547,11 +552,12 @@ export default {
      class="fa fa-cloud-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_plan  !== null" @click="deleteDocument(individual_plan.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_plan !== null" :href="`/storage/app/public/${individual_plan.document}`" target="_blank">
+        <a v-if="individual_plan !== null" :href="`/storage/app/public/temp-licence-documents/${individual_plan.document}`" target="_blank">
         <i v-if="individual_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
 <button v-if="individual_application_form !== null
+&& get_person_id_document !== null
 && power_of_attorney !== null
 && individual_annexure_b !== null
 && individual_annexure_c !== null
@@ -560,7 +566,7 @@ export default {
 && individual_security_letter !== null
 && individual_advert !== null
 && individual_plan !== null"
-@click="mergeCompanyDocuments('Individual')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
+@click="mergeDocuments('Individual')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
 
@@ -594,7 +600,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+    <a :href="`/storage/app/public/temp-licence-documents/${liqour_board.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -636,7 +642,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_issued !== null">
-    <a :href="`/storage/app/public/${licence_issued.document}`" target="_blank">
+    <a :href="`/storage/app/public/temp-licence-documents/${licence_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -679,7 +685,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_issued !== null">
-    <a :href="`/storage/app/public/${licence_issued.document}`" target="_blank">
+    <a :href="`/storage/app/public/temp-licence-documents/${licence_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -726,7 +732,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_delivered !== null">
-    <a :href="`/storage/app/public/${licence_delivered.document}`" target="_blank">
+    <a :href="`/storage/app/public/temp-licence-documents/${licence_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>

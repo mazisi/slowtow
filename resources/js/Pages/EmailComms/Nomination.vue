@@ -5,15 +5,10 @@ import Layout from "../../Shared/Layout.vue";
 export default {
   name: "dashboard-default",
   props: {
-    with_client_quoted_status: Object,
-    with_client_invoiced_status: Object,
-    with_client_paid_status: Object,
-    with_payment_to_liquor_board_status: Object,
-    with_select_nominees_status: Object,
-    with_documents_required_status: Object,
-    with_nomination_logded_status: Object,
-    with_nomination_issued_status: Object,
-    with_delivered_status: Object
+    nominations: Object,
+    errors: Object,
+    error: String,
+    success: String
 
     // 1= > Client Quoted
 // 2 => Client Invoiced
@@ -27,9 +22,9 @@ export default {
   },
   data() {
     return {
-      term: '',
-      withThrashed: '', 
-      active_status: ''  
+      month: '',
+      province: '',
+      stage: '', 
     }
   },
   components: {
@@ -37,11 +32,11 @@ export default {
     Link,
 },
 methods: {
-     search(){
-        this.$inertia.replace(route('companies',{
-          term: this.term,
-          withThrashed: this.withThrashed,
-          active_status: this.active_status
+     filter(){
+        this.$inertia.replace(route('get_nominations',{
+             month: this.month,
+             province: this.province,
+             stage: this.stage,
           }))
         },
 
@@ -61,9 +56,10 @@ methods: {
     },
     getNominations(){
       this.$inertia.get('/email-comms/nominations');
-    }
+    },
 
-      
+      alertTempo(){alert('Waiting for data')}
+
     },
 };
 </script>
@@ -80,7 +76,7 @@ methods: {
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-  <ul class="nav nav-pills mb-3 pt-3" id="pills-tab" role="tablist">
+  <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
 
   <li class="nav-item" role="presentation">
     <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white " id="Renewals" data-bs-toggle="pill" data-bs-target="#renewals" 
@@ -100,56 +96,107 @@ methods: {
     <button class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
   </li>
+
+  <li class="nav-item" role="presentation">
+    <button @click="alertTempo" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
+  </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">
 
 
   <div class="tab-pane fade show active" id="renewals" role="tabpanel" aria-labelledby="Renewals">
+  <div class="row">
+<div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select v-model="stage" @change="filter" class="form-control form-control-default">
+<option :value="''" disabled selected>Filter By Stage</option>
+<option value="1">Client Quoted With Requirements </option>
+<option value="2">Client Invoiced </option>
+<option value="4">Payment To The Liquor Board</option>
+<option value="7">Transfer Lodged </option>
+<option value="8">Transfer Issued </option>
+
+</select>
+</div>
+
+</div>
+  <div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select v-model="month" @change="filter" class="form-control form-control-default" >
+<option :value="''" disabled selected>Filter By Month</option>
+<option value="1">January</option>
+<option value="2">February</option>
+<option value="3">March</option>
+<option value="4">April</option>
+<option value="5">May</option>
+<option value="6">June</option>
+<option value="7">July</option>
+<option value="8">August</option>
+<option value="9">September</option>
+<option value="10">October</option>
+<option value="11">November</option>
+<option value="12">December</option>
+</select>
+</div>
+
+</div>
+
+<div class="col-4 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<select @change="filter" class="form-control form-control-default" v-model="province">
+<option :value="''" disabled selected>Filter By Province</option>
+<option value="Eastern Cape">Eastern Cape</option>
+<option value="Free State">Free State</option>
+<option value="Gauteng">Gauteng</option>
+<option value="KwaZulu-Natal">KwaZulu-Natal</option>
+<option value="Limpopo">Limpopo</option>
+<option value="Mpumalanga">Mpumalanga</option>
+<option value="Northern Cape">Northern Cape</option>
+<option value="North West">North West</option>
+<option value="Western Cape">Western Cape</option>
+</select>
+</div>
+</div>
+</div>
   <h5 class="text-center"> Nominations</h5>
   <div class="table-responsive p-0">
-  <h6 class="text-danger">Client Quoted</h6>
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th> -->
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Trading Name </th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Licence Number</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Date </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Stage </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Email Action</th>
       </tr>
     </thead>
     <tbody>
-    <!-- with_invoiced_status -->
-      <tr v-for="status in with_client_quoted_status" :key="status.id">
+      <tr v-for="nomination in nominations" :key="nomination.id">
         <td>
-          <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
+              <h6 class="mb-0 text-sm">{{ nomination.licence.trading_name }}</h6>
           </div>
         </td>
         <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
+          <p class="text-xs font-weight-bold mb-0">{{ nomination.licence.licence_number }}</p>
         </td>
-        <!-- <td class="align-middle text-center text-sm">
-          <span v-if="status.status == 'Invoiced'" class="badge bg-dark text-default">{{ status.status }}</span>
-        <span v-if="status.status == 'Paid'" class="badge bg-info text-default">{{ status.status }}</span>
-        <span v-if="status.status == 'Get Client Docs'" class="badge bg-light text-default">{{ status.status }}</span>
-        <span v-if="status.status == 'Awaiting Liquor Board'" class="badge bg-warning text-default">{{ status.status }}</span>
-        <span v-if="status.status == 'Issued'" class="badge bg-secondary text-default">{{ status.status }}</span>
-        <span v-if="status.status == 'Complete'" class="badge bg-success text-default">{{ status.status }}</span>
-        </td> -->
-        <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
+        <td class="align-middle font-weight-bold text-center text-sm">
+          <span>{{ nomination.licence.licence_date }}</span>
+        </td>
+         <td class="align-middle text-center">
+         <span v-if="nomination.status == 1">Client Quoted</span>
+        <span v-if="nomination.status == 2" >Client Invoiced</span>
+        <span v-if="nomination.status == 4" >Payment To Liquor Board</span>
+        <span v-if="nomination.status == 7" >Renewal Logded</span>
+        <span v-if="nomination.status == 8" >Renewal Issued</span>
         </td>
         <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/email-comms/get-mail-template/${nomination.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/view-nomination/${nomination.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
@@ -158,312 +205,6 @@ methods: {
     </tbody>
   </table>
 </div>
-<hr>
-
-
-
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Client Invoiced</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="status in with_client_invoiced_status" :key="status.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-     
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger"> Client Paid </h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-    <!-- <h6 v-if="$props.with_get_client_docs_statuses.length <= 0" class="text-center">No licences awaiting client docs</h6> -->
-      <tr v-for="status in with_client_paid_status" :key="with_nomination_logded.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-      
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Payment To The Liquor Board</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-       <tr v-for="status in with_payment_to_liquor_board_status" :key="status.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-         <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Document Required</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-       <tr v-for="status in with_documents_required_status" :key="status.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-        <a href="javascript:;" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </a>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Nomination Logded</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="status in with_nomination_logded_status" :key="status.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-       <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Nomination Issued</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="status in with_nomination_issued_status" :key="status.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-       <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
-<hr>
-<div class="table-responsive p-0">
-  <h6 class="text-danger">Nomination Delivered</h6>
-  <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Comms Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="status in with_delivered_status" :key="status.id">
-        <td>
-          <div class="d-flex px-2 py-1">
-            <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ status.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(status.date).getFullYear() }}/{{ this.getRenewalYear(status.date)  }} </p>
-            </div>
-          </div>
-        </td>
-        <td>
-          <p class="text-xs font-weight-bold mb-0">????</p>
-        </td>
-                <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ status.date }}</span>
-        </td>
-        <td class="align-middle text-center">
-        <Link :href="`/email-comms/send-mail/${status.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-envelope"></i> Send </Link>
-
-        
-       <Link :href="`/view-nomination/${status.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
-        <i class="fa fa-eye"></i> View </Link>
-        </td>
-      </tr>
-   
-    </tbody>
-  </table>
-</div>
-
 
   </div>
 

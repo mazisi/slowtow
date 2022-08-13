@@ -33,7 +33,7 @@
                     Stage
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Action
+                    View
                     </th>
                     
                   </tr>
@@ -49,7 +49,7 @@
                           </Link>                      
                         </div>
                         </td>
-                    <td>
+                    <td class="text-center">
                         <div class="d-flex flex-column justify-content-left">
                         <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                           <h6 class="mb-0 text-sm">
@@ -59,14 +59,14 @@
                         </div>
                      
                     </td>
-                     <td v-if="currentCompany.pivot.status == 1"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Quoted</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 2"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Invoiced</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 3"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Paid</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 4"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Collate Transfer Documents</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 5"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Payment To The Liquor Board</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 6"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Activation Fee Paid</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 8"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Issued</Link></td>
-                     <td v-else-if="currentCompany.pivot.status == 9"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Delivered</Link></td>
+                     <td  class="text-center" v-if="currentCompany.pivot.status == 1"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Quoted</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 2"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Invoiced</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 3"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Paid</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 4"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Collate Transfer Documents</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 5"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Payment To The Liquor Board</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 6"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Activation Fee Paid</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 8"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Issued</Link></td>
+                     <td  class="text-center" v-else-if="currentCompany.pivot.status == 9"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Delivered</Link></td>
                       <td class="text-center">
                     <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                     <i class="fa fa-eye  " aria-hidden="true"></i>

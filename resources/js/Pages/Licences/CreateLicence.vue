@@ -93,7 +93,6 @@
 <label class="form-label">Address Line 1</label>
 <input type="text" class="form-control form-control-default" v-model="form.address">
 </div>
-<div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
 </div>
 
 <div class="col-12 columns">            
@@ -108,7 +107,6 @@
 <label class="form-label">Address Line 3</label>
 <input type="text" class="form-control form-control-default" v-model="form.address3">
 </div>
-<div v-if="errors.address3" class="text-danger">{{ errors.address3 }}</div>
 </div> 
 
 <div class="col-12 columns">                  
@@ -126,7 +124,6 @@
 <option value="Western Cape">Western Cape</option>
 </select>
 </div>
-<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
 </div>
 
 <div class="col-12 columns">            

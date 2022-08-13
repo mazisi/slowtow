@@ -59,7 +59,7 @@
   <div class="col-md-4 columns">            
  <div class="input-group input-group-outline null is-filled">
   <label class="form-label">ID/Passport Number</label>
-  <input required type="text" class="form-control form-control-default" v-model="form.id_or_passport">
+  <input @keyup="getDateOfBirth" required type="text" class="form-control form-control-default" v-model="form.id_or_passport">
    </div>
     <div v-if="errors.id_or_passport" class="text-danger">{{ errors.i_d_or_passport }}</div>
     </div>  
@@ -142,8 +142,8 @@ export default {
         form: {
         name: null,
         surname: null,
-        date_of_birth: null,
-        id_or_passport: null,
+        date_of_birth: '',
+        id_or_passport: '',
         passport_number: null,
         email_address_1: null,
         email_address_2: null,
@@ -163,6 +163,23 @@ export default {
       submit() {
           this.$inertia.post(`/submit-person`, this.form)
         },
+
+        getDateOfBirth(){//needs refactoring
+          if(this.form.id_or_passport.length === 13){
+            let year = this.form.id_or_passport.substring(0,2);
+            let month = this.form.id_or_passport.substring(2,4);
+            let day = this.form.id_or_passport.substring(4,6);
+            let century = '';
+            if(year > 20){
+              century = '19';
+            }else{
+              century = '20';
+            }
+            this.form.date_of_birth = century + year +'-' + month +'-'+ day + '';
+          }else{
+            this.form.date_of_birth = ''
+          }
+        }
   },
 
   components: {

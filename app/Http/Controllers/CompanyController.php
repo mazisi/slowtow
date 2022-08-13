@@ -49,6 +49,8 @@ class CompanyController extends Controller
             $companies = Company::when($request->term,function($query,$term){
                 $query->where('name','LIKE','%'.$term.'%');
                })->get();
+     }elseif(empty($request->term) && empty($request->company_type) && $request->active_status == 'Active'){
+        $companies = Company::where('active','1')->get();
 
     }elseif(!empty($request->term) && $request->active_status == 'Inactive'){
 

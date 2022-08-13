@@ -192,7 +192,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/app/public/${client_quoted.document}`" target="_blank">
+    <a :href="`/storage/app/public/renewalDocuments/${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -208,7 +208,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>    
@@ -226,7 +226,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/app/public/${client_invoiced.document}`" target="_blank">
+    <a :href="`/storage/app/public/renewalDocuments/${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -243,7 +243,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -296,7 +296,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a :href="`/storage/app/public/${liqour_board.document}`" target="_blank">
+    <a :href="`/storage/app/public/renewalDocuments/${liqour_board.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -313,7 +313,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -344,7 +344,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_issued !== null">
-    <a :href="`/storage/app/public/${renewal_issued.document}`" target="_blank">
+    <a :href="`/storage/app/public/renewalDocuments/${renewal_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -359,7 +359,7 @@ export default {
     </a>
     <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -388,7 +388,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_doc !== null">
-    <a :href="`/storage/app/public/${renewal_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/renewalDocuments/${renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -405,7 +405,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Renewal Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>  

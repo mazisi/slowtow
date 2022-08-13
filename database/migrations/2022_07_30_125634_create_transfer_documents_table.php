@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('document')->nullable();
             $table->string('doc_type')->nullable();
             $table->string('belongs_to')->nullable();
-            $table->string('num')->nullable()->comment('Number these documents for merging purposes');
+            $table->integer('num')->nullable();
             $table->string('slug');
             $table->timestamps();
         });

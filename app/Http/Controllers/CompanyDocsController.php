@@ -12,17 +12,17 @@ class CompanyDocsController extends Controller
             "document"=> "required|mimes:pdf"
             ]);
         
-          $get_file_name = explode(".",$request->document->getClientOriginalName());
-           $store_file = $request->document->store('companyDocuments','public'); 
-           $comp = CompanyDocument::create([
-                "company_id" => $request->company_id,
-                "document_name" => $get_file_name[0],
-                "document_file" => $store_file,
-                "document_type" => $request->doc_type,
-                "expiry_date" => $request->expiry_date,
-                "file_path" => 'storage/app/public/'
-               ]);
-        if($comp){
+           $fileModel = new CompanyDocument;
+           $fileName = $request->document->getClientOriginalName();
+           $filePath = $request->file('document')->storeAs('companyDocuments', $fileName, 'public');
+           $fileModel->document_name = $fileName;
+           $fileModel->document_file = $fileName;
+           $fileModel->company_id = $request->company_id;
+           $fileModel->document_type = $request->doc_type;
+           $fileModel->expiry_date = $request->expiry_date;
+           $fileModel->file_path = 'storage/app/public/';
+         
+        if($fileModel->save()){
             return back()->with('success','Document uploaded successfully.');
         }
         return back()->with('error','Error uploading documents.');

@@ -62,34 +62,22 @@ class EmailCommsController extends Controller
 
     /**
      * Get Nominations Comms.
-     * //The following are status keys:
-    * 1 => Client Invoiced
-    * 2 => Nomination Paid
-    * 3 => Nomination Lodged
-    * 4 => Certificate Received
-    * 5 => Nomination Complete And Delivered
      */
-    public function getNominations(){
+    public function getNominations(Request $request){
+        $month =$request->month;
 
-    $with_client_quoted_status = Nomination::with('licence')->whereStatus('1')->get();
-    $with_client_invoiced_status = Nomination::with('licence')->whereStatus('2')->get();
-    $with_client_paid_status = Nomination::with('licence')->whereStatus('3')->get();
-    $with_payment_to_liquor_board_status = Nomination::with('licence')->whereStatus('4')->get();
-    $with_documents_required_status = Nomination::with('licence')->whereStatus('6')->get();
-    $with_nomination_logded_status = Nomination::with('licence')->whereStatus('7')->get();
-    $with_nomination_issued_status = Nomination::with('licence')->whereStatus('8')->get();
-    $with_delivered_status = Nomination::with('licence')->whereStatus('9')->get();
+        $nominations = Nomination::with("licence")->when($month, function($query,$month) use($request){
+            $query->whereHas('licence', function($query) use($month,$request){
+                $query->whereMonth('licence_date', $month)
+                ->when(!is_null(request('province')), function ($query) use ($request) {
+                    $query->where('province',$request->province);
+                });
+            });
+            })->when(!empty(request('stage')), function ($query) use ($request) {
+                $query->where('status',$request->stage);
+            })->orderBy('status','asc')->get();
 
-        return Inertia::render('EmailComms/Nomination',[
-            'with_client_quoted_status' => $with_client_quoted_status,
-            'with_client_invoiced_status' => $with_client_invoiced_status,
-            'with_client_paid_status' => $with_client_paid_status,
-            'with_payment_to_liquor_board_status' => $with_payment_to_liquor_board_status,
-            'with_documents_required_status' => $with_documents_required_status,
-            'with_nomination_logded_status' => $with_nomination_logded_status,
-            'with_nomination_issued_status' => $with_nomination_issued_status,
-            'with_delivered_status' => $with_delivered_status
-        ]);
+        return Inertia::render('EmailComms/Nomination',['nominations' => $nominations]);
     }
 
     public function getMailTemplate($slug,$comm_variation){         
@@ -141,23 +129,6 @@ class EmailCommsController extends Controller
                 $this->alterationMailer($slug);
                 break;
             case 'transfers':
-                //The following are status keys
-// 1 => Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Collate Transfer Documents
-// 5 => Payment To The Liquor Board
-// 6 => Transfer Logded
-// 7 => Activation Fee Paid
-// 8 => Transfer Issued
-// 9 => Transfer Delivered
-
-// Client Quoted with requirements 
-// Client Invoiced
-// Payment to the Liquor Board
-// Transfer lodged 
-// Activation Fee paid 
-// Transfer Issued
 
                 $licence = LicenceTransfer::with('licence')->whereSlug($slug)->firstOrFail();   
                 if($licence->status == '1'){//quoted
@@ -200,9 +171,48 @@ class EmailCommsController extends Controller
                 }                
                 return Inertia::render('EmailComms/TransferTemplate',['licence' => $licence,'template' => $template]);
                 break;
+
             case 'nominations':
-                $this->nominationMailer($slug);
-                return back()->with('success','Email Sent Successfully.');
+
+ 
+                $licence = Nomination::with('licence')->whereSlug($slug)->firstOrFail();   
+                if($licence->status == '1'){//quoted
+                    $template = '<p dir="ltr">Good Day,</p>
+                    <p dir="ltr">Please see attached quotation along with the basic requirements for an appointment of managers application.</p>
+                    <p dir="ltr">Note that the Liquor Board is currently running at a delay due to COVID-19 and applications may take anywhere from 6 to 12 months to be approved. Once the application has been lodged, please ensure the necessary documents are on display in the interim to avoid any problems with inspectors.&nbsp;</p>
+                    <p dir="ltr"><strong>&nbsp;</strong></p>
+                    <p dir="ltr">Many thanks,</p>
+                    <p dir="ltr">&nbsp;</p>
+                    '; 
+                }elseif ($licence->status == '2') {//Client Invoiced
+                    $template = '<p dir="ltr">Good Day,</p>
+                    <p dir="ltr">Please see attached invoice in respect of the appointment of managers application. Note that the application will only be lodged once payment or proof of has been received.</p>
+                    <p dir="ltr">Many thanks,</p>
+                    <p dir="ltr">&nbsp;</p>';
+                }elseif ($licence->status == '4') {//Payment to the Liquor Board
+                    $template = '<p dir="ltr">Good Day,</p>
+                    <p dir="ltr">Please see attached proof of payment in respect of the appointment of managers application. Please ensure this is on display in the interim to avoid any issues with the liquor inspectors.</p>
+                    <p dir="ltr">Many thanks,</p>
+                    <p dir="ltr">&nbsp;</p>';
+                    
+                }elseif ($licence->status == '7') {//Logded
+                   
+                    $template = '<p dir="ltr">Good Day,</p>
+                    <p dir="ltr">Please see attached proof of lodgement in respect of the appointment of managers application. Please ensure that this is on display in the interim until the application has been approved.</p>
+                    <p dir="ltr">Many thanks,</p>
+                    <p dir="ltr">&nbsp;</p>';
+                }elseif ($licence->status == '8') {//issued
+                    $template = '<p dir="ltr">Good Day,</p>
+                    <p dir="ltr">We are happy to inform you that the appointment of managers application has been approved! Please see attached copy of the certificate.</p>
+                    <p dir="ltr">The original will be delivered in due course</p>
+                    <p dir="ltr"><strong>&nbsp;</strong></p>
+                    <p dir="ltr">Many thanks,</p>
+                    <p dir="ltr">&nbsp;</p>'; 
+                
+                }else{
+                    return back()->with('error','An unknown error ocurred');
+                }                
+                return Inertia::render('EmailComms/NominationTemplate',['licence' => $licence,'template' => $template]);
                 break;
             case 'new-app':
                 $this->newAppMailer($slug);
@@ -240,7 +250,7 @@ class EmailCommsController extends Controller
                 return back()->with('error','Could not send email.');
                     break;
             }
-            if(is_null($get_doc->document)){
+            if(is_null($get_doc)){
                 return back()->with('error','Mail NOT SENT!!!!.Document IS NOT YET UPLOADED.');
             }
             $recipients = [$licence->licence->company->email,$licence->licence->company->email1,$licence->licence->company->email2];

@@ -11,8 +11,8 @@ export default {
   },
   data() {
     return {
-      month: null,
-      province: null,
+      month: '',
+      province: '',
       stage: '',
     }
   },
@@ -49,6 +49,7 @@ methods: {
     // getAlterations(){
     //   this.$inertia.get('/email-comms/nominations');
     // }
+     alertTempo(){alert('Waiting for data')}
 
       
     },
@@ -58,7 +59,13 @@ methods: {
 #with-thrashed{
   margin-top: 3px;
   margin-left: 3px;
-}</style>
+}
+.active{
+    color: #000;
+    background-color: #fff;
+    border-color: #fff;
+}
+</style>
 <template>
 <Layout>
   <div class="container-fluid">
@@ -67,10 +74,11 @@ methods: {
       <span class="mask bg-gradient-success opacity-6"></span>
     </div>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-  <ul class="nav nav-pills mb-3 pt-3" id="pills-tab" role="tablist">
+    
+  <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
 
   <li class="nav-item" role="presentation">
-    <button @click="getLicenceRenewals" class="nav-link btn btn-secondary btn-outline-success text-white active" id="Renewals" 
+    <button @click="getLicenceRenewals" class="nav-link btn btn-secondary  text-white active" id="Renewals" 
     data-bs-toggle="pill" data-bs-target="#renewals" 
     type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -88,6 +96,12 @@ methods: {
     <button class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
   </li>
+
+  <li class="nav-item" role="presentation">
+    <button @click="alertTempo" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
+  </li>
+  
 </ul>
 <div class="tab-content" id="pills-tabContent">
 
@@ -109,8 +123,8 @@ methods: {
 </div>
   <div class="col-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Filter By Month</label>
 <select @change="filter" class="form-control form-control-default" v-model="month">
+<option :value="''" disabled selected>Filter By Month</option>
 <option value="1">January</option>
 <option value="2">February</option>
 <option value="3">March</option>
@@ -130,8 +144,8 @@ methods: {
 
 <div class="col-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Filter By Province</label>
 <select @change="filter" class="form-control form-control-default" v-model="province">
+<option :value="''" disabled selected>Filter By Province</option>
 <option value="Eastern Cape">Eastern Cape</option>
 <option value="Free State">Free State</option>
 <option value="Gauteng">Gauteng</option>
@@ -151,8 +165,6 @@ methods: {
     <thead>
       <tr>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Process Date </th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
@@ -169,8 +181,8 @@ methods: {
           </div>
         </td>
         
-        <td class="align-middle text-center text-sm">
-          <span v-if="renewal.status == 1">Client Quoted</span>
+        <!-- <td class="align-middle text-center text-sm">
+        <span v-if="renewal.status == 1">Client Quoted</span>
         <span v-if="renewal.status == 2" >Client Invoiced</span>
         <span v-if="renewal.status == 4" >Payment To Liquor Board</span>
         <span v-if="renewal.status == 5" >Renewal Issued</span>
@@ -178,7 +190,7 @@ methods: {
         </td>
         <td class="align-middle text-center">
         <span class="text-secondary text-xs font-weight-bold">{{ renewal.date }}</span>
-        </td>
+        </td> -->
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>

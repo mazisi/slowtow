@@ -52,10 +52,25 @@ class LicenceController extends Controller
                 ->where('licence_type_id',$request->licence_type)                
                 ->get();
 
-            }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)
-            && empty($request->licence_type)){
+            }elseif(empty($request->licence_date) && empty($request->term) && empty($request->active_status)
+            && empty($request->licence_type) && !empty($request->province)){
 
                 $licences = Licence::with(["company","licence_type"])
+                ->where('province',$request->province)                
+                ->get();
+
+            }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)
+            && empty($request->licence_type) && empty($request->province)){
+
+                $licences = Licence::with(["company","licence_type"])
+                    ->whereMonth('licence_date',$request->licence_date)->get();
+
+            }elseif(!empty($request->licence_date) && empty($request->term) && $request->active_status == 'Active'
+            && !empty($request->licence_type) && !empty($request->province)){
+                $licences = Licence::with(["company","licence_type"])
+                    ->where('licence_type_id',$request->licence_type)
+                    ->where('is_licence_active',1)
+                    ->where('province',$request->province)   
                     ->whereMonth('licence_date',$request->licence_date)->get();
 
             }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)

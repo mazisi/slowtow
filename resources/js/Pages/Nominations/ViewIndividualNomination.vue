@@ -220,7 +220,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/app/public/${client_quoted.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -233,7 +233,7 @@ export default{
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
 </div>
@@ -251,7 +251,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/app/public/${client_invoiced.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -264,7 +264,7 @@ export default{
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>
 </ul>
 </div>
@@ -317,7 +317,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liquor_board !== null">
-    <a :href="`/storage/app/public/${liquor_board.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${liquor_board.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -331,7 +331,7 @@ export default{
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
 </div>
@@ -385,12 +385,12 @@ Action
 <td class="text-center">{{ person.id_number }}</td>
 <td class="text-center">
 <i @click="removeSelectedNominee(person.id)" 
-style="cursor: pointer;"
-class="material-icons-round text-danger fs-10">highlight_off</i>
+ style="cursor: pointer;"
+ class="material-icons-round text-danger fs-10">highlight_off</i>
 <Link :href="`/view-person/${person.slug}`">
-<i @click="removeSelectedNominee(person.id)" 
-style="cursor: pointer;"
-class="material-icons-round text-secondary fs-10">visibility</i>
+ <i @click="removeSelectedNominee(person.id)" 
+ style="cursor: pointer;"
+ class="material-icons-round text-secondary fs-10">visibility</i>
 </Link>
 </td>
 </tr>
@@ -413,7 +413,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_forms !== null">
-    <a :href="`/storage/app/public/${nomination_forms.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${nomination_forms.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -426,7 +426,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
 </div>
@@ -435,7 +435,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="proof_of_payment !== null">
-    <a :href="`/storage/app/public/${proof_of_payment.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${proof_of_payment.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -448,7 +448,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Proof of Payment')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -458,7 +458,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="attorney_doc !== null">
-    <a :href="`/storage/app/public/${attorney_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${attorney_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -471,7 +471,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -480,7 +480,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certified_id_doc !== null">
-    <a :href="`/storage/app/public/${certified_id_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${certified_id_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -493,7 +493,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -502,7 +502,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance_doc !== null">
-    <a :href="`/storage/app/public/${police_clearance_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${police_clearance_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -515,7 +515,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -524,7 +524,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="latest_renewal_doc !== null">
-    <a :href="`/storage/app/public/${latest_renewal_doc.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${latest_renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -537,7 +537,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -553,7 +553,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 </Link>
 <button class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
 <a v-if="nomination.merged_document !== null" 
-:href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
+:href="`/storage/app/public/nominationDocuments/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
 <hr>
 
@@ -569,7 +569,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded !== null">
-    <a :href="`/storage/app/public/${nomination_logded.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${nomination_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -583,7 +583,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -613,7 +613,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
-    <a :href="`/storage/app/public/${nomination_issued.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${nomination_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -626,7 +626,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -655,7 +655,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
-    <a :href="`/storage/app/public/${nomination_delivered.document}`" target="_blank">
+    <a :href="`/storage/app/public/nominationDocuments/${nomination_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -669,7 +669,7 @@ class="material-icons-round text-secondary fs-10">visibility</i>
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i></a>
+    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
   </li>   
 </ul>
 </div>
@@ -805,7 +805,7 @@ mode="tags"
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload <span class="text-success">{{ uploadDoc.doc_type }}</span> Document</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Upload <span class="">{{ uploadDoc.doc_type }}</span> Document</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form @submit.prevent="submitDocument">
