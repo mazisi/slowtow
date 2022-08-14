@@ -83,12 +83,12 @@ public function merge(Request $request,$type){
      $merger = PDFMerger::init();
 
      foreach ($temporals as $temp) {
-       $merger->addPDF(public_path('/storage/').$temp->document, 'all');
+       $merger->addPDF(public_path('/storage/temp-licence-documents/').$temp->document, 'all');
      }
      $fileName = time().'.pdf';
      $merger->merge();
 
-     $merger->save(public_path('/storage/'.$fileName));
+     $merger->save(public_path('/storage/temp-licence-documents/'.$fileName));
      $updateModel = TemporalLicence::whereId($request->temporal_licence_id)->update(['merged_document' => $fileName]);
      if($updateModel){
        return back()->with('success','Document merged successfully.');

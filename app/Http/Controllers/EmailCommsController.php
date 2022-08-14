@@ -25,6 +25,11 @@ class EmailCommsController extends Controller
             });
             })->when(!empty(request('stage')), function ($query) use ($request) {
                 $query->where('status',$request->stage);
+            })->where(function($query){
+                $query->where('status',1)
+                ->orWhere('status',2)
+                ->orWhere('status',4)
+                ->orWhere('status',5);
             })->orderBy('status','asc')->get();
 
         return Inertia::render('EmailComms/EmailComm',['renewals' => $renewals]);
@@ -75,7 +80,14 @@ class EmailCommsController extends Controller
             });
             })->when(!empty(request('stage')), function ($query) use ($request) {
                 $query->where('status',$request->stage);
-            })->orderBy('status','asc')->get();
+            })->where(function($query){
+                $query->where('status',1)
+                ->orWhere('status',2)
+                ->orWhere('status',4)
+                ->orWhere('status',7)
+                ->orWhere('status',8);
+            })
+            ->orderBy('status','asc')->get();
 
         return Inertia::render('EmailComms/Nomination',['nominations' => $nominations]);
     }

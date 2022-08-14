@@ -158,35 +158,9 @@ export default {
           }
       }
 
-function is_one_file_uploaded(){
-  // if (props.view_transfer.transfer_documents !==null) {
-  //   return true;
-  // }
-  return props.view_transfer;
 
- 
-      }
-
-  //  if(payment_to_liquor_board !== null
-// && old_transfer_forms !== null
-// && current_transfer_forms !== null
-// && smoking_affidavict !== null
-// && old_poa_res_docs !== null
-// && current_poa_res_docs !== null
-// && old_shareholding !== null
-// && current_shareholding !== null
-// && old_cipc_certificate !== null
-// && current_cipc_certificate !== null
-// && id_docs !== null
-// && police_clearance !== null
-// && lta_certificate !== null
-// && financial_interest !== null
-// && landloard_letter !== null
-// && representation !== null
-// && index_page !== null    
     return {
       pushData,
-      is_one_file_uploaded,
       mergeForm,
       mergeDocuments,
       submitDocuments,

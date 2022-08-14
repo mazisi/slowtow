@@ -427,6 +427,9 @@ export default {
         <i v-if="company_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
+ <a :href="`/storage/app/public/temp-licence-documents/${licence.merged_document}`" 
+ v-if="licence.merged_document !== null" target="_blank"  class="ms-2 btn btn-sm btn-secondary" >
+  View </a>
 <button v-if="company_application_form !== null
 && company_id_document !== null
 && company_poa !== null
@@ -442,12 +445,7 @@ export default {
 @click="mergeDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
-
-<button v-else type="button" disabled :style="{float: 'right'}" class=" btn btn-sm btn-secondary" >
-  Compile &amp; Merge</button>
-
-  <!-- <button v-if="licence.company_merged_document !== null" type="button" :style="{float: 'right'}" class=" btn btn-sm btn-secondary" >
-  View Merged Document</button> -->
+  
   </div>
 </div>
 
@@ -556,6 +554,9 @@ export default {
         <i v-if="individual_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
+ <a :href="`/storage/app/public/temp-licence-documents/${licence.merged_document}`" 
+ v-if="licence.merged_document !== null" target="_blank" :style="{float: 'right'}" class="ms-2 btn btn-sm btn-secondary" >
+  View </a>
 <button v-if="individual_application_form !== null
 && get_person_id_document !== null
 && power_of_attorney !== null
@@ -570,8 +571,7 @@ export default {
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
 
-<button v-else type="button" disabled :style="{float: 'right'}" class=" btn btn-sm btn-secondary" >
-  Compile &amp; Merge</button>
+
 
   </div>
 </div>
