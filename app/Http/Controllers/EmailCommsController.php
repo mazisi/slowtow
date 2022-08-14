@@ -36,17 +36,6 @@ class EmailCommsController extends Controller
     }
 
 
-    /**
-     * Get licence transfers..
-     * The following are status keys:
-        * 1 => Deposit Paid
-        * 2 => Collate Transfer Details
-        * 3 => Client Invoiced
-        * 4 => Client Paid
-        * 5 => Transfer Logded
-        * 6 => Certificate Received
-        *7 => Transfer Complete And Delivered
-     */
     public function getLicenceTransfers(request $request){
         $month =$request->month;
 
@@ -59,6 +48,13 @@ class EmailCommsController extends Controller
             });
             })->when(!empty(request('stage')), function ($query) use ($request) {
                 $query->where('status',$request->stage);
+            })->where(function($query){
+                $query->where('status',1)
+                ->orWhere('status',2)
+                ->orWhere('status',5)
+                ->orWhere('status',6)
+                ->orWhere('status',7)
+                ->orWhere('status',8);
             })->orderBy('status','asc')->get();
 
 

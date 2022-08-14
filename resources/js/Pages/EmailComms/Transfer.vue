@@ -162,9 +162,7 @@ methods: {
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
               <h6 class="mb-0 text-sm">{{ transfer.licence.trading_name }}</h6>
-              <p class="text-xs mb-0"> 
-              Renewal For: {{ new Date(transfer.date).getFullYear() }}/{{ this.getRenewalYear(transfer.date)  }} </p>
-            </div>
+             </div>
           </div>
         </td>
         
@@ -173,7 +171,7 @@ methods: {
         <i class="fa fa-envelope"></i> Send </Link>
 
         
-        <Link :href="`/view-licence-transfer/${transfer.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+        <Link :href="`/view-transfered-licence/${transfer.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
