@@ -551,7 +551,7 @@ Action
 && nomination_forms !== null" 
 :href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
 </Link>
-<button class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
+<button v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
 <a v-if="nomination.merged_document !== null" 
 :href="`/storage/app/public/nominationDocuments/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>

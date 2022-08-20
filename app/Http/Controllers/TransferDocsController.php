@@ -43,7 +43,7 @@ class TransferDocsController extends Controller
     
     }
 
-    public function merge(Request $request){
+    public function merge(Request $request){dd($request);
 
          $exist =  LicenceTransfer::whereId($request->transfer_id)->whereNotNull('merged_document')->first(); 
         $merger = PDFMerger::init();           

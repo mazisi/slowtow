@@ -78,7 +78,7 @@ export default {
     })
 
      function mergeDocuments(){
-        mergeForm.post(`/merge-transfer-documents/`, {
+        mergeForm.post(`/transfer-documents-merge`, {
           preserveScroll: true,
           onSuccess: () => {
             //do something
@@ -594,7 +594,7 @@ export default {
 <div v-if="view_transfer.merged_document !==null">
 <a :href="`/storage/app/public/${view_transfer.merged_document}`" target="_blank" :style="{float: 'right'}" class="btn btn-secondary ms-2" >View</a>
 </div>
-  <button @click="mergeDocuments" :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="mergeForm.processing">
+  <button @click="mergeDocuments" :style="{float: 'right'}" type="button" class="btn btn-secondary ms-2" :disabled="mergeForm.processing">
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Compile And Merge</button>
 

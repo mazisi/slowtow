@@ -102,7 +102,7 @@ Route::group(['middleware' => ['auth']], function () {
 
 
         Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
-        Route::post('/merge-transfer-documents',[TransferDocsController::class,'merge'])->name('transfer_licence_docs');
+        Route::post('/transfer-documents-merge',[TransferDocsController::class,'merge'])->name('transfer_licence_docs');
         Route::delete('/delete-transfer-document/{document_id}',[TransferDocsController::class,'destroy']);
 
         Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');
