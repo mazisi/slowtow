@@ -4,6 +4,7 @@
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
       <h5>Reports</h5>
+      <a href="/renewal-export">Export</a>
         <div class="row">
           <div class="col-lg-6 col-md-6 mt-4 mb-4">
             <chart-holder-card
@@ -106,5 +107,10 @@ export default {
     MiniStatisticsCard,
     Layout
 },
+methods: {
+  exportt(){
+    this.$inertia.post('export')
+  }
+}
 };
 </script>

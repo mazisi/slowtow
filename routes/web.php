@@ -19,6 +19,7 @@ use App\Http\Controllers\LicenceDocsController;
 use App\Http\Controllers\AlterLicenceController;
 use App\Http\Controllers\TransferDocsController;
 use App\Http\Controllers\MergeDocumentController;
+use App\Http\Controllers\RenewalExportController;
 use App\Http\Controllers\LicenceRenewalController;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
@@ -124,6 +125,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //Reports
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
+        Route::get('/renewal-export',[RenewalExportController::class,'export'])->name('export');
 
         //Consultants
         // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
