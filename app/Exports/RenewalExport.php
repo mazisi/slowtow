@@ -17,16 +17,26 @@ class RenewalExport implements FromCollection, WithHeadings{
       'QUOTED',
       'QUOTE SENT',
       'PAYMENT DATE',
-      'INVOICE NUMBER',
       'PAYMENT TO LIQUOR BOARD',
       'DELIVERY DATE ',
-      'renewal_granted',
-      'delivery_date',
-      'proof_of_delivery',
-      'notes'
+      'PROOF OF DELIVERY',
+      'REASON / NOTES'
     ];
 } 
     public function collection(){
-        return LicenceRenewalExports::all();
+        return LicenceRenewalExports::get(['is_active',
+        'trading_name',
+        'licence_number',
+        'renewal_date',
+        'renewal_amount',
+        'is_quoted',
+        'is_quote_sent',
+        'payment_date',
+        'payment_to_liquour_board',
+        'delivery_date',
+        'proof_of_delivery',
+        'notes'
+    ]);
     }
+    
 }

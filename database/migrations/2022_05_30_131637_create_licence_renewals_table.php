@@ -22,7 +22,7 @@ return new class extends Migration
             $table->date('renewal_issued_at')->nullable();
             $table->date('renewal_delivered_at')->nullable();
             $table->date('payment_to_liquor_board_at')->nullable();
-            $table->string('is_quoted_sent')->nullable();//updated on email comms
+            $table->string('is_quote_sent')->nullable();//updated on email comms
             $table->string('slug');
             $table->softDeletes();
             $table->timestamps();

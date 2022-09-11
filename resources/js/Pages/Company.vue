@@ -3,7 +3,13 @@ import Layout from "../Shared/Layout.vue";
 
 export default {
   name: "dashboard-default",
-  props: ['companies'],
+  props: {
+    companies: Object,
+    success: String,
+    errors: Object,
+    error: String
+  },
+
   data() {
     return {
       term: '',

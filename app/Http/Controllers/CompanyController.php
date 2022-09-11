@@ -26,7 +26,7 @@ class CompanyController extends Controller
 
     }elseif(!empty($request->term) && $request->active_status == 'Active' && !empty($request->company_type)){
             $companies = Company::where(function($query) use($request){
-                                $query->where('name','LIKE','%'.$term.'%')
+                                $query->where('name','LIKE','%'.$request->term.'%')
                                 ->whereNull('active')
                                 ->orWhere('company_type','LIKE','%'.$request->company_type.'%')
                                 ->orWhere('reg_number','LIKE','%'.$request->term.'%');
@@ -177,22 +177,48 @@ class CompanyController extends Controller
 
    
 public function updatePeople(Request $request,$pivot_id){
-    $update = DB::table('company_people')
-    ->whereId($pivot_id)
-    ->update(['position' => $request->position]);
-    if($update){
-        return back()->with('message', $request->full_name.' updated successfully.'); 
+    try {
+        $update = DB::table('company_people')
+        ->whereId($pivot_id)
+        ->update(['position' => $request->position]);
+            if($update){
+                return back()->with('message', $request->full_name.' updated successfully.'); 
+            }
+
+    } catch (\Throwable $th) {
+        return back()->with('error','Error..Something went wrong.');
     }
 }
   /**
      * Unlink person from company.
      */
     public function unlinkPerson($id){
-       $unlink = DB::table('company_people')->where('id',$id)->delete();
+       try {
+        $unlink = DB::table('company_people')->where('id',$id)->delete();
        if($unlink){
         return back()->with('success','Person removed successfully.');            
         }
+        
+       } catch (\Throwable $th) {
+        // throw $th;
         return back()->with('error','Error..Something went wrong.');
+       }
+    }
+
+    /**
+     * Delete company
+     */
+    public function destroy($slug){
+        try {
+            $company = Company::whereSlug($slug);
+            if($company->delete()){
+                return to_route('companies')->with('success','Company deleted successfully.');            
+            }
+           
+        } catch (\Throwable $th) {
+            return to_route('companies')->with('error','Error..Something went wrong.');
+        }
+       
     }
 
 }

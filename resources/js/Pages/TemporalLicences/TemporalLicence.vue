@@ -12,7 +12,6 @@ export default {
   data() {
     return {
      term: '',
-      withThrashed: '', 
       active_status: '' 
     }
   },
@@ -24,7 +23,6 @@ methods: {
      search(){
           this.$inertia.replace(route('temp_licences',{
           term: this.term,
-          withThrashed: this.withThrashed,
           active_status: this.active_status
           }))
       
@@ -51,7 +49,7 @@ methods: {
       <div class="col-12">
       <form>
      <div class="row">
-       <div class="col-3">
+       <div class="col-9">
         <div class="input-group input-group-outline null is-filled">
   <label class="form-label">Search Company </label>
   <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
@@ -64,13 +62,6 @@ methods: {
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>
-
-   </div>
-       </div>
-        <div class="col-3">
-        <div class="input-group ">
-  <label class="">Include deleted licences: </label>
-  <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
 
    </div>
        </div>

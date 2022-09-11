@@ -18,7 +18,7 @@
 <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
 <li><Link :href="`#!`" @click="show_modal=true" data-bs-toggle="modal" data-bs-target="#add-company-admin" class="dropdown-item border-radius-md">Add Company Admin</Link></li>
 
-<li><a class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
+<li><a @click="deleteCompany(company.name)" class="dropdown-item border-radius-md text-danger" ><i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</a></li>
 </ul>
 </div>
 </div>
@@ -838,6 +838,12 @@ export default {
           }
         }
 
+        function deleteCompany(company_name){
+          if(confirm(company_name + ' will be deleted.. Continue??')){
+            Inertia.delete(`/delete-company/${props.company.slug}`)
+          }
+        }
+
     function submit() {//Update company details
       form.post('/update-company', {
         preserveScroll: true,
@@ -912,7 +918,8 @@ export default {
       getPositionValue,
       updatePerson,
       show_modal,
-      copyBusinessAddress
+      copyBusinessAddress,
+      deleteCompany
     }
   },
 

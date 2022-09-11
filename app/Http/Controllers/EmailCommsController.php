@@ -266,7 +266,9 @@ class EmailCommsController extends Controller
                 if(is_null($recipient)){
                     continue;
                 }
-                Mail::to($recipient)->send(new RenewalMailer($licence,$request->mail_body));    
+                Mail::to($recipient)->send(new RenewalMailer($licence,$request->mail_body));
+                //if mail sent then update is quote sent for reporting purposes
+                $licence->update(['is_quote_sent' => 'true']);    
             }
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {

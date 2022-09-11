@@ -67,6 +67,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/delete-company-document/{id}',[CompanyDocsController::class,'destroy']);
         Route::post('/add-people-to-company/{company_id}',[CompanyController::class,'attachPeopleToCompany']);
         Route::patch('/update-position/{id}',[CompanyController::class,'updatePeople']);
+        Route::delete('/delete-company/{slug}',[CompanyController::class,'destroy']);
 
         Route::delete('/unlink-person/{id}',[CompanyController::class,'unlinkPerson'])->name('unlink_person');
 

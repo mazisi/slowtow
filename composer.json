@@ -14,7 +14,6 @@
         "laravel/scout": "^9.4",
         "laravel/tinker": "^2.7",
         "maatwebsite/excel": "^3.1",
-        "pear/http_request2": "^2.5",
         "psr/simple-cache": "^2.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
