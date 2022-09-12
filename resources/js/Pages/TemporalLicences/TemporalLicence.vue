@@ -51,14 +51,14 @@ methods: {
      <div class="row">
        <div class="col-9">
         <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Search Company </label>
-  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
+  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default" placeholder="Search..">
    </div>
        </div>
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Active status: </label>
+
   <select @change="search" v-model="active_status" class="form-control form-control-default">
+    <option :value="''" disabled selected>Filter By</option>
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>

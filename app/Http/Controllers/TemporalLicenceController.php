@@ -269,11 +269,15 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
      }
 
      public function destroy($slug){
-         $licence = TemporalLicence::whereSlug($slug);
-         if($licence->delete()){
-            return to_route('temp_licences')->with('success','Temporal Licence deleted successfully.');
-         }
-         return to_route('temp_licences')->with('error','AN unknown error occured while deleteing temporal Licence.');
+        try {
+            $licence = TemporalLicence::whereSlug($slug);
+            if($licence->delete()){
+               return to_route('temp_licences')->with('success','Temporal Licence deleted successfully.');
+            }
+            
+        } catch (\Throwable $th) {
+            return to_route('temp_licences')->with('error','AN unknown error occured while deleteing temporal Licence.');
+        }
 
      }
 }

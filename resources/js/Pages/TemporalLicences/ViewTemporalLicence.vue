@@ -125,6 +125,14 @@ export default {
         }
       }
 
+      function deleteTemporalLicence(){
+        if(confirm('Are you sure you want to delete this licence??')){
+          Inertia.delete(`/delete-temporal-licence/${props.licence.slug}`, {
+            //
+          })
+        }
+      }
+
     function updateLicence() {
       form.patch(`/update-temp-licence/${props.licence.slug}`, {
         preserveScroll: true,
@@ -161,7 +169,8 @@ export default {
      submitTask,
      checkBodyLength,
      mergeDocuments,
-     mergeForm
+     mergeForm,
+     deleteTemporalLicence
      }
   },
    components: {
@@ -212,7 +221,8 @@ export default {
     <h6 v-else>Temporal Licence For: {{ licence.people.full_name }}</h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
-  
+    <button @click="deleteTemporalLicence" class=" border-radius-md btn-danger" style="border: none">
+      <i class="fa fa-trash-o cursor-pointer" aria-hidden="true" ></i> Delete</button>
   </div>
 </div>
 

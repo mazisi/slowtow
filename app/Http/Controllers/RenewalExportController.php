@@ -39,11 +39,11 @@ class RenewalExportController extends Controller
                     'is_quoted' => (is_null($is_quoted)) ? 'False' : 'True',
                     'is_quote_sent' => (is_null($renewal->is_quote_sent)) ? 'False' : 'True',
                     'payment_date' => $renewal->client_paid_at,
-                    'invoice_number' => '',
-                    'payment_to_liquour_board' => $renewal->payment_to_liquour_board_at,
+                    'invoice_number' => null,
+                    'payment_to_liquour_board' => $renewal->payment_to_liqour_board_at,
                     'renewal_granted' => $renewal->renewal_issued_at,
                     'delivery_date' => $renewal->renewal_delivery_at,
-                    'proof_of_delivery' => '???',
+                    'proof_of_delivery' => null,
                     'notes' => $notesCollection
                 ]);
             }

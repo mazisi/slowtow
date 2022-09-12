@@ -166,7 +166,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-temp-licence', [TemporalLicenceController::class,'store'])->name('store_temp_licence');
         Route::get('/view-temp-licence/{slug}', [TemporalLicenceController::class,'show'])->name('view_temp_licence');
         Route::patch('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
-        Route::post('/delete-temp-licence/{slug}', [TemporalLicenceController::class,'destroy']);
+        Route::delete('/delete-temporal-licence/{slug}', [TemporalLicenceController::class,'destroy']);
         
         Route::post('/submit-temporal-licence-document', [TemporalLicenceDocsController::class,'store']);
         Route::delete('/delete-temporal-licence-document/{id}', [TemporalLicenceDocsController::class,'destroy']);

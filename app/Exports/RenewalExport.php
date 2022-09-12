@@ -14,17 +14,21 @@ class RenewalExport implements FromCollection, WithHeadings{
       'TRADING NAME',
       'LICENCE NUMBER',
       'RENEWAL DATE',
+      'RENEWAL AMOUNT',
       'QUOTED',
       'QUOTE SENT',
       'PAYMENT DATE',
+      'INVOICE NUMBER',
       'PAYMENT TO LIQUOR BOARD',
+      'RENEWAL GRANTED',
       'DELIVERY DATE ',
       'PROOF OF DELIVERY',
       'REASON / NOTES'
     ];
 } 
     public function collection(){
-        return LicenceRenewalExports::get(['is_active',
+        return LicenceRenewalExports::get([
+        'is_active',
         'trading_name',
         'licence_number',
         'renewal_date',
@@ -32,7 +36,9 @@ class RenewalExport implements FromCollection, WithHeadings{
         'is_quoted',
         'is_quote_sent',
         'payment_date',
+        'invoice_number',
         'payment_to_liquour_board',
+        'renewal_granted',
         'delivery_date',
         'proof_of_delivery',
         'notes'
