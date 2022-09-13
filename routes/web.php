@@ -89,10 +89,11 @@ Route::group(['middleware' => ['auth']], function () {
         //renew licence.submit
         Route::post('/submit-licence-renewal',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
         Route::get('/view-licence-renewal/{slug}',[LicenceRenewalController::class,'show'])->name('view_licence_renewal');
-        Route::delete('/delete-licence-renewal/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
         Route::patch('/update-renewal',[LicenceRenewalController::class,'update'])->name('update_licence_renewal');
         Route::post('/submit-renewal-document',[LicenceRenewalController::class,'uploadDocuments']);
         Route::delete('/delete-renewal-document/{id}',[LicenceRenewalController::class,'deleteDocument']);
+        Route::delete('/delete-licence-renewal/{licence_slug}/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
+
         
 
         Route::get('/transfer-licence',[TransferLicenceController::class,'index'])->name('transfer_licence');
@@ -157,6 +158,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController::class,'detachNominee']);
         Route::post('/submit-nomination-document',[NominationController::class,'uploadDocument']);
         Route::delete('/delete-nomination-document/{id}',[NominationController::class,'deleteDocument']);
+        Route::delete('/delete-nomination/{licence_slug}/{slug}',[NominationController::class,'destroy']);
 
         Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');
 

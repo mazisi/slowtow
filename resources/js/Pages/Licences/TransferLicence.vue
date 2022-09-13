@@ -213,7 +213,7 @@ function assignActiveValue(event){
 </div>
 </div> 
 <hr>
-<hr>
+
 
 
 <div class="col-md-12 columns">

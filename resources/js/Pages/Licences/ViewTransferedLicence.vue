@@ -158,6 +158,12 @@ export default {
           }
       }
 
+      function deleteTransfer() {
+        if(confirm('Are you sure??')){
+          Inertia.delete(`/delete-licence-transfer/${props.view_transfer.slug}/${props.view_transfer.licence.slug}`)
+        }
+      }
+
 
     return {
       pushData,
@@ -175,7 +181,8 @@ export default {
       createTask,
       submitTask,
       checkBodyLength,
-      body_max
+      body_max,
+      deleteTransfer
     }
   },
   components: {
@@ -231,7 +238,9 @@ export default {
   <h5>Transfer Info for: {{ view_transfer.licence.trading_name }}</h5>
   
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end"></div>
+  <div class="col-lg-6 col-5 my-auto text-end">
+    <button @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+  </div>
 </div>
       <div class="row">
         <div class="mt-3 row">

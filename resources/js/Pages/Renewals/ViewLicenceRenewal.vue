@@ -101,6 +101,12 @@ export default {
       return computed_date + 1;    
     }
 
+      function deleteRenewal(){
+        if(confirm('Are you sure you want to delete this licence renewal??')){
+          Inertia.delete(`/delete-licence-renewal/${props.renewal.licence.slug}/${props.renewal.slug}`)
+        }
+      }
+
     function computeDocumentDate(date_param){
         return new Date(date_param).toLocaleString().split(',')[0]
     };
@@ -124,7 +130,8 @@ export default {
      computeDocumentDate,deleteDocument,
      createTask,
      submitTask,
-     checkBodyLength
+     checkBodyLength,
+     deleteRenewal
      }
   },
    components: {
@@ -170,6 +177,7 @@ export default {
    <h6>Process Renewal for: <span class="text-success">{{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}</span> : {{ renewal.licence.trading_name }}</h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
+    <button @click="deleteRenewal" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   
   </div>
 </div>

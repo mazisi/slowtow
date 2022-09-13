@@ -186,11 +186,25 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     }
 
     public function deleteDocument($id){
+       try {
         $model = NominationDocument::find($id);
         if(!is_null($model->document)){
             unlink(public_path('storage/app/public/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
+        }
+       } catch (\Throwable $th) {
+        return back()->with('error','An unknown error occured.');
+       }
+    }
+
+    public function destroy($licence_slug, $slug){
+        try {
+            Nomination::whereSlug($slug)->delete();
+            return to_route('nominations',['slug' => $licence_slug])->with('success','Nomination deleted successfully.');
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with('error','An unknown error occured.');
         }
     }
 }

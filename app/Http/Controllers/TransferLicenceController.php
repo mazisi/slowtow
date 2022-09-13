@@ -154,10 +154,15 @@ class TransferLicenceController extends Controller
        * Remove licence transfer
        */
       public function destroy($slug,$licence_slug){
+      try {
         $licence = LicenceTransfer::whereSlug($slug)->first();
         if ($licence->delete()) {
           return to_route('transfer_history',['slug' => $licence_slug])->with('success','Licence transfer deleted successfully.');
         }
-        return to_route('transfer_history',['slug' => $licence_slug])->with('error','Error deleting transfered licence.');
+        
+      } catch (\Throwable $th) {
+        //throw $th;
+        return back()->with('error','Error deleting  licence transfer.');
+      }
       }
 }

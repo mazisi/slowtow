@@ -134,6 +134,11 @@ export default{
               }
               
           }
+          function deleteNomination() {
+            if(confirm('Are you sure you want to delete this nomination??')){
+              Inertia.delete(`/delete-nomination/${props.nomination.licence.slug}/${props.nomination.slug}`)
+            }
+          }
 
       function pushData(status_value) {
           if (event.target.checked) {
@@ -150,7 +155,7 @@ export default{
       return{options,pushData,checkBodyLength,body_max,updateNomination,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,
             computeDocumentDate,deleteDocument,submitDocument,submitTask,
-            getDocType,nomineeForm,createTask,uploadDoc,updateForm
+            getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination
 
 
       }
@@ -199,7 +204,10 @@ export default{
 <div class="col-lg-6 col-7">
 <h6>Nomination Info:  {{ nomination.licence.trading_name }}</h6>
 </div>
-<div class="col-lg-6 col-5 my-auto text-end"></div>
+<div class="col-lg-6 col-5 my-auto text-end">
+  <button @click="deleteNomination" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+
+</div>
 </div>
 <div class="row">
 <div class="mt-3 row">

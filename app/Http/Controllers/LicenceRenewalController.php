@@ -62,14 +62,7 @@ class LicenceRenewalController extends Controller
         ]);
     }
 
-    public function destroy($slug)
-    {
-        $renewal = LicenceRenewal::whereSlug($slug)->first();
-        if($renewal->delete()){
-            return back()->with('success','Renewal deleted successful.');
-        }
-        return back()->with('error','Error deleting renewal.');
-    }
+    
 
     public function update(Request $request){
        $request->validate([
@@ -132,4 +125,17 @@ class LicenceRenewalController extends Controller
             return back()->with('success','Document removed successfully.');
         }
     }
+
+    public function destroy($licence_slug, $slug){
+        try {
+            $renewal = LicenceRenewal::whereSlug($slug)->first();
+        if($renewal->delete()){
+            return to_route('renew_licence',['slug' => $licence_slug])->with('success','Renewal deleted successful.');
+        }
+        } catch (\Throwable $th) {
+            return to_route('renew_licence',['slug' => $licence_slug])->with('error','Error deleting renewal.');
+        }
+       
+    }
+
 }
