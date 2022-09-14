@@ -10,4 +10,9 @@ class RenewalDocument extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function licence_renewal()
+    {
+        return $this->belongsTo(LicenceRenewal::class);
+    }
 }

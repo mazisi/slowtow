@@ -53,9 +53,8 @@ export default {
 .columns{
   margin-bottom: 1rem;
 }
-#active-checkbox{
-  margin-top: 3px;
-  margin-left: 3px;
+.active-checkbox{
+  margin-top: -10px;
 }
 .status-heading{
   font-weight: 700;
@@ -86,8 +85,8 @@ export default {
 <input type="hidden" v-model="form.slug">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="1">
-<label class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+<input id="client-invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
+<label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
 </div>  
@@ -95,16 +94,16 @@ export default {
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="2">
-<label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+<input id="client-paid" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
 </div> <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="3">
-<label class="form-check-label text-body text-truncate status-heading">Alteration Details Captured</label>
+<input id="alteration-details" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
+<label for="alteration-details" class="form-check-label text-body text-truncate status-heading">Alteration Details Captured</label>
 </div>
 <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
 </div> <hr>
@@ -121,8 +120,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="4">
-<label class="form-check-label text-body text-truncate status-heading"> Alteration Complete</label>
+<input id="alteration-complete" class="active-checkbox" v-model="form.status" type="checkbox" value="4">
+<label for="alteration-complete" class="form-check-label text-body text-truncate status-heading"> Alteration Complete</label>
 </div>
 </div> 
 

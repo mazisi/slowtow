@@ -16,4 +16,9 @@ class LicenceRenewal extends Model
     {
         return $this->belongsTo(Licence::class);
     }
+
+    public function renewal_documents()
+    {
+        return $this->hasMany(RenewalDocument::class,'licence_renewal_id');
+    }
 }
