@@ -55,7 +55,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="renewal in renewals">
+                  <tr v-for="renewal in renewals.data">
                     <td class="align-middle text-sm">
                       <i v-if="renewal.licence.is_licence_active === '1'" class="fa fa-check text-success" aria-hidden="true"></i>
                       <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
@@ -72,8 +72,9 @@
                 </tbody>
               </table>
             </div>
-          </div>
+          </div>          
       </div>
+      <paginate :links="renewals.links"/>
     </div>
   </div>
 
@@ -81,6 +82,7 @@
 </template>
 <script>
 import Layout from "../Shared/Layout.vue";
+import Paginate from "../Shared/Paginate.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 
 export default {
@@ -95,7 +97,8 @@ export default {
   },
  components: {
     Layout,
-    Link
+    Link,
+    Paginate
 },
 methods: {
   deleteSingleContact(id){
