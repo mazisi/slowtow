@@ -11,7 +11,7 @@ class ReportController extends Controller
     public function index(){
         $renewals = LicenceRenewal::with(['licence','renewal_documents' => function ($query){
             $query ->where('doc_type','Client Quoted');            
-          }])->paginate(2);
+          }])->paginate(1);
         return Inertia::render('Report',['renewals' => $renewals]);
     }
 
