@@ -53,11 +53,11 @@ class RenewalMailer extends Mailable
             return to_route('get_licence_transfers')->with('error','Error sending mail.');
         }
         
-        return $this->from('no-reply@slowotow.co.za')
-                    ->cc('info@slotow.co.za')
+        return $this->from('no-reply@slowtow.co.za')
+                    ->cc('mazisimsebele18@gmail.com')
                     ->subject($this->renewal->licence->trading_name.' AND '.$this->renewal->date)
                     ->markdown('emails.ecomms.renewalMailer')
-                    ->attach(public_path('storage/'.$get_doc->document))
+                    ->attach(public_path('storage/renewalDocuments/'.$get_doc->document))
                     ->with([
                         'message_body' => $this->template
                     ]);

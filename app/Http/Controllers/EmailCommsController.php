@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Nomination;
 use App\Mail\RenewalMailer;
+use App\Models\Email;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceTransfer;
@@ -239,19 +240,29 @@ class EmailCommsController extends Controller
 // 3 => Client Paid
 // 5 => Renewal Issued
     public function dispatchMail(Request $request){
-        try {            
+        try {
             $licence = LicenceRenewal::with('licence.company')->whereSlug($request->renewal_slug)->firstOrFail();
+            $get_email_status = '';
+            
             switch ($licence->status) {            
-                case '1':                
+                case '1':
+                    $stage = '1';                
                     $get_doc = RenewalDocument::where('licence_renewal_id',$licence->id)->where('doc_type','Client Quoted')->first();
+                    $get_email_status = Email::where('stage','1')->where('model_type','Renewal')->where('model_id',$licence->id)->first();
                     break;
                 case '2':
+                    $stage = '2';
+                    $get_email_status = Email::where('stage','2')->where('model_type','Renewal')->where('model_id',$licence->id)->first();
                     $get_doc = RenewalDocument::where('licence_renewal_id',$licence->id)->where('doc_type','Client Invoiced')->first();
                     break;
                 case '3':
+                    $get_email_status = Email::where('stage','3')->where('model_type','Renewal')->where('model_id',$licence->id)->first();
+                    $stage = '3';
                     $get_doc = RenewalDocument::where('licence_renewal_id',$licence->id)->where('doc_type','Client Paid')->first();
                     break;
                 case '5':
+                    $get_email_status = Email::where('stage','5')->where('model_type','Renewal')->where('model_id',$licence->id)->first();
+                    $stage = '5';
                     $get_doc = RenewalDocument::where('licence_renewal_id',$licence->id)->where('doc_type','Renewal Issued')->first();
                     break;
                 default:
@@ -259,7 +270,19 @@ class EmailCommsController extends Controller
                     break;
             }
             if(is_null($get_doc)){
-                return back()->with('error','Mail NOT SENT!!!!.Document IS NOT YET UPLOADED.');
+                if(is_null($get_email_status)){
+                    Email::insert([
+                        'model_type' => 'Renewal',
+                        'model_id' => $licence->id,
+                        'status' => 'Email NOT Sent',
+                        'stage' => $stage,
+                        'feedback' => 'Quote Document Not Uploaded.',
+                        'created_at' => now(),
+                        'updated_at' => now()
+                    ]);  
+                }
+                
+                return back()->with('error','Mail NOT SENT!!!!.Quote Document IS NOT YET UPLOADED.');
             }
             $recipients = [$licence->licence->company->email,$licence->licence->company->email1,$licence->licence->company->email2];
             foreach ($recipients as $recipient) {
@@ -267,12 +290,23 @@ class EmailCommsController extends Controller
                     continue;
                 }
                 Mail::to($recipient)->send(new RenewalMailer($licence,$request->mail_body));
-                //if mail sent then update is quote sent for reporting purposes
-                $licence->update(['is_quote_sent' => 'true']);    
+                
             }
+            //if mail sent then update is quote sent for reporting purposes
+            $licence->update(['is_quote_sent' => 'true']);
+            // Email::insert([
+            //     'model_type' => 'Renewal',
+            //     'model_id' => $licence->id,
+            //     'status' => 'successful',
+            //     'stage' => $stage,
+            //     'feedback' => '',
+            //     'created_at' => now(),
+            //     'updated_at' => now()
+            // ]);    
+            
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {
-            return back()->with('error','An error occured while sending email.');
+             // return back()->with('error','An error occured while sending email.');
         }
        
         
