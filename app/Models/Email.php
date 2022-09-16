@@ -10,4 +10,8 @@ class Email extends Model
     use HasFactory;
 
     protected $guarded = [];
+    public function licence_renewals()
+    {
+        return $this->belongsTo(LicenceRenewal::class,'model_id');
+    }
 }

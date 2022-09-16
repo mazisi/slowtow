@@ -21,4 +21,9 @@ class LicenceRenewal extends Model
     {
         return $this->hasMany(RenewalDocument::class,'licence_renewal_id');
     }
+
+    public function emails()
+    {
+        return $this->hasMany(Email::class,'model_id');
+    }
 }

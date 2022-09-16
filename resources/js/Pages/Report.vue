@@ -29,51 +29,29 @@
   </div>
   </div>
 </div>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <button class="nav-link active" id="nav-home-tab" data-bs-toggle="tab" data-bs-target="#nav-home" type="button" role="tab" aria-controls="nav-home" aria-selected="true">Emails</button>
+    <button class="nav-link" id="nav-profile-tab" data-bs-toggle="tab" data-bs-target="#nav-profile" type="button" role="tab" aria-controls="nav-profile" aria-selected="false">Renewals</button>
+    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-contact" type="button" role="tab" aria-controls="nav-contact" aria-selected="false">Contact</button>
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+    <EmailComponent :emails="emails"/> 
+  </div>
 
-        <div class=" my-4">
-            <div class="table-responsive p-0">
-              <table class="table align-items-center mb-0">
-                <thead>
-                  <tr>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      Active/Deactive
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Trading Name
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Licence Number
-                    </th>
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Renewal Date
-                    </th>                    
-                    
-                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Quoted
-                    </th>
-                    
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="renewal in renewals.data">
-                    <td class="align-middle text-sm">
-                      <i v-if="renewal.licence.is_licence_active === '1'" class="fa fa-check text-success" aria-hidden="true"></i>
-                      <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
-                      
-                    </td>
-                    <td class="text-center text-sm">{{ renewal.licence.trading_name }}</td>
-                    <td class="text-center text-sm">{{ renewal.licence.licence_number }}</td>
-                    <td class="text-center text-sm">{{ renewal.date }}</td>
-                    <td v-if="renewal.renewal_documents[0] != null" class="text-center text-sm">True</td>
-                    <td v-else class="text-center text-sm">False</td>                  </tr>
-                  
-                 
-                </tbody>
-              </table>
-            </div>
-          </div>          
+
+
+  <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+    <RenewalComponent :renewals="renewals"/>
+  </div>
+  <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+</div>
+
+           
       </div>
-      <paginate :links="renewals.links"/>
+      <!-- <paginate :links="renewals.links"/> -->
     </div>
   </div>
 
@@ -83,10 +61,13 @@
 import Layout from "../Shared/Layout.vue";
 import Paginate from "../Shared/Paginate.vue";
 import { Link } from '@inertiajs/inertia-vue3';
+import EmailComponent from "./Reporting/EmailComponent.vue";
+import RenewalComponent from "./Reporting/RenewalComponent.vue";
 
 export default {
   props: {
     renewals: Object,
+    emails: Object,
     success: String,
     error: String,
     errors: Object,
@@ -97,7 +78,9 @@ export default {
  components: {
     Layout,
     Link,
-    Paginate
+    Paginate,
+    EmailComponent,
+    RenewalComponent
 },
 methods: {
   deleteSingleContact(id){
