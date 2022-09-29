@@ -93,7 +93,7 @@ class CompanyController extends Controller
                 'postal_province' => $request->postal_province,
                 'postal_code' => $request->postal_code,
                 'active' => $request->active,
-                'slug' => Str::replace(' ','_',$request->company_name).sha1(time()),
+                'slug' => sha1(time()),
             ]);
 
             if($company ){

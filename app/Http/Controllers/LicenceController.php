@@ -194,7 +194,7 @@ class LicenceController extends Controller
             "province" => $request->province,
             "postal_code" => $request->postal_code,
             "is_licence_active" => $request->is_licence_active,
-            'slug' => Str::replace(' ','_',$request->trading_name).sha1(time()),
+            'slug' => sha1(time()),
         ]);
         return redirect(route('licences'))->with('success','Licence created successfully.');
     }

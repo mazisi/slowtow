@@ -268,7 +268,7 @@ class EmailCommsController extends Controller
             }
             $get_doc = RenewalDocument::where('licence_renewal_id',$licence->id)->where('doc_type',$renewal_stage)->first();
             $get_email_status = Email::where('stage', $stage)->where('model_type','Renewal')->where('model_id',$licence->id)->first();
-            if(){
+            if(){//emils stuff
                 $error_message = '';
             }else{
                 $error_message = '';
