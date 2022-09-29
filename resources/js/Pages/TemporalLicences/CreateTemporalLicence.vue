@@ -13,12 +13,15 @@ export default {
     return {
       showMenu: false,
       form: {
+        event_name: '',
         liquor_licence_number: null,
         start_date: null,
         end_date: null,
         company: null,
         person: null,
-        belongs_to: null
+        belongs_to: null,
+        latest_lodgment_date: null,
+        address: null
     },
     options: this.companies,
     persons: this.people,
@@ -77,18 +80,26 @@ export default {
   <form @submit.prevent="submit">
 <div class="row">
                   
-  <div class="col-md-4 columns">
+  <div class="col-md-4 columns d-none">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Liquor Licence Number</label>
-    <input type="text" required class="form-control form-control-default" v-model="form.liquor_licence_number" >
+    <input type="text" class="form-control form-control-default" v-model="form.liquor_licence_number" >
      </div>
    <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
    </div>
   
+
+   <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Event Name</label>
+    <input type="text" class="form-control form-control-default" v-model="form.event_name" >
+     </div>
+   <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
+   </div>
  
  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Start Date</label>
+    <label class="form-label">Event Start Date</label>
     <input type="date" required class="form-control form-control-default" v-model="form.start_date" >
      </div>
    <div v-if="errors.start_date" class="text-danger">{{ errors.start_date }}</div>
@@ -97,11 +108,35 @@ export default {
 
 <div class="col-md-4 columns">
    <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">End Date</label>
+  <label class="form-label">Event Ending Date</label>
   <input type="date" class="form-control form-control-default" v-model="form.end_date" >
    </div>
   <div v-if="errors.end_date" class="text-danger">{{ errors.end_date }}</div>
 </div>  
+
+<div class="col-md-4 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Latest Lodgment Date</label>
+  <input type="date" class="form-control form-control-default" v-model="form.latest_lodgment_date" >
+   </div>
+ <div v-if="errors.latest_lodgment_date" class="text-danger">{{ errors.latest_lodgment_date }}</div>
+ </div>
+
+ 
+ <div class="col-md-4 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  
+  <select class="form-control form-control-default" v-model="form.address" >
+    <option :value="''" disabled selected >Event Address</option>
+    <option value="Ekurhuleni">Ekurhuleni</option>
+      <option value="Johannesburg">Johannesburg</option>
+      <option value="Sedibeng">Sedibeng</option>
+      <option value="Tshwane">Tshwane</option>
+      <option value="West Rand">West Rand</option>
+  </select>
+   </div>
+ <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
+ </div>
 
 <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">

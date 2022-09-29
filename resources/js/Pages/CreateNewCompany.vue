@@ -182,7 +182,15 @@
 </div>
 
 <hr>
-
+<div class="col-12 columns">            
+  <div class="input-group input-group-outline is-filled">
+  <input style="margin-top: -6px; margin-right: 3px;" @change="copyBusinessAddress" 
+   type="checkbox" v-model="form.copy_address" >
+  <label>Same as Business Address</label>
+  </div>
+  <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
+  </div> 
+  
 <div class="col-12 columns">            
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Postal Address Line 1</label>
@@ -270,6 +278,7 @@ export default {
   data() {
     return {
        form: {
+        copy_address: '',
         company_name: '',
         company_type: '',
         reg_number: '',
@@ -302,7 +311,28 @@ export default {
         .then(() => {
           // code
         })
+    },
+
+    copyBusinessAddress(){
+      if(this.form.copy_address){
+        this.form.copy_address = true;
+        this.form.postal_address = this.form.business_address;
+        this.form.postal_address2 = this.form.business_address2;
+        this.form.postal_address3 = this.form.business_address3;
+        this.form.postal_address3 = this.form.business_address3;
+        this.form.postal_province = this.form.business_province;
+        this.form.postal_code = this.form.business_address_postal_code;
+      }else{
+        this.form.copy_address = false;
+        this.form.postal_address = ''
+        this.form.postal_address2 = '';
+        this.form.postal_address3 = '';
+        this.form.postal_address3 = '';
+        this.form.postal_province = '';
+        this.form.postal_code = '';
+      }
     }
+
   },
   components: {
     Layout,

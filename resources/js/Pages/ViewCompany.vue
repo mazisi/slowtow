@@ -327,7 +327,8 @@
 
 <div class="col-12 columns">            
 <div class="input-group input-group-outline is-filled">
-<input style="margin-top: -6px; margin-right: 3px;" @change="copyBusinessAddress" type="checkbox" v-model="form.copy_address" >
+<input style="margin-top: -6px; margin-right: 3px;" @change="copyBusinessAddress" 
+ type="checkbox" v-model="form.copy_address">
 <label>Same as Business Address</label>
 </div>
 <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
@@ -745,9 +746,13 @@ export default {
       if(form.copy_address){
         form.copy_address = true;
         form.postal_address = form.business_address;
+        form.postal_address2 = form.business_address2;
+        form.postal_address3 = form.business_address3;
       }else{
         form.copy_address = false;
         form.postal_address = ''
+        form.postal_address2 = '';
+        form.postal_address3 = '';
       }
     }
 

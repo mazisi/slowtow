@@ -22,6 +22,8 @@ return new class extends Migration
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->date('client_paid_at')->nullable();
+            $table->date('latest_lodgment_date')->nullable();
+            $table->longText('address')->nullable();
             $table->date('payment_to_liquor_board_at')->nullable();
             $table->date('logded_at')->nullable();
             $table->date('issued_at')->nullable();
