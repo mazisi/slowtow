@@ -2,14 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
-use App\Models\Consultant;
-use App\Models\PeopleDocument;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Models\PeopleDocument;
 use App\Models\TemporalLicence;
 use App\Models\TemporalLicenceDocument;
 
@@ -18,7 +18,6 @@ class TemporalLicenceController extends Controller
     public function index(Request $request){
         $queryString = request('term');
         if(!empty($queryString) && !empty($request->withThrashed) && $request->active_status == 'Active'){
-
           
             $licences = TemporalLicence::with(["company"])
                             ->orWhereHas('company', function($query) use($queryString){
@@ -59,7 +58,10 @@ class TemporalLicenceController extends Controller
                     ->orWhere('end_date','LIKE','%'.$queryString.'%')
                     ->where('active','1')
                     ->get();
-               
+        }elseif(empty($queryString) && $request->active_status == 'All'){
+            $licences = TemporalLicence::with(['company','people'])
+        ->get();
+
         }elseif(!empty($queryString)){
             
             $licences = TemporalLicence::with('company','people')
@@ -103,18 +105,23 @@ class TemporalLicenceController extends Controller
 
     public function store(Request $request){
        $request->validate([
-           'liquor_licence_number' => 'required',
+           'event_name' => 'required',
            'start_date' => 'required|date',
            'end_date' => 'required|date',
+           'latest_lodgment_date'=> 'required|date',
            'belongs_to' => 'required|in:Person,Company'
            ]);
            if(is_null($request->person)){
             $request->validate(['company' => 'required']);
             $temp = TemporalLicence::create([
                 'company_id' => $request->company,
-                'liquor_licence_number' => $request->liquor_licence_number,
+                'event_name' => $request->event_name,
                 'end_date' => $request->end_date,
                 'start_date' => $request->start_date,
+                'application_type' => $request->application_type,
+                'address' => $request->address,
+                'belongs_to' => $request->belongs_to,
+                'latest_lodgment_date'  => Carbon::parse($request->latest_lodgment_date)->format('m-d-Y'),
                 'slug' => sha1(time()),
                 ]);
 
@@ -122,9 +129,13 @@ class TemporalLicenceController extends Controller
             $request->validate(['person' => 'required|exists:people,id']);
             $temp = TemporalLicence::create([
                 'people_id' => $request->person,
-                'liquor_licence_number' => $request->liquor_licence_number,
+                'event_name' => $request->event_name,
                 'end_date' => $request->end_date,
                 'start_date' => $request->start_date,
+                'application_type' => $request->application_type,
+                'belongs_to' => $request->belongs_to,
+                'address' => $request->address,
+                'latest_lodgment_date'  => Carbon::parse($request->latest_lodgment_date)->format('m-d-Y'),
                 'slug' => sha1(time()),
                 ]);
 
@@ -258,6 +269,8 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
                 'logded_at' => $request->logded_at,
                 'issued_at' => $request->issued_at,
                 'delivered_at' => $request->delivered_at,
+                'reg_number' => $request->reg_number,
+                'id_number' => $request->id_number,
                 "status" => $status,
                 ]);
     

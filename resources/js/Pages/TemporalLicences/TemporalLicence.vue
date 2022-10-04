@@ -59,6 +59,7 @@ methods: {
 
   <select @change="search" v-model="active_status" class="form-control form-control-default">
     <option :value="''" disabled selected>Filter By</option>
+   <option value="All">All</option>
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>
@@ -79,8 +80,14 @@ methods: {
                      Event Name
                     </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Company/Individual
+                    Applicant
                     </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                      Event Date
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                        Licence Number
+                        </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     View
                     </th>
@@ -89,20 +96,18 @@ methods: {
                 </thead>
                 <tbody>
                   <tr v-for="licence in licences" :key="licence.id">
-                    <td class="align-middle text-sm">
-                    <div class="d-flex flex-column justify-content-center">
+                    <td class="text-sm" >
+                      <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
                     <Link :href="`/view-temp-licence/${licence.slug}`">
-                    <h6 class="mb-0 text-sm justify-content-center">{{ licence.liquor_licence_number }}</h6>
+                    {{ licence.event_name }}
                     </Link>
-                    
-                    </div>
+                  </h6>
                       
                     </td>
                     <td v-if="licence.people === null">
                           <h6 class="mb-0 text-sm">               
                           <Link :href="`/view-temp-licence/${licence.slug}`"
-                            class="px-0 nav-link font-weight-bold lh-1"
-                            :class="color ? color : 'text-body'">{{ licence.company.name }}
+                            class="px-0 ">{{ licence.company.name }}
                           </Link>
                            </h6>
                     </td>
@@ -113,6 +118,22 @@ methods: {
                             {{ licence.people.full_name }}
                           </Link>
                            </h6>
+                    </td>
+                    <td class="">
+                      <h6 class="mb-0 text-sm">
+                        <Link :href="`/view-temp-licence/${licence.slug}`">
+                          {{ licence.start_date }}
+                       </Link>
+                        </h6>
+                      
+                    </td>
+                    <td class="">
+                      <h6 class="mb-0 text-sm">
+                        <Link :href="`/view-temp-licence/${licence.slug}`">
+                          {{ licence.liquor_licence_number }}
+                       </Link>
+                        </h6>
+                      
                     </td>
                     <td class="text-center">
                     <Link :href="`/view-temp-licence/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>

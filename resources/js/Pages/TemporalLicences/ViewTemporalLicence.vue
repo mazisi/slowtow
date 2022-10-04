@@ -59,7 +59,11 @@ export default {
       payment_to_liquor_board_at: props.licence.payment_to_liquor_board_at,
       logded_at: props.licence.logded_at,
       issued_at: props.licence.issued_at, 
-      delivered_at: props.licence.delivered_at,  
+      delivered_at: props.licence.delivered_at,
+      liquor_licence_number: props.licence.liquor_licence_number,
+      reg_number: props.licence.reg_number,
+      id_number: props.licence.id_number,
+      belongs_to: props.licence.belongs_to
      })
 
     const uploadDoc = useForm({
@@ -83,7 +87,7 @@ export default {
       })
     }
 
-    function checkBodyLength(){//Monitor task body length..
+    function checkBodyLength(){//Monitor task body length..Or just use watcher
           if(this.createTask.body.length > this.body_max){
               this.createTask.body = this.createTask.body.substring(0,this.body_max)
           }
@@ -178,6 +182,14 @@ export default {
     Link,
     Head,
     Datepicker
+  },
+
+  watch: {
+    'form.start_date'() {
+      var d = new Date(this.form.start_date);
+      d.setDate(d.getDate() - 14);
+      this.form.latest_lodgment_date = d.toLocaleString().split(' ')[0].replace(/,/g, '')
+    }
   },
   
 };
@@ -300,6 +312,31 @@ export default {
 </ul>
 <hr>
 
+<div class="col-md-4 columns">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Licence Number</label>
+  <input type="text" class="form-control form-control-default" v-model="form.liquor_licence_number">
+   </div>
+ <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
+ </div>
+ <div class="col-md-2 columns"></div>
+ <div class="col-md-4 columns" v-if="form.belongs_to === 'Company'">
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">Registration Number</label>
+  <input type="text" class="form-control form-control-default" v-model="form.reg_number">
+   </div>
+ <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
+ </div>
+
+ <div class="col-md-4 columns" v-else>
+  <div class="input-group input-group-outline null is-filled ">
+  <label class="form-label">ID Number</label>
+  <input type="text" class="form-control form-control-default" v-model="form.id_number">
+   </div>
+ <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
+ </div>
+  <hr/>
+
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid"  type="checkbox" value="3"
@@ -323,10 +360,12 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
 @input="pushData($event.target.value)" value="4" :checked="licence.status >= 4">
-<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Collate Temporary Licence Documents </label>
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Process application </label>
 </div>
 </div> 
 
+
+<div class="">
 
 <!-- ===============   Company File Uploads ===========================-->
 <div v-if="licence.people_id == null" class="d-flex row">
@@ -454,7 +493,7 @@ export default {
 && company_plan !== null"
 @click="mergeDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
+  <span class="visually-hidden">Loading...</span> Compile Application</button>
   
   </div>
 </div>
@@ -579,11 +618,13 @@ export default {
 && individual_plan !== null"
 @click="mergeDocuments('Individual')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Compile &amp; Merge</button>
+  <span class="visually-hidden">Loading...</span> Compile Application</button>
 
 
 
   </div>
+</div>
+
 </div>
 
 <hr>

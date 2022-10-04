@@ -15,15 +15,20 @@ return new class extends Migration
     {
         Schema::create('temporal_licences', function (Blueprint $table) {
             $table->id();
+            $table->string('belongs_to');
             $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('people_id')->nullable()->constrained()->onDelete('cascade');
+            $table->string('event_name')->default(1);
             $table->string('liquor_licence_number')->nullable();
-            $table->string('active')->nullable();
+            $table->string('active')->default(1);
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->date('client_paid_at')->nullable();
-            $table->date('latest_lodgment_date')->nullable();
+            $table->string('latest_lodgment_date')->nullable();
             $table->longText('address')->nullable();
+            $table->string('application_type')->nullable();
+            $table->string('reg_number')->nullable();
+            $table->string('id_number')->nullable();
             $table->date('payment_to_liquor_board_at')->nullable();
             $table->date('logded_at')->nullable();
             $table->date('issued_at')->nullable();

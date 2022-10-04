@@ -90,7 +90,7 @@ class="form-label"
 
 <div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Date of Original Issue</label>
+<label class="form-label">Licence Date</label>
 <input type="date" class="form-control form-control-default" v-model="form.licence_date">
 </div>
 <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>

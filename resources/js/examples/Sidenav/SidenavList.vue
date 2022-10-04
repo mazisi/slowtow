@@ -211,7 +211,22 @@
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_licence'}"
           collapseRef="/create-licence"
-          navText="New Licence"
+          navText="Existing licence"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">add</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li v-if="$page.props.currentRoute == 'licences' && $page.props.auth.has_slowtow_admin_role" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'create_licence'}"
+          collapseRef="/create-new-app"
+          navText="New Application"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">add</i>
