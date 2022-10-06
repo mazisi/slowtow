@@ -138,7 +138,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
-
+import lodash from 'lodash'
 
 export default {
     props: {
@@ -166,7 +166,7 @@ export default {
     },
 
     methods: {
-      search(){
+      search(){        
          this.$inertia.replace(route('licences',{
           term: this.term,
           active_status: this.active_status,
@@ -176,5 +176,6 @@ export default {
           }))
         },
     },
+    
 }
 </script>

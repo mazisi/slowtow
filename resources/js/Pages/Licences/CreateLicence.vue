@@ -59,7 +59,7 @@
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.licence_number" >
+<input type="text" required class="form-control form-control-default" v-model="form.licence_number" >
 </div>
 <div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
 </div>
@@ -73,7 +73,7 @@
 </div>  
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">Original Issue Of Licence Date</label>
+<label class="form-label">Licence Date</label>
 <input type="date" class="form-control form-control-default" v-model="form.licence_date">
 </div>
 <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
@@ -112,7 +112,7 @@
 <div class="col-12 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.province" >
+<select class="form-control form-control-default" v-model="form.province" required>
 <option value="Eastern Cape">Eastern Cape</option>
 <option value="Free State">Free State</option>
 <option value="Gauteng">Gauteng</option>
@@ -190,7 +190,8 @@ export default {
           address2: '',
           address3: '',
           province: '',
-          company: '',   
+          company: '',
+          postal_code: ''   
     })
 
     function submit() {

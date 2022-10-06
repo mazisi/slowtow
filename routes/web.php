@@ -21,6 +21,7 @@ use App\Http\Controllers\TransferDocsController;
 use App\Http\Controllers\MergeDocumentController;
 use App\Http\Controllers\RenewalExportController;
 use App\Http\Controllers\LicenceRenewalController;
+use App\Http\Controllers\NewApplicationController;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -78,6 +79,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/submit-licence',[LicenceController::class,'store'])->name('submit_licence');
         Route::patch('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
+
+        //New Apps
+        Route::get('/create-new-app',[NewApplicationController::class,'create'])->name('create_new_app');
+        Route::post('/submit-new-app',[NewApplicationController::class,'store'])->name('submit_new_app');
 
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store']);
         Route::delete('/delete-licence-document/{id}',[LicenceDocsController::class,'destroy'])->name('delete_licence_doc');

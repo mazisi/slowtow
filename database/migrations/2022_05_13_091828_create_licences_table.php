@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('licences', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+            $table->foreignId('company_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('people_id')->nullable()->constrained()->onDelete('cascade');
             $table->foreignId('licence_type_id')->constrained()->onDelete('cascade');
             $table->string('trading_name');
             $table->string('licence_number')->nullable();
@@ -26,6 +27,22 @@ return new class extends Migration
             $table->string('address3')->nullable();
             $table->string('province')->nullable();
             $table->string('postal_code')->nullable();
+            $table->string('belongs_to')->nullable();
+            $table->string('reg_number')->nullable();
+            $table->string('id_number')->nullable();
+            $table->string('board_region')->nullable();
+            $table->string('is_new_app')->nullable();
+            $table->string('status')->nullable();
+            $table->date('deposit_paid_at')->nullable();
+            $table->date('liquor_board_at')->nullable();
+            $table->date('application_lodged_at')->nullable();
+            $table->date('initial_inspection_at')->nullable(); 
+            $table->date('final_inspection_at')->nullable();
+            $table->date('activation_fee_requested_at')->nullable();
+            $table->date('client_paid_at')->nullable();
+            $table->date('activation_fee_paid_at')->nullable();
+            $table->date('licence_issued-at')->nullable(); 
+            $table->date('licence_delivered_at')->nullable(); 
             $table->string('is_licence_active')->nullable();
             $table->string('slug');
             $table->softDeletes();

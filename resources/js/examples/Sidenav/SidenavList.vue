@@ -224,7 +224,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'create_licence'}"
+          :class="{ active:  $page.props.currentRoute == 'create_new_app'}"
           collapseRef="/create-new-app"
           navText="New Application"
         >
@@ -233,6 +233,8 @@
           </template>
         </sidenav-collapse>
       </li>
+
+      
       
 
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<===============Licence variations Starts ==============>>>>>>>>>>>>>>>> -->

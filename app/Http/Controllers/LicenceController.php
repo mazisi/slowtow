@@ -180,6 +180,7 @@ class LicenceController extends Controller
             "licence_type" => "required",
             "company" => "required|exists:companies,id",
             "province" => "required",
+            "licence_number" => "required"
         ]);
         Licence::create([
             "trading_name" => $request->trading_name,
