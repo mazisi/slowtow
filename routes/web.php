@@ -83,6 +83,8 @@ Route::group(['middleware' => ['auth']], function () {
         //New Apps
         Route::get('/create-new-app',[NewApplicationController::class,'create'])->name('create_new_app');
         Route::post('/submit-new-app',[NewApplicationController::class,'store'])->name('submit_new_app');
+        Route::patch('/update-new-app/{slug}',[NewApplicationController::class,'update'])->name('update_new_app');
+        Route::get('/registration',[NewApplicationController::class,'view_registration'])->name('view_registration');
 
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store']);
         Route::delete('/delete-licence-document/{id}',[LicenceDocsController::class,'destroy'])->name('delete_licence_doc');

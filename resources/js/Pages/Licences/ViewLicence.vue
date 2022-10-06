@@ -8,7 +8,7 @@
   <div class="card card-body mx-3 mx-md-4 mt-n6">
   <div class="row">
   <div class="col-lg-6 col-7">
-  <h6 class="mb-1">New Application </h6>
+  <h6 class="mb-1">View Application </h6>
   </div>
   
   </div>
@@ -32,7 +32,7 @@
   <div class="col-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Licence Date</label>
-    <input type="text" required class="form-control form-control-default" v-model="form.trading_name" >
+    <input type="text" class="form-control form-control-default" v-model="form.trading_name" >
     </div>
     <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
     </div>
@@ -59,7 +59,7 @@
     <div class="col-4 columns">
       <div class="input-group input-group-outline null is-filled ">
       <label class="form-label">Licence Number</label>
-      <input type="text" required class="form-control form-control-default" v-model="form.licence_number" >
+      <input type="text" class="form-control form-control-default" v-model="form.licence_number" >
       </div>
       <div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
     </div>
@@ -91,27 +91,7 @@
 
       
 
-  <div class="col-4 columns">
-   <Multiselect
-       v-model="form.company"
-          placeholder="Search company"
-          :options="companies"
-          :searchable="true"
-          style="margin:top: 1rem;"
-        />
-  <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
-  </div>
-
-  <div class="col-12 columns" v-if="form.belongs_to ==='Person'">
-    <Multiselect
-        v-model="form.person"
-           placeholder="Search Person"
-           :options="persons"
-           :searchable="true"
-           style="margin:top: 1rem;"
-         />
-   <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
-   </div>
+  
 
 
    <div class="col-4 columns">            
@@ -129,7 +109,7 @@
     <input type="text" class="form-control form-control-default" v-model="form.address3">
     </div>
     </div> 
-    
+
    <div class="col-4 columns">                  
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Licence Type</label>
@@ -139,7 +119,24 @@
     </div>
     </div>
 
-    
+    <div class="col-4 columns"></div>
+
+    <div class="col-4 columns">                  
+      <div class="input-group input-group-outline null is-filled">
+      <label class="form-label">Province</label>
+      <select required class="form-control form-control-default" v-model="form.province" >
+      <option value="Eastern Cape">Eastern Cape</option>
+      <option value="Free State">Free State</option>
+      <option value="Gauteng">Gauteng</option>
+      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+      <option value="Limpopo">Limpopo</option>
+      <option value="Mpumalanga">Mpumalanga</option>
+      <option value="Northern Cape">Northern Cape</option>
+      <option value="North West">North West</option>
+      <option value="Western Cape">Western Cape</option>
+      </select>
+      </div>
+      </div>
 
     <div class="col-4 columns">                  
       <div class="input-group input-group-outline null is-filled">
@@ -161,50 +158,24 @@
       </select>
       </div>
       </div>
-  
-</div>
+
+      <div class="col-4 columns"></div>
+      <div class="col-4 columns">            
+        <div class="input-group input-group-outline null is-filled">
+        <label class="form-label">Postal Code</label>
+        <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
+      </div> 
+       </div>
   
   </div>
-  
+  <div>
+    <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    <span class="visually-hidden">Loading...</span> Update</button>
+  </div>
   </div>
   </div>  
-  
-
-  <div class="col-5">  
-    
-    
-    
-    
-    
-    <div class="col-12 columns">                  
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Province</label>
-    <select required class="form-control form-control-default" v-model="form.province" >
-    <option value="Eastern Cape">Eastern Cape</option>
-    <option value="Free State">Free State</option>
-    <option value="Gauteng">Gauteng</option>
-    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-    <option value="Limpopo">Limpopo</option>
-    <option value="Mpumalanga">Mpumalanga</option>
-    <option value="Northern Cape">Northern Cape</option>
-    <option value="North West">North West</option>
-    <option value="Western Cape">Western Cape</option>
-    </select>
-    </div>
-    </div>
-    
-    <div class="col-12 columns">            
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Postal Code</label>
-    <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
-    </div>    
-    </div>
-    <div>
-      <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
-      <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      <span class="visually-hidden">Loading...</span> Submit</button>
-    </div>
-    </div>
+ </div>
     
   </form>
   
@@ -247,8 +218,8 @@
       let options;     
   
       const form = useForm({
-        trading_name: props.licence.trading_name,
-        licence_type: props.licence.licence_type_id,
+            trading_name: props.licence.trading_name,
+            licence_type: props.licence.licence_type_id,
             belongs_to: props.licence.belongs_to,
             reg_number:  props.licence.reg_number,
             id_number: props.licence.id_number,
@@ -256,24 +227,18 @@
             address2: props.licence.address2,
             address3: props.licence.address3,
             province: props.licence.province,
-            company:  props.licence.company.name,
-            person: '',
+            company:  props.licence.company !== null ? props.licence.company.name : '',
+            person: props.licence.people !== null ? props.licence.people.full_name : '',
             board_region: props.licence.board_region,
             licence_number: props.licence.licence_number,
             licence_date: props.licence.licence_date,
             postal_code: props.licence.postal_code,
-            company_id: props.licence.company.id,
+            company_id: props.licence.company !== null ? props.licence.company.id :'',
              
       })
 
-      if(form.belongs_to === 'Company'){
-        options = props.companies;
-      }else{
-        options = props.persons;
-      }
-      
       function submit() {
-        form.post('/submit-new-app', {
+        form.patch(`/update-new-app/${props.licence.slug}`, {
           preserveScroll: true,
         })
         

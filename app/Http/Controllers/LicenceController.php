@@ -17,7 +17,7 @@ class LicenceController extends Controller
 
         if(!empty($request->term) && $request->active_status == 'Active' && empty($request->licence_date) && empty($request->licence_type)){
 
-               $licences = Licence::with(["company","licence_type"])
+               $licences = Licence::with(["company","people","licence_type"])
                  ->whereNotNull('is_licence_active')
                 ->where(function($query) use($request){
                     $query->where('trading_name','LIKE','%'.$request->term.'%')
@@ -32,7 +32,7 @@ class LicenceController extends Controller
     }elseif(!empty($request->term) && $request->active_status == 'Active' 
       && !empty($request->licence_date) && !empty($request->licence_type)){
 
-        $licences = Licence::with(["company","licence_type"])
+        $licences = Licence::with(["company","people","licence_type"])
                     ->where('licence_type_id',$request->licence_type)
                     ->whereMonth('licence_date',$request->licence_date)      
                     
@@ -48,26 +48,26 @@ class LicenceController extends Controller
         }elseif(empty($request->term) && empty($request->active_status)
              && empty($request->licence_date) && !empty($request->licence_type)){
 
-                $licences = Licence::with(["company","licence_type"])
+                $licences = Licence::with(["company","people","licence_type"])
                 ->where('licence_type_id',$request->licence_type)                
                 ->get();
 
             }elseif(empty($request->licence_date) && empty($request->term) && empty($request->active_status)
             && empty($request->licence_type) && !empty($request->province)){
 
-                $licences = Licence::with(["company","licence_type"])
+                $licences = Licence::with(["company","people","licence_type"])
                 ->where('province',$request->province)                
                 ->get();
 
             }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)
             && empty($request->licence_type) && empty($request->province)){
 
-                $licences = Licence::with(["company","licence_type"])
+                $licences = Licence::with(["company","people","licence_type"])
                     ->whereMonth('licence_date',$request->licence_date)->get();
 
             }elseif(!empty($request->licence_date) && empty($request->term) && $request->active_status == 'Active'
             && !empty($request->licence_type) && !empty($request->province)){
-                $licences = Licence::with(["company","licence_type"])
+                $licences = Licence::with(["company","people","licence_type"])
                     ->where('licence_type_id',$request->licence_type)
                     ->where('is_licence_active',1)
                     ->where('province',$request->province)   
@@ -76,7 +76,7 @@ class LicenceController extends Controller
             }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)
             && !empty($request->licence_type)){
 
-                $licences = Licence::with(["company","licence_type"])
+                $licences = Licence::with(["company","people","licence_type"])
                     ->where('licence_type_id',$request->licence_type)
                     ->whereMonth('licence_date',$request->licence_date)->get();
 
@@ -84,7 +84,7 @@ class LicenceController extends Controller
                 }elseif(!empty($request->licence_date) && $request->active_status =='Inactive'
                 && !empty($request->licence_type) && empty($request->term) ){
                     
-                    $licences = Licence::with(["company","licence_type"])
+                    $licences = Licence::with(["company","people","licence_type"])
                       ->where(function($query) use($request){
                         $query->where('licence_type_id',$request->licence_type)
                          ->whereMonth('licence_date',$request->licence_date);
@@ -94,7 +94,7 @@ class LicenceController extends Controller
         && !empty($request->licence_type) && !empty($request->term) ){
                         
 
-                    $licences = Licence::with(["company","licence_type"])
+                    $licences = Licence::with(["company","people","licence_type"])
                       ->where(function($query) use($request){
                         $query->where('licence_type_id',$request->licence_type)
                          ->whereNotNull('is_licence_active');
@@ -112,11 +112,11 @@ class LicenceController extends Controller
 
         }elseif($request->active_status == 'All' && empty($request->term)){
 
-          $licences = Licence::with(["company","licence_type"])->get();
+          $licences = Licence::with(["company","people","licence_type"])->get();
 
         }elseif(!empty($request->term) && empty($request->active_status)){
 
-            $licences = Licence::with(["company","licence_type"])
+            $licences = Licence::with(["company","people","licence_type"])
                             ->orWhereHas('company', function($query) use($request){
                                 $query->where('name', 'like', '%'.$request->term.'%');
                             })->orWhere('trading_name','LIKE','%'.$request->term.'%')
@@ -126,7 +126,7 @@ class LicenceController extends Controller
         
         }elseif(!empty($request->term)  && $request->active_status == 'Inactive'){
 
-                    $licences = Licence::with(["company","licence_type"])
+                    $licences = Licence::with(["company","people","licence_type"])
                          ->whereNull('is_licence_active')
                         ->where(function($query) use($request){
                     $query->where('trading_name','LIKE','%'.$request->term.'%')
@@ -139,16 +139,16 @@ class LicenceController extends Controller
                 })->get();
 
     }elseif(empty($request->term)  && $request->active_status == 'Active'){
-        $licences = Licence::with(["company","licence_type"])
+        $licences = Licence::with(["company","people","licence_type"])
                          ->whereNotNull('is_licence_active')->get();
 
     }elseif(empty($request->term)  && $request->active_status == 'Inactive'){
-        $licences = Licence::with(["company","licence_type"])
+        $licences = Licence::with(["company","people","licence_type"])
                             ->whereNull('is_licence_active')->get();
 
     }elseif(!empty($request->term)  && $request->active_status == 'All'){
 
-                    $licences = Licence::with(["company","licence_type"])
+                    $licences = Licence::with(["company","people","licence_type"])
                         ->where(function($query) use($request){
                     $query->where('trading_name','LIKE','%'.$request->term.'%')
                     ->orWhere('licence_number','LIKE','%'.$request->term.'%')
@@ -160,7 +160,7 @@ class LicenceController extends Controller
                 })->get();
 
         }else{
-            $licences = Licence::with('company','licence_type')->whereNull('id')->get();
+            $licences = Licence::with('company','people','licence_type')->whereNull('id')->get();
         }
         $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
@@ -206,7 +206,7 @@ class LicenceController extends Controller
      * And also that its multiple
      */
     public function show(Request $request){
-        $licence = Licence::with('company','licence_documents')->whereSlug($request->slug)->first();
+        $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
         $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->get();
         $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->get();
         $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->get();

@@ -19,6 +19,11 @@
   </main>
  
 </template>
+<style>
+  .navbar-nav {
+    overflow: hidden;
+  }
+</style>
 <script>
 import Sidenav from "../examples/Sidenav";
 import Navbar from "@/examples/Navbars/Navbar.vue";

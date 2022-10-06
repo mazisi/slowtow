@@ -104,7 +104,7 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company.name }}</Link></td>
+<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company==null ? licence.people.full_name : licence.company.name }}</Link></td>
 <td class="text-center">
 <Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
 
@@ -138,7 +138,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
-import lodash from 'lodash'
+// import lodash from 'lodash'
 
 export default {
     props: {

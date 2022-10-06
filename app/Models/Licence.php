@@ -17,7 +17,10 @@ class Licence extends Model
        return $this->belongsTo(Company::class);
     }
 
-   
+    public function people()
+    {
+       return $this->belongsTo(People::class);
+    }
 
     public function licence_documents()
     {
