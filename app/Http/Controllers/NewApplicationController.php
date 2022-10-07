@@ -99,8 +99,9 @@ class NewApplicationController extends Controller
        
     }
 
-    public function view_registration()
+    public function view_registration(Request $request)
     {
-        return Inertia::render('New Applications/Registration');
+        $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
+        return Inertia::render('New Applications/Registration',['licence' => $licence]);
     }
 }

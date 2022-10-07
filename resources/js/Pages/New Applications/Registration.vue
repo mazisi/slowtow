@@ -30,26 +30,26 @@
   
       const form = useForm({
         year: '',
-        licence_id: props.licence.id,
+        licence_id: '',
         status: [],
-        client_paid_at: props.renewal.client_paid_at,
-        payment_to_liquor_board_at: props.renewal.payment_to_liquor_board_at,
-        renewal_issued_at: props.renewal.renewal_issued_at,
-        renewal_delivered_at: props.renewal.renewal_delivered_at,
-        renewal_id: props.renewal.id,
+        client_paid_at: '',
+        payment_to_liquor_board_at: '',
+        renewal_issued_at: '',
+        renewal_delivered_at: '',
+        renewal_id: '',
        })
   
       const uploadDoc = useForm({
         document: null,
         doc_type: null,
         date: null,
-        renewal_id: props.renewal.id    
+        renewal_id: ''   
       })
   
       const createTask = useForm({
             body: '',
             model_type: 'Licence Renewal',
-            model_id: props.renewal.id,
+            model_id: '',
             taskDate: ''     
       })
   
@@ -96,21 +96,13 @@
         })
       }
   
-      function getRenewalYear(date){
-        let computed_date = new Date(date).getFullYear();
-        return computed_date + 1;    
-      }
-  
         function deleteRenewal(){
           if(confirm('Are you sure you want to delete this licence renewal??')){
             Inertia.delete(`/delete-licence-renewal/${props.renewal.licence.slug}/${props.renewal.slug}`)
           }
         }
   
-      function computeDocumentDate(date_param){
-          return new Date(date_param).toLocaleString().split(',')[0]
-      };
-  
+    
       function pushData(status_value){
            if (event.target.checked) {
               if(this.form.status.includes(status_value)){
@@ -125,9 +117,9 @@
   
       return { year,form,body_max,show_modal,
        updateRenewal,
-       getRenewalYear, pushData,uploadDoc,
+       pushData,uploadDoc,
        getDocType, submitDocument,
-       computeDocumentDate,deleteDocument,
+       deleteDocument,
        createTask,
        submitTask,
        checkBodyLength,
@@ -143,13 +135,23 @@
     
   };
   //The following are status keys
-  // 1 => Client Quoted
-  // 2 => Client Invoiced
-  // 3 => Client Paid
-  // 4 => Payment To Liquor Board
-  // 5 => Renewal Issued
-  // 6 => Renewal Complete
-  
+  // 1. Client Quoted
+  // 2. Deposit Paid
+  // 3. Client Invoiced
+  // 4. Prepare New Application
+  // 5. Payment to the Liquor Board
+  // 6. Scanned Application
+  // 7. Application Lodged
+  // 8. Initial Inspection
+  // 9. Liquor Board Requests
+  // 10. Final Inspection
+  // 11. Activation Fee Requested
+  // 12. Client Finalisation Invoice
+  // 13. Client Paid
+  // 14. Activation Fee Paid
+  // 15. Licence Issued
+  // 16. Licence Delivered 
+    
   </script>
   <style>
   .columns{
@@ -174,7 +176,7 @@
       <div class="card card-body mx-3 mx-md-4 mt-n6">
         <div class="row">
     <div class="col-lg-6 col-7">
-     <h6>Process Renewal for: <span class="text-success">{{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}</span> : {{ renewal.licence.trading_name }}</h6>
+     <h6>Process Renewal for: <span class="text-success">testtrading name</span></h6>
     </div>
     <div class="col-lg-6 col-5 my-auto text-end">
       <button @click="deleteRenewal" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
@@ -192,96 +194,117 @@
   <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input id="client-quoted" class="active-checkbox" type="checkbox" 
-  :checked="renewal.status >= '1'"
+  :checked="1"
   @input="pushData($event.target.value)" value="1">
   <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
   </div>
-  </div> 
-  <ul class="list-group">
-    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="client_quoted !== null">
-      <a :href="`/storage/app/public/renewalDocuments/${client_quoted.document}`" target="_blank">
-      <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-      </a>
-      </div>
-  
-     <div class="d-flex align-items-start flex-column justify-content-center">
-        <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
-        <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      </div>
-  
-      <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-      </a>
-      <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>    
+  </div>   
   <hr>
   
-  
-  <div class="col-md-12 columns">
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
-  @input="pushData($event.target.value)" 
-  :checked="renewal.status >= '2'">
-  <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
-  </div>
-  </div>
-  <ul class="list-group">
-    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="client_invoiced !== null">
-      <a :href="`/storage/app/public/renewalDocuments/${client_invoiced.document}`" target="_blank">
-      <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-      </a>
-      </div>
-  
-     <div class="d-flex align-items-start flex-column justify-content-center">
-        <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
-        <p v-if="client_invoiced !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(client_invoiced.date) }}</p>
-        <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      </div>
-  
-      <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-      </a>
-      <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>
-  <hr>
   
   <div class="col-md-5 columns">
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="client-paid" type="checkbox" 
-  @input="pushData($event.target.value)" value="3" :checked="renewal.status >= '3'">
-  <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+  <div class="form-switch d-flex ps-0 ms-0  is-filled">
+  <input class="active-checkbox" id="client-paid"  type="checkbox" value="2"
+  @input="pushData($event.target.value)" 
+  :checked="'2'">
+  <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
   </div>
-  </div> 
+  </div>
   <div class="col-md-1 columns"></div>
-   <div class="col-md-4 columns">
-      <div class="input-group input-group-outline null is-filled ">
-      <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
-       </div>
-     <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-     </div> 
-     
-  <div class="col-md-1 columns">
+  <div class="col-md-4 columns">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
+      </div>
+    <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+    </div> 
+
+    <div class="col-md-1 columns">
       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
      </div>
-     <hr>
-  
+  <hr>
+
+  <div class="col-md-12 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <input class="active-checkbox" id="client-invoiced"  type="checkbox" value="3"
+    @input="pushData($event.target.value)" 
+    :checked="'3'">
+    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+    </div>
+    </div>
+    <ul class="list-group">
+      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+        <div class="avatar me-3" v-if="client_invoiced !== null">
+        <a :href="`/storage/app/public/renewalDocuments/`" target="_blank">
+        <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+        </a>
+        </div>
+    
+       <div class="d-flex align-items-start flex-column justify-content-center">
+          <h6 class="mb-0 text-sm">Document</h6>
+          <p v-if="client_invoiced !== null" class="mb-0 text-xs">document_name</p>
+          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+        </div>
+    
+        <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+        </a>
+        <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+        </a>
+      </li>
+    </ul>
+    <hr>
+
+
+    <div class="col-md-12 columns">
+      <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+      <input class="active-checkbox" id="prepare-new-app"  type="checkbox" value="4"
+      @input="pushData($event.target.value)" 
+      :checked="'4'">
+      <label for="prepare-new-app" class="form-check-label text-body text-truncate status-heading">Prepare New Application</label>
+      </div>
+      </div>
+
+  <div class="col-md-6">
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95"> GLBApplication Forms</button> </div><div class="col-md-1"><i class="fa fa-upload h5" ></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Proof of Payment</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Application Forms</button></div> <div class="col-md-1"><i class="fa fa-upload h5"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Companyn Documents</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">CIPC Documents</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">ID Documents</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Police clearance</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Tax Clearance</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">LTA Certificate</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Shareholding Info</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Financial Interests</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">500m Affidavit</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Adverts</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Zoning Affidavit</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    </div>
+
+  <div class="col-md-6">
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Proof of Occupation</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Represantations</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Menu( if applicable)</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Photographs</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Municipal Consent Ltr</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Zoning Certificate</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Mapbook Plans</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Google Map Plans</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Description</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Site Plans</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Advert Photographs</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div>
+    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Newspaper Adverts</button></div><div class="col-md-1"><i class="fa fa-upload h5 col-md-3"></i></div></div> <br><br>
+
+    <button type="button" class="btn btn-success w-65">Compile Application</button> 
+</div> 
+      <hr>
   <div class="col-md-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="4"
-  :checked="renewal.status >= '4'">
+  <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="5"
+  :checked="'5'">
   <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
   </div>
   </div> 
@@ -304,16 +327,16 @@
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="liqour_board !== null">
-      <a :href="`/storage/app/public/renewalDocuments/${liqour_board.document}`" target="_blank">
+      <a :href="`/storage/app/public/renewalDocuments/`" target="_blank">
       <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
   
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
-        <p v-if="liqour_board !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(liqour_board.date) }}</p>
-        <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+        <p class="mb-0 text-xs">document_name</p>
+        <p class="mb-0 text-xs text-dark">Date:</p>
+        <p class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       </div>
   
       <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -330,17 +353,17 @@
   <div class="col-md-6 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="issued" type="checkbox" 
-  @input="pushData($event.target.value)" value="5" :checked="renewal.status >= '5'">
-  <label for="issued" class="form-check-label text-body text-truncate status-heading"> Renewal Issued</label>
+  @input="pushData($event.target.value)" value="6" :checked="'6'">
+  <label for="issued" class="form-check-label text-body text-truncate status-heading"> Scanned Application  </label>
   </div>
   </div> 
   
   <div class="col-md-4 columns">
       <div class="input-group input-group-outline null is-filled ">
       <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.renewal_issued_at">
+      <input type="date" class="form-control form-control-default" v-model="form.scanned_app">
        </div>
-     <div v-if="errors.renewal_issued_at" class="text-danger">{{ errors.renewal_issued_at }}</div>
+     <div v-if="errors.scanned_app" class="text-danger">{{ errors.scanned_app }}</div>
      </div>
   
   <!-- <div class="col-md-6 columns">
@@ -352,14 +375,14 @@
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="renewal_issued !== null">
-      <a :href="`/storage/app/public/renewalDocuments/${renewal_issued.document}`" target="_blank">
+      <a :href="`/storage/app/public/renewalDocuments/`" target="_blank">
       <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
       <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="renewal_issued !== null" class="mb-0 text-xs">{{ renewal_issued.document_name }}</p>
-        <p v-if="renewal_issued !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_issued.date) }}</p>
+        <p v-if="renewal_issued !== null" class="mb-0 text-xs">Doc Name</p>
+        <p v-if="renewal_issued !== null" class="mb-0 text-xs text-dark">Date:</p>
         <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       </div>
       <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -374,14 +397,113 @@
   </div>
   <hr>
   
-  
-  
+
+
+  <div class="col-md-6 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <input class="active-checkbox" id="application-logded" type="checkbox" 
+    @input="pushData($event.target.value)" value="7" :checked="'7'">
+    <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Application Lodged  </label>
+    </div>
+    </div>
+      
+      <div class="col-md-4 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control form-control-default" v-model="form.scanned_app">
+         </div>
+       <div v-if="errors.scanned_app" class="text-danger">{{ errors.scanned_app }}</div>
+    </div>
+
+      <div class="col-md-1 columns">
+        <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+       </div>
+      
+      <ul class="list-group">
+        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+          <div class="avatar me-3" v-if="renewal_doc !== null">
+          <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+          <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+          </a>
+          </div>
+      
+         <div class="d-flex align-items-start flex-column justify-content-center">
+            <h6 class="mb-0 text-sm">Document</h6>
+            <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+            <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+          </div>
+      
+          <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+          <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+          </a>
+          <a v-else @click="getDocType('Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+          class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+          <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul> 
+<hr/>
+
+       <div class="col-md-6 columns">
+        <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+        <input class="active-checkbox" id="delivered" type="checkbox" value="8"
+        @input="pushData($event.target.value)" :checked="'8'">
+        <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Initial Inspection</label>
+        </div>
+        </div>
+        
+        <div class="col-md-4 columns">
+            <div class="input-group input-group-outline null is-filled ">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+             </div>
+           <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+        </div>
+        <div class="col-md-1 columns">
+          <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+         </div>
+        
+        <ul class="list-group">
+          <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+            <div class="avatar me-3" v-if="renewal_doc !== null">
+            <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+            <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+            </a>
+            </div>
+        
+           <div class="d-flex align-items-start flex-column justify-content-center">
+              <h6 class="mb-0 text-sm">Document</h6>
+              <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+              <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+              <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+            </div>
+        
+            <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+            </a>
+            <a v-else @click="getDocType('Initial Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
+            class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+            <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+            </a>
+          </li>
+        </ul>  
+
+        <div class="col-md-6 columns">
+          <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+          <input class="active-checkbox" id="delivered" type="checkbox" value="9"
+          @input="pushData($event.target.value)" :checked="'9'">
+          <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Liquor Board Requests </label>
+          </div>
+          </div>
+          <hr/>
+
   
   <div class="col-md-6 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="delivered" type="checkbox" value="6"
-  @input="pushData($event.target.value)" :checked="renewal.status == '6'">
-  <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Renewal Delivered</label>
+  <input class="active-checkbox" id="delivered" type="checkbox" value="10"
+  @input="pushData($event.target.value)" :checked="'10'">
+  <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Final Inspection</label>
   </div>
   </div>
   
@@ -391,36 +513,316 @@
       <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
        </div>
      <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
-     </div>
-  
+  </div>
+  <div class="col-md-1 columns">
+    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="renewal_doc !== null">
-      <a :href="`/storage/app/public/renewalDocuments/${renewal_doc.document}`" target="_blank">
+      <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
       <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
   
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="renewal_doc !== null" class="mb-0 text-xs">{{ renewal_doc.document_name }}</p>
-        <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_doc.date) }}</p>
+        <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+        <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
         <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       </div>
   
       <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
       </a>
-      <a v-else @click="getDocType('Renewal Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+      <a v-else @click="getDocType('Final Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
       </a>
     </li>
-  </ul>  
+  </ul> 
+  <hr/>
+
+
+
+
+  <div class="col-md-6 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <input class="active-checkbox" id="delivered" type="checkbox" value="11"
+    @input="pushData($event.target.value)" :checked="'11'">
+    <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Activation Fee Requested </label>
+    </div>
+    </div>
+    
+    <div class="col-md-4 columns">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+         </div>
+       <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+       </div>
+       <div class="col-md-1 columns">
+        <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+       </div>
+    
+    <ul class="list-group">
+      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+        <div class="avatar me-3" v-if="renewal_doc !== null">
+        <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+        <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+        </a>
+        </div>
+    
+       <div class="d-flex align-items-start flex-column justify-content-center">
+          <h6 class="mb-0 text-sm">Document</h6>
+          <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+          <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+        </div>
+    
+        <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+        </a>
+        <a v-else @click="getDocType('Activation Fee Requested ')" data-bs-toggle="modal" data-bs-target="#documents" 
+        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+        </a>
+      </li>
+    </ul>
+    <hr/> 
+
+    <div class="col-md-6 columns">
+      <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+      <input class="active-checkbox" id="delivered" type="checkbox" value="12"
+      @input="pushData($event.target.value)" :checked="'12'">
+      <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoiced </label>
+      </div>
+      </div>
+      
+      <div class="col-md-4 columns">
+          <div class="input-group input-group-outline null is-filled ">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+           </div>
+         <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+      </div>
+      <div class="col-md-1 columns">
+        <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+       </div>
+      
+      <ul class="list-group">
+        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+          <div class="avatar me-3" v-if="renewal_doc !== null">
+          <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+          <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+          </a>
+          </div>
+      
+         <div class="d-flex align-items-start flex-column justify-content-center">
+            <h6 class="mb-0 text-sm">Document</h6>
+            <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+            <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+          </div>
+      
+          <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+          <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+          </a>
+          <a v-else @click="getDocType('Activation Fee Requested ')" data-bs-toggle="modal" data-bs-target="#documents" 
+          class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+          <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+          </a>
+        </li>
+      </ul>
+      <hr/>
+      
+      <div class="col-md-6 columns">
+        <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+        <input class="active-checkbox" id="delivered" type="checkbox" value="13"
+        @input="pushData($event.target.value)" :checked="'13'">
+        <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Client Paid </label>
+        </div>
+        </div>
+        
+        <div class="col-md-4 columns">
+            <div class="input-group input-group-outline null is-filled ">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+             </div>
+           <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+           </div>
+           <div class="col-md-1 columns">
+            <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+           </div>
+        
+        <ul class="list-group">
+          <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+            <div class="avatar me-3" v-if="renewal_doc !== null">
+            <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+            <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+            </a>
+            </div>
+        
+           <div class="d-flex align-items-start flex-column justify-content-center">
+              <h6 class="mb-0 text-sm">Document</h6>
+              <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+              <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+              <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+            </div>
+        
+            <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+            </a>
+            <a v-else @click="getDocType('Client Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
+            class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+            <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+            </a>
+          </li>
+        </ul> 
+        <hr/>
+
+        <div class="col-md-6 columns">
+          <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+          <input class="active-checkbox" id="delivered" type="checkbox" value="14"
+          @input="pushData($event.target.value)" :checked="'14'">
+          <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Activation Fee Paid </label>
+          </div>
+          </div>
+          
+          <div class="col-md-4 columns">
+              <div class="input-group input-group-outline null is-filled ">
+              <label class="form-label">Date</label>
+              <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+               </div>
+             <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+          </div>
+          <div class="col-md-1 columns">
+            <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+           </div>
+          
+          <ul class="list-group">
+            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+              <div class="avatar me-3" v-if="renewal_doc !== null">
+              <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+              <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+              </a>
+              </div>
+          
+             <div class="d-flex align-items-start flex-column justify-content-center">
+                <h6 class="mb-0 text-sm">Document</h6>
+                <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+                <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+                <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+              </div>
+          
+              <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+              <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+              </a>
+              <a v-else @click="getDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
+              class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+              <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+              </a>
+            </li>
+          </ul>
+          <hr/>
+          
+          <div class="col-md-6 columns">
+            <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+            <input class="active-checkbox" id="delivered" type="checkbox" value="15"
+            @input="pushData($event.target.value)" :checked="'15'">
+            <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Licence Issued </label>
+            </div>
+            </div>
+            
+            <div class="col-md-4 columns">
+                <div class="input-group input-group-outline null is-filled ">
+                <label class="form-label">Date</label>
+                <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+                 </div>
+               <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+            </div>
+
+            <div class="col-md-1 columns">
+              <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+             </div>
+            
+            <ul class="list-group">
+              <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                <div class="avatar me-3" v-if="renewal_doc !== null">
+                <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+                <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                </a>
+                </div>
+            
+               <div class="d-flex align-items-start flex-column justify-content-center">
+                  <h6 class="mb-0 text-sm">Document</h6>
+                  <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+                  <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+                  <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                </div>
+            
+                <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+                </a>
+                <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+                class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+                </a>
+              </li>
+            </ul> 
+            <hr/>
+
+
+
+
+            <div class="col-md-6 columns">
+              <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+              <input class="active-checkbox" id="licence-delivered" type="checkbox" value="16"
+              @input="pushData($event.target.value)" :checked="'16'">
+              <label for="licence-delivered" class="form-check-label text-body text-truncate status-heading"> Licence Delivered </label>
+              </div>
+              </div>
+              
+              <div class="col-md-4 columns">
+                  <div class="input-group input-group-outline null is-filled ">
+                  <label class="form-label">Date</label>
+                  <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+                   </div>
+                 <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+              </div>
+
+              <div class="col-md-1 columns">
+                <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+               </div>
+              
+              <ul class="list-group">
+                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                  <div class="avatar me-3" v-if="renewal_doc !== null">
+                  <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+                  <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                  </a>
+                  </div>
+              
+                 <div class="d-flex align-items-start flex-column justify-content-center">
+                    <h6 class="mb-0 text-sm">Document</h6>
+                    <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
+                    <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
+                    <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                  </div>
+              
+                  <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                  <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+                  </a>
+                  <a v-else @click="getDocType('Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+                  class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                  <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+                  </a>
+                </li>
+              </ul> 
   
-  <div class="text-danger">
-    <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
-    <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+  <div>
+    <div v-if="form.isDirty" class="text-xs text-danger d-flex">You have unsaved changes.</div>
+    <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-primary ms-2" type="submit">
     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     <span class="visually-hidden">Loading...</span> Save</button>
   </div>
