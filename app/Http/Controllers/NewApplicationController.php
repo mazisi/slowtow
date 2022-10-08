@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
+use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceType;
-use App\Models\People;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use Inertia\Inertia;
 
 class NewApplicationController extends Controller
 {
@@ -68,15 +69,13 @@ class NewApplicationController extends Controller
         try {
             $request->validate([
                 'trading_name' => 'required'
-               ]);
-        
-              
+               ]);             
         
                $licence = Licence::whereSlug($slug)->update([
                 'trading_name' => $request->trading_name,
                 'licence_type_id' => $request->licence_type,
                 'belongs_to' => $request->belongs_to,
-                'company_id' => $request->company,
+                'company_id' => $request->company_id,
                 'board_region' => $request->board_region,
                 'address' => $request->address,
                 'address2' => $request->address2,
@@ -101,7 +100,39 @@ class NewApplicationController extends Controller
 
     public function view_registration(Request $request)
     {
-        $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
+        $licence = Licence::with('company')->whereSlug($request->slug)->first();
         return Inertia::render('New Applications/Registration',['licence' => $licence]);
+    }
+
+    public function updateRegistration(Request $request, $slug){
+       try {
+        $licence = Licence::whereSlug($slug)->first();
+        $status = '';
+        if(!is_null($licence->status) && empty($request->status)){
+            $db_status = $licence->status;
+            $status = $db_status;
+        }elseif(!empty($request->status)){
+            $sorted_statuses = Arr::sort($request->status);
+            $status = last($sorted_statuses);
+        }
+
+        $licence->update([
+            'deposit_paid_at' => $request->deposit_paid_at,
+            'liquor_board_at' => $request->liquor_board_at,
+            'application_lodged_at' => $request->application_lodged_at,
+            'initial_inspection_at' => $request->initial_inspection_at,
+            'final_inspection_at' => $request->final_inspection_at,
+            'activation_fee_requested_at' =>$request->activation_fee_requested_at,
+            'client_paid_at' => $request->client_paid_at,
+            'activation_fee_paid_at' => $request->activation_fee_paid_at,
+            'licence_issued_at' => $request->licence_issued_at,
+            'licence_delivered_at' => $request->licence_delivered_at,
+            'status' => $status,
+           ]);
+           return back()->with('success','Updated successfully');
+       } catch (\Throwable $th) {
+         return back()->with('success','An error occured while updating.');
+       }
+       
     }
 }

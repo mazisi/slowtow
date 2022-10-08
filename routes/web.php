@@ -88,6 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store']);
         Route::delete('/delete-licence-document/{id}',[LicenceDocsController::class,'destroy'])->name('delete_licence_doc');
+        Route::patch('/update-new-registration/{slug}',[NewApplicationController::class,'updateRegistration']);
 
       
          // Get licence renewals.

@@ -41,7 +41,7 @@ return new class extends Migration
             $table->date('activation_fee_requested_at')->nullable();
             $table->date('client_paid_at')->nullable();
             $table->date('activation_fee_paid_at')->nullable();
-            $table->date('licence_issued-at')->nullable(); 
+            $table->date('licence_issued_at')->nullable(); 
             $table->date('licence_delivered_at')->nullable(); 
             $table->string('is_licence_active')->nullable();
             $table->string('latest_renewal')->nullable();
