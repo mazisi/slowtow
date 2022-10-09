@@ -496,14 +496,14 @@
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="payment_to_liqour_board !== null">
-      <a :href="`/storage/app/public/renewalDocuments/${payment_to_liqour_board.document_name}`" target="_blank">
-      <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+      <a :href="`/storage/app/public/licenceDocuments/${payment_to_liqour_board.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
   
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p class="mb-0 text-xs">document_name</p>
+        <p class="mb-0 text-xs">{{ payment_to_liqour_board.document_name }}</p>
       </div>
   
       <a v-if="payment_to_liqour_board !== null" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -511,7 +511,7 @@
       </a>
       <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+      <i class="fa fa-upload h5" aria-hidden="true"></i>
       </a>
     </li>
   </ul>
@@ -527,26 +527,24 @@
   
   
  
-  <div class="col-md-6" style="margin-top: -1rem;">
+  <div class="col-md-6">
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="renewal_issued !== null">
-      <a :href="`/storage/app/public/renewalDocuments/`" target="_blank">
-      <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+      <div class="avatar " v-if="scanned_application !== null">
+      <a :href="`/storage/app/public/licenceDocuments/${scanned_application.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf text-lg text-danger h5" aria-hidden="true"></i>
       </a>
       </div>
       <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="renewal_issued !== null" class="mb-0 text-xs">Doc Name</p>
-        <p v-if="renewal_issued !== null" class="mb-0 text-xs text-dark">Date:</p>
-        <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+        <p v-if="scanned_application !== null" class="mb-0 text-xs">{{ scanned_application.document_name }}</p>
       </div>
-      <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+      <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+      <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
-      <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+      <a @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
-      <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+      <i class="fa fa-upload h5" aria-hidden="true"></i>
       </a>
     </li>
   </ul>
@@ -577,25 +575,23 @@
       
       <ul class="list-group">
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-          <div class="avatar me-3" v-if="renewal_doc !== null">
-          <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
-          <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+          <div class="avatar me-3" v-if="application_logded !== null">
+          <a :href="`/storage/app/public/licenceDocuments/${application_logded.document_name}`" target="_blank">
+          <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
           </a>
           </div>
       
-         <div class="d-flex align-items-start flex-column justify-content-center">
-            <h6 class="mb-0 text-sm">Document</h6>
-            <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-            <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+         <div class=" d-flex align-items-start flex-column justify-content-center">
+            <h6 class="mb-0 text-sm ">Document</h6>
+            <p v-if="application_logded !== null" class="mb-0 text-xs">{{ application_logded.document_name }}</p>
           </div>
       
-          <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+          <a v-if="application_logded !== null" @click="deleteDocument(application_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+          <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
           </a>
           <a v-else @click="getDocType('Application Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
           class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+          <i class="fa fa-upload h5 " aria-hidden="true"></i>
           </a>
         </li>
       </ul> 
@@ -614,7 +610,7 @@
             <label class="form-label">Date</label>
           <input type="date" class="form-control form-control-default" v-model="form.initial_inspection_at">
             </div>
-          <div v-if="errors.	initial_inspection_at" class="text-danger">{{ errors.	initial_inspection_at }}</div>
+          <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
         </div>
         <div class="col-md-1 columns">
           <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
@@ -622,25 +618,23 @@
         
         <ul class="list-group">
           <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-            <div class="avatar me-3" v-if="renewal_doc !== null">
-            <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
-            <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+            <div class="avatar me-3" v-if="initial_inspection_doc !== null">
+            <a :href="`/storage/app/public/licenceDocuments/${initial_inspection_doc.document_name}`" target="_blank">
+            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
             </a>
             </div>
         
            <div class="d-flex align-items-start flex-column justify-content-center">
               <h6 class="mb-0 text-sm">Document</h6>
-              <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-              <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-              <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+              <p v-if="initial_inspection_doc !== null" class="mb-0 text-xs">{{ initial_inspection_doc.document_name }}</p>
             </div>
         
-            <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+            <a v-if="initial_inspection_doc !== null" @click="deleteDocument(initial_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+            <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
             </a>
             <a v-else @click="getDocType('Initial Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
             class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-            <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+            <i class="fa fa-upload h5" aria-hidden="true"></i>
             </a>
           </li>
         </ul>  
@@ -675,25 +669,23 @@
    </div>
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="renewal_doc !== null">
-      <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
-      <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+      <div class="avatar me-3" v-if="final_inspection_doc !== null">
+      <a :href="`/storage/app/public/licenceDocuments/${final_inspection_doc.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
   
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-        <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-        <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+        <p v-if="final_inspection_doc !== null" class="mb-0 text-xs">{{ final_inspection_doc.document_name }}</p>
       </div>
   
-      <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+      <a v-if="final_inspection_doc !== null" @click="deleteDocument(final_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+      <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
       <a v-else @click="getDocType('Final Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+      <i class="fa fa-upload h5" aria-hidden="true"></i>
       </a>
     </li>
   </ul> 
@@ -724,25 +716,23 @@
     
     <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-        <div class="avatar me-3" v-if="renewal_doc !== null">
-        <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+        <div class="avatar me-3" v-if="activation_fee_requested_doc !== null">
+        <a :href="`/storage/app/public/licenceDocuments/${activation_fee_requested_doc.document_name }`" target="_blank">
         <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a>
         </div>
     
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-          <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+          <p v-if="activation_fee_requested_doc !== null" class="mb-0 text-xs">{{ activation_fee_requested_doc.document_name }}</p>
         </div>
     
-        <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-if="activation_fee_requested_doc !== null" @click="deleteDocument(activation_fee_requested_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Activation Fee Requested ')" data-bs-toggle="modal" data-bs-target="#documents" 
+        <a v-else @click="getDocType('Activation Fee Requested')" data-bs-toggle="modal" data-bs-target="#documents" 
         class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+        <i class="fa fa-upload h5" aria-hidden="true"></i>
         </a>
       </li>
     </ul>
@@ -758,25 +748,23 @@
             
       <ul class="list-group">
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-          <div class="avatar me-3" v-if="renewal_doc !== null">
-          <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
-          <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+          <div class="avatar me-3" v-if="client_finalisation !== null">
+          <a :href="`/storage/app/public/licenceDocuments/${client_finalisation.document_name}`" target="_blank">
+          <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
           </a>
           </div>
       
          <div class="d-flex align-items-start flex-column justify-content-center">
             <h6 class="mb-0 text-sm">Document</h6>
-            <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-            <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+            <p v-if="client_finalisation !== null" class="mb-0 text-xs">{{ client_finalisation.document_name }}</p>
           </div>
       
-          <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+          <a v-if="client_finalisation !== null" @click="deleteDocument(client_finalisation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+          <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
           </a>
-          <a v-else @click="getDocType('Activation Fee Requested ')" data-bs-toggle="modal" data-bs-target="#documents" 
+          <a v-else @click="getDocType('Client Finalisation Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
           class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+          <i class="fa fa-upload h5" aria-hidden="true"></i>
           </a>
         </li>
       </ul>
@@ -803,25 +791,23 @@
         
         <ul class="list-group">
           <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-            <div class="avatar me-3" v-if="renewal_doc !== null">
-            <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
-            <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+            <div class="avatar me-3" v-if="client_paid !== null">
+            <a :href="`/storage/app/public/licenceDocuments/${client_paid.document_name}`" target="_blank">
+            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
             </a>
             </div>
         
            <div class="d-flex align-items-start flex-column justify-content-center">
               <h6 class="mb-0 text-sm">Document</h6>
-              <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-              <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-              <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+              <p v-if="client_paid !== null" class="mb-0 text-xs">document_name</p>
             </div>
         
-            <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+            <a v-if="client_paid !== null" @click="deleteDocument(client_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+            <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
             </a>
             <a v-else @click="getDocType('Client Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
             class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-            <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+            <i class="fa fa-upload h5" aria-hidden="true"></i>
             </a>
           </li>
         </ul> 
@@ -848,25 +834,23 @@
           
           <ul class="list-group">
             <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-              <div class="avatar me-3" v-if="renewal_doc !== null">
-              <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
-              <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+              <div class="avatar me-3" v-if="activation_fee_paid !== null">
+              <a :href="`/storage/app/public/licenceDocuments/${activation_fee_paid.document_name}`" target="_blank">
+              <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
               </a>
               </div>
           
              <div class="d-flex align-items-start flex-column justify-content-center">
                 <h6 class="mb-0 text-sm">Document</h6>
-                <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-                <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-                <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                <p v-if="activation_fee_paid !== null" class="mb-0 text-xs">document_name</p>
               </div>
           
-              <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+              <a v-if="activation_fee_paid !== null" @click="deleteDocument(activation_fee_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
               <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
               </a>
               <a v-else @click="getDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
               class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-              <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+              <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
               </a>
             </li>
           </ul>
@@ -895,7 +879,7 @@
             <ul class="list-group">
               <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                 <div class="avatar me-3" v-if="renewal_doc !== null">
-                <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+                <a :href="`/storage/app/public/licenceDocuments`" target="_blank">
                 <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
                 </a>
                 </div>
@@ -944,7 +928,7 @@
               <ul class="list-group">
                 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                   <div class="avatar me-3" v-if="renewal_doc !== null">
-                  <a :href="`/storage/app/public/renewalDocuments`" target="_blank">
+                  <a :href="`/storage/app/public/licenceDocuments`" target="_blank">
                   <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
                   </a>
                   </div>
@@ -1081,6 +1065,9 @@
   .status-heading{
     font-weight: 700;
   }
+  .list-group{
+    margin-top: -1.4rem;
+  }
   </style>
 
   <script>
@@ -1125,7 +1112,15 @@
       site_plans: Object,
       advert_photographs: Object,
       newspaper_adverts: Object,
-      payment_to_liqour_board: Object
+      payment_to_liqour_board: Object,
+      scanned_application: Object,
+      application_logded: Object,
+      initial_inspection_doc: Object,
+      final_inspection_doc: Object,
+      activation_fee_requested_doc: Object,
+      client_finalisation: Object,
+      client_paid: Object,
+      activation_fee_paid: Object
     },
   
     setup (props) {

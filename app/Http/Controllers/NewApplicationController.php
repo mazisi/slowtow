@@ -128,7 +128,17 @@ class NewApplicationController extends Controller
         $site_plans  = LicenceDocument::where('document_type','Site Plans')->where('licence_id',$licence->id)->first(['id','document_name']);
         $advert_photographs  = LicenceDocument::where('document_type','Advert Photographs')->where('licence_id',$licence->id)->first(['id','document_name']);
         $newspaper_adverts  = LicenceDocument::where('document_type','Newspaper Adverts')->where('licence_id',$licence->id)->first(['id','document_name']);
+        
+        
         $payment_to_liqour_board  = LicenceDocument::where('document_type','Payment To The Liquor Board')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $scanned_application  = LicenceDocument::where('document_type','Scanned Application')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $application_logded  = LicenceDocument::where('document_type','Application Lodged')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $initial_inspection_doc  = LicenceDocument::where('document_type','Initial Inspection')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $final_inspection_doc  = LicenceDocument::where('document_type','Final Inspection')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $activation_fee_requested_doc  = LicenceDocument::where('document_type','Activation Fee Requested')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $client_finalisation  = LicenceDocument::where('document_type','Client Finalisation Invoiced')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $client_paid  = LicenceDocument::where('document_type','Client Paid')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $activation_fee_paid  = LicenceDocument::where('document_type','Activation Fee Paid')->where('licence_id',$licence->id)->first(['id','document_name']);
         
         
         
@@ -160,7 +170,15 @@ class NewApplicationController extends Controller
             'site_plans' => $site_plans,
             'advert_photographs' => $advert_photographs,
             'newspaper_adverts' => $newspaper_adverts,
-            'payment_to_liqour_board' => $payment_to_liqour_board]);
+            'payment_to_liqour_board' => $payment_to_liqour_board,
+            'scanned_application' => $scanned_application,
+            'application_logded' => $application_logded,
+            'initial_inspection_doc' => $initial_inspection_doc,
+             'final_inspection_doc' => $final_inspection_doc,
+            'activation_fee_requested_doc' => $activation_fee_requested_doc,
+            'client_finalisation' => $client_finalisation,
+            'client_paid' => $client_paid,
+        'activation_fee_paid' => $activation_fee_paid]);
     }
 
     public function updateRegistration(Request $request, $slug){
