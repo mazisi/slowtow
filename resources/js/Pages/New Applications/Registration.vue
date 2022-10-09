@@ -67,9 +67,9 @@
     </div>
     </div>
     <ul class="list-group">
-      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+      <li class="px-0 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="client_invoiced !== null">
-        <a :href="`/storage/app/public/renewalDocuments/`" target="_blank">
+        <a :href="`/storage/app/public/licenceDocuments/${client_invoiced.document_name}`" target="_blank">
         <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -77,15 +77,14 @@
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
           <p v-if="client_invoiced !== null" class="mb-0 text-xs">document_name</p>
-          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
         </div>
     
         <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+        <a v-if="client_invoiced == null" @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
         class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+        <i class="fa fa-upload h5 upload-icon" aria-hidden="true"></i>
         </a>
       </li>
     </ul>
@@ -106,8 +105,14 @@
       <div class="col-md-7" >
     <button type="button" class="btn btn-outline-success w-95"> GLB Application Forms</button>
    </div>
-    <div class="col-md-1" @click="getDocType('GLB Application Forms')" data-bs-toggle="modal" data-bs-target="#documents">
-      <i class="fa fa-upload h5 upload-icon" ></i>
+    <div class="col-md-1 d-flex">
+      <i v-if="gba_application_form === null" 
+      @click="getDocType('GLB Application Forms',1)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${gba_application_form.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="gba_application_form !== null" @click="deleteDocument(gba_application_form.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+      
     </div>
   </div>
 
@@ -115,38 +120,352 @@
     <div class="row"><div class="col-md-7" >
       <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
     </div>
-    <div  @click="getDocType('Proof of Payment')" data-bs-toggle="modal" data-bs-target="#documents" class="col-md-1">
-      <i class="fa fa-upload h5 upload-icon col-md-3"></i>
+    <div data-bs-toggle="modal" data-bs-target="#documents" class="col-md-1">
+      <i class="fa fa-link h5 upload-icon col-md-3"></i>
     </div></div>
 
 
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Application Forms</button></div> <div class="col-md-1"><i class="fa fa-upload h5 upload-icon"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Companyn Documents</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">CIPC Documents</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">ID Documents</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Police clearance</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Tax Clearance</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">LTA Certificate</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Shareholding Info</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Financial Interests</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">500m Affidavit</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Adverts</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-     <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Zoning Affidavit</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
+    <div class="row">
+      <div class="col-md-7">
+        <button type="button" class="btn btn-outline-success w-95">Application Forms</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="application_forms === null" 
+      @click="getDocType('Application Forms',3)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${application_forms.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="application_forms !== null" @click="deleteDocument(application_forms.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+      
+    </div>
     </div>
 
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Company Documents</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="company_docs === null" 
+      @click="getDocType('Company Documents',4)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${company_docs.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="company_docs !== null" @click="deleteDocument(company_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">CIPC Documents</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="cipc_docs === null" 
+      @click="getDocType('CIPC Documents',5)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${cipc_docs.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="cipc_docs !== null" @click="deleteDocument(cipc_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">ID Documents</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="id_docs === null" 
+      @click="getDocType('ID Documents',6)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${id_docs.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="id_docs !== null" @click="deleteDocument(id_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7">
+        <button type="button" class="btn btn-outline-success w-95">Police Clearance</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="police_clearance === null" 
+      @click="getDocType('Police Clearance',7)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${police_clearance.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="police_clearance !== null" @click="deleteDocument(police_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Tax Clearance</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="tax_clearance === null" 
+      @click="getDocType('Tax Clearance',8)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${tax_clearance.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="tax_clearance !== null" @click="deleteDocument(tax_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">LTA Certificate</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="lta_certificate === null" 
+      @click="getDocType('LTA Certificate',9)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${lta_certificate.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="lta_certificate !== null" @click="deleteDocument(lta_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Shareholding Info</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="shareholding_info === null" 
+      @click="getDocType('Shareholding Info',10)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${shareholding_info.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="shareholding_info !== null" @click="deleteDocument(shareholding_info.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Financial Interests</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="financial_interests === null" 
+      @click="getDocType('Financial Interests',11)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${financial_interests.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="financial_interests !== null" @click="deleteDocument(financial_interests.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">500m Affidavit</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="_500m_affidavict === null" 
+      @click="getDocType('500m Affidavit',12)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${_500m_affidavict.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="_500m_affidavict !== null" @click="deleteDocument(_500m_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Adverts</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="adverts === null" 
+      @click="getDocType('Adverts',13)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${adverts.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="adverts !== null" @click="deleteDocument(adverts.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+     <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Zoning Affidavit</button>      
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="zoning_affidavict === null" 
+      @click="getDocType('Zoning Affidavit',14)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${zoning_affidavict.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="zoning_affidavict !== null" @click="deleteDocument(zoning_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+  </div>
+
   <div class="col-md-6">
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Proof of Occupation</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Represantations</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Menu( if applicable)</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Photographs</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Municipal Consent Ltr</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Zoning Certificate</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Mapbook Plans</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Google Map Plans</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Description</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Site Plans</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Advert Photographs</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div>
-    <div class="row"><div class="col-md-7" ><button type="button" class="btn btn-outline-success w-95">Newspaper Adverts</button></div><div class="col-md-1"><i class="fa fa-upload h5 upload-icon col-md-3"></i></div></div> <br><br>
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Proof of Occupation</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="proof_of_occupation === null" 
+      @click="getDocType('Proof of Occupation',15)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${proof_of_occupation.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="proof_of_occupation !== null" @click="deleteDocument(proof_of_occupation.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row"><div class="col-md-7" >
+      <button type="button" class="btn btn-outline-success w-95">Representations</button>
+    </div>
+    <div class="col-md-1 d-flex">
+      <i v-if="representations === null" 
+      @click="getDocType('Representations',16)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${representations.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="representations !== null" @click="deleteDocument(representations.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+  </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Menu( if applicable)</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="menu === null" 
+      @click="getDocType('Menu',17)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${menu.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="menu !== null" @click="deleteDocument(menu.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Photographs</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="photographs === null" 
+      @click="getDocType('Photographs',18)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${photographs.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="photographs !== null" @click="deleteDocument(photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Municipal Consent Ltr</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="consent_letter === null" 
+      @click="getDocType('Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${consent_letter.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="consent_letter !== null" @click="deleteDocument(consent_letter.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Zoning Certificate</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="zoning_certificate === null" 
+      @click="getDocType('Zoning Certificate',20)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${zoning_certificate.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="zoning_certificate !== null" @click="deleteDocument(zoning_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Mapbook Plans</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="mapbook_plans === null" 
+      @click="getDocType('Mapbook Plans',21)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${mapbook_plans.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="mapbook_plans !== null" @click="deleteDocument(mapbook_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Google Map Plans</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="google_map_plans === null" 
+      @click="getDocType('Google Map Plans',22)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${google_map_plans.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="google_map_plans !== null" @click="deleteDocument(google_map_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Description</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="description === null" 
+      @click="getDocType('Description',23)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${description.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="description !== null" @click="deleteDocument(description.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Site Plans</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="site_plans === null" 
+      @click="getDocType('Site Plans',24)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${site_plans.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="site_plans !== null" @click="deleteDocument(site_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+        <button type="button" class="btn btn-outline-success w-95">Advert Photographs</button>
+      </div>
+      <div class="col-md-1 d-flex">
+      <i v-if="advert_photographs === null" 
+      @click="getDocType('Advert Photographs',25)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${advert_photographs.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="advert_photographs !== null" @click="deleteDocument(advert_photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-7" >
+      <button type="button" class="btn btn-outline-success w-95">Newspaper Adverts</button>
+    </div>
+    <div class="col-md-1 d-flex">
+      <i v-if="newspaper_adverts === null" 
+      @click="getDocType('Newspaper Adverts',26)" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="fa fa-upload h5 upload-icon" ></i>
+      <a v-else :href="`/storage/app/public/licenceDocuments/${newspaper_adverts.document_name}`" target="_blank">
+      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+      <i v-if="newspaper_adverts !== null" @click="deleteDocument(newspaper_adverts.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+    </div>
+  </div> 
+  <br><br>
 
     <button type="button" class="btn btn-success w-65">Compile Application</button> 
 </div> 
@@ -176,8 +495,8 @@
   
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="liqour_board !== null">
-      <a :href="`/storage/app/public/renewalDocuments/`" target="_blank">
+      <div class="avatar me-3" v-if="payment_to_liqour_board !== null">
+      <a :href="`/storage/app/public/renewalDocuments/${payment_to_liqour_board.document_name}`" target="_blank">
       <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
@@ -185,16 +504,14 @@
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
         <p class="mb-0 text-xs">document_name</p>
-        <p class="mb-0 text-xs text-dark">Date:</p>
-        <p class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       </div>
   
-      <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+      <a v-if="payment_to_liqour_board !== null" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+      <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
       <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+      <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
       </a>
     </li>
   </ul>
@@ -718,15 +1035,16 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <form @submit.prevent="submitDocument">
-        <input type="" v-model="uploadDoc.doc_type">
+        <input type="hidden" v-model="uploadDoc.doc_type">
+        <input type="hidden" v-model="uploadDoc.num">
         <div class="modal-body">      
           <div class="row">
     
           <div class="col-md-12 columns">
           <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
-           <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+           <input type="file" @input="uploadDoc.doc = $event.target.files[0]"
            hidden id="licence-doc" accept=".pdf"/>
-           <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+           <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
          </div>
          <div class="col-md-12">
             <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -781,11 +1099,33 @@
       licence: Object,
       success: String,
       error: String,
+      gba_application_form: Object,//doc
       client_invoiced: Object,//doc
-      renewal_issued: Object,//doc
-      client_quoted: Object,//doc
-      renewal_doc: Object,
-      liqour_board: Object
+      application_forms: Object,//doc
+      company_docs: Object,
+      cipc_docs: Object,
+      id_docs: Object,
+      police_clearance: Object,
+      tax_clearance: Object,
+      lta_certificate: Object,
+      shareholding_info: Object,
+      financial_interests: Object,
+      _500m_affidavict: Object,
+      adverts: Object,
+      zoning_affidavict: Object,
+      proof_of_occupation: Object,
+      representations: Object,
+      menu: Object,
+      photographs: Object,
+      consent_letter: Object,
+      zoning_certificate: Object,
+      mapbook_plans: Object,
+      google_map_plans: Object,
+      description: Object,
+      site_plans: Object,
+      advert_photographs: Object,
+      newspaper_adverts: Object,
+      payment_to_liqour_board: Object
     },
   
     setup (props) {
@@ -808,10 +1148,10 @@
        })
   
       const uploadDoc = useForm({
-        document: null,
-        doc_type: null,
-        date: null,
-        renewal_id: ''   
+        doc: null,
+        doc_type: null ,
+        num: null,
+        licence_id: props.licence.id
       })
   
       const createTask = useForm({
@@ -833,8 +1173,9 @@
             }
         }
   
-      function getDocType(doc_type){
-        this.uploadDoc.doc_type = doc_type 
+      function getDocType(doc_type,num=null){
+        this.uploadDoc.doc_type = doc_type
+        this.uploadDoc.num = num 
         this.show_modal =true   
       }
   
@@ -847,12 +1188,12 @@
         }
   
       function submitDocument(){
-        uploadDoc.post('/submit-renewal-document', {
+        uploadDoc.post('/upload-licence-document', {
           preserveScroll: true,
           onSuccess: () => { 
             this.show_modal = false;
-            let dismiss =  document.querySelector('.modal-backdrop')    
-            dismiss.remove();
+            let dismiss =  document.querySelector('.modal-backdrop').classList.remove('modal-backdrop');
+            // dismiss.remove();
             uploadDoc.reset();
            },
         })

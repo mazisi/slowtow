@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Models\LicenceDocument;
 use App\Models\LicenceType;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
@@ -101,7 +102,65 @@ class NewApplicationController extends Controller
     public function view_registration(Request $request)
     {
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
-        return Inertia::render('New Applications/Registration',['licence' => $licence]);
+        $gba_application_form = LicenceDocument::where('document_type','GLB Application Forms')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $client_invoiced = LicenceDocument::where('document_type','Client Invoiced')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $application_forms = LicenceDocument::where('document_type','Application Forms')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $company_docs = LicenceDocument::where('document_type','Company Documents')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $cipc_docs = LicenceDocument::where('document_type','CIPC Documents')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $id_docs = LicenceDocument::where('document_type','ID Documents')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $police_clearance = LicenceDocument::where('document_type','Police Clearance')->where('licence_id',$licence->id)->first(['id','document_name']); 
+        $tax_clearance = LicenceDocument::where('document_type','Tax Clearance')->where('licence_id',$licence->id)->first(['id','document_name']); 
+        $lta_certificate = LicenceDocument::where('document_type','LTA Certificate')->where('licence_id',$licence->id)->first(['id','document_name']); 
+        $shareholding_info = LicenceDocument::where('document_type','Shareholding Info')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $financial_interests = LicenceDocument::where('document_type','Financial Interests')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $_500m_affidavict  = LicenceDocument::where('document_type','500m Affidavit')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $adverts  = LicenceDocument::where('document_type','Adverts')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $zoning_affidavict  = LicenceDocument::where('document_type','Zoning Affidavit')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $proof_of_occupation  = LicenceDocument::where('document_type','Proof of Occupation')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $menu  = LicenceDocument::where('document_type','Menu')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $representations  = LicenceDocument::where('document_type','Representations')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $photographs  = LicenceDocument::where('document_type','Photographs')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $consent_letter  = LicenceDocument::where('document_type','Municipal Consent Ltr')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $zoning_certificate  = LicenceDocument::where('document_type','Zoning Certificate')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $mapbook_plans  = LicenceDocument::where('document_type','Mapbook Plans')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $google_map_plans  = LicenceDocument::where('document_type','Google Map Plans')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $description  = LicenceDocument::where('document_type','Description')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $site_plans  = LicenceDocument::where('document_type','Site Plans')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $advert_photographs  = LicenceDocument::where('document_type','Advert Photographs')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $newspaper_adverts  = LicenceDocument::where('document_type','Newspaper Adverts')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $payment_to_liqour_board  = LicenceDocument::where('document_type','Payment To The Liquor Board')->where('licence_id',$licence->id)->first(['id','document_name']);
+        
+        
+        
+        return Inertia::render('New Applications/Registration',[
+            'licence' => $licence,
+             'gba_application_form' => $gba_application_form,
+             'client_invoiced' => $client_invoiced,
+            'application_forms' => $application_forms,
+            'company_docs' => $company_docs,
+            'cipc_docs' => $cipc_docs,
+             'id_docs' => $id_docs,
+            'police_clearance' => $police_clearance,
+            'tax_clearance' => $tax_clearance,
+            'lta_certificate' => $lta_certificate,
+            'shareholding_info' => $shareholding_info,
+            'financial_interests' => $financial_interests,
+            '_500m_affidavict' => $_500m_affidavict,
+            'adverts' => $adverts,
+            'zoning_affidavict' => $zoning_affidavict,
+            'proof_of_occupation' => $proof_of_occupation,
+            'representations' => $representations,
+            'photographs' => $photographs,
+            'consent_letter' => $consent_letter,
+            'zoning_certificate' => $zoning_certificate,
+            'menu' => $menu,
+            'mapbook_plans' => $mapbook_plans,
+            'google_map_plans' => $google_map_plans,
+            'description' => $description,
+            'site_plans' => $site_plans,
+            'advert_photographs' => $advert_photographs,
+            'newspaper_adverts' => $newspaper_adverts,
+            'payment_to_liqour_board' => $payment_to_liqour_board]);
     }
 
     public function updateRegistration(Request $request, $slug){

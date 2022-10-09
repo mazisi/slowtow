@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->string('document_name')->nullable();
             $table->string('document_type')->nullable();
-            $table->string('document_file')->nullable();
+            $table->integer('num')->nullable();
             $table->timestamps();
         });
     }
