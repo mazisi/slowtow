@@ -32,9 +32,9 @@
   <div class="col-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Licence Date</label>
-    <input type="text" class="form-control form-control-default" v-model="form.trading_name" >
+    <input type="text" class="form-control form-control-default" v-model="form.licence_date" >
     </div>
-    <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
+    <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
     </div>
 
     <div class="col-4 columns">            

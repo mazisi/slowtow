@@ -11,6 +11,7 @@ use App\Models\LicenceType;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
+use App\Models\Nomination;
 
 class NewApplicationController extends Controller
 {
@@ -143,7 +144,6 @@ class NewApplicationController extends Controller
         $licence_issued_doc  = LicenceDocument::where('document_type','Licence Issued')->where('licence_id',$licence->id)->first(['id','document_name']);
         $licence_delivered  = LicenceDocument::where('document_type','Licence Delivered')->where('licence_id',$licence->id)->first(['id','document_name']);
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
-        // $board_requests = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
         
         
         return Inertia::render('New Applications/Registration',[
@@ -192,6 +192,7 @@ class NewApplicationController extends Controller
        try {
         $licence = Licence::whereSlug($slug)->first();
         $status = '';
+        $licence_date = null;
         if(!is_null($licence->status) && empty($request->status)){
             $db_status = $licence->status;
             $status = $db_status;
@@ -199,7 +200,14 @@ class NewApplicationController extends Controller
             $sorted_statuses = Arr::sort($request->status);
             $status = last($sorted_statuses);
         }
-
+        if($status >= 15){
+            $licence_date = now();
+            Nomination::create([//begin nomination
+                'licence_id' => $licence->id,
+                'year' => now()->format('Y'),
+                'slug' => sha1(now())
+            ]);
+        }
         $licence->update([
             'deposit_paid_at' => $request->deposit_paid_at,
             'liquor_board_at' => $request->liquor_board_at,
@@ -211,13 +219,14 @@ class NewApplicationController extends Controller
             'activation_fee_paid_at' => $request->activation_fee_paid_at,
             'licence_issued_at' => $request->licence_issued_at,
             'licence_delivered_at' => $request->licence_delivered_at,
+            'licence_date' => $licence_date,
             'status' => $status,
            ]);
            
            return back()->with('success','Updated successfully');
        } catch (\Throwable $th) {
-        // throw $th;
-         return back()->with('success','An error occured while updating.');
+         throw $th;
+         //return back()->with('success','An error occured while updating.');
        }
        
     }
