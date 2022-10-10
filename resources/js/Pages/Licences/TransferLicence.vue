@@ -132,7 +132,7 @@ function assignActiveValue(event){
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" v-model="form.status" type="checkbox" value="4">
-<label class="form-check-label text-body text-truncate status-heading">Collate Transfer Details</label>
+<label class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
 </div>
 </div> 
 
@@ -184,7 +184,7 @@ function assignActiveValue(event){
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
-<label class="form-check-label text-body text-truncate status-heading">Transfer Logded</label>
+<label class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>  
 <hr>

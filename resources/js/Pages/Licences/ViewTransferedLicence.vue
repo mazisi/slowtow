@@ -40,7 +40,8 @@ export default {
     activation_fee: Object,
     transfer_issued: Object,
     transfer_delivered: Object,
-    latest_renewal: Object
+    latest_renewal: Object,
+    scanned_application: Object
   },
 
   setup (props) {
@@ -201,10 +202,11 @@ export default {
 // 3 => Client Paid
 // 4 => Collate Transfer Documents
 // 5 => Payment To The Liquor Board
-// 6 => Transfer Logded
-// 7 => Activation Fee Paid
-// 8 => Transfer Issued
-// 9 => Transfer Delivered
+// 6 => Scanned Application
+// 7 => Application Logded
+// 8 => Activation Fee Paid
+// 9 => Transfer Issued
+// 10 => Transfer Delivered
 </script>
 <style>
 .columns{
@@ -251,8 +253,8 @@ export default {
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 1" type="checkbox" value="1">
+<input id="active-checkbox" @input="pushData(1)"
+:checked="view_transfer.status >= 1" type="checkbox" >
 <label class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
 </div> 
@@ -283,8 +285,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 2" type="checkbox" value="2">
+<input id="active-checkbox" @input="pushData(2)"
+:checked="view_transfer.status >= 2" type="checkbox" >
 <label class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
 </div>
 </div> 
@@ -315,8 +317,8 @@ export default {
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 3" type="checkbox" value="3">
+<input id="active-checkbox" @input="pushData(3)"
+:checked="view_transfer.status >= 3" type="checkbox">
 <label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>  
@@ -324,8 +326,8 @@ export default {
 
 <div class="col-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 4" type="checkbox" value="4">
+<input id="active-checkbox" @input="pushData(4)"
+:checked="view_transfer.status >= 4" type="checkbox">
 <label class="form-check-label text-body text-truncate status-heading">Collate Transfer Documents</label>
 </div>
 </div> 
@@ -636,8 +638,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 5" type="checkbox" value="5">
+<input id="active-checkbox" @input="pushData(5)"
+:checked="view_transfer.status >= 5" type="checkbox">
 <label class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
@@ -676,13 +678,42 @@ export default {
 
 
 <hr>
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" @input="pushData(6)"
+:checked="view_transfer.status >= 6" type="checkbox">
+<label class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
+</div>
+</div>
+<ul class=" list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="scanned_application !== null">
+    <a :href="`/storage/app/public/transferDocuments/${scanned_application.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
 
+   <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="scanned_application !== null" class="mb-0 text-xs">{{ scanned_application.document_name }}</p>
+    </div>
+
+    <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="setDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>  
+<hr/>
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 6" type="checkbox" value="6">
-<label class="form-check-label text-body text-truncate status-heading">Transfer Logded</label>
+<input id="active-checkbox" @input="pushData(7)"
+:checked="view_transfer.status >= 6" type="checkbox">
+<label class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>
 
@@ -719,8 +750,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 7" type="checkbox" value="7">
+<input id="active-checkbox" @input="pushData(8)"
+:checked="view_transfer.status >= 7" type="checkbox">
 <label class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>
@@ -759,8 +790,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 8" type="checkbox" value="8">
+<input id="active-checkbox" @input="pushData(9)"
+:checked="view_transfer.status >= 8" type="checkbox">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
@@ -799,8 +830,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData($event.target.value)"
-:checked="view_transfer.status >= 9" type="checkbox" value="9">
+<input id="active-checkbox" @input="pushData(10)"
+:checked="view_transfer.status >= 9" type="checkbox">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 

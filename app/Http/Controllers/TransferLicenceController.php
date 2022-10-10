@@ -90,6 +90,8 @@ class TransferLicenceController extends Controller
         $transfer_delivered = TransferDocument::where('doc_type','Transfer Delivered')->where('licence_transfer_id',$view_transfer->id)->first();
         $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
         $latest_renewal = TransferDocument::where('doc_type','Latest Renewal')->where('licence_transfer_id',$view_transfer->id)->first();
+        $scanned_application = TransferDocument::where('doc_type','Scanned Application')->where('licence_transfer_id',$view_transfer->id)->first();
+        
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
@@ -121,7 +123,8 @@ class TransferLicenceController extends Controller
           'transfer_issued' => $transfer_issued,
           'transfer_delivered' => $transfer_delivered,
           'original_licence' => $original_licence,
-          'latest_renewal' => $latest_renewal
+          'latest_renewal' => $latest_renewal,
+          'scanned_application' => $scanned_application
         ]);
       }
 
