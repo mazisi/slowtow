@@ -76,7 +76,7 @@
     
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="client_invoiced !== null" class="mb-0 text-xs">document_name</p>
+          <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
         </div>
     
         <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

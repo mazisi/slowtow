@@ -213,6 +213,7 @@ class NewApplicationController extends Controller
             'licence_delivered_at' => $request->licence_delivered_at,
             'status' => $status,
            ]);
+           
            return back()->with('success','Updated successfully');
        } catch (\Throwable $th) {
         // throw $th;
