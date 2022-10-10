@@ -29,6 +29,7 @@ use App\Http\Controllers\TemporalLicenceDocsController;
 use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
+use App\Http\Controllers\LiquorBoardRequestController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -89,8 +90,14 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/upload-licence-document',[LicenceDocsController::class,'store']);
         Route::delete('/delete-licence-document/{id}',[LicenceDocsController::class,'destroy'])->name('delete_licence_doc');
         Route::patch('/update-new-registration/{slug}',[NewApplicationController::class,'updateRegistration']);
+        Route::post('/merge-licence-docs/{id}',[LicenceDocsController::class,'merge']);
 
-      
+      //board request
+      Route::post('/submit-board-request',[LiquorBoardRequestController::class,'store']);
+
+
+
+
          // Get licence renewals.
         Route::get('/renew-licence',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
 

@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\LicenceDocument;
+use File;
+use App\Models\Licence;
 use Illuminate\Http\Request;
+use App\Models\LicenceDocument;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
 {
@@ -33,5 +36,29 @@ class LicenceDocsController extends Controller
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }
+    }
+
+    public function merge($licence_id){
+
+      $exist =  Licence::whereId($licence_id)->first(); 
+       $merger = PDFMerger::init();           
+          if (! is_null($exist->merged_document)) {
+            unlink(public_path('/storage/').$exist->merged_document);
+            $exist->update(['merged_document' => null]);
+          }
+                  
+         $all_docs =  LicenceDocument::where('licence_id',$licence_id)->whereNotNull('num')->orWhere('document_type','Payment To The Liquor Board')->orderBy('num','ASC')->get();
+         foreach ($all_docs as $doc) {
+            $merger->addPDF(public_path('/storage/licenceDocuments/').$doc->document_name, 'all');
+          }
+          $fileName = 'licence'.'_'.time().'.pdf';
+          $merger->merge();
+
+          $exist->update(['merged_document' => $fileName]);
+
+          $merger->save(public_path('/storage/'.$fileName));
+          return back()->with('success','Document merged successfully.');
+          
+
     }
 }

@@ -120,9 +120,10 @@
     <div class="row"><div class="col-md-7" >
       <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
     </div>
-    <div data-bs-toggle="modal" data-bs-target="#documents" class="col-md-1">
-      <i class="fa fa-link h5 upload-icon col-md-3"></i>
-    </div></div>
+    <a :href="`/storage/app/public/licenceDocuments/${payment_to_liqour_board.document_name}`" target="_blank" class="col-md-1">
+      <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
+    </a>
+  </div>
 
 
     <div class="row">
@@ -358,7 +359,7 @@
       <div class="col-md-7" >
         <button type="button" class="btn btn-outline-success w-95">Municipal Consent Ltr</button>
       </div>
-      <div class="col-md-1 d-flex">
+      <div v-if="licence.province === 'Mpumalanga'" class="col-md-1 d-flex">
       <i v-if="consent_letter === null" 
       @click="getDocType('Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
@@ -466,8 +467,39 @@
     </div>
   </div> 
   <br><br>
+   <div class="d-flex ">
+    <button v-if="gba_application_form !== null      
+      && application_forms !== null
+      && company_docs !== null
+      && cipc_docs !== null
+      && id_docs !== null
+      && police_clearance !== null
+      && tax_clearance !== null
+      && lta_certificate !== null
+      && shareholding_info !== null
+      && financial_interests !== null
+      && _500m_affidavict !== null
+      && adverts !== null
+      && zoning_affidavict !== null
+      && proof_of_occupation !== null
+      && representations !== null
+      && payment_to_liqour_board !== null
+      && photographs !== null
+      && consent_letter !== null
+      && zoning_certificate !== null
+      && mapbook_plans !== null
+      && google_map_plans !== null
+      && description !== null
+      && site_plans !== null
+      && advert_photographs !== null
+      && newspaper_adverts !== null"
+      @click="mergeDocs"
+       type="button" class="btn btn-success w-65">Compile Application</button>
+       <button v-else type="button" class="btn btn-success w-65" disabled>Compile Application</button>
+       <a v-if="licence.merged_document !== null" :href="`/storage/app/public/${licence.merged_document}`" target="_blank" class="btn btn-success w-20 mx-2" >View</a>  
 
-    <button type="button" class="btn btn-success w-65">Compile Application</button> 
+      </div>
+
 </div> 
       <hr>
   <div class="col-md-5 columns">
@@ -495,7 +527,7 @@
   
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="payment_to_liqour_board !== null">
+      <div class="avatar me-3" v-if="payment_to_liqour_board">
       <a :href="`/storage/app/public/licenceDocuments/${payment_to_liqour_board.document_name}`" target="_blank">
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
@@ -503,10 +535,10 @@
   
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p class="mb-0 text-xs">{{ payment_to_liqour_board.document_name }}</p>
+        <p v-if="payment_to_liqour_board" class="mb-0 text-xs">{{ payment_to_liqour_board.document_name }}</p>
       </div>
   
-      <a v-if="payment_to_liqour_board !== null" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+      <a v-if="payment_to_liqour_board" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
       <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
@@ -645,6 +677,25 @@
           @input="pushData(9)" :checked="licence.status >= 9">
           <label for="requests" class="form-check-label text-body text-truncate status-heading"> Liquor Board Requests </label>
           </div>
+          </div>
+
+          <div class="row mb-3">
+            <div class="row col-8">
+              <div v-for="liquor_board_request in licence.liquor_board_requests" :key="liquor_board_request.id" 
+              class="col-6 bg-gray-100 mb-md-0 mb-4">{{ liquor_board_request.body.slice(o,120) }}...</div>
+
+            </div>
+
+            <div class="col-4 mb-md-0 mb-4">
+              <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">           
+                <textarea v-model="boardRequests.requestBody" class="form-control" placeholder="Type here.." ></textarea>
+                <i @click="submitBoardRequests" class="fa fa-plus ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Edit Card" aria-label="Edit Card"></i>
+                <span class="sr-only">Edit Card</span>
+              </div>
+              <div class="text-danger" v-if="errors.requestBody">{{ errors.requestBody }}</div>
+            </div>
+
+
           </div>
           <hr/>
 
@@ -836,17 +887,17 @@
             <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
               <div class="avatar me-3" v-if="activation_fee_paid !== null">
               <a :href="`/storage/app/public/licenceDocuments/${activation_fee_paid.document_name}`" target="_blank">
-              <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+              <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
               </a>
               </div>
           
              <div class="d-flex align-items-start flex-column justify-content-center">
                 <h6 class="mb-0 text-sm">Document</h6>
-                <p v-if="activation_fee_paid !== null" class="mb-0 text-xs">document_name</p>
+                <p v-if="activation_fee_paid !== null" class="mb-0 text-xs">{{ activation_fee_paid.document_name }}</p>
               </div>
           
               <a v-if="activation_fee_paid !== null" @click="deleteDocument(activation_fee_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-              <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+              <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
               </a>
               <a v-else @click="getDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
               class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -878,25 +929,23 @@
             
             <ul class="list-group">
               <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                <div class="avatar me-3" v-if="renewal_doc !== null">
-                <a :href="`/storage/app/public/licenceDocuments`" target="_blank">
-                <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                <div class="avatar me-3" v-if="licence_issued_doc !== null">
+                <a :href="`/storage/app/public/licenceDocuments/${licence_issued_doc.document_name}`" target="_blank">
+                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
                 </a>
                 </div>
             
                <div class="d-flex align-items-start flex-column justify-content-center">
                   <h6 class="mb-0 text-sm">Document</h6>
-                  <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-                  <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-                  <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                  <p v-if="licence_issued_doc !== null" class="mb-0 text-xs">{{ licence_issued_doc.document_name }}</p>
                 </div>
             
-                <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+                <a v-if="licence_issued_doc !== null" @click="deleteDocument(licence_issued_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
                 </a>
                 <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
                 class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+                <i class="fa fa-upload h5" aria-hidden="true"></i>
                 </a>
               </li>
             </ul> 
@@ -927,25 +976,23 @@
               
               <ul class="list-group">
                 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                  <div class="avatar me-3" v-if="renewal_doc !== null">
-                  <a :href="`/storage/app/public/licenceDocuments`" target="_blank">
-                  <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                  <div class="avatar me-3" v-if="licence_delivered !== null">
+                  <a :href="`/storage/app/public/licenceDocuments/${licence_delivered.document_name}`" target="_blank">
+                  <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
                   </a>
                   </div>
               
                  <div class="d-flex align-items-start flex-column justify-content-center">
                     <h6 class="mb-0 text-sm">Document</h6>
-                    <p v-if="renewal_doc !== null" class="mb-0 text-xs">document_name</p>
-                    <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:</p>
-                    <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                    <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
                   </div>
               
-                  <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                  <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+                  <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                  <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
                   </a>
                   <a v-else @click="getDocType('Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
                   class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                  <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+                  <i class="fa fa-upload h5" aria-hidden="true"></i>
                   </a>
                 </li>
               </ul> 
@@ -962,52 +1009,16 @@
   </div>
   <hr class="vertical dark" />
   </div>
-        <!-- //tasks were here -->
           
   </div>
   
   </div>
   <hr>
-  <div class="row">
-  <h6 class="text-center">Notes</h6>
-  <div class="col-xl-8">
-  <div class="row">
-  <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-  <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-  <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-  <span class="text-sm">{{ task.body }}</span>
-  </span>
-  <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
-  </div>
-  </div>
-  <h6 v-if="!tasks" class="text-center">No notes found.</h6>
-  </div>
-  
-  </div>
-  
-  <div class="col-xl-4">
-  <form @submit.prevent="submitTask">
-  <div class="col-md-12 columns">
-  <label class="form-check-label text-body text-truncate status-heading">New Note:
-  <span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-  </div>
-  
-  <div class="col-12 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">New Task<span class="text-danger pl-6">
-  ({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
-  <textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
-  </div>
-  <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-  </div>
-  
-  <button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-    <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    Save
-  </button>
-  </form>
-  </div>
-  </div>
+ 
+  <Task :tasks="tasks" :model_id="licence.id" :errors="errors"/>
+
+
+
   </div>
   </div>
   
@@ -1022,8 +1033,7 @@
         <input type="hidden" v-model="uploadDoc.doc_type">
         <input type="hidden" v-model="uploadDoc.num">
         <div class="modal-body">      
-          <div class="row">
-    
+          <div class="row">    
           <div class="col-md-12 columns">
           <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
            <input type="file" @input="uploadDoc.doc = $event.target.files[0]"
@@ -1074,8 +1084,8 @@
   import Layout from "../../Shared/Layout.vue";
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
   import { Inertia } from '@inertiajs/inertia';
-  import Datepicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
+  import Task from "../Tasks/Task.vue";
   
   import { ref } from 'vue';
   
@@ -1120,12 +1130,12 @@
       activation_fee_requested_doc: Object,
       client_finalisation: Object,
       client_paid: Object,
-      activation_fee_paid: Object
+      activation_fee_paid: Object,
+      licence_issued_doc: Object,
+      licence_delivered: Object
     },
   
     setup (props) {
-      const year = ref(new Date().getFullYear());
-      const body_max = ref(100);
       let show_modal = ref(true);  
   
       const form = useForm({
@@ -1142,6 +1152,11 @@
         status: [],
        })
   
+      const boardRequests = useForm({
+        requestBody: null,
+        licence_id: props.licence.id
+      })
+
       const uploadDoc = useForm({
         doc: null,
         doc_type: null ,
@@ -1149,24 +1164,12 @@
         licence_id: props.licence.id
       })
   
-      const createTask = useForm({
-            body: '',
-            model_type: 'Licence Renewal',
-            model_id: '',
-            taskDate: ''     
-      })
-  
-      function submitTask(){
-        createTask.post('/submit-task', {
-            onSuccess: () => createTask.reset(),
+      function submitBoardRequests(){
+        boardRequests.post('/submit-board-request', {
+          preserveScroll: true,
+          onSuccess: () => { boardRequests.requestBody = '';},
         })
       }
-  
-      function checkBodyLength(){//Monitor task body length..
-            if(this.createTask.body.length > this.body_max){
-                this.createTask.body = this.createTask.body.substring(0,this.body_max)
-            }
-        }
   
       function getDocType(doc_type,num=null){
         this.uploadDoc.doc_type = doc_type
@@ -1212,23 +1215,28 @@
             //
             }
         }
+        function mergeDocs(){
+          Inertia.post(`/merge-licence-docs/${props.licence.id}`, {
+          preserveScroll: true,
+        })
+        }
   
       return { 
-        year,form,body_max,show_modal,
+        form,show_modal,
         updateRegistration,
         pushData,uploadDoc,
         getDocType, submitDocument,
         deleteDocument,
-        createTask,
-        submitTask,
-        checkBodyLength,
+        boardRequests,
+        submitBoardRequests,
+        mergeDocs
        }
     },
      components: {
       Layout,
       Link,
       Head,
-      Datepicker
+      Task
     },
     
   };

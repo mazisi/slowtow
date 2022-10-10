@@ -56,6 +56,11 @@ class Licence extends Model
        return $this->belongsToMany(Company::class,'licence_transfers','licence_id','old_company_id');
     }
 
+    public function liquor_board_requests()
+    {
+       return $this->hasMany(LiquorBoardRequest::class);
+    }
+
 
     
 }

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
-use App\Models\LicenceDocument;
 use App\Models\LicenceType;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Models\LicenceDocument;
 
 class NewApplicationController extends Controller
 {
@@ -101,7 +102,7 @@ class NewApplicationController extends Controller
 
     public function view_registration(Request $request)
     {
-        $licence = Licence::with('company')->whereSlug($request->slug)->first();
+        $licence = Licence::with('company','liquor_board_requests')->whereSlug($request->slug)->first();
         $gba_application_form = LicenceDocument::where('document_type','GLB Application Forms')->where('licence_id',$licence->id)->first(['id','document_name']);
         $client_invoiced = LicenceDocument::where('document_type','Client Invoiced')->where('licence_id',$licence->id)->first(['id','document_name']);
         $application_forms = LicenceDocument::where('document_type','Application Forms')->where('licence_id',$licence->id)->first(['id','document_name']);
@@ -139,7 +140,10 @@ class NewApplicationController extends Controller
         $client_finalisation  = LicenceDocument::where('document_type','Client Finalisation Invoiced')->where('licence_id',$licence->id)->first(['id','document_name']);
         $client_paid  = LicenceDocument::where('document_type','Client Paid')->where('licence_id',$licence->id)->first(['id','document_name']);
         $activation_fee_paid  = LicenceDocument::where('document_type','Activation Fee Paid')->where('licence_id',$licence->id)->first(['id','document_name']);
-        
+        $licence_issued_doc  = LicenceDocument::where('document_type','Licence Issued')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $licence_delivered  = LicenceDocument::where('document_type','Licence Delivered')->where('licence_id',$licence->id)->first(['id','document_name']);
+        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+        // $board_requests = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
         
         
         return Inertia::render('New Applications/Registration',[
@@ -178,7 +182,10 @@ class NewApplicationController extends Controller
             'activation_fee_requested_doc' => $activation_fee_requested_doc,
             'client_finalisation' => $client_finalisation,
             'client_paid' => $client_paid,
-        'activation_fee_paid' => $activation_fee_paid]);
+            'activation_fee_paid' => $activation_fee_paid,
+            'licence_issued_doc' => $licence_issued_doc,
+            'licence_delivered' => $licence_delivered,
+            'tasks' => $tasks]);
     }
 
     public function updateRegistration(Request $request, $slug){
@@ -208,6 +215,7 @@ class NewApplicationController extends Controller
            ]);
            return back()->with('success','Updated successfully');
        } catch (\Throwable $th) {
+        // throw $th;
          return back()->with('success','An error occured while updating.');
        }
        
