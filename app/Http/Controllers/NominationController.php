@@ -77,8 +77,9 @@ $certified_id_doc =  NominationDocument::where('nomination_id',$nomination->id)-
 $police_clearance_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Police Clearances')->first();
 $latest_renewal_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Latest Renewal/Licence')->first();
 $nomination_logded = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Lodged')->first();
+$scanned_app = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Scanned Application')->first();
 $nomination_issued = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Issued')->first();
-$nomination_delivered = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Issued')->first();
+$nomination_delivered = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Delivered')->first();
 
 return Inertia::render('Nominations/ViewIndividualNomination',[
             'nomination' => $nomination,
@@ -95,7 +96,8 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
              'latest_renewal_doc' => $latest_renewal_doc,
              'nomination_logded' => $nomination_logded,
              'nomination_issued' => $nomination_issued,
-             'nomination_delivered' => $nomination_delivered
+             'nomination_delivered' => $nomination_delivered,
+             'scanned_app' => $scanned_app
     ]);
     }
 

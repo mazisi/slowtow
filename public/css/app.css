@@ -834,6 +834,9 @@ select {
 .mr-4 {
   margin-right: 1rem;
 }
+.mt-14 {
+  margin-top: 3.5rem;
+}
 .block {
   display: block;
 }
@@ -908,6 +911,9 @@ select {
 }
 .w-10 {
   width: 2.5rem;
+}
+.w-40 {
+  width: 10rem;
 }
 .max-w-xl {
   max-width: 36rem;

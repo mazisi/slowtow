@@ -201,12 +201,16 @@ class NewApplicationController extends Controller
             $status = last($sorted_statuses);
         }
         if($status >= 15){
-            $licence_date = now();
-            Nomination::create([//begin nomination
-                'licence_id' => $licence->id,
-                'year' => now()->format('Y'),
-                'slug' => sha1(now())
-            ]);
+            $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
+            if(is_null($nom)){
+                $licence_date = now();
+                Nomination::create([//begin nomination
+                    'licence_id' => $licence->id,
+                    'year' => now()->format('Y'),
+                    'slug' => sha1(now())
+                ]);
+            }
+            
         }
         $licence->update([
             'deposit_paid_at' => $request->deposit_paid_at,

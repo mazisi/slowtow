@@ -28,6 +28,7 @@ export default{
       nomination_logded: Object,//doc
       nomination_issued: Object,//doc
       nomination_delivered: Object,//doc
+      scanned_app: Object//doc
   },
 
   setup (props) {
@@ -173,10 +174,11 @@ export default{
   // 3 => Client Paid
   // 4 => Payment to the Liquor Board
   // 5 => Select nominees
-  // 6 => Documents Required 
-  // 7 => Nomination Lodged 
-  // 8 => Nomination issued
-  // 9 => Nomination Delievered
+  // 6 => Prepare Nomination Application 
+  // 7  => Scanned Application
+  // 8 => Nomination Lodged 
+  // 9 => Nomination issued
+  // 10 => Nomination Delievered
 }
 </script>
 <style>
@@ -218,8 +220,8 @@ export default{
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-quoted" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '1'" value="1" class="active-checkbox">
+<input id="client-quoted" type="checkbox" @input="pushData(1)"
+:checked="nomination.status >= '1'" class="active-checkbox">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div>  
@@ -249,8 +251,8 @@ export default{
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '2'" value="2" class="active-checkbox">
+<input id="client-paid" type="checkbox" @input="pushData(2)"
+:checked="nomination.status >= '2'" class="active-checkbox">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
@@ -280,8 +282,8 @@ export default{
 <hr>
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '3'" value="3" class="active-checkbox">
+<input id="client-paid" type="checkbox" @input="pushData(3)"
+:checked="nomination.status >= '3'" class="active-checkbox">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>
@@ -303,8 +305,8 @@ export default{
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="liquor-board" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '4'" value="4" class="active-checkbox">
+<input id="liquor-board" type="checkbox" @input="pushData(4)"
+:checked="nomination.status >= '4'" class="active-checkbox">
 <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div>
@@ -349,8 +351,8 @@ export default{
 
 <div class="col-md-11 d-flex columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="Select nominees" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '5'" value="5" class="active-checkbox">
+<input id="Select nominees" type="checkbox" @input="pushData(5)"
+:checked="nomination.status >= '5'" class="active-checkbox">
 </div>
 
 <label for="Select nominees" class="form-check-label text-body text-truncate status-heading">Select Person(s) To Nominate</label>
@@ -409,13 +411,15 @@ Action
 </div>
 <hr>
 
+
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="documents-required" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '6'" value="6" class="active-checkbox">
-<label for="documents-required" class="form-check-label text-body text-truncate status-heading">Collate Nomination Documents </label>
+<input id="documents-required" type="checkbox" @input="pushData(6)"
+:checked="nomination.status >= '6'" class="active-checkbox">
+<label for="documents-required" class="form-check-label text-body text-truncate status-heading">Prepare Nomination Application </label>
 </div>
 </div>
+
 
 <div class="col-md-4 columns">
 <ul class="list-group">
@@ -442,21 +446,15 @@ Action
 <div class="col-md-4 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="proof_of_payment !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${proof_of_payment.document}`" target="_blank">
-    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-    </a>
+    <div class="avatar me-3" >
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Proof Of Payment</h6>
-       <p v-if="proof_of_payment !== null" class="mb-0 text-xs">{{ proof_of_payment.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="proof_of_payment !== null" @click="deleteDocument(proof_of_payment.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-    </a>
-    <a v-else @click="getDocType('Proof of Payment')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <a v-if="liquor_board !== null" :href="`/storage/app/public/nominationDocuments/${liquor_board.document}`" class="mb-0 btn btn-link ms-auto" href="javascript:;">
+    <i class="fa fa-link h5 " aria-hidden="true"></i></a>
+    <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" href="javascript:;">
+      <i class="fa fa-link h5" aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -565,10 +563,43 @@ Action
 </div>
 <hr>
 
+
+<div class="col-md-12 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+  <input id="scanned-app" type="checkbox" @input="pushData(7)"
+  :checked="nomination.status >= '7'" class="active-checkbox">
+  <label for="scanned-app" class="form-check-label text-body text-truncate status-heading">Scanned Application </label>
+  </div>
+  </div>
+  <div class="col-md-6 columns">
+    <ul class="list-group">
+     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+        <div class="avatar me-3" v-if="scanned_app !== null">
+        <a :href="`/storage/app/public/nominationDocuments/${scanned_app.document}`" target="_blank">
+        <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+        </a>
+        </div>
+        <div class="d-flex align-items-start flex-column justify-content-center">
+          <h6 class="mb-0 text-sm">Document</h6>
+           <p v-if="scanned_app !== null" class="mb-0 text-xs">{{ scanned_app.document_name }}</p>
+          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+          <p v-if="scanned_app !== null" class="mb-0 text-xs"></p>
+        </div>
+        <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+        </a>
+        <a v-else @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+      </li>  
+    </ul>
+    </div>
+  <hr/>
+
+
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="nomination-logded" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '7'" value="7" class="active-checkbox">
+<input id="nomination-logded" type="checkbox" @input="pushData(8)"
+:checked="nomination.status >= '8'" class="active-checkbox">
 <label for="nomination-logded" class="form-check-label text-body text-truncate status-heading">Nomination Lodged</label>
 </div>
 </div>
@@ -611,8 +642,8 @@ Action
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="nomination-issued" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '8'" value="8" class="active-checkbox">
+<input id="nomination-issued" type="checkbox" @input="pushData(9)"
+:checked="nomination.status >= '9'" class="active-checkbox">
 <label for="nomination-issued" class="form-check-label text-body text-truncate status-heading">Nomination Issued</label>
 </div>
 </div>
@@ -653,8 +684,8 @@ Action
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="nomination-delivered" type="checkbox" @input="pushData($event.target.value)"
-:checked="nomination.status >= '9'" value="9" class="active-checkbox">
+<input id="nomination-delivered" type="checkbox" @input="pushData(10)"
+:checked="nomination.status >= '10'" class="active-checkbox">
 <label for="nomination-delivered" class="form-check-label text-body text-truncate status-heading"> Nomination Delivered</label>
 </div>
 </div> 
