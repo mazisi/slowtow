@@ -28,6 +28,11 @@ class ReportController extends Controller
     public function export(Request $request)
     {
       dd($request);
+      $users = DB::table('users')
+                ->when($role, function ($query, $role) {
+                    return $query->where('role_id', $role);
+                })
+                ->get();
     }
 
 }
