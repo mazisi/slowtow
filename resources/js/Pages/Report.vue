@@ -49,27 +49,27 @@
   <div class="col-4">
     <button type="button" class="btn btn-success w-45">Filter By:</button>
   </div>
-  <div class="col-8">
+  <div class="col-3">
     <div class="input-group input-group-outline null is-filled">
         <Multiselect
-           
-           :options="options"
-           :multiple="true"
+        v-model="form.month"           
+           :options="months"
+           mode="tags"
            :taggable="true"
+           placeholder="Month"
          />
       </div>
   </div>
   
   <div class="col-3">
+    
     <div class="input-group input-group-outline null is-filled">
-      <select v-model="form.year" class="form-control form-control-default">
-      <option :value="''" disabled selected>Year</option>
-      <option value="01">January</option>
-      <option value="02">February</option>
-      </select>
+      <Datepicker v-model="form.year" yearPicker @update:modelValue="handleDate" />
       </div>
-  </div>
-  <div class="col-2"></div>
+    </div>
+  <div class="col-2">
+    <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success">
+      {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer"></i></span><br></div>
   <div class="col-2">
     <div class="input-group input-group-outline null is-filled">
       <select v-model="form.activeStatus" class="form-control form-control-default">
@@ -82,20 +82,22 @@
   <div class="col-2"></div>
   <div class="col-3">
     <div class="input-group input-group-outline null is-filled">
-      <select v-model="form.month" class="form-control form-control-default">
-      <option :value="''" disabled selected>Year</option>
-      <option value="01">January</option>
-      <option value="02">February</option>
-      </select>
+      <Multiselect 
+      v-model="form.province"          
+      :options="provinces"
+       mode="tags"
+      :taggable="true"
+      placeholder="Province"/>
       </div>
   </div>
   <div class="col-3">
     <div class="input-group input-group-outline null is-filled">
-      <select v-model="licence_date" class="form-control form-control-default">
-      <option :value="''" disabled selected>Year</option>
-      <option value="01">January</option>
-      <option value="02">February</option>
-      </select>
+      <Multiselect
+      v-model="form.boardRegion"           
+      :options="boardRegion"
+       mode="tags"
+      :taggable="true"
+      placeholder="Liquor Board Region"/>
       </div>
   </div>
   <div class="col-2"></div>
@@ -103,30 +105,30 @@
   <div class="col-2"></div>
   <div class="col-3  mt-3">
     <div class="input-group input-group-outline null is-filled">
-      <select v-model="licence_date" class="form-control form-control-default">
-      <option :value="''" disabled selected>Year</option>
-      <option value="01">January</option>
-      <option value="02">February</option>
-      </select>
+      <Multiselect           
+      :options="licenceTypes"
+       mode="tags"
+      :taggable="true"
+      placeholder="Licence Type"/>
       </div>
   </div>
   <div class="col-3 mt-3">
     <div class="input-group input-group-outline null is-filled">
-      <select v-model="licence_date" class="form-control form-control-default">
+      <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Applicant</option>
-      <option value="01">January</option>
-      <option value="02">Februatttttry</option>
+      <option value="Company">Company</option>
+      <option value="Person">Person</option>
       </select>
       </div>
   </div>
-  <div class="col-8"></div>
-  <div class="col-4 mt-4">
-    <button type="button" class="btn btn-success">Export</button>
+  <div class="col-9"></div>
+  <div class="col-3 mt-4">
+    <button @click="exportReport" type="button" class="btn btn-success">Export</button>
   </div>
 </div>
 
-        </div>
-          </div>
+</div>
+  </div>
           
           
 </div>
@@ -138,38 +140,77 @@ import Layout from "../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 import { useForm } from '@inertiajs/inertia-vue3';
 import Multiselect from '@vueform/multiselect';
-
+import Datepicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+import {ref} from 'vue'
 
 export default {
   props: {
-    renewals: Object,
+    licenceTypes: Object,
     emails: Object,
     success: String,
     error: String,
     errors: Object,
   },
-  setup() {
-    let options = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+
+  setup(props) {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const provinces = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
+    const boardRegion = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
+    let licenceTypes = props.licenceTypes;
+    const date = ref();
+    
     const form = useForm({
       variation: null,
       activeStatus: '',
-      month: '',
-      year: ''
+      month: [],
+      year: '',
+      applicant: '',
+      province: [],
+      selectedDates:[],
+      boardRegion: []
     })
     
   function getType(type){
      form.variation=type;
    }
+
+   const handleDate = (modelData) => {
+          date.value = modelData;
+       form.selectedDates.push(date.value)
+   }
+
+   const removeDate = (index) => {
+       form.selectedDates.splice(index, 1)
+   }
+
+   const exportReport = () => {
+    form.post(`/export-report`, {
+           preserveScroll: true,
+           onSuccess: () => {
+            //         
+           },
+          })  
+       
+   }
+
 return{
   getType,
   form,
-  options
+  months,
+  provinces,
+  boardRegion,
+  licenceTypes,
+  handleDate,
+  removeDate,
+  exportReport
 }
 },
  components: {
     Layout,
     Link,
-    Multiselect
+    Multiselect,
+    Datepicker
 },
 
 

@@ -142,7 +142,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //Reports
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
-        Route::get('/renewal-export',[RenewalExportController::class,'export'])->name('export');
+        Route::post('/export-report',[ReportController::class,'export'])->name('export');
 
         //Consultants
         // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');

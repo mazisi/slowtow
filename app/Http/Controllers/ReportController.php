@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Email;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
+use App\Models\LicenceType;
 
 class ReportController extends Controller
 {
@@ -18,10 +19,15 @@ class ReportController extends Controller
           $emails = Email::with(['licence_renewals.licence' => function ($query){
             // $query ->where('doc_type','Client Quoted');            
           }])->where('model_type','Renewal')->get();
-          
+        
+        $licenceTypes = LicenceType::get(['licence_type','id']);
         return Inertia::render('Report',[
-            'renewals' => $renewals,
-            'emails' => $emails]);
+            'licenceTypes' => $licenceTypes]);
+    }
+
+    public function export(Request $request)
+    {
+      dd($request);
     }
 
 }
