@@ -46,7 +46,7 @@ class RenewalExportController extends Controller
                 $exist = LicenceRenewalExports::where('licence_renewal_id',$renewal->id)->first();
                 
                 if(!is_null($exist)){
-                    $exist->delete();
+                    //$exist->delete();
                 }
                 $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get();
             //check if client has been quoted
@@ -73,14 +73,14 @@ class RenewalExportController extends Controller
                     'notes' => $notesCollection
                 ]);
             }
-            return Inertia::location('http://127.0.0.1:8000/force-download-export');
+            
            
            
     }
 
     public function forceDownload()
-    {dd('Redicted');
-        Excel::download(new RenewalExport, 'renewals.xlsx');
+    {
+        return Excel::download(new RenewalExport, 'renewals.xlsx');
     }
 
 }
