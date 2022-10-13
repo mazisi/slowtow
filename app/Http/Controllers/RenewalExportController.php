@@ -3,24 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Inertia\Inertia;
 use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
 use App\Models\RenewalDocument;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LicenceRenewalExports;
 
 class RenewalExportController extends Controller
 {
-    public function export(){
-            $renewals = LicenceRenewal::with('licence')->get();
+    public static function export($request){
+        $selectedDates = $request->selectedDates;
+      
+
+            $renewals = LicenceRenewal::with("licence")->when(function($query) use($request){
+                $query->whereHas('licence', function($query) use($request){
+                    $query->when($request->month, function($query) use($request){
+                        $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
+                    })
+                    ->when(!empty(request('activeStatus')), function ($query) use ($request) {
+                        $query->where('is_licence_active',$request->activeStatus);
+                    })
+                    ->when(!empty(request('province')), function ($query) use ($request) {
+                        $query->whereIn('province',$request->province);
+                    })
+                    ->when(!empty(request('boardRegion')), function ($query) use ($request) {
+                        $query->whereIn('board_region',$request->boardRegion);
+                    })
+                    ->when(!empty(request('applicant')), function ($query) use ($request) {
+                        $query->where('belongs_to',$request->applicant);
+                    });
+                });
+
+                })->when(!empty(request('year')), function ($query) use ($request) {
+                    $query->whereIn('year',$request->year);
+                })->get();
+              
             $notesCollection = '';
 
             foreach ($renewals as $renewal) {
                 $exist = LicenceRenewalExports::where('licence_renewal_id',$renewal->id)->first();
                 
                 if(!is_null($exist)){
-                    continue;
-                    // $exist->delete();
+                    $exist->delete();
                 }
                 $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get();
             //check if client has been quoted
@@ -47,11 +73,14 @@ class RenewalExportController extends Controller
                     'notes' => $notesCollection
                 ]);
             }
-            return Excel::download(new RenewalExport, 'licence_renewals.xlsx');
+            return Inertia::location('http://127.0.0.1:8000/force-download-export');
            
            
     }
 
-    
+    public function forceDownload()
+    {dd('Redicted');
+        Excel::download(new RenewalExport, 'renewals.xlsx');
+    }
 
 }

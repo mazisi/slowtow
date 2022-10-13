@@ -154,7 +154,20 @@ export default {
   },
 
   setup(props) {
-    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const months = {
+    "1": "January",
+    "2" : "February",
+    "3" : "March",
+    "4":   "April",
+    "5": "May",
+    "6": "June",
+    "7": "July",
+    "8": "August",
+    "9": "September",
+    "10": "October",
+    "11": "November",
+    "12": "December",
+}
     const provinces = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
     const boardRegion = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
     let licenceTypes = props.licenceTypes;
@@ -188,7 +201,7 @@ export default {
     form.post(`/export-report`, {
            preserveScroll: true,
            onSuccess: () => {
-            //         
+            //
            },
           })  
        

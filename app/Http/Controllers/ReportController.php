@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\RenewalExport;
 use Inertia\Inertia;
 use App\Models\Email;
 use Illuminate\Http\Request;
@@ -25,14 +26,16 @@ class ReportController extends Controller
             'licenceTypes' => $licenceTypes]);
     }
 
-    public function export(Request $request)
-    {
-      dd($request);
-      $users = DB::table('users')
-                ->when($role, function ($query, $role) {
-                    return $query->where('role_id', $role);
-                })
-                ->get();
+    public function export(Request $request){
+      switch ($request->variation) {
+        case 'Renewals':
+          RenewalExportController::export($request);
+          break;
+        
+        default:
+          echo 'Noo';
+          break;
+      }
     }
 
 }

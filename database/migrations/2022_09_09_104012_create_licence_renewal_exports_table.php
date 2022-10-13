@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('licence_renewal_id')->constrained()->onDelete('cascade');
             $table->string('is_active');
-            $table->string('trading_name');
-            $table->string('licence_number');
-            $table->string('renewal_date');
+            $table->string('trading_name')->nullable();
+            $table->string('licence_number')->nullable();
+            $table->string('renewal_date')->nullable();
             $table->string('renewal_amount')->nullable();
             $table->string('is_quoted')->nullable();
             $table->string('is_quote_sent')->nullable();
