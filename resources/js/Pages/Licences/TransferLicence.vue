@@ -58,13 +58,16 @@ function assignActiveValue(event){
 };
 
 //The following are status keys
-// 1 => Deposit Paid
-// 2 => Collate Transfer Details
-// 3 => Client Invoiced
-// 4 => Client Paid
-// 5 => Transfer Logded
-// 6 => Certificate Received
-//7 => Transfer Complete And Delivered
+// 1 => Client Quoted
+// 2 => Client Invoiced
+// 3 => Client Paid
+// 4 => Collate Transfer Documents
+// 5 => Payment To The Liquor Board
+// 6 => Scanned Application
+// 7 => Application Logded
+// 8 => Activation Fee Paid
+// 9 => Transfer Issued
+// 10 => Transfer Delivered
 </script>
 <style>
 .columns{
@@ -108,7 +111,7 @@ function assignActiveValue(event){
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" v-model="form.status" type="checkbox" value="1">
-<label class="form-check-label text-body text-truncate status-heading">Deposit Quoted </label>
+<label class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
 </div>     
 
@@ -179,11 +182,16 @@ function assignActiveValue(event){
 </div>
 </div>  
 <hr>
-
-
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
+<label class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
+</div>
+</div>
+<hr/>
+<div class="col-md-12 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="7">
 <label class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>  
@@ -191,7 +199,7 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="7">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="8">
 <label class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>  
@@ -200,7 +208,7 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="8">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="9">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
@@ -208,7 +216,7 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="9">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="10">
 <label class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 
@@ -218,7 +226,7 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="10">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="11">
 <label class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
 </div>
 </div> 
@@ -226,7 +234,7 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="11">
+<input id="active-checkbox" v-model="form.status" type="checkbox" value="12">
 <label class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
 </div>
 </div> 

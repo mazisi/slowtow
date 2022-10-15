@@ -200,7 +200,7 @@ export default {
 // 1 => Client Quoted
 // 2 => Client Invoiced
 // 3 => Client Paid
-// 4 => Collate Transfer Documents
+// 4 => Prepare Transfer Application
 // 5 => Payment To The Liquor Board
 // 6 => Scanned Application
 // 7 => Application Logded
@@ -328,7 +328,7 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" @input="pushData(4)"
 :checked="view_transfer.status >= 4" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Collate Transfer Documents</label>
+<label class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
 </div>
 </div> 
  <div class="col-4 columns">
@@ -619,20 +619,6 @@ export default {
 </div>
  </div>  
 <hr>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

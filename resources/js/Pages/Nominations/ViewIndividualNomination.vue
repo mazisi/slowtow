@@ -600,7 +600,7 @@ Action
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="nomination-logded" type="checkbox" @input="pushData(8)"
 :checked="nomination.status >= '8'" class="active-checkbox">
-<label for="nomination-logded" class="form-check-label text-body text-truncate status-heading">Nomination Lodged</label>
+<label for="nomination-logded" class="form-check-label text-body text-truncate status-heading">Application Lodged</label>
 </div>
 </div>
 

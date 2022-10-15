@@ -30,6 +30,8 @@ use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 use App\Http\Controllers\LiquorBoardRequestController;
+use App\Http\Controllers\NominationExportController;
+use App\Http\Controllers\TransferExportController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -143,7 +145,10 @@ Route::group(['middleware' => ['auth']], function () {
         //Reports
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
         Route::post('/export-report/',[ReportController::class,'export'])->name('export');
-        Route::get('/force-download-export',[RenewalExportController::class,'forceDownload']);
+        Route::get('/force-download-renewal-export',[RenewalExportController::class,'forceDownload']);
+        Route::get('/force-download-transfer-export',[TransferExportController::class,'forceDownload']);
+        Route::get('/force-download-nomination-export',[NominationExportController::class,'forceDownload']);
+
 
         //Consultants
         // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');

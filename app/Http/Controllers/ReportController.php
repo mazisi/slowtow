@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\RenewalExport;
+use App\Exports\TransferExports;
 use Inertia\Inertia;
 use App\Models\Email;
 use Illuminate\Http\Request;
@@ -30,7 +31,15 @@ class ReportController extends Controller
       switch ($request->variation) {
         case 'Renewals':
           RenewalExportController::export($request);          
-          return Inertia::location("http://127.0.0.1:8000/force-download-export");
+          return Inertia::location("http://127.0.0.1:8000/force-download-renewal-export");
+          break;
+        case 'Transfers':
+          TransferExportController::export($request);          
+          return Inertia::location("http://localhost:8000/force-download-transfer-export");
+          break;
+        case 'Nominations':
+          NominationExportController::export($request);          
+          return Inertia::location("http://localhost:8000/force-download-nomination-export");
           break;
         
         default:

@@ -13,9 +13,11 @@ use App\Models\LicenceRenewalExports;
 
 class RenewalExportController extends Controller
 {
-    public static function export($request){
-        $selectedDates = $request->selectedDates;
-      
+    public static function export($request){ 
+                $exist = LicenceRenewalExports::get();                
+                if(!is_null($exist)){
+                    $exist->delete();
+                }
 
             $renewals = LicenceRenewal::with("licence")->when(function($query) use($request){
                 $query->whereHas('licence', function($query) use($request){
@@ -36,18 +38,13 @@ class RenewalExportController extends Controller
                     });
                 });
 
-                })->when(!empty(request('year')), function ($query) use ($request) {
-                    $query->whereIn('year',$request->year);
+                })->when(!empty(request('selectedDates')), function ($query) use ($request) {
+                      $query->whereIn('year',$request->selectedDates);
                 })->get();
               
             $notesCollection = '';
 
             foreach ($renewals as $renewal) {
-                $exist = LicenceRenewalExports::where('licence_renewal_id',$renewal->id)->first();
-                
-                if(!is_null($exist)){
-                    //$exist->delete();
-                }
                 $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get();
             //check if client has been quoted
             $is_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
