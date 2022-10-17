@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\RenewalExport;
-use App\Exports\TransferExports;
 use Inertia\Inertia;
 use App\Models\Email;
-use Illuminate\Http\Request;
-use App\Models\LicenceRenewal;
+use App\Models\People;
+use App\Models\Company;
 use App\Models\LicenceType;
+use Illuminate\Http\Request;
+use App\Exports\RenewalExport;
+use App\Models\LicenceRenewal;
+use App\Exports\TransferExports;
 
 class ReportController extends Controller
 {
@@ -22,9 +24,13 @@ class ReportController extends Controller
             // $query ->where('doc_type','Client Quoted');            
           }])->where('model_type','Renewal')->get();
         
-        $licenceTypes = LicenceType::get(['licence_type','id']);
+        $licenceTypes = LicenceType::pluck('licence_type', 'id');
+        $companies = Company::pluck('name','id');        
+        $people = People::pluck('full_name','id');
         return Inertia::render('Report',[
-            'licenceTypes' => $licenceTypes]);
+             'licenceTypes' => $licenceTypes,
+             'companies' => $companies,
+             'people' => $people]);
     }
 
     public function export(Request $request){

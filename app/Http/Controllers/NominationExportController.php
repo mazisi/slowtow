@@ -47,6 +47,7 @@ class NominationExportController extends Controller
             })->get();
         $status = '';
         $notesCollection = '';
+        $i = 0;
         foreach ($nominations as $nom) {
             switch ($nom->status) {
                 case '1':
@@ -91,10 +92,9 @@ class NominationExportController extends Controller
                     $notesCollection += '|| '. $note;
                 }
             }
-            check nomination peopple relationship
             NominationExport::create([
                 'trading_name' => $nom->licence->trading_name,
-                'client_name' => $nom->licence->people->full_name,
+                'client_name' => $nom->people[$i]->full_name,
                 'licence_number' => $nom->licence->licence_number,
                 'province' => $nom->licence->province,
                 'invoice_number' => null,

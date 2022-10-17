@@ -40,6 +40,9 @@ public static function export($request){
                     })
                     ->when(!empty(request('applicant')), function ($query) use ($request) {
                         $query->where('belongs_to',$request->applicant);
+                    })
+                    ->when(!empty(request('licence_types')), function ($query) use ($request) {
+                        $query->whereIn('licence_type_id',$request->licence_types);
                     });
                 });
 

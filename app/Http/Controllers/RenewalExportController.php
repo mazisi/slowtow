@@ -13,7 +13,7 @@ use App\Models\LicenceRenewalExports;
 
 class RenewalExportController extends Controller
 {
-    public static function export($request){ 
+    public static function export($request){ dd($request);
                 $exist = LicenceRenewalExports::get();                
                 if(!is_null($exist)){
                     $exist->delete();
@@ -35,6 +35,9 @@ class RenewalExportController extends Controller
                     })
                     ->when(!empty(request('applicant')), function ($query) use ($request) {
                         $query->where('belongs_to',$request->applicant);
+                    })
+                    ->when(!empty(request('licence_types')), function ($query) use ($request) {
+                        $query->where('licence_type_id',$request->licence_types);
                     });
                 });
 

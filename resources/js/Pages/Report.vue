@@ -105,7 +105,8 @@
   <div class="col-2"></div>
   <div class="col-3  mt-3">
     <div class="input-group input-group-outline null is-filled">
-      <Multiselect           
+      <Multiselect
+      v-model="form.licence_types"           
       :options="licenceTypes"
        mode="tags"
       :taggable="true"
@@ -121,6 +122,30 @@
       </select>
       </div>
   </div>
+
+  <!-- <div v-if="form.applicant ==='Company'" class="col-3 mt-3">
+    <div class="input-group input-group-outline null is-filled">
+      <Multiselect
+      v-model="form.company"           
+      :options="companies"
+       mode="tags"
+      :taggable="true"
+      :searchable="true"
+      placeholder="Search Company"/>
+      </div>
+  </div>
+
+  <div v-if="form.applicant ==='Person'" class="col-3 mt-3">
+    <div class="input-group input-group-outline null is-filled">
+      <Multiselect
+      v-model="form.person"           
+      :options="people"
+       mode="tags"
+      :taggable="true"
+      :searchable="true"
+      placeholder="Search Company"/>
+      </div>
+  </div> -->
   <div class="col-9"></div>
   <div class="col-3 mt-4">
     <button @click="exportReport" type="button" class="btn btn-success">Export</button>
@@ -147,6 +172,8 @@ import {ref} from 'vue'
 export default {
   props: {
     licenceTypes: Object,
+    companies: Object,
+    people: Object,
     emails: Object,
     success: String,
     error: String,
@@ -171,6 +198,9 @@ export default {
     const provinces = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
     const boardRegion = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
     let licenceTypes = props.licenceTypes;
+    let companies = props.companies;
+    let people = props.people;
+
     const date = ref();
     
     const form = useForm({
@@ -179,9 +209,12 @@ export default {
       month: [],
       year: '',
       applicant: '',
+      person: [],
+      company: [],
       province: [],
       selectedDates:[],
-      boardRegion: []
+      boardRegion: [],
+      licence_types: []
     })
     
   function getType(type){
@@ -216,7 +249,9 @@ return{
   licenceTypes,
   handleDate,
   removeDate,
-  exportReport
+  exportReport,
+  people,
+  companies
 }
 },
  components: {
