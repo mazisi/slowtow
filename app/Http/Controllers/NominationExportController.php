@@ -49,6 +49,7 @@ class NominationExportController extends Controller
         $notesCollection = '';
         $i = 0;
         foreach ($nominations as $nom) {
+            $i++;
             switch ($nom->status) {
                 case '1':
                    $status = 'Client Quoted';

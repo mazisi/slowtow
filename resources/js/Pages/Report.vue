@@ -153,9 +153,53 @@
 </div>
 
 </div>
-  </div>
-          
-          
+
+
+<div v-if="form.variation === 'New-App'" class="table-responsive p-0">
+  <table class="table align-items-center mb-0">
+    <thead>
+      <tr>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Trading Name </th>
+        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Licence Type </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Number </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Region </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Quoted</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Deposit Paid</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Invoiced </th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Prepare New Application</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Payment to the Liquor Board</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Scanned Application</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Application Lodged</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Initial Inspection</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Final Inspection</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="new_application in new_applications" :key="new_application.id">
+        <td class="align-left text-center text-sm">
+              <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.trading_name }}</p>
+        </td>
+        <td>
+          <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.licence_type.licence_type }}</p>
+        </td>
+        <td class="align-left text-center text-sm">
+          <p class="text-xs font-weight-bold mb-0">{{ new_application.licence_number }}</p>
+        </td>
+        <td class="align-left align-left text-center">
+          <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.board_region }}</p>
+        </td>
+        <td class="text-center">
+          <p class="align-center text-xs font-weight-bold mb-0">
+            <input class="align-center" type="checkbox" :checked="new_application.status >= '1'">
+          </p>
+         </td>
+      </tr>
+     
+    </tbody>
+  </table>
+</div>
+  </div>    
 </div>
 
   </Layout>
@@ -173,6 +217,7 @@ export default {
   props: {
     licenceTypes: Object,
     companies: Object,
+    new_applications: Object,
     people: Object,
     emails: Object,
     success: String,

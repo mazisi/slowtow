@@ -6,6 +6,7 @@ use Inertia\Inertia;
 use App\Models\Email;
 use App\Models\People;
 use App\Models\Company;
+use App\Models\Licence;
 use App\Models\LicenceType;
 use Illuminate\Http\Request;
 use App\Exports\RenewalExport;
@@ -27,10 +28,12 @@ class ReportController extends Controller
         $licenceTypes = LicenceType::pluck('licence_type', 'id');
         $companies = Company::pluck('name','id');        
         $people = People::pluck('full_name','id');
+        $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
         return Inertia::render('Report',[
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,
-             'people' => $people]);
+             'people' => $people,
+            'new_applications' => $new_applications]);
     }
 
     public function export(Request $request){
