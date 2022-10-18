@@ -21,8 +21,8 @@ export default {
     let options = props.companies_dropdown;
 
     const form = useForm({
-          old_company: props.licence.company.name,
-          old_company_id: props.licence.company_id,
+          old_company: props.licence.company ?  props.licence.company.name : props.licence.people.full_name,
+          old_company_id: props.licence.company ?  props.licence.company_id : props.licence.people_id,
           new_company: null,
           licence_id: props.licence.id,
           status: [],

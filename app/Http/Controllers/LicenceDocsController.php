@@ -24,6 +24,19 @@ class LicenceDocsController extends Controller
             $fileModel->num = $request->num;
             $fileModel->save();
 
+            $updateLicence = Licence::whereId($request->licence_id);
+            switch ($request->doc_type) {
+              case 'Client Quoted':
+                $updateLicence->update(['client_quoted_doc_name' => $fileModel->document_name]);
+                break;
+              case 'Client Finalisation Invoiced':
+                $updateLicence->update(['client_finalisation_invoiced_doc_name' => $fileModel->document_name]);
+                break;              
+              default:
+                # code...
+                break;
+            }
+
        
       return back()->with('success','Document uploaded successfully.');
     
@@ -47,7 +60,7 @@ class LicenceDocsController extends Controller
             $exist->update(['merged_document' => null]);
           }
                   
-         $all_docs =  LicenceDocument::where('licence_id',$licence_id)->whereNotNull('num')->orWhere('document_type','Payment To The Liquor Board')->orderBy('num','ASC')->get();
+         $all_docs = LicenceDocument::where('licence_id',$licence_id)->whereNotNull('num')->orWhere('document_type','Payment To The Liquor Board')->orderBy('num','ASC')->get();
          foreach ($all_docs as $doc) {
             $merger->addPDF(public_path('/storage/licenceDocuments/').$doc->document_name, 'all');
           }

@@ -194,6 +194,17 @@
             <input class="align-center" type="checkbox" :checked="new_application.status >= '1'">
           </p>
          </td>
+         <td class="text-center">
+          <p class="align-center text-xs font-weight-bold mb-0">
+            {{ new_application.deposit_paid_at }}
+          </p>
+         </td>
+
+         <td class="text-center">
+          <p class="align-center text-xs font-weight-bold mb-0">
+            {{ new_application.deposit_paid_at }}
+          </p>
+         </td>
       </tr>
      
     </tbody>

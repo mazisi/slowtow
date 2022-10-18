@@ -15,7 +15,7 @@ use App\Models\TransferDocument;
 class TransferLicenceController extends Controller
 {
     public function index(Request $request){//NB..licence slug
-        $licence = Licence::with('company')->whereSlug($request->slug)->first();
+        $licence = Licence::with('company','people')->whereSlug($request->slug)->first();
         $companies_dropdown = Company::where('id','!=',$licence->company_id)->pluck('name','id');//get companies list
         return Inertia::render('Licences/TransferLicence',
                                                 ['licence' => $licence,

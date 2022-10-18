@@ -120,7 +120,7 @@
     <div class="row"><div class="col-md-7" >
       <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
     </div>
-    <a :href="`/storage/app/public/licenceDocuments/${payment_to_liqour_board.document_name}`" target="_blank" class="col-md-1">
+    <a v-if="payment_to_liqour_board !== null" :href="`/storage/app/public/licenceDocuments/${payment_to_liqour_board.document_name}`" target="_blank" class="col-md-1">
       <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
     </a>
   </div>
