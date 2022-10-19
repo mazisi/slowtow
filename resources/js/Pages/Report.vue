@@ -156,6 +156,20 @@
 
 
 <div v-if="form.variation === 'New-App'" class="table-responsive p-0">
+<div class="row">
+  <div class="col-6">
+    <div class="input-group input-group-outline null is-filled">
+      <Multiselect
+      v-model="form.new_app_stages"           
+      :options="new_app_stages"
+       mode="tags"
+      :taggable="true"
+      @select="fetchNewAppWithStages"
+      placeholder="Filter By Stage"/>
+      </div>
+  </div>
+</div>
+  
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
@@ -173,6 +187,10 @@
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Initial Inspection</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Final Inspection</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Paid</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Activation Fee Paid</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Issued</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Delivered</th>
       </tr>
     </thead>
     <tbody>
@@ -202,8 +220,74 @@
 
          <td class="text-center">
           <p class="align-center text-xs font-weight-bold mb-0">
-            {{ new_application.deposit_paid_at }}
+            <span v-if="new_application.status >= '3'">{{ new_application.is_client_invoiced }}</span>
           </p>
+         </td>
+
+         
+         <td class="text-center">
+          <p class="align-center text-xs font-weight-bold mb-0">
+            <span v-if="new_application.status >= '4'">Application preparation</span>
+          </p>
+         </td>
+
+         <td class="text-center">
+          <p v-if="new_application.status >= 5" class="align-center text-xs font-weight-bold mb-0">
+            {{ new_application.liquor_board_at }}
+          </p>
+         </td>
+
+         <td class="text-center">
+          <p v-if="new_application.status >= 6" class="align-center text-xs font-weight-bold mb-0">
+            Application ready for lodgement
+          </p>
+         </td>
+
+         <td class="text-center">
+          <p v-if="new_application.status >= 7" class="align-center text-xs font-weight-bold mb-0">
+              {{ new_application.application_lodged_at }}
+          </p>
+          <p v-if="is_application_logded_doc_uploaded" class="text-xs text-secondary mb-0">Doc Uploaded: <input type="checkbox" 
+            :checked="new_application.is_application_logded_doc_uploaded !== null"></p>
+         </td>
+
+         <td class="text-center">
+          {{ new_application.initial_inspection_at }}
+         </td>
+
+         <td class="text-center">
+          <span>check me liquor board request</span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 10">{{ new_application.final_inspection_at }}</span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 11">{{ new_application.activation_fee_requested_at }}</span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 12 
+             && new_application.is_finalisation_doc_uploaded !== null">
+             {{ new_application.is_finalisation_doc_uploaded }}
+            </span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 13">{{ new_application.client_paid_at }}</span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 14">{{ new_application.activation_fee_paid_at }}</span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 15">{{ new_application.licence_issued_at }}</span>
+         </td>
+
+         <td class="text-center">
+          <span v-if="new_application.status >= 16">{{ new_application.licence_delivered_at }}</span>
          </td>
       </tr>
      
@@ -217,8 +301,8 @@
 </template>
 <script>
 import Layout from "../Shared/Layout.vue";
-import { Link } from '@inertiajs/inertia-vue3';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia'
+import { useForm, Link } from '@inertiajs/inertia-vue3';
 import Multiselect from '@vueform/multiselect';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -251,6 +335,24 @@ export default {
     "11": "November",
     "12": "December",
 }
+
+const new_app_stages = {
+    "1": "Client Quoted",
+    "2" : "Deposit Paid",
+    "3" : "Client Invoiced",
+    "4":  "Prepare New Application",
+    "5": "Payment to the Liquor Board",
+    "6": "Scanned Application",
+    "7": "Application Lodged",
+    "8": "Initial Inspection",
+    "9": "Liquor Board Requests",
+    "10": "Final Inspection",
+    "11": "Activation Fee Requested",
+    "12": "Client Finalisation Invoice",
+    "13": "Client Paid",
+    "14": "Activation Fee Paid",
+}
+
     const provinces = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
     const boardRegion = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
     let licenceTypes = props.licenceTypes;
@@ -270,7 +372,8 @@ export default {
       province: [],
       selectedDates:[],
       boardRegion: [],
-      licence_types: []
+      licence_types: [],
+      new_app_stages: []
     })
     
   function getType(type){
@@ -296,6 +399,16 @@ export default {
        
    }
 
+   const fetchNewAppWithStages = () => {
+    form.post(`/reports`, {
+           preserveScroll: true,
+           onSuccess: () => {
+            //
+           },
+          })  
+       
+   }
+
 return{
   getType,
   form,
@@ -307,7 +420,9 @@ return{
   removeDate,
   exportReport,
   people,
-  companies
+  companies,
+  new_app_stages,
+  fetchNewAppWithStages
 }
 },
  components: {

@@ -13,10 +13,12 @@ use App\Models\LicenceRenewalExports;
 
 class RenewalExportController extends Controller
 {
-    public static function export($request){ dd($request);
-                $exist = LicenceRenewalExports::get();                
-                if(!is_null($exist)){
-                    $exist->delete();
+    public static function export($request){
+                $exists = LicenceRenewalExports::get();                
+                if(!is_null($exists)){
+                    foreach ($exists as $exist) {
+                        $exist->delete();
+                    }  
                 }
 
             $renewals = LicenceRenewal::with("licence")->when(function($query) use($request){

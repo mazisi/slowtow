@@ -29,6 +29,7 @@ class ReportController extends Controller
         $companies = Company::pluck('name','id');        
         $people = People::pluck('full_name','id');
         $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
+        
         return Inertia::render('Report',[
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,
@@ -49,6 +50,10 @@ class ReportController extends Controller
         case 'Nominations':
           NominationExportController::export($request);          
           return Inertia::location("http://localhost:8000/force-download-nomination-export");
+          break;
+        case 'New-App':
+          NewAppExportController::export($request);          
+           return Inertia::location("http://localhost:8000/force-download-nomination-export");
           break;
         
         default:

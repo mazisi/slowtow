@@ -149,7 +149,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/force-download-transfer-export',[TransferExportController::class,'forceDownload']);
         Route::get('/force-download-nomination-export',[NominationExportController::class,'forceDownload']);
 
-
         //Consultants
         // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
         // Route::get('/create-consultant',[ConsultantController::class,'create'])->name('create_consultant');

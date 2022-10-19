@@ -234,4 +234,6 @@ class NewApplicationController extends Controller
        }
        
     }
+
+
 }

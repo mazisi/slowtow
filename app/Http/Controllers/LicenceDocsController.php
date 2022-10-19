@@ -24,14 +24,17 @@ class LicenceDocsController extends Controller
             $fileModel->num = $request->num;
             $fileModel->save();
 
-            $updateLicence = Licence::whereId($request->licence_id);
+            $updateLicence = Licence::find($request->licence_id);
             switch ($request->doc_type) {
               case 'Client Quoted':
-                $updateLicence->update(['client_quoted_doc_name' => $fileModel->document_name]);
+                $updateLicence->update(['is_client_invoiced' => $fileModel->document_name]);
+                break;
+              case 'Application Lodged':
+                $updateLicence->update(['is_application_logded_doc_uploaded' => true]);
                 break;
               case 'Client Finalisation Invoiced':
-                $updateLicence->update(['client_finalisation_invoiced_doc_name' => $fileModel->document_name]);
-                break;              
+                $updateLicence->update(['is_finalisation_doc_uploaded' => $fileModel->document_name]);
+                break;                
               default:
                 # code...
                 break;
@@ -44,6 +47,20 @@ class LicenceDocsController extends Controller
 
     public function destroy($id){
         $model = LicenceDocument::find($id);
+        switch ($model->document_type) {
+          case 'Client Quoted':
+            $updateLicence->update(['is_client_invoiced' => null]);
+            break;
+          case 'Application Lodged':
+            $updateLicence->update(['is_application_logded_doc_uploaded' => null]);
+            break;
+          case 'Client Finalisation Invoiced':
+            $updateLicence->update(['is_finalisation_doc_uploaded' => null]);
+            break;               
+          default:
+            # code...
+            break;
+        }
         if(!is_null($model->document_file)){
             unlink(public_path('storage/'.$model->document_file));
             $model->delete();
