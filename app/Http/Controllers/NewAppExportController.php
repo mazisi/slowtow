@@ -20,7 +20,7 @@ class NewAppExportController extends Controller
 
         $licences = Licence::where(function($query) use($request){
             $query->when($request->month, function($query) use($request){
-                //$query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
+                $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
             })
             ->when(!empty(request('activeStatus')), function ($query) use ($request) {
                 $query->where('is_licence_active',$request->activeStatus);
@@ -38,9 +38,9 @@ class NewAppExportController extends Controller
                 $query->where('licence_type_id',$request->licence_types);
             })
             ->when(!empty(request('selectedDates')), function ($query) use ($request) {
-                $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+               // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
             });
-        })->get();dd($licences);
+        })->get();
 
     $notesCollection = '';
 
@@ -54,7 +54,6 @@ class NewAppExportController extends Controller
             }
         }
         NewAppExport::create([
-            'is_active' => ($renewal->licence->is_licence_active) ? 'A' : 'D',
             'trading_name' => $renewal->licence->trading_name,
             'licence_number' => $renewal->licence->licence_number,
             'renewal_date' => $renewal->date,
