@@ -276,7 +276,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -309,7 +309,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -642,7 +642,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -674,7 +674,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -713,7 +713,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Transfer Logded')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -752,7 +752,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -793,7 +793,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Transfer Issued')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -832,7 +832,7 @@ export default {
     </a>
     <a v-else @click="setDocType('Transfer Delivered')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
