@@ -26,23 +26,23 @@
 
         <div class="row">
           <div class="col-4">
-            <button @click="getType('Renewals')" type="button" class="btn btn-success w-45">Renewals</button>
+            <button :class="{ active: isActive }" @click="getType('Renewals')"  type="button" class="btn btn-success w-45">Renewals</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Transfers')" type="button" class="btn btn-success">Transfers</button>
+            <button :class="{ active: isActive }" @click="getType('Transfers')" type="button" class="btn btn-success">Transfers</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Nominations')" type="button" class="btn btn-success">Nominations</button>
+            <button :class="{ active: isActive }" @click="getType('Nominations')" type="button" class="btn btn-success">Nominations</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('New-App')" type="button" class="btn btn-success w-45">New Applications</button>
+            <button :class="{ active: isActive }" @click="getType('New-App')" type="button" class="btn btn-success w-45">New Applications</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
+            <button :class="{ active: isActive }" @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Alterations')" type="button" class="btn btn-success w-45">Temporary Applications</button>
+            <button :class="{ active: isActive }" @click="getType('Alterations')" type="button" class="btn btn-success w-45">Temporary Applications</button>
           </div>
 <hr/>
 <div v-if="form.variation" class="row">
@@ -72,7 +72,7 @@
       {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer"></i></span><br></div>
   <div class="col-2">
     <div class="input-group input-group-outline null is-filled">
-      <select v-model="form.activeStatus" class="form-control form-control-default">
+      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
       <option :value="''" disabled selected>Active/Inactive</option>
       <option value="Active">Active</option>
       <option value="Inactive">Inactive</option>
@@ -87,6 +87,7 @@
       :options="provinces"
        mode="tags"
       :taggable="true"
+      @select="fetchNewAppWithStages"
       placeholder="Province"/>
       </div>
   </div>
@@ -97,6 +98,7 @@
       :options="boardRegion"
        mode="tags"
       :taggable="true"
+      @select="fetchNewAppWithStages"
       placeholder="Liquor Board Region"/>
       </div>
   </div>
@@ -110,6 +112,7 @@
       :options="licenceTypes"
        mode="tags"
       :taggable="true"
+      @select="fetchNewAppWithStages"
       placeholder="Licence Type"/>
       </div>
   </div>
@@ -301,7 +304,6 @@
 </template>
 <script>
 import Layout from "../Shared/Layout.vue";
-import { Inertia } from '@inertiajs/inertia'
 import { useForm, Link } from '@inertiajs/inertia-vue3';
 import Multiselect from '@vueform/multiselect';
 import Datepicker from '@vuepic/vue-datepicker';
@@ -321,6 +323,7 @@ export default {
   },
 
   setup(props) {
+  const isActive = '';
   const months = {
     "1": "January",
     "2" : "February",
@@ -400,12 +403,16 @@ const new_app_stages = {
    }
 
    const fetchNewAppWithStages = () => {
-    form.post(`/reports`, {
-           preserveScroll: true,
-           onSuccess: () => {
-            //
-           },
-          })  
+    if(form.variation === 'New-App'){
+      form.get(`/reports`, {
+            preserveScroll: true,
+            onSuccess: () => {
+              //
+            },
+            replace: true,
+            preserveState: true
+            })
+    } 
        
    }
 
@@ -422,7 +429,8 @@ return{
   people,
   companies,
   new_app_stages,
-  fetchNewAppWithStages
+  fetchNewAppWithStages,
+  isActive
 }
 },
  components: {

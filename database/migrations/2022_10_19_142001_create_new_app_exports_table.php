@@ -29,7 +29,7 @@ return new class extends Migration
             $table->string('date_granted')->nullable();
             $table->string('current_status')->nullable();
             $table->string('focus_for_the_week')->nullable();
-            $table->longText('notes');
+            $table->longText('notes')->nullable();
             $table->timestamps();
         });
     }

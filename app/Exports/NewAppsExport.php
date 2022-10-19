@@ -1,12 +1,11 @@
 <?php
 namespace App\Exports;
 
-use App\Models\NominationExport;
-use App\Models\TransferExport;
+use App\Models\NewAppExport;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
 
-class NewAppsExports implements FromCollection, WithHeadings{
+class NewAppsExport implements FromCollection, WithHeadings{
 
   public function headings():array{
     return[
@@ -28,7 +27,7 @@ class NewAppsExports implements FromCollection, WithHeadings{
     ];
 } 
     public function collection(){
-        return NominationExport::get([
+        return NewAppExport::get([
         'trading_name',
         'licence_type',
         'licence_number',

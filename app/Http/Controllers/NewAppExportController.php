@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\Licence;
 use App\Models\NewAppExport;
-use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class NewAppExportController extends Controller
 {
@@ -42,30 +43,89 @@ class NewAppExportController extends Controller
             });
         })->get();
 
-    $notesCollection = '';
+    $notesCollection = null;
+    $status = '';
 
     foreach ($licences as $licence) {
         $notes = Task::where('model_id',$licence->id)->where('model_type','Licence')->get();
-    //check if client has been quoted
-    $is_quoted = LicenceDocument::where('licence_id',$licence->id)->where('doc_type','Client Quoted')->first();
+    //check if client has been logded
+    $is_client_logded = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Application Lodged')->first();
         if(!is_null($notesCollection) || !empty($notesCollection)){
             foreach ($notes as $note) {
-                $notesCollection += ' '. $note;
+                $notesCollection += ' || '. $note;
             }
         }
+          
+            switch ($licence->status) {
+                case '1':
+                   $status = 'Client Quoted';
+                    break;
+                case '2':
+                    $status = 'Deposit Paid';
+                    break;
+                case '3':
+                    $status = 'Client Invoiced';
+                    break;
+                case '4':
+                    $status = 'Prepare New Application';
+                    break;
+                case '5':
+                    $status = 'Payment To The Liquor Board';
+                    break;
+                case '6':
+                    $status = 'Scanned Application';
+                    break;
+                case '7':
+                    $status = 'Application Lodged';
+                    break;
+                case '8':
+                    $status = 'Initial Inspection';
+                    break;
+                case '9':
+                    $status = 'Liquor Board Requests';
+                    break;
+                case '10':
+                    $status = 'Final Inspection';
+                    break;
+                case '11':
+                    $status = 'Activation Fee Requested';
+                    break;
+                case '12':
+                    $status = 'Client Finalisation Invoice';
+                    break;
+                case '13':
+                    $status = 'Client Paid';
+                    break;
+                case '14':
+                    $status = 'Activation Fee Paid';
+                    break;
+                case '15':
+                    $status = 'Licence Issued';
+                    break;
+                case '16':
+                    $status = 'Licence Delivered';
+                    break;
+                default:
+                    return back()->with('error','Could not process request.An unknown error occured');
+                    break;
+                }
         NewAppExport::create([
-            'trading_name' => $renewal->licence->trading_name,
-            'licence_number' => $renewal->licence->licence_number,
-            'renewal_date' => $renewal->date,
-            'is_quoted' => (is_null($is_quoted)) ? 'False' : 'True',
-            'is_quote_sent' => (is_null($renewal->is_quote_sent)) ? 'False' : 'True',
-            'payment_date' => $renewal->client_paid_at,
-            'invoice_number' => null,
-            'payment_to_liquour_board' => $renewal->payment_to_liqour_board_at,
-            'renewal_granted' => $renewal->renewal_issued_at,
-            'delivery_date' => $renewal->renewal_delivery_at,
-            'proof_of_delivery' => null,
+            'trading_name' => $licence->trading_name,
+            'licence_number' => $licence->licence_number,
+            'licence_type' => $licence->licence_type->licence_type,
+            'province' => $licence->province,
+            'deposit_invoice' => '',
+            'deposit_paid' => is_null($licence->deposit_paid_at) ? 'FALSE': 'TRUE',
+            'date_logded' => optional($licence->application_lodged_at)->format('d M Y'),
+            'proof_of_lodgement' => is_null($is_client_logded) ? 'FALSE': 'TRUE',
+            'activation_fee_paid' => $licence->activation_fee_paid_at,
+            'final_invoice' => '',
+            'full_payment' => optional($licence->client_paid_at)->format('d M Y'),
+            'date_granted' => '',
+            'current_status' => $status,
+            'focus_for_the_week' => '',
             'notes' => $notesCollection
+            
         ]);
     }
     

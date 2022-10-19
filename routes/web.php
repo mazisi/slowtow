@@ -30,6 +30,7 @@ use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 use App\Http\Controllers\LiquorBoardRequestController;
+use App\Http\Controllers\NewAppExportController;
 use App\Http\Controllers\NominationExportController;
 use App\Http\Controllers\TransferExportController;
 
@@ -148,6 +149,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/force-download-renewal-export',[RenewalExportController::class,'forceDownload']);
         Route::get('/force-download-transfer-export',[TransferExportController::class,'forceDownload']);
         Route::get('/force-download-nomination-export',[NominationExportController::class,'forceDownload']);
+        Route::get('/force-download-new-app-export',[NewAppExportController::class,'forceDownload']);
 
         //Consultants
         // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');

@@ -12,10 +12,11 @@ use Illuminate\Http\Request;
 use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
 use App\Exports\TransferExports;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
-    public function index(){
+    public function index(Request $request){
         $renewals = LicenceRenewal::with(['licence','renewal_documents' => function ($query){
             $query ->where('doc_type','Client Quoted');            
           }])->paginate(1);
@@ -28,7 +29,31 @@ class ReportController extends Controller
         $licenceTypes = LicenceType::pluck('licence_type', 'id');
         $companies = Company::pluck('name','id');        
         $people = People::pluck('full_name','id');
-        $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
+        // $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
+
+        $new_applications = Licence::with('licence_type')->where(function($query) use($request){
+          $query->when($request->month, function($query) use($request){
+              $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
+          })
+          ->when(!empty(request('activeStatus')), function ($query) use ($request) {
+              $query->where('is_licence_active',$request->activeStatus);
+          })
+          ->when(!empty(request('province')), function ($query) use ($request) {
+              $query->whereIn('province',$request->province);
+          })
+          ->when(!empty(request('boardRegion')), function ($query) use ($request) {
+              $query->whereIn('board_region',$request->boardRegion);
+          })
+          ->when(!empty(request('applicant')), function ($query) use ($request) {
+              $query->where('belongs_to',$request->applicant);
+          })
+          ->when(!empty(request('licence_types')), function ($query) use ($request) {
+              $query->where('licence_type_id',$request->licence_types);
+          })
+          ->when(!empty(request('selectedDates')), function ($query) use ($request) {
+             // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+          });
+      })->where('is_new_app','1')->get();
         
         return Inertia::render('Report',[
              'licenceTypes' => $licenceTypes,
@@ -53,7 +78,7 @@ class ReportController extends Controller
           break;
         case 'New-App':
           NewAppExportController::export($request);          
-           return Inertia::location("http://localhost:8000/force-download-nomination-export");
+           return Inertia::location("http://localhost:8000/force-download-new-app-export");
           break;
         
         default:
