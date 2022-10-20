@@ -13,8 +13,8 @@ export default {
     return {
       showMenu: false,
         form: {
+          slug: this.licence.slug,
           event_name: this.licence.event_name,
-          client_paid_at: this.licence.client_paid_at,
           start_date: this.licence.start_date,
           end_date: this.licence.end_date,
           address: this.licence.address,
@@ -40,7 +40,7 @@ export default {
   },
   methods: {
     update() {
-          this.$inertia.post(`/update-temp-licence`, this.form)
+          this.$inertia.patch(`/update-temp-licence`, this.form)
         }
   },
   components: {
@@ -93,14 +93,7 @@ export default {
               <div class="p-3 card-body">
   <form @submit.prevent="update">
 <div class="row">
-                  
-  <div class="col-md-4 columns d-none">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Liquor Licence Number</label>
-    <input type="text" class="form-control form-control-default" v-model="form.liquor_licence_number" >
-     </div>
-   <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
-   </div>
+  
   
 
    <div class="col-md-4 columns">
@@ -139,7 +132,7 @@ export default {
  <div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Licence Number</label>
-  <input type="text" required class="form-control form-control-default" v-model="form.liquor_licence_number" >
+  <input type="text" class="form-control form-control-default" v-model="form.liquor_licence_number" >
    </div>
  <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
  </div>
@@ -188,7 +181,21 @@ export default {
    <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
    </div>
 
-
+   <div class="col-md-4 columns" v-if="form.belongs_to === 'Company'">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Registration Number</label>
+    <input type="text" disabled class="form-control form-control-default" v-model="form.reg_number">
+     </div>
+   <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
+   </div>
+  
+   <div class="col-md-4 columns" v-else>
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">ID Number</label>
+    <input type="text" disabled class="form-control form-control-default" v-model="form.id_number">
+     </div>
+   <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
+   </div>
 
   
     

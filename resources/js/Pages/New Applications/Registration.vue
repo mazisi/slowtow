@@ -679,12 +679,15 @@
           </div>
           </div>
 
-          <div class="row mb-3">
-            <div class="row col-8">
+          <div class="row mb-3 ">
+            <div class="col-8 ">
               <div v-for="liquor_board_request in licence.liquor_board_requests" :key="liquor_board_request.id" 
-              class="col-6 bg-gray-100 mb-md-0 mb-4">{{ liquor_board_request.body.slice(o,120) }}...</div>
+              class="card card-body border card-plain border-radius-lg d-flex mb-2 align-items-center flex-row">
+                {{ liquor_board_request.body }}
+             </div>
 
             </div>
+
 
             <div class="col-4 mb-md-0 mb-4">
               <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">           

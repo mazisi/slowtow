@@ -148,117 +148,147 @@ class TemporalLicenceController extends Controller
     }
 
     public function show($slug){
+        // $companies = Company::pluck('name','id');
+        // $people = People::pluck('full_name','id');
+        $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
 
+        return Inertia::render('TemporalLicences/ViewTemporalLicence',['licence' => $licence]);
+ }
 
-
-// $companies = Company::pluck('name','id');
-// $people = People::pluck('full_name','id');
-$licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
-
-
-    $client_invoiced = TemporalLicenceDocument::where('doc_type','Client Invoiced')->where('temporal_licence_id',$licence->id)->first();
-    $client_quoted = TemporalLicenceDocument::where('doc_type','Client Quoted')->where('temporal_licence_id',$licence->id)->first();
-    $collate = TemporalLicenceDocument::where('doc_type','Collate Documents')->where('temporal_licence_id',$licence->id)->first();
-    $liqour_board = TemporalLicenceDocument::where('doc_type','Payment To The Liquor Board')->where('temporal_licence_id',$licence->id)->first();
-    $licence_logded = TemporalLicenceDocument::where('doc_type','Licence Lodged')->where('temporal_licence_id',$licence->id)->first();
-    $licence_issued = TemporalLicenceDocument::where('doc_type','Licence Issued')->where('temporal_licence_id',$licence->id)->first();
-    $licence_delivered = TemporalLicenceDocument::where('doc_type','Licence Delivered')->where('temporal_licence_id',$licence->id)->first();
-    $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
-    $scanned_app = TemporalLicenceDocument::where('doc_type','Scanned Application')->where('temporal_licence_id',$licence->id)->first();
-    
-
-    if(is_null($licence->people_id)){
-
-        //company documents
-    $company_application_form = TemporalLicenceDocument::where('doc_type','Application Form')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();  
-    $company_poa = TemporalLicenceDocument::where('doc_type','POA And RES')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_annexure_b = TemporalLicenceDocument::where('doc_type','Annexure B')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_annexure_c = TemporalLicenceDocument::where('doc_type','Annexure C')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_cipc = TemporalLicenceDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_id_document = TemporalLicenceDocument::where('doc_type','ID Document')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_representations = TemporalLicenceDocument::where('doc_type','Representations')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_landlord_letter = TemporalLicenceDocument::where('doc_type','Landlord Letter')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_security_letter = TemporalLicenceDocument::where('doc_type','Security Letter')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_advert =  TemporalLicenceDocument::where('doc_type','Advert/Blurb')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-    $company_plan = TemporalLicenceDocument::where('doc_type','Plan/Maps')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
-
-
-    return Inertia::render('TemporalLicences/ViewTemporalLicence',
-        ['licence' => $licence,
-        // 'people' => $people,
-        // 'companies' => $companies,
-         'client_invoiced' => $client_invoiced,
-         'client_quoted' => $client_quoted,
-         'collate' => $collate,
-         'liqour_board' => $liqour_board,
-         'licence_logded' => $licence_logded,
-         'licence_issued' => $licence_issued,
-         'licence_delivered' => $licence_delivered,
-         'tasks' => $tasks,
-         'scanned_app' => $scanned_app,
-         'company_application_form' => $company_application_form,
-         'company_poa' => $company_poa,
-         'company_annexure_b' => $company_annexure_b,
-         'company_annexure_c' => $company_annexure_c,
-         'company_cipc' => $company_cipc,
-         'company_id_document' => $company_id_document,
-         'company_representations' => $company_representations,
-         'company_landlord_letter' => $company_landlord_letter,
-         'company_security_letter' => $company_security_letter,
-         'company_advert' => $company_advert,
-         'company_plan' => $company_plan
-        ]);
-
-    }else{
-
-        $get_person_id_document = PeopleDocument::where('people_id',$licence->people_id)->where('doc_type','ID Document')->first();
-            //individual documents
-        $individual_application_form = TemporalLicenceDocument::where('doc_type','Application Form')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();  
-        $power_of_attorney = TemporalLicenceDocument::where('doc_type','Power Of Attorney')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_annexure_b = TemporalLicenceDocument::where('doc_type','Annexure B')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_annexure_c = TemporalLicenceDocument::where('doc_type','Annexure C')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_representations = TemporalLicenceDocument::where('doc_type','Representations')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_landlord_letter = TemporalLicenceDocument::where('doc_type','Landlord Letter')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_security_letter = TemporalLicenceDocument::where('doc_type','Security Letter')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_advert =  TemporalLicenceDocument::where('doc_type','Advert/Blurb')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-        $individual_plan = TemporalLicenceDocument::where('doc_type','Plan/Maps')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
-
-        return Inertia::render('TemporalLicences/ViewTemporalLicence',
-        [
-         
-        'licence' => $licence,
-        'client_invoiced' => $client_invoiced,
-        'client_quoted' => $client_quoted,
-        'collate' => $collate,
-        'liqour_board' => $liqour_board,
-        'licence_logded' => $licence_logded,
-        'licence_issued' => $licence_issued,
-        'licence_delivered' => $licence_delivered,
-        'tasks' => $tasks,
-        'scanned_app' => $scanned_app,
-        'individual_application_form' => $individual_application_form,
-        'power_of_attorney' => $power_of_attorney,
-        'individual_annexure_b' => $individual_annexure_b,
-        'individual_annexure_c' => $individual_annexure_c,
-        'individual_representations' => $individual_representations,
-        'individual_landlord_letter' => $individual_landlord_letter,
-        'individual_security_letter' => $individual_security_letter,
-        'individual_advert' => $individual_advert,
-        'individual_plan' => $individual_plan,
-        'get_person_id_document' => $get_person_id_document
-        ]);
-    }
-    
-
-    }
-
-    public function update(Request $request,$slug){dd($request);
-        $temp = TemporalLicence::whereSlug($slug)->first();
-        
+    public function update(Request $request){
+        $temp = TemporalLicence::whereSlug($request->slug)->first();        
             $temp->update([
                 'liquor_licence_number' => $request->liquor_licence_number,
-                // 'end_date' => $request->end_date,
-                // 'start_date' => $request->start_date,
+                'end_date' => $request->end_date,
+                'start_date' => $request->start_date,
+                'reg_number' => $request->reg_number,
+                'id_number' => $request->id_number,
+                "application_type" => $request->application_type,
+                "address" => $request->address,
+                "event_name" => $request->event_name
+                ]);
+    
+              
+            if($temp){
+               return back()->with('success','Temporal Licence updated successfully.');
+            }
+            return back()->with('error','An unknown error occured while updating temporal Licence.');
+     }
+
+    public function processApplication(Request $request){
+        $licence = TemporalLicence::with('company','people')->whereSlug($request->slug)->first();
+        $client_invoiced = TemporalLicenceDocument::where('doc_type','Client Invoiced')->where('temporal_licence_id',$licence->id)->first();
+        $client_quoted = TemporalLicenceDocument::where('doc_type','Client Quoted')->where('temporal_licence_id',$licence->id)->first();
+        $collate = TemporalLicenceDocument::where('doc_type','Collate Documents')->where('temporal_licence_id',$licence->id)->first();
+        $liqour_board = TemporalLicenceDocument::where('doc_type','Payment To The Liquor Board')->where('temporal_licence_id',$licence->id)->first();
+        $licence_logded = TemporalLicenceDocument::where('doc_type','Licence Lodged')->where('temporal_licence_id',$licence->id)->first();
+        $licence_issued = TemporalLicenceDocument::where('doc_type','Licence Issued')->where('temporal_licence_id',$licence->id)->first();
+        $licence_delivered = TemporalLicenceDocument::where('doc_type','Licence Delivered')->where('temporal_licence_id',$licence->id)->first();
+        $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+        $scanned_app = TemporalLicenceDocument::where('doc_type','Scanned Application')->where('temporal_licence_id',$licence->id)->first();
+    
+
+        if(is_null($licence->people_id)){
+            //company documents
+        $company_application_form = TemporalLicenceDocument::where('doc_type','Application Form')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();  
+        $company_poa = TemporalLicenceDocument::where('doc_type','POA And RES')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_annexure_b = TemporalLicenceDocument::where('doc_type','Annexure B')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_annexure_c = TemporalLicenceDocument::where('doc_type','Annexure C')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_cipc = TemporalLicenceDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_id_document = TemporalLicenceDocument::where('doc_type','ID Document')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_representations = TemporalLicenceDocument::where('doc_type','Representations')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_landlord_letter = TemporalLicenceDocument::where('doc_type','Landlord Letter')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_security_letter = TemporalLicenceDocument::where('doc_type','Security Letter')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_advert =  TemporalLicenceDocument::where('doc_type','Advert/Blurb')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+        $company_plan = TemporalLicenceDocument::where('doc_type','Plan/Maps')->where('belongs_to','Company')->where('temporal_licence_id',$licence->id)->first();
+
+
+        return Inertia::render('TemporalLicences/ProcessApplication',
+            ['licence' => $licence,
+            // 'people' => $people,
+            // 'companies' => $companies,
+            'client_invoiced' => $client_invoiced,
+            'client_quoted' => $client_quoted,
+            'collate' => $collate,
+            'liqour_board' => $liqour_board,
+            'licence_logded' => $licence_logded,
+            'licence_issued' => $licence_issued,
+            'licence_delivered' => $licence_delivered,
+            'tasks' => $tasks,
+            'scanned_app' => $scanned_app,
+            'company_application_form' => $company_application_form,
+            'company_poa' => $company_poa,
+            'company_annexure_b' => $company_annexure_b,
+            'company_annexure_c' => $company_annexure_c,
+            'company_cipc' => $company_cipc,
+            'company_id_document' => $company_id_document,
+            'company_representations' => $company_representations,
+            'company_landlord_letter' => $company_landlord_letter,
+            'company_security_letter' => $company_security_letter,
+            'company_advert' => $company_advert,
+            'company_plan' => $company_plan
+            ]);
+
+        }else{
+
+            $get_person_id_document = PeopleDocument::where('people_id',$licence->people_id)->where('doc_type','ID Document')->first();
+                //individual documents
+            $individual_application_form = TemporalLicenceDocument::where('doc_type','Application Form')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();  
+            $power_of_attorney = TemporalLicenceDocument::where('doc_type','Power Of Attorney')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_annexure_b = TemporalLicenceDocument::where('doc_type','Annexure B')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_annexure_c = TemporalLicenceDocument::where('doc_type','Annexure C')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_representations = TemporalLicenceDocument::where('doc_type','Representations')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_landlord_letter = TemporalLicenceDocument::where('doc_type','Landlord Letter')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_security_letter = TemporalLicenceDocument::where('doc_type','Security Letter')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_advert =  TemporalLicenceDocument::where('doc_type','Advert/Blurb')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+            $individual_plan = TemporalLicenceDocument::where('doc_type','Plan/Maps')->where('belongs_to','Individual')->where('temporal_licence_id',$licence->id)->first();
+
+            return Inertia::render('TemporalLicences/ProcessApplication',
+            [
+            
+            'licence' => $licence,
+            'client_invoiced' => $client_invoiced,
+            'client_quoted' => $client_quoted,
+            'collate' => $collate,
+            'liqour_board' => $liqour_board,
+            'licence_logded' => $licence_logded,
+            'licence_issued' => $licence_issued,
+            'licence_delivered' => $licence_delivered,
+            'tasks' => $tasks,
+            'scanned_app' => $scanned_app,
+            'individual_application_form' => $individual_application_form,
+            'power_of_attorney' => $power_of_attorney,
+            'individual_annexure_b' => $individual_annexure_b,
+            'individual_annexure_c' => $individual_annexure_c,
+            'individual_representations' => $individual_representations,
+            'individual_landlord_letter' => $individual_landlord_letter,
+            'individual_security_letter' => $individual_security_letter,
+            'individual_advert' => $individual_advert,
+            'individual_plan' => $individual_plan,
+            'get_person_id_document' => $get_person_id_document
+            ]);
+        }
+     }
+
+
+
+
+
+
+
+
+
+    public function update_prepared_temp_app(Request $request,$slug){
+        $temp = TemporalLicence::whereSlug($slug)->first();
+        if(!is_null($temp->status) && empty($request->status)){
+            $db_status = $temp->status;
+            $status = $db_status;
+        }elseif(!empty($request->status)){
+            $sorted_statuses = Arr::sort($request->status);
+            $status = last($sorted_statuses);
+        }
+            $temp->update([
+                'liquor_licence_number' => $request->liquor_licence_number,
                 'client_paid_at' => $request->client_paid_at,
                 'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
                 'logded_at' => $request->logded_at,
@@ -275,35 +305,6 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
             }
             return back()->with('error','An unknown error occured while updating temporal Licence.');
      }
-    // public function update(Request $request,$slug){
-    //     $temp = TemporalLicence::whereSlug($slug)->first();
-    //     if(!is_null($temp->status) && empty($request->status)){
-    //         $db_status = $temp->status;
-    //         $status = $db_status;
-    //     }elseif(!empty($request->status)){
-    //         $sorted_statuses = Arr::sort($request->status);
-    //         $status = last($sorted_statuses);
-    //     }
-    //         $temp->update([
-    //             'liquor_licence_number' => $request->liquor_licence_number,
-    //             // 'end_date' => $request->end_date,
-    //             // 'start_date' => $request->start_date,
-    //             'client_paid_at' => $request->client_paid_at,
-    //             'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
-    //             'logded_at' => $request->logded_at,
-    //             'issued_at' => $request->issued_at,
-    //             'delivered_at' => $request->delivered_at,
-    //             'reg_number' => $request->reg_number,
-    //             'id_number' => $request->id_number,
-    //             "status" => $status,
-    //             ]);
-    
-              
-    //         if($temp){
-    //            return back()->with('success','Temporal Licence updated successfully.');
-    //         }
-    //         return back()->with('error','An unknown error occured while updating temporal Licence.');
-    //  }
 
      public function destroy($slug){
         try {
