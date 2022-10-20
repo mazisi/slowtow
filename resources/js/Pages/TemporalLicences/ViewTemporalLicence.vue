@@ -15,13 +15,14 @@ export default {
     licence: Object,
     success: String,
     error: String,
+    licence_logded: Object,//doc
+    scanned_app: Object,//doc
     client_invoiced: Object,//doc
     licence_issued: Object,//doc
     client_quoted: Object,//doc
     collate: Object,
     liqour_board: Object,
     licence_delivered: Object,
-    transfer_logded: Object,
     company_application_form: Object,
     company_poa: Object,
     company_annexure_b: Object,
@@ -61,8 +62,8 @@ export default {
       issued_at: props.licence.issued_at, 
       delivered_at: props.licence.delivered_at,
       liquor_licence_number: props.licence.liquor_licence_number,
-      reg_number: props.licence.reg_number,
-      id_number: props.licence.id_number,
+      reg_number: props.licence.company ? props.licence.company.reg_number: '',
+      id_number: props.licence.people ? props.licence.people.id_number: '',
       belongs_to: props.licence.belongs_to
      })
 
@@ -196,11 +197,13 @@ export default {
 //The following are status keys
 // 1 => Client Quoted
 // 2 => Client Invoiced
-// 3 => Collate Temporary Licence Documents 
-// 4 => Payment To The Liquor Board 
-// 5 => Temporary Licence Lodged 
-// 6 => Temporary Licence Issued 
-// 7 => Temporary Licence Delivered
+// 3 => Client Paid
+// 4 => Collate Temporary Licence Documents 
+// 5 => Payment To The Liquor Board 
+// 6 => Scanned Application
+// 7 => Temporary Licence Lodged 
+// 8 => Temporary Licence Issued 
+// 9 => Temporary Licence Delivered
 
 </script>
 <style>
@@ -249,7 +252,7 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-quoted" class="active-checkbox" type="checkbox" 
 :checked="licence.status >= 1"
-@input="pushData($event.target.value)" value="1">
+@input="pushData(1)">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div> 
@@ -281,8 +284,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
-@input="pushData($event.target.value)" 
+<input class="active-checkbox" id="client-invoiced"  type="checkbox"
+@input="pushData(2)" 
 :checked="licence.status >= 2">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
@@ -339,8 +342,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="client-paid"  type="checkbox" value="3"
-@input="pushData($event.target.value)" 
+<input class="active-checkbox" id="client-paid"  type="checkbox"
+@input="pushData(3)" 
 :checked="licence.status >= 3">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
@@ -359,8 +362,8 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
-@input="pushData($event.target.value)" value="4" :checked="licence.status >= 4">
-<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Process application </label>
+@input="pushData(4)" :checked="licence.status >= 4">
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Prepare Temporary Application” </label>
 </div>
 </div> 
 
@@ -631,7 +634,7 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event.target.value)" value="5"
+<input class="active-checkbox" id="payment" type="checkbox" @input="pushData(5)"
 :checked="licence.status >= 5">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
@@ -671,12 +674,45 @@ export default {
     </a>
   </li>
 </ul>
-<hr>
+<hr/>
 
-<div class="col-md-6 columns">
+<div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
 @input="pushData($event.target.value)" value="6" :checked="licence.status >= 6">
+<label for="issued" class="form-check-label text-body text-truncate status-heading"> Scanned Application </label>
+</div>
+</div> 
+
+
+<div class="col-md-6" style="margin-top: -1rem;">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="scanned_app !== null">
+    <a :href="`/storage/app/public/temp-licence-documents/${scanned_app.document}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="scanned_app !== null" class="mb-0 text-xs">{{ scanned_app.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+    <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+    </a>
+  </li>
+</ul>
+</div>
+<hr/>
+<div class="col-md-6 columns">
+<div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="issued" type="checkbox" 
+@input="pushData(7)" :checked="licence.status >= 7">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Lodged </label>
 </div>
 </div> 
@@ -692,20 +728,20 @@ export default {
 <div class="col-md-6" style="margin-top: -1rem;">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="licence_issued !== null">
-    <a :href="`/storage/app/public/temp-licence-documents/${licence_issued.document}`" target="_blank">
+    <div class="avatar me-3" v-if="licence_logded !== null">
+    <a :href="`/storage/app/public/temp-licence-documents/${licence_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_issued !== null" class="mb-0 text-xs">{{ licence_issued.document_name }}</p>
+      <p v-if="licence_logded !== null" class="mb-0 text-xs">{{ licence_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="licence_issued !== null" @click="deleteDocument(licence_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="licence_logded !== null" @click="deleteDocument(licence_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a @click="getDocType('Licence Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
@@ -719,8 +755,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="delivered" type="checkbox" value="7"
-@input="pushData($event.target.value)" :checked="licence.status == 7">
+<input class="active-checkbox" id="delivered" type="checkbox"
+@input="pushData(8)" :checked="licence.status == 8">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Issued</label>
 </div>
 </div>
@@ -764,8 +800,8 @@ export default {
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="delivered" type="checkbox" value="8"
-@input="pushData($event.target.value)" :checked="licence.status == 8">
+<input class="active-checkbox" id="delivered" type="checkbox"
+@input="pushData($event.target.value)" :checked="licence.status == 9">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Delivered</label>
 </div>
 </div>

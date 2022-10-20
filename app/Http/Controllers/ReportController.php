@@ -13,6 +13,7 @@ use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
 use App\Exports\TransferExports;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\TemporaLExportController;
 
 class ReportController extends Controller
 {
@@ -79,6 +80,10 @@ class ReportController extends Controller
         case 'New-App':
           NewAppExportController::export($request);          
            return Inertia::location("http://localhost:8000/force-download-new-app-export");
+          break;
+        case 'New-App':
+          TemporaLExportController::export($request);          
+            return Inertia::location("http://localhost:8000/force-download-new-app-export");
           break;
         
         default:

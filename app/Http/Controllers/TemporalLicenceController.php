@@ -49,7 +49,7 @@ class TemporalLicenceController extends Controller
         }elseif(!empty($queryString) && $request->active_status == 'Active'){
     
                $licences = TemporalLicence::with(['company','people'])
-               ->orWhereHas('company', function($query) use($request){
+               ->orWhereHas('company', function($query) use($queryString){
                    $query->where('name', 'like', '%'.$queryString.'%');
                })->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
                ->orWhereHas('people', function($query) use($queryString){
@@ -160,10 +160,11 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
     $client_quoted = TemporalLicenceDocument::where('doc_type','Client Quoted')->where('temporal_licence_id',$licence->id)->first();
     $collate = TemporalLicenceDocument::where('doc_type','Collate Documents')->where('temporal_licence_id',$licence->id)->first();
     $liqour_board = TemporalLicenceDocument::where('doc_type','Payment To The Liquor Board')->where('temporal_licence_id',$licence->id)->first();
-    $transfer_logded = TemporalLicenceDocument::where('doc_type','Transfer Lodged')->where('temporal_licence_id',$licence->id)->first();
+    $licence_logded = TemporalLicenceDocument::where('doc_type','Licence Lodged')->where('temporal_licence_id',$licence->id)->first();
     $licence_issued = TemporalLicenceDocument::where('doc_type','Licence Issued')->where('temporal_licence_id',$licence->id)->first();
     $licence_delivered = TemporalLicenceDocument::where('doc_type','Licence Delivered')->where('temporal_licence_id',$licence->id)->first();
     $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+    $scanned_app = TemporalLicenceDocument::where('doc_type','Scanned Application')->where('temporal_licence_id',$licence->id)->first();
     
 
     if(is_null($licence->people_id)){
@@ -190,10 +191,11 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
          'client_quoted' => $client_quoted,
          'collate' => $collate,
          'liqour_board' => $liqour_board,
-         'transfer_logded' => $transfer_logded,
+         'licence_logded' => $licence_logded,
          'licence_issued' => $licence_issued,
          'licence_delivered' => $licence_delivered,
          'tasks' => $tasks,
+         'scanned_app' => $scanned_app,
          'company_application_form' => $company_application_form,
          'company_poa' => $company_poa,
          'company_annexure_b' => $company_annexure_b,
@@ -229,10 +231,11 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
         'client_quoted' => $client_quoted,
         'collate' => $collate,
         'liqour_board' => $liqour_board,
-        'transfer_logded' => $transfer_logded,
+        'licence_logded' => $licence_logded,
         'licence_issued' => $licence_issued,
         'licence_delivered' => $licence_delivered,
         'tasks' => $tasks,
+        'scanned_app' => $scanned_app,
         'individual_application_form' => $individual_application_form,
         'power_of_attorney' => $power_of_attorney,
         'individual_annexure_b' => $individual_annexure_b,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Models\Licence;
 use App\Models\NewAppExport;
+use App\Exports\NewAppsExport;
 use App\Models\LicenceDocument;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -134,6 +135,6 @@ class NewAppExportController extends Controller
 }
 
 public function forceDownload(){
-    return Excel::download(new NewAppExport(), 'newApps.xlsx');
+    return Excel::download(new NewAppsExport(), 'newApps.xlsx');
 }
 }
