@@ -81,9 +81,9 @@ class ReportController extends Controller
           NewAppExportController::export($request);          
            return Inertia::location("http://localhost:8000/force-download-new-app-export");
           break;
-        case 'New-App':
+        case 'Temporal Licence':
           TemporaLExportController::export($request);          
-            return Inertia::location("http://localhost:8000/force-download-new-app-export");
+            return Inertia::location("http://localhost:8000/force-download-temp-licence-export");
           break;
         
         default:

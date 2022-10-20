@@ -32,6 +32,7 @@ use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 use App\Http\Controllers\LiquorBoardRequestController;
 use App\Http\Controllers\NewAppExportController;
 use App\Http\Controllers\NominationExportController;
+use App\Http\Controllers\TemporaLExportController;
 use App\Http\Controllers\TransferExportController;
 
 Route::group([], __DIR__.'/company_admin.php');
@@ -150,6 +151,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/force-download-transfer-export',[TransferExportController::class,'forceDownload']);
         Route::get('/force-download-nomination-export',[NominationExportController::class,'forceDownload']);
         Route::get('/force-download-new-app-export',[NewAppExportController::class,'forceDownload']);
+        Route::get('/force-download-temp-licence-export',[TemporaLExportController::class,'forceDownload']);
 
         //Consultants
         // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
@@ -189,8 +191,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/create-temp-licence', [TemporalLicenceController::class,'create'])->name('create_temp_licence');
         Route::post('/submit-temp-licence', [TemporalLicenceController::class,'store'])->name('store_temp_licence');
         Route::get('/view-temp-licence/{slug}', [TemporalLicenceController::class,'show'])->name('view_temp_licence');
-        Route::patch('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
+        // Route::patch('/update-temp-licence/{slug}', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
         Route::delete('/delete-temporal-licence/{slug}', [TemporalLicenceController::class,'destroy']);
+        Route::patch('/update-temp-licence', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
         
         Route::post('/submit-temporal-licence-document', [TemporalLicenceDocsController::class,'store']);
         Route::delete('/delete-temporal-licence-document/{id}', [TemporalLicenceDocsController::class,'destroy']);

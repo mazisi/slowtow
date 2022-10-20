@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('event_name')->default(1);
             $table->string('liquor_licence_number')->nullable();
             $table->string('active')->default(1);
+            $table->string('status')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->date('client_paid_at')->nullable();

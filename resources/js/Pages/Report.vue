@@ -42,7 +42,7 @@
             <button :class="{ active: isActive }" @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
           </div>
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('Alterations')" type="button" class="btn btn-success w-45">Temporary Applications</button>
+            <button :class="{ active: isActive }" @click="getType('Temporal Licence')" type="button" class="btn btn-success w-45">Temporary Applications</button>
           </div>
 <hr/>
 <div v-if="form.variation" class="row">

@@ -112,7 +112,7 @@ class TemporalLicenceController extends Controller
            'belongs_to' => 'required|in:Person,Company'
            ]);
            if(is_null($request->person)){
-            $request->validate(['company' => 'required']);
+            $request->validate(['company' => 'required|exists:companies,id']);
             $temp = TemporalLicence::create([
                 'company_id' => $request->company,
                 'event_name' => $request->event_name,
@@ -252,21 +252,13 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
 
     }
 
-
-    public function update(Request $request,$slug){
+    public function update(Request $request,$slug){dd($request);
         $temp = TemporalLicence::whereSlug($slug)->first();
-        if(!is_null($temp->status) && empty($request->status)){
-            $db_status = $temp->status;
-            $status = $db_status;
-        }elseif(!empty($request->status)){
-            $sorted_statuses = Arr::sort($request->status);
-            $status = last($sorted_statuses);
-        }
+        
             $temp->update([
-                'company_id' => $request->company,
                 'liquor_licence_number' => $request->liquor_licence_number,
-                'end_date' => $request->end_date,
-                'start_date' => $request->start_date,
+                // 'end_date' => $request->end_date,
+                // 'start_date' => $request->start_date,
                 'client_paid_at' => $request->client_paid_at,
                 'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
                 'logded_at' => $request->logded_at,
@@ -283,6 +275,35 @@ $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
             }
             return back()->with('error','An unknown error occured while updating temporal Licence.');
      }
+    // public function update(Request $request,$slug){
+    //     $temp = TemporalLicence::whereSlug($slug)->first();
+    //     if(!is_null($temp->status) && empty($request->status)){
+    //         $db_status = $temp->status;
+    //         $status = $db_status;
+    //     }elseif(!empty($request->status)){
+    //         $sorted_statuses = Arr::sort($request->status);
+    //         $status = last($sorted_statuses);
+    //     }
+    //         $temp->update([
+    //             'liquor_licence_number' => $request->liquor_licence_number,
+    //             // 'end_date' => $request->end_date,
+    //             // 'start_date' => $request->start_date,
+    //             'client_paid_at' => $request->client_paid_at,
+    //             'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+    //             'logded_at' => $request->logded_at,
+    //             'issued_at' => $request->issued_at,
+    //             'delivered_at' => $request->delivered_at,
+    //             'reg_number' => $request->reg_number,
+    //             'id_number' => $request->id_number,
+    //             "status" => $status,
+    //             ]);
+    
+              
+    //         if($temp){
+    //            return back()->with('success','Temporal Licence updated successfully.');
+    //         }
+    //         return back()->with('error','An unknown error occured while updating temporal Licence.');
+    //  }
 
      public function destroy($slug){
         try {
