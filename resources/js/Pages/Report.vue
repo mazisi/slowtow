@@ -9,11 +9,9 @@
       
         <div class="card card-body mx-3 mx-md-4 mt-n6">
           <div class="col-12">
-          <div class="row">
-
-
-                  <div class="col-10">
-                    <h6>Licence Renewals</h6>              
+          <div class="row">   
+             <div class="col-10">
+                    <h6>Reports</h6>              
                   </div>
                   <div class="col-2 my-auto text-end">
                     <div class="dropdown float-lg-end pe-4">
@@ -44,54 +42,55 @@
           <div class="col-4">
             <button :class="{ active: isActive }" @click="getType('Temporal Licence')" type="button" class="btn btn-success w-45">Temporary Applications</button>
           </div>
+        </div>
 <hr/>
-<div v-if="form.variation" class="row">
-  <div class="col-4">
+
+<!-- ################################################ -->
+
+<div class="row">
+  <div class="col-4 columns">
     <button type="button" class="btn btn-success w-45">Filter By:</button>
   </div>
-  <div class="col-3">
-    <div class="input-group input-group-outline null is-filled">
-        <Multiselect
-        v-model="form.month"           
-           :options="months"
-           mode="tags"
-           :taggable="true"
-           placeholder="Month"
-         />
-      </div>
+  <div class="col-8 columns">
+    <Multiselect
+            v-model="form.month"           
+               :options="months"
+               mode="tags"
+               :taggable="true"
+               placeholder="Month"
+             />
   </div>
-  
-  <div class="col-3">
-    
-    <div class="input-group input-group-outline null is-filled">
-      <Datepicker v-model="form.year" yearPicker @update:modelValue="handleDate" />
+  <div class="col-4 columns">
+    <div class="input-group input-group-outline null is-filled" >
+      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
+          <option :value="''" disabled selected>Active/Inactive</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+       </select>
+    </div>
+  </div>
+  <div class="col-8 columns" >
+      <div class="input-group input-group-outline null is-filled" >
+        <Multiselect 
+          v-model="form.province"          
+          :options="provinces"
+           mode="tags"
+          :taggable="true"
+          @select="fetchNewAppWithStages"
+          placeholder="Province"/>
       </div>
     </div>
-  <div class="col-2">
-    <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success">
-      {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer"></i></span><br></div>
-  <div class="col-2">
-    <div class="input-group input-group-outline null is-filled">
-      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
-      <option :value="''" disabled selected>Active/Inactive</option>
-      <option value="Active">Active</option>
-      <option value="Inactive">Inactive</option>
-      </select>
+    <div class="col-4">
+      <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
+      {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
+    </div>
+
+      <div class="col-8 columns" >
+        <Datepicker v-model="form.year" yearPicker @update:modelValue="handleDate" />
       </div>
-  </div>
-  <div class="col-2"></div>
-  <div class="col-3">
-    <div class="input-group input-group-outline null is-filled">
-      <Multiselect 
-      v-model="form.province"          
-      :options="provinces"
-       mode="tags"
-      :taggable="true"
-      @select="fetchNewAppWithStages"
-      placeholder="Province"/>
-      </div>
-  </div>
-  <div class="col-3">
+  
+  <div class="col-4"></div>
+  <div class="col-8">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
@@ -102,10 +101,9 @@
       placeholder="Liquor Board Region"/>
       </div>
   </div>
-  <div class="col-2"></div>
-  <div class="col-2"> </div>
-  <div class="col-2"></div>
-  <div class="col-3  mt-3">
+
+  <div class="col-4"></div>
+  <div class="col-8  mt-3">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.licence_types"           
@@ -116,7 +114,9 @@
       placeholder="Licence Type"/>
       </div>
   </div>
-  <div class="col-3 mt-3">
+
+  <div class="col-4"></div>
+  <div class="col-8 mt-3">
     <div class="input-group input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Applicant</option>
@@ -126,182 +126,163 @@
       </div>
   </div>
 
-  <!-- <div v-if="form.applicant ==='Company'" class="col-3 mt-3">
-    <div class="input-group input-group-outline null is-filled">
-      <Multiselect
-      v-model="form.company"           
-      :options="companies"
-       mode="tags"
-      :taggable="true"
-      :searchable="true"
-      placeholder="Search Company"/>
-      </div>
+  <div class="col-4"></div>
+  <div v-if="form.variation === 'New-App'" class="col-8 mt-3">
+    <Multiselect
+        v-model="form.new_app_stages"           
+        :options="new_app_stages"
+          mode="tags"
+        :taggable="true"
+        @select="fetchNewAppWithStages"
+        placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.applicant ==='Person'" class="col-3 mt-3">
-    <div class="input-group input-group-outline null is-filled">
-      <Multiselect
-      v-model="form.person"           
-      :options="people"
-       mode="tags"
-      :taggable="true"
-      :searchable="true"
-      placeholder="Search Company"/>
-      </div>
-  </div> -->
-  <div class="col-9"></div>
-  <div class="col-3 mt-4">
-    <button @click="exportReport" type="button" class="btn btn-success">Export</button>
+  <div class="float-end mt-4">
+    <button @click="exportReport" type="button" class="btn btn-success float-end">Export</button>
   </div>
-</div>
 
+  
 </div>
-
 
 <div v-if="form.variation === 'New-App'" class="table-responsive p-0">
-<div class="row">
-  <div class="col-6">
-    <div class="input-group input-group-outline null is-filled">
-      <Multiselect
-      v-model="form.new_app_stages"           
-      :options="new_app_stages"
-       mode="tags"
-      :taggable="true"
-      @select="fetchNewAppWithStages"
-      placeholder="Filter By Stage"/>
-      </div>
-  </div>
-</div>
-  
   <table class="table align-items-center mb-0">
-    <thead>
-      <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Trading Name </th>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Licence Type </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Number </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Region </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Quoted</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Deposit Paid</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Invoiced </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Prepare New Application</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Payment to the Liquor Board</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Scanned Application</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Application Lodged</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Initial Inspection</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Final Inspection</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Paid</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Activation Fee Paid</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Issued</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Delivered</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="new_application in new_applications" :key="new_application.id">
-        <td class="align-left text-center text-sm">
-              <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.trading_name }}</p>
-        </td>
-        <td>
-          <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.licence_type.licence_type }}</p>
-        </td>
-        <td class="align-left text-center text-sm">
-          <p class="text-xs font-weight-bold mb-0">{{ new_application.licence_number }}</p>
-        </td>
-        <td class="align-left align-left text-center">
-          <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.board_region }}</p>
-        </td>
-        <td class="text-center">
-          <p class="align-center text-xs font-weight-bold mb-0">
-            <input class="align-center" type="checkbox" :checked="new_application.status >= '1'">
-          </p>
-         </td>
-         <td class="text-center">
-          <p class="align-center text-xs font-weight-bold mb-0">
-            {{ new_application.deposit_paid_at }}
-          </p>
-         </td>
-
-         <td class="text-center">
-          <p class="align-center text-xs font-weight-bold mb-0">
-            <span v-if="new_application.status >= '3'">{{ new_application.is_client_invoiced }}</span>
-          </p>
-         </td>
-
+        <thead>
+          <tr>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Trading Name </th>
+            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Licence Type </th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Number </th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Region </th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Quoted</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Deposit Paid</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Invoiced </th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Prepare New Application</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Payment to the Liquor Board</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Scanned Application</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Application Lodged</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Initial Inspection</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Final Inspection</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Paid</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Activation Fee Paid</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Issued</th>
+            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Licence Delivered</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="new_application in new_applications" :key="new_application.id">
+            <td class="align-left text-center text-sm">
+                  <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.trading_name }}</p>
+            </td>
+            <td>
+              <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.licence_type.licence_type }}</p>
+            </td>
+            <td class="align-left text-center text-sm">
+              <p class="text-xs font-weight-bold mb-0">{{ new_application.licence_number }}</p>
+            </td>
+            <td class="align-left align-left text-center">
+              <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.board_region }}</p>
+            </td>
+            <td class="text-center">
+              <p class="align-center text-xs font-weight-bold mb-0">
+                <input class="align-center" type="checkbox" :checked="new_application.status >= '1'">
+              </p>
+             </td>
+             <td class="text-center">
+              <p class="align-center text-xs font-weight-bold mb-0">
+                {{ new_application.deposit_paid_at }}
+              </p>
+             </td>
+    
+             <td class="text-center">
+              <p class="align-center text-xs font-weight-bold mb-0">
+                <span v-if="new_application.status >= '3'">{{ new_application.is_client_invoiced }}</span>
+              </p>
+             </td>
+    
+             
+             <td class="text-center">
+              <p class="align-center text-xs font-weight-bold mb-0">
+                <span v-if="new_application.status >= '4'">Application preparation</span>
+              </p>
+             </td>
+    
+             <td class="text-center">
+              <p v-if="new_application.status >= 5" class="align-center text-xs font-weight-bold mb-0">
+                {{ new_application.liquor_board_at }}
+              </p>
+             </td>
+    
+             <td class="text-center">
+              <p v-if="new_application.status >= 6" class="align-center text-xs font-weight-bold mb-0">
+                Application ready for lodgement
+              </p>
+             </td>
+    
+             <td class="text-center">
+              <p v-if="new_application.status >= 7" class="align-center text-xs font-weight-bold mb-0">
+                  {{ new_application.application_lodged_at }}
+              </p>
+              <p v-if="is_application_logded_doc_uploaded" class="text-xs text-secondary mb-0">Doc Uploaded: <input type="checkbox" 
+                :checked="new_application.is_application_logded_doc_uploaded !== null"></p>
+             </td>
+    
+             <td class="text-center">
+              {{ new_application.initial_inspection_at }}
+             </td>
+    
+             <td class="text-center">
+              <span>check me liquor board request</span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 10">{{ new_application.final_inspection_at }}</span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 11">{{ new_application.activation_fee_requested_at }}</span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 12 
+                 && new_application.is_finalisation_doc_uploaded !== null">
+                 {{ new_application.is_finalisation_doc_uploaded }}
+                </span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 13">{{ new_application.client_paid_at }}</span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 14">{{ new_application.activation_fee_paid_at }}</span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 15">{{ new_application.licence_issued_at }}</span>
+             </td>
+    
+             <td class="text-center">
+              <span v-if="new_application.status >= 16">{{ new_application.licence_delivered_at }}</span>
+             </td>
+          </tr>
          
-         <td class="text-center">
-          <p class="align-center text-xs font-weight-bold mb-0">
-            <span v-if="new_application.status >= '4'">Application preparation</span>
-          </p>
-         </td>
-
-         <td class="text-center">
-          <p v-if="new_application.status >= 5" class="align-center text-xs font-weight-bold mb-0">
-            {{ new_application.liquor_board_at }}
-          </p>
-         </td>
-
-         <td class="text-center">
-          <p v-if="new_application.status >= 6" class="align-center text-xs font-weight-bold mb-0">
-            Application ready for lodgement
-          </p>
-         </td>
-
-         <td class="text-center">
-          <p v-if="new_application.status >= 7" class="align-center text-xs font-weight-bold mb-0">
-              {{ new_application.application_lodged_at }}
-          </p>
-          <p v-if="is_application_logded_doc_uploaded" class="text-xs text-secondary mb-0">Doc Uploaded: <input type="checkbox" 
-            :checked="new_application.is_application_logded_doc_uploaded !== null"></p>
-         </td>
-
-         <td class="text-center">
-          {{ new_application.initial_inspection_at }}
-         </td>
-
-         <td class="text-center">
-          <span>check me liquor board request</span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 10">{{ new_application.final_inspection_at }}</span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 11">{{ new_application.activation_fee_requested_at }}</span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 12 
-             && new_application.is_finalisation_doc_uploaded !== null">
-             {{ new_application.is_finalisation_doc_uploaded }}
-            </span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 13">{{ new_application.client_paid_at }}</span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 14">{{ new_application.activation_fee_paid_at }}</span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 15">{{ new_application.licence_issued_at }}</span>
-         </td>
-
-         <td class="text-center">
-          <span v-if="new_application.status >= 16">{{ new_application.licence_delivered_at }}</span>
-         </td>
-      </tr>
-     
-    </tbody>
-  </table>
+        </tbody>
+      </table>
+    </div>
 </div>
-  </div>    
 </div>
 
-  </Layout>
+
+
+
+
+</Layout>
 </template>
+<style scoped>
+.columns{
+  margin-bottom: 1rem;
+}
+</style>
 <script>
 import Layout from "../Shared/Layout.vue";
 import { useForm, Link } from '@inertiajs/inertia-vue3';

@@ -14,6 +14,7 @@ use App\Models\LicenceRenewal;
 use App\Exports\TransferExports;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\TemporaLExportController;
+use Illuminate\Support\Arr;
 
 class ReportController extends Controller
 {
@@ -31,8 +32,8 @@ class ReportController extends Controller
         $companies = Company::pluck('name','id');        
         $people = People::pluck('full_name','id');
         // $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
-
-        $new_applications = Licence::with('licence_type')->where(function($query) use($request){
+        $sortedStatus = Arr::sort($request->new_app_stages);
+        $new_applications = Licence::with('licence_type')->where(function($query) use($request,$sortedStatus){
           $query->when($request->month, function($query) use($request){
               $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
           })
@@ -51,6 +52,9 @@ class ReportController extends Controller
           ->when(!empty(request('licence_types')), function ($query) use ($request) {
               $query->where('licence_type_id',$request->licence_types);
           })
+          ->when(!empty(request('new_app_stages')), function ($query) use ($sortedStatus) {
+            $query->where('status','<=', last($sortedStatus));
+        })
           ->when(!empty(request('selectedDates')), function ($query) use ($request) {
              // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
           });
