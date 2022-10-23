@@ -379,7 +379,7 @@ export default {
 </div>
 
 <div class="d-flex justify-content-center w-100">
-  <div class="px-3 mb-2 active w-10"> <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i> </div>
+  <div class="px-3 mb-2 active w-10"> <i class="fa fa-times-circle h5" aria-hidden="true"></i> </div>
   <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Smoking Affidavit </button>
   <div class="px-3 mb-2 ms-2  w-10"> <i class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> </div>
 </div>
@@ -562,8 +562,7 @@ export default {
 </div>
 
 <div class="d-flex justify-content-center w-100">
-  <div class="px-3 d-flex mb-2 active w-10">
-    
+  <div class="px-3 d-flex mb-2 active w-10">    
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
   <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Lease/Landlord Letter </button>
@@ -577,31 +576,96 @@ export default {
     </div>
 </div>
 
-<div class="row">
-      <div class="d-flex">
-      <button id="btn-transparent" class="w-20 px-3 mb-2 btn bg-gradient-success ms-2"> Representation </button>
-      <div class="ms-5 mb-2 ms-2 d-flex  w-10">
-        <i v-if="representation == null" @click="setDocType('Representation','Old Licence Holder',8)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-        class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
-        <a v-if="representation !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${representation.document}`">
-          <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
-        </a>
-        <i v-if="representation !== null" @click="deleteDocument(representation.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
-        </div>
+<div class="d-flex justify-content-center w-100">
+  <div class="px-3 d-flex mb-2 active w-10">
+    <i v-if="representation == null" @click="setDocType('Representation','Old Licence Holder',8)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
+     <a v-if="representation !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${representation.document}`">
+      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
+    </a>
+    <i v-if="representation !== null" @click="deleteDocument(representation.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+     </div>
+  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Representation </button>
+  <div class="px-3 mb-2 ms-2 d-flex  w-10">
+    <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
     </div>
+</div>
 
-    <div class="d-flex">
-      <button id="btn-transparent" class="w-20 px-3 mb-2 btn bg-gradient-success ms-2"> Index Page </button>
-      <div class="ms-5 mb-2 ms-2 d-flex  w-10">
-        <i v-if="index_page == null" @click="setDocType('Index Page','Old Licence Holder',1)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+<div class="d-flex justify-content-center w-100">
+  <div class="px-3 d-flex mb-2 active w-10">
+    
+    <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
+     </div>
+  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
+  <div class="px-3 mb-2 ms-2 d-flex  w-10">
+     <i v-if="latest_renewal == null" @click="setDocType('Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
+     <a v-if="latest_renewal !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${latest_renewal.document}`">
+      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
+    </a>
+    <i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+    </div>
+</div>
+
+<div class="d-flex justify-content-center w-100">
+  <div class="px-3 d-flex mb-2 active w-10">
+    <i v-if="index_page == null" @click="setDocType('Index Page','Old Licence Holder',1)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
         class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
         <a v-if="index_page !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${index_page.document}`">
           <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
         </a>
         <i v-if="index_page !== null" @click="deleteDocument(index_page.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
-        </div>
+     </div>
+  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Index Page </button>
+  <div class="px-3 mb-2 ms-2 d-flex  w-10">
+    <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
     </div>
 </div>
+
+<div class="d-flex justify-content-center w-100">
+  <div class="px-3 d-flex mb-2 active w-10">
+   
+     </div>
+  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Proof Of Payment </button>
+  <div class="px-3 mb-2 ms-2 d-flex  w-10">
+    <a v-if="payment_to_liquor_board !== null" :href="`/storage/app/public/transferDocuments/${payment_to_liquor_board.document}`" target="_blank">
+    <i class="fa fa-link float-end h5 "></i>
+ </a>
+    
+    </div>
+</div>
+<div v-if="payment_to_liquor_board !== null
+&& old_transfer_forms !== null
+&& current_transfer_forms !== null
+&& smoking_affidavict !== null
+&& old_poa_res_docs !== null
+&& current_poa_res_docs !== null
+&& old_shareholding !== null
+&& current_shareholding !== null
+&& old_cipc_certificate !== null
+&& current_cipc_certificate !== null
+&& id_docs !== null
+&& police_clearance !== null
+&& lta_certificate !== null
+&& financial_interest !== null
+&& landloard_letter !== null
+&& representation !== null
+&& index_page !== null
+">
+<div v-if="view_transfer.merged_document !==null">
+<a :href="`/storage/app/public/${view_transfer.merged_document}`" target="_blank" :style="{float: 'right'}" class="btn btn-secondary ms-2" >View</a>
+</div>
+  <button @click="mergeDocuments" :style="{float: 'right'}" type="button" class="btn btn-secondary ms-2" :disabled="mergeForm.processing">
+  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Compile And Merge</button>
+
+
+</div>
+<div v-else >
+<button :style="{float: 'right'}" type="button" class="disabled btn btn-secondary ms-2" >
+ Compile And Merge</button>
+ </div>
+ 
 
 <hr>
 

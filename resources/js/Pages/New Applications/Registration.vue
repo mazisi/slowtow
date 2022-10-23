@@ -670,7 +670,7 @@
             </a>
           </li>
         </ul>  
-
+<hr/>
         <div class="col-md-6 columns">
           <div class=" form-switch d-flex ps-0 ms-0  is-filled">
           <input class="active-checkbox" id="requests" type="checkbox"
@@ -680,10 +680,11 @@
           </div>
 
           <div class="row mb-3 ">
-            <div class="col-8 ">
+            <div class="col-8">
               <div v-for="liquor_board_request in licence.liquor_board_requests" :key="liquor_board_request.id" 
-              class="card card-body border card-plain border-radius-lg d-flex mb-2 align-items-center flex-row">
-                {{ liquor_board_request.body }}
+              class="card card-body border card-plain border-radius-lg mb-2 align-items-center ">
+                {{ liquor_board_request.body }}<br/>
+                <span class="text-xs">{{ computeBoardRequestDate(liquor_board_request.created_at) }}</span>
              </div>
 
             </div>
@@ -691,7 +692,7 @@
 
             <div class="col-4 mb-md-0 mb-4">
               <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">           
-                <textarea v-model="boardRequests.requestBody" class="form-control" placeholder="Type here.." ></textarea>
+                <textarea v-model="boardRequests.requestBody" class="form-control" placeholder="Request" ></textarea>
                 <i @click="submitBoardRequests" class="fa fa-plus ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Edit Card" aria-label="Edit Card"></i>
                 <span class="sr-only">Edit Card</span>
               </div>
@@ -1223,6 +1224,10 @@
           preserveScroll: true,
         })
         }
+
+      function computeBoardRequestDate(datetime){
+        return new Date(datetime).toLocaleString()
+      }
   
       return { 
         form,show_modal,
@@ -1232,7 +1237,8 @@
         deleteDocument,
         boardRequests,
         submitBoardRequests,
-        mergeDocs
+        mergeDocs,
+        computeBoardRequestDate
        }
     },
      components: {

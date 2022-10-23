@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 
 
 export default {
-  name: "profile-overview",
+  name: "ViewAlteration",
  props: {
     errors: Object,
     alteration: Object,

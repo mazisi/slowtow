@@ -24,23 +24,23 @@
 
         <div class="row">
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('Renewals')"  type="button" class="btn btn-success w-45">Renewals</button>
+            <button @click="getType('Renewals')"  type="button" class="btn btn-success w-45">Renewals</button>
           </div>
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('Transfers')" type="button" class="btn btn-success">Transfers</button>
+            <button @click="getType('Transfers')" type="button" class="btn btn-success">Transfers</button>
           </div>
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('Nominations')" type="button" class="btn btn-success">Nominations</button>
+            <button @click="getType('Nominations')" type="button" class="btn btn-success">Nominations</button>
           </div>
 
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('New-App')" type="button" class="btn btn-success w-45">New Applications</button>
+            <button @click="getType('New-App')" type="button" class="btn btn-success w-45">New Applications</button>
           </div>
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
+            <button @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
           </div>
           <div class="col-4">
-            <button :class="{ active: isActive }" @click="getType('Temporal Licence')" type="button" class="btn btn-success w-45">Temporary Applications</button>
+            <button @click="getType('Temporal Licence')" type="button" class="btn btn-success w-45">Temporary Applications</button>
           </div>
         </div>
 <hr/>
@@ -51,7 +51,9 @@
   <div class="col-4 columns">
     <button type="button" class="btn btn-success w-45">Filter By:</button>
   </div>
+ 
   <div class="col-8 columns">
+    <h5 class="text-center">{{ form.variation }}</h5>
     <Multiselect
             v-model="form.month"           
                :options="months"
@@ -304,7 +306,7 @@ export default {
   },
 
   setup(props) {
-  const isActive = '';
+  let isActive = false;
   const months = {
     "1": "January",
     "2" : "February",
@@ -362,6 +364,7 @@ const new_app_stages = {
     
   function getType(type){
      form.variation=type;
+     isActive = true
    }
 
    const handleDate = (modelData) => {

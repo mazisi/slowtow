@@ -8,13 +8,14 @@ use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceType;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
 use App\Exports\TransferExports;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\TemporaLExportController;
-use Illuminate\Support\Arr;
+use App\Http\Controllers\AlterationExportController;
 
 class ReportController extends Controller
 {
@@ -89,9 +90,14 @@ class ReportController extends Controller
           TemporaLExportController::export($request);          
             return Inertia::location("http://localhost:8000/force-download-temp-licence-export");
           break;
+
+          case 'Alterations':dd('Waiting For Data');
+            AlterationExportController::export($request);          
+              return Inertia::location("http://localhost:8000/force-download-temp-licence-export");
+            break;         
         
         default:
-          echo 'Noo';
+          dd('Error');
           break;
       }
     }
