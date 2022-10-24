@@ -216,7 +216,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>    
@@ -251,7 +251,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -321,7 +321,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -367,7 +367,7 @@ export default {
     </a>
     <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -413,7 +413,7 @@ export default {
     </a>
     <a v-else @click="getDocType('Renewal Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 text-success" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
   </li>
 </ul>  

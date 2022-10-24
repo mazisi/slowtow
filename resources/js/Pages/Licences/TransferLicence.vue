@@ -80,7 +80,7 @@ function assignActiveValue(event){
 .status-heading{
   font-weight: 700;
 }
-.fa-cloud-upload{
+.fa-upload{
   cursor: pointer;
   }
 </style>

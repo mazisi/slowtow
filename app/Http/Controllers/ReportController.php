@@ -34,7 +34,8 @@ class ReportController extends Controller
         $people = People::pluck('full_name','id');
         // $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
         $sortedStatus = Arr::sort($request->new_app_stages);
-        $new_applications = Licence::with('licence_type')->where(function($query) use($request,$sortedStatus){
+
+        $new_applications = Licence::with('licence_type','liquor_board_requests')->where(function($query) use($request,$sortedStatus){
           $query->when($request->month, function($query) use($request){
               $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
           })
@@ -60,7 +61,7 @@ class ReportController extends Controller
              // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
           });
       })->where('is_new_app','1')->get();
-        
+      dd($new_applications);
         return Inertia::render('Report',[
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,

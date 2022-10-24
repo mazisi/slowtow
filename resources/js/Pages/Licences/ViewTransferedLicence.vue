@@ -219,7 +219,7 @@ export default {
 .status-heading{
   font-weight: 700;
 }
-.fa-cloud-upload{
+.fa-upload{
   cursor: pointer;
   }
   .document-names { width: 60%; }
@@ -368,7 +368,7 @@ export default {
       class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
    
   </div>
-  <button id="btn-transparent" class=" w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Transfer Forms </button>
+  <button type="button" class=" w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Transfer Forms </button>
   <div  class=" px-3 d-flex mb-2 ms-2 w-10" >
     <i v-if="current_transfer_forms == null" @click="setDocType('Transfer Forms','Current Licence Holder',4)" data-bs-toggle="modal" data-bs-target="#upload-documents"
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i>
@@ -380,8 +380,15 @@ export default {
 
 <div class="d-flex justify-content-center w-100">
   <div class="px-3 mb-2 active w-10"> <i class="fa fa-times-circle h5" aria-hidden="true"></i> </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Smoking Affidavit </button>
-  <div class="px-3 mb-2 ms-2  w-10"> <i class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> </div>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Smoking Affidavit </button>
+  <div class="px-3 mb-2 ms-2 d-flex  w-10">
+    <i v-if="smoking_affidavict == null" @click="etDocType('Smoking Affidavit','Current Licence Holder',5)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
+    <a v-if="smoking_affidavict !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${smoking_affidavict.document}`">
+     <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
+   </a>
+   <i v-if="smoking_affidavict !== null" @click="deleteDocument(current_shareholding.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+   </div>
 </div>
 
 <div class="d-flex justify-content-center w-100">
@@ -397,7 +404,7 @@ export default {
     <i v-if="old_poa_res_docs !== null" @click="deleteDocument(old_poa_res_docs.id)" 
     class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> POA & Res </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> POA & Res </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="current_poa_res_docs == null" @click="setDocType('POA & RES','Current Licence Holder',7)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -422,7 +429,7 @@ export default {
     <i v-if="old_shareholding !== null" @click="deleteDocument(old_shareholding.id)" 
     class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Shareholding </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Shareholding </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="current_shareholding == null" @click="setDocType('Shareholding','Current Licence Holder',12)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -447,7 +454,7 @@ export default {
     <i v-if="old_cipc_certificate !== null" @click="deleteDocument(old_cipc_certificate.id)" 
     class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> CIPC Certificate </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> CIPC Certificate </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="current_shareholding == null" @click="setDocType('CIPC Certificate','Current Licence Holder',13)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -464,7 +471,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Company Documents </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Company Documents </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="company_docs == null" @click="setDocType('Company Documents','Current Licence Holder')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -482,7 +489,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> ID Documents </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> ID Documents </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="id_docs == null" @click="setDocType('ID Documents','Current Licence Holder',14)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -500,7 +507,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Police Clearances </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Police Clearances </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="police_clearance == null" @click="setDocType('Police Clearances','Current Licence Holder',15)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -517,7 +524,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Tax Clearance </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Tax Clearance </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="tax_clearance == null" @click="setDocType('Tax Clearance','Current Licence Holder',16)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -534,7 +541,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> LTA Certificate </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> LTA Certificate </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="lta_certificate == null" @click="setDocType('LTA Certificate','Current Licence Holder',17)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -550,7 +557,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Financial Interests </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Financial Interests </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="financial_interest == null" @click="setDocType('Financial Interests','Current Licence Holder',18)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -565,7 +572,7 @@ export default {
   <div class="px-3 d-flex mb-2 active w-10">    
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Lease/Landlord Letter </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Lease/Landlord Letter </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="landloard_letter == null" @click="setDocType('Lease/Landlord Letter','Current Licence Holder',19)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -585,7 +592,7 @@ export default {
     </a>
     <i v-if="representation !== null" @click="deleteDocument(representation.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Representation </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Representation </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
     </div>
@@ -596,7 +603,7 @@ export default {
     
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
      <i v-if="latest_renewal == null" @click="setDocType('Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
@@ -616,7 +623,7 @@ export default {
         </a>
         <i v-if="index_page !== null" @click="deleteDocument(index_page.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Index Page </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Index Page </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
     </div>
@@ -626,7 +633,7 @@ export default {
   <div class="px-3 d-flex mb-2 active w-10">
    
      </div>
-  <button id="btn-transparent" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Proof Of Payment </button>
+  <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Proof Of Payment </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
     <a v-if="payment_to_liquor_board !== null" :href="`/storage/app/public/transferDocuments/${payment_to_liquor_board.document}`" target="_blank">
     <i class="fa fa-link float-end h5 "></i>

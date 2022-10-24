@@ -243,7 +243,7 @@ export default{
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
 </div>
@@ -274,7 +274,7 @@ export default{
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>
 </ul>
 </div>
@@ -341,7 +341,7 @@ export default{
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
 </div>
@@ -438,7 +438,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
 </div>
@@ -477,7 +477,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -499,7 +499,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -521,7 +521,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -543,7 +543,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -589,7 +589,7 @@ Action
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
         <a v-else @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+        <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
       </li>  
     </ul>
     </div>
@@ -622,7 +622,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -665,7 +665,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
 </div>
@@ -708,7 +708,7 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType('Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-cloud-upload h5 " aria-hidden="true"></i></a>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>   
 </ul>
 </div>
