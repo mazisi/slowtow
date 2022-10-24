@@ -382,7 +382,7 @@ export default {
   <div class="px-3 mb-2 active w-10"> <i class="fa fa-times-circle h5" aria-hidden="true"></i> </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Smoking Affidavit </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-    <i v-if="smoking_affidavict == null" @click="etDocType('Smoking Affidavit','Current Licence Holder',5)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <i v-if="smoking_affidavict == null" @click="setDocType('Smoking Affidavit','Current Licence Holder',5)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
     <a v-if="smoking_affidavict !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${smoking_affidavict.document}`">
      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
