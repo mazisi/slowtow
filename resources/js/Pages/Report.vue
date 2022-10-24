@@ -233,7 +233,8 @@
              </td>
     
              <td class="text-center">
-              <span>check me liquor board request</span>
+
+              <p v-for="liquor_board_request in new_application.liquor_board_requests ">{{ liquor_board_request.body }}</p>
              </td>
     
              <td class="text-center">
@@ -241,7 +242,7 @@
              </td>
     
              <td class="text-center">
-              <span v-if="new_application.status >= 11">{{ new_application.activation_fee_requested_at }}</span>
+              <span v-if="new_application.status >= 11">{{ new_application.activation_fee_requested_at }}</span><br/>
              </td>
     
              <td class="text-center">
@@ -364,7 +365,9 @@ const new_app_stages = {
     
   function getType(type){
      form.variation=type;
-     isActive = true
+     isActive = true,
+     form.reset('activeStatus','month','year','applicant','person','company',
+     'province','month','selectedDates','boardRegion','licence_types','new_app_stages')
    }
 
    const handleDate = (modelData) => {

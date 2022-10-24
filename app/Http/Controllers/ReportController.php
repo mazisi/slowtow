@@ -61,7 +61,7 @@ class ReportController extends Controller
              // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
           });
       })->where('is_new_app','1')->get();
-      dd($new_applications);
+      
         return Inertia::render('Report',[
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,

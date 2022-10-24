@@ -14,14 +14,9 @@
       ></i>
       <inertia-link class="m-0 navbar-brand" href="/">
         <img
-          :src="
-            sidebarType === 'bg-white' ||
-            (sidebarType === 'bg-transparent' && !isDarkMode)
-              ? logoDark
-              : logo
-          "
+          src="public/assets/img/slowtow.png"
           class="navbar-brand-img h-100"
-          alt="main_logo"
+          alt="Slotow Logo"
         />
         <!-- <span class="ms-2 font-weight-bold text-white"
           >GO VERIFY</span -->
@@ -34,8 +29,6 @@
 </template>
 <script>
 import SidenavList from "./SidenavList.vue";
-import logo from "@/assets/img/slowtow.png";
-import logoDark from "@/assets/img/slowtow.png";
 import { mapState } from "vuex";
 
 export default {
@@ -45,7 +38,6 @@ export default {
   },
   data() {
     return {
-      logo,
     };
   },
   computed: {

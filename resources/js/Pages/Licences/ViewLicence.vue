@@ -10,6 +10,28 @@
   <div class="col-lg-6 col-7">
   <h6 class="mb-1">View Application </h6>
   </div>
+  <div class="col-lg-6 col-5 my-auto text-end">
+    <div class="dropdown float-lg-end pe-4">
+    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+    <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+    </a>
+    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+    <li><Link :href="`/registration?slug=${licence.slug}`" class="dropdown-item border-radius-md">Registration</Link></li>
+    <li><Link :href="`/renew-licence?slug=${licence.slug }`" class="dropdown-item border-radius-md">Renewals</Link></li>
+    
+    <li><Link :href="`/transfer-history?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
+    
+    <li><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
+    
+    <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
+    
+    <li><hr class="text-danger"></li>
+    <li><button @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
+    <i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</button></li>
+    </ul>
+    </div>
+    </div>
+    
   
   </div>
   <div class="row">
