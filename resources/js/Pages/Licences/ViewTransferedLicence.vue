@@ -456,12 +456,12 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> CIPC Certificate </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="current_shareholding == null" @click="setDocType('CIPC Certificate','Current Licence Holder',13)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="current_cipc_certificate == null" @click="setDocType('CIPC Certificate','Current Licence Holder',13)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
-     <a v-if="current_shareholding !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_shareholding.document}`">
+     <a v-if="current_cipc_certificate !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_cipc_certificate.document}`">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
     </a>
-    <i v-if="current_shareholding !== null" @click="deleteDocument(current_shareholding.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+    <i v-if="current_cipc_certificate !== null" @click="deleteDocument(current_cipc_certificate.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
     </div>
 </div>
 
