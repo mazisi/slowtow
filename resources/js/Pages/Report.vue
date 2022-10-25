@@ -71,7 +71,7 @@
        </select>
     </div>
   </div>
-  <div class="col-8 columns" >
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-8 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
           v-model="form.province"          
@@ -82,7 +82,7 @@
           placeholder="Province"/>
       </div>
     </div>
-    <div class="col-4">
+    <div v-if="form.variation !== 'Temporal Licence'" class="col-4">
       <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
       {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
     </div>
@@ -91,8 +91,8 @@
         <Datepicker v-model="form.year" yearPicker @update:modelValue="handleDate" />
       </div>
   
-  <div class="col-4"></div>
-  <div class="col-8">
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-4"></div>
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-8">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
@@ -104,8 +104,8 @@
       </div>
   </div>
 
-  <div class="col-4"></div>
-  <div class="col-8  mt-3">
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-4"></div>
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-8  mt-3">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.licence_types"           

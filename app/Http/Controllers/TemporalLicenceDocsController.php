@@ -44,7 +44,7 @@ public function destroy($id){
   $model = TemporalLicenceDocument::find($id);
  
       // unlink(storage_path('app/folder/'.$model->document_file));
-      unlink(public_path('storage/'.$model->document));
+      // unlink(public_path('storage/'.$model->document));
       $model->delete();
       return back()->with('success','Document removed successfully.');
 

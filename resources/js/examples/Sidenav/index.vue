@@ -14,7 +14,7 @@
       ></i>
       <inertia-link class="m-0 navbar-brand" href="/">
         <img
-          src="public/assets/img/slowtow.png"
+          src="public/images/slowtow.png"
           class="navbar-brand-img h-100"
           alt="Slotow Logo"
         />
