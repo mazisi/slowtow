@@ -43,7 +43,7 @@ class TransferDocsController extends Controller
     
     }
 
-    public function merge(Request $request){dd($request);
+    public function merge(Request $request){
 
          $exist =  LicenceTransfer::whereId($request->transfer_id)->whereNotNull('merged_document')->first(); 
         $merger = PDFMerger::init();           
@@ -54,8 +54,7 @@ class TransferDocsController extends Controller
            
            if(is_null($request->latest_renewal)){
               $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->original_licence['licence_id'])->first();
-             if(!is_null($original_licence)){
-              
+             if(!is_null($original_licence)){             
               
             File::copy(public_path('storage/licenceDocuments/'.$original_licence->document_file), public_path('storage/transferDocuments/'.$original_licence->document_file));
             $fileModel = new TransferDocument;
@@ -68,6 +67,8 @@ class TransferDocsController extends Controller
             $fileModel->slug = sha1(now());
             $fileModel->save();
             
+            }else{
+              return back()->with('error','We could not find Original Licence document. Please make sure its uploaded.');
             }
           }
           //get proof of payment to merge

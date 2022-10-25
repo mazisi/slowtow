@@ -366,16 +366,17 @@ export default {
       <i class="fa fa-file-pdf h5 mx-2 text-danger curser-pointer"></i>
       </a><i v-if="old_transfer_forms !== null" @click="deleteDocument(old_transfer_forms.id)" 
       class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
-   
+      
   </div>
   <button type="button" class=" w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Transfer Forms </button>
-  <div  class=" px-3 d-flex mb-2 ms-2 w-10" >
-    <i v-if="current_transfer_forms == null" @click="setDocType('Transfer Forms','Current Licence Holder',4)" data-bs-toggle="modal" data-bs-target="#upload-documents"
-     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i>
-     <a v-if="current_transfer_forms !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_transfer_forms.document}`">
-      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
-    </a>
-     </div>
+  <div class="px-3 mb-2 ms-2 d-flex  w-10">
+    <i v-if="current_transfer_forms == null" @click="setDocType('Transfer Forms','Current Licence Holder',4)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
+    <a v-if="current_transfer_forms !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${current_transfer_forms.document}`">
+     <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
+   </a>
+   <i v-if="current_transfer_forms !== null" @click="deleteDocument(current_transfer_forms.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+   </div>
 </div>
 
 <div class="d-flex justify-content-center w-100">
@@ -387,7 +388,7 @@ export default {
     <a v-if="smoking_affidavict !== null" target="_blank" :href="`/storage/app/public/transferDocuments/${smoking_affidavict.document}`">
      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
    </a>
-   <i v-if="smoking_affidavict !== null" @click="deleteDocument(current_shareholding.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+   <i v-if="smoking_affidavict !== null" @click="deleteDocument(smoking_affidavict.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
    </div>
 </div>
 
