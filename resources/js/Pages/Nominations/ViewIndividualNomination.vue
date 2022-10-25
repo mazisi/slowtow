@@ -852,7 +852,7 @@ mode="tags"
       <div class="modal-body">      
         <div class="row">
 
-        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
+        <!-- <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
         && uploadDoc.doc_type !== 'Nomination Lodged'
         && uploadDoc.doc_type !== 'Nomination Issued'
         && uploadDoc.doc_type !== 'Nomination Delivered'">
@@ -862,7 +862,7 @@ mode="tags"
          v-model="uploadDoc.date" >
         </div>
         <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-        </div>
+        </div> -->
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>

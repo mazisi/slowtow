@@ -21,30 +21,18 @@ class TemporaLExportController extends Controller
             }  
         }
 
-        // $licences = TemporalLicence::where(function($query) use($request){
-        //     $query->when($request->month, function($query) use($request){
-        //         $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
-        //     })
-        //     ->when(!empty(request('activeStatus')), function ($query) use ($request) {
-        //         $query->where('is_licence_active',$request->activeStatus);
-        //     })
-        //     ->when(!empty(request('province')), function ($query) use ($request) {
-        //         $query->whereIn('province',$request->province);
-        //     })
-        //     ->when(!empty(request('boardRegion')), function ($query) use ($request) {
-        //         $query->whereIn('board_region',$request->boardRegion);
-        //     })
-        //     ->when(!empty(request('applicant')), function ($query) use ($request) {
-        //         $query->where('belongs_to',$request->applicant);
-        //     })
-        //     ->when(!empty(request('licence_types')), function ($query) use ($request) {
-        //         $query->where('licence_type_id',$request->licence_types);
-        //     })
-        //     ->when(!empty(request('selectedDates')), function ($query) use ($request) {
-        //        // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
-        //     });
-        // })->get();
-    $licences = TemporalLicence::get();
+        $licences = TemporalLicence::where(function($query) use($request){
+            $query->when($request->month, function($query) use($request){
+                $query->whereIn(DB::raw('MONTH(start_date)'), $request->month);
+            })
+            // ->when(!empty(request('activeStatus')), function ($query) use ($request) {
+            //     $query->where('is_licence_active',$request->activeStatus);
+            // })
+            ->when(!empty(request('applicant')), function ($query) use ($request) {
+                $query->where('belongs_to',$request->applicant);
+            });
+        })->get();
+    // $licences = TemporalLicence::get();
     $notesCollection = null;
     $status = '';
 

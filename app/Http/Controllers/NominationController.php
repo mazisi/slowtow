@@ -116,7 +116,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     }
 
     public function update(Request $request){
-        
+        $status = null;
         $request->validate([
             'nomination_year' => 'required',
             'nomination_id' => 'required|exists:nominations,id'

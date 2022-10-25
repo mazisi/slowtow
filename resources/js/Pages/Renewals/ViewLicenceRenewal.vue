@@ -342,7 +342,9 @@ export default {
      </div>
    <div v-if="errors.renewal_issued_at" class="text-danger">{{ errors.renewal_issued_at }}</div>
    </div>
-
+   <div class="col-md-1 columns">
+    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
 <!-- <div class="col-md-6 columns">
 <Datepicker v-model="form.year" yearPicker />
 <p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
@@ -392,7 +394,9 @@ export default {
      </div>
    <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
    </div>
-
+   <div class="col-md-1 columns">
+    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_doc !== null">

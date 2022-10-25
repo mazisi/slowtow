@@ -17,7 +17,8 @@ class TemporalLicenceController extends Controller
 {
     public function index(Request $request){
         $queryString = request('term');
-        if(!empty($queryString) && !empty($request->withThrashed) && $request->active_status == 'Active'){
+
+        if(!empty($queryString) && $request->active_status == 'Active'){
           
             $licences = TemporalLicence::with(["company"])
                             ->orWhereHas('company', function($query) use($queryString){
@@ -28,7 +29,7 @@ class TemporalLicenceController extends Controller
                             ->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
-                            ->withTrashed()
+                            ->orWhere('event_name','LIKE','%'.$queryString.'%')
                             ->get();
         }elseif(empty($queryString) && empty($request->withThrashed) && $request->active_status == 'Active'){
 
@@ -46,25 +47,13 @@ class TemporalLicenceController extends Controller
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
                             ->get();
         
-        }elseif(!empty($queryString) && $request->active_status == 'Active'){
-    
-               $licences = TemporalLicence::with(['company','people'])
-               ->orWhereHas('company', function($query) use($queryString){
-                   $query->where('name', 'like', '%'.$queryString.'%');
-               })->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
-               ->orWhereHas('people', function($query) use($queryString){
-                $query->where('full_name', 'like', '%'.$queryString.'%');                      
-                      })->orWhere('start_date','LIKE','%'.$queryString.'%')
-                    ->orWhere('end_date','LIKE','%'.$queryString.'%')
-                    ->where('active','1')
-                    ->get();
         }elseif(empty($queryString) && $request->active_status == 'All'){
-            $licences = TemporalLicence::with(['company','people'])
-        ->get();
-
-        }elseif(!empty($queryString)){
             
-            $licences = TemporalLicence::with('company','people')
+            
+            $licences = TemporalLicence::with('company','people')->get();
+
+                        }elseif(!empty($queryString)){
+                            $licences = TemporalLicence::with('company','people')
                             ->where('liquor_licence_number','like','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
@@ -72,8 +61,9 @@ class TemporalLicenceController extends Controller
                                 $query->where('name', 'like', '%'.$queryString.'%');
                             })->orWhereHas('people', function($query) use($queryString){
                                 $query->where('full_name', 'like', '%'.$queryString.'%');                                      
-                            })->get();
-        
+                            })->orWhere('event_name','LIKE','%'.$queryString.'%')
+                            ->get();
+
         }elseif(!empty($queryString) && $request->withThrashed != '' && $request->active_status == 'Inactive'){
                     $licences = TemporalLicence::with(["company"])
                             ->orWhereHas('company', function($query) use($queryString){
@@ -88,6 +78,7 @@ class TemporalLicenceController extends Controller
                             ->orWhere('liquor_licence_number','LIKE','%'.$queryString.'%')
                             ->orWhere('start_date','LIKE','%'.$queryString.'%')
                             ->orWhere('end_date','LIKE','%'.$queryString.'%')
+                            ->orWhere('event_name','LIKE','%'.$queryString.'%')
                             ->get();
 
         }else{

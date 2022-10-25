@@ -389,14 +389,14 @@ export default {
          class="fa fa-upload h5 mx-2 curser-pointer"></i>
         <i v-if="company_annexure_c !== null" @click="deleteDocument(company_annexure_c.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_annexure_c !== null" :href="`/storage/app/public/temp-licence-documents/${company_annexure_c.document}`" target="_blank">
-        <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
+        <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> -->
 
         <button type="button" class="btn btn-outline-success document-names"> CIPC Certificate</button>
          <i v-if="company_cipc == null" @click="getDocType('CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
          class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_cipc !== null" @click="deleteDocument(company_cipc.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_cipc !== null" :href="`/storage/app/public/temp-licence-documents/${company_cipc.document}`" target="_blank">
-        <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a> -->
+        <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br> 
     <div class="col-sm-1"> </div>
   </div>
@@ -454,26 +454,30 @@ export default {
         <i v-if="company_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
- <a :href="`/storage/app/public/temp-licence-documents/${licence.merged_document}`" 
- v-if="licence.merged_document !== null" target="_blank"  class="ms-2 btn btn-sm btn-secondary" >
-  View </a>
-<button v-if="company_application_form !== null
-&& company_id_document !== null
+ <div class="d-flex">
+  <button v-if="company_application_form !== null
 && company_poa !== null
 && company_annexure_b !== null
-&& company_annexure_c !== null
+// && company_annexure_c !== null
 && company_cipc !== null
 && company_id_document !== null
 && company_representations !== null
 && company_landlord_letter !== null
 && company_security_letter !== null
-&& company_advert !== null
-&& company_plan !== null"
+&& company_advert !== null"
+
 @click="mergeDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Compile Application</button>
-  
+  <span class="visually-hidden">Loading...</span> Compile Application
+</button>
+  <a :href="`/storage/app/public/temp-licence-documents/${licence.merged_document}`" 
+ v-if="licence.merged_document !== null" target="_blank"  class="ms-2 btn btn-sm btn-secondary" >
+  View </a>
+ </div>
+
+
   </div>
+  
 </div>
 
 
@@ -511,7 +515,7 @@ export default {
      <a v-if="power_of_attorney !== null" :href="`/storage/app/public/temp-licence-documents/${power_of_attorney.document}`" target="_blank">
      <i v-if="power_of_attorney !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
-       <button type="button" class="btn btn-outline-success document-names">Annexure B</button>
+       <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
         <i v-if="individual_annexure_b == null" @click="getDocType('Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="individual_annexure_b !== null" @click="deleteDocument(individual_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
@@ -519,21 +523,23 @@ export default {
         <i v-if="individual_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
-        <button type="button" class="btn btn-outline-success document-names">Annexure C</button>
+        <!-- <button type="button" class="btn btn-outline-success document-names">Annexure C</button>
          <i v-if="individual_annexure_c == null" @click="getDocType('Annexure C','Individual',5)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 mx-2 curser-pointer"></i>
         <i v-if="individual_annexure_c !== null" @click="deleteDocument(individual_annexure_c.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="individual_annexure_c !== null" :href="`/storage/app/public/temp-licence-documents/${individual_annexure_c.document}`" target="_blank">
-        <i v-if="individual_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
+        <i v-if="individual_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br>  -->
 
-
-          <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
+<div v-if="licence.company_id == null">
+  <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
      <a v-if="get_person_id_document !== null" :href="`/storage/app/public/temp-licence-documents/${get_person_id_document.document}`" target="_blank">
         <i  class="fa fa-link h5 mx-2" ></i></a>
     <a v-else :href="`#!`">
         <i  class="fa fa-link h5 mx-2"></i></a> <br> 
 
     <div class="col-sm-1"> </div>
+</div>
+      
   </div>
   
   <div class="col-sm-5">
@@ -581,14 +587,12 @@ export default {
         <i v-if="individual_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
- <a :href="`/storage/app/public/temp-licence-documents/${licence.merged_document}`" 
- v-if="licence.merged_document !== null" target="_blank" :style="{float: 'right'}" class="ms-2 btn btn-sm btn-secondary" >
-  View </a>
-<button v-if="individual_application_form !== null
+  <div class="d-flex">
+    <button v-if="individual_application_form !== null
 && get_person_id_document !== null
 && power_of_attorney !== null
 && individual_annexure_b !== null
-&& individual_annexure_c !== null
+// && individual_annexure_c !== null
 && individual_representations !== null
 && individual_landlord_letter !== null
 && individual_security_letter !== null
@@ -597,6 +601,12 @@ export default {
 @click="mergeDocuments('Individual')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Compile Application</button>
+    <a :href="`/storage/app/public/temp-licence-documents/${licence.merged_document}`" 
+ v-if="licence.merged_document !== null" target="_blank" :style="{float: 'right'}" class="ms-2 btn btn-sm btn-secondary" >
+  View </a>
+  </div>
+ 
+
 
 
 
