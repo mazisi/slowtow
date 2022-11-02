@@ -2,7 +2,7 @@
 import Layout from "../../Shared/Layout.vue";
 
 export default {
-  name: "dashboard-default",
+  name: "my-company",
   props: {
     user: Object
   },
@@ -61,7 +61,7 @@ View
 <h6 class="mb-0 text-sm">
 
 <inertia-link
-:href="`/company/view-my-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.name }}
+:href="`/company/view-my-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" >{{ company.name }}
 </inertia-link>
 </h6>                          
 </div>
