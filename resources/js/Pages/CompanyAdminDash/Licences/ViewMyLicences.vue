@@ -257,7 +257,7 @@ class="form-label"
 </form>
 <hr>
 
-<div class="row">
+<!-- <div class="row">
 <h6 class="text-center mb-2 ">Companies Linked To : {{ licence.trading_name }}</h6>
 <div class="table-responsive p-0">
 <table class="table align-items-center mb-0">
@@ -291,8 +291,8 @@ Action
 </table>
 </div>
 <hr>
-<!-- <h6 class="text-center text-decoration-underline">Notes</h6> -->
-</div>
+
+</div> -->
 <!-- Notes were here -->
 
 </div>

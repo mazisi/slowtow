@@ -146,7 +146,7 @@ export default {
 
     methods: {
       search(){
-         this.$inertia.replace(route('licences',{
+         this.$inertia.replace(route('company_admin_licences',{
           term: this.term,
           active_status: this.active_status,
           licence_type: this.licence_type,

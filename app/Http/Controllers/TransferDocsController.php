@@ -17,7 +17,7 @@ class TransferDocsController extends Controller
             ]);
             $fileModel = new TransferDocument;
             $fileName = $request->document->getClientOriginalName();
-            $filePath = $request->file('document')->storeAs('mrnlabs', $fileName, 'azure');
+            $filePath = $request->file('document')->storeAs('transferDocuments', $fileName, 'local');
             $fileModel->document_name = $request->document->getClientOriginalName();
             $fileModel->document = $fileName;
             $fileModel->licence_transfer_id = $transfer_id;
@@ -25,7 +25,7 @@ class TransferDocsController extends Controller
             $fileModel->num = $request->document_number;
             $fileModel->belongs_to = $request->belong_to;
             $fileModel->slug = sha1(now());
-           // $fileModel->save();
+            $fileModel->save();
 
           //   $get_file_name = explode(".",$request->document->getClientOriginalName());
           //   $store_file = $request->document->store('transferDocuments','public'); 
@@ -39,7 +39,7 @@ class TransferDocsController extends Controller
           //       'slug' => sha1(now())
           //      ]);
        
-      return $filePath;
+      return back()->with('success','Document uploaded successfully.');
     
     }
 

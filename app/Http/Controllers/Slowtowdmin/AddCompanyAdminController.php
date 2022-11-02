@@ -25,7 +25,7 @@ $exist = DB::table('company_user')->where('company_id',$request->company_id)->wh
 
        if(is_null($exist)){
             $get_person_data = People::find($request->person_id);
-          $password = Str::random(6);
+            $password = Str::random(6);
           
             if(!is_null( $get_person_data->email_address_1)){
               $email = $get_person_data->email_address_1;
@@ -36,7 +36,7 @@ $exist = DB::table('company_user')->where('company_id',$request->company_id)->wh
             }else{
               return back()->with('error','This selected person does not have email address.');
             }
-
+            
           $user = User::create([
             'name' => $get_person_data->full_name,
             'email' => $email,
@@ -44,8 +44,7 @@ $exist = DB::table('company_user')->where('company_id',$request->company_id)->wh
             'password' => Hash::make($password)
           ]);
 
-          if($user){
-            
+          if($user){            
             $user->assignRole('company-admin');        
             $user->company()->attach($request->company_id);      
             
@@ -55,8 +54,8 @@ $exist = DB::table('company_user')->where('company_id',$request->company_id)->wh
               'email' => $user->email,
               'password' => $password
           ];
-          Mail::to('mazisimsebele18@gmail.com')->send(new SendMailCredentials($mailables));
-          return back()->with('success','Company admin added successfully.');
+          Mail::to($email)->send(new SendMailCredentials($mailables));
+            return back()->with('success','Company admin added successfully.');
           }
             return back()->with('error','Ooops!!! An error occured while creating company admin.');
           

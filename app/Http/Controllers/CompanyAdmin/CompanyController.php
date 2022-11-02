@@ -14,9 +14,7 @@ use App\Models\User;
 class CompanyController extends Controller
 {
     
-    public function index(){
-
-   
+    public function index(){   
         $user = User::with('company')->whereId(auth()->id())->first();
         return Inertia::render('CompanyAdminDash/MyCompanies',['user'=> $user]);
     }
