@@ -50,7 +50,6 @@
 <option value="Private Company  (Proprietary) Limited">Private Company  (Proprietary) Limited</option>
 <option value="Public Company">Public Company</option>
 <option value="Sole Proprietor">Sole Proprietor</option>
-<option value="Sole Proprietor">Sole Proprietor</option>
 <option value="Trust">Trust</option>
 </select>
 </div>

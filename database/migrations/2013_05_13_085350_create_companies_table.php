@@ -36,7 +36,7 @@ return new class extends Migration
             $table->string('tel_number')->nullable();
             $table->string('tel_number1')->nullable();
             $table->string('active')->nullable();
-            $table->string('slug');
+            $table->string('slug')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
