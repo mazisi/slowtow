@@ -148,7 +148,7 @@ function assignActiveValue(event){
    </div>
 
    <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
+    <div class="input-group input-group-outline null is-filled">
     <label class="mx-6 mt-2">Transfering To</label>
      </div>
    </div>

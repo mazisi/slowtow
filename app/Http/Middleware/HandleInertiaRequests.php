@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => $request->user(),
                 'has_slowtow_admin_role' => (Auth::check()) ? $request->user()->hasRole('slowtow-admin') : null,
                 'has_company_admin_role' => (Auth::check()) ? $request->user()->hasRole('company-admin') : null,
+                'has_slowtow_user_role' => (Auth::check()) ? $request->user()->hasRole('slowtow-user') : null,
                 
             ],
             'ziggy' => function () {

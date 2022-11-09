@@ -51,7 +51,13 @@
 </div>
 <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
 </div>
-
+<div class="col-md-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+ <label class="form-label">Date of Birth</label>
+ <input type="date" class="form-control form-control-default" v-model="form.date_of_birth" >
+  </div>
+    <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
+</div>
 
 <div class="col-md-4 columns">    
 <div class="input-group input-group-outline null is-filled">

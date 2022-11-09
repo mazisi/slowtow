@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('date_of_birth')->nullable();
             $table->string('id_number')->nullable();
             $table->string('id_or_passport')->nullable();
-            $table->string('passport')->unique()->nullable();
+            $table->string('passport')->nullable();
             $table->string('email_address_1')->nullable();
             $table->string('email_address_2')->nullable();
             $table->string('cell_number')->nullable();

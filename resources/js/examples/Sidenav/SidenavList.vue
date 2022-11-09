@@ -24,7 +24,8 @@
         </sidenav-collapse>
       </li>
 
-      <li class=" nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+      <li class=" nav-item" v-if="$page.props.auth.has_slowtow_admin_role
+      || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -39,7 +40,8 @@
         </sidenav-collapse>
       </li>
 
-       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
+       || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -83,7 +85,8 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+      <li class="nav-item" v-if="$page.props.auth.has_slowtow_user_role
+      || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -101,7 +104,8 @@
       
 
 
- <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+ <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
+ || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -134,7 +138,8 @@
   </li>
 
 
-   <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+   <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
+   || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -151,8 +156,8 @@
   </li>
      
     <hr>
-      <li v-if="$page.props.auth.has_slowtow_admin_role" class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
-
+      <li v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
+      " class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
 
       <li v-if="$page.props.currentRoute == 'consultants'" class="nav-item">
         <sidenav-collapse
@@ -170,7 +175,8 @@
 
       <li v-if="$page.props.currentRoute == 'companies' 
       || $page.props.currentRoute == 'view_company'
-      && $page.props.auth.has_slowtow_admin_role" class="nav-item">
+      && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
+      " class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -189,7 +195,8 @@
       <li v-if="$page.props.currentRoute == 'people' 
               || $page.props.currentRoute == 'view_person'
               || $page.props.currentRoute == 'create_person'
-              && $page.props.auth.has_slowtow_admin_role" class="nav-item">
+              && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
+              " class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -204,7 +211,8 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences' && $page.props.auth.has_slowtow_admin_role" class="nav-item">
+      <li v-if="$page.props.currentRoute == 'licences' && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
+      " class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -219,7 +227,8 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences' && $page.props.auth.has_slowtow_admin_role" class="nav-item">
+      <li v-if="$page.props.currentRoute == 'licences' && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
+      " class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -229,7 +238,7 @@
           navText="New Application"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">add</i>
+            <i class="material-icons-round opacity-10 fs-5">add_task</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -374,7 +383,8 @@
 
       <li v-if="$page.props.currentRoute == 'contacts' 
       || $page.props.currentRoute == 'upload_contacts'
-      && $page.props.auth.has_slowtow_admin_role" class="nav-item">
+      && $page.props.auth.has_slowtow_admin_role
+      " class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -397,10 +407,12 @@
   </a>
   <div class="collapse"></div>
 </li>
-<hr v-if="$page.props.auth.has_slowtow_admin_role"/>
+<hr v-if="$page.props.auth.has_slowtow_admin_role
+"/>
 
 
- <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+ <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
+ ">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -417,7 +429,8 @@
  </li>
 
 
-      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
+      ">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -432,7 +445,8 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
+      ">
         <sidenav-collapse 
           url="#"
           :aria-controls="''"
@@ -449,9 +463,11 @@
           </template>
         </sidenav-collapse>
       </li>
-      <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
+      <hr v-if="$page.props.auth.has_slowtow_admin_role
+      "/>
 
-   <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+   <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
+   ">
   <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
     <div class="text-center d-flex align-items-center justify-content-center me-2">
     <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>

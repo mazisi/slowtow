@@ -55,7 +55,7 @@ Route::group(['middleware' => ['guest']], function () {
 
 Route::group(['middleware' => ['auth']], function () { 
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
-    Route::group(['middleware' => ['role:slowtow-admin']], function () {
+    Route::group(['middleware' => ['role:slowtow-admin|slowtow-user']], function () {
         
         //update password
         Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
@@ -96,11 +96,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::patch('/update-new-registration/{slug}',[NewApplicationController::class,'updateRegistration']);
         Route::post('/merge-licence-docs/{id}',[LicenceDocsController::class,'merge']);
 
-      //board request
-      Route::post('/submit-board-request',[LiquorBoardRequestController::class,'store']);
+        //board request
+        Route::post('/submit-board-request',[LiquorBoardRequestController::class,'store']);
 
 
-
+        Route::post('/get-id-or-reg-number/{variation}',[LicenceController::class,'getLicenceIDOrRegNumber']);
 
          // Get licence renewals.
         Route::get('/renew-licence',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');

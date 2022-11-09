@@ -121,7 +121,7 @@ class PersonController extends Controller
             "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document"
             ]);
 
-          $fileModel = new PeopleDocument;
+            $fileModel = new PeopleDocument;
             $fileName = $request->document->getClientOriginalName();
             $filePath = $request->file('document')->storeAs('peopleDocuments', $fileName, 'public');
             $fileModel->document_name = $fileName;

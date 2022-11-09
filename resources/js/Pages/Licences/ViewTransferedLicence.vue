@@ -241,7 +241,8 @@ export default {
   
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
-    <button @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+    <button v-if="$page.props.auth.has_slowtow_user_role"
+     @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
 </div>
       <div class="row">

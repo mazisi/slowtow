@@ -199,8 +199,8 @@
    props: {
       errors: Object,
       licence_dropdowns: Object,
-      companies: Object,
-      persons: Object,
+      companies: Array,
+      persons: Array,
       success: String,
       error: String,
     },
@@ -224,6 +224,11 @@
             board_region: ''   
       })
 
+      const idRegForm = useForm({
+            person : '',
+            company: ''  
+      })
+
       if(form.belongs_to === 'Company'){
         options = props.companies;
       }else{
@@ -236,15 +241,38 @@
         })
         
       }
-      return { submit, form ,options}
+      
+      return { submit, form ,options, idRegForm}
+      
     },
+    
      components: {
       Layout,
       Link,
       Head,
       Multiselect
     },
-    
+    watch: {
+      'form.company': {
+        handler(newValue, oldValue) {
+          this.form.person = ''
+          this.form.post(`/get-id-or-reg-number/${newValue}`, {
+            preserveState: true,
+          })
+        },
+        deep: true
+      },
+      'form.person': {
+        handler(newValue, oldValue) {
+          this.form.company = ''
+          this.form.post(`/get-id-or-reg-number/${newValue}`, {
+            preserveState: true,
+          })
+        },
+        deep: true
+      }
+  },
+
   };
   </script>
   

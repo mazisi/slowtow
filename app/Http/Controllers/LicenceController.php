@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceDocument;
 use App\Models\LicenceType;
+use App\Models\People;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\Task;
@@ -206,6 +207,7 @@ class LicenceController extends Controller
      * And also that its multiple
      */
     public function show(Request $request){
+        $view = '';
         $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
         $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->get();
         $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->get();
@@ -215,7 +217,12 @@ class LicenceController extends Controller
         $licence_dropdowns = LicenceType::get();
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
 
-        return Inertia::render('Licences/ViewLicence',[
+        if($licence->is_new_app){
+            $view = 'ViewNewApp';
+        }else{
+            $view = 'ViewLicence';
+        }
+        return Inertia::render('Licences/'.$view,[
                                             'licence' => $licence,
                                             'licence_dropdowns' => $licence_dropdowns,
                                              'tasks' => $tasks,
@@ -264,5 +271,13 @@ class LicenceController extends Controller
         return to_route('licences')->with('error','Error deleting licence.');
     }
 
-    
+    public function getLicenceIDOrRegNumber(Request $request, $id){
+       if(empty($request->person)){
+         $comp = Company::whereId($id)->first();
+         return to_route('create_new_app', ['reg-number' => $comp->reg_number]);
+       }else{
+        $lic = People::whereId($id)->first();
+        return to_route('create_new_app', ['id-number' => $lic->id_or_passport]);
+       }
+    }
 }

@@ -10,7 +10,7 @@
       <div class="card card-body mx-3 mx-md-4 mt-n6">
         <div class="row">
     <div class="col-lg-6 col-7">
-     <h6>Process Registration for: <span class="text-success">{{ licence.trading_name }}</span></h6>
+     <h6>Process Registration for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h6>
     </div>
     <div class="col-lg-6 col-5 my-auto text-end">
       
@@ -45,7 +45,7 @@
   </div>
   </div>
   <div class="col-md-1 columns"></div>
-  <div class="col-md-4 columns">
+  <div class="col-md-4 columns mb-4">
      <div class="input-group input-group-outline null is-filled ">
      <label class="form-label">Date</label>
      <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
@@ -54,7 +54,7 @@
     </div> 
 
     <div class="col-md-1 columns">
-      <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button v-if="$page.props.auth.has_slowtow_user_role && licence.deposit_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
      </div>
   <hr>
 
@@ -511,7 +511,7 @@
   </div> 
   
   <div class="col-md-1 columns"></div>
-   <div class="col-md-4 columns">
+   <div class="col-md-4 columns mb-4">
       <div class="input-group input-group-outline null is-filled ">
       <label class="form-label">Date</label>
       <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
@@ -519,7 +519,7 @@
      <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
      </div> 
      <div class="col-md-1 columns">
-      <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button v-if="$page.props.auth.has_slowtow_user_role && licence.liquor_board_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
      </div>
   
   
@@ -593,7 +593,7 @@
     </div>
     </div>
       
-      <div class="col-md-4 columns">
+      <div class="col-md-4 columns mb-4">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
         <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
@@ -602,7 +602,7 @@
     </div>
 
       <div class="col-md-1 columns">
-        <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+        <button v-if="$page.props.auth.has_slowtow_user_role && licence.application_lodged_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
        </div>
       
       <ul class="list-group">
@@ -637,7 +637,7 @@
         </div>  
         </div>
   
-        <div class="col-md-4 columns">
+        <div class="col-md-4 columns mb-4">
             <div class="input-group input-group-outline null is-filled ">
             <label class="form-label">Date</label>
           <input type="date" class="form-control form-control-default" v-model="form.initial_inspection_at">
@@ -645,7 +645,7 @@
           <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
         </div>
         <div class="col-md-1 columns">
-          <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+          <button v-if="$page.props.auth.has_slowtow_user_role && licence.initial_inspection_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
         
         <ul class="list-group">
@@ -712,15 +712,16 @@
   </div>
   </div>
   
-  <div class="col-md-4 columns">
+  <div class="col-md-4 columns mb-4">
       <div class="input-group input-group-outline null is-filled ">
       <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.	final_inspection_at">
+      <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
        </div>
-     <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.	final_inspection_at }}</div>
+     <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
   </div>
   <div class="col-md-1 columns">
-    <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+    <button v-if="$page.props.auth.has_slowtow_user_role && licence.final_inspection_at == null" 
+    @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -757,7 +758,7 @@
     </div>
     </div>
     
-    <div class="col-md-4 columns">
+    <div class="col-md-4 columns mb-4">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
@@ -766,7 +767,8 @@
       {{ errors.activation_fee_requested_at }}</div>
     </div>
     <div class="col-md-1 columns">
-    <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+    <button v-if="$page.props.auth.has_slowtow_user_role && licence.activation_fee_requested_at == null" 
+    @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
     
     <ul class="list-group">
@@ -833,7 +835,7 @@
         </div>
         </div>
         
-        <div class="col-md-4 columns">
+        <div class="col-md-4 columns mb-4">
             <div class="input-group input-group-outline null is-filled ">
             <label class="form-label">Date</label>
             <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
@@ -841,7 +843,7 @@
            <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
            </div>
            <div class="col-md-1 columns">
-            <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+            <button v-if="$page.props.auth.has_slowtow_user_role && licence.client_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
            </div>
         
         <ul class="list-group">
@@ -928,7 +930,7 @@
           </div>
 
             <div class="col-md-1 columns">
-              <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+              <button v-if="$page.props.auth.has_slowtow_user_role && licence.licence_issued_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
              </div>
             
             <ul class="list-group">
@@ -958,7 +960,7 @@
 
 
 
-            <div class="col-md-6 columns">
+            <div class="col-md-6 columns mb-4">
               <div class=" form-switch d-flex ps-0 ms-0  is-filled">
               <input class="active-checkbox" id="licence-delivered" type="checkbox" 
               @input="pushData(16)" :checked="licence.status >= 16">

@@ -177,8 +177,8 @@ export default{
   // 6 => Prepare Nomination Application 
   // 7  => Scanned Application
   // 8 => Nomination Lodged 
-  // 9 => Nomination issued
-  // 10 => Nomination Delievered
+  // 9 => Nomination Issued
+  // 10 => Nomination Delivered
 }
 </script>
 <style>
@@ -204,11 +204,12 @@ export default{
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6>Nomination Info:  {{ nomination.licence.trading_name }}</h6>
+<h6>Nomination Info:  <Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">{{ nomination.licence.trading_name }}</Link></h6>
 </div>
 <div class="col-lg-6 col-5 my-auto text-end">
-  <button @click="deleteNomination" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
-
+  <button v-if="$page.props.auth.has_slowtow_user_role" 
+  @click="deleteNomination" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+ 
 </div>
 </div>
 <div class="row">
@@ -288,7 +289,7 @@ export default{
 </div>
 </div>
 
- <div class="col-md-5 columns">
+ <div class="col-md-5 columns mb-4">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
   <input type="date" class="form-control form-control-default" 
@@ -298,7 +299,8 @@ export default{
  </div>
 <div class="col-md-1"></div>
  <div class="col-md-1 columns">
-  <button @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+  <button v-if="nomination.client_paid_date == null" 
+  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
 <hr>
 
@@ -310,7 +312,7 @@ export default{
 <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div>
- <div class="col-md-5 columns">
+ <div class="col-md-5 columns mb-4">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
   <input type="date" class="form-control form-control-default" 
@@ -320,7 +322,8 @@ export default{
  </div>
 <div class="col-md-1"></div>
  <div class="col-md-1 columns">
-  <button @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+  <button v-if="nomination.payment_to_liquor_board_at == null" 
+  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
 
 <div class="col-md-12 columns">
@@ -346,8 +349,6 @@ export default{
 </ul>
 </div>
 <hr>
-
-
 
 <div class="col-md-11 d-flex columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
@@ -604,7 +605,7 @@ Action
 </div>
 </div>
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded !== null">
@@ -627,13 +628,18 @@ Action
 </ul>
 </div>
 
- <div class="col-md-6 columns">
+ <div class="col-md-5 columns mb-4">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
   <input type="date" class="form-control form-control-default" 
     v-model="updateForm.nomination_lodged_at" >
   </div>
   <div v-if="errors.nomination_lodged_at" class="text-danger">{{ errors.nomination_lodged_at }}</div>
+ </div>
+ <div class="col-md-1"></div>
+ <div class="col-md-1 columns">
+  <button v-if="nomination.nomination_lodged_at == null" 
+  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
 <hr>
 
@@ -648,7 +654,7 @@ Action
 </div>
 </div>
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
@@ -669,13 +675,18 @@ Action
   </li>  
 </ul>
 </div>
-<div class="col-md-6 columns">
+<div class="col-md-5 columns mb-4">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
   <input type="date" class="form-control form-control-default" 
     v-model="updateForm.nomination_issued_at" >
   </div>
   <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
+ </div>
+ <div class="col-md-1"></div>
+ <div class="col-md-1 columns">
+  <button v-if="nomination.nomination_issued_at == null" 
+  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
 <hr>
 
@@ -690,7 +701,7 @@ Action
 </div>
 </div> 
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
@@ -713,13 +724,19 @@ Action
 </ul>
 </div>
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns mb-4">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
   <input type="date" class="form-control form-control-default" 
     v-model="updateForm.nomination_delivered_at" >
   </div>
   <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
+ </div>
+
+ <div class="col-md-1"></div>
+ <div class="col-md-1 columns">
+  <button v-if="nomination.nomination_delivered_at == null" 
+  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
 <hr>
 
