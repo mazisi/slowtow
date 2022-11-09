@@ -34,7 +34,7 @@
           </div>
 
           <div class="col-4">
-            <button @click="getType('New-App')" type="button" class="btn btn-success w-45">New Applications</button>
+            <button @click="getType('New-Applications')" type="button" class="btn btn-success w-45">New Applications</button>
           </div>
           <div class="col-4">
             <button @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
@@ -47,7 +47,7 @@
 
 <!-- ################################################ -->
 
-<div class="row">
+<div class="row" v-if="form.variation">
   <div class="col-4 columns">
     <button type="button" class="btn btn-success w-45">Filter By:</button>
   </div>

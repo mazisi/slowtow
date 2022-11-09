@@ -60,7 +60,7 @@ class CompanyController extends Controller
            })->get();
     
     }else{
-        $companies = Company::whereNull('name')->get();
+        $companies = Company::latest()->get();
     }
         return Inertia::render('Company',['companies'=> $companies]);
     }

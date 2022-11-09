@@ -41,7 +41,7 @@ class PersonController extends Controller
        }elseif(empty($request->term)  && $request->active_status == 'Active'){
         $people = People::where('active',1)->get();
         }else{
-            $people = People::whereNull('id')->get();
+            $people = People::latest()->get();
         }
         return Inertia::render('People/Person',['people' => $people]);
     }

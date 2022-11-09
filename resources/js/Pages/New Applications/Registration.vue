@@ -63,7 +63,7 @@
     <input class="active-checkbox" id="client-invoiced" type="checkbox"
     @input="pushData(3)" 
     :checked="licence.status >= 3">
-    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoiced</label>
     </div>
     </div>
     <ul class="list-group">

@@ -82,7 +82,7 @@ class TemporalLicenceController extends Controller
                             ->get();
 
         }else{
-            $licences = TemporalLicence::whereNull('id')->get();
+            $licences = TemporalLicence::with('company','people')->latest()->get();
         }
         
         return Inertia::render('TemporalLicences/TemporalLicence',['licences' => $licences]);

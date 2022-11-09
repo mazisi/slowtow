@@ -104,20 +104,18 @@ methods: {
                   </h6>
                       
                     </td>
-                    <td v-if="licence.people === null">
-                          <h6 class="mb-0 text-sm">               
+                    <td>
+             
+                          <h6  v-if="licence.people === null" class="mb-0 text-sm">               
                           <Link :href="`/view-temp-licence/${licence.slug}`"
                             class="px-0 ">{{ licence.company.name }}
                           </Link>
                            </h6>
-                    </td>
-
-                    <td v-if="licence.company === null">
-                          <h6 class="mb-0 text-sm">
-                           <Link :href="`/view-temp-licence/${licence.slug}`">
-                            {{ licence.people.full_name }}
-                          </Link>
-                           </h6>
+                           <h6 v-if="licence.company === null" class="mb-0 text-sm">
+                            <Link :href="`/view-temp-licence/${licence.slug}`">
+                             {{ licence.people.full_name }}
+                           </Link>
+                            </h6>
                     </td>
                     <td class="">
                       <h6 class="mb-0 text-sm">

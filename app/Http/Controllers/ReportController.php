@@ -83,7 +83,7 @@ class ReportController extends Controller
           NominationExportController::export($request);          
           return Inertia::location("http://localhost:8000/force-download-nomination-export");
           break;
-        case 'New-App':
+        case 'New-Applications':
           NewAppExportController::export($request);          
            return Inertia::location("http://localhost:8000/force-download-new-app-export");
           break;
