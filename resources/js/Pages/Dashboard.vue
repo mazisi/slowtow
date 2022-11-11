@@ -4,51 +4,48 @@
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
         <div class="row">
-          <div class="col-lg-3 col-md-6 col-sm-6">
+          <Link :href="`licences`" class="col-lg-3 col-md-6 col-sm-6">
             <mini-statistics-card
-              :title="{ text: 'Today\'s Money', value: '$53k' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+55%</span> than last week"
+              :title="{ text: 'Licences', value: licences }"
               :icon="{
                 name: 'weekend',
                 color: 'text-white',
                 background: 'dark',
               }"
             />
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+          </Link>
+          <Link :href="`companies`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Today\'s Users', value: '2,300' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+3%</span> than last month"
+              :title="{ text: 'Companies', value: companies }"
               :icon="{
                 name: 'leaderboard',
                 color: 'text-white',
                 background: 'primary',
               }"
             />
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+          </Link>
+          <Link :href="`people`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'New Clients', value: '3,462' }"
-              detail="<span class='text-danger text-sm font-weight-bolder'>-2%</span> than yesterday"
+              :title="{ text: 'People', value: people }"
               :icon="{
                 name: 'person',
                 color: 'text-white',
                 background: 'success',
               }"
             />
-          </div>
-          <div class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
+            </Link>
+          <Link :href="`temp-licences`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Sales', value: '$103,430' }"
-              detail="<span class='text-success text-sm font-weight-bolder'>+5%</span> Just updated"
+              :title="{ text: 'Temporal Licences', value: temp_licences }"
               :icon="{
                 name: 'weekend',
                 color: 'text-white',
                 background: 'info',
               }"
             />
-          </div>
+            </Link>
         </div>
+      
         <div class="row mt-4">
           <div class="col-lg-4 col-md-6 mt-4">
             <chart-holder-card
@@ -138,31 +135,18 @@ import ChartHolderCard from "./components/ChartHolderCard.vue";
 import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
 import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
 import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
-import logoXD from "@/assets/img/small-logos/logo-xd.svg";
-import logoAtlassian from "@/assets/img/small-logos/logo-atlassian.svg";
-import logoSlack from "@/assets/img/small-logos/logo-slack.svg";
-import logoSpotify from "@/assets/img/small-logos/logo-spotify.svg";
-import logoJira from "@/assets/img/small-logos/logo-jira.svg";
-import logoInvision from "@/assets/img/small-logos/logo-invision.svg";
-import team1 from "@/assets/img/team-1.jpg";
-import team2 from "@/assets/img/team-2.jpg";
-import team3 from "@/assets/img/team-3.jpg";
-import team4 from "@/assets/img/team-4.jpg";
+import { Link } from '@inertiajs/inertia-vue3';
 
 export default {
-  name: "dashboard-default",
+  name: "dashboard",
+  props: {
+    licences: Number,
+    companies: Number,
+    people: Number,
+    temp_licences: Number
+  },
   data() {
     return {
-      logoXD,
-      team1,
-      team2,
-      team3,
-      team4,
-      logoAtlassian,
-      logoSlack,
-      logoSpotify,
-      logoJira,
-      logoInvision,
     };
   },
   components: {
@@ -170,7 +154,8 @@ export default {
     ReportsBarChart,
     ReportsLineChart,
     MiniStatisticsCard,
-    Layout
+    Layout,
+    Link
 },
 };
 </script>

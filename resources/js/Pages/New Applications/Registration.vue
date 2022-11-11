@@ -681,10 +681,13 @@
 
           <div class="row mb-3 ">
             <div class="col-8">
-              <div v-for="liquor_board_request in licence.liquor_board_requests" :key="liquor_board_request.id" 
+              <div v-for="liquor_board_request in licence.liquor_board_requests" 
+              :key="liquor_board_request.id" 
               class="card card-body border card-plain border-radius-lg mb-2 align-items-center ">
                 {{ liquor_board_request.body }}<br/>
                 <span class="text-xs">{{ computeBoardRequestDate(liquor_board_request.created_at) }}</span>
+                <!-- <button @click="
+                " type="button" class="mt-4 btn btn-sm btn-secondary">Save</button> -->
              </div>
 
             </div>
@@ -1084,6 +1087,9 @@
   .list-group{
     margin-top: -1.4rem;
   }
+
+ 
+  
   </style>
 
   <script>
@@ -1092,7 +1098,7 @@
   import { Inertia } from '@inertiajs/inertia';
   import '@vuepic/vue-datepicker/dist/main.css';
   import Task from "../Tasks/Task.vue";
-  
+  import debounce from 'lodash'  
   import { ref } from 'vue';
   
   export default {
@@ -1216,6 +1222,7 @@
                   return;
                 }else{
                   this.form.status.push(status_value)
+                  //alert(this.form.status[0] = status_value)
                 } 
             }else if(!event.target.checked){
             //
@@ -1231,8 +1238,13 @@
         return new Date(datetime).toLocaleString()
       }
   
+     
+     function editBoardRequest(id){
+           alert(id)
+      }
+     
       return { 
-        form,show_modal,
+        form,show_modal,editBoardRequest,
         updateRegistration,
         pushData,uploadDoc,
         getDocType, submitDocument,

@@ -55,7 +55,7 @@ class RenewalMailer extends Mailable
         
         return $this->from('no-reply@slowtow.co.za')
                     ->cc('mazisimsebele18@gmail.com')
-                    ->subject($this->renewal->licence->trading_name.' AND '.$this->renewal->date)
+                    ->subject('Renewal for '.$this->renewal->licence->trading_name.' AND '.$this->renewal->date)
                     ->markdown('emails.ecomms.renewalMailer')
                     ->attach(public_path('storage/renewalDocuments/'.$get_doc->document))
                     ->with([

@@ -17,31 +17,30 @@ use App\Http\Controllers\CompanyDocsController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
 use App\Http\Controllers\AlterLicenceController;
+use App\Http\Controllers\NewAppExportController;
 use App\Http\Controllers\TransferDocsController;
 use App\Http\Controllers\MergeDocumentController;
 use App\Http\Controllers\RenewalExportController;
 use App\Http\Controllers\LicenceRenewalController;
 use App\Http\Controllers\NewApplicationController;
-use App\Http\Controllers\TemporalLicenceController;
-use App\Http\Controllers\TransferLicenceController;
-use App\Http\Controllers\Auth\PasswordResetController;
-use App\Http\Controllers\TemporalLicenceDocsController;
-use App\Http\Controllers\NominationEmailCommsController;
-use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
-use App\Http\Controllers\EmailComms\TransferEmailCommsController;
-use App\Http\Controllers\LiquorBoardRequestController;
-use App\Http\Controllers\NewAppExportController;
-use App\Http\Controllers\NominationExportController;
 use App\Http\Controllers\TemporaLExportController;
 use App\Http\Controllers\TransferExportController;
+use App\Http\Controllers\TemporalLicenceController;
+use App\Http\Controllers\TransferLicenceController;
+use App\Http\Controllers\NominationExportController;
+use App\Http\Controllers\Auth\PasswordResetController;
+use App\Http\Controllers\LiquorBoardRequestController;
+use App\Http\Controllers\TemporalLicenceDocsController;
+use App\Http\Controllers\NominationEmailCommsController;
+use App\Http\Controllers\DispatchMailWithoutEditingController;
+use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
+use App\Http\Controllers\EmailComms\TransferEmailCommsController;
+use App\Http\Controllers\SlotowDashboardController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
 Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
-
-Route::get('/slowtow-admin-dashboard', function () {
-    return Inertia::render('Dashboard');
-})->name('slowtow_dashboard');
+Route::get('/slowtow-admin-dashboard',[SlotowDashboardController::class,'index'])->name('slowtow_dashboard');
 
 Route::get('/dashboard',[LoginController::class,'redirect_to_dash'])->name('dashboard');
 
@@ -217,6 +216,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
         //nomination mail dispatcher
         Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
-        
+        //dispatch mail without edit
+        //Route::post('/dispatchMail', [DispatchMailWithoutEditingController::class,'dispatchMail'])->name('dispatch_mail_without_editing');
     });
 });

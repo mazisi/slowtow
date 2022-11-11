@@ -51,7 +51,7 @@ methods: {
     // }
      alertTempo(){alert('Waiting for data')}
 
-      
+    
     },
 };
 </script>
@@ -99,7 +99,7 @@ methods: {
 
   <li class="nav-item" role="presentation">
     <button @click="alertTempo" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
+    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
   </li>
   
 </ul>
@@ -195,7 +195,9 @@ methods: {
         <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
-        
+        <!-- <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-primary text-center font-weight-bold text-xs"> 
+          <i class="fa fa-pencil"></i> Edit </Link> -->
+
         <Link :href="`/view-licence-renewal/${renewal.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>
         </td>
