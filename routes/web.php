@@ -97,6 +97,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         //board request
         Route::post('/submit-board-request',[LiquorBoardRequestController::class,'store']);
+        Route::patch('/update-board-request',[LiquorBoardRequestController::class,'update']);
 
 
         Route::post('/get-id-or-reg-number/{variation}',[LicenceController::class,'getLicenceIDOrRegNumber']);

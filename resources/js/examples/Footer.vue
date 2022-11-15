@@ -11,7 +11,7 @@
               <inertia-link
                 href="#!"
                 class="nav-link text-muted"
-                target="_blank"> You are logged in as: {{ user.name }}</inertia-link>
+              > You are logged in as:<b> {{ user.name }}</b></inertia-link>
             </li>
           </ul>
         </div>
@@ -19,7 +19,7 @@
         <div class="col-lg-6">
         <ul class="nav nav-footer d-flex justify-content-center justify-content-lg-end">
             <li class="nav-item">
-              <a href="#" class="nav-link text-muted" target="_blank"> Copyright &copy; {{ new Date().getFullYear() }} Slotow Family Trust </a
+              <a href="#" class="nav-link text-muted"> Copyright &copy; {{ new Date().getFullYear() }} Slotow Family Trust </a
               >
             </li>
           </ul>

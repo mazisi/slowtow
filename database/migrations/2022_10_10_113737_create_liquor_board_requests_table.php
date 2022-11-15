@@ -15,7 +15,8 @@ return new class extends Migration
     {
         Schema::create('liquor_board_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('licence_id')->constrained()->onDelete('cascade');
+            $table->string('model_type');
+            $table->string('model_id');
             $table->text('body');
             $table->timestamps();
         });

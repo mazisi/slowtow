@@ -11,7 +11,25 @@
         <div class="row">
     <div class="col-lg-6 col-7">
      <h6>Process Registration for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h6>
-    </div>
+     <p class="text-sm mb-0">Current Stage: 
+      <span class="font-weight-bold ms-1" v-if="licence.status === '1'">Client Quoted</span>
+     <span v-else-if="licence.status === '2'" class="font-weight-bold ms-1">Deposit Paid</span>
+     <span v-else-if="licence.status === '3'" class="font-weight-bold ms-1">Deposit Invoiced</span>
+     <span v-else-if="licence.status === '4'" class="font-weight-bold ms-1">Prepare New Application</span>
+     <span v-else-if="licence.status === '5'" class="font-weight-bold ms-1">Payment to the Liquor Board</span>
+     <span v-else-if="licence.status === '6'" class="font-weight-bold ms-1">Scanned Application</span>
+     <span v-else-if="licence.status === '7'" class="font-weight-bold ms-1">Application Lodged</span>
+     <span v-else-if="licence.status === '8'" class="font-weight-bold ms-1">Initial Inspection</span>
+     <span v-else-if="licence.status === '9'" class="font-weight-bold ms-1">Liquor Board Requests</span>
+     <span v-else-if="licence.status === '10'" class="font-weight-bold ms-1">Final Inspection</span>
+     <span v-else-if="licence.status === '11'" class="font-weight-bold ms-1">Activation Fee Requested</span>
+     <span v-else-if="licence.status === '12'" class="font-weight-bold ms-1">Client Finalisation Invoice</span>
+     <span v-else-if="licence.status === '13'" class="font-weight-bold ms-1">Client Paid</span>
+     <span v-else-if="licence.status === '14'" class="font-weight-bold ms-1">Activation Fee Paid</span>
+     <span v-else-if="licence.status === '15'" class="font-weight-bold ms-1">Licence Issued</span>
+     <span v-else-if="licence.status === '16'" class="font-weight-bold ms-1">Licence Delivered</span>
+   </p>
+  </div>
     <div class="col-lg-6 col-5 my-auto text-end">
       
     
@@ -54,7 +72,7 @@
     </div> 
 
     <div class="col-md-1 columns">
-      <button v-if="$page.props.auth.has_slowtow_user_role && licence.deposit_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button v-if="licence.deposit_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
      </div>
   <hr>
 
@@ -519,7 +537,7 @@
      <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
      </div> 
      <div class="col-md-1 columns">
-      <button v-if="$page.props.auth.has_slowtow_user_role && licence.liquor_board_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button v-if="licence.liquor_board_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
      </div>
   
   
@@ -602,7 +620,7 @@
     </div>
 
       <div class="col-md-1 columns">
-        <button v-if="$page.props.auth.has_slowtow_user_role && licence.application_lodged_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+        <button v-if="licence.application_lodged_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
        </div>
       
       <ul class="list-group">
@@ -645,7 +663,7 @@
           <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
         </div>
         <div class="col-md-1 columns">
-          <button v-if="$page.props.auth.has_slowtow_user_role && licence.initial_inspection_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+          <button v-if="licence.initial_inspection_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
         
         <ul class="list-group">
@@ -681,13 +699,13 @@
 
           <div class="row mb-3 ">
             <div class="col-8">
-              <div v-for="liquor_board_request in licence.liquor_board_requests" 
+              <div v-for="liquor_board_request in liqour_board_requests" 
               :key="liquor_board_request.id" 
               class="card card-body border card-plain border-radius-lg mb-2 align-items-center ">
                 {{ liquor_board_request.body }}<br/>
                 <span class="text-xs">{{ computeBoardRequestDate(liquor_board_request.created_at) }}</span>
-                <!-- <button @click="
-                " type="button" class="mt-4 btn btn-sm btn-secondary">Save</button> -->
+                <button @click="editBoardRequest(liquor_board_request.body, liquor_board_request.id)" data-bs-toggle="modal" data-bs-target="#edit-board-request" 
+                 type="button" class="mt-4 btn btn-sm btn-secondary">Edit</button>
              </div>
 
             </div>
@@ -695,11 +713,11 @@
 
             <div class="col-4 mb-md-0 mb-4">
               <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">           
-                <textarea v-model="boardRequests.requestBody" class="form-control" placeholder="Request" ></textarea>
+                <textarea v-model="boardRequests.body" class="form-control" placeholder="Request" ></textarea>
                 <i @click="submitBoardRequests" class="fa fa-plus ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Edit Card" aria-label="Edit Card"></i>
                 <span class="sr-only">Edit Card</span>
               </div>
-              <div class="text-danger" v-if="errors.requestBody">{{ errors.requestBody }}</div>
+              <div class="text-danger" v-if="errors.body">{{ errors.body }}</div>
             </div>
 
 
@@ -723,7 +741,7 @@
      <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
   </div>
   <div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_user_role && licence.final_inspection_at == null" 
+    <button v-if="licence.final_inspection_at == null" 
     @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
   <ul class="list-group">
@@ -770,7 +788,7 @@
       {{ errors.activation_fee_requested_at }}</div>
     </div>
     <div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_user_role && licence.activation_fee_requested_at == null" 
+    <button v-if="licence.activation_fee_requested_at == null" 
     @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
     
@@ -846,7 +864,7 @@
            <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
            </div>
            <div class="col-md-1 columns">
-            <button v-if="$page.props.auth.has_slowtow_user_role && licence.client_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+            <button v-if="licence.client_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
            </div>
         
         <ul class="list-group">
@@ -933,7 +951,7 @@
           </div>
 
             <div class="col-md-1 columns">
-              <button v-if="$page.props.auth.has_slowtow_user_role && licence.licence_issued_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+              <button v-if="licence.licence_issued_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
              </div>
             
             <ul class="list-group">
@@ -1067,6 +1085,40 @@
       </div>
     </div>
   </div>
+
+  <div v-if="show_modal" class="modal" id="edit-board-request" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit Board Request</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form @submit.prevent="updateBoardRequest">
+        <div class="modal-body">      
+          <div class="row">
+          <div class="col-md-12 columns">
+            <div class="col-md-12 columns">
+              <div class="input-group input-group-outline null is-filled ">
+              <textarea required class="form-control form-control-default" 
+               v-model="editBoardRequestForm.body"></textarea>
+              </div>
+              <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
+          </div>
+          
+          </div>
+           </div>   
+        </div>
+    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" :disabled="editBoardRequestForm.processing">
+           <span v-if="editBoardRequestForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+           Save</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
     </Layout>
   </template>
     <style src="@vueform/multiselect/themes/default.css"></style>
@@ -1144,7 +1196,8 @@
       client_paid: Object,
       activation_fee_paid: Object,
       licence_issued_doc: Object,
-      licence_delivered: Object
+      licence_delivered: Object,
+      liqour_board_requests: Object
     },
   
     setup (props) {
@@ -1165,8 +1218,14 @@
        })
   
       const boardRequests = useForm({
-        requestBody: null,
-        licence_id: props.licence.id
+        body: null,
+        model_id: props.licence.id,
+        model_type: 'Licence'
+      })
+
+      const editBoardRequestForm = useForm({
+        body: null,
+        id: null,
       })
 
       const uploadDoc = useForm({
@@ -1179,7 +1238,7 @@
       function submitBoardRequests(){
         boardRequests.post('/submit-board-request', {
           preserveScroll: true,
-          onSuccess: () => { boardRequests.requestBody = '';},
+          onSuccess: () => { boardRequests.body = '';},
         })
       }
   
@@ -1239,12 +1298,27 @@
       }
   
      
-     function editBoardRequest(id){
-           alert(id)
+     function editBoardRequest(body, request_id){
+      this.show_modal = true     
+      this.editBoardRequestForm.body = body,
+      this.editBoardRequestForm.id = request_id      
       }
-     
+
+     function updateBoardRequest(){
+      editBoardRequestForm.patch('/update-board-request', {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.show_modal = false;
+            document.querySelector('.modal-backdrop').remove() 
+            }
+        })
+     }
+
       return { 
-        form,show_modal,editBoardRequest,
+        form,show_modal,
+        editBoardRequestForm,
+        editBoardRequest,
+        updateBoardRequest,
         updateRegistration,
         pushData,uploadDoc,
         getDocType, submitDocument,

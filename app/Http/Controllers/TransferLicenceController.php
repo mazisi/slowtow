@@ -6,11 +6,12 @@ use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\Company;
 use App\Models\Licence;
-use App\Models\LicenceDocument;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Models\LicenceDocument;
 use App\Models\LicenceTransfer;
 use App\Models\TransferDocument;
+use App\Models\LiquorBoardRequest;
 
 class TransferLicenceController extends Controller
 {
@@ -60,6 +61,8 @@ class TransferLicenceController extends Controller
        */
       public function viewTransferedLicence($slug){
         $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents')->whereSlug($slug)->first();
+        $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
+
         $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->whereUserId(auth()->id())->get();
 
@@ -124,7 +127,8 @@ class TransferLicenceController extends Controller
           'transfer_delivered' => $transfer_delivered,
           'original_licence' => $original_licence,
           'latest_renewal' => $latest_renewal,
-          'scanned_application' => $scanned_application
+          'scanned_application' => $scanned_application,
+          'liqour_board_requests' => $liqour_board_requests
         ]);
       }
 

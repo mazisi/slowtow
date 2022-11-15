@@ -4,11 +4,13 @@ import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 
 import { ref } from 'vue';
 
 export default {
   props: {
+    liqour_board_requests: Object,
     tasks: Object,
     errors: Object,
     licence_dropdowns: Object,
@@ -71,7 +73,7 @@ export default {
     }
 
     function deleteDocument(id){
-        if(confirm('Document will be deleted permanently...Continue ??')){
+        if(confirm('Document will be deleted...Continue ??')){
           Inertia.delete(`/delete-renewal-document/${id}`, {
             //
           })
@@ -83,8 +85,7 @@ export default {
         preserveScroll: true,
         onSuccess: () => { 
           this.show_modal = false;
-          let dismiss =  document.querySelector('.modal-backdrop')    
-          dismiss.remove();
+          let dismiss =  document.querySelector('.modal-backdrop').remove()
           uploadDoc.reset();
          },
       })
@@ -138,7 +139,8 @@ export default {
     Layout,
     Link,
     Head,
-    Datepicker
+    Datepicker,
+    LiquorBoardRequest
   },
   
 };
@@ -174,7 +176,17 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-   <h6>Process Renewal for: <span class="text-success">{{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}</span> : {{ renewal.licence.trading_name }}</h6>
+   <h6>Process Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
+    <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
+    <p class="text-sm mb-0">Current Stage: 
+       <span class="font-weight-bold ms-1" v-if="renewal.status == '1'">Client Quoted</span>
+      <span v-if="renewal.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
+      <span v-if="renewal.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
+      <span v-if="renewal.status == '4'" class="font-weight-bold ms-1">Payment To The Liquor Board</span>
+      <span v-if="renewal.status == '5'" class="font-weight-bold ms-1">Renewal Issued</span>
+      <span v-if="renewal.status == '6'" class="font-weight-bold ms-1">Renewal Delivered</span>
+    </p>
+   
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteRenewal" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
@@ -425,9 +437,9 @@ export default {
 
 <div class="text-danger">
   <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
-  <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+  <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-primary ms-2" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Save</button>
+  <span class="visually-hidden">Loading...</span> Update</button>
 </div>
 </div>
 </form>
@@ -441,6 +453,14 @@ export default {
 
 </div>
 <hr>
+
+<LiquorBoardRequest 
+:model_type='`Licence Renewal`'
+:model_id="renewal.id" 
+:liqour_board_requests="liqour_board_requests"
+/>
+<hr/>
+
 <div class="row">
 <h6 class="text-center">Notes</h6>
 <div class="col-xl-8">
@@ -484,6 +504,8 @@ data-bs-dismiss="alert" aria-label="Close">
 </form>
 </div>
 </div>
+
+
 </div>
 </div>
 

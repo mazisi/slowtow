@@ -8,13 +8,14 @@ use App\Models\Licence;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
+use App\Models\LiquorBoardRequest;
 use App\Models\RenewalDocument;
 
 class LicenceRenewalController extends Controller
 {
     public function renewLicence(Request $request){
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
-        $renewals = LicenceRenewal::where('licence_id',$licence->id)->get();
+        $renewals = LicenceRenewal::with('licence')->where('licence_id',$licence->id)->get();
        return Inertia::render('Renewals/Renewals',['licence' => $licence,'renewals' => $renewals]);
     }
 
@@ -45,6 +46,8 @@ class LicenceRenewalController extends Controller
 
     public function show($slug){
         $renewal = LicenceRenewal::with('licence')->whereSlug($slug)->first();
+        $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Renewal')->where('model_id',$renewal->id)->get();
+
         $client_invoiced = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Invoiced')->first();
         $renewal_issued = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Issued')->first();
         $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
@@ -58,7 +61,8 @@ class LicenceRenewalController extends Controller
             'renewal_issued' => $renewal_issued,
             'client_quoted'  => $client_quoted,
             'renewal_doc' => $renewal_doc,
-            'liqour_board' => $liqour_board
+            'liqour_board' => $liqour_board,
+            'liqour_board_requests' => $liqour_board_requests
         ]);
     }
 

@@ -3,11 +3,13 @@ import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Link,useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
-import { Inertia } from '@inertiajs/inertia'
+import { Inertia } from '@inertiajs/inertia';
+import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 
 
 export default {
  props: {
+  liqour_board_requests: Object,
     errors: Object,
     view_transfer: Object,
     companies_dropdown: Array,
@@ -189,7 +191,8 @@ export default {
   components: {
     Layout,
     Multiselect,
-    Link
+    Link,
+    LiquorBoardRequest
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -930,6 +933,14 @@ export default {
         
       </div>
 
+<hr/>
+      <LiquorBoardRequest 
+      :model_type='`Licence Transfer`'
+      :model_id="view_transfer.id" 
+      :liqour_board_requests="liqour_board_requests"
+      />
+      <hr/>
+      
 
 
 <div class="row">

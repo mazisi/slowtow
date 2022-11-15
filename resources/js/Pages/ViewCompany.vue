@@ -784,8 +784,7 @@ export default {
         preserveScroll: true,
            onSuccess: () => { 
             this.show_modal = false;
-            let dismiss =  document.querySelector('.modal-backdrop') 
-            dismiss.remove();
+            let dismiss =  document.querySelector('.modal-backdrop').remove()
             addCompanyUserForm.reset();
            },
           }) 

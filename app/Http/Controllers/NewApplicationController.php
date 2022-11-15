@@ -7,11 +7,12 @@ use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Models\Nomination;
 use App\Models\LicenceType;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
-use App\Models\Nomination;
+use App\Models\LiquorBoardRequest;
 
 class NewApplicationController extends Controller
 {
@@ -101,9 +102,10 @@ class NewApplicationController extends Controller
        
     }
 
-    public function view_registration(Request $request)
-    {
-        $licence = Licence::with('company','liquor_board_requests')->whereSlug($request->slug)->first();
+    public function view_registration(Request $request){
+        $licence = Licence::with('company')->whereSlug($request->slug)->first();
+        $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence')->where('model_id',$licence->id)->get();
+
         $gba_application_form = LicenceDocument::where('document_type','GLB Application Forms')->where('licence_id',$licence->id)->first(['id','document_name']);
         $client_invoiced = LicenceDocument::where('document_type','Client Invoiced')->where('licence_id',$licence->id)->first(['id','document_name']);
         $application_forms = LicenceDocument::where('document_type','Application Forms')->where('licence_id',$licence->id)->first(['id','document_name']);
@@ -185,6 +187,7 @@ class NewApplicationController extends Controller
             'activation_fee_paid' => $activation_fee_paid,
             'licence_issued_doc' => $licence_issued_doc,
             'licence_delivered' => $licence_delivered,
+            'liqour_board_requests' => $liqour_board_requests,
             'tasks' => $tasks]);
     }
 

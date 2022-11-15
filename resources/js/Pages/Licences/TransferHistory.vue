@@ -9,7 +9,7 @@
       <div class="col-12">
       <div class="row">
   <div class="col-lg-6 col-7">
-   <h5>Transfers for: {{ licence.trading_name }}</h5>
+   <h5>Transfers for: <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h5>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
@@ -50,13 +50,11 @@
                         </div>
                         </td>
                     <td class="text-center">
-                        <div class="d-flex flex-column justify-content-left">
-                        <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
-                          <h6 class="mb-0 text-sm">
-                          {{currentCompany.name}}
-                           </h6>    
-                          </Link>                      
-                        </div>
+                      <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
+                        <h6 class="mb-0 text-sm">
+                        {{ currentCompany.name }}
+                         </h6>    
+                        </Link>  
                      
                     </td>
                      <td  class="text-center" v-if="currentCompany.pivot.status == 1"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Client Quoted</Link></td>
