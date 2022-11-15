@@ -57,7 +57,7 @@ class TransferLicenceController extends Controller
       }
 
       /**
-       * View Individual licence transfer individually.
+       * View licence transfer individually.
        */
       public function viewTransferedLicence($slug){
         $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents')->whereSlug($slug)->first();
