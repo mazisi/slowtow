@@ -4,11 +4,13 @@ import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 
 import { ref } from 'vue';
 
 export default {
   props: {
+    liqour_board_requests: Object,
     tasks: Object,
     errors: Object,
     licence_dropdowns: Object,
@@ -182,7 +184,8 @@ export default {
     Layout,
     Link,
     Head,
-    Datepicker
+    Datepicker,
+    LiquorBoardRequest
   },
 
   watch: {
@@ -232,8 +235,24 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-  <h6 v-if="licence.people === null">Temporal Licence For: {{ licence.company.name }}</h6>
-    <h6 v-else>Temporal Licence For: {{ licence.people.full_name }}</h6>
+  <h6 v-if="licence.people === null">Temporal Licence For: 
+      <Link :href="`/view-company/${licence.company.slug}`" class="text-success">{{ licence.company.name }}
+      </Link>
+  </h6>
+    <h6 v-else>Temporal Licence For: <Link :href="`/view-person/${licence.people.slug}`" class="text-success">{{ licence.people.full_name }}</Link></h6>
+    <p class="text-sm mb-0">Current Stage: 
+      <span class="font-weight-bold ms-1" v-if="licence.status == '1'">Client Quoted</span>
+     <span v-if="licence.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
+     <span v-if="licence.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
+     <span v-if="licence.status == '4'" class="font-weight-bold ms-1">Collate Temporary Licence Documents </span>
+     <span v-if="licence.status == '5'" class="font-weight-bold ms-1">Payment To The Liquor Board</span>
+     <span v-if="licence.status == '6'" class="font-weight-bold ms-1">Scanned Application</span>
+     <span v-if="licence.status == '7'" class="font-weight-bold ms-1">Temporary Licence Lodged</span>
+     <span v-if="licence.status == '8'" class="font-weight-bold ms-1">Temporary Licence Issued</span>
+     <span v-if="licence.status == '9'" class="font-weight-bold ms-1">Transfer Issued</span>
+     <span v-if="licence.status == '10'" class="font-weight-bold ms-1">Temporary Licence Delivered</span>
+   </p>
+
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <button @click="deleteTemporalLicence" class=" border-radius-md btn-danger" style="border: none">
@@ -843,6 +862,13 @@ export default {
 </div>
 
 </div>
+
+<hr/>
+      <LiquorBoardRequest 
+      :model_type='`Temporal Licence`'
+      :model_id="licence.id" 
+      :liqour_board_requests="liqour_board_requests"
+      />
 <hr>
 <div class="row">
 <h6 class="text-center">Notes</h6>

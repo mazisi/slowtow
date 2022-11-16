@@ -7,11 +7,12 @@ use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Licence;
 use App\Models\Nomination;
-use App\Models\NominationDocument;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LiquorBoardRequest;
+use App\Models\NominationDocument;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Arr;
 
 class NominationController extends Controller
 {
@@ -64,6 +65,7 @@ class NominationController extends Controller
      */
     public function viewIndividualNomination($slug){
         $nomination = Nomination::with('licence','people','merged_document')->whereSlug($slug)->first();
+        $liqour_board_requests = LiquorBoardRequest::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
         $nominees = People::pluck('full_name','id');
         $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->whereUserId(auth()->id())->get();
         
@@ -97,7 +99,8 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
              'nomination_logded' => $nomination_logded,
              'nomination_issued' => $nomination_issued,
              'nomination_delivered' => $nomination_delivered,
-             'scanned_app' => $scanned_app
+             'scanned_app' => $scanned_app,
+             'liqour_board_requests' => $liqour_board_requests
     ]);
     }
 

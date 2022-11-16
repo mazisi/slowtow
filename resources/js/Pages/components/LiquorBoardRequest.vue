@@ -36,7 +36,7 @@
     <span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
     </div>
 
-    <div class="col-12 columns">    
+    <div class="col-12">    
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">New Board Request</label>
     <textarea v-model="submitBoardRequestForm.body" class="form-control form-control-default" rows="3" ></textarea>
@@ -112,8 +112,8 @@ export default {
     })
 
     function submitBoardRequest(){
-      editBoardRequestForm.post('/submit-board-request', {
-          onSuccess: () => editBoardRequestForm.reset(),
+      submitBoardRequestForm.post('/submit-board-request', {
+          onSuccess: () => submitBoardRequestForm.reset(),
       })
     }
 

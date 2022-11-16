@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\PeopleDocument;
 use App\Models\TemporalLicence;
+use App\Models\LiquorBoardRequest;
 use App\Models\TemporalLicenceDocument;
 
 class TemporalLicenceController extends Controller
@@ -168,6 +169,8 @@ class TemporalLicenceController extends Controller
 
     public function processApplication(Request $request){
         $licence = TemporalLicence::with('company','people')->whereSlug($request->slug)->first();
+        $liqour_board_requests = LiquorBoardRequest::where('model_type','Temporal Licence')->where('model_id',$licence->id)->get();
+
         $client_invoiced = TemporalLicenceDocument::where('doc_type','Client Invoiced')->where('temporal_licence_id',$licence->id)->first();
         $client_quoted = TemporalLicenceDocument::where('doc_type','Client Quoted')->where('temporal_licence_id',$licence->id)->first();
         $collate = TemporalLicenceDocument::where('doc_type','Collate Documents')->where('temporal_licence_id',$licence->id)->first();
@@ -217,7 +220,8 @@ class TemporalLicenceController extends Controller
             'company_landlord_letter' => $company_landlord_letter,
             'company_security_letter' => $company_security_letter,
             'company_advert' => $company_advert,
-            'company_plan' => $company_plan
+            'company_plan' => $company_plan,
+            'liqour_board_requests' => $liqour_board_requests
             ]);
 
         }else{
@@ -256,7 +260,8 @@ class TemporalLicenceController extends Controller
             'individual_security_letter' => $individual_security_letter,
             'individual_advert' => $individual_advert,
             'individual_plan' => $individual_plan,
-            'get_person_id_document' => $get_person_id_document
+            'get_person_id_document' => $get_person_id_document,
+            'liqour_board_requests' => $liqour_board_requests
             ]);
         }
      }

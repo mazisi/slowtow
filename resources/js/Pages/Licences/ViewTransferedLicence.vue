@@ -240,8 +240,19 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-  <h5>Transfer Info for: {{ view_transfer.licence.trading_name }}</h5>
-  
+  <h5>Transfer Info for: <Link :href="`/view-licence?slug=${view_transfer.licence.slug}`" class="text-success">{{ view_transfer.licence.trading_name }}</Link></h5>
+  <p class="text-sm mb-0">Current Stage: 
+    <span class="font-weight-bold ms-1" v-if="view_transfer.status == '1'">Client Quoted</span>
+   <span v-if="view_transfer.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
+   <span v-if="view_transfer.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
+   <span v-if="view_transfer.status == '4'" class="font-weight-bold ms-1">Prepare Transfer Application</span>
+   <span v-if="view_transfer.status == '5'" class="font-weight-bold ms-1">Payment To The Liquor Board</span>
+   <span v-if="view_transfer.status == '6'" class="font-weight-bold ms-1">Scanned Application</span>
+   <span v-if="view_transfer.status == '7'" class="font-weight-bold ms-1">Application Logded</span>
+   <span v-if="view_transfer.status == '8'" class="font-weight-bold ms-1">Activation Fee Paid</span>
+   <span v-if="view_transfer.status == '9'" class="font-weight-bold ms-1">Transfer Issued</span>
+   <span v-if="view_transfer.status == '10'" class="font-weight-bold ms-1">Transfer Delivered</span>
+ </p>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_user_role"
@@ -952,9 +963,6 @@ export default {
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
-data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>

@@ -6,6 +6,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
 import { ref } from "vue";
+import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 
 export default{
   props:{
@@ -28,7 +29,8 @@ export default{
       nomination_logded: Object,//doc
       nomination_issued: Object,//doc
       nomination_delivered: Object,//doc
-      scanned_app: Object//doc
+      scanned_app: Object,//doc
+      liqour_board_requests: Object
   },
 
   setup (props) {
@@ -166,7 +168,8 @@ export default{
     Layout,
     Link,
     Multiselect,
-    Datepicker
+    Datepicker,
+    LiquorBoardRequest
   },
 
   // 1= > Client Quoted
@@ -205,6 +208,20 @@ export default{
 <div class="row">
 <div class="col-lg-6 col-7">
 <h6>Nomination Info:  <Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">{{ nomination.licence.trading_name }}</Link></h6>
+<p class="text-sm mb-0">Current Stage: 
+  <span class="font-weight-bold ms-1" v-if="nomination.status == '1'">Client Quoted</span>
+ <span v-if="nomination.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
+ <span v-if="nomination.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
+ <span v-if="nomination.status == '4'" class="font-weight-bold ms-1">Payment to the Liquor Board</span>
+ <span v-if="nomination.status == '5'" class="font-weight-bold ms-1">Select Nominees</span>
+ <span v-if="nomination.status == '6'" class="font-weight-bold ms-1">Prepare Nomination Application </span>
+ <span v-if="nomination.status == '7'" class="font-weight-bold ms-1">Scanned Application</span>
+ <span v-if="nomination.status == '8'" class="font-weight-bold ms-1">Nomination Lodged </span>
+ <span v-if="nomination.status == '9'" class="font-weight-bold ms-1">Nomination Issued</span>
+ <span v-if="nomination.status == '10'" class="font-weight-bold ms-1">Nomination Delivered</span>
+</p>
+
+  
 </div>
 <div class="col-lg-6 col-5 my-auto text-end">
   <button v-if="$page.props.auth.has_slowtow_user_role" 
@@ -747,9 +764,9 @@ Action
 </div> -->
 
 <div>
-<button type="submit" :style="{float: 'right'}" class="btn btn-sm btn-secondary" :disabled="updateForm.processing">
+<button type="submit" :style="{float: 'right'}" class="btn btn-primary" :disabled="updateForm.processing">
 <span v-if="updateForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-Save</button>
+Update</button>
 </div>
 </div>
 </form>
@@ -760,7 +777,12 @@ Save</button>
 <!-- //tasks were here -->
 
 </div>
-
+      <hr/>
+      <LiquorBoardRequest 
+      :model_type='`Nomination`'
+      :model_id="nomination.id" 
+      :liqour_board_requests="liqour_board_requests"
+      />
 <div class="row">
 <hr>
 <h6 class="text-center">Notes</h6>
