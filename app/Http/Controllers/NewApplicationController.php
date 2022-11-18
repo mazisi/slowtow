@@ -16,15 +16,27 @@ use App\Models\LiquorBoardRequest;
 
 class NewApplicationController extends Controller
 {
-    public function create()
-    {
+    public $get_reg_num_or_id_number = '';
+
+    public function create(){
+        
+        if(!empty(request('variation')) && request('variation') == 'company'){
+            $comp = Company::whereId(request('value'))->first();
+            $this->get_reg_num_or_id_number = $comp->reg_number;
+          }elseif(!empty(request('variation')) && request('variation') == 'person'){
+           $person = People::whereId(request('value'))->first();
+           $this->get_reg_num_or_id_number = $person->id_or_passport;
+          }
+
         $persons = People::pluck('full_name','id');
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
+
         return Inertia::render('New Applications/Index',[
             'persons' => $persons,
              'companies' => $companies,
-             'licence_dropdowns' => $licence_dropdowns
+             'licence_dropdowns' => $licence_dropdowns,
+             'get_reg_num_or_id_number' => $this->get_reg_num_or_id_number
         ]);
     }
 
@@ -237,6 +249,7 @@ class NewApplicationController extends Controller
        }
        
     }
+
 
 
 }

@@ -10,8 +10,6 @@
 <form>
 <div class="row">
 <div  class="col-md-12 col-xl-12 col-lg-12">
-
-
 <div class="input-group input-group-outline null is-filled">
 <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
 <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
@@ -80,9 +78,9 @@
 
 </div>
 </form>
-<div class="card my-4">
+<div class="my-4">
 
-<div class="card-body px-0 pb-2">
+<div class="px-0 pb-2">
 <div class="table-responsive p-0">
   <table class="table table-striped table-hover">
 <thead>

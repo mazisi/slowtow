@@ -14,6 +14,7 @@ use App\Http\Controllers\ConsultantController;
 use App\Http\Controllers\EmailCommsController;
 use App\Http\Controllers\NominationController;
 use App\Http\Controllers\CompanyDocsController;
+use App\Http\Controllers\EmailReportController;
 use App\Http\Controllers\InsertTypesController;
 use App\Http\Controllers\LicenceDocsController;
 use App\Http\Controllers\AlterLicenceController;
@@ -25,6 +26,7 @@ use App\Http\Controllers\LicenceRenewalController;
 use App\Http\Controllers\NewApplicationController;
 use App\Http\Controllers\TemporaLExportController;
 use App\Http\Controllers\TransferExportController;
+use App\Http\Controllers\SlotowDashboardController;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\NominationExportController;
@@ -35,7 +37,6 @@ use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\DispatchMailWithoutEditingController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
-use App\Http\Controllers\SlotowDashboardController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -98,9 +99,6 @@ Route::group(['middleware' => ['auth']], function () {
         //board request
         Route::post('/submit-board-request',[LiquorBoardRequestController::class,'store']);
         Route::patch('/update-board-request',[LiquorBoardRequestController::class,'update']);
-
-
-        Route::post('/get-id-or-reg-number/{variation}',[LicenceController::class,'getLicenceIDOrRegNumber']);
 
          // Get licence renewals.
         Route::get('/renew-licence',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
@@ -210,6 +208,9 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/email-comms/get-mail-template/{slug}/{licence_variation}', [EmailCommsController::class,'getMailTemplate']);
  
         Route::post('email-comms/filter-by-month', [EmailCommsController::class,'index']);
+        
+        //Emmails Not sent 
+        Route::get('emails-report', [EmailReportController::class,'index']);
 
         //renewals mail dispatcher
         Route::post('/dispatchRenewalMail', [EmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');

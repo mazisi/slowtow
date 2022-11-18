@@ -61,7 +61,7 @@ class TransferMailer extends Mailable
                 return $this->from('no-reply@slowtow.co.za')
                 ->markdown('emails.ecomms.transferMailer')
                 ->cc('info@slotow.co.za')
-                ->subject($this->transfer->licence->trading_name.' Transfer ')
+                ->subject($this->transfer->licence->trading_name.' Transfer')
                 ->attach(public_path('storage/'.$get_doc->document))
                 ->attach(public_path('storage/transferDocuments/GoVerify.pdf'))
                 ->with([

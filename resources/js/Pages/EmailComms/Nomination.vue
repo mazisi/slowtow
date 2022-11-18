@@ -57,7 +57,9 @@ methods: {
     getNominations(){
       this.$inertia.get('/email-comms/nominations');
     },
-
+    getEmmails(){
+      this.$inertia.get('/emails-report');
+    },
       alertTempo(){alert('Waiting for data')}
 
     },
@@ -100,6 +102,11 @@ methods: {
   <li class="nav-item" role="presentation">
     <button @click="alertTempo" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
+  </li>
+
+  <li class="nav-item" role="presentation">
+    <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    type="button" role="tab" aria-controls="alterations" aria-selected="false">Emails</button>
   </li>
 </ul>
 <div class="tab-content" id="pills-tabContent">

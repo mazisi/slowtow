@@ -15,11 +15,14 @@ return new class extends Migration
     {
         Schema::create('emails', function (Blueprint $table) {
             $table->id();
+            $table->string('trading_name')->nullable();
             $table->string('model_type');
             $table->bigInteger('model_id');
             $table->string('stage');
             $table->string('status');
             $table->longText('feedback')->nullable();
+            $table->string('model_slug');
+            $table->string('parent_licence_slug');
             $table->timestamps();
         });
     }

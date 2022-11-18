@@ -271,13 +271,5 @@ class LicenceController extends Controller
         return to_route('licences')->with('error','Error deleting licence.');
     }
 
-    public function getLicenceIDOrRegNumber(Request $request, $id){
-       if(empty($request->person)){
-         $comp = Company::whereId($id)->first();
-         return to_route('create_new_app', ['reg-number' => $comp->reg_number]);
-       }else{
-        $lic = People::whereId($id)->first();
-        return to_route('create_new_app', ['id-number' => $lic->id_or_passport]);
-       }
-    }
+    
 }

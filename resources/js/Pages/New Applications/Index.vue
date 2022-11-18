@@ -8,15 +8,14 @@
   <div class="card card-body mx-3 mx-md-4 mt-n6">
   <div class="row">
   <div class="col-lg-6 col-7">
-  <h6 class="mb-1">New Application </h6>
-  </div>
-  
+  <h6 class="mb-1 ml-4">Process New Application </h6>
+  </div>  
   </div>
   <div class="row">
   <div class="mt-3 ">
   <form class="row" @submit.prevent="submit">
-  <div class="col-1 "></div>
-    <div class="col-5 ">
+  
+    <div class="col-6">
   <div class="card card-plain h-100">
   <div class="p-3 card-body">
   
@@ -52,7 +51,7 @@
 
         <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
           <div class="input-group input-group-outline null is-filled">
-          <label class="form-label">Reg Number</label>
+          <label class="form-label">Company Registration Number</label>
           <input type="text" class="form-control form-control-default" v-model="form.reg_number" >
           </div>
           <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
@@ -118,7 +117,7 @@
   </div>  
   
 
-  <div class="col-5">  
+  <div class="col-6">  
     <div class="col-12 columns">            
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Address Line 1</label>
@@ -203,12 +202,17 @@
       persons: Array,
       success: String,
       error: String,
+      get_reg_num_or_id_number: String
     },
     
     
     setup (props) {
       let options;     
-  
+      
+      const filterForm = useForm({
+        variation: ''
+      })
+
       const form = useForm({
             trading_name: '',
             licence_type: '',
@@ -242,7 +246,7 @@
         
       }
       
-      return { submit, form ,options, idRegForm}
+      return { submit, form ,options, idRegForm, filterForm}
       
     },
     
@@ -255,19 +259,29 @@
     watch: {
       'form.company': {
         handler(newValue, oldValue) {
-          this.form.person = ''
-          this.form.post(`/get-id-or-reg-number/${newValue}`, {
-            preserveState: true,
-          })
+          this.filterForm.variation = 'company'
+          this.filterForm.get(`/create-new-app?value=${this.form.company}`, {
+            onSuccess: () => {
+              this.form.company = newValue
+            },
+            preserveScroll: true,
+            replace: true,
+            preserveState: true
+            })
         },
         deep: true
       },
       'form.person': {
         handler(newValue, oldValue) {
-          this.form.company = ''
-          this.form.post(`/get-id-or-reg-number/${newValue}`, {
-            preserveState: true,
-          })
+          this.filterForm.variation = 'person'
+          this.filterForm.get(`/create-new-app?value=${this.form.person}`, {
+            onSuccess: () => {
+              this.form.person = newValue
+            },
+            preserveScroll: true,
+            replace: true,
+            preserveState: true
+            })
         },
         deep: true
       }

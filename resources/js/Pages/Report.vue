@@ -129,7 +129,7 @@
   </div>
 
   <div class="col-4"></div>
-  <div v-if="form.variation === 'New-App'" class="col-8 mt-3">
+  <div v-if="form.variation === 'New-Applications'" class="col-8 mt-3">
     <Multiselect
         v-model="form.new_app_stages"           
         :options="new_app_stages"
@@ -146,7 +146,7 @@
   
 </div>
 
-<div v-if="form.variation === 'New-App'" class="table-responsive p-0">
+<div v-if="form.variation === 'New-Applications'" class="table-responsive p-0">
   <table class="table align-items-center mb-0">
         <thead>
           <tr>
@@ -162,7 +162,7 @@
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Scanned Application</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Application Lodged</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Initial Inspection</th>
-            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th>
+            <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th> -->
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Final Inspection</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Paid</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Activation Fee Paid</th>
@@ -232,10 +232,10 @@
               {{ new_application.initial_inspection_at }}
              </td>
     
-             <td class="text-center">
+             <!-- <td class="text-center">
 
               <p v-for="liquor_board_request in new_application.liquor_board_requests ">{{ liquor_board_request.body }}</p>
-             </td>
+             </td> -->
     
              <td class="text-center">
               <span v-if="new_application.status >= 10">{{ new_application.final_inspection_at }}</span>

@@ -35,7 +35,7 @@ class ReportController extends Controller
         // $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
         $sortedStatus = Arr::sort($request->new_app_stages);
 
-        $new_applications = Licence::with('licence_type','liquor_board_requests')->where(function($query) use($request,$sortedStatus){
+        $new_applications = Licence::with('licence_type')->where(function($query) use($request,$sortedStatus){
           $query->when($request->month, function($query) use($request){
               $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
           })
@@ -98,7 +98,7 @@ class ReportController extends Controller
             break;         
         
         default:
-          dd('Error');
+          return back()->with('error','Invalid selection');
           break;
       }
     }
