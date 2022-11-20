@@ -98,17 +98,15 @@
     <div class="col-4 columns" v-if="form.belongs_to ==='Person'">
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">ID Number</label>
-      <input type="text" class="form-control form-control-default" v-model="form.id_number" >
+      <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" :value="licence.people.id_or_passport" >
       </div>
-      <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
     </div>
 
       <div class="col-4 columns" v-if="form.belongs_to === 'Company'">
         <div class="input-group input-group-outline null is-filled">
         <label class="form-label">Reg Number</label>
-        <input type="text" class="form-control form-control-default" v-model="form.reg_number" >
+        <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" :value="licence.company.reg_number" >
         </div>
-        <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
       </div>
 
       
@@ -243,8 +241,6 @@
             trading_name: props.licence.trading_name,
             licence_type: props.licence.licence_type_id,
             belongs_to: props.licence.belongs_to,
-            reg_number:  props.licence.reg_number,
-            id_number: props.licence.id_number,
             address: props.licence.address,
             address2: props.licence.address2,
             address3: props.licence.address3,

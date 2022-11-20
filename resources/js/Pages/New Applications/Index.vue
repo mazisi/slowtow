@@ -44,17 +44,15 @@
       <div class="col-12 columns" v-if="form.belongs_to ==='Person'">
         <div class="input-group input-group-outline null is-filled">
         <label class="form-label">ID Number</label>
-        <input type="text" class="form-control form-control-default" v-model="form.id_number" >
+        <input readonlytype="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
         </div>
-        <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
         </div>
 
         <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
           <div class="input-group input-group-outline null is-filled">
           <label class="form-label">Company Registration Number</label>
-          <input type="text" class="form-control form-control-default" v-model="form.reg_number" >
+          <input readonly type="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
           </div>
-          <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
           </div> 
 
   <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
@@ -263,6 +261,7 @@
           this.filterForm.get(`/create-new-app?value=${this.form.company}`, {
             onSuccess: () => {
               this.form.company = newValue
+              alert(get_reg_num_or_id_number)
             },
             preserveScroll: true,
             replace: true,
@@ -277,6 +276,7 @@
           this.filterForm.get(`/create-new-app?value=${this.form.person}`, {
             onSuccess: () => {
               this.form.person = newValue
+              alert(get_reg_num_or_id_number)
             },
             preserveScroll: true,
             replace: true,

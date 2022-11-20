@@ -50,9 +50,9 @@ class NewApplicationController extends Controller
                ]);
         
                if($request->belongs_to === 'Company'){
-                $request->validate(['reg_number' => 'required', 'company' => 'required|exists:companies,id']);
+                $request->validate(['company' => 'required|exists:companies,id']);
                }else{
-                $request->validate(['id_number' => 'required','person' => 'required|exists:people,id']);
+                $request->validate(['person' => 'required|exists:people,id']);
                }
         
                $licence = Licence::create([
@@ -100,16 +100,14 @@ class NewApplicationController extends Controller
                 'licence_number' => $request->licence_number,
                 'latest_renewal' => $request->latest_renewal,
                 'licence_date' => $request->licence_date,
-                'id_number' => $request->id_number,
-                'reg_number' => $request->reg_number
                ]);
                if($licence){
                 return back()->with('success','Licence updated successfully.');
                }
                
         } catch (\Throwable $th) {
-            throw $th;
-            //return back()->with('error','An error occured.Please try again.');
+            //throw $th;
+            return back()->with('error','An error occured.Please try again.');
         }
        
     }

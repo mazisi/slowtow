@@ -222,6 +222,7 @@ class LicenceController extends Controller
         }else{
             $view = 'ViewLicence';
         }
+      
         return Inertia::render('Licences/'.$view,[
                                             'licence' => $licence,
                                             'licence_dropdowns' => $licence_dropdowns,
