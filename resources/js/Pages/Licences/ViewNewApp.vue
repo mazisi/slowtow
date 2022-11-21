@@ -8,7 +8,7 @@
   <div class="card card-body mx-3 mx-md-4 mt-n6">
   <div class="row">
   <div class="col-lg-6 col-7">
-  <h6 class="mb-1">View New Application</h6>
+  <h6 class="mb-1">View New Application: <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name }}</Link></h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
@@ -122,6 +122,8 @@
     <div v-if="errors.latest_renewal" class="text-danger">{{ errors.latest_renewal }}</div>
   </div> 
 
+  
+
 
   <div class="col-4 columns">            
     <div class="input-group input-group-outline null is-filled">
@@ -139,8 +141,15 @@
     </div>
     </div>
 
-    <div class="col-4 columns"></div>
+    <div class="col-4 columns" v-if="licence.province === 'Mpumalanga'">            
+      <div class="input-group input-group-outline null is-filled">
+      <label class="form-label">Client Number</label>
+      <input type="text" class="form-control form-control-default" v-model="form.client_number">
+      </div>
+      <div v-if="errors.client_number" class="text-danger">{{ errors.client_number }}</div>
+    </div> 
 
+    
     <div class="col-4 columns">                  
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">Province</label>
@@ -245,6 +254,7 @@
             address2: props.licence.address2,
             address3: props.licence.address3,
             province: props.licence.province,
+            client_number: props.licence.client_number,
             company:  props.licence.company !== null ? props.licence.company.name : '',
             person: props.licence.people !== null ? props.licence.people.full_name : '',
             board_region: props.licence.board_region,

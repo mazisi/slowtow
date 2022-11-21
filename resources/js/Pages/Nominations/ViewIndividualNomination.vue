@@ -207,7 +207,7 @@ export default{
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6>Nomination Info:  <Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">{{ nomination.licence.trading_name }}</Link></h6>
+<h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">{{ nomination.licence.trading_name }}</Link> - {{ nomination.year }} </h6>
 <p class="text-sm mb-0">Current Stage: 
   <span class="font-weight-bold ms-1" v-if="nomination.status == '1'">Client Quoted</span>
  <span v-if="nomination.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
@@ -248,7 +248,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${client_quoted.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -279,7 +279,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${client_invoiced.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -347,7 +347,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liquor_board !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${liquor_board.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${liquor_board.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -443,7 +443,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_forms !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${nomination_forms.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${nomination_forms.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -469,7 +469,7 @@ Action
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Proof Of Payment</h6>
     </div>
-    <a v-if="liquor_board !== null" :href="`/storage/app/public/nominationDocuments/${liquor_board.document}`" class="mb-0 btn btn-link ms-auto" href="javascript:;">
+    <a v-if="liquor_board !== null" :href="`${$page.props.blob_file_path}${liquor_board.document}`" class="mb-0 btn btn-link ms-auto" href="javascript:;">
     <i class="fa fa-link h5 " aria-hidden="true"></i></a>
     <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" href="javascript:;">
       <i class="fa fa-link h5" aria-hidden="true"></i></a>
@@ -482,7 +482,7 @@ Action
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="attorney_doc !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${attorney_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${attorney_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -504,7 +504,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certified_id_doc !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${certified_id_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${certified_id_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -526,7 +526,7 @@ Action
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance_doc !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${police_clearance_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${police_clearance_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -548,7 +548,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="latest_renewal_doc !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${latest_renewal_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${latest_renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -577,7 +577,7 @@ Action
 </Link>
 <button v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
 <a v-if="nomination.merged_document !== null" 
-:href="`/storage/app/public/nominationDocuments/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
+:href="`${$page.props.blob_file_path}${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
 <hr>
 
@@ -593,7 +593,7 @@ Action
     <ul class="list-group">
      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="scanned_app !== null">
-        <a :href="`/storage/app/public/nominationDocuments/${scanned_app.document}`" target="_blank">
+        <a :href="`${$page.props.blob_file_path}${scanned_app.document}`" target="_blank">
         <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -626,7 +626,7 @@ Action
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${nomination_logded.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${nomination_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -675,7 +675,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${nomination_issued.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${nomination_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -722,7 +722,7 @@ Action
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
-    <a :href="`/storage/app/public/nominationDocuments/${nomination_delivered.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${nomination_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>

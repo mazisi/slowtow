@@ -12,7 +12,7 @@
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">New Nomination For:  {{ licence.trading_name }}</h6>
+<h6 class="mb-1">New Nomination For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h6>
 </div>
 </div>
 
@@ -56,7 +56,7 @@
 <div class="col-4 col-md-6 col-xl-8 position-relative">
 <div class="card card-plain h-100">
 <div class="p-3 card-body">
-<form @submit.prevent="submit">
+<form @submit.prevent="submit" class="mt-4">
 <Datepicker v-model="form.year" yearPicker />
 <p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
 
@@ -64,7 +64,6 @@
   <span v-if="form.processing" class="spinner-border mt-1 spinner-border-sm" role="status" aria-hidden="true"></span>
   Submit
 </button>
-
 </form>
 
 </div>

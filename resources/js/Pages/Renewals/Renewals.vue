@@ -12,7 +12,9 @@
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">Renewal Information:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h6>
+<h6 class="mb-1">
+   <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link>
+   Renewals</h6>
 </div>
 
 
@@ -56,7 +58,7 @@
 <span v-if="renewal.status == '6'" class="badge bg-success text-default">Renewal Delivered</span>
 </td>
 <td class="align-middle text-end" >
-<div class="d-flex align-middle text-end" style="margin-left: 3rem;">
+<div class="d-flex justify-content-center">
 <Link :href="`/view-licence-renewal/${renewal.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
 <!-- <Link :href="`#!`" @click="deleteRenewal(renewal.slug)"><i class="fa fa-trash-o  text-danger" aria-hidden="true"></i></Link> -->
 </div>

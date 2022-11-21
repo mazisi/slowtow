@@ -101,7 +101,7 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
+<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ limit(licence.licence_type.licence_type) }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company==null ? licence.people.full_name : licence.company.name }}</Link></td>
 <td class="text-center">
 <Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
@@ -112,7 +112,7 @@
 </table>
 </div>
 </div>
-<button class="btn btn-success">Load More</button>
+
 </div>
 </div>
 </div>
@@ -174,6 +174,13 @@ export default {
           province: this.province
           }))
         },
+
+       limit(string = '', limit = 25) {
+        if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
     },
     
 }

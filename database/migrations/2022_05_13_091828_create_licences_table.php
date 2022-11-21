@@ -20,6 +20,7 @@ return new class extends Migration
             $table->foreignId('licence_type_id')->constrained()->onDelete('cascade');
             $table->string('trading_name');
             $table->string('licence_number')->nullable();
+            $table->string('client_number')->nullable();
             $table->string('old_licence_number')->nullable();
             $table->date('licence_date')->nullable();
             $table->string('address')->nullable();

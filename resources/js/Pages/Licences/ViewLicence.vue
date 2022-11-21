@@ -186,7 +186,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic !== ''">
-    <a v-for="doc in original_lic" :key="doc.id" :href="`/storage/app/public/licenceDocuments/${doc.document_file}`" target="_blank">
+    <a v-for="doc in original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -207,7 +207,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic !== ''">
-    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`/storage/app/public/licenceDocuments/${doc.document_file}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -233,7 +233,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic_delivered !== ''">
-    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`/storage/app/public/licenceDocuments/${doc.document_file}`" target="_blank">
+    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -256,7 +256,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic_delivered !== ''">
-    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`/storage/app/public/licenceDocuments/${doc.document_file}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>

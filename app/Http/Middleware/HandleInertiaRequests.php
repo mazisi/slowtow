@@ -50,6 +50,7 @@ class HandleInertiaRequests extends Middleware
             'currentRoute' => fn () => Route::currentRouteName(),
             'success' => fn () => $request->session()->get('success'),
             'error' => fn () => $request->session()->get('error'),
+            'blob_file_path' => fn () => env('BLOB_FILE_PATH'),
             'slug' => fn () => $request->slug,//this guy handles every slug passed in url..
             
         ]);

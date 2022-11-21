@@ -213,7 +213,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`/storage/app/public/renewalDocuments/${client_quoted.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -247,7 +247,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`/storage/app/public/renewalDocuments/${client_invoiced.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -317,7 +317,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a :href="`/storage/app/public/renewalDocuments/${liqour_board.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -367,7 +367,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_issued !== null">
-    <a :href="`/storage/app/public/renewalDocuments/${renewal_issued.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${renewal_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -413,7 +413,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_doc !== null">
-    <a :href="`/storage/app/public/renewalDocuments/${renewal_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>

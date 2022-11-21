@@ -98,8 +98,10 @@ class NewApplicationController extends Controller
                 'address3' => $request->address3,
                 'province' => $request->province,
                 'licence_number' => $request->licence_number,
+                'client_number' => $request->client_number,
                 'latest_renewal' => $request->latest_renewal,
                 'licence_date' => $request->licence_date,
+                'postal_code' => $request->postal_code,
                ]);
                if($licence){
                 return back()->with('success','Licence updated successfully.');
