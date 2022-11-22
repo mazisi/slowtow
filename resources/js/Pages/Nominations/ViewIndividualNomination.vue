@@ -577,7 +577,7 @@ Action
 </Link>
 <button v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
 <a v-if="nomination.merged_document !== null" 
-:href="`${$page.props.blob_file_path}${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
+:href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
 <hr>
 
