@@ -57,8 +57,13 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(['middleware' => ['auth']], function () { 
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
     Route::group(['middleware' => ['role:slowtow-admin|slowtow-user']], function () {
+
         Route::get('/slotow-admins',[AdminsController::class,'index'])->name('slotow_admins');
         Route::post('/submit-user',[AdminsController::class,'store']);
+        Route::patch('/update-user',[AdminsController::class,'update']);
+        Route::post('/deactivate-user/{id}/{status}',[AdminsController::class,'deactivate']);
+
+
         //update password
         Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
         Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');

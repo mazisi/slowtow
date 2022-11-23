@@ -5,7 +5,7 @@ Your Goverify login credentials are as follows:<br><br>
 Email: <b>{{ $email }}</b><br>
 Password: <b>{{ $password }}</b><br>
 
-@component('mail::button', ['url' => {{ env('APP_URL') }}])
+@component('mail::button', ['url' => env('APP_URL')])
 Login
 @endcomponent
 

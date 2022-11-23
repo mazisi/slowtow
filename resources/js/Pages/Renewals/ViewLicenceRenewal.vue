@@ -85,7 +85,7 @@ export default {
         preserveScroll: true,
         onSuccess: () => { 
           this.show_modal = false;
-          let dismiss =  document.querySelector('.modal-backdrop').remove()
+          document.querySelector('.modal-backdrop').remove()
           uploadDoc.reset();
          },
       })

@@ -22,28 +22,45 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Full Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Function </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Employed </th>
-                      <th class="text-secondary opacity-7"></th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Created </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr v-for="user in users" :key="user.id">
                       <td>
                         <div class="d-flex px-2 py-1">
-                          <div><img src="/vue-material-dashboard-2/img/team-2.90c40d0c.jpg" class="avatar avatar-sm me-3 border-radius-lg" alt="user1"></div>
+                          <div>
+                            <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                          </div>
                           <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm">John Michael</h6>
-                            <p class="text-xs text-secondary mb-0"> john@creative-tim.com </p>
+                            <h6 class="mb-0 text-sm">{{ user.name }}</h6>
+                            <p class="text-xs text-secondary mb-0"> {{ user.email.toLowerCase() }} </p>
                           </div>
                         </div>
                       </td>
                       <td>
-                        <p class="text-xs font-weight-bold mb-0">Manager</p>
-                        <p class="text-xs text-secondary mb-0">Organization</p>
+                        <p v-for="role in user.roles" class="text-xs font-weight-bold mb-0">{{ role.name }}</p>
                       </td>
-                      <td class="align-middle text-center text-sm"><span class="badge badge-sm bg-gradient-success">Online</span></td>
-                      <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">23/04/18</span></td>
-                      <td class="align-middle"><a href="javascript:;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user"> Edit </a></td>
+                      <td class="align-middle text-center text-sm">
+                        <span v-if="user.is_active" class="badge badge-sm bg-gradient-success">Active</span>
+                        <span v-else class="badge badge-sm bg-gradient-warning">Deactivated</span>
+                      </td>
+                      <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">{{ new Date(user.created_at).toDateString() }}</span></td>
+                      <td class="align-middle text-center">
+                      <!-- Example split danger button -->
+                      <div class="dropdown">
+  <button class="btn btn-sm  btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+    Action
+  </button>
+  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+    <li><a @click="editUser(user.id,user.name,user.email,user.roles[0].name)" data-bs-toggle="modal" data-bs-target="#edit-user" class="dropdown-item active" href="#!">Edit</a></li>
+    <li>
+      <a v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Deactivate</a>
+      <a v-else @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Activate</a></li>
+  </ul>
+</div>
+</td>
                     </tr>
                  
                   </tbody>
@@ -118,6 +135,45 @@
       </div>
     </div>
   </div>
+
+  <div v-if="show_modal" class="modal fade" id="edit-user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Edit {{ editForm.full_name }}</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form @submit.prevent="updateUser">        
+        <div class="modal-body">      
+          <div class="row">
+            <div class="col-12 columns">
+              <div class="input-group input-group-outline null is-filled ">
+              <label class="form-label">Full Name</label>
+              <input type="text" required class="form-control form-control-default" v-model="editForm.full_name" >
+              </div>
+              <div v-if="errors.full_name" class="text-danger">{{ errors.full_name }}</div>
+              </div>
+
+              <div class="col-12 columns">
+                <div class="input-group input-group-outline null is-filled ">
+                <label class="form-label">Email</label>
+                <input type="email" required class="form-control form-control-default" v-model="editForm.email" >
+                </div>
+                <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
+                </div>     
+           </div>
+        </div>
+    
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary" :disabled="editForm.processing">
+           <span v-if="editForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+           Update</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
    
   </Layout>
   </template>
@@ -141,7 +197,7 @@
   export default {
    props: {
       errors: Object,
-      admins: Object,
+      users: Object,
       success: String,
       error: String
     },
@@ -151,12 +207,19 @@
           let showMenu = ref(false);
           let show_modal = ref(true); 
   
-      const form = useForm({
-        full_name: '',
-        email: '',
-        role: '',
-        password: '' 
-      }) 
+          const form = useForm({
+            full_name: '',
+            email: '',
+            role: '',
+            password: '' 
+          }) 
+
+          const editForm = useForm({
+            full_name: '',
+            email: '',
+            role: '',
+            id: ''
+          }) 
         //  function deleteLicence(){
         //     if(confirm('Are you sure you want to delete this licence??')){
         //       Inertia.delete(`/delete-licence/${props.licence.slug}`)
@@ -166,7 +229,8 @@
           function submitUser() {
             form.post('/submit-user', {
               onSuccess: () => {
-                this.show_modal = false
+                this.show_modal = false;
+                document.querySelector('.modal-backdrop').remove()
                 form.reset('body','full_name','email','role')
               }
              })
@@ -187,8 +251,32 @@
                   var randomNumber = Math.floor(Math.random() * chars.length);
                   this.form.password += chars.substring(randomNumber, randomNumber +1);
                }
-            }
-            
+            }            
+          }
+
+          function editUser(user_id,name,email,role){
+            this.editForm.full_name = name;
+            this.editForm.email = email;
+            this.editForm.role = role;
+            this.editForm.id = user_id;
+            this.show_modal = true;
+          }
+
+          function updateUser(){
+            editForm.patch('/update-user', {
+              onSuccess: () => {
+                this.show_modal = false
+                document.querySelector('.modal-backdrop').remove()
+              }
+             })
+          }
+
+          function deActivateuser(id, status){
+            Inertia.post(`/deactivate-user/${id}/${status}`,{
+              onSuccess: () => {
+                //
+              }
+            })
           }
   
       return {
@@ -196,7 +284,11 @@
         showMenu,
         show_modal,
         submitUser,
-        generatePassword
+        generatePassword,
+        editUser,
+        editForm,
+        updateUser,
+        deActivateuser
       }
     },
      components: {
