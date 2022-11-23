@@ -37,6 +37,7 @@ use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\DispatchMailWithoutEditingController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
+use App\Http\Controllers\Slowtowdmin\AdminsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -56,7 +57,8 @@ Route::group(['middleware' => ['guest']], function () {
 Route::group(['middleware' => ['auth']], function () { 
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
     Route::group(['middleware' => ['role:slowtow-admin|slowtow-user']], function () {
-        
+        Route::get('/slotow-admins',[AdminsController::class,'index'])->name('slotow_admins');
+        Route::post('/submit-user',[AdminsController::class,'store']);
         //update password
         Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
         Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');

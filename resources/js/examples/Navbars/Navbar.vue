@@ -41,7 +41,20 @@
         >
           <vmd-input id="search" label="Search here" />
         </div>
+
+        
         <ul class="navbar-nav justify-content-end">
+          <li class="nav-item d-flex align-items-center">
+            <inertia-link href="/slotow-admins" class="px-0 nav-link font-weight-bold lh-1 text-body">
+              <i class="material-icons me-sm-1"> admin_panel_settings </i>
+            </inertia-link>
+          </li>
+          
+          <li class="px-3 nav-item d-flex align-items-center">
+            <a class="p-0 nav-link lh-1 text-body">
+              <i class="material-icons fixed-plugin-button-nav cursor-pointer"> settings </i>
+            </a>
+        </li>
           <li class="nav-item d-flex align-items-center">
             <inertia-link
               :href="`/logout`"
@@ -53,6 +66,9 @@
               </i>
             </inertia-link>
           </li>
+        </ul>
+        <!-- <ul class="navbar-nav justify-content-end">
+         
           
          
          
@@ -70,7 +86,7 @@
               </div>
             </a>
           </li>
-        </ul>
+        </ul> -->
       </div>
     </div>
   </nav>

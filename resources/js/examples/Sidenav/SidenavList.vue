@@ -466,6 +466,7 @@
       <hr v-if="$page.props.auth.has_slowtow_admin_role
       "/>
 
+
    <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
    ">
   <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
