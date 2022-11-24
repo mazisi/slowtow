@@ -40,7 +40,11 @@
                         </div>
                       </td>
                       <td>
-                        <p v-for="role in user.roles" class="text-xs font-weight-bold mb-0">{{ role.name }}</p>
+                        <p v-for="role in user.roles" class="text-xs font-weight-bold mb-0">
+                         <span v-if="role.name === 'slowtow-admin'">Super Admin</span>
+                         <span v-else-if="role.name === 'slowtow-user'">Admin</span>
+                         <span v-else >User</span>
+                        </p>
                       </td>
                       <td class="align-middle text-center text-sm">
                         <span v-if="user.is_active" class="badge badge-sm bg-gradient-success">Active</span>
@@ -49,17 +53,17 @@
                       <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">{{ new Date(user.created_at).toDateString() }}</span></td>
                       <td class="align-middle text-center">
                       <!-- Example split danger button -->
-                      <div class="dropdown">
-  <button class="btn btn-sm  btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-    Action
-  </button>
-  <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-    <li><a @click="editUser(user.id,user.name,user.email,user.roles[0].name)" data-bs-toggle="modal" data-bs-target="#edit-user" class="dropdown-item active" href="#!">Edit</a></li>
-    <li>
-      <a v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Deactivate</a>
-      <a v-else @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Activate</a></li>
-  </ul>
-</div>
+  <div class="dropdown">
+    <button class="btn btn-sm  btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+      Action
+    </button>
+    <ul v-if="user.roles[0].name == 'slowtow-user'" class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
+      <li><a @click="editUser(user.id,user.name,user.email,user.roles[0].name)" data-bs-toggle="modal" data-bs-target="#edit-user" class="dropdown-item active" href="#!">Edit</a></li>
+      <li>
+        <a v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Deactivate</a>
+        <a v-else @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Activate</a></li>
+    </ul>
+  </div>
 </td>
                     </tr>
                  
@@ -73,7 +77,6 @@
     </div>
   
   
-  <!-- upload doc -->
   
   <div v-if="show_modal" class="modal fade" id="add-user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">

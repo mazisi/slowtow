@@ -9,14 +9,16 @@ use Inertia\Inertia;
 
 class LoginController extends Controller
 {
-    public function authenticate(Request $request)
-    {
+    public function authenticate(Request $request){
         $credentials = $request->validate([
             'email' => ['required', 'email'],
             'password' => ['required'],
         ]);
  
         if (Auth::attempt($credentials,$request->remember)) {
+            if(!auth()->user()->is_active){
+                return back()->with('error','Your account is not activated.');
+            }
             $request->session()->regenerate();
            // dd(auth()->user()->hasRole('slowtow-user'));
             if(auth()->user()->hasRole('company-admin')){

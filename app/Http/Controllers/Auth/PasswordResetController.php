@@ -19,19 +19,12 @@ class PasswordResetController extends Controller
     }
 
     public function updatePassword(Request $request) {
-        $request->validate([
-            "old_password"=> "required",
-            "new_password"=> "required|confirmed"
-        ]);
-        
-          if(Hash::check($request->old_password, $request->new_password)){
-            auth()->user()->update(['password' => Hash::make($request->new_password)]);
+        if($request->password === $request->password_confirmation){
+            auth()->user()->update(['password' => Hash::make($request->password)]);
             return back()->with('success', 'Password updated successfully');
-            }else{
-                return back()->with('error', 'Old Password incorrect');
-            }
-        
-              
-          }
+        }else{
+            return back()->with('error', 'Passwords are not the same');
+      }
+     }
 
 }

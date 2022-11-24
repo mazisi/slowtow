@@ -108,9 +108,8 @@ export default{
             preserveScroll: true,
             onSuccess: () => { 
               this.show_modal = false;        
-              let dismiss = document.querySelector('.modal-backdrop');
-                dismiss.remove();
-                nomineeForm.reset();
+              document.querySelector('.modal-backdrop').remove();
+              nomineeForm.reset();
             },
           })
       }

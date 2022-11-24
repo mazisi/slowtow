@@ -3,7 +3,7 @@ import { computed } from 'vue';
 
 const emit = defineEmits(['update:checked']);
 
-const props = defineProps({
+const props = ({
     checked: {
         type: [Array, Boolean],
         default: false,

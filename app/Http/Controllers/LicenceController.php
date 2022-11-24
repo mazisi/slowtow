@@ -163,7 +163,7 @@ class LicenceController extends Controller
         }else{
             $licences = Licence::with('company','people','licence_type')->latest()->get();
         }
-        $all_licence_types = LicenceType::get();
+       $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
     }
 
