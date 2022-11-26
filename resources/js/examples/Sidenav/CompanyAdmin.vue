@@ -1,0 +1,35 @@
+<template>
+    <li class="nav-item" v-if="$page.props.currentRoute == 'view_my_licences'">
+        <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
+         :class="{ active:  $page.props.currentRoute == 'my_renewals'}"
+         :href="`/company/my-renewals?slug=${$page.props.slug}`">
+        <div class="text-center d-flex align-items-center justify-content-center me-2">
+        <i class="material-icons-round opacity-10 fs-5">autorenew</i>
+        </div>
+        <span class="nav-link-text ms-1">Renewals</span>
+        
+        </Link>
+      </li>
+
+      <li v-if="$page.props.currentRoute == 'view_my_licences'"
+            class="nav-item">
+        <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
+         :class="{ active:  $page.props.currentRoute == 'my_transfer_history'}"
+         :href="`/company/my-transfer-history?slug=${$page.props.slug}`">
+        <div class="text-center d-flex align-items-center justify-content-center me-2">
+        <i class="material-icons-round opacity-10 fs-5">move_down</i>
+        </div>
+        <span class="nav-link-text ms-1">Transfers</span>
+        
+        </Link>
+      </li>
+</template>
+<script>
+import { Link } from '@inertiajs/inertia-vue3';
+
+export default{
+    components: {
+        Link
+    }
+}
+</script>

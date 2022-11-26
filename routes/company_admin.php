@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyAdmin\CompanyController;
 use App\Http\Controllers\CompanyAdmin\LicenceController;
 use App\Http\Controllers\CompanyAdmin\DashboardController;
+use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 
 Route::group(['middleware' => ['auth']], function () { 
@@ -19,7 +20,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/my-companies',[CompanyController::class,'index'])->name('my_companies');
         Route::get('/view-my-company/{slug}',[CompanyController::class,'show'])->name('view_my_company');
 
+        Route::get('/my-renewals',[LicenceController::class,'my_renewals'])->name('my_renewals');
+        Route::get('/view-my-licence-renewal/{slug}',[LicenceController::class,'view_my_renewal'])->name('view_renewal');
+
+        Route::get('/my-transfer-history',[LicenceTransferController::class,'index'])->name('my_transfer_history');
+        Route::get('/view-my-transfer/{slug}',[LicenceTransferController::class,'view_my_transfer'])->name('view_my_transfer');
         Route::get('/my-temp-licences',[TemporalLicenceController::class,'index'])->name('my_temp_licences');
+        Route::get('/view-my-temp-licences/{slug}',[TemporalLicenceController::class,'show']);
     });
 
   });   

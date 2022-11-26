@@ -60,7 +60,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'licences'}"
+          :class="{ active:  $page.props.currentRoute == 'company_admin_licences'}"
           :collapseRef="route('company_admin_licences')"
           navText="Licences">
           <template v-slot:icon>
@@ -398,7 +398,12 @@
           </template>
         </sidenav-collapse>
       </li>
-      
+
+
+
+      <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>  
+
+
       <li class="nav-item">
   <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
     <div class="text-center d-flex align-items-center justify-content-center me-2">
@@ -467,6 +472,8 @@
       "/>
 
 
+
+
    <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
    ">
   <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
@@ -479,12 +486,13 @@
 
 
     </ul>
-   
+    
   </div>
 </template>
 <script>
 import SidenavCollapse from "./SidenavCollapse.vue";
 import { Link } from '@inertiajs/inertia-vue3';
+import CompanyAdminVue from "./CompanyAdmin.vue";
 
 export default {
   name: "SidenavList",
@@ -500,7 +508,8 @@ export default {
   },
   components: {
     SidenavCollapse,
-    Link
+    Link,
+    CompanyAdminVue
   },
   methods: {
     goBack(){

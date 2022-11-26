@@ -2,165 +2,109 @@
 
 namespace App\Http\Controllers\CompanyAdmin;
 
-use App\Http\Controllers\Controller;
+use App\Models\Task;
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Company;
 use App\Models\Licence;
-use App\Models\LicenceDocument;
 use App\Models\LicenceType;
 use Illuminate\Http\Request;
-use App\Models\Task;
-use App\Models\User;
+use App\Models\LicenceRenewal;
+use App\Models\LicenceDocument;
+use App\Models\RenewalDocument;
+use App\Http\Controllers\Controller;
 
 class LicenceController extends Controller
 {
     public function index(Request $request){
-
-        if(!empty($request->term) && $request->active_status == 'Active' && empty($request->licence_date) && empty($request->licence_type)){
-
-               $licences = Licence::with(["company","licence_type"])
-                 ->whereNotNull('is_licence_active')
-                ->where(function($query) use($request){
-                    $query->where('trading_name','LIKE','%'.$request->term.'%')
-                    ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                    ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-                    ->orWhereHas('company', function($query) use($request){
-                       $query->where('name', 'like', '%'.$request->term.'%');
-                });
-                })->get();
-               
-
-    }elseif(!empty($request->term) && $request->active_status == 'Active' 
-      && !empty($request->licence_date) && !empty($request->licence_type)){
-
-        $licences = Licence::with(["company","licence_type"])
-                    ->where('licence_type_id',$request->licence_type)
-                    ->whereMonth('licence_date',$request->licence_date)      
-                    
-                    ->where(function($query) use($request){
-                        $query->where('trading_name','LIKE','%'.$request->term.'%')
-                              ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                              ->orWhere('old_licence_number','LIKE','%'.$request->term.'%');
-                        })->orWhereHas('company', function($query) use($request){
-                            $query->where('name', 'like', '%'.$request->term.'%');
-                           })->whereNotNull('is_licence_active')
-                  ->get();
-
-        }elseif(empty($request->term) && empty($request->active_status)
-             && empty($request->licence_date) && !empty($request->licence_type)){
-
-                $licences = Licence::with(["company","licence_type"])
-                ->where('licence_type_id',$request->licence_type)                
-                ->get();
-
-            }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)
-            && empty($request->licence_type)){
-
-                $licences = Licence::with(["company","licence_type"])
-                    ->whereMonth('licence_date',$request->licence_date)->get();
-
-            }elseif(!empty($request->licence_date) && empty($request->term) && empty($request->active_status)
-            && !empty($request->licence_type)){
-
-                $licences = Licence::with(["company","licence_type"])
-                    ->where('licence_type_id',$request->licence_type)
-                    ->whereMonth('licence_date',$request->licence_date)->get();
-
-
-                }elseif(!empty($request->licence_date) && $request->active_status =='Inactive'
-                && !empty($request->licence_type) && empty($request->term) ){
-                    
-                    $licences = Licence::with(["company","licence_type"])
-                      ->where(function($query) use($request){
-                        $query->where('licence_type_id',$request->licence_type)
-                         ->whereMonth('licence_date',$request->licence_date);
-                        })->whereNull('is_licence_active')->get();
-
-        }elseif(empty($request->licence_date) && $request->active_status =='Active'
-        && !empty($request->licence_type) && !empty($request->term) ){
-                        
-
-                    $licences = Licence::with(["company","licence_type"])
-                      ->where(function($query) use($request){
-                        $query->where('licence_type_id',$request->licence_type)
-                         ->whereNotNull('is_licence_active');
-                        })
-                        ->where(function($query) use($request){
-                            $query->where('licence_type_id',$request->licence_type)
-                            ->where('trading_name','LIKE','%'.$request->term.'%')
-                        ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                        ->orWhere('old_licence_number','LIKE','%'.$request->term.'%');
-                            })
-                        
-                        ->orWhereHas('company', function($query) use($request){
-                            $query->where('name', 'like', '%'.$request->term.'%');
-                        })->get();
-
-        }elseif($request->active_status == 'All' && empty($request->term)){
-
-          $licences = Licence::with(["company","licence_type"])->get();
-
-        }elseif(!empty($request->term) && empty($request->active_status)){
-
-            $licences = Licence::with(["company","licence_type"])
-                            ->orWhereHas('company', function($query) use($request){
-                                $query->where('name', 'like', '%'.$request->term.'%');
-                            })->orWhere('trading_name','LIKE','%'.$request->term.'%')
-                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-                            ->get();
         
-        }elseif(!empty($request->term)  && $request->active_status == 'Inactive'){
+        $companies = Company::whereHas('users', function($query){
+            $query->where('user_id',auth()->id());
+        })->get();
 
-                    $licences = Licence::with(["company","licence_type"])
-                         ->whereNull('is_licence_active')
-                        ->where(function($query) use($request){
-                    $query->where('trading_name','LIKE','%'.$request->term.'%')
-                    ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                    ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
+        $get_company_ids = [];
 
-                    ->orWhereHas('company', function($query) use($request){
-                    $query->where('name', 'like', '%'.$request->term.'%');
-                });
-                })->get();
+        foreach($companies as $company){
+            $get_company_ids[] = $company->id;
+        } 
 
-    }elseif(empty($request->term)  && $request->active_status == 'Active'){
+
         $licences = Licence::with(["company","licence_type"])
-                         ->whereNotNull('is_licence_active')->get();
 
-    }elseif(empty($request->term)  && $request->active_status == 'Inactive'){
-        $licences = Licence::with(["company","licence_type"])
-                            ->whereNull('is_licence_active')->get();
-
-    }elseif(!empty($request->term)  && $request->active_status == 'All'){
-
-                    $licences = Licence::with(["company","licence_type"])
-                        ->where(function($query) use($request){
-                    $query->where('trading_name','LIKE','%'.$request->term.'%')
-                    ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                    ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-
-                    ->orWhereHas('company', function($query) use($request){
-                    $query->where('name', 'LIKE', '%'.$request->term.'%');
-                });
-                })->get();
-
-        }else{
+        ->when(request('term'), function ($query) {
+            return $query->where('licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%');
+        })->when(request('term') && request('active_status') == 'Active', 
+            function ($query){ 
+                $query->whereNotNull('is_licence_active')
+                ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                ->orWhere('old_licence_number','LIKE','%'.request('term').'%');
             
-            $companies = Company::whereHas('users', function($query){
-                $query->where('user_id',auth()->id());
-            })->get();
+            })
+            ->when(request('term') && request('licence_date') && request('licence_type'), 
+                function ($query){ 
+                    $query->whereMonth('licence_date',request('licence_date'))
+                    ->orWhere('licence_type_id',request('licence_type'))
+                    ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%');            
+                })
 
-            $get_company_ids = [];
+            ->when(request('licence_type'), 
+                function ($query){ 
+                    $query->where('licence_type_id',request('licence_type'));                
+                })
 
-            foreach($companies as $company){
-                $get_company_ids[] = $company->id;
-            } 
-            $licences = Licence::with('licence_type','company')->whereIn('company_id',$get_company_ids)->get();    
-        }
+            ->when(request('licence_date'), 
+                function ($query){ 
+                    $query->where('licence_type_id',request('licence_date'));                
+                })
 
+            ->when(request('licence_date') && request('licence_type'), 
+                function ($query){ 
+                    $query->whereMonth('licence_date',request('licence_date'))
+                    ->orWhere('licence_type_id',request('licence_type'));                
+                })
 
+            ->when(request('licence_date') && request('active_status') =='Inactive' && request('licence_type'), 
+                function ($query){ 
+                    $query->whereMonth('licence_date',request('licence_date'))
+                    ->orWhere('licence_type_id',request('licence_type'))
+                    ->whereNull('is_licence_active');                
+                })
 
+            ->when(request('term') && request('active_status') =='Active' && request('licence_type'), 
+                function ($query){ 
+                    $query->where('licence_type_id',request('licence_type'))
+                        ->where('trading_name','LIKE','%'.request('term').'%')
+                        ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                        ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('licence_type_id',request('licence_type'))
+                    ->whereNotNull('is_licence_active');                
+                })
+
+            ->when(request('term') && request('active_status') =='Inactive', 
+                function ($query){ 
+                   $query->where('trading_name','LIKE','%'.request('term').'%')
+                    ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                    ->whereNull('is_licence_active')
+                    ->orWhereHas('company', function($query){
+                      $query->where('name', 'like', '%'.request('term').'%');                
+                });
+               })
+
+            ->when(request('active_status') =='Active', 
+                function ($query){ 
+                    $query->whereNotNull('is_licence_active');                
+                })
+
+            ->when(request('active_status') =='Inactive', 
+                function ($query){ 
+                    $query->whereNull('is_licence_active');                
+                })
+
+            ->whereIn('company_id',$get_company_ids)
+            ->get();
         $all_licence_types = LicenceType::get();
 
         return Inertia::render('CompanyAdminDash/Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
@@ -190,6 +134,29 @@ class LicenceController extends Controller
     }
 
 
+public function my_renewals(Request $request){
+    $licence = Licence::with('licence_renewals')->whereSlug($request->slug)->first();
+    return Inertia::render('CompanyAdminDash/Licences/MyRenewals',['licence' => $licence]);
+}
 
+public function view_my_renewal($slug){
+    $renewal = LicenceRenewal::with('licence')->whereSlug($slug)->first();
+
+    $client_invoiced = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Invoiced')->first();
+    $renewal_issued = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Issued')->first();
+    $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
+    $renewal_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Delivered')->first();
+    $liqour_board = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Payment To The Liquor Board')->first();
+    return Inertia::render('CompanyAdminDash/Licences/ViewMyRenewal',
+    [
+
+    'renewal' => $renewal,
+    'client_invoiced' => $client_invoiced,
+    'renewal_issued' => $renewal_issued,
+    'client_quoted'  => $client_quoted,
+    'renewal_doc' => $renewal_doc,
+    'liqour_board' => $liqour_board
+   ]);
+}
     
 }

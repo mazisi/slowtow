@@ -65,18 +65,6 @@
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
 
-<!-- <div class="col-md-12 columns" v-if="change_company">
-<Multiselect
-v-model="form.change_company"
-:options="options"
-:searchable="true"
-placeholder="Search Company..."
-class="form-label"
-/>
-
-<div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-</div> -->
-
 
 <div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
@@ -185,7 +173,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic !== ''">
-    <a v-for="doc in original_lic" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -202,7 +190,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic !== ''">
-    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -220,7 +208,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic_delivered !== ''">
-    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -237,7 +225,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic_delivered !== ''">
-    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -302,44 +290,6 @@ Action
 </div>
 
 
-<!-- upload doc -->
-
-<!-- <div v-if="show_modal" class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form @submit.prevent="uploadOriginalLicenceDoc">
-      <input type="hidden" v-model="originalLicenceForm.doc_type">
-      <div class="modal-body">      
-        <div class="row">
-        <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
-         <input type="file" @input="originalLicenceForm.original_licence_doc = $event.target.files[0]"
-         hidden id="licence-doc" accept=".pdf"/>
-         <div v-if="errors.original_licence_doc" class="text-danger">{{ errors.original_licence_doc }}</div>
-       </div>
-       <div class="col-md-12">
-          <progress v-if="originalLicenceForm.progress" :value="originalLicenceForm.progress.percentage" max="100">
-         {{ originalLicenceForm.progress.percentage }}%
-         </progress>
-         </div>
-         </div>
-      </div>
-  
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="originalLicenceForm.processing">
-         <span v-if="originalLicenceForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-         Save</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div> -->
- 
 </Layout>
 </template>
 

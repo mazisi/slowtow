@@ -12,7 +12,6 @@ export default {
   data() {
     return {
      term: '',
-      withThrashed: '', 
       active_status: '' 
     }
   },
@@ -22,15 +21,11 @@ export default {
 },
 methods: {
      search(){
-          this.$inertia.replace(route('temp_licences',{
+          this.$inertia.replace(route('my_temp_licences',{
           term: this.term,
-          withThrashed: this.withThrashed,
           active_status: this.active_status
           }))
-      
-        
-        },
-
+     },
       
     },
 };
@@ -51,26 +46,20 @@ methods: {
       <div class="col-12">
       <form>
      <div class="row">
-       <div class="col-3">
+       <div class="col-9">
         <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Search Company </label>
-  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
+  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default" placeholder="Search..">
    </div>
        </div>
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Active status: </label>
+
   <select @change="search" v-model="active_status" class="form-control form-control-default">
+    <option :value="''" disabled selected>Filter By</option>
+   <option value="All">All</option>
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
   </select>
-
-   </div>
-       </div>
-        <div class="col-3">
-        <div class="input-group ">
-  <label class="">Include deleted licences: </label>
-  <input @change="search" type="checkbox" id="with-thrashed" v-model="withThrashed">
 
    </div>
        </div>
@@ -85,11 +74,17 @@ methods: {
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                     Liqour Licence Number
+                     Event Name
                     </th>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                    Company Name
+                    Applicant
                     </th>
+                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                      Event Date
+                      </th>
+                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                        Licence Number
+                        </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     View
                     </th>
@@ -98,33 +93,45 @@ methods: {
                 </thead>
                 <tbody>
                   <tr v-for="licence in licences" :key="licence.id">
-                    <td class="align-middle text-sm">
-                    <div class="d-flex flex-column justify-content-center">
-                    <Link :href="`#`">
-                    <h6 class="mb-0 text-sm justify-content-center">{{ licence.liquor_licence_number }}</h6>
+                    <td class="text-sm" >
+                      <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
+                    <Link :href="`/company/view-my-temp-licences/${licence.slug}`">
+                    {{ licence.event_name }}
                     </Link>
-                    
-                    </div>
+                  </h6>
                       
                     </td>
-                    <td v-if="licence.people == null">
-                          <h6 class="mb-0 text-sm">               
-                          <Link :href="`#`"
-                            class="px-0 nav-link font-weight-bold lh-1"
-                            :class="color ? color : 'text-body'">{{ licence.company.full_name }}
+                    <td>
+             
+                          <h6  v-if="licence.people === null" class="mb-0 text-sm">               
+                          <Link :href="`/company/view-my-temp-licences/${licence.slug}`"
+                            class="px-0 ">{{ licence.company.name }}
                           </Link>
                            </h6>
+                           <h6 v-if="licence.company === null" class="mb-0 text-sm">
+                            <Link :href="`/company/view-my-temp-licences/${licence.slug}`">
+                             {{ licence.people.full_name }}
+                           </Link>
+                            </h6>
                     </td>
-
-                    <td v-else>
-                          <h6 class="mb-0 text-sm">
-                           <Link :href="`#`">
-                            {{ licence.people.full_name }}
-                          </Link>
-                           </h6>
+                    <td class="">
+                      <h6 class="mb-0 text-sm">
+                        <Link :href="`/company/view-my-temp-licences/${licence.slug}`">
+                          {{ licence.start_date }}
+                       </Link>
+                        </h6>
+                      
+                    </td>
+                    <td class="">
+                      <h6 class="mb-0 text-sm">
+                        <Link :href="`/company/view-my-temp-licences/${licence.slug}`">
+                          {{ licence.liquor_licence_number }}
+                       </Link>
+                        </h6>
+                      
                     </td>
                     <td class="text-center">
-                    <Link :href="`/view-temp-licence/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
+                    <Link :href="`/company/view-my-temp-licences/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
                       
                     </td>
                     

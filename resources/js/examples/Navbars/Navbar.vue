@@ -67,10 +67,7 @@
             </inertia-link>
           </li>
         </ul>
-        <ul class="navbar-nav justify-content-end">
-         
-          
-         
+        <ul class="navbar-nav justify-content-end">        
          
           <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
             <a
@@ -117,7 +114,6 @@
         </div>
     
         <div class="modal-footer">
-          ysting is testing nmghthththttttttttttttttttttttttttttttt
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
           <button type="submit" class="btn btn-primary" :disabled="form.processing">
            <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
