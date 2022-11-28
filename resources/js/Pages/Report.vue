@@ -24,7 +24,8 @@
 
         <div class="row">
           <div class="col-4">
-            <button @click="getType('Renewals')"  type="button" class="btn btn-success w-45">Renewals</button>
+            <button @click="getType('Renewals')"  type="button" class="btn btn btn-success w-45" 
+            :class="{ btnPrimary: isActive }">Renewals</button>
           </div>
           <div class="col-4">
             <button @click="getType('Transfers')" type="button" class="btn btn-success">Transfers</button>
@@ -285,6 +286,16 @@
 .columns{
   margin-bottom: 1rem;
 }
+
+  .btnSecondary{
+    background-color: #6c757d!important;
+  }
+  .btnSuccess{
+    background-color: #4caf50;
+  }
+  .btnPrimary{
+    background-color: #0d6efd!important;
+  }
 </style>
 <script>
 import Layout from "../Shared/Layout.vue";
@@ -292,7 +303,7 @@ import { useForm, Link } from '@inertiajs/inertia-vue3';
 import Multiselect from '@vueform/multiselect';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import {ref} from 'vue'
+import { ref } from 'vue'
 
 export default {
   props: {
@@ -307,7 +318,10 @@ export default {
   },
 
   setup(props) {
-  let isActive = false;
+  let isActive = ref(false);
+  const btnSecondary = ref('btn-secondary');
+  const btnSuccess = ref('btn-success');
+  const btnPrimary = ref('btn-primary');
   const months = {
     "1": "January",
     "2" : "February",
@@ -347,7 +361,7 @@ const new_app_stages = {
     let people = props.people;
 
     const date = ref();
-    
+   
     const form = useForm({
       variation: null,
       activeStatus: '',
@@ -365,7 +379,7 @@ const new_app_stages = {
     
   function getType(type){
      form.variation=type;
-     isActive = true,
+     
      form.reset('activeStatus','month','year','applicant','person','company',
      'province','month','selectedDates','boardRegion','licence_types','new_app_stages')
    }
@@ -417,7 +431,10 @@ return{
   companies,
   new_app_stages,
   fetchNewAppWithStages,
-  isActive
+  isActive,
+  btnSecondary,
+  btnSuccess,
+  btnPrimary
 }
 },
  components: {

@@ -90,7 +90,7 @@ methods: {
     type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <li class="nav-item" role="presentation">
-    <button @click="getNominations" class="nav-link btn btn-secondary text-white active" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
+    <button @click="getNominations" class="nav-link btn btn-success text-white active" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
     type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 

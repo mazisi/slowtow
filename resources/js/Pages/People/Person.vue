@@ -23,12 +23,12 @@
 <div class="row mb-4">
 <div class="col-9">
 <div class="input-group input-group-outline null is-filled">
-<input v-model="term" @keyup="search" type="text" class="form-control form-control-default" placeholder="Search Person">
+<input v-model="term" type="text" class="form-control form-control-default" placeholder="Search Person">
 </div>
 </div>
 <div class="col-2">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search"  v-model="active_status" class="form-control form-control-default">
+<select @change="search"  v-model="form.active_status" class="form-control form-control-default">
   <option :value="``" disabled>Filter Options</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
@@ -87,27 +87,40 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm ,Link } from '@inertiajs/inertia-vue3';
+import { ref, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
+
 export default {
   props: {
     success: Object,
     people: Object,
     links: Array,
   },
-  data(){
-    return{
-       term: '',
-      withThrashed: '', 
-      active_status: '' 
+  setup(){
+    const term = ref('')
+    const form = useForm({
+          term: term,
+          active_status: ''
+        })
+
+    function search(){
+      form.get(`/people`, {
+            replace: true,
+            preserveState: true
+            
+        })
     }
-  },
-  methods: {
-    search(){
-    this.$inertia.replace(route('people',{
-      term: this.term,
-      withThrashed: this.withThrashed,
-      active_status: this.active_status
-      }))
-    },
+
+    watch(term, _.debounce(function (value) {
+          Inertia.get('/people', { term: value }, { preserveState: true, replace: true });
+        }, 2000));
+
+    return{
+      term,
+      search,
+      form,
+      Inertia
+    }
   },
  components: {
     Layout,

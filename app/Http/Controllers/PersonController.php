@@ -13,36 +13,35 @@ use Illuminate\Support\Facades\Redirect;
 
 class PersonController extends Controller
 {
-    public function index(Request $request){
-        if(!empty($request->term) && $request->active_status == 'Active'){
+    public function index(){
+        $people = People::when(request('term') && request('active_status') == 'Active', 
+            function ($query){ 
+                return $query->orWhere('email_address_1','LIKE','%'.request('term').'%')
+                ->orWhere('email_address_2','LIKE','%'.request('term').'%')
+                ->whereNotNull('active');
+            
+            })
 
-            $people = People::where('full_name','LIKE','%'.$request->term.'%')
-                            ->where('licence_status','1')
-                            ->orWhere('licence_number','LIKE','%'.$request->term.'%')
-                            ->orWhere('old_licence_number','LIKE','%'.$request->term.'%')
-                            ->get();
+            ->when(request('term') && request('active_status') == 'Inactive', 
+                function ($query){ 
+                    return $query->orWhere('email_address_1','LIKE','%'.request('term').'%')
+                    ->orWhere('email_address_2','LIKE','%'.request('term').'%')
+                    ->whereNull('active');
+                
+                })
 
-        }elseif($request->active_status == 'All' && empty($request->term)){
-           
-            $people = People::latest()->get();
-        
-        }elseif(!empty($request->term) && empty($request->active_status)){
-            $people = People::where('full_name','LIKE','%'.$request->term.'%')
-                            ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
-                            ->orWhere('email_address_2','LIKE','%'.$request->term.'%')
-                            ->get();
-        
-        }elseif(!empty($request->term)  && $request->active_status == 'Inactive'){
-                    $people = People::where('full_name','LIKE','%'.$request->term.'%')
-                            ->whereNull('active')
-                            ->orWhere('email_address_1','LIKE','%'.$request->term.'%')
-                            ->orWhere('email_address_2','LIKE','%'.$request->term.'%')
-                            ->get();
-       }elseif(empty($request->term)  && $request->active_status == 'Active'){
-        $people = People::where('active',1)->get();
-        }else{
-            $people = People::latest()->get();
-        }
+            ->when(request('active_status') =='Inactive', 
+                function ($query){ 
+                    return $query->whereNull('active');                
+                })
+
+                ->when(request('active_status') =='Active', 
+                function ($query){ 
+                    return $query->whereNotNull('active');                
+                })
+            ->get();
+
+     
         return Inertia::render('People/Person',['people' => $people]);
     }
 

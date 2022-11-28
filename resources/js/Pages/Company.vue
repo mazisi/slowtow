@@ -1,8 +1,11 @@
 <script>
 import Layout from "../Shared/Layout.vue";
+import { ref, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
+import { Link, useForm } from '@inertiajs/inertia-vue3';
 
 export default {
-  name: "dashboard-default",
+  name: "companies",
   props: {
     companies: Object,
     success: String,
@@ -10,28 +13,37 @@ export default {
     error: String
   },
 
-  data() {
+  setup() {
+
+    const term = ref('')
+    const form = useForm({
+          term: term,
+          active_status: '',
+          company_type: '',
+        })
+
+    function search(){
+          form.get(`/companies`, {
+            replace: true,
+            preserveState: true,
+            onSuccess: () => {},            
+        })
+    }
+
+       watch(term, _.debounce(function (value) {
+          Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
+        }, 2000));
+
     return {
-      term: '',
-      withThrashed: '', 
-      active_status: '' ,
-      company_type: ''  
+      term,
+      form,
+      search
     }
   },
   components: {
-    Layout
+    Layout,
+    Link
 },
-methods: {
-     search(){
-        this.$inertia.replace(route('companies',{
-          term: this.term,
-          active_status: this.active_status,
-          company_type: this.company_type
-          }))
-        },
-
-      
-    },
 };
 </script>
 <style>
@@ -58,7 +70,7 @@ methods: {
 <div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
 <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
-<input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
+<input v-model="term" type="text" class="form-control form-control-default">
 </div>
 </div>
 
@@ -66,7 +78,7 @@ methods: {
 
 <div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="active_status" class="form-control form-control-default">
+<select @change="search" v-model="form.active_status" class="form-control form-control-default">
 <option :value="''" disabled selected>Active/Inactive Status</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
@@ -77,7 +89,7 @@ methods: {
 
 <div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="company_type" class="form-control form-control-default">
+<select @change="search" v-model="form.company_type" class="form-control form-control-default">
 <option :value="''" disabled selected>Company Type</option>
 <option value="Association">Association</option>
 <option value="Close Corporation CC">Close Corporation  CC</option>
@@ -128,30 +140,30 @@ View
 </td>
 <td>
 <h6 class="mb-0 text-sm">
-<inertia-link
+<Link
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.name }}
-</inertia-link>
+</Link>
 </h6>   
 </td>
 
 <td>
 <h6 class="mb-0 text-sm">
-<inertia-link
+<Link
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.company_type }}
-</inertia-link>
+</Link>
 </h6>   
 </td>
 
 <td>
 <h6 class="mb-0 text-sm">
-<inertia-link
+<Link
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.reg_number }}
-</inertia-link>
+</Link>
 </h6>   
 </td>
 
 <td class="text-center">
-<inertia-link :href="`/view-company/${company.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></inertia-link>
+<Link :href="`/view-company/${company.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
 
 </td>
 

@@ -29,11 +29,13 @@ class LicenceController extends Controller
         } 
 
 
-        $licences = Licence::with(["company","licence_type"])
+        $licences = Licence::with(["company","people","licence_type"])
 
         ->when(request('term'), function ($query) {
             return $query->where('licence_number','LIKE','%'.request('term').'%')
-                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%');
+                          ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                          ->orWhere('trading_name','LIKE','%'.request('term').'%');
+
         })->when(request('term') && request('active_status') == 'Active', 
             function ($query){ 
                 $query->whereNotNull('is_licence_active')

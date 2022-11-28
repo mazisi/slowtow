@@ -14,6 +14,7 @@ export default {
       month: '',
       province: '',
       stage: '',
+      isActive: false
     }
   },
   components: {
@@ -36,6 +37,7 @@ methods: {
 
     //On navigation click get renewal data
     getLicenceRenewals(){
+      this.isActive = true;
       this.$inertia.get('/email-comms');
     },
 
@@ -80,7 +82,7 @@ methods: {
   <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
 
   <li class="nav-item" role="presentation">
-    <button @click="getLicenceRenewals" class="nav-link btn btn-secondary  text-white active" id="Renewals" 
+    <button @click="getLicenceRenewals" class="nav-link btn btn-success text-white"  id="Renewals" 
     data-bs-toggle="pill" data-bs-target="#renewals" 
     type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

@@ -75,7 +75,7 @@ methods: {
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   
   <li class="nav-item" role="presentation">
-    <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4 active" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
+    <button @click="getLicenceTransfers" class="nav-link btn btn-success text-white ml-4 active" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
     type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   <li class="nav-item" role="presentation">

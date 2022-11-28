@@ -25,7 +25,7 @@
   </div>
   <div class="col-8">
   <div class="input-group input-group-outline null is-filled">
-<input v-model="q" @keyup="search" type="text" class="form-control form-control-default" placeholder="Search by full name and surname">
+<input v-model="q" type="text" class="form-control form-control-default" placeholder="Search by full name and surname">
 </div>
   </div>
   <div class="col-2 my-auto text-end">
@@ -92,7 +92,9 @@
 </template>
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { ref, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
   props: {
@@ -101,22 +103,34 @@ export default {
     error: String,
     errors: Object,
   },
-  data() {
-    return {q: '' }
+
+  setup() {
+  const q = ref('')
+
+  const form = useForm({
+          q: q,
+        })
+
+  function search(){
+    form.get(`/goverify-contacts`, {
+            replace: true,
+            preserveState: true
+     })
+  }
+
+  watch(q, _.debounce(function (value) {
+          Inertia.get('/goverify-contacts', { q: value }, { preserveState: true, replace: true });
+  }, 2000));
+
+    return {
+      q,
+      search,
+      form
+     }
   },
  components: {
     Layout,
     Link
-},
-methods: {
-  deleteSingleContact(id){
-    if(confirm('Are you sure??')){
-        this.$inertia.delete(`/delete-contact/${id}`)
-    }
-  },
-  search(){
-     this.$inertia.replace(route('contacts',{q: this.q}))
-},
 },
 
 }

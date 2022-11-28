@@ -12,13 +12,13 @@
 <div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
 <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
-<input v-model="term" @keyup="search" type="text" class="form-control form-control-default">
+<input v-model="term" type="text" class="form-control form-control-default">
 </div>
 </div>
 
 <div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="active_status" class="form-control form-control-default">
+<select @change="search" v-model="form.active_status" class="form-control form-control-default">
 <option :value="''" disabled selected>Active/Inactive Status</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
@@ -30,7 +30,7 @@
 
 <div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="licence_type" class="form-control form-control-default">
+<select @change="search" v-model="form.licence_type" class="form-control form-control-default">
 <option :value="''" disabled selected>Licence Type</option>
 <option v-for='licence_type in all_licence_types' :value=licence_type.id> {{ licence_type.licence_type }}</option>
 </select>
@@ -39,7 +39,7 @@
 
 <div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="licence_date" class="form-control form-control-default">
+<select @change="search" v-model="form.licence_date" class="form-control form-control-default">
 <option :value="''" disabled selected>Licence Date</option>
 <option value="01">January</option>
 <option value="02">February</option>
@@ -59,7 +59,7 @@
 
 <div class="col-md-3 col-xl-3 col-lg-3 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="province" class="form-control form-control-default">
+<select @change="search" v-model="form.province" class="form-control form-control-default">
 <option :value="''" disabled selected>Province</option>
 <option value="Eastern Cape">Eastern Cape</option>
 <option value="Free State">Free State</option>
@@ -136,8 +136,9 @@
 
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link } from '@inertiajs/inertia-vue3';
-// import lodash from 'lodash'
+import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { ref, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
     props: {
@@ -150,38 +151,49 @@ export default {
 
     components: {
         Layout,
-        Link
+        Link,
+        Inertia
     },
 
-    data() {
-        return {
-          term: '',
-          all: '', 
+    setup() {
+
+    const term = ref('')
+    const form = useForm({
+          term: term,
           active_status: '',
           licence_type: '',
           licence_date: '',
           province: ''
-        }
-    },
+        })
 
-    methods: {
-      search(){        
-         this.$inertia.replace(route('licences',{
-          term: this.term,
-          active_status: this.active_status,
-          licence_type: this.licence_type,
-          licence_date: this.licence_date,
-          province: this.province
-          }))
-        },
-
-       limit(string = '', limit = 25) {
+       function limit(string = '', limit = 25) {
         if(string.length >= limit){
           return string.substring(0, limit) + '...'
         }  
           return string.substring(0, limit)
         }
+
+       function search(){
+          form.get(`/licences`, {
+            replace: true,
+            preserveState: true,
+            onSuccess: () => {},
+            
+        })
+        }
+
+        watch(term, _.debounce(function (value) {
+          Inertia.get('/licences', { term: value }, { preserveState: true, replace: true });
+        }, 2000));
+          
+        return {
+          limit,
+          form,
+          term,
+          search
+        }
     },
+
     
 }
 </script>

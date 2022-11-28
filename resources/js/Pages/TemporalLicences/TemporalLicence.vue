@@ -1,6 +1,8 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { ref, watch } from 'vue'
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
   props: {
@@ -9,28 +11,37 @@ export default {
   error: Object,
   errors: Object
   },
-  data() {
+
+  setup() {
+    const term = ref('')
+    const form = useForm({
+          term: term,
+          active_status: ''
+    })
+
+    function search(){
+      form.get(`/temp-licences`, {
+        replace: true,
+        preserveState: true
+     })     
+   }
+
+   watch(term, _.debounce(function (value) {
+          Inertia.get('/temp-licences', { term: value }, { preserveState: true, replace: true });
+        }, 2000));
+
     return {
-     term: '',
-      active_status: '' 
+     term,
+     form,
+     search
     }
   },
   components: {
     Layout,
-    Link
-},
-methods: {
-     search(){
-          this.$inertia.replace(route('temp_licences',{
-          term: this.term,
-          active_status: this.active_status
-          }))
-      
-        
-        },
+    Link,
+    Inertia
+}
 
-      
-    },
 };
 </script>
 <style>
@@ -51,13 +62,13 @@ methods: {
      <div class="row">
        <div class="col-9">
         <div class="input-group input-group-outline null is-filled">
-  <input v-model="term" @keyup="search" type="text" class="form-control form-control-default" placeholder="Search..">
+  <input v-model="term" type="text" class="form-control form-control-default" placeholder="Search..">
    </div>
        </div>
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
 
-  <select @change="search" v-model="active_status" class="form-control form-control-default">
+  <select @change="search" v-model="form.active_status" class="form-control form-control-default">
     <option :value="''" disabled selected>Filter By</option>
    <option value="All">All</option>
    <option value="Active">Active</option>
@@ -122,8 +133,7 @@ methods: {
                         <Link :href="`/view-temp-licence/${licence.slug}`">
                           {{ licence.start_date }}
                        </Link>
-                        </h6>
-                      
+                     </h6>                      
                     </td>
                     <td class="">
                       <h6 class="mb-0 text-sm">

@@ -17,51 +17,46 @@ class CompanyController extends Controller
     
     public function index(Request $request){
 
-      if(!empty($request->term) && $request->active_status == 'Active'){
+        $companies = Company::when(request('term'), function ($query) {
+            return $query->where('name','LIKE','%'.request('term').'%')
+                    ->orWhere('reg_number','LIKE','%'.request('term').'%');
 
-        $companies = Company::when($request->term,function($query,$term){
-         $query->where('name','LIKE','%'.$term.'%')
-               ->whereNotNull('active');
-        })->get();
+          })->when(request('term') && request('active_status') == 'Active', 
+            function ($query){ 
+                $query->where('name','LIKE','%'.request('term').'%')
+                ->orWhere('reg_number','LIKE','%'.request('term').'%')
+                ->whereNotNull('active');            
+            })
 
-    }elseif(!empty($request->term) && $request->active_status == 'Active' && !empty($request->company_type)){
-            $companies = Company::where(function($query) use($request){
-                                $query->where('name','LIKE','%'.$request->term.'%')
-                                ->whereNull('active')
-                                ->orWhere('company_type','LIKE','%'.$request->company_type.'%')
-                                ->orWhere('reg_number','LIKE','%'.$request->term.'%');
-                                })->get();
+            ->when(request('active_status') == 'Inactive', 
+            function ($query){ 
+                return $query->whereNull('active');            
+            })
+            ->when(request('term') && request('company_type'), 
+                function ($query){ 
+                    $query->where('name','LIKE','%'.request('term').'%')
+                     ->orWhere('reg_number','LIKE','%'.request('term').'%')
+                     ->where('company_type','LIKE','%'.request('company_type').'%');            
+                })
+                
+                ->when(request('company_type') && request('active_status') == 'Inactive', 
+                function ($query){ 
+                    $query->whereNull('active')
+                          ->where('company_type','LIKE','%'.request('company_type').'%');            
+                })
 
-    }elseif(empty($request->term) && $request->active_status == 'Inactive' && !empty($request->company_type)){
-        $companies = Company::whereNull('active')
-                            ->where(function($query) use($request){
-                                $query->where('company_type','LIKE','%'.$request->company_type.'%')
-                            ->orWhere('reg_number','LIKE','%'.$request->term.'%')
-                            ->where('name','LIKE','%'.$request->term.'%');
-                                })->get();
+                ->when(request('company_type') && request('active_status') == 'Active', 
+                function ($query){ 
+                    $query->whereNotNull('active')
+                          ->where('company_type','LIKE','%'.request('company_type').'%');            
+                })
 
-    }elseif(empty($request->term) && !empty($request->company_type) && $request->active_status == ''){
-        $companies = Company::where('company_type','LIKE','%'.$request->company_type.'%')->get();
+            ->when(request('company_type'), 
+                function ($query){ 
+                    $query->where('company_type','LIKE','%'.request('company_type').'%');                
+                })
+                ->get();
 
-    }elseif($request->active_status == "All" && empty($request->term)){
-        $companies = Company::get();
-    }elseif(!empty($request->term) && empty($request->active_status) ){
-            $companies = Company::when($request->term,function($query,$term){
-                $query->where('name','LIKE','%'.$term.'%');
-               })->get();
-     }elseif(empty($request->term) && empty($request->company_type) && $request->active_status == 'Active'){
-        $companies = Company::where('active','1')->get();
-
-    }elseif(!empty($request->term) && $request->active_status == 'Inactive'){
-
-        $companies = Company::when($request->term,function($query,$term){
-            $query->where('name','LIKE','%'.$term.'%')
-                  ->whereNull('active');
-           })->get();
-    
-    }else{
-        $companies = Company::latest()->get();
-    }
         return Inertia::render('Company',['companies'=> $companies]);
     }
 
