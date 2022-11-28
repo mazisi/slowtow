@@ -14,7 +14,7 @@
       ></i>
       <inertia-link class="m-0 navbar-brand" href="/">
         <img
-          src="public/images/slowtow.png"
+          :src="`${$page.props.blob_file_path}slowtow.png`"
           class="navbar-brand-img h-100"
           alt="Slotow Logo"
         />
