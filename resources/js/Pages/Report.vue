@@ -24,24 +24,24 @@
 
         <div class="row">
           <div class="col-4">
-            <button @click="getType('Renewals')"  type="button" class="btn btn btn-success w-45" 
+            <button @click="getType('Renewals')" type="button" class="type btn btn btn-success w-45" 
             :class="{ btnPrimary: isActive }">Renewals</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Transfers')" type="button" class="btn btn-success">Transfers</button>
+            <button @click="getType('Transfers')" type="button" class="type btn btn-success">Transfers</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Nominations')" type="button" class="btn btn-success">Nominations</button>
+            <button @click="getType('Nominations')" type="button" class="type btn btn-success">Nominations</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('New-Applications')" type="button" class="btn btn-success w-45">New Applications</button>
+            <button @click="getType('New-Applications')" type="button" class="type btn btn-success w-45">New Applications</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Alterations')" type="button" class="btn btn-success">Alterations</button>
+            <button @click="getType('Alterations')" type="button" class="type btn btn-success">Alterations</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Temporal Licence')" type="button" class="btn btn-success w-45">Temporary Applications</button>
+            <button @click="getType('Temporal Licence')" type="button" class="type btn btn-success w-45">Temporary Applications</button>
           </div>
         </div>
 <hr/>
@@ -376,10 +376,17 @@ const new_app_stages = {
       licence_types: [],
       new_app_stages: []
     })
-    
+    function addClass(type){
+      if(type){
+
+      }
+      let element = document.querySelectorAll('.type');
+      console.log(type)
+    }
   function getType(type){
      form.variation=type;
-     
+     addClass(type);
+     this.isActive = true;
      form.reset('activeStatus','month','year','applicant','person','company',
      'province','month','selectedDates','boardRegion','licence_types','new_app_stages')
    }
