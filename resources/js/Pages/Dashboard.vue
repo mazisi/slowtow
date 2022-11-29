@@ -47,7 +47,7 @@
         </div>
       
         <div class="row mt-4">
-          <div class="col-lg-4 col-md-6 mt-4">
+          <div class="col-lg-6 col-md-6 mt-4">
             <chart-holder-card
               title="Website Views"
               subtitle="Last Campaign Performance"
@@ -55,10 +55,10 @@
             >
               <reports-bar-chart
                 :chart="{
-                  labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+                  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul','Sep','Oct','Nov','Dec'],
                   datasets: {
                     label: 'Sales',
-                    data: [50, 20, 10, 22, 50, 10, 40],
+                    data: [50, 20, 10, 22, 50, 10, 40, 55, 70, 65, 15, 25],
                   },
                 }"
               />

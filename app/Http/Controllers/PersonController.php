@@ -39,9 +39,8 @@ class PersonController extends Controller
                 function ($query){ 
                     return $query->whereNotNull('active');                
                 })
-            ->get();
+            ->latest()->paginate(20);
 
-     
         return Inertia::render('People/Person',['people' => $people]);
     }
 

@@ -44,7 +44,7 @@
 
         
         <ul class="navbar-nav justify-content-end">
-          <li class="nav-item d-flex align-items-center">
+          <li v-if="$page.props.auth.has_slowtow_admin_role" class="nav-item d-flex align-items-center">
             <inertia-link href="/slotow-admins" class="px-0 nav-link font-weight-bold lh-1 text-body">
               <i class="material-icons me-sm-1"> admin_panel_settings </i>
             </inertia-link>

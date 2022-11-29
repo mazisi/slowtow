@@ -23,7 +23,8 @@ export default {
           all: '', 
           active_status: '',
           licence_type: '',
-          licence_date: ''
+          licence_date: '',
+          province: ''
         }
     },
 
@@ -33,7 +34,8 @@ export default {
           term: this.term,
           active_status: this.active_status,
           licence_type: this.licence_type,
-          licence_date: this.licence_date
+          licence_date: this.licence_date,
+          province: this.province
           }))
         },
     },
@@ -120,7 +122,7 @@ export default {
 
 </div>
 </form>
-<div class="card my-4">
+<div class="my-4">
 
 <div class="px-0 pb-2">
 <div class="table-responsive p-0">

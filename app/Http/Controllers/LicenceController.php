@@ -84,12 +84,29 @@ class LicenceController extends Controller
                 function ($query){ 
                     $query->whereNotNull('is_licence_active');                
                 })
+            
+            ->when(request('province'), 
+                function ($query){ 
+                    $query->where('province', 'LIKE','%'.request('province').'%');                
+                })
+
+            ->when(request('province') && request('term'), 
+                function ($query){ 
+                    $query->where('province', 'LIKE','%'.request('province').'%')
+                    ->where('trading_name','LIKE','%'.request('term').'%')
+                    ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                    ->orWhereHas('company', function($query){
+                      $query->where('name', 'like', '%'.request('term').'%');                
+                });
+            })            
 
             ->when(request('active_status') =='Inactive', 
                 function ($query){ 
                     $query->whereNull('is_licence_active');                
                 })
-            ->get();
+            ->latest()->paginate(20);
+            
 
        $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);

@@ -52,7 +52,7 @@
 </tr>
 </thead>
 <tbody>
-<tr v-for="person in people" :key="person.id">
+<tr v-for="person in people.data" :key="person.id">
 <td>
 <div class="avatar-group mt-2">
 <i v-if="person.active" class="fa fa-check text-info" aria-hidden="true"></i>
@@ -72,6 +72,18 @@
 </tbody>
 </table>
 
+<nav aria-label="Person Navigation mt-2">
+  <ul class="pagination justify-content-end">
+    <li class="page-item" :class="{ disabled: people.prev_page_url == null }">
+      <button type="button" @click=paginatePrev class="page-link">Prev</button>
+    </li>
+    <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
+    <li class="page-item" :class="{ disabled: people.next_page_url == null }">
+      <button @click=paginateNext type="button" class="page-link">Next</button>
+    </li>
+  </ul>
+</nav>
+
 </div>
 </div>
 
@@ -87,7 +99,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm ,Link } from '@inertiajs/inertia-vue3';
-import { ref, watch } from 'vue'
+import { ref, watch, reactive } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 
 export default {
@@ -96,8 +108,12 @@ export default {
     people: Object,
     links: Array,
   },
-  setup(){
-    const term = ref('')
+  setup(props){
+    const term = ref('');
+    let nextPage = ref(0);
+    let prevPage =  ref(0);
+    let currentPage =  reactive(props.people.current_page);
+
     const form = useForm({
           term: term,
           active_status: ''
@@ -110,7 +126,20 @@ export default {
             
         })
     }
+    function paginateNext(){          
+          if(props.people.current_page < props.people.last_page){            
+            this.nextPage = props.people.current_page + 1;
+            this.currentPage =  props.people.current_page+1;
+            Inertia.get('/people', { page: this.nextPage }, { preserveState: true, replace: true });            
+          } 
+        }
 
+        function paginatePrev(){         
+            this.prevPage = props.people.current_page - 1;
+            this.currentPage =  props.people.current_page-1;
+            Inertia.get('/people', { page: this.prevPage }, { preserveState: true, replace: true });
+          
+        }
     watch(term, _.debounce(function (value) {
           Inertia.get('/people', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -119,7 +148,11 @@ export default {
       term,
       search,
       form,
-      Inertia
+      paginateNext,
+      paginatePrev,
+      nextPage,
+      prevPage,
+      currentPage,
     }
   },
  components: {

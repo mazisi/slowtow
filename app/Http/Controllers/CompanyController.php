@@ -55,7 +55,7 @@ class CompanyController extends Controller
                 function ($query){ 
                     $query->where('company_type','LIKE','%'.request('company_type').'%');                
                 })
-                ->get();
+                ->latest()->paginate(20);
 
         return Inertia::render('Company',['companies'=> $companies]);
     }

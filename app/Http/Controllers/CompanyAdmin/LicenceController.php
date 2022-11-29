@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 
 class LicenceController extends Controller
 {
-    public function index(Request $request){
+    public function index(){
         
         $companies = Company::whereHas('users', function($query){
             $query->where('user_id',auth()->id());
@@ -99,6 +99,22 @@ class LicenceController extends Controller
                 function ($query){ 
                     $query->whereNotNull('is_licence_active');                
                 })
+
+                ->when(request('province'), 
+                function ($query){ 
+                    $query->where('province', 'LIKE','%'.request('province').'%');                
+                })
+
+            ->when(request('province') && request('term'), 
+                function ($query){ 
+                    $query->where('province', 'LIKE','%'.request('province').'%')
+                    ->where('trading_name','LIKE','%'.request('term').'%')
+                    ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                    ->orWhereHas('company', function($query){
+                      $query->where('name', 'like', '%'.request('term').'%');                
+                });
+            }) 
 
             ->when(request('active_status') =='Inactive', 
                 function ($query){ 
