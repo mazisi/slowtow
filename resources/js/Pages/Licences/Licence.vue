@@ -117,7 +117,13 @@
     <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
       <button type="button" @click=paginatePrev class="page-link">Prev</button>
     </li>
-    <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
+    <template v-for="(link, key) in licences.links">
+    <li class="page-item " :class="{ 'active': link.active }">
+      
+      <Link class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
+    
+    </li>
+  </template>
     <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
       <button @click=paginateNext type="button" class="page-link">Next</button>
     </li>
@@ -182,7 +188,12 @@ export default {
           licence_date: '',
           province: ''
         })
-
+function getArrowBbuttons(key){
+  if(key !== 0){
+    return key;
+  }
+  
+}
        function limit(string = '', limit = 25) {
         if(string.length >= limit){
           return string.substring(0, limit) + '...'
@@ -227,7 +238,8 @@ export default {
           nextPage,
           prevPage,
           paginatePrev,
-          currentPage
+          currentPage,
+          getArrowBbuttons
         }
     },
 
