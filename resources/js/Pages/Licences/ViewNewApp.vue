@@ -140,7 +140,13 @@
    </select>
     </div>
     </div>
-
+    <div class="col-4 columns">            
+      <div class="input-group input-group-outline null is-filled">
+      <label class="form-label">Renewal Amount</label>
+      <input type="text" class="form-control form-control-default" v-model="form.renewal_amount">
+      </div>
+      <div v-if="errors.renewal_amount" class="text-danger">{{ errors.renewal_amount }}</div>
+    </div> 
     <div class="col-4 columns" v-if="licence.province === 'Mpumalanga'">            
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">Client Number</label>
@@ -260,6 +266,7 @@
             board_region: props.licence.board_region,
             licence_number: props.licence.licence_number,
             licence_date: props.licence.licence_date,
+            renewal_amount: props.licence.renewal_amount,
             postal_code: props.licence.postal_code,
             company_id: props.licence.company !== null ? props.licence.company.id :'',
              

@@ -23,9 +23,10 @@
         </div>
 
         <div class="row">
+          <!-- :class="{ btnPrimary: isActive }" -->
           <div class="col-4">
             <button @click="getType('Renewals')" type="button" class="type btn btn btn-success w-45" 
-            :class="{ btnPrimary: isActive }">Renewals</button>
+            >Renewals</button>
           </div>
           <div class="col-4">
             <button @click="getType('Transfers')" type="button" class="type btn btn-success">Transfers</button>

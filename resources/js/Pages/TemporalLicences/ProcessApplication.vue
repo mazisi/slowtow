@@ -882,7 +882,7 @@ export default {
 <!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
 <i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
 </div>
 </div>
 <h6 v-if="!tasks" class="text-center">No notes found.</h6>

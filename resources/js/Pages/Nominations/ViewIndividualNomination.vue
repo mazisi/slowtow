@@ -795,7 +795,7 @@ Update</button>
 <!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex mr-4 justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
 Expire: 23/09/2022</button> -->
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString().split(',')[0] }}</p>
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString() }}</p>
 </div>
 </div>
 <h6 v-if="!tasks" class="text-center">No tasks found.</h6>
@@ -868,7 +868,7 @@ mode="tags"
       </div>
   
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-secondary" :disabled="nomineeForm.processing">
          <span v-if="nomineeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>

@@ -73,28 +73,28 @@ class ReportController extends Controller
       switch ($request->variation) {
         case 'Renewals':
           RenewalExportController::export($request);          
-          return Inertia::location("http://127.0.0.1:8000/force-download-renewal-export");
+          return Inertia::location(env('APP_URL').'/force-download-renewal-export');
           break;
         case 'Transfers':
           TransferExportController::export($request);          
-          return Inertia::location("http://localhost:8000/force-download-transfer-export");
+          return Inertia::location(env('APP_URL').'/force-download-transfer-export');
           break;
         case 'Nominations':
           NominationExportController::export($request);          
-          return Inertia::location("http://localhost:8000/force-download-nomination-export");
+          return Inertia::location(env('APP_URL').'/force-download-nomination-export');
           break;
         case 'New-Applications':
           NewAppExportController::export($request);          
-           return Inertia::location("http://localhost:8000/force-download-new-app-export");
+           return Inertia::location(env('APP_URL').'/force-download-new-app-export');
           break;
         case 'Temporal Licence':
           TemporaLExportController::export($request);          
-            return Inertia::location("http://localhost:8000/force-download-temp-licence-export");
+            return Inertia::location(env('APP_URL').'/force-download-temp-licence-export');
           break;
 
           case 'Alterations':dd('Waiting For Data');
             AlterationExportController::export($request);          
-              return Inertia::location("http://localhost:8000/force-download-temp-licence-export");
+              return Inertia::location(env('APP_URL').'/force-download-temp-licence-export');
             break;         
         
         default:

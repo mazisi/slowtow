@@ -91,6 +91,7 @@
 <th>Licence Date</th>
 <th>Licence Type</th>
 <th>Company</th>
+<th>Client Number</th>
 <th>View</th>
 </tr>
 </thead>
@@ -103,6 +104,7 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ limit(licence.licence_type.licence_type) }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company==null ? licence.people.full_name : licence.company.name }}</Link></td>
+<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.client_number }}</Link></td>
 <td class="text-center">
 <Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
 

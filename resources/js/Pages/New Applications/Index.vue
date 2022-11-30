@@ -41,20 +41,6 @@
 
   
 
-      <div class="col-12 columns" v-if="form.belongs_to ==='Person'">
-        <div class="input-group input-group-outline null is-filled">
-        <label class="form-label">ID Number</label>
-        <input readonlytype="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
-        </div>
-        </div>
-
-        <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
-          <div class="input-group input-group-outline null is-filled">
-          <label class="form-label">Company Registration Number</label>
-          <input readonly type="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
-          </div>
-          </div> 
-
   <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
    <Multiselect
        v-model="form.company"
@@ -77,6 +63,20 @@
    <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
    </div>
 
+
+   <div class="col-12 columns" v-if="form.belongs_to ==='Person'">
+    <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">ID Number</label>
+    <input readonly type="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
+    </div>
+    </div>
+
+    <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
+      <div class="input-group input-group-outline null is-filled">
+      <label class="form-label">Company Registration Number</label>
+      <input readonly type="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
+      </div>
+      </div> 
    <div class="col-12 columns">                  
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Licence Type</label>

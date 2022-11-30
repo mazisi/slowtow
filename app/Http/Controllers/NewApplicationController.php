@@ -153,7 +153,6 @@ class NewApplicationController extends Controller
         $final_inspection_doc  = LicenceDocument::where('document_type','Final Inspection')->where('licence_id',$licence->id)->first(['id','document_name']);
         $activation_fee_requested_doc  = LicenceDocument::where('document_type','Activation Fee Requested')->where('licence_id',$licence->id)->first(['id','document_name']);
         $client_finalisation  = LicenceDocument::where('document_type','Client Finalisation Invoiced')->where('licence_id',$licence->id)->first(['id','document_name']);
-        $client_paid  = LicenceDocument::where('document_type','Client Paid')->where('licence_id',$licence->id)->first(['id','document_name']);
         $activation_fee_paid  = LicenceDocument::where('document_type','Activation Fee Paid')->where('licence_id',$licence->id)->first(['id','document_name']);
         $licence_issued_doc  = LicenceDocument::where('document_type','Licence Issued')->where('licence_id',$licence->id)->first(['id','document_name']);
         $licence_delivered  = LicenceDocument::where('document_type','Licence Delivered')->where('licence_id',$licence->id)->first(['id','document_name']);
@@ -195,7 +194,6 @@ class NewApplicationController extends Controller
              'final_inspection_doc' => $final_inspection_doc,
             'activation_fee_requested_doc' => $activation_fee_requested_doc,
             'client_finalisation' => $client_finalisation,
-            'client_paid' => $client_paid,
             'activation_fee_paid' => $activation_fee_paid,
             'licence_issued_doc' => $licence_issued_doc,
             'licence_delivered' => $licence_delivered,
@@ -239,6 +237,7 @@ class NewApplicationController extends Controller
             'licence_issued_at' => $request->licence_issued_at,
             'licence_delivered_at' => $request->licence_delivered_at,
             'licence_date' => $licence_date,
+            'renewal_amount' => $request->renewal_amount,
             'status' => $status,
            ]);
            
@@ -250,6 +249,13 @@ class NewApplicationController extends Controller
        
     }
 
-
+public function updateRegistrationViaWatch(Request $request, $slug)
+{
+   $licence = Licence::whereSlug($slug)->first();
+   $licence->update([
+    'status' => $request->status[0]
+   ]);
+   return back();
+}
 
 }

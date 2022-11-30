@@ -46,6 +46,7 @@ return new class extends Migration
             $table->date('licence_delivered_at')->nullable(); 
             $table->boolean('is_licence_active')->nullable();
             $table->string('latest_renewal')->nullable();
+            $table->string('renewal_amount')->nullable();
             $table->string('merged_document')->nullable();
             $table->string('client_quoted_invoice_number')->nullable();
             $table->string('is_application_logded_doc_uploaded')->nullable();
