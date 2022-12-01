@@ -57,8 +57,8 @@ class LicenceController extends Controller
                 })
 
             ->when(request('licence_date'), 
-                function ($query){ 
-                    $query->where('licence_type_id',request('licence_date'));                
+                function ($query){
+                    return $query->whereMonth('licence_date',request('licence_date'));                
                 })
 
             ->when(request('licence_date') && request('licence_type'), 

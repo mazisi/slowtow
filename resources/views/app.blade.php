@@ -57,6 +57,14 @@
                     transform: rotate(360deg);
                   }
                 }
+
+                .navbar-vertical .navbar-brand > img, .navbar-vertical .navbar-brand-img {
+
+    max-height: 7rem !important;
+    height: 10rem;
+    margin-top: -2.5rem;
+    margin-left: -1.7rem;
+}
                 </style>
     </head>
     <body class="g-sidenav-show " >

@@ -1,15 +1,12 @@
 <template>
     <Layout>
       <div class="container-fluid">
-        <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-          ">
-          <span class="mask bg-gradient-success opacity-6"></span>
-        </div>
+        <Banner/>
         <div class="card card-body mx-3 mx-md-4 mt-n6">
           <div class="col-12">
           <div class="row">
       <div class="col-lg-6 col-7">
-       <h5>Transfers for: <Link :href="`/company/view-my-licences?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h5>
+       <h5>Transfers for: <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h5>
       </div>
       <div class="col-lg-6 col-5 my-auto text-end">
         
@@ -85,7 +82,8 @@
     
     <script>
     import Layout from "../../../Shared/Layout.vue";
-    import { Link } from '@inertiajs/inertia-vue3'
+    import { Link } from '@inertiajs/inertia-vue3';
+    import Banner from '../../components/Banner.vue'
     
     export default {
       name: "dashboard-default",
@@ -98,7 +96,8 @@
       
       components: {
         Layout,
-        Link
+        Link,
+        Banner
         },
     
     };

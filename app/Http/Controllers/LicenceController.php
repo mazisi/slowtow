@@ -13,7 +13,6 @@ use App\Models\Task;
 class LicenceController extends Controller
 {
     public function index(){
-
         $licences = Licence::with(["company","people","licence_type"])
 
         ->when(request('term'), function ($query) {
@@ -23,14 +22,14 @@ class LicenceController extends Controller
 
         })->when(request('term') && request('active_status') == 'Active', 
             function ($query){ 
-                $query->whereNotNull('is_licence_active')
+                return $query->whereNotNull('is_licence_active')
                 ->orWhere('licence_number','LIKE','%'.request('term').'%')
                 ->orWhere('old_licence_number','LIKE','%'.request('term').'%');
             
             })
             ->when(request('term') && request('licence_date') && request('licence_type'), 
                 function ($query){ 
-                    $query->whereMonth('licence_date',request('licence_date'))
+                    return $query->whereMonth('licence_date',request('licence_date'))
                     ->orWhere('licence_type_id',request('licence_type'))
                     ->orWhere('licence_number','LIKE','%'.request('term').'%')
                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%');            
@@ -38,30 +37,26 @@ class LicenceController extends Controller
 
             ->when(request('licence_type'), 
                 function ($query){ 
-                    $query->where('licence_type_id',request('licence_type'));                
+                    return $query->where('licence_type_id',request('licence_type'));                
                 })
 
-            ->when(request('licence_date'), 
-                function ($query){ 
-                    $query->where('licence_type_id',request('licence_date'));                
-                })
 
             ->when(request('licence_date') && request('licence_type'), 
                 function ($query){ 
-                    $query->whereMonth('licence_date',request('licence_date'))
+                    return $query->whereMonth('licence_date',request('licence_date'))
                     ->orWhere('licence_type_id',request('licence_type'));                
                 })
 
             ->when(request('licence_date') && request('active_status') =='Inactive' && request('licence_type'), 
                 function ($query){ 
-                    $query->whereMonth('licence_date',request('licence_date'))
+                    return $query->whereMonth('licence_date',request('licence_date'))
                     ->where('licence_type_id',request('licence_type'))
                     ->whereNull('is_licence_active');                
                 })
 
             ->when(request('term') && request('active_status') =='Active' && request('licence_type'), 
                 function ($query){ 
-                    $query->where('licence_type_id',request('licence_type'))
+                    return $query->where('licence_type_id',request('licence_type'))
                         ->where('trading_name','LIKE','%'.request('term').'%')
                         ->orWhere('licence_number','LIKE','%'.request('term').'%')
                         ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
@@ -82,12 +77,12 @@ class LicenceController extends Controller
 
             ->when(request('active_status') =='Active', 
                 function ($query){ 
-                    $query->whereNotNull('is_licence_active');                
+                    return $query->whereNotNull('is_licence_active');                
                 })
             
             ->when(request('province'), 
                 function ($query){ 
-                    $query->where('province', 'LIKE','%'.request('province').'%');                
+                    return $query->where('province', 'LIKE','%'.request('province').'%');                
                 })
 
             ->when(request('province') && request('term'), 
@@ -101,9 +96,14 @@ class LicenceController extends Controller
                 });
             })            
 
-            ->when(request('active_status') =='Inactive', 
+            ->when(request('licence_date'), 
+                function ($query){
+                    return $query->whereMonth('licence_date',request('licence_date'));                
+                })
+
+                ->when(request('active_status') =='Inactive', 
                 function ($query){ 
-                    $query->whereNull('is_licence_active');                
+                    return $query->whereNull('is_licence_active');                
                 })
             ->latest()->paginate(20);
             

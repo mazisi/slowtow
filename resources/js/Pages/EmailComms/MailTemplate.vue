@@ -1,14 +1,11 @@
 <template>
 <Layout>
 <div class="container-fluid">
-<div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-">
-<span class="mask bg-gradient-success opacity-6"></span>
-</div>
+<Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6 class="mb-1">Licence Info: {{ licence.licence.trading_name }}</h6>
+<h6 class="mb-1">Licence Info: <Link :href="`/view-licence?slug=${licence.licence.slug}`" class="text-success">{{ licence.licence.trading_name }}</Link></h6>
 </div>
 
 </div>
@@ -20,7 +17,7 @@
       }"
       v-model="mailForm.mail_body"
     />
-<div class="mt-3 float-end"><button type="submit" class="btn btn-secondary">Send</button></div>
+<div class="mt-3 float-end"><button type="submit" class="btn btn-secondary float-end">Send</button></div>
 </form>
 
 </div>
@@ -45,8 +42,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link,useForm } from '@inertiajs/inertia-vue3';
-import { Inertia } from '@inertiajs/inertia'
-import { ref } from 'vue'
+import Banner from '../components/Banner.vue'
 import Editor from '@tinymce/tinymce-vue'
 
 export default {
@@ -83,6 +79,7 @@ export default {
    components: {
     Layout,
     Link,
+    Banner,
     'editor':Editor
   },
   

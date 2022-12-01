@@ -1,6 +1,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
+import Banner from '../components/Banner.vue'
 
 export default {
  name: "profile-overview",
@@ -45,7 +46,8 @@ export default {
   },
   components: {
     Layout,
-    Multiselect
+    Multiselect,
+    Banner
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -70,10 +72,7 @@ export default {
 <template>
 <Layout>
 <div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+    <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row ">
        
@@ -91,7 +90,7 @@ export default {
           <div class="col-12 col-md-12 col-xl-12 position-relative">
             <div class="card card-plain h-100">
               <div class="p-3 card-body">
-  <form @submit.prevent="update">
+  <form>
 <div class="row">
   
   

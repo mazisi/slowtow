@@ -1,6 +1,7 @@
 <script>
 import { Link, useForm } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
+import Banner from '../components/Banner.vue'
 
 
 export default {
@@ -37,7 +38,8 @@ export default {
   },
   components: {
     Layout,
-    Link
+    Link,
+    Banner
   }
 }
 </script>
@@ -55,10 +57,7 @@ export default {
 <template>
 <Layout>
   <div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+    <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
         <h6 class="text-capitalize ps-3">Emails Not Sent</h6>
         <div class="card-body px-0 pb-2">

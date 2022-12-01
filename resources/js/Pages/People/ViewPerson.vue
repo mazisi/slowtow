@@ -1,10 +1,7 @@
 <template>
 <Layout>
 <div class="container-fluid">
-<div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-">
-<span class="mask bg-gradient-success opacity-6"></span>
-</div>
+<Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
@@ -138,7 +135,7 @@
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Police Clearance</h6>
-      <p v-if="police_clearance !== null" class="mb-0 text-xs">Name:{{ police_clearance.document_name }}</p>
+      <p v-if="police_clearance !== null" class="mb-0 text-xs">{{ police_clearance.document_name }}</p>
       <p v-if="police_clearance !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(police_clearance.expiry_date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Police Clearance Not Uploaded</p>
     </div>
@@ -241,7 +238,7 @@
 <!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
 data-bs-dismiss="alert" aria-label="Close">
 <i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
+<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
 </div>
 </div>
 <h6 v-if="!tasks" class="text-center">No tasks found.</h6>
@@ -356,6 +353,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import Layout from "../../Shared/Layout.vue";
 import { ref } from "vue";
 import { Inertia } from '@inertiajs/inertia';
+import Banner from '../components/Banner.vue';
 
 export default {
 
@@ -480,7 +478,8 @@ const form = useForm({
      }
 },
  components: {
-    Layout
+    Layout,
+    Banner
   },
 }
 </script>

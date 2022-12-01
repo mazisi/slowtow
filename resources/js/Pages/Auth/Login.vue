@@ -1,6 +1,6 @@
 
 <template>
-  <div class="page-header align-items-start min-vh-100" style="background-image: url('https://images.unsplash.com/photo-1497294815431-9365093b7331?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1950&q=80');
+  <div class="page-header align-items-start min-vh-100" style="background-image: url('https://slotowstorage.blob.core.windows.net/images/10.jpg');
     ">
     <span class="mask bg-gradient-dark opacity-6"></span>
     <div class="container my-auto">
@@ -14,23 +14,6 @@
                 <h4 class="text-white font-weight-bolder text-center mt-2 mb-0">
                   Sign in
                 </h4>
-                <div class="row mt-3">
-                  <div class="col-2 text-center ms-auto">
-                    <a class="btn btn-link px-3" href="javascript:;">
-                      <i class="fab fa-facebook text-white text-lg"></i>
-                    </a>
-                  </div>
-                  <div class="col-2 text-center px-1">
-                    <a class="btn btn-link px-3" href="javascript:;">
-                      <i class="fab fa-github text-white text-lg"></i>
-                    </a>
-                  </div>
-                  <div class="col-2 text-center me-auto">
-                    <a class="btn btn-link px-3" href="javascript:;">
-                      <i class="fab fa-google text-white text-lg"></i>
-                    </a>
-                  </div>
-                </div>
               </div>
             </div>
             <div class="card-body">

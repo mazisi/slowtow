@@ -1,6 +1,7 @@
 <script>
 import { Link } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
+import Banner from '../components/Banner.vue';
 
 export default {
   name: "emmail-comms",
@@ -19,7 +20,8 @@ export default {
   },
   components: {
     Layout,
-    Link
+    Link,
+    Banner
 },
 methods: {
      filter(){
@@ -73,10 +75,7 @@ methods: {
 <template>
 <Layout>
   <div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+    <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
     
   <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
@@ -97,7 +96,7 @@ methods: {
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
   <li class="nav-item" role="presentation">
-    <button class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    <button @click="alertTempo" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
   </li>
 

@@ -5,6 +5,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
+import Banner from '../components/Banner.vue';
 
 import { ref } from 'vue';
 
@@ -185,7 +186,8 @@ export default {
     Link,
     Head,
     Datepicker,
-    LiquorBoardRequest
+    LiquorBoardRequest,
+    Banner
   },
 
   watch: {
@@ -228,10 +230,7 @@ export default {
 <template>
 <Layout>
 <div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+    <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
@@ -847,7 +846,7 @@ export default {
 
 <div class="text-danger">
   <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
-  <button :disabled="form.processing" :style="{float: 'right'}" class="btn  btn-secondary ms-2" type="submit">
+  <button :disabled="form.processing" :style="{float: 'right'}" class="btn  btn-primary ms-2" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Save</button>
 </div>

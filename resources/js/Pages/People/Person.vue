@@ -11,11 +11,7 @@
 <template>
 <Layout>
 <div class="container-fluid">
-<div class="page-header min-height-100 border-radius-xl mt-4"
-   style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-">
-<span class="mask bg-gradient-success opacity-6"></span>
-</div>
+<Banner/>
 
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="col-12">
@@ -99,8 +95,9 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm ,Link } from '@inertiajs/inertia-vue3';
-import { ref, watch, reactive } from 'vue'
-import { Inertia } from '@inertiajs/inertia'
+import { ref, watch, reactive } from 'vue';
+import { Inertia } from '@inertiajs/inertia';
+import Banner from '../components/Banner.vue'
 
 export default {
   props: {
@@ -158,7 +155,8 @@ export default {
  components: {
     Layout,
     Link,
-    useForm
+    useForm,
+    Banner
 },
 }
 </script>

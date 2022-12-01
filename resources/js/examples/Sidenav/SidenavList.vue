@@ -30,7 +30,7 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'slowtow-admin-dashboard'}"
+          :class="{ active:  $page.props.currentRoute == 'slowtow_dashboard'}"
           collapseRef="/dashboard"
           navText="Dashboard"
         >

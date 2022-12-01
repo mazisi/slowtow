@@ -14,8 +14,8 @@
       ></i>
       <inertia-link class="m-0 navbar-brand" href="/">
         <img
-          :src="`${$page.props.blob_file_path}slowtow.png`"
-          class="navbar-brand-img h-100"
+          src="https://slotowstorage.blob.core.windows.net/images/white_logo3.png"
+          class="navbar-brand-img h-200"
           alt="Slotow Logo"
         />
         <!-- <span class="ms-2 font-weight-bold text-white"

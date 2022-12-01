@@ -1,11 +1,7 @@
 <template>
 <Layout>
   <div class="container-fluid">
-<div class="page-header min-height-100 border-radius-xl mt-4"
-      style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+<Banner/>
     
     <div class="card mx-3 mx-md-4 mt-n6">
       <div class="col-12">
@@ -22,7 +18,7 @@
     <input v-model="form.header" type="checkbox" id="has-header">
   </div> -->
 <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded" style="background-color: #f4f6f7;">
-<input @input="form.csv_file = $event.target.files[0]" type="file"  aria-label="..." />
+<input @input="form.csv_file = $event.target.files[0]" type="file" required aria-label="..." />
 <p v-if="errors.csv_file" class="text-danger">{{ errors.csv_file }}</p>
 </li>
 <progress v-if="form.progress" :value="form.progress.percentage" max="100">
@@ -56,6 +52,8 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm } from '@inertiajs/inertia-vue3';
+import Banner from '../components/Banner.vue';
+
 export default {
   setup () {
     const form = useForm({
@@ -75,7 +73,7 @@ export default {
   },
  components: {
     Layout,
-    useForm
+    Banner,
 },
 }
 </script>
