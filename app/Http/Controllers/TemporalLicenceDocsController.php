@@ -19,10 +19,10 @@ class TemporalLicenceDocsController extends Controller
 
         try {
           $fileModel = new TemporalLicenceDocument;
-            $fileName = $request->document->getClientOriginalName();
-            $filePath = $request->file('document')->storeAs('temp-licence-documents', $fileName, 'public');
+            $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
+            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
-            $fileModel->document = $fileName;
+            $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->temporal_licence_id = $request->temp_licence_id;
             $fileModel->doc_type = $request->doc_type;
             $fileModel->num = $request->merge_number;
@@ -43,8 +43,6 @@ class TemporalLicenceDocsController extends Controller
 public function destroy($id){
   $model = TemporalLicenceDocument::find($id);
  
-      // unlink(storage_path('app/folder/'.$model->document_file));
-      // unlink(public_path('storage/'.$model->document));
       $model->delete();
       return back()->with('success','Document removed successfully.');
 
@@ -59,7 +57,7 @@ public function merge(Request $request,$type){
   if($type == 'Individual'){
     $person_id_document = PeopleDocument::where('people_id',$request->person_id)->where('doc_type','ID Document')->first();
    if(!is_null($person_id_document)){
-    File::copy(public_path('storage/peopleDocuments/'.$person_id_document->document), public_path('storage/temp-licence-documents/'.$person_id_document->document));
+    File::copy(env('BLOB_FILE_PATH').$person_id_document->path, env('BLOB_FILE_PATH').$person_id_document->path);
           $fileModel = new TemporalLicenceDocument;       
             $fileModel->document_name = $person_id_document->document_name;
             $fileModel->document = $person_id_document->document;
@@ -83,12 +81,12 @@ public function merge(Request $request,$type){
      $merger = PDFMerger::init();
 
      foreach ($temporals as $temp) {
-       $merger->addPDF(public_path('/storage/temp-licence-documents/').$temp->document, 'all');
+       $merger->addPDF(env('BLOB_FILE_PATH').$temp->document, 'all');
      }
      $fileName = time().'.pdf';
      $merger->merge();
 
-     $merger->save(public_path('/storage/temp-licence-documents/'.$fileName));
+     $merger->save(storage_path('/app/public/'.$fileName));
      $updateModel = TemporalLicence::whereId($request->temporal_licence_id)->update(['merged_document' => $fileName]);
      if($updateModel){
        return back()->with('success','Document merged successfully.');

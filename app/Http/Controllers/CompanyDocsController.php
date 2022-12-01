@@ -13,14 +13,14 @@ class CompanyDocsController extends Controller
             ]);
         
            $fileModel = new CompanyDocument;
-           $fileName = $request->document->getClientOriginalName();
-           $filePath = $request->file('document')->storeAs('companyDocuments', $fileName, 'public');
+           $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
+           $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
            $fileModel->document_name = $fileName;
-           $fileModel->document_file = $fileName;
+           $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
            $fileModel->company_id = $request->company_id;
            $fileModel->document_type = $request->doc_type;
            $fileModel->expiry_date = $request->expiry_date;
-           $fileModel->file_path = 'storage/app/public/';
+           $fileModel->file_path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
          
         if($fileModel->save()){
             return back()->with('success','Document uploaded successfully.');
@@ -32,7 +32,7 @@ class CompanyDocsController extends Controller
     public function destroy($id){
         $model = CompanyDocument::find($id);
         if(!is_null($model->document_file)){
-            unlink(public_path('storage/'.$model->document_file));
+            //unlink(public_path('storage/'.$model->document_file));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

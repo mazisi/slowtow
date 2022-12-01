@@ -102,7 +102,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document !== null">
-    <a :href="`${$page.props.blob_file_path}${id_document.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${id_document.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -129,7 +129,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance !== null">
-    <a :href="`${$page.props.blob_file_path}${police_clearance.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${police_clearance.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -154,7 +154,7 @@
   <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${passport_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${passport_doc.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -183,7 +183,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="work_permit_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${work_permit_doc.document}`" target="_blank">
+    <a :href="`${$page.props.blob_file_path}${work_permit_doc.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -211,7 +211,7 @@
 
 </div>
 <div class="d-flex float-end" style="float: right;">
- <button :disabled="form.processing" class="btn btn-sm btn-secondary ms-2" type="submit">
+ <button :disabled="form.processing" class="btn btn-sm btn-primary ms-2" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   Update
 </button>
@@ -262,7 +262,7 @@ data-bs-dismiss="alert" aria-label="Close">
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-4 float-end justify-content-center" type="submit">
+<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
   <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   Save
 </button>

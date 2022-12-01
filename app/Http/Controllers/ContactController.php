@@ -81,7 +81,7 @@ class ContactController extends Controller{
        $extension = $request->csv_file->getClientOriginalExtension();
 
        if(in_array(strtolower($extension),$valid_extension)){
-            if (($handle = fopen ( public_path () . '/storage/'.$csv_file, 'r' )) !== FALSE) {
+            if (($handle = fopen ( storage_path () . '/app/public/'.$csv_file, 'r' )) !== FALSE) {
                 $flag = true;
             
                 while ( ($data = fgetcsv ( $handle, 1000, ',' )) !== FALSE ) {

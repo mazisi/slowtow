@@ -16,10 +16,10 @@ class TransferDocsController extends Controller
             "document"=> "required|mimes:pdf"
             ]);
             $fileModel = new TransferDocument;
-            $fileName = $request->document->getClientOriginalName();
-            $filePath = $request->file('document')->storeAs('transferDocuments', $fileName, 'local');
+            $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
+            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $request->document->getClientOriginalName();
-            $fileModel->document = $fileName;
+            $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->licence_transfer_id = $transfer_id;
             $fileModel->doc_type = $request->document_type;
             $fileModel->num = $request->document_number;
@@ -48,7 +48,7 @@ class TransferDocsController extends Controller
          $exist =  LicenceTransfer::whereId($request->transfer_id)->whereNotNull('merged_document')->first(); 
         $merger = PDFMerger::init();           
            if (! is_null($exist)) {
-             unlink(public_path('/storage/').$exist->merged_document);
+             unlink(storage_path('app/public/').$exist->merged_document);
              $exist->update(['merged_document' => null]);
            }
            
@@ -56,7 +56,7 @@ class TransferDocsController extends Controller
               $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->original_licence['licence_id'])->first();
              if(!is_null($original_licence)){             
               
-            File::copy(public_path('storage/licenceDocuments/'.$original_licence->document_file), public_path('storage/transferDocuments/'.$original_licence->document_file));
+            File::copy(env('BLOB_FILE_PATH').$original_licence->document_file, env('BLOB_FILE_PATH').$original_licence->document_file);
             $fileModel = new TransferDocument;
           
             $fileModel->document_name = $original_licence->document_name;
@@ -78,14 +78,14 @@ class TransferDocsController extends Controller
           $transfers =  TransferDocument::where('licence_transfer_id',$request->transfer_id)->whereNotNull('num')->orderBy('num','ASC')->get();
           $model =  LicenceTransfer::whereId($request->transfer_id)->first();
            foreach ($transfers as $transfer) {
-             $merger->addPDF(public_path('/storage/transferDocuments/').$transfer->document, 'all');
+             $merger->addPDF(env('BLOB_FILE_PATH').$transfer->document, 'all');
            }
            $fileName = time().'.pdf';
            $merger->merge();
  
            $model->update(['merged_document' => $fileName]);
  
-           $merger->save(public_path('/storage/'.$fileName));
+           $merger->save(storage_path('/app/public/'.$fileName));
            return back()->with('success','Document merged successfully.');
            
  
@@ -93,8 +93,7 @@ class TransferDocsController extends Controller
 
     public function destroy($id){
         $model = TransferDocument::find($id);
-            // unlink(storage_path('app/folder/'.$model->document_file));
-            unlink(public_path('storage/transferDocuments/'.$model->document));
+            //unlink(public_path('storage/transferDocuments/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
       

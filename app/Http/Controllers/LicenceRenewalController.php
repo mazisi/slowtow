@@ -105,14 +105,14 @@ class LicenceRenewalController extends Controller
             ]);
 
             $fileModel = new RenewalDocument;
-            $fileName = $request->document->getClientOriginalName();
-            $filePath = $request->file('document')->storeAs('renewalDocuments', $fileName, 'public');
+            $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
+            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
             $fileModel->document = $fileName;
             $fileModel->licence_renewal_id = $request->renewal_id;
             $fileModel->doc_type = $request->doc_type;
             $fileModel->date = $request->date;
-            $fileModel->path = 'app/public/';
+            $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             
 
        if($fileModel->save()){
@@ -124,7 +124,7 @@ class LicenceRenewalController extends Controller
     public function deleteDocument($id){
         $model = RenewalDocument::find($id);
         if(!is_null($model->document)){
-            unlink(public_path('storage/app/public/renewalDocuments/'.$model->document));
+            //unlink(public_path('storage/app/public/renewalDocuments/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

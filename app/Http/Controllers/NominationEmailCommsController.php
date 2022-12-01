@@ -100,7 +100,7 @@ class NominationEmailCommsController extends Controller
                 'model_slug' => $licence->slug,
                 'parent_licence_slug' => $licence->licence->slug,
                 'status' => 'Email NOT Sent',
-                'stage' => $renewal_stage,
+                'stage' => $stage,
                 'feedback' => $error_message,
                 'created_at' => now(),
                 'updated_at' => now()

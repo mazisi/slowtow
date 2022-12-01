@@ -121,13 +121,13 @@ class PersonController extends Controller
 
             $fileModel = new PeopleDocument;
             $fileName = $request->document->getClientOriginalName();
-            $filePath = $request->file('document')->storeAs('peopleDocuments', $fileName, 'public');
+            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
             $fileModel->document = $fileName;
             $fileModel->people_id = $request->people_id;
             $fileModel->doc_type = $request->doc_type;
             $fileModel->expiry_date = $request->doc_expiry;
-            $fileModel->path = "app/public/";
+            $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->slug = sha1(time());
             
        if($fileModel->save()){
@@ -140,10 +140,11 @@ class PersonController extends Controller
     public function deleteDocument($slug){
         $model = PeopleDocument::whereSlug($slug)->first();
         if(!is_null($model->document)){
-            unlink(public_path('storage/'.$model->document));
+            //unlink(public_path('storage/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }
+        return back()->with('error','An error occurred while deleting document');
     }
 
     

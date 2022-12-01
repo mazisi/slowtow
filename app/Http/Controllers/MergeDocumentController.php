@@ -21,7 +21,7 @@ class MergeDocumentController extends Controller{
           }
 
           foreach ($nominations as $nom) {
-            $merger->addPDF(storage_path('/app/public/').$nom->document, 'all');
+            $merger->addPDF(env('BLOB_FILE_PATH').$nom->document, 'all');
           }
           $fileName = time().'.pdf';
           $merger->merge();

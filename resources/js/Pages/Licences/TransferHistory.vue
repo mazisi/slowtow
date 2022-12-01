@@ -41,7 +41,7 @@
                     <div class="d-flex flex-column justify-content-left">
                         <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                           <h6 class="mb-0 text-sm">
-                          {{ licence.old_company[index].name }}
+                          {{ limit(licence.old_company[index].name) }}
                            </h6>    
                           </Link>                      
                         </div>
@@ -49,7 +49,7 @@
                     <td class="text-center">
                       <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                         <h6 class="mb-0 text-sm">
-                        {{ currentCompany.name }}
+                        {{ limit(currentCompany.name) }}
                          </h6>    
                         </Link>  
                      
@@ -93,6 +93,15 @@ export default {
     success: String,
     error: String,
     errors: Object
+  },
+
+  methods: {
+    limit(string, limit=25){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
   },
   
   components: {

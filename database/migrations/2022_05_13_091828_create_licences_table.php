@@ -49,6 +49,8 @@ return new class extends Migration
             $table->string('renewal_amount')->nullable();
             $table->string('merged_document')->nullable();
             $table->string('client_quoted_invoice_number')->nullable();
+            $table->string('is_client_invoiced')->nullable();
+            $table->string('is_finalisation_doc_uploaded')->nullable();
             $table->string('is_application_logded_doc_uploaded')->nullable();
             $table->string('slug');
             $table->softDeletes();

@@ -32,7 +32,7 @@
                   </tr>
                 </thead>
                  <tbody>
-                  <tr v-for="nom in nomination_years" :key="nom.id" >
+                  <tr v-for="nom in nomination_years.data" :key="nom.id" >
                     <td>
                       <div class="text-center" >                       
                    
@@ -48,7 +48,13 @@
                   </tr>
                   </tbody>
               </table>
-            </div></div>
+              
+            </div>
+            <PaginateVue 
+              :modelName="nomination_years"
+              :modelType="Nominations"
+              />
+            </div>
 
 <div class="col-4 col-md-6 col-xl-8 position-relative">
 <div class="card card-plain h-100">
@@ -81,7 +87,8 @@ import Layout from "../../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-import Banner from '../components/Banner.vue'
+import Banner from '../components/Banner.vue';
+import PaginateVue from "@/Shared/Paginate.vue";
 
 import { ref } from 'vue';
 
@@ -115,7 +122,8 @@ export default {
     Link,
     Head,
     Datepicker,
-    Banner
+    Banner,
+    PaginateVue
   },
   
 };

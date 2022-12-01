@@ -183,7 +183,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic !== ''">
-    <a v-for="doc in original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
+    <a v-for="doc in original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -204,7 +204,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic !== ''">
-    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -230,7 +230,7 @@ class="form-label"
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic_delivered !== ''">
-    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
+    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -253,7 +253,7 @@ class="form-label"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic_delivered !== ''">
-    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_name}`" target="_blank">
+    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -274,7 +274,7 @@ class="form-label"
 </div>
 </div>
 <div>
-<button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button>
+<button type="submit" class="btn btn-primary ms-2" :style="{float: 'right'}">Save</button>
 </div>
 </form>
 <hr>
@@ -303,7 +303,8 @@ Action
 <td v-if="licence.company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
 <td v-else class=" text-sm text-danger"><i class="fa fa-times"></i></td>
 <td class="align-middle text-sm">
-<Link class="text-sm text-center align-middle" :href="`/view-company/${licence.company.slug}`"><h6 class="mb-0 ">{{ licence.company.name }}</h6></Link>
+<Link class="text-sm text-center align-middle" :href="`/view-company/${licence.company.slug}`">
+  <h6 class="mb-0 ">{{ limit(licence.company.name) }}</h6></Link>
 </td>
 <td class="text-center">
 <Link :href="`/view-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
@@ -539,6 +540,12 @@ export default {
           this.form.is_licence_active = checkbox_value
         }
 
+        function limit(string = '', limit = 25) {
+          if(string.length >= limit){
+            return string.substring(0, limit) + '...'
+          }  
+            return string.substring(0, limit)
+        }
     return {
       showMenu,
       createTask,
@@ -548,6 +555,7 @@ export default {
       change_company,
       options,
       form,
+      limit,
       changeCompany,
       updateLicence,
       deleteLicence,

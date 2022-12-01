@@ -47,6 +47,13 @@ export default {
             Inertia.get('/companies', { page: this.prevPage }, { preserveState: true, replace: true });
           
         }
+
+        function limit(string, limit=25){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
        watch(term, _.debounce(function (value) {
           Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -59,7 +66,8 @@ export default {
       prevPage,
       currentPage,
       paginateNext,
-      paginatePrev
+      paginatePrev,
+      limit
     }
   },
   components: {
@@ -132,7 +140,7 @@ export default {
 <table class="table align-items-center mb-0">
 <thead>
 <tr>
-<th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+<th class="text-uppercase text-secondary w-10 text-xxs font-weight-bolder opacity-7">
 Active
 </th>
 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -161,7 +169,8 @@ View
 <td>
 <h6 class="mb-0 text-sm">
 <Link
-:href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.name }}
+:href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">
+{{ limit(company.name )}}
 </Link>
 </h6>   
 </td>
@@ -169,7 +178,8 @@ View
 <td>
 <h6 class="mb-0 text-sm">
 <Link
-:href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.company_type }}
+:href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">
+{{ limit(company.company_type) }}
 </Link>
 </h6>   
 </td>

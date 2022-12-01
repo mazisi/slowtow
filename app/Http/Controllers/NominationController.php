@@ -23,7 +23,7 @@ class NominationController extends Controller
      */
     public function index(Request $request){
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
-        $nomination_years = Nomination::get(['slug', 'year']);
+        $nomination_years = Nomination::paginate(10)->withQueryString();
         return Inertia::render('Nominations/Nominate',['licence' => $licence,'nomination_years' => $nomination_years]);
     }
     /**
@@ -175,14 +175,14 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             ]);
 
            $fileModel = new NominationDocument;
-           $fileName = $request->document->getClientOriginalName();
-           $filePath = $request->file('document')->storeAs('nominationDocuments', $fileName, 'public');
+           $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
+           $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
            $fileModel->document_name = $fileName;
-           $fileModel->document = $fileName;
+           $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
            $fileModel->nomination_id = $request->nomination_id;
            $fileModel->doc_type = $request->doc_type;
            $fileModel->date = $request->date;
-           $fileModel->path = 'app/public/';
+           $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
 
        if($fileModel->save()){
             return back()->with('success','Document uploaded successfully.');
@@ -194,7 +194,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
        try {
         $model = NominationDocument::find($id);
         if(!is_null($model->document)){
-            unlink(public_path('storage/app/public/'.$model->document));
+           // unlink(storage_path('/app/public/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }
