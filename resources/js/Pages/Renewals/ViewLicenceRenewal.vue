@@ -189,7 +189,6 @@ export default {
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteRenewal" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
-  
   </div>
 </div>
 
@@ -277,17 +276,34 @@ export default {
 </div>
 </div> 
 <div class="col-md-1 columns"></div>
- <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
-     </div>
-   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-   </div> 
-   
-<div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_user_role && renewal.client_paid_at == null" type="submit" class="btn btn-sm btn-secondary">Save</button>
-   </div>
+<template v-if="renewal.client_paid_at == null">
+   <div class="col-md-4 columns" >
+      <div class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+       </div>
+     <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+     </div> 
+     
+  <div class="col-md-1 columns">
+      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+  </div>
+</template>
+
+<template v-else>
+  <div class="col-md-4 columns" >
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+      </div>
+    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+    </div> 
+    
+ <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+     <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
+
    <hr>
 
 <div class="col-md-5 columns">
@@ -299,18 +315,34 @@ export default {
 </div> 
 
 <div class="col-md-1 columns"></div>
- <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
-     </div>
-   <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
-   </div> 
+
+   <template v-if="renewal.payment_to_liquor_board_at == null">
+    <div class="col-md-4 columns" >
+       <div class="input-group input-group-outline null is-filled ">
+       <label class="form-label">Date</label>
+       <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
+        </div>
+      <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+      </div> 
+      
    <div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_user_role && renewal.payment_to_liquor_board_at == null" type="submit" class="btn btn-sm btn-secondary">Save</button>
+       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
-
-
+ </template>
+ 
+ <template v-else>
+   <div class="col-md-4 columns" >
+      <div class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
+       </div>
+     <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+     </div> 
+     
+  <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+  </div>
+ </template>
 
 
 <ul class="list-group">
@@ -342,21 +374,41 @@ export default {
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
-@input="pushData(5)" value="5" :checked="renewal.status >= '5'">
+@input="pushData(5)" value="5" :checked="renewal.status >= 5">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Renewal Issued</label>
 </div>
 </div> 
 
-<div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.renewal_issued_at">
-     </div>
-   <div v-if="errors.renewal_issued_at" class="text-danger">{{ errors.renewal_issued_at }}</div>
-   </div>
+
+
+   <template v-if="renewal.renewal_issued_at == null">
+    <div class="col-md-4 columns" >
+       <div class="input-group input-group-outline null is-filled ">
+       <label class="form-label">Date</label>
+       <input type="date" class="form-control form-control-default" v-model="form.renewal_issued_at">
+        </div>
+      <div v-if="errors.renewal_issued_at" class="text-danger">{{ errors.renewal_issued_at }}</div>
+      </div> 
+      
    <div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_user_role && renewal.renewal_issued_at == null" type="submit" class="btn btn-sm btn-secondary">Save</button>
+       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
+ </template>
+ 
+ <template v-else>
+   <div class="col-md-4 columns" >
+      <div class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.renewal_issued_at">
+       </div>
+     <div v-if="errors.renewal_issued_at" class="text-danger">{{ errors.renewal_issued_at }}</div>
+     </div> 
+     
+  <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+  </div>
+ </template>
+
 <!-- <div class="col-md-6 columns">
 <Datepicker v-model="form.year" yearPicker />
 <p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
@@ -399,16 +451,35 @@ export default {
 </div>
 </div>
 
-<div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
-     </div>
-   <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
-   </div>
+   <template v-if="renewal.renewal_delivered_at == null">
+    <div class="col-md-4 columns" >
+       <div class="input-group input-group-outline null is-filled ">
+       <label class="form-label">Date</label>
+       <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+        </div>
+      <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+      </div> 
+      
    <div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_user_role && renewal.renewal_delivered_at == null"  type="submit" class="btn btn-sm btn-secondary">Save</button>
+       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
+ </template>
+ 
+ <template v-else>
+   <div class="col-md-4 columns" >
+      <div class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.renewal_delivered_at">
+       </div>
+     <div v-if="errors.renewal_delivered_at" class="text-danger">{{ errors.renewal_delivered_at }}</div>
+     </div> 
+     
+  <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+  </div>
+ </template>
+
+
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_doc !== null">

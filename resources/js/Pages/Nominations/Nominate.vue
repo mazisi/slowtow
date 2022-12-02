@@ -50,10 +50,10 @@
               </table>
               
             </div>
-            <PaginateVue 
+            <!-- <PaginateVue 
               :modelName="nomination_years"
               :modelType="Nominations"
-              />
+              /> -->
             </div>
 
 <div class="col-4 col-md-6 col-xl-8 position-relative">

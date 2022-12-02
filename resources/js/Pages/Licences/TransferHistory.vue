@@ -22,7 +22,7 @@
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Previous Licence Holder
                     </th>
-                    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                     Current Licence Holder
                     </th>
                     
@@ -47,10 +47,11 @@
                         </div>
                         </td>
                     <td class="text-center">
+                      
                       <Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
-                        <h6 class="mb-0 text-sm">
+                        <h6 class="text-sm">
                         {{ limit(currentCompany.name) }}
-                         </h6>    
+                      </h6>    
                         </Link>  
                      
                     </td>

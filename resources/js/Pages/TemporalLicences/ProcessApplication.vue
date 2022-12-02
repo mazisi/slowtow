@@ -342,13 +342,33 @@ export default {
 </div>
 </div> 
 
-<div class="col-md-4 columns">
+
+
+ <template v-if="licence.client_paid_at == null">
+  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
      </div>
    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-   </div>
+ </div>
+ <div class="col-md-1 columns">
+  <button class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
+
+<template v-else>
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+     </div>
+   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+ </div>
+ <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+  <button  class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
 <hr>
 
@@ -644,14 +664,31 @@ export default {
 </div> 
 
 
-<div class="col-md-4 columns">
+<template v-if="licence.payment_to_liquor_board_at == null">
+  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
      </div>
    <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
-   </div>
+ </div>
+ <div class="col-md-1 columns">
+  <button class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
+<template v-else>
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
+     </div>
+   <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+ </div>
+ <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+  <button  class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
 
 <ul class="list-group">
@@ -720,13 +757,31 @@ export default {
 </div>
 </div> 
 
-<div class="col-md-4 columns">
+<template v-if="licence.logded_at == null">
+  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.logded_at">
      </div>
-   <div v-if="errors.logded_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
-   </div>
+   <div v-if="errors.logded_at" class="text-danger">{{ errors.logded_at }}</div>
+ </div>
+ <div class="col-md-1 columns">
+  <button class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
+
+<template v-else>
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.logded_at">
+     </div>
+   <div v-if="errors.logded_at" class="text-danger">{{ errors.logded_at }}</div>
+ </div>
+ <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+  <button  class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
 <div class="col-md-6" style="margin-top: -1rem;">
 <ul class="list-group">
@@ -764,13 +819,31 @@ export default {
 </div>
 </div>
 
-<div class="col-md-4 columns">
+<template v-if="licence.issued_at == null">
+  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.issued_at">
      </div>
    <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
-   </div>
+ </div>
+ <div class="col-md-1 columns">
+  <button class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
+
+<template v-else>
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.issued_at">
+     </div>
+   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+ </div>
+ <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+  <button  class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -809,14 +882,31 @@ export default {
 </div>
 </div>
 
-<div class="col-md-4 columns">
+<template v-if="licence.delivered_at == null">
+  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
      </div>
    <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
-   </div>
+ </div>
+ <div class="col-md-1 columns">
+  <button class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
+<template v-else>
+  <div class="col-md-4 columns">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+     </div>
+   <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+ </div>
+ <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+  <button  class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
 
 
 <ul class="list-group">

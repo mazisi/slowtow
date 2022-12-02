@@ -191,11 +191,16 @@ methods: {
           <span>{{ nomination.licence.licence_date }}</span>
         </td>
          <td class="align-middle text-center">
-         <span v-if="nomination.status == 1">Client Quoted</span>
-        <span v-if="nomination.status == 2" >Client Invoiced</span>
-        <span v-if="nomination.status == 4" >Payment To Liquor Board</span>
-        <span v-if="nomination.status == 7" >Renewal Logded</span>
-        <span v-if="nomination.status == 8" >Renewal Issued</span>
+          <span class="font-weight-bold text-sm" v-if="nomination.status == '1'">Client Quoted</span>
+          <span v-if="nomination.status == '2'" class="font-weight-bold text-sm">Client Invoiced</span>
+          <span v-if="nomination.status == '3'" class="font-weight-bold text-sm">Client Paid</span>
+          <span v-if="nomination.status == '4'" class="font-weight-bold text-sm">Payment to the Liquor Board</span>
+          <span v-if="nomination.status == '5'" class="font-weight-bold text-sm">Select Nominees</span>
+          <span v-if="nomination.status == '6'" class="font-weight-bold text-sm">Prepare Nomination Application </span>
+          <span v-if="nomination.status == '7'" class="font-weight-bold text-sm">Scanned Application</span>
+          <span v-if="nomination.status == '8'" class="font-weight-bold text-sm">Nomination Lodged </span>
+          <span v-if="nomination.status == '9'" class="font-weight-bold text-sm">Nomination Issued</span>
+          <span v-if="nomination.status == '10'" class="font-weight-bold text-sm">Nomination Delivered</span>
         </td>
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${nomination.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 
@@ -214,27 +219,7 @@ methods: {
 
   </div>
 
-  <div class="tab-pane fade" id="transfers" role="tabpanel" aria-labelledby="Transfers">
-  <div class="text-center">
-  <div class="spinner-grow text-success" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
-  </div>
-  </div>
 
-  <div class="tab-pane fade" id="nominations" role="tabpanel" aria-labelledby="Nominations">
-   <div class="text-center">
-  <div class="spinner-grow text-success" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
-  </div></div>
-
-   <div class="tab-pane fade" id="alterations" role="tabpanel" aria-labelledby="Alterations">
-   <div class="text-center">
-  <div class="spinner-grow text-success" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>
-  </div></div>
 
 </div>
 

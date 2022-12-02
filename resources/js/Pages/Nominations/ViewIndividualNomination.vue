@@ -267,9 +267,9 @@ export default{
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" type="checkbox" @input="pushData(2)"
+<input id="client-inv" type="checkbox" @input="pushData(2)"
 :checked="nomination.status >= '2'" class="active-checkbox">
-<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+<label for="client-inv" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
 
@@ -304,43 +304,90 @@ export default{
 </div>
 </div>
 
- <div class="col-md-5 columns mb-4">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Date</label>
-  <input type="date" class="form-control form-control-default" 
-    v-model="updateForm.client_paid_date" >
-  </div>
-  <div v-if="errors.client_paid_date" class="text-danger">{{ errors.client_paid_date }}</div>
- </div>
-<div class="col-md-1"></div>
- <div class="col-md-1 columns">
-  <button v-if="nomination.client_paid_date == null" 
-  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
- </div>
+ <template v-if="nomination.payment_to_liquor_board_at == null">
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.client_paid_date" >
+    </div>
+    <div v-if="errors.client_paid_date" class="text-danger">{{ errors.client_paid_date }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="nomination.client_paid_date == null" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.client_paid_date" >
+    </div>
+    <div v-if="errors.client_paid_date" class="text-danger">{{ errors.client_paid_date }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
 <hr>
 
-
 <div class="col-md-5 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="liquor-board" type="checkbox" @input="pushData(4)"
-:checked="nomination.status >= '4'" class="active-checkbox">
-<label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
-</div>
-</div>
- <div class="col-md-5 columns mb-4">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Date</label>
-  <input type="date" class="form-control form-control-default" 
-    v-model="updateForm.payment_to_liquor_board_at" >
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+  <input id="liquor-board" type="checkbox" @input="pushData(4)"
+  :checked="nomination.status >= '4'" class="active-checkbox">
+  <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
   </div>
-  <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
- </div>
-<div class="col-md-1"></div>
- <div class="col-md-1 columns">
-  <button v-if="nomination.payment_to_liquor_board_at == null" 
-  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
- </div>
+  </div>
 
+ <template v-if="nomination.payment_to_liquor_board_at == null">  
+
+   <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.payment_to_liquor_board_at" >
+    </div>
+    <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+   </div>
+  <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="nomination.payment_to_liquor_board_at == null" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  
+<div class="col-md-5 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+  <input id="liquor-board" type="checkbox" @input="pushData(4)"
+  :checked="nomination.status >= '4'" class="active-checkbox">
+  <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
+  </div>
+  </div>
+   <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.payment_to_liquor_board_at" >
+    </div>
+    <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+   </div>
+  <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+ 
 <div class="col-md-12 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -643,6 +690,8 @@ Action
 </ul>
 </div>
 
+
+ <template v-if="nomination.nomination_lodged_at == null">  
  <div class="col-md-5 columns mb-4">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Date</label>
@@ -656,9 +705,24 @@ Action
   <button v-if="nomination.nomination_lodged_at == null" 
   @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
  </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.nomination_lodged_at" >
+    </div>
+    <div v-if="errors.nomination_lodged_at" class="text-danger">{{ errors.nomination_lodged_at }}</div>
+   </div>
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
 <hr>
-
-
 
 
 <div class="col-md-12 columns">
@@ -690,19 +754,40 @@ Action
   </li>  
 </ul>
 </div>
-<div class="col-md-5 columns mb-4">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Date</label>
-  <input type="date" class="form-control form-control-default" 
-    v-model="updateForm.nomination_issued_at" >
-  </div>
-  <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
- </div>
- <div class="col-md-1"></div>
- <div class="col-md-1 columns">
-  <button v-if="nomination.nomination_issued_at == null" 
-  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
- </div>
+
+
+
+ <template v-if="nomination.nomination_issued_at == null">  
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.nomination_issued_at" >
+    </div>
+    <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
+   </div>
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="nomination.nomination_issued_at == null" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+ </template>
+ 
+ <template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.nomination_issued_at" >
+    </div>
+    <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
+   </div>
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+ </template>
 <hr>
 
 
@@ -739,20 +824,39 @@ Action
 </ul>
 </div>
 
-<div class="col-md-5 columns mb-4">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Date</label>
-  <input type="date" class="form-control form-control-default" 
-    v-model="updateForm.nomination_delivered_at" >
-  </div>
-  <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
- </div>
-
- <div class="col-md-1"></div>
- <div class="col-md-1 columns">
-  <button v-if="nomination.nomination_delivered_at == null" 
-  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
- </div>
+ <template v-if="nomination.nomination_delivered_at == null">  
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.nomination_delivered_at" >
+    </div>
+    <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
+   </div>
+  
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="nomination.nomination_delivered_at == null" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+ </template>
+ 
+ <template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="updateForm.nomination_delivered_at" >
+    </div>
+    <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
+   </div>
+  
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role" 
+    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+ </template>
 <hr>
 
 <!-- <div class="col-md-6 columns">

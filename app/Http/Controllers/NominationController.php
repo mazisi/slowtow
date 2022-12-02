@@ -16,14 +16,10 @@ use Illuminate\Support\Facades\DB;
 
 class NominationController extends Controller
 {
-    /**
-     * Get nominate page...
-     * Return Nominate.vue where you select people & create nomination. 
-     * For some reason,wc i dont know,search data(term) comes via Symphony\InputBag!!!!
-     */
     public function index(Request $request){
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
-        $nomination_years = Nomination::paginate(10)->withQueryString();
+        // $nomination_years = Nomination::paginate(10)->withQueryString();
+        $nomination_years = Nomination::latest()->where('licence_id',$licence->id)->get();
         return Inertia::render('Nominations/Nominate',['licence' => $licence,'nomination_years' => $nomination_years]);
     }
     /**

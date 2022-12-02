@@ -91,17 +91,35 @@
   </div>
   </div>
   <div class="col-md-1 columns"></div>
+  
+  <template v-if="licence.deposit_paid_at == null">   
   <div class="col-md-4 columns mb-4">
-     <div class="input-group input-group-outline null is-filled ">
-     <label class="form-label">Date</label>
-     <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
-      </div>
-    <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
-    </div> 
-
-    <div class="col-md-1 columns">
-      <button v-if="licence.deposit_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
      </div>
+   <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
+   </div> 
+
+   <div class="col-md-1 columns">
+     <button v-if="licence.deposit_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+   </template>
+   
+   <template v-else>
+    <div class="col-md-4 columns mb-4">
+      <div class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
+       </div>
+     <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
+     </div> 
+  
+     <div class="col-md-1 columns">
+       <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+      </div>
+   </template>
+  
   <hr>
 
     <div class="col-md-12 columns">
@@ -525,18 +543,34 @@
   </div> 
   
   <div class="col-md-1 columns"></div>
-   <div class="col-md-4 columns mb-4">
-      <div class="input-group input-group-outline null is-filled ">
-      <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+   
+     <template v-if="licence.liquor_board_at == null">   
+      <div class="col-md-4 columns mb-4">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+         </div>
+       <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+       </div> 
+       <div class="col-md-1 columns">
+        <button v-if="licence.liquor_board_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
        </div>
-     <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
-     </div> 
-     <div class="col-md-1 columns">
-      <button v-if="licence.liquor_board_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
-     </div>
-  
-  
+       </template>
+       
+       <template v-else>
+          <div class="col-md-4 columns mb-4">
+            <div class="input-group input-group-outline null is-filled ">
+            <label class="form-label">Date</label>
+            <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+            </div>
+          <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+          </div> 
+          <div class="col-md-1 columns">
+            <button v-if="$page.props.auth.has_slowtow_admin_role" 
+            @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+          </div>        
+         
+       </template> 
   
   
   <ul class="list-group">
@@ -607,6 +641,8 @@
     </div>
     </div>
       
+    
+     <template v-if="licence.application_lodged_at == null">   
       <div class="col-md-4 columns mb-4">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
@@ -617,8 +653,25 @@
 
       <div class="col-md-1 columns">
         <button v-if="licence.application_lodged_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
-       </div>
-      
+      </div>
+       </template>
+       
+       <template v-else>
+        <div class="col-md-4 columns mb-4">
+          <div class="input-group input-group-outline null is-filled ">
+          <label class="form-label">Date</label>
+          <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
+           </div>
+         <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
+      </div>
+  
+        <div class="col-md-1 columns">
+          <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+        </div>      
+         
+       </template> 
+
+
       <ul class="list-group">
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
           <div class="avatar me-3" v-if="application_logded !== null">
@@ -651,7 +704,10 @@
         </div>  
         </div>
   
-        <div class="col-md-4 columns mb-4">
+        
+        
+         <template v-if="licence.initial_inspection_at == null">   
+          <div class="col-md-4 columns mb-4">
             <div class="input-group input-group-outline null is-filled ">
             <label class="form-label">Date</label>
           <input type="date" class="form-control form-control-default" v-model="form.initial_inspection_at">
@@ -661,7 +717,21 @@
         <div class="col-md-1 columns">
           <button v-if="licence.initial_inspection_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
-        
+         </template>
+           
+           <template v-else>
+            <div class="col-md-4 columns mb-4">
+              <div class="input-group input-group-outline null is-filled ">
+              <label class="form-label">Date</label>
+            <input type="date" class="form-control form-control-default" v-model="form.initial_inspection_at">
+              </div>
+            <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
+          </div>
+          <div class="col-md-1 columns">
+            <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+           </div>    
+          </template>  
+
         <ul class="list-group">
           <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
             <div class="avatar me-3" v-if="initial_inspection_doc !== null">
@@ -709,7 +779,7 @@
 
             <div class="col-4 mb-md-0 mb-4">
               <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">           
-                <textarea v-model="boardRequests.body" class="form-control" placeholder="Request" ></textarea>
+                <textarea v-model="boardRequests.body" class="form-control" placeholder="Type Request" ></textarea>
                 <i @click="submitBoardRequests" class="fa fa-plus ms-auto text-dark cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="" aria-hidden="true" data-bs-original-title="Edit Card" aria-label="Edit Card"></i>
                 <span class="sr-only">Edit Card</span>
               </div>
@@ -728,18 +798,40 @@
   <label for="final-inspection" class="form-check-label text-body text-truncate status-heading"> Final Inspection</label>
   </div>
   </div>
-  
+
+  <template v-if="licence.final_inspection_at == null"> 
+       
   <div class="col-md-4 columns mb-4">
-      <div class="input-group input-group-outline null is-filled ">
-      <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
-       </div>
-     <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
-  </div>
-  <div class="col-md-1 columns">
-    <button v-if="licence.final_inspection_at == null" 
-    @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
-   </div>
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
+     </div>
+   <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
+</div>
+<div class="col-md-1 columns">
+  <button v-if="licence.final_inspection_at == null" 
+  @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+ </div>
+   
+   </template>
+           
+  <template v-else>      
+  <div class="col-md-4 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
+     </div>
+   <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
+</div>
+<div class="col-md-1 columns">
+  <button v-if="$page.props.auth.has_slowtow_admin_role" 
+  @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+ </div>
+
+   
+ </template>  
+
+
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="final_inspection_doc !== null">
@@ -775,7 +867,12 @@
     </div>
     </div>
     
-    <div class="col-md-4 columns mb-4">
+  
+    
+
+    <template v-if="licence.activation_fee_requested_at == null"> 
+       
+      <div class="col-md-4 columns mb-4">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
     <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
@@ -787,7 +884,24 @@
     <button v-if="licence.activation_fee_requested_at == null" 
     @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
-    
+ </template>
+               
+ <template v-else>      
+        <div class="col-md-4 columns mb-4">
+          <div class="input-group input-group-outline null is-filled ">
+          <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
+        </div>
+      <div v-if="errors.activation_fee_requested_at" class="text-danger">
+        {{ errors.activation_fee_requested_at }}</div>
+      </div>
+   
+      <div class="col-md-1 columns">
+      <button v-if="$page.props.auth.has_slowtow_admin_role" 
+      @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+      </div>
+     </template>  
+
     <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="activation_fee_requested_doc !== null">
@@ -852,17 +966,32 @@
         </div>
         </div>
         
-        <div class="col-md-4 columns mb-4">
-            <div class="input-group input-group-outline null is-filled ">
-            <label class="form-label">Date</label>
-            <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
-             </div>
-           <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-           </div>
-           <div class="col-md-1 columns">
-            <button v-if="licence.client_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
-           </div>
-        
+ <template v-if="licence.client_paid_at == null"> 
+       
+  <div class="col-md-4 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+     </div>
+   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+   </div>
+   <div class="col-md-1 columns">
+    <button v-if="licence.client_paid_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>   
+</template>
+                     
+<template v-else>      
+  <div class="col-md-4 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+     </div>
+   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+   </div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"  @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>  
+ </template>  
         <hr/>
 
         <div class="col-md-6 columns">
@@ -873,7 +1002,12 @@
           </div>
           </div>
           
-          <div class="col-md-4 columns">
+          
+
+
+           <template v-if="licence.activation_fee_paid_at == null"> 
+       
+            <div class="col-md-4 columns">
               <div class="input-group input-group-outline null is-filled ">
               <label class="form-label">Date</label>
           <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
@@ -882,8 +1016,24 @@
       </div>
           <div class="col-md-1 columns">
             <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
-           </div>
-          
+           </div>  
+          </template>
+                               
+          <template v-else>      
+            <div class="col-md-4 columns">
+              <div class="input-group input-group-outline null is-filled ">
+              <label class="form-label">Date</label>
+          <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
+            </div>
+          <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
+             </div>
+          <div class="col-md-1 columns">
+            <button v-if="$page.props.auth.has_slowtow_admin_role"  @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+           </div>  
+       </template> 
+
+
+
           <ul class="list-group">
             <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
               <div class="avatar me-3" v-if="activation_fee_paid !== null">
@@ -916,7 +1066,12 @@
             </div>
             </div>
             
-            <div class="col-md-4 columns">
+           
+   
+             
+             <template v-if="licence.licence_issued_at == null"> 
+       
+              <div class="col-md-4 columns">
                 <div class="input-group input-group-outline null is-filled ">
                 <label class="form-label">Date</label>
               <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
@@ -927,7 +1082,23 @@
             <div class="col-md-1 columns">
               <button v-if="licence.licence_issued_at == null" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
              </div>
-            
+          </template>
+                               
+          <template v-else>      
+            <div class="col-md-4 columns">
+              <div class="input-group input-group-outline null is-filled ">
+              <label class="form-label">Date</label>
+            <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
+              </div>
+            <div v-if="errors.licence_issued_at" class="text-danger">{{ errors.licence_issued_at }}</div>
+        </div>
+
+          <div class="col-md-1 columns">
+            <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+           </div>
+       </template> 
+
+
             <ul class="list-group">
               <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                 <div class="avatar me-3" v-if="licence_issued_doc !== null">
@@ -963,18 +1134,37 @@
               </div>
               </div>
               
+              
+               <template v-if="licence.licence_delivered_at == null"> 
+       
+                <div class="col-md-4 columns">
+                  <div class="input-group input-group-outline null is-filled ">
+                  <label class="form-label">Date</label>
+            <input type="date" class="form-control form-control-default" v-model="form.licence_delivered_at">
+              </div>
+               <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
+                </div>
+
+              <div class="col-md-1 columns">
+                <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+               </div>
+            </template>
+                                 
+            <template v-else>      
               <div class="col-md-4 columns">
                   <div class="input-group input-group-outline null is-filled ">
                   <label class="form-label">Date</label>
             <input type="date" class="form-control form-control-default" v-model="form.licence_delivered_at">
               </div>
-            <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
-        </div>
+               <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
+                </div>
 
               <div class="col-md-1 columns">
-                <button @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
+                <button  v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistration" type="button" class="btn btn-sm btn-secondary">Save</button>
                </div>
-              
+         </template> 
+
+
               <ul class="list-group">
                 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                   <div class="avatar me-3" v-if="licence_delivered !== null">
