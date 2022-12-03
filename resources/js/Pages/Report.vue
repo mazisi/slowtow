@@ -55,7 +55,6 @@
     <Multiselect
             v-model="form.month"           
                :options="months"
-               mode="tags"
                :taggable="true"
                placeholder="Month"
              />
@@ -363,7 +362,7 @@ const new_app_stages = {
     const form = useForm({
       variation: null,
       activeStatus: '',
-      month: [],
+      month: '',
       year: '',
       applicant: '',
       person: [],

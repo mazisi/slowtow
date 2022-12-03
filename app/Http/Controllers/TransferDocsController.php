@@ -52,8 +52,8 @@ class TransferDocsController extends Controller
              $exist->update(['merged_document' => null]);
            }
            
-           if(is_null($request->latest_renewal)){
-              $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->original_licence['licence_id'])->first();
+           if($request->licence_id){
+              $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->licence_id)->first();
              if(!is_null($original_licence)){             
               
             File::copy(env('BLOB_FILE_PATH').$original_licence->document_file, env('BLOB_FILE_PATH').$original_licence->document_file);

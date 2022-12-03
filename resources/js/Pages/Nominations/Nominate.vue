@@ -32,7 +32,7 @@
                   </tr>
                 </thead>
                  <tbody>
-                  <tr v-for="nom in nomination_years.data" :key="nom.id" >
+                  <tr v-for="nom in nomination_years" :key="nom.id" >
                     <td>
                       <div class="text-center" >                       
                    

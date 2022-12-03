@@ -78,6 +78,7 @@ export default {
       transfer_id: props.view_transfer.id,
       latest_renewal: props.latest_renewal,
       original_licence: props.original_licence,
+      licence_id: props.view_transfer.licence.id
     })
 
      function mergeDocuments(){
@@ -255,7 +256,7 @@ export default {
  </p>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
-    <button v-if="$page.props.auth.has_slowtow_user_role"
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
      @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
 </div>
@@ -272,7 +273,7 @@ export default {
 :checked="view_transfer.status >= 1" type="checkbox" >
 <label class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
-</div> 
+</div>
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">

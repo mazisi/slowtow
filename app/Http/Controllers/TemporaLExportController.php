@@ -23,17 +23,17 @@ class TemporaLExportController extends Controller
 
         $licences = TemporalLicence::where(function($query) use($request){
             $query->when($request->month, function($query) use($request){
-                $query->whereIn(DB::raw('MONTH(start_date)'), $request->month);
+                $query->whereMonth('start_date', $request->month);
             })
-            // ->when(!empty(request('activeStatus')), function ($query) use ($request) {
-            //     $query->where('is_licence_active',$request->activeStatus);
-            // })
+            ->when(!empty(request('selectedDates')), function ($query) use ($request) {
+                $query->whereIn('start_date',$request->selectedDates);
+            })
             ->when(!empty(request('applicant')), function ($query) use ($request) {
                 $query->where('belongs_to',$request->applicant);
             });
         })->get();
     // $licences = TemporalLicence::get();
-    $notesCollection = null;
+    $notesCollection = '';
     $status = '';
 
     foreach ($licences as $licence) {
@@ -41,7 +41,7 @@ class TemporaLExportController extends Controller
    
         if(!is_null($notesCollection) || !empty($notesCollection)){
             foreach ($notes as $note) {
-                $notesCollection += ' || '. $note;
+                $notesCollection .= ' || '. $note->body;
             }
         }
             switch ($licence->status) {

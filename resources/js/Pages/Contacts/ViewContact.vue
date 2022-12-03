@@ -29,7 +29,7 @@ export default {
             })
       }
 
-      function deleteContact(first_name,last_name) {
+      function deleteContact(first_name='',last_name='') {
         if(confirm(first_name + ' ' + last_name + ' will deleted..Continue??')){
           Inertia.delete(`/delete-individual-contact/${props.contact.id}`)
         }

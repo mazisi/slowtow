@@ -222,7 +222,7 @@ export default{
   
 </div>
 <div class="col-lg-6 col-5 my-auto text-end">
-  <button v-if="$page.props.auth.has_slowtow_user_role" 
+  <button v-if="$page.props.auth.has_slowtow_admin_role" 
   @click="deleteNomination" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
  
 </div>
@@ -365,14 +365,6 @@ export default{
 </template>
 
 <template v-else>
-  
-<div class="col-md-5 columns">
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input id="liquor-board" type="checkbox" @input="pushData(4)"
-  :checked="nomination.status >= '4'" class="active-checkbox">
-  <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
-  </div>
-  </div>
    <div class="col-md-5 columns mb-4">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
@@ -616,11 +608,11 @@ Action
 && police_clearance_doc !== null
 && certified_id_doc !== null
 && attorney_doc !== null
-&& proof_of_payment !== null
+&& liquor_board !== null
 && nomination_forms !== null" 
 :href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
 </Link>
-<button v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</button>
+<Link v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</Link>
 <a v-if="nomination.merged_document !== null" 
 :href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
