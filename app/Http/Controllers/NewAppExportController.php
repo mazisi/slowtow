@@ -53,7 +53,7 @@ class NewAppExportController extends Controller
     $is_client_logded = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Application Lodged')->first();
         if(!is_null($notesCollection) || !empty($notesCollection)){
             foreach ($notes as $note) {
-                $notesCollection += ' || '. $note;
+                $notesCollection .= ' || '. $note->body;
             }
         }
           

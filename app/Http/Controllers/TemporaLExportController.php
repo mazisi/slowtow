@@ -32,7 +32,6 @@ class TemporaLExportController extends Controller
                 $query->where('belongs_to',$request->applicant);
             });
         })->get();
-    // $licences = TemporalLicence::get();
     $notesCollection = '';
     $status = '';
 
@@ -74,7 +73,7 @@ class TemporaLExportController extends Controller
                     break;
                
                 default:
-                    return back()->with('error','Could not process request.An unknown error occured');
+                    $status = 'NULL';
                     break;
                 }
 
