@@ -6,7 +6,6 @@
 
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="col-12">
-<form>
 <div class="row">
 <div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
@@ -76,7 +75,6 @@
 
 
 </div>
-</form>
 <div class="my-4">
 
 <div class="px-0 pb-2">
@@ -116,17 +114,17 @@
 <nav aria-label="Licences Pagination mt-2">
   <ul class="pagination justify-content-end">
     <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
-      <button type="button" @click=paginatePrev class="page-link">Prev</button>
+      <Link as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
     </li>
     <template v-for="(link, key) in licences.links">
     <li class="page-item " :class="{ 'active': link.active }">
       
-      <Link class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
+      <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
     
     </li>
   </template>
     <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
-      <button @click=paginateNext type="button" class="page-link">Next</button>
+      <Link as="button" @click=paginateNext type="button" class="page-link">Next</Link>
     </li>
   </ul>
 </nav>
@@ -229,7 +227,7 @@ function getArrowBbuttons(key){
 
         watch(term, _.debounce(function (value) {
           Inertia.get('/licences', { term: value }, { preserveState: true, replace: true });
-        }, 2000));
+        }, 1000));
           
         return {
           limit,

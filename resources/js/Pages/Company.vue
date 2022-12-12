@@ -56,7 +56,7 @@ export default {
         }
        watch(term, _.debounce(function (value) {
           Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
-        }, 2000));
+        }, 1000));
 
     return {
       term,
@@ -93,7 +93,6 @@ export default {
   <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="col-12">
-<form>
 <div class="row">
 <div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
@@ -101,8 +100,6 @@ export default {
 <input v-model="term" type="text" class="form-control form-control-default">
 </div>
 </div>
-
-
 
 <div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
@@ -134,7 +131,6 @@ export default {
 </div>
 <div class="col-1"></div>
 </div>
-</form>
 <div class=" my-4">
 <div class="table-responsive p-0">
 <table class="table align-items-center mb-0">
@@ -206,11 +202,11 @@ View
 <nav aria-label="Company Pagination mt-2">
   <ul class="pagination justify-content-end">
     <li class="page-item" :class="{ disabled: companies.prev_page_url == null }">
-      <button type="button" @click=paginatePrev class="page-link">Prev</button>
+      <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
     </li>
     <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
     <li class="page-item" :class="{ disabled: companies.next_page_url == null }">
-      <button @click=paginateNext type="button" class="page-link">Next</button>
+      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
     </li>
   </ul>
 </nav>
