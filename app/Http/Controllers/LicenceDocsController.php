@@ -6,6 +6,7 @@ use File;
 use App\Models\Licence;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
+use Illuminate\Support\Str;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
@@ -16,9 +17,9 @@ class LicenceDocsController extends Controller
             ]);
 
             $fileModel = new LicenceDocument;
-            $fileName = str_replace(' ', '_',$request->doc->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->doc->getClientOriginalName());
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->document_name = $fileName;
+            $fileModel->document_name = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->licence_id = $request->licence_id;
             $fileModel->document_type = $request->doc_type;
             $fileModel->num = $request->num;
@@ -68,6 +69,8 @@ class LicenceDocsController extends Controller
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }
+        
+             return back()->with('error','Document not successfully.');
     }
 
     public function merge($licence_id){

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CompanyDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CompanyDocsController extends Controller
 {
@@ -13,7 +14,7 @@ class CompanyDocsController extends Controller
             ]);
         
            $fileModel = new CompanyDocument;
-           $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
+           $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
            $fileModel->document_name = $fileName;
            $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

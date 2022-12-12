@@ -11,11 +11,14 @@ use App\Models\NominationDocument;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
+ini_set('memory_limit', '1024M');
+
 class NominationExportController extends Controller
 {
     public static function export($request){
-    
-        $exists = NominationExport::get();
+
+          try {
+            $exists = NominationExport::get();
                       
             if(!is_null($exists)){
                 foreach ($exists as $exist) {
@@ -23,36 +26,52 @@ class NominationExportController extends Controller
                 }                  
             }
 
-        $nominations = Nomination::with("licence")->when(function($query) use($request){
-            $query->whereHas('licence', function($query) use($request){
-                $query->when($request->month, function($query) use($request){
-                    $query->whereMonth('licence_date', $request->month);
-                })
-                ->when(request('activeStatus') == 'Active', function ($query) {
-                    $query->whereNotNull('is_licence_active');
-                })
-                ->when(request('activeStatus') == 'Inactive', function ($query) {
-                    $query->whereNull('is_licence_active');
-                })
-                ->when(!empty(request('province')), function ($query) use ($request) {
-                    $query->whereIn('province',$request->province);
-                })
-                ->when(!empty(request('boardRegion')), function ($query) use ($request) {
-                    $query->whereIn('board_region',$request->boardRegion);
-                })
-                ->when(!empty(request('applicant')), function ($query) use ($request) {
-                    $query->where('belongs_to',$request->applicant);
-                });
-            });
+       
+                $nominations = DB::table('nominations')
+                            ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
+                                nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
+                                nominations.status ")
+                            ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
+                            ->join('people', 'people.id' , '=', 'nomination_people.people_id' )
+                            ->join('licences', 'licences.id' , '=', 'nominations.licence_id' )
+                                ->when(function($query){
+                                    $query->when(request('month'), function($query){
+                                        $query->whereMonth('licence_date', request('month'));
+                                    })
+                                    ->when(request('activeStatus') == 'Active', function ($query) {
+                                        $query->whereNotNull('is_licence_active');
+                                    })
+                                    ->when(request('activeStatus') == 'Inactive', function ($query) {
+                                        $query->whereNull('is_licence_active');
+                                    })
+                                    ->when(request('province'), function ($query) {
+                                        $query->whereIn('province',request('province'));
+                                    })
+                                    ->when(request('boardRegion'), function ($query) {
+                                        $query->whereIn('board_region',request('boardRegion'));
+                                    })
+                                    ->when(request('applicant'), function ($query) {
+                                        $query->where('belongs_to',request('applicant'));
+                                    });
 
-            })->when(!empty(request('selectedDates')), function ($query) use ($request) {
-                  $query->whereIn('year',$request->selectedDates);
-            })->get();
+                                })->when(request('selectedDates'), function ($query) {
+                                      $query->whereIn('year',request('selectedDates'));
+                                })
+                            ->get();
+        
         $status = '';
         $notesCollection = '';
-        $i = 0;
+        
         foreach ($nominations as $nom) {
-            $i++;
+            
+            $notes = Task::where('model_id',$nom->id)->where('model_type','Nomination')->get();
+
+       // $is_client_paid = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Payment To The Liquor Board')->first();
+            if(!is_null($notesCollection) || !empty($notesCollection)){
+                foreach ($notes as $note) {
+                    $notesCollection .= '|| '. $note->body;
+                }
+            }
             switch ($nom->status) {
                 case '1':
                    $status = 'Client Quoted';
@@ -88,19 +107,12 @@ class NominationExportController extends Controller
                     //
                     break;
             }
-            $notes = Task::where('model_id',$nom->id)->where('model_type','Nomination')->get();
 
-        $is_client_paid = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Payment To The Liquor Board')->first();
-            if(!is_null($notesCollection) || !empty($notesCollection)){
-                foreach ($notes as $note) {
-                    $notesCollection .= '|| '. $note->body;
-                }
-            }
             NominationExport::create([
-                'trading_name' => $nom->licence->trading_name,
-                'client_name' => $nom->people[$i]->full_name,
-                'licence_number' => $nom->licence->licence_number,
-                'province' => $nom->licence->province,
+                'trading_name' => $nom->trading_name,
+                'client_name' =>  $nom->full_name,
+                'licence_number' => $nom->licence_number,
+                'province' => $nom->province,
                 'invoice_number' => null,
                 'payment_date' => $nom->payment_to_liquor_board_at,
                 'date_logded' => $nom->nomination_lodged_at,
@@ -110,6 +122,11 @@ class NominationExportController extends Controller
                 'notes' => $notesCollection
             ]);
         }
+          } catch (\Throwable $th) {throw $th;
+          // return back()->with('error','An unknown error occured.');
+         }
+    
+        
 }
 
 

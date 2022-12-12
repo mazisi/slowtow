@@ -24,7 +24,7 @@ public static function export($request){
                     
                 }
 
-            $transfers = LicenceTransfer::with("licence")->when(function($query) use($request){
+             $transfers = LicenceTransfer::with("licence")->when(function($query) use($request){
                 $query->whereHas('licence', function($query) use($request){
                     $query->when($request->month, function($query) use($request){
                         $query->whereMonth('licence_date', $request->month);
@@ -54,6 +54,7 @@ public static function export($request){
                 })->get();
             $status = '';
             $notesCollection = '';
+
 
             foreach ($transfers as $transfer) {
                 switch ($transfer->status) {

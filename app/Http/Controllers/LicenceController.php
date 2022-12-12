@@ -105,7 +105,7 @@ class LicenceController extends Controller
                 function ($query){ 
                     return $query->whereNull('is_licence_active');                
                 })
-            ->latest()->paginate(20);
+            ->latest()->paginate(1);
             
 
        $all_licence_types = LicenceType::get();

@@ -21,7 +21,7 @@ class TemporaLExportController extends Controller
             }  
         }
 
-        $licences = TemporalLicence::where(function($query) use($request){
+       $licences = TemporalLicence::where(function($query) use($request){
             $query->when($request->month, function($query) use($request){
                 $query->whereMonth('start_date', $request->month);
             })
@@ -32,7 +32,8 @@ class TemporaLExportController extends Controller
                 $query->where('belongs_to',$request->applicant);
             });
         })->get();
-    $notesCollection = '';
+    // $licences = TemporalLicence::get();
+    $notesCollection = null;
     $status = '';
 
     foreach ($licences as $licence) {
@@ -73,7 +74,7 @@ class TemporaLExportController extends Controller
                     break;
                
                 default:
-                    $status = 'NULL';
+                    return back()->with('error','Could not process request.An unknown error occured');
                     break;
                 }
 
@@ -93,7 +94,7 @@ class TemporaLExportController extends Controller
                 //get invoice number
     $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Client Invoiced')->first();
     $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Licence Lodged')->first();
-    
+
         TemporalLicenceExport::create([
             'event_name' => $licence->event_name,
             'applicant' => $applicant,

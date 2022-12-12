@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Exports\RenewalExport;
-use App\Models\Licence;
 use App\Models\LicenceRenewal;
+use App\Models\Licence;
 use App\Models\RenewalDocument;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -21,7 +21,8 @@ class RenewalExportController extends Controller
                         $exist->delete();
                     }  
                 }
-                $renewals = LicenceRenewal::with("licence")->when(function($query) use($request){
+                
+            $renewals = LicenceRenewal::with("licence")->when(function($query) use($request){
                     $query->whereHas('licence', function($query) use($request){
                         $query->when($request->month, function($query) use($request){
                             $query->whereMonth('licence_date', $request->month);
@@ -49,8 +50,6 @@ class RenewalExportController extends Controller
                     })->when(request('selectedDates'), function ($query) use ($request) {
                           $query->whereIn('year',$request->selectedDates);
                     })->get();
-                    
-              
               
             $notesCollection = '';
 

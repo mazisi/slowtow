@@ -26,19 +26,6 @@ class TransferDocsController extends Controller
             $fileModel->belongs_to = $request->belong_to;
             $fileModel->slug = sha1(now());
             $fileModel->save();
-
-          //   $get_file_name = explode(".",$request->document->getClientOriginalName());
-          //   $store_file = $request->document->store('transferDocuments','public'); 
-          //  TransferDocument::create([
-          //       "licence_transfer_id" => $transfer_id,
-          //       "document_name" => $fileName,
-          //       "document" => $store_file,
-          //       "doc_type" => $request->document_type,
-          //       "num" => $request->document_number,
-          //       "belongs_to" => $request->belong_to,
-          //       'slug' => sha1(now())
-          //      ]);
-       
       return back()->with('success','Document uploaded successfully.');
     
     }
@@ -51,26 +38,26 @@ class TransferDocsController extends Controller
              unlink(storage_path('app/public/').$exist->merged_document);
              $exist->update(['merged_document' => null]);
            }
-           
-           if($request->licence_id){
-              $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->licence_id)->first();
-             if(!is_null($original_licence)){             
+        //   dd($request);
+        //   if(is_null($request->latest_renewal)){
+        //       $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->original_licence['licence_id'])->first();
+        //      if(!is_null($original_licence)){             
               
-            File::copy(env('BLOB_FILE_PATH').$original_licence->document_file, env('BLOB_FILE_PATH').$original_licence->document_file);
-            $fileModel = new TransferDocument;
+        //     File::copy(env('BLOB_FILE_PATH').$original_licence->document_file, env('BLOB_FILE_PATH').$original_licence->document_file);
+        //     $fileModel = new TransferDocument;
           
-            $fileModel->document_name = $original_licence->document_name;
-            $fileModel->document = $original_licence->document_file;
-            $fileModel->licence_transfer_id = $request->transfer_id;
-            $fileModel->doc_type = 'Original-Licence';
-            $fileModel->num = 9;
-            $fileModel->slug = sha1(now());
-            $fileModel->save();
+        //     $fileModel->document_name = $original_licence->document_name;
+        //     $fileModel->document = $original_licence->document_file;
+        //     $fileModel->licence_transfer_id = $request->transfer_id;
+        //     $fileModel->doc_type = 'Original-Licence';
+        //     $fileModel->num = 9;
+        //     $fileModel->slug = sha1(now());
+        //     $fileModel->save();
             
-            }else{
-              return back()->with('error','We could not find Original Licence document. Please make sure its uploaded.');
-            }
-          }
+        //     }else{
+        //       return back()->with('error','We could not find Original Licence document. Please make sure its uploaded.');
+        //     }
+        //   }
           //get proof of payment to merge
           $merge_proof_of_payment = TransferDocument::where('licence_transfer_id',$request->transfer_id)->where('doc_type','Payment To The Liquor Board')->first();
           $merge_proof_of_payment->update(['num' => 2]);

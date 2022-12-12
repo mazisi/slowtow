@@ -22,11 +22,14 @@ class AlterationExportController extends Controller
     $alterations = Alteration::with("licence")->when(function($query) use($request){
         $query->whereHas('licence', function($query) use($request){
             $query->when($request->month, function($query) use($request){
-                $query->whereIn(DB::raw('MONTH(licence_date)'), $request->month);
+                $query->whereMonth('licence_date', $request->month);
             })
-            ->when(!empty(request('activeStatus')), function ($query) use ($request) {
-                $query->where('is_licence_active',$request->activeStatus);
-            })
+            ->when(request('activeStatus') == 'Active', function ($query) {
+                        $query->whereNotNull('is_licence_active');
+                    })
+             ->when(request('activeStatus') == 'Inactive', function ($query) {
+                    $query->whereNull('is_licence_active');
+             })
             ->when(!empty(request('province')), function ($query) use ($request) {
                 $query->whereIn('province',$request->province);
             })

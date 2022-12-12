@@ -15,6 +15,7 @@ use App\Models\LicenceRenewal;
 use App\Exports\TransferExports;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\TemporaLExportController;
+use App\Http\Controllers\NominationExportController;
 use App\Http\Controllers\AlterationExportController;
 
 class ReportController extends Controller

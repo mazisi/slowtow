@@ -58,12 +58,12 @@ class TransferMailer extends Mailable
             }
             
             if($this->transfer->status == 'Client Quoted'){
-                return $this->from('no-reply@slowtow.co.za')
+                return $this->from('info@goverify.co.za')
                 ->markdown('emails.ecomms.transferMailer')
                 ->cc('info@slotow.co.za')
                 ->subject($this->transfer->licence->trading_name.' Transfer')
-                ->attach(public_path('storage/'.$get_doc->document))
-                ->attach(public_path('storage/transferDocuments/GoVerify.pdf'))
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
+                ->attach(storage_path('app/public/GoVerify.pdf'))
                 ->with([
                     'message_body' => $this->template
                 ]);
@@ -73,7 +73,7 @@ class TransferMailer extends Mailable
                 ->markdown('emails.ecomms.transferMailer')
                 ->cc('info@slotow.co.za')
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
-                ->attach(public_path('storage/'.$get_doc->document))
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                 ->with([
                     'message_body' => $this->template
                 ]);

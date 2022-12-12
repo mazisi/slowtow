@@ -55,11 +55,11 @@ class NominationMailer extends Mailable
                  break;
             }
             
-                 return $this->from('no-reply@slowtow.co.za')
+                 return $this->from('info@goverify.co.za')
                 ->markdown('emails.ecomms.nominationMailer')
                 ->cc('info@slotow.co.za')
                 ->subject($this->nomination->licence->trading_name.' Appointment Of Managers ')
-                ->attach(public_path('storage/'.$get_doc->document))
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                 ->with([
                     'message_body' => $this->template
                 ]);
