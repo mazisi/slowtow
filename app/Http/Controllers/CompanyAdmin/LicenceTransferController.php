@@ -20,7 +20,7 @@ class LicenceTransferController extends Controller
 
     public function view_my_transfer($slug) {
         $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents')->whereSlug($slug)->first();
-$get_current_company = Company::whereId($view_transfer->company_id)->first(['name']);
+        $get_current_company = Company::whereId($view_transfer->company_id)->first(['name']);
         $old_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $current_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $smoking_affidavict = TransferDocument::where('doc_type','Smoking Affidavit')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
@@ -47,7 +47,7 @@ $get_current_company = Company::whereId($view_transfer->company_id)->first(['nam
         $transfer_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id',$view_transfer->id)->first();
         $transfer_delivered = TransferDocument::where('doc_type','Transfer Delivered')->where('licence_transfer_id',$view_transfer->id)->first();
         $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
-        $latest_renewal = TransferDocument::where('doc_type','Latest Renewal')->where('licence_transfer_id',$view_transfer->id)->first();
+        $latest_renewal = LicenceDocument::where('doc_type','Latest Renewal')->where('licence_transfer_id',$view_transfer->id)->first();
         $scanned_application = TransferDocument::where('doc_type','Scanned Application')->where('licence_transfer_id',$view_transfer->id)->first();
         
         return Inertia::render('CompanyAdminDash/Transfers/ViewMyTransfers',

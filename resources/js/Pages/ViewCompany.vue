@@ -249,6 +249,30 @@
   </li>
 
 
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="sars_cert !== ''">
+    <a v-for="doc in sars_cert" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">SARS Certificate</h6>
+      <p v-if="sars_cert.length > 0" class="mb-0 text-xs">Name: {{ sars_cert[0].document_name }}</p>
+      <p v-if="sars_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(sars_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+
+    <button  v-if="sars_cert.length > 0" @click="deleteDocument(sars_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('SARS-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+
 
 </ul>
 </div>
@@ -496,12 +520,11 @@ outline: none;">
     </div>
     </td>
     
-  </tr>
-  
-  
+  </tr> 
 </tbody>
 </table>
 </div>
+
 <hr>
 <h6 class="text-center text-decoration-underline">Notes</h6>
 </div>
@@ -560,7 +583,9 @@ outline: none;">
       <input type="hidden" v-model="documentsForm.doc_type">
       <div class="modal-body">      
         <div class="row">
-        <div class="col-md-12 columns" v-if="documentsForm.doc_type == 'CIPC-Certificate' || documentsForm.doc_type == 'BEE-Certificate'">
+        <div class="col-md-12 columns" v-if="documentsForm.doc_type == 'CIPC-Certificate' 
+                                          || documentsForm.doc_type == 'BEE-Certificate'
+                                          || documentsForm.doc_type == 'SARS-Certificate'">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Expiry Date</label>
         <input type="date" required class="form-control form-control-default" 
@@ -702,6 +727,7 @@ export default {
     bee_cert: Object,
     cipc_cert: Object,
     lta_cert: Object,
+    sars_cert: Object,
     success: String,
     error: String,
     message: String

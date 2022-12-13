@@ -39,7 +39,7 @@ class PersonController extends Controller
                 function ($query){ 
                     return $query->whereNotNull('active');                
                 })
-            ->latest()->paginate(20);
+            ->latest()->paginate(20)->withQueryString();
 
         return Inertia::render('People/Person',['people' => $people]);
     }
@@ -60,7 +60,7 @@ class PersonController extends Controller
         'cell_number' => $request->cell_number,
         'telephone' => $request->telephone,
         'passport_valid_until' => $request->passport_valid_until,
-         'slug' => Str::replace(' ','_',$request->name).' '.Str::replace(' ','_',$request->surname).'_'.sha1(time()),
+         'slug' => sha1(time()),
         ]);
         
         if($person){
@@ -75,6 +75,7 @@ class PersonController extends Controller
         $police_clearance = PeopleDocument::where('people_id',$person->id)->where('doc_type','Police Clearance')->first();
         $passport_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Passport')->first();
         $work_permit_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Work Permit')->first();
+        $fingerprints = PeopleDocument::where('people_id',$person->id)->where('doc_type','Fingerprints')->first();
         $tasks = Task::where('model_type','Person')->where('model_id',$person->id)->whereUserId(auth()->id())->get();
         return Inertia::render('People/ViewPerson',[
             'person' => $person,
@@ -82,7 +83,9 @@ class PersonController extends Controller
            'id_document' => $id_document,
             'police_clearance' => $police_clearance,
             'passport_doc' => $passport_doc,
-            'work_permit_doc' => $work_permit_doc]);
+            'work_permit_doc' => $work_permit_doc,
+            'fingerprints' => $fingerprints
+           ]);
             }
 
     public function update(ValidatePeople $request){

@@ -4,6 +4,7 @@ import { createApp, h } from 'vue';
 import store from "./store";
 import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
+
 import MaterialDashboard from "./material-dashboard";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';

@@ -30,7 +30,8 @@ export default{
       nomination_logded: Object,//doc
       nomination_issued: Object,//doc
       nomination_delivered: Object,//doc
-      scanned_app: Object,//doc
+      scanned_app: Object,//doc,
+      latest_renewal_licence_doc: Object,
       liqour_board_requests: Object
   },
 
@@ -392,7 +393,7 @@ export default{
       <h6 class="mb-0 text-sm">Document</h6>
        <p v-if="liquor_board !== null" class="mb-0 text-xs">{{ liquor_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      <p v-if="liquor_board !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(liquor_board.date) }}</p>
+      <!-- <p v-if="liquor_board !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(liquor_board.date) }}</p> -->
     </div>
     <a v-if="liquor_board !== null" @click="deleteDocument(liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
@@ -585,20 +586,28 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="latest_renewal_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${latest_renewal_doc.document}`" target="_blank">
+    <a v-if="latest_renewal_doc !== null" :href="`${$page.props.blob_file_path}${latest_renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
+    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Latest renewal/ licence</h6>
        <p v-if="latest_renewal_doc !== null" class="mb-0 text-xs">{{ latest_renewal_doc.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+      <!-- <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p> -->
     </div>
     <a v-if="latest_renewal_doc !== null" @click="deleteDocument(latest_renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+
+    <a v-if="latest_renewal_doc == null && latest_renewal_licence_doc.document_file !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
+      :href="`${$page.props.blob_file_path}${latest_renewal_licence_doc.document_file}`">
+      <i class="fa fa-link h5" aria-hidden="true"></i>
+    </a>
+
+    <a v-if="latest_renewal_doc == null" @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+
   </li>  
 </ul>
 </div>
@@ -871,12 +880,11 @@ Update</button>
 <!-- //tasks were here -->
 
 </div>
-      <hr/>
-      <LiquorBoardRequest 
+      <!-- <LiquorBoardRequest 
       :model_type='`Nomination`'
       :model_id="nomination.id" 
       :liqour_board_requests="liqour_board_requests"
-      />
+      /> -->
 <div class="row">
 <hr>
 <h6 class="text-center">Notes</h6>

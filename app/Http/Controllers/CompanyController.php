@@ -107,6 +107,7 @@ class CompanyController extends Controller
         $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->get();
         $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->get();
         $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->get();
+        $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->get();
         $people = People::pluck('full_name','id');
         
         return Inertia::render('ViewCompany',[
@@ -117,7 +118,8 @@ class CompanyController extends Controller
              'bee_cert' => $bee_cert,
              'cipc_cert' => $cipc_cert,
              'lta_cert' => $lta_cert,
-             'company_doc' => $company_doc
+             'company_doc' => $company_doc,
+             'sars_cert' => $sars_cert
             ]);
     }
 

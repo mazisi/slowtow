@@ -103,7 +103,7 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company==null ? limit(licence.people.full_name) : limit(licence.company.name) }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.client_number }}</Link></td>
 <td class="text-center">
-<Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
+<Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
 
 </td>
 </tr>
@@ -114,7 +114,7 @@
 <nav aria-label="Licences Pagination mt-2">
   <ul class="pagination justify-content-end">
     <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
-      <Link as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
+      <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
     </li>
     <template v-for="(link, key) in licences.links">
     <li class="page-item " :class="{ 'active': link.active }">
@@ -124,7 +124,7 @@
     </li>
   </template>
     <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
-      <Link as="button" @click=paginateNext type="button" class="page-link">Next</Link>
+      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
     </li>
   </ul>
 </nav>

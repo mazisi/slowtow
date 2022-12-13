@@ -63,7 +63,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="contact in contacts" :key="contact.id">
+                  <tr v-for="contact in contacts.data" :key="contact.id">
                     <td class="align-middle text-sm">
                       <Link :href='`/view-contact/${contact.id}`'><h6 class="mb-0 text-sm">{{ contact.first_name }}</h6></Link>
                     </td>
@@ -79,7 +79,12 @@
                 </tbody>
               </table>
             </div>
+           
           </div>
+          <Paginate
+              :modelName="contacts"
+              :modelType="Contact"
+              />
       </div>
     </div>
   </div>
@@ -92,6 +97,7 @@ import { Link, useForm } from '@inertiajs/inertia-vue3';
 import { ref, watch } from 'vue'
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
+import Paginate from '../../Shared/Paginate.vue';
 
 export default {
   props: {
@@ -128,7 +134,8 @@ export default {
  components: {
     Layout,
     Link,
-    Banner
+    Banner,
+    Paginate
 },
 
 }

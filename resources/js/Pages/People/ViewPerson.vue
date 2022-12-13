@@ -98,7 +98,7 @@
 <h6 class="text-center">Documents</h6>
 
 <div class="row">
-<div class="col-3">
+<div class="col-4">
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document !== null">
@@ -125,7 +125,7 @@
 </ul>
 </div>
 
-<div class="col-3">
+<div class="col-4">
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance !== null">
@@ -150,7 +150,7 @@
 </ul>
 </div>
 
-<div class="col-3">
+<div class="col-4">
   <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc !== null">
@@ -179,7 +179,7 @@
 </div>
 
 
-<div class="col-3">
+<div class="col-4">
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="work_permit_doc !== null">
@@ -206,6 +206,34 @@
   </li>
 </ul>
 </div>
+
+<div class="col-4">
+  <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="fingerprints !== null">
+    <a :href="`${$page.props.blob_file_path}${fingerprints.path}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Valid Fingerprints</h6>
+      <p v-if="fingerprints !== null" class="mb-0 text-xs">{{ fingerprints.document_name }}</p>
+      <p v-if="fingerprints !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(fingerprints.expiry_date) }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Fingerprints Not Uploaded</p>
+    </div>
+
+    <button v-if="fingerprints !== null" @click="deleteDocument('Fingerprints',fingerprints.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Fingerprints')" type="button" data-bs-toggle="modal" data-bs-target="#documents" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+</div>
 </div>
 
 
@@ -219,7 +247,7 @@
 </form>
 </div>
 </div>
-<hr class="vertical dark" />
+
 </div>
 <!-- //tasks were here -->
 
@@ -367,7 +395,8 @@ props:{
       id_document: Object,
       police_clearance: Object,
       passport_doc: Object,
-      work_permit_doc: Object
+      work_permit_doc: Object,
+      fingerprints: Object
 },
 
 setup (props) {

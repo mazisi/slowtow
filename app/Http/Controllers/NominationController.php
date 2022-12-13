@@ -6,6 +6,7 @@ use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Licence;
+use App\Models\LicenceDocument;
 use App\Models\Nomination;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -78,25 +79,27 @@ $nomination_logded = NominationDocument::where('nomination_id',$nomination->id)-
 $scanned_app = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Scanned Application')->first();
 $nomination_issued = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Issued')->first();
 $nomination_delivered = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Delivered')->first();
+$latest_renewal_licence_doc = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$nomination->licence_id)->first(['document_file']);
 
 return Inertia::render('Nominations/ViewIndividualNomination',[
-            'nomination' => $nomination,
-            'nominees' => $nominees,
-            'tasks' => $tasks,
-            'client_quoted' => $client_quoted,
-            'client_invoiced' => $client_invoiced,
-             'liquor_board' => $liquor_board,
-             'nomination_forms' => $nomination_forms,
-             'proof_of_payment' => $proof_of_payment,
-             'attorney_doc' => $attorney_doc,
-             'certified_id_doc' => $certified_id_doc,
-             'police_clearance_doc' => $police_clearance_doc,
-             'latest_renewal_doc' => $latest_renewal_doc,
-             'nomination_logded' => $nomination_logded,
-             'nomination_issued' => $nomination_issued,
-             'nomination_delivered' => $nomination_delivered,
-             'scanned_app' => $scanned_app,
-             'liqour_board_requests' => $liqour_board_requests
+        'nomination' => $nomination,
+        'nominees' => $nominees,
+        'tasks' => $tasks,
+        'client_quoted' => $client_quoted,
+        'client_invoiced' => $client_invoiced,
+            'liquor_board' => $liquor_board,
+            'nomination_forms' => $nomination_forms,
+            'proof_of_payment' => $proof_of_payment,
+            'attorney_doc' => $attorney_doc,
+            'certified_id_doc' => $certified_id_doc,
+            'police_clearance_doc' => $police_clearance_doc,
+            'latest_renewal_doc' => $latest_renewal_doc,
+            'nomination_logded' => $nomination_logded,
+            'nomination_issued' => $nomination_issued,
+            'nomination_delivered' => $nomination_delivered,
+            'scanned_app' => $scanned_app,
+            'latest_renewal_licence_doc' => $latest_renewal_licence_doc,
+            'liqour_board_requests' => $liqour_board_requests
     ]);
     }
 

@@ -1,9 +1,10 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link, useForm } from "@inertiajs/inertia-vue3";
-import { ref, watch } from 'vue'
+import { ref, watch, reactive } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
+import Paginate from '../../Shared/Paginate.vue';
 
 export default {
   props: {
@@ -13,8 +14,12 @@ export default {
   errors: Object
   },
 
-  setup() {
-    const term = ref('')
+  setup(props) {
+    const term = ref('');
+    let nextPage = ref(0);
+    let prevPage =  ref(0);
+    let currentPage =  reactive(props.licences.current_page);
+
     const form = useForm({
           term: term,
           active_status: ''
@@ -26,7 +31,20 @@ export default {
         preserveState: true
      })     
    }
+   function paginateNext(){          
+          if(props.licences.current_page < props.licences.last_page){            
+            this.nextPage = props.licences.current_page + 1;
+            this.currentPage =  props.licences.current_page + 1;
+            Inertia.get('/temp-licences', { page: this.nextPage }, { preserveState: true, replace: true });            
+          } 
+        }
 
+        function paginatePrev(){         
+            this.prevPage = props.licences.current_page - 1;
+            this.currentPage =  props.licences.current_page-1;
+            Inertia.get('/temp-licences', { page: this.prevPage }, { preserveState: true, replace: true });
+          
+        }
    watch(term, _.debounce(function (value) {
           Inertia.get('/temp-licences', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -34,14 +52,20 @@ export default {
     return {
      term,
      form,
-     search
+     nextPage,
+     prevPage,
+     currentPage,
+     search,
+     paginateNext,
+     paginatePrev
     }
   },
   components: {
     Layout,
     Link,
     Inertia,
-    Banner
+    Banner,
+    Paginate
 }
 
 };
@@ -105,7 +129,7 @@ export default {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="licence in licences" :key="licence.id">
+                  <tr v-for="licence in licences.data" :key="licence.id">
                     <td class="text-sm" >
                       <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
                     <Link :href="`/view-temp-licence/${licence.slug}`">
@@ -154,6 +178,17 @@ export default {
               </table>
             </div>
           </div>
+          <nav aria-label="Person Navigation mt-2">
+            <ul class="pagination justify-content-end">
+              <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
+                <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
+              </li>
+              <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
+              <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
+                <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
+              </li>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>

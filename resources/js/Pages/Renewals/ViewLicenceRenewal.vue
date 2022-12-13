@@ -515,7 +515,6 @@ export default {
 </form>
   </div>
 </div>
-<hr class="vertical dark" />
 </div>
       <!-- //tasks were here -->
         
@@ -524,13 +523,13 @@ export default {
 </div>
 <hr>
 
-<LiquorBoardRequest 
+<!-- <LiquorBoardRequest 
 :model_type='`Licence Renewal`'
 :model_id="renewal.id" 
 :liqour_board_requests="liqour_board_requests"
-/>
+/> 
 <hr/>
-
+-->
 <div class="row">
 <h6 class="text-center">Notes</h6>
 <div class="col-xl-8">

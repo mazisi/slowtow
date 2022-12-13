@@ -621,14 +621,19 @@ export default {
     <i class="fa fa-times-circle float-end h5" aria-hidden="true"></i>
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
+  
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="latest_renewal == null" @click="setDocType('Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
-     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
-     <a v-if="latest_renewal !== null" target="_blank" :href="`${$page.props.blob_file_path}${latest_renewal.document}`">
-      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
-    </a>
-    <i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
-    </div>
+      <i v-if="latest_renewal == null" @click="setDocType('Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
+      <a v-if="latest_renewal !== null" target="_blank" :href="`${$page.props.blob_file_path}${latest_renewal.document}`">
+        <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
+      </a>
+
+      <a v-else target="_blank" :href="`${$page.props.blob_file_path}${original_licence.document_file}`">
+        <i class="fa fa-link float-end h5 curser-pointer"></i>
+      </a>
+      <i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+  </div>
 </div>
 
 <div class="d-flex justify-content-center w-100">

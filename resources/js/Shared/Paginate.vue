@@ -2,17 +2,17 @@
 <nav :aria-label="modelType" class="mt-2">
   <ul class="pagination justify-content-end">
     <li class="page-item" :class="{ disabled: modelName.prev_page_url == null }">
-      <button type="button" @click=paginatePrev class="page-link">Prev</button>
+      <Link preserve-state  @click=paginatePrev class="page-link">Prev</Link>
     </li>
     <template v-for="(link, key) in modelName.links">
     <li class="page-item " :class="{ 'active': link.active }">
       
-      <Link class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
+      <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
     
     </li>
   </template>
     <li class="page-item" :class="{ disabled: modelName.next_page_url == null }">
-      <button @click=paginateNext type="button" class="page-link">Next</button>
+      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
     </li>
   </ul>
 </nav>

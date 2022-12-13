@@ -71,11 +71,11 @@
 <nav aria-label="Person Navigation mt-2">
   <ul class="pagination justify-content-end">
     <li class="page-item" :class="{ disabled: people.prev_page_url == null }">
-      <button type="button" @click=paginatePrev class="page-link">Prev</button>
+      <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
     </li>
     <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
     <li class="page-item" :class="{ disabled: people.next_page_url == null }">
-      <button @click=paginateNext type="button" class="page-link">Next</button>
+      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
     </li>
   </ul>
 </nav>

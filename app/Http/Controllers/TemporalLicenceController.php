@@ -71,7 +71,7 @@ class TemporalLicenceController extends Controller
                 function ($query){ 
                     $query->whereNotNull('active');                
                 })
-            ->get();
+                ->paginate(20)->withQueryString();
 
         return Inertia::render('TemporalLicences/TemporalLicence',['licences' => $licences]);
     }
