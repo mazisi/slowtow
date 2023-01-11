@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use Inertia\Inertia;
 use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
-use App\Models\Licence;
 use App\Models\RenewalDocument;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LicenceRenewalExports;
 
@@ -27,10 +24,10 @@ class RenewalExportController extends Controller
                         $query->when($request->month, function($query) use($request){
                             $query->whereMonth('licence_date', $request->month);
                         })
-                        ->when(request('activeStatus') == 'Active', function ($query) use ($request) {
+                        ->when(request('activeStatus') == 'Active', function ($query) {
                             $query->whereNotNull('is_licence_active');
                         })
-                        ->when(request('activeStatus') == 'Inactive', function ($query) use ($request) {
+                        ->when(request('activeStatus') == 'Inactive', function ($query) {
                             $query->whereNull('is_licence_active');
                         })
                         ->when(request('province'), function ($query) use ($request) {
@@ -50,7 +47,7 @@ class RenewalExportController extends Controller
                     })->when(request('selectedDates'), function ($query) use ($request) {
                           $query->whereIn('year',$request->selectedDates);
                     })->get();
-              
+        
             $notesCollection = '';
 
             foreach ($renewals as $renewal) {

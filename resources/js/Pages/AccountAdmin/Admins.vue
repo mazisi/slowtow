@@ -8,7 +8,7 @@
               <div class="row">
                 <div class="col-lg-6 col-7">
                   <h6 class="mx-2">Slotow Admins</h6>
-                </div>
+                  </div>
                 <div class="col-lg-6 col-5 my-auto text-end">
                   <a @click="show_modal = true" data-bs-toggle="modal" data-bs-target="#add-user" href="#!" class="float-end btn btn-dark">
                     <i class="material-icons-round">person_add_alt</i>
@@ -22,7 +22,7 @@
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Full Name </th>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Function </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Created </th>
+                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Last Activity </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                     </tr>
                   </thead>
@@ -31,7 +31,8 @@
                       <td>
                         <div class="d-flex px-2 py-1">
                           <div>
-                            <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+                            <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" 
+                            class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
                           </div>
                           <div class="d-flex flex-column justify-content-center">
                             <h6 class="mb-0 text-sm">{{ user.name }}</h6>
@@ -50,7 +51,8 @@
                         <span v-if="user.is_active" class="badge badge-sm bg-gradient-success">Active</span>
                         <span v-else class="badge badge-sm bg-gradient-warning">Deactivated</span>
                       </td>
-                      <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">{{ new Date(user.created_at).toDateString() }}</span></td>
+                      <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">
+                        {{ user.last_activity_at  }}</span></td>
                       <td class="align-middle text-center">
                       <!-- Example split danger button -->
   <div class="dropdown">
@@ -194,8 +196,8 @@
   <script>
   import Layout from "../../Shared/Layout.vue";
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-  import { Inertia } from '@inertiajs/inertia'
-  import { ref } from 'vue'
+  import { Inertia } from '@inertiajs/inertia';
+  import { ref } from 'vue';
   
   export default {
    props: {
@@ -207,6 +209,7 @@
     
     
     setup (props) {
+
           let showMenu = ref(false);
           let show_modal = ref(true); 
   
@@ -223,11 +226,6 @@
             role: '',
             id: ''
           }) 
-        //  function deleteLicence(){
-        //     if(confirm('Are you sure you want to delete this licence??')){
-        //       Inertia.delete(`/delete-licence/${props.licence.slug}`)
-        //     }      
-        //   }
         
           function submitUser() {
             form.post('/submit-user', {
@@ -281,6 +279,7 @@
               }
             })
           }
+
   
       return {
         form,
@@ -291,7 +290,7 @@
         editUser,
         editForm,
         updateUser,
-        deActivateuser
+        deActivateuser,
       }
     },
      components: {

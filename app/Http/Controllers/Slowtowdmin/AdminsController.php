@@ -8,14 +8,13 @@ use Illuminate\Http\Request;
 use App\Mail\SendMailCredentials;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
 class AdminsController extends Controller
 {
     public function index(){
-      $users = User::with('roles')->latest()->get(['id','name','email','created_at','is_active']);
+      $users = User::with('roles')->latest()->get(['id','name','email','created_at','is_active','last_activity_at']);
       return Inertia::render('AccountAdmin/Admins',['users' => $users]);
     }
 

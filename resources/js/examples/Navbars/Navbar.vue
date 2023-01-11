@@ -37,13 +37,20 @@
 
         <div
           class="invisible pe-md-3 d-flex align-items-center"
-          :class="isRTL ? 'me-md-auto' : 'ms-md-auto'"
-        >
+          :class="isRTL ? 'me-md-auto' : 'ms-md-auto'">
           <vmd-input id="search" label="Search here" />
         </div>
 
-        
+           
         <ul class="navbar-nav justify-content-end">
+          <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+            <div class="avatar me-3">
+              <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${$page.props.auth.user.name}`" 
+              alt="kal" class="avatar avatar-sm border-radius-lg">
+            </div>
+            
+            </li>
+
           <li v-if="$page.props.auth.has_slowtow_admin_role" class="nav-item d-flex align-items-center">
             <inertia-link href="/slotow-admins" class="px-0 nav-link font-weight-bold lh-1 text-body">
               <i class="material-icons me-sm-1"> admin_panel_settings </i>
