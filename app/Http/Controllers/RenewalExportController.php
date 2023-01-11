@@ -19,7 +19,7 @@ class RenewalExportController extends Controller
                     }  
                 }
                 
-            $renewals = LicenceRenewal::with("licence")->when(function($query) use($request){
+            $renewals = LicenceRenewal::with("licence")->when($request,function($query) use($request){
                     $query->whereHas('licence', function($query) use($request){
                         $query->when($request->month, function($query) use($request){
                             $query->whereMonth('licence_date', $request->month);
