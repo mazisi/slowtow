@@ -206,7 +206,8 @@ export default{
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">{{ nomination.licence.trading_name }}</Link> - {{ nomination.year }} </h6>
+<h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">
+  {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
 <p class="text-sm mb-0">Current Stage: 
   <span class="font-weight-bold ms-1" v-if="nomination.status == '1'">Client Quoted</span>
  <span v-if="nomination.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>

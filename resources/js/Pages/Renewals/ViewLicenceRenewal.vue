@@ -40,6 +40,7 @@ export default {
       renewal_issued_at: props.renewal.renewal_issued_at,
       renewal_delivered_at: props.renewal.renewal_delivered_at,
       renewal_id: props.renewal.id,
+      client_invoiced_at: props.renewal.client_invoiced_at
      })
 
     const uploadDoc = useForm({
@@ -81,6 +82,15 @@ export default {
         }
       }
 
+      function limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
+
     function submitDocument(){
       uploadDoc.post('/submit-renewal-document', {
         preserveScroll: true,
@@ -109,9 +119,7 @@ export default {
         }
       }
 
-    function computeDocumentDate(date_param){
-        return new Date(date_param).toLocaleString().split(',')[0]
-    };
+    
 
     function pushData(status_value){
          if (event.target.checked) {
@@ -125,15 +133,23 @@ export default {
           }
       }
 
-    return { year,form,body_max,show_modal,
+      let file_name = ref('');
+      function getFileName(e){
+        this.uploadDoc.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
+
+    return { year,form,body_max,show_modal,getFileName, 
+      file_name,
      updateRenewal,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
-     computeDocumentDate,deleteDocument,
+     deleteDocument,
      createTask,
      submitTask,
      checkBodyLength,
-     deleteRenewal
+     deleteRenewal,
+     limit
      }
   },
    components: {
@@ -176,7 +192,7 @@ export default {
       <div class="row">
   <div class="col-lg-6 col-7">
    <h6>Process Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
-    <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
+    <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ limit(renewal.licence.trading_name) }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
        <span class="font-weight-bold ms-1" v-if="renewal.status == '1'">Client Quoted</span>
       <span v-if="renewal.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
@@ -234,7 +250,7 @@ export default {
 <hr>
 
 
-<div class="col-md-12 columns">
+<div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
 @input="pushData(2)" 
@@ -242,6 +258,19 @@ export default {
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
+
+<div class="col-md-4 columns">    
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Date</label>
+  <input type="date" class="form-control form-control-default" v-model="form.client_invoiced_at" >
+  </div>
+  <div v-if="errors.client_invoiced_at" class="text-danger">{{ errors.client_invoiced_at }}</div>
+</div>
+
+<div class="col-md-2 columns">    
+  <button class="btn btn-secondary btn-sm">Save</button>
+</div>
+
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
@@ -253,7 +282,6 @@ export default {
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(client_invoiced.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -356,7 +384,6 @@ export default {
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
-      <p v-if="liqour_board !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(liqour_board.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -425,7 +452,6 @@ export default {
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="renewal_issued !== null" class="mb-0 text-xs">{{ renewal_issued.document_name }}</p>
-      <p v-if="renewal_issued !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_issued.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -491,7 +517,6 @@ export default {
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
       <p v-if="renewal_doc !== null" class="mb-0 text-xs">{{ renewal_doc.document_name }}</p>
-      <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_doc.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -509,7 +534,7 @@ export default {
   <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
   <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-primary ms-2" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Update</button>
+  <span class="visually-hidden">Loading...</span> Save</button>
 </div>
 </div>
 </form>
@@ -590,22 +615,13 @@ data-bs-dismiss="alert" aria-label="Close">
       <div class="modal-body">      
         <div class="row">
 
-        <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
-        && uploadDoc.doc_type !== 'Renewal Issued'
-        && uploadDoc.doc_type !== 'Renewal Delivered'">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Date</label>
-        <input type="date" required class="form-control form-control-default" 
-         v-model="uploadDoc.date" >
-        </div>
-        <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-        </div>
-
+ 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
-         <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+         <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

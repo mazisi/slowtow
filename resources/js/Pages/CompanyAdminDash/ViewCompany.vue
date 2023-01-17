@@ -345,7 +345,7 @@
       <div class="d-flex px-2">
     
     <div class="d-flex flex-column">
-      <Link :href="`/company/view-my-licences/${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name }}</h6></Link>                          
+      <Link :href="`/company/view-my-licences/${licence.slug }`"><h6 class="mb-0 text-sm">{{ limit(licence.trading_name)  }}</h6></Link>                          
     </div>
       </div>
     </td>
@@ -679,7 +679,17 @@ export default {
         }
         
       }
+
+      function limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
     return {
+      limit,
       submit,
       submitTask,
       deleteTask,

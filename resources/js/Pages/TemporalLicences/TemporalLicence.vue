@@ -45,6 +45,13 @@ export default {
             Inertia.get('/temp-licences', { page: this.prevPage }, { preserveState: true, replace: true });
           
         }
+
+        function getArrowButtons(key){
+              if(key !== 0){
+                return key;
+              }  
+        }
+
    watch(term, _.debounce(function (value) {
           Inertia.get('/temp-licences', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -57,7 +64,8 @@ export default {
      currentPage,
      search,
      paginateNext,
-     paginatePrev
+     paginatePrev,
+     getArrowButtons
     }
   },
   components: {
@@ -178,12 +186,18 @@ export default {
               </table>
             </div>
           </div>
-          <nav aria-label="Person Navigation mt-2">
+          <nav aria-label="Temp-Licence Pagination mt-2">
             <ul class="pagination justify-content-end">
               <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
                 <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
               </li>
-              <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
+              <template v-for="(link, key) in licences.links">
+              <li class="page-item " :class="{ 'active': link.active }">
+                
+                <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowButtons(key)"></Link>
+              
+              </li>
+            </template>
               <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
                 <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
               </li>

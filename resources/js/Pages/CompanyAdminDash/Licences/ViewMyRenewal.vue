@@ -88,7 +88,7 @@ export default {
       <div class="row">
   <div class="col-lg-6 col-7">
    <h6>Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
-    <Link :href="`/company/view-my-licences/${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
+    <Link :href="`/company/view-my-licences/${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name ? renewal.licence.trading_name : '' }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
        <span class="font-weight-bold ms-1" v-if="renewal.status == '1'">Client Quoted</span>
       <span v-if="renewal.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>

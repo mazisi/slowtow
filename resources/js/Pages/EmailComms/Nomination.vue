@@ -1,7 +1,8 @@
 <script>
 import { Link } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
-import Banner from '../components/Banner.vue'
+import Banner from '../components/Banner.vue';
+import Paginate from '../../Shared/Paginate.vue';
 
 export default {
   name: "dashboard-default",
@@ -31,9 +32,19 @@ export default {
   components: {
     Layout,
     Link,
-    Banner
+    Banner,
+    Paginate
 },
 methods: {
+  limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+     }, 
+     
      filter(){
         this.$inertia.replace(route('get_nominations',{
              month: this.month,
@@ -178,10 +189,10 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="nomination in nominations" :key="nomination.id">
+      <tr v-for="nomination in nominations.data" :key="nomination.id">
         <td>
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ nomination.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ limit( nomination.licence.trading_name) }}</h6>
           </div>
         </td>
         <td>
@@ -219,7 +230,10 @@ methods: {
 
   </div>
 
-
+  <Paginate
+  :modelName="nominations"
+  :modelType="Nominations"
+  />
 
 </div>
 

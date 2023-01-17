@@ -9,36 +9,7 @@
 <template>
   <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      <li class=" nav-item" v-if="$page.props.auth.has_company_admin_role">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'company_dashboard'}"
-          collapseRef="/company/dashboard"
-          navText="Dashboard"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">dashboard</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-
-      <li class=" nav-item" v-if="$page.props.auth.has_slowtow_admin_role
-      || $page.props.auth.has_slowtow_user_role">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'slowtow_dashboard'}"
-          collapseRef="/dashboard"
-          navText="Dashboard"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">dashboard</i>
-          </template>
-        </sidenav-collapse>
-      </li>
+      
 
        <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
        || $page.props.auth.has_slowtow_user_role">

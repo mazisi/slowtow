@@ -446,7 +446,7 @@
       <div class="d-flex px-2">
     
     <div class="d-flex flex-column">
-      <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name }}</h6></Link>                          
+      <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name: ''  }}</h6></Link>                          
     </div>
       </div>
     </td>
@@ -505,7 +505,8 @@
     <div class="input-group input-group-outline null mx-5 is-filled">
     <div class="mb-3 mx-10">
   <input :value="person.pivot.position" @input="getPositionValue($event.target.value)"
-  name="position" class="" id="formFileSm" type="text" style="border: none;background-color: transparent;
+  name="position" class="" id="formFileSm" type="text" 
+  style="border: none;background-color: transparent;
 resize: none;
 outline: none;">
 </div>
@@ -595,10 +596,11 @@ outline: none;">
         </div>
 
         <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
-         <input type="file" @input="documentsForm.document = $event.target.files[0]"
+        <label for="licence-doc" class="btn btn-dark w-100" href="#!">Click To Upload File</label>
+         <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
@@ -922,8 +924,16 @@ export default {
         }
         
       }
+      let file_name = ref('');
+      function getFileName(e){
+        this.documentsForm.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
+
     return {
       showMenu,
+      file_name,
+      getFileName,
       submit,
       submitTask,
       deleteTask,

@@ -94,7 +94,7 @@ function assignActiveValue(event){
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-   <h5>New Transfer for: {{ licence.trading_name }}</h5>
+   <h5>New Transfer for: {{ licence.trading_name ? licence.trading_name : '' }}</h5>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end"></div>
 </div>

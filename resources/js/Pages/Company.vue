@@ -5,6 +5,7 @@ import { Inertia } from '@inertiajs/inertia'
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import Banner from './components/Banner.vue'
 
+
 export default {
   name: "companies",
   props: {
@@ -35,9 +36,9 @@ export default {
     }
     function paginateNext(){          
           if(props.companies.current_page < props.companies.last_page){            
-            this.nextPage = props.companies.current_page + 1;
-            this.currentPage =  props.companies.current_page+1;
-            Inertia.get('/companies', { page: this.nextPage }, { preserveState: true, replace: true });            
+            nextPage = props.companies.current_page + 1;
+            currentPage =  props.companies.current_page+1;
+            Inertia.get(`/companies`, { page: nextPage }, { preserveState: true, replace: true });            
           } 
         }
 
@@ -54,6 +55,12 @@ export default {
         }  
           return string.substring(0, limit)
         }
+
+        function getArrowButtons(key){
+              if(key !== 0){
+                return key;
+              }  
+        }
        watch(term, _.debounce(function (value) {
           Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
         }, 1000));
@@ -67,7 +74,8 @@ export default {
       currentPage,
       paginateNext,
       paginatePrev,
-      limit
+      limit,
+      getArrowButtons
     }
   },
   components: {
@@ -199,12 +207,18 @@ View
 </tbody>
 </table>
 
-<nav aria-label="Company Pagination mt-2">
+<nav aria-label="Companies Pagination mt-2">
   <ul class="pagination justify-content-end">
     <li class="page-item" :class="{ disabled: companies.prev_page_url == null }">
       <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
     </li>
-    <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
+    <template v-for="(link, key) in companies.links">
+    <li class="page-item " :class="{ 'active': link.active }">
+      
+      <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowButtons(key)"></Link>
+    
+    </li>
+  </template>
     <li class="page-item" :class="{ disabled: companies.next_page_url == null }">
       <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
     </li>

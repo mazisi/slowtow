@@ -12,7 +12,7 @@
         aria-hidden="true"
         id="iconSidenav"
       ></i>
-      <inertia-link class="m-0 navbar-brand" href="/">
+      <inertia-link class="m-0 navbar-brand" href="/dashboard">
         <img
           src="https://slotowstorage.blob.core.windows.net/images/white_logo3.png"
           class="navbar-brand-img h-200"

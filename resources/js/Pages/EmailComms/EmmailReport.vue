@@ -30,8 +30,17 @@ export default {
       return model_type.charAt(0).toUpperCase() + model_type.slice(1);
     }
 
+    function limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
     return { 
       filterForm,
+      limit,
       dispatchFilter,
       ucFirst
     }
@@ -130,7 +139,7 @@ export default {
                   <td>
                     <div class="d-flex px-2 py-1">
                       <div class="d-flex flex-column justify-content-center">
-                        <Link :href="`/view-licence?slug=${email.parent_licence_slug}`"><h6 class="mb-0 text-sm">{{ email.trading_name }}</h6></Link>
+                        <Link :href="`/view-licence?slug=${email.parent_licence_slug}`"><h6 class="mb-0 text-sm">{{ limit(email.trading_name) }}</h6></Link>
                       </div>
                     </div>
                   </td>

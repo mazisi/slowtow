@@ -64,7 +64,7 @@ name: "dashboard-default",
 
 <div class="row">
   <div class="col-lg-6 col-7">
-   <h6 class="mb-1">Alterations for:  {{ licence.trading_name }}</h6>
+   <h6 class="mb-1">Alterations for:  {{ licence.trading_name ? licence.trading_name: '' }}</h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <Link :href="`/new-alteration?slug=${licence.slug }`" class="btn btn-sm btn-secondary"> New Alteration</Link>

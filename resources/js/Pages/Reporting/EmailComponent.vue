@@ -23,7 +23,7 @@
         <tbody>
           <tr v-for="email in emails">
             <td class="text-center text-sm">
-              {{ email.licence_renewals.licence.trading_name }}              
+              {{ email.licence_renewals.licence.trading_name ? email.licence_renewals.licence.trading_name : '' }}              
             </td>
             <td class="text-center text-sm">
               <Link :href="`/view-licence-renewal/${email.licence_renewals.slug}`" class=" font-weight-bold"> 

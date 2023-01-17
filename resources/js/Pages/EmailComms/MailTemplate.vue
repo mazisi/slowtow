@@ -5,7 +5,8 @@
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6 class="mb-1">Licence Info: <Link :href="`/view-licence?slug=${licence.licence.slug}`" class="text-success">{{ licence.licence.trading_name }}</Link></h6>
+<h6 class="mb-1">Licence Info: <Link :href="`/view-licence?slug=${licence.licence.slug}`" class="text-success">
+  {{ licence.licence.trading_name ? licence.licence.trading_name : '' }}</Link></h6>
 </div>
 
 </div>

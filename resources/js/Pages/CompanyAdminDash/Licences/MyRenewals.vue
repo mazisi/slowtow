@@ -10,7 +10,7 @@
     <div class="row">
     <div class="col-lg-12">
     <h6 class="mb-1">
-      <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link> Renewals</h6>
+      <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">{{ licence.trading_name ? licence.trading_name: '' }}</Link> Renewals</h6>
     </div>
     
     

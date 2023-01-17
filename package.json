@@ -37,6 +37,7 @@
         "webpack-node-externals": "^3.0.0"
     },
     "dependencies": {
+        "@mathieustan/vue-datepicker": "^0.2.11",
         "@popperjs/core": "2.10.2",
         "@tinymce/tinymce-vue": "^4.0.7",
         "@vueform/multiselect": "^2.3.4",

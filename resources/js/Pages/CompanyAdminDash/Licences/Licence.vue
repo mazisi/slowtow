@@ -39,6 +39,15 @@ export default {
           province: this.province
           }))
         },
+
+      limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
     },
 }
 </script>
@@ -141,11 +150,11 @@ export default {
 <tr v-for="licence in licences" :key="licence.id">
 <td v-if="licence.is_licence_active == '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
 <td v-else><i class="fa fa-times text-danger" aria-hidden="true"></i></td>
-<td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.trading_name }}</Link></td>
+<td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ limit(licence.trading_name) }}</Link></td>
 <td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.licence_date }}</Link></td>
 <td class="text-center"><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
-<td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.company.name }}</Link></td>
+<td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ limit(licence.company.name) }}</Link></td>
 <td class="text-center">
 <Link :href="`/company/view-my-licences/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
 

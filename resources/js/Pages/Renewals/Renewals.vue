@@ -10,7 +10,7 @@
 <div class="row">
 <div class="col-lg-12">
 <h6 class="mb-1">
-   <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link>
+   <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ limit(licence.trading_name) }}</Link>
    Renewals</h6>
 </div>
 
@@ -115,6 +115,7 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 
+
 import { ref } from 'vue';
 
 export default {
@@ -134,7 +135,7 @@ export default {
       year: null,
       licence_id: props.licence.id
     })
-
+ 
     function submit() {
       Inertia.post('/submit-licence-renewal', form)
     }
@@ -145,7 +146,16 @@ export default {
     }
     }
 
-    return { year,form, submit, deleteRenewal }
+    function limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
+
+    return { year,form, submit, deleteRenewal, limit }
   },
    components: {
     Layout,

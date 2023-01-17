@@ -6,7 +6,7 @@
       <div class="col-12">
       <div class="row">
   <div class="col-lg-6 col-7">
-   <h5>Transfers for: <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h5>
+   <h5>Transfers for: <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h5>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">

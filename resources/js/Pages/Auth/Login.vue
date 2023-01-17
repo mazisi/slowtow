@@ -1,6 +1,7 @@
 
 <template>
-  <div class="page-header align-items-start min-vh-100" style="background-image: url('https://slotowstorage.blob.core.windows.net/images/10.jpg');
+  <div class="page-header align-items-start min-vh-100" 
+  style="background-image: url('https://slotowstorage.blob.core.windows.net/images/10.jpg');
     ">
     <span class="mask bg-gradient-dark opacity-6"></span>
     <div class="container my-auto">

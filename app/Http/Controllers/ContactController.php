@@ -15,7 +15,7 @@ class ContactController extends Controller{
                              ->orWhere('email', 'LIKE', '%'.request('q').'%')
                              ->orWhere('business_phone', 'LIKE', '%'.request('q').'%')
                              ->orWhere('mobile_phone', 'LIKE', '%'.request('q').'%');
-            })->paginate(20)->withQueryString();
+            })->paginate(1)->withQueryString();
         
         return Inertia::render('Contacts/Contact',['contacts' => $contacts]);
     }

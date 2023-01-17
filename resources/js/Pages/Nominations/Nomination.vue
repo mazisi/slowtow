@@ -6,7 +6,8 @@
       <div class="col-12">
          <div class="row">
   <div class="col-lg-6 col-7">
-   <h5>Nominees for: <Link :href="`/view-licence?slug=${nominations[0].licence.slug}`" class="text-success" v-if="nominations.length > 0">{{ nominations[0].licence.trading_name }}</Link></h5>
+   <h5>Nominees for: <Link :href="`/view-licence?slug=${nominations[0].licence.slug}`" class="text-success" v-if="nominations.length > 0">
+    {{ nominations[0].licence.trading_name ? nominations[0].licence.trading_name : '' }}</Link></h5>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">

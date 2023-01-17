@@ -170,7 +170,7 @@
         <tbody>
           <tr v-for="new_application in new_applications" :key="new_application.id">
             <td class="align-left text-center text-sm">
-                  <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.trading_name }}</p>
+                  <p class="align-left text-xs font-weight-bold mb-0">{{ limit(new_application.trading_name) }}</p>
             </td>
             <td>
               <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.licence_type.licence_type }}</p>
@@ -421,7 +421,17 @@ const new_app_stages = {
        
    }
 
+   function limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
+
 return{
+  limit,
   getType,
   form,
   months,

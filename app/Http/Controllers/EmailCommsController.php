@@ -36,7 +36,7 @@ class EmailCommsController extends Controller
                 ->orWhere('status',2)
                 ->orWhere('status',4)
                 ->orWhere('status',5);
-            })->get();
+            })->paginate(20)->withQueryString();
 
         return Inertia::render('EmailComms/EmailComm',['renewals' => $renewals]);
     }
@@ -64,7 +64,7 @@ class EmailCommsController extends Controller
                 ->orWhere('status',6)
                 ->orWhere('status',7)
                 ->orWhere('status',8);
-            })->orderBy('status','asc')->get();
+            })->orderBy('status','asc')->paginate(20)->withQueryString();
 
 
         return Inertia::render('EmailComms/Transfer',['transfers' => $transfers]);
@@ -92,7 +92,7 @@ class EmailCommsController extends Controller
                 ->orWhere('status',7)
                 ->orWhere('status',8);
             })
-            ->orderBy('status','asc')->get();
+            ->orderBy('status','asc')->paginate(20)->withQueryString();
 
         return Inertia::render('EmailComms/Nomination',['nominations' => $nominations]);
     }

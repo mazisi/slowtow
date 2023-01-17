@@ -5,7 +5,7 @@
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6 class="mb-1">Licence Info: {{ licence.trading_name }}</h6>
+<h6 class="mb-1">Licence Info: {{ licence.trading_name ? licence.trading_name : '' }}</h6>
 </div>
 
 

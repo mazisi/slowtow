@@ -9,6 +9,7 @@ import MaterialDashboard from "./material-dashboard";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { Link } from '@inertiajs/inertia-vue3';
+// import helper from '../js/helper.js';
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'

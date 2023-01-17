@@ -6,7 +6,8 @@
       <div class="card card-body mx-3 mx-md-4 mt-n6">
         <div class="row">
     <div class="col-lg-6 col-7">
-     <h6>Process Registration for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h6>
+     <h6>Process Registration for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
+      {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
      <p class="text-sm mb-0">Current Stage: 
       <span class="font-weight-bold ms-1" v-if="licence.status === '1'">Client Quoted</span>
      <span v-else-if="licence.status === '2'" class="font-weight-bold ms-1">Deposit Paid</span>
@@ -72,7 +73,8 @@
           <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
         </div>
     
-        <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" 
+        href="javascript:;">
         <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
         </a>
         <a v-if="client_invoiced == null" @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
@@ -1227,9 +1229,10 @@
           <div class="row">    
           <div class="col-md-12 columns">
           <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
-           <input type="file" @input="uploadDoc.doc = $event.target.files[0]"
+           <input type="file" @change="getFileName"
            hidden id="licence-doc" accept=".pdf"/>
            <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
+           <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
          </div>
          <div class="col-md-12">
             <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -1491,9 +1494,14 @@
 //         },
 //         { deep: true }
 //       ) 
-
+       let file_name = ref('');
+      function getFileName(e){
+        this.uploadDoc.doc = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
       return { 
         form,show_modal,
+        file_name,getFileName,
         editBoardRequestForm,
         editBoardRequest,
         updateBoardRequest,

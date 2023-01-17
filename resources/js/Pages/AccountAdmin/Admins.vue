@@ -55,7 +55,7 @@
                         {{ user.last_activity_at  }}</span></td>
                       <td class="align-middle text-center">
                       <!-- Example split danger button -->
-  <div class="dropdown">
+  <!-- <div class="dropdown">
     <button class="btn btn-sm  btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
       Action
     </button>
@@ -65,7 +65,22 @@
         <a v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Deactivate</a>
         <a v-else @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Activate</a></li>
     </ul>
-  </div>
+  </div> -->
+
+  <div class="dropdown float-lg-end pe-4">
+    <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+      <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+    </a>
+    <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
+      <li v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)">
+        <a  
+         class="dropdown-item border-radius-md" href="javascript:;"> Deactivate </a>
+        </li>
+        <li  v-else @click="deActivateuser(user.id, user.is_active)">
+          <a class="dropdown-item border-radius-md" href="javascript:;"> Activate </a>
+        </li>
+    <!-- <li><a class="dropdown-item border-radius-md" href="javascript:;"> Delete </a></li> -->
+  </ul></div>
 </td>
                     </tr>
                  
@@ -109,9 +124,8 @@
                   <div class="input-group input-group-outline null is-filled ">
                   <label class="form-label">Function/Role</label>
                   <select class="form-control form-control-default" v-model="form.role">
-                    <option value="SuperAdmin">SuperAdmin</option>
-                    <option value="Admin">Admin</option>
-                    <option value="Test">Test</option>
+                    <option value="slowtow-admin">Admin</option>
+                    <option value="slowtow-user">User</option>
                   </select>
                   </div>
                   <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>

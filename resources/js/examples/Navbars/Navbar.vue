@@ -171,7 +171,7 @@ export default {
   watch: {
     '$page.props.success': {
       handler(newVal,preVal) {
-        if(this.$page.props.success != null){
+        if(this.$page.props.success !== null){
           this.showFlashMessage = true
         }
         
@@ -181,7 +181,7 @@ export default {
 
     '$page.props.error': {
       handler(newVal,preVal) {
-        if(this.$page.props.error != null){
+        if(this.$page.props.error !== null){
           this.showFlashMessage = true
         }
         

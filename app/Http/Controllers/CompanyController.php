@@ -18,7 +18,7 @@ class CompanyController extends Controller
     public function index(Request $request){
 
         $companies = Company::when(request('term'), function ($query) {
-            return $query->where('name','LIKE','%'.request('term').'%')
+            $query->where('name','LIKE','%'.request('term').'%')
                     ->orWhere('reg_number','LIKE','%'.request('term').'%');
 
           })->when(request('term') && request('active_status') == 'Active', 

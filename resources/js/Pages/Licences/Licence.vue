@@ -100,7 +100,7 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.licence_date }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ limit(licence.licence_type.licence_type) }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company==null ? limit(licence.people.full_name) : limit(licence.company.name) }}</Link></td>
+<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company == null ? limit(licence.people.full_name) : limit(licence.company.name) }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.client_number }}</Link></td>
 <td class="text-center">
 <Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
@@ -194,11 +194,13 @@ function getArrowBbuttons(key){
   }
   
 }
-       function limit(string = '', limit = 25) {
-        if(string.length >= limit){
+       function limit(string='', limit = 25) {
+        if(string !== ''){
+          if(string.length >= limit){
           return string.substring(0, limit) + '...'
         }  
           return string.substring(0, limit)
+        }
         }
 
         function paginateNext(){          

@@ -5,7 +5,7 @@
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6 class="mb-1">Licence Info: {{ licence.trading_name }}</h6>
+<h6 class="mb-1">Licence Info: {{ licence.trading_name ? licence.trading_name : '' }}</h6>
 </div>
 
 
@@ -280,7 +280,7 @@ class="form-label"
 <hr>
 
 <div class="row">
-<h6 class="text-center mb-2 ">Companies Linked To : {{ licence.trading_name }}</h6>
+<h6 class="text-center mb-2 ">Companies Linked To : {{ licence.trading_name ? licence.trading_name : '' }}</h6>
 <div class="table-responsive p-0">
 <table class="table align-items-center mb-0">
 <thead>

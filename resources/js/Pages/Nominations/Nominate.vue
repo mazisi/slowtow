@@ -9,7 +9,8 @@
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">New Nomination For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link></h6>
+<h6 class="mb-1">New Nomination For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
+  {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
 </div>
 </div>
 

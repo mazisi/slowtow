@@ -2,6 +2,7 @@
 import { Link } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
+import Paginate from '../../Shared/Paginate.vue';
 
 export default {
   name: "emmail-comms",
@@ -21,7 +22,8 @@ export default {
   components: {
     Layout,
     Link,
-    Banner
+    Banner,
+    Paginate
 },
 methods: {
      filter(){
@@ -57,7 +59,16 @@ methods: {
 
     getEmmails(){
       this.$inertia.get('/emails-report');
-    }
+    },
+
+    limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
     },
 };
 </script>
@@ -178,11 +189,11 @@ methods: {
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="renewal in renewals" :key="renewal.id">
+      <tr v-for="renewal in renewals.data" :key="renewal.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ renewal.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ limit(renewal.licence.trading_name) }}</h6>
               <p class="text-xs mb-0"> 
               Renewal For: {{ new Date(renewal.date).getFullYear() }}/{{ this.getRenewalYear(renewal.date)  }} </p>
             </div>
@@ -224,7 +235,10 @@ methods: {
   </div>
 
 
-
+  <Paginate
+  :modelName="renewals"
+  :modelType="EmailComms"
+  />
 
 
 </div>

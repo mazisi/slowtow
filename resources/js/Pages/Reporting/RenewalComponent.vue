@@ -30,7 +30,7 @@
               <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
               
             </td>
-            <td class="text-center text-sm">{{ renewal.licence.trading_name }}</td>
+            <td class="text-center text-sm">{{ limit(renewal.licence.trading_name) }}</td>
             <td class="text-center text-sm">{{ renewal.licence.licence_number }}</td>
             <td class="text-center text-sm">{{ renewal.date }}</td>
             <td v-if="renewal.renewal_documents[0] != null" class="text-center text-sm">True</td>
@@ -47,5 +47,16 @@
     props: {
       renewals: Object,
     },
+    
+    methods: {
+      limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
+    }
   }
   </script> 

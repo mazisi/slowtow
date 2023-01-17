@@ -38,7 +38,9 @@ export default {
     AppFooter
   },
   methods: {
-    ...mapMutations(["toggleConfigurator", "navbarMinimize"])
+    ...mapMutations(["toggleConfigurator", "navbarMinimize"]),
+
+    
   },
   computed: {
     ...mapState([

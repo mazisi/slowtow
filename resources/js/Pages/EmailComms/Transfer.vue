@@ -2,6 +2,7 @@
 import { Link } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
+import Paginate from '../../Shared/Paginate.vue';
 
 export default {
   name: "email-comms",
@@ -20,9 +21,20 @@ export default {
   components: {
     Layout,
     Link,
-    Banner
+    Banner,
+    Paginate
 },
 methods: {
+  
+  limit(string='', limit = 25) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        },
+
      filter(){
         this.$inertia.replace(route('get_licence_transfers',{
               month: this.month,
@@ -164,11 +176,11 @@ methods: {
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="transfer in transfers" :key="transfer.id">
+      <tr v-for="transfer in transfers.data" :key="transfer.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ transfer.licence.trading_name }}</h6>
+              <h6 class="mb-0 text-sm">{{ limit(transfer.licence.trading_name) }}</h6>
              </div>
           </div>
         </td>
@@ -190,7 +202,10 @@ methods: {
 
 
   </div>
-
+  <Paginate
+  :modelName="transfers"
+  :modelType="Transfers"
+  />
 
 </div>
 
