@@ -124,8 +124,9 @@
                   <div class="input-group input-group-outline null is-filled ">
                   <label class="form-label">Function/Role</label>
                   <select class="form-control form-control-default" v-model="form.role">
-                    <option value="slowtow-admin">Admin</option>
-                    <option value="slowtow-user">User</option>
+                    <option :value="''">Select Role..</option>
+                    <option value="slowtow-admin">Super Admin</option>
+                    <option value="slowtow-user">Admin</option>
                   </select>
                   </div>
                   <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>

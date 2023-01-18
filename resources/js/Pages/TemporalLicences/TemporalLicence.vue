@@ -52,6 +52,16 @@ export default {
               }  
         }
 
+        function limit(string='', limit=25){
+          if(string){
+            if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+           }  
+          return string.substring(0, limit)
+          }
+          
+        }
+
    watch(term, _.debounce(function (value) {
           Inertia.get('/temp-licences', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -65,7 +75,8 @@ export default {
      search,
      paginateNext,
      paginatePrev,
-     getArrowButtons
+     getArrowButtons,
+     limit
     }
   },
   components: {
@@ -141,7 +152,7 @@ export default {
                     <td class="text-sm" >
                       <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
                     <Link :href="`/view-temp-licence/${licence.slug}`">
-                    {{ licence.event_name }}
+                    {{ limit(licence.event_name) }}
                     </Link>
                   </h6>
                       
@@ -150,7 +161,7 @@ export default {
              
                           <h6  v-if="licence.people === null" class="mb-0 text-sm">               
                           <Link :href="`/view-temp-licence/${licence.slug}`"
-                            class="px-0 ">{{ licence.company.name }}
+                            class="px-0 ">{{ limit(licence.company.name) }}
                           </Link>
                            </h6>
                            <h6 v-if="licence.company === null" class="mb-0 text-sm">

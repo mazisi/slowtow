@@ -62,6 +62,7 @@
 <div class="p-3 card-body">
 <form @submit.prevent="submit" class="mt-4">
 <Datepicker v-model="form.year" yearPicker />
+
 <p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
 
 <button class="btn btn-sm btn-secondary mt-3 float-end justify-content-center" type="submit" >
@@ -90,6 +91,8 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from '../components/Banner.vue';
 import PaginateVue from "@/Shared/Paginate.vue";
+
+
 
 import { ref } from 'vue';
 
