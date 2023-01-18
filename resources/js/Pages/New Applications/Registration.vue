@@ -1416,8 +1416,8 @@
       }
   
       function deleteDocument(id){
-          if(confirm('Document will be deleted permanently...Continue ??')){
-            Inertia.delete(`/delete-renewal-document/${id}`, {
+          if(confirm('Document will be deleted...Continue ??')){
+            Inertia.delete(`/delete-licence-document/${id}`, {
               //
             })
           }

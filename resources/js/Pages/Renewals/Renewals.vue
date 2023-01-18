@@ -47,12 +47,14 @@
 </td>
 
 <td class="align-middle text-center text-sm">
+  <Link :href="`/view-licence-renewal/${renewal.slug}`">
 <span v-if="renewal.status == '1'" class="badge bg-dark text-default">Client Quoted</span>
 <span v-if="renewal.status == '2'" class="badge bg-info text-default">Client Invoiced</span>
 <span v-if="renewal.status == '3'" class="badge bg-light text-dark">Client Paid</span>
 <span v-if="renewal.status == '4'" class="badge bg-warning text-default">Payment To The Liquor Board</span>
 <span v-if="renewal.status == '5'" class="badge bg-secondary text-default">Renewal Issued</span>
 <span v-if="renewal.status == '6'" class="badge bg-success text-default">Renewal Delivered</span>
+</Link>
 </td>
 <td class="align-middle text-end" >
 <div class="d-flex justify-content-center">

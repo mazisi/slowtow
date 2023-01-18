@@ -168,8 +168,14 @@ export default {
           }
       }
 
+      let file_name = ref('');
+      function getFileName(e){
+        this.uploadDoc.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
+
     return { year,form,body_max,show_modal,
-     updateLicence,
+     updateLicence,file_name,getFileName,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      computeDocumentDate,deleteDocument,
@@ -1032,9 +1038,10 @@ data-bs-dismiss="alert" aria-label="Close">
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
-         <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+         <input type="file" @input="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

@@ -156,10 +156,16 @@ export default{
                 }
       }
       
+      let file_name = ref('');
+      function getFileName(e){
+        this.uploadDoc.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
+
       return{options,pushData,checkBodyLength,body_max,updateNomination,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,
             computeDocumentDate,deleteDocument,submitDocument,submitTask,
-            getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination
+            getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination,file_name,getFileName
 
 
       }
@@ -1008,9 +1014,10 @@ mode="tags"
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
-         <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+         <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

@@ -189,7 +189,8 @@ class="form-label"
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence</h6>
-      <p v-if="original_lic.length > 0" class="mb-0 text-xs">{{ original_lic[0].document_name }}</p>
+      <p v-if="original_lic.length > 0" class="mb-0 text-xs">
+        {{ original_lic[0].document_name ? original_lic[0].document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
     <button  v-if="original_lic.length > 0" @click="deleteDocument(original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -210,7 +211,8 @@ class="form-label"
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original</h6>
-      <p v-if="duplicate_original_lic.length > 0" class="mb-0 text-xs">{{ duplicate_original_lic[0].document_name }}</p>
+      <p v-if="duplicate_original_lic.length > 0" class="mb-0 text-xs">
+        {{ duplicate_original_lic[0].document_name ? duplicate_original_lic[0].document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
     <button  v-if="duplicate_original_lic.length > 0" @click="deleteDocument(duplicate_original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -237,7 +239,7 @@ class="form-label"
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
-      <p v-if="original_lic_delivered.length > 0" class="mb-0 text-xs">{{ original_lic_delivered[0].document_name }}</p>
+      <p v-if="original_lic_delivered.length > 0" class="mb-0 text-xs">{{ original_lic_delivered[0].document_name ? original_lic_delivered[0].document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
@@ -259,7 +261,8 @@ class="form-label"
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
-       <p v-if="duplicate_original_lic_delivered.length > 0" class="mb-0 text-xs">{{ duplicate_original_lic_delivered[0].document_name }}</p>
+       <p v-if="duplicate_original_lic_delivered.length > 0" class="mb-0 text-xs">
+        {{ duplicate_original_lic_delivered[0].document_name ? duplicate_original_lic_delivered[0].document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
     <button  v-if="duplicate_original_lic_delivered.length > 0" @click="deleteDocument(duplicate_original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -378,9 +381,10 @@ data-bs-dismiss="alert" aria-label="Close">
         <div class="row">
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
-         <input type="file" @input="originalLicenceForm.doc = $event.target.files[0]"
+         <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="originalLicenceForm.progress" :value="originalLicenceForm.progress.percentage" max="100">
@@ -546,8 +550,16 @@ export default {
           }  
             return string.substring(0, limit)
         }
+
+        let file_name = ref('');
+          function getFileName(e){
+            this.originalLicenceForm.doc = e.target.files[0];
+            this.file_name = e.target.files[0].name;
+          }
+
     return {
       showMenu,
+      file_name,getFileName,
       createTask,
       body_max,
       show_modal,

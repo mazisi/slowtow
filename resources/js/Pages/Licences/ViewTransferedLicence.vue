@@ -168,10 +168,16 @@ export default {
         }
       }
 
-
+      let file_name = ref('');
+      function getFileName(e){
+        this.documentsForm.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
     return {
       pushData,
+      file_name,
       mergeForm,
+      getFileName,
       mergeDocuments,
       submitDocuments,
       submit,
@@ -630,7 +636,7 @@ export default {
         <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
       </a>
 
-      <a v-else target="_blank" :href="`${$page.props.blob_file_path}${original_licence.document_file}`">
+      <a v-else-if="original_licence !== null" target="_blank" :href="`${$page.props.blob_file_path}${original_licence.document_file}`">
         <i class="fa fa-link float-end h5 curser-pointer"></i>
       </a>
       <i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
@@ -1035,9 +1041,10 @@ export default {
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
-         <input type="file" @input="documentsForm.document = $event.target.files[0]"
+         <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">

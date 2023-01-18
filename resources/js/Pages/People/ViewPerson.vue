@@ -322,9 +322,10 @@ data-bs-dismiss="alert" aria-label="Close">
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
-         <input type="file" @input="uploadDoc.document = $event.target.files[0]"
+         <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -500,10 +501,17 @@ const form = useForm({
             createTask.body = createTask.body.substring(0,body_max)
         }
      }
+
+       let file_name = ref('');
+      function getFileName(e){
+        this.uploadDoc.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+      }
+
      return{
         form,checkBodyLength,body_max,deleteTask,computeExpiryDate,deletePerson,
         assignActiveValue,updatePerson,submitTask,deleteDocument,getDocType,submitDocument,
-        show_doc_modal,uploadDoc,createTask
+        show_doc_modal,uploadDoc,createTask,file_name,getFileName
      }
 },
  components: {
