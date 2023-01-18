@@ -1208,7 +1208,7 @@
   </div>
   <hr>
  
-  <Task :tasks="tasks" :model_id="licence.id" :errors="errors"/>
+  <Task :tasks="tasks" :model_id="licence.id" :errors="errors" :model_type="'Licence'"/>
 
 
 

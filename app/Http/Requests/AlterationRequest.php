@@ -24,8 +24,7 @@ class AlterationRequest extends FormRequest
     public function rules()
     {
         return [
-            'alteration_date' => 'required|date',
-            'status*'  => 'required|in:Client Invoiced,Client Paid,Alteration Details Captured,Alteration Complete'
+            'alteration_date' => 'required|date'
         ];
     }
 }

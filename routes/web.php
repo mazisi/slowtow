@@ -1,7 +1,6 @@
 <?php
 
-
-
+use App\Http\Controllers\AlterationDocumentController;
 use Inertia\Inertia;
 
 use Illuminate\Support\Facades\Route;
@@ -85,6 +84,8 @@ Route::group([], __DIR__.'/company_admin.php');
 
 
 Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
+Route::get('/insert-years',[InsertTypesController::class,'insert_years']);
+
 
 Route::get('/slowtow-admin-dashboard',[SlotowDashboardController::class,'index'])->name('slowtow_dashboard');
 
@@ -276,11 +277,15 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/submit-altered-licence/{licence_id}',[AlterLicenceController::class,'store'])->name('alter_licence.submit');
 
-        Route::delete('/delete-altered-licence/{slug}',[AlterLicenceController::class,'destroy'])->name('delete_altered_licence.submit');
+        Route::delete('/delete-altered-licence/{slug}/{licence_slug}',[AlterLicenceController::class,'destroy'])->name('delete_altered_licence.submit');
 
         Route::get('/view-alteration/{slug}',[AlterLicenceController::class,'show'])->name('view_alteration');
 
         Route::patch('/update-alteration',[AlterLicenceController::class,'update'])->name('update_alteration');
+
+        Route::post('/submit-alteration-document',[AlterationDocumentController::class,'store']);
+
+        Route::delete('/delete-alteration-document/{id}',[AlterationDocumentController::class,'destroy']);
 
 
 

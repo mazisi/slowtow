@@ -34,11 +34,15 @@ name: "dashboard-default",
       this.$inertia.post(`/submit-altered-licence/${this.licence.id}`, this.form)
     },
 
-    deleteAlteration(slug){
-       if (confirm('Are you sure you want to delete this alteration?')) {
-        this.$inertia.delete(`/delete-altered-licence/${slug}`)
-      }
-    }
+    
+   limit(string='', limit = 35) {
+        if(string){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
+        }
 
   },
   beforeUnmount() {
@@ -64,7 +68,9 @@ name: "dashboard-default",
 
 <div class="row">
   <div class="col-lg-6 col-7">
-   <h6 class="mb-1">Alterations for:  {{ licence.trading_name ? licence.trading_name: '' }}</h6>
+   <h6 class="mb-1">Alterations for:  
+    <Link :href="`/view-licence?slug=${licence.slug}`">
+      <span class="text-success">{{ licence.trading_name ? licence.trading_name: '' }}</span></Link></h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end">
     <Link :href="`/new-alteration?slug=${licence.slug }`" class="btn btn-sm btn-secondary"> New Alteration</Link>
@@ -83,7 +89,6 @@ name: "dashboard-default",
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
-      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Id</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alteration Date</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Complete</th>
@@ -92,27 +97,29 @@ name: "dashboard-default",
     </thead>
     <tbody v-if="$props. licence.alterations.length > 0">
       <tr v-for="alter in licence.alterations" :key="alter.id">
-        <td class="text-center text-sm"><h6 class="text-center">{{ alter.id }}</h6></td>
+       
         <td class="text-center text-sm">
+          <Link :href="`/view-alteration/${alter.slug}`">
           {{ new Date(alter.date).toLocaleString().split(',')[0] }}
+          </Link>
         </td>
          <td class="text-sm text-center">
-         Description heree.....
+          <Link :href="`/view-alteration/${alter.slug}`">
+            {{ limit(alter.description) }}
+          </Link>
+        
         </td>
         
         <td class="text-sm text-center">
-        <span v-if="alter.status == '1'" class="badge bg-warning text-default">Client Invoiced</span>
-        <span v-if="alter.status == '2'" class="badge bg-default text-default">Client Paid</span>
-        <span v-if="alter.status == '3'" class="badge bg-dark text-default">Alteration Details Captured</span>
-        <span v-if="alter.status == '4'" class="badge bg-success text-default">Alteration Complete</span>
-
+          <Link :href="`/view-alteration/${alter.slug}`">
+          <i v-if="alter.status == '4'" class="fa fa-check text-info" aria-hidden="true"></i>
+           <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
+      </Link>
         </td>
 
-        <td class="text-sm text-end">
-        <div class="d-flex text-end" style="margin-left: 3rem;">
-        <Link  :href="`#!`" @click="deleteAlteration(alter.slug)"><i class="fa fa-trash-o  text-danger" aria-hidden="true"></i></Link>
+        <td class="text-sm text-center">
         <Link  :href="`/view-alteration/${alter.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
-        </div>
+        
         </td>
       </tr>
     </tbody>

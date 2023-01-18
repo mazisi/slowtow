@@ -68,21 +68,15 @@
 </tbody>
 </table>
 
-<nav aria-label="Person Navigation mt-2">
-  <ul class="pagination justify-content-end">
-    <li class="page-item" :class="{ disabled: people.prev_page_url == null }">
-      <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
-    </li>
-    <li class="page-item active"><a class="page-link" href="#!">{{ currentPage }}</a></li>
-    <li class="page-item" :class="{ disabled: people.next_page_url == null }">
-      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
-    </li>
-  </ul>
-</nav>
 
 </div>
 </div>
 
+<Paginate
+  :modelName="people"
+  :modelType="People"
+  />
+  
 </div>
 {{ links }}
 </div>
@@ -98,6 +92,7 @@ import { useForm ,Link } from '@inertiajs/inertia-vue3';
 import { ref, watch, reactive } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue'
+import Paginate from "@/Shared/Paginate.vue";
 
 export default {
   props: {
@@ -107,9 +102,6 @@ export default {
   },
   setup(props){
     const term = ref('');
-    let nextPage = ref(0);
-    let prevPage =  ref(0);
-    let currentPage =  reactive(props.people.current_page);
 
     const form = useForm({
           term: term,
@@ -123,20 +115,6 @@ export default {
             
         })
     }
-    function paginateNext(){          
-          if(props.people.current_page < props.people.last_page){            
-            this.nextPage = props.people.current_page + 1;
-            this.currentPage =  props.people.current_page+1;
-            Inertia.get('/people', { page: this.nextPage }, { preserveState: true, replace: true });            
-          } 
-        }
-
-        function paginatePrev(){         
-            this.prevPage = props.people.current_page - 1;
-            this.currentPage =  props.people.current_page-1;
-            Inertia.get('/people', { page: this.prevPage }, { preserveState: true, replace: true });
-          
-        }
     watch(term, _.debounce(function (value) {
           Inertia.get('/people', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -144,19 +122,15 @@ export default {
     return{
       term,
       search,
-      form,
-      paginateNext,
-      paginatePrev,
-      nextPage,
-      prevPage,
-      currentPage,
+      form
     }
   },
  components: {
     Layout,
     Link,
     useForm,
-    Banner
+    Banner,
+    Paginate
 },
 }
 </script>

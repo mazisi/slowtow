@@ -607,12 +607,12 @@ Action
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
 
-    <a v-if="latest_renewal_doc == null && latest_renewal_licence_doc.document_file !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
+    <a v-if="latest_renewal_licence_doc !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
       :href="`${$page.props.blob_file_path}${latest_renewal_licence_doc.document_file}`">
       <i class="fa fa-link h5" aria-hidden="true"></i>
     </a>
 
-    <a v-if="latest_renewal_doc == null" @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
 
   </li>  

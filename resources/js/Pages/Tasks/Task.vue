@@ -47,13 +47,14 @@
     props: {
       tasks: Object,
       errors: Object,
-      model_id: Number
+      model_id: Number,
+      model_type: String
     },
     setup(props){
       const body_max = ref(100);
       const createTask = useForm({
             body: '',
-            model_type: 'Licence',
+            model_type: props.model_type,
             model_id: props.model_id,
             taskDate: ''     
       })

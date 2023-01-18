@@ -1,8 +1,9 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link } from '@inertiajs/inertia-vue3';
-import Banner from '../components/Banner.vue'
+import { Link,useForm } from '@inertiajs/inertia-vue3';
+import Banner from '../components/Banner.vue';
+
 
 export default {
  props: {
@@ -12,28 +13,30 @@ export default {
     error: String,
 
   },
-  data() {
-    return {
-      showMenu: false,
-      form: {
+  setup(props) {
+   let showMenu = false;
+    
+     let options = props.nominees;
+     const form = useForm({
          alteration_date: '',
-         licence_id: this.licence.id,
-         licence_slug: this.licence.slug,
+         licence_id: props.licence.id,
+         licence_slug: props.licence.slug,
+         description: '',
          status: [],
-      
-      },
-      options: this.nominees,
+        })
+
+    function submit() {
+          form.post(`/submit-altered-licence/${props.licence.id}`, props.form)
+     }
+
+     
+    return {
+      submit,
+      options,
+      form,showMenu
     };
   },
-    methods: {
-      submit() {
-          this.$inertia.post(`/submit-altered-licence/${this.licence.id}`, this.form)
-        },
 
-        
-  },
-
-  
   components: {
     Layout,
     Multiselect,
@@ -69,7 +72,7 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-   <h5>New Alteration for: {{ licence.trading_name }}</h5>
+   <h6>New Alteration for: <Link :href="`/view-licence?slug=${licence.slug}`"><span class="text-success">{{ licence.trading_name }}</span></Link></h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end"></div>
 </div>
@@ -86,33 +89,43 @@ export default {
 <input id="client-invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
-<div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
 </div>  
-<label> Invoice Document goes here..</label>   
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-paid" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
-<div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
-</div> <hr>
+</div>
+<hr/>
 
-<div class="col-md-12 columns">
+
+<div class="col-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="alteration-details" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
 <label for="alteration-details" class="form-check-label text-body text-truncate status-heading">Alteration Details Captured</label>
 </div>
-<div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
-</div> <hr>
+</div>
 
-<div class="col-md-6 columns">
+
+
+<div class="col-3 columns">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Alteration Date *</label>
     <input type="date" class="form-control form-control-default" v-model="form.alteration_date">
     </div>
      <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
   </div>
+
+  <div class="col-9 columns">    
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Description</label>
+<input type="text" class="form-control form-control-default" v-model="form.description" >
+</div>
+<div v-if="errors.description" class="text-danger">{{ errors.description }}</div>
+</div>
+
+
 <hr>
 
 
@@ -124,7 +137,10 @@ export default {
 </div> 
 
 <div>
-  <button type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
+  <button :disabled="form.processing" type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">
+    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Create</button>
+</div>
             </div>
             </form>
               </div>

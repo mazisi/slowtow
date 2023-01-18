@@ -15,14 +15,13 @@ use Illuminate\Support\Facades\Mail;
 class EmailCommsController extends Controller
 {
    public function index(Request $request){
-     $month =$request->month;
-            $renewals = LicenceRenewal::with('licence')->where(function($query) use($month,$request){
-                $query->when($request->month, function($query) use($month,){                    
-                    $query->whereHas('licence', function($query) use($month){
-                        $query->whereMonth('licence_date', $month);
+            $renewals = LicenceRenewal::with('licence')->where(function($query) use($request){
+                $query->when($request->month, function($query) {                    
+                    $query->whereHas('licence', function($query) {
+                        $query->whereMonth('licence_date', request('month'));
                     });
                 })
-                ->when(!is_null(request('province')), function ($query) use ($request) {
+                ->when(request('province'), function ($query) use ($request) {
                     $query->whereHas('licence', function($query) use($request){
                         $query->where('province',$request->province);
                     });
@@ -43,20 +42,22 @@ class EmailCommsController extends Controller
 
 
     public function getLicenceTransfers(request $request){
-        $month =$request->month;
 
-        $transfers = LicenceTransfer::with("licence")->when($month, function($query,$month) use($request){
-
-            $query->when($request->month, function($query) use($month,){                    
-                $query->whereHas('licence', function($query) use($month){
-                    $query->whereMonth('licence_date', $month);
-                });
-            })->when(!is_null(request('province')), function ($query) use ($request) {
-                    $query->where('province',$request->province);
-            });
-           
-            })->when(!empty(request('stage')), function ($query) use ($request) {
+            $transfers = LicenceTransfer::with("licence")->when($request, function($query) use($request){
+                $query->when(request('month'), function($query) {                    
+                    $query->whereHas('licence', function($query) {
+                        $query->whereMonth('licence_date', request('month'));
+                    });
+                })
+                ->when(request('province'), function ($query) use ($request) {
+                    $query->whereHas('licence', function($query) use($request){
+                        $query->where('province',$request->province);
+                    });
+                   
+                })
+              ->when(!empty(request('stage')), function ($query) use ($request) {
                 $query->where('status',$request->stage);
+            });
             })->where(function($query){
                 $query->where('status',1)
                 ->orWhere('status',2)
@@ -74,17 +75,22 @@ class EmailCommsController extends Controller
      * Get Nominations Comms.
      */
     public function getNominations(Request $request){
-        $month =$request->month;
 
-        $nominations = Nomination::with("licence")->when($month, function($query,$month) use($request){
-            $query->whereHas('licence', function($query) use($month,$request){
-                $query->whereMonth('licence_date', $month)
-                ->when(!is_null(request('province')), function ($query) use ($request) {
-                    $query->where('province',$request->province);
-                });
-            });
-            })->when(!empty(request('stage')), function ($query) use ($request) {
+            $nominations = Nomination::with("licence")->when($request, function($query) use($request){
+                $query->when(request('month'), function($query) {                    
+                    $query->whereHas('licence', function($query){
+                        $query->whereMonth('licence_date', request('month'));
+                    });
+                })
+                ->when(request('province'), function ($query) use ($request) {
+                    $query->whereHas('licence', function($query) use($request){
+                        $query->where('province',$request->province);
+                    });
+                   
+                })
+              ->when(!empty(request('stage')), function ($query) use ($request) {
                 $query->where('status',$request->stage);
+            });
             })->where(function($query){
                 $query->where('status',1)
                 ->orWhere('status',2)

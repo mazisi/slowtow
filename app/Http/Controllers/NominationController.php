@@ -21,7 +21,12 @@ class NominationController extends Controller
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
         // $nomination_years = Nomination::paginate(10)->withQueryString();
         $nomination_years = Nomination::latest()->where('licence_id',$licence->id)->get();
-        return Inertia::render('Nominations/Nominate',['licence' => $licence,'nomination_years' => $nomination_years]);
+        $years = DB::table('years')->get()->pluck('year');//dropdown of years
+        return Inertia::render('Nominations/Nominate',[
+            'licence' => $licence,
+            'nomination_years' => $nomination_years,
+            'years' => $years
+          ]);
     }
     /**
      * Insert nomination.

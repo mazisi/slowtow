@@ -56,14 +56,23 @@
               :modelType="Nominations"
               /> -->
             </div>
-
-<div class="col-4 col-md-6 col-xl-8 position-relative">
+            <div class="col-2"></div>
+<div class="col-6 position-relative">
 <div class="card card-plain h-100">
 <div class="p-3 card-body">
 <form @submit.prevent="submit" class="mt-4">
-<Datepicker v-model="form.year" yearPicker />
+<!-- <Datepicker v-model="form.year" yearPicker /> -->
 
-<p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
+  <div class="input-group input-group-outline null is-filled">
+     <Multiselect
+     v-model="form.year"
+        placeholder="Search Year"
+        :options="years"
+        :searchable="true"
+      />
+    </div>
+ <div v-if="errors.year" class="text-danger">{{ errors.year }}</div>
+
 
 <button class="btn btn-sm btn-secondary mt-3 float-end justify-content-center" type="submit" >
   <span v-if="form.processing" class="spinner-border mt-1 spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -83,15 +92,15 @@
 </div>
 </Layout>
 </template>
-
+<style src="@vueform/multiselect/themes/default.css"></style>
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-import Datepicker from '@vuepic/vue-datepicker';
+// import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from '../components/Banner.vue';
 import PaginateVue from "@/Shared/Paginate.vue";
-
+import Multiselect from '@vueform/multiselect';
 
 
 import { ref } from 'vue';
@@ -100,6 +109,7 @@ export default {
   props: {
     errors: Object,
     licence: Object,
+    years: Object,
     success: String,
     error: String,
     nomination_years: Object
@@ -107,6 +117,7 @@ export default {
 
   setup (props) {
     const year = ref(new Date().getFullYear());
+    let years = props.years
 
     const form = useForm({
       year: null,
@@ -119,15 +130,16 @@ export default {
       })
     }
 
-    return { year,form, submit }
+    return { year, years,form, submit }
   },
    components: {
     Layout,
     Link,
     Head,
-    Datepicker,
+    // Datepicker,
     Banner,
-    PaginateVue
+    PaginateVue,
+    Multiselect
   },
   
 };

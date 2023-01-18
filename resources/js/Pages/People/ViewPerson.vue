@@ -241,7 +241,7 @@
 <div class="d-flex float-end" style="float: right;">
  <button :disabled="form.processing" class="btn btn-sm btn-primary ms-2" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Update
+  Save
 </button>
 </div>
 </form>
