@@ -234,6 +234,7 @@
   import Multiselect from '@vueform/multiselect';
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
   import Banner from '../components/Banner.vue'
+  import { Inertia } from '@inertiajs/inertia'
   
   export default {
    props: {
@@ -276,7 +277,13 @@
         })
         
       }
-      return { submit, form ,options}
+
+      function deleteLicence(){
+          if(confirm('Are you sure you want to delete this licence??')){
+            Inertia.delete(`/delete-licence/${props.licence.slug}`)
+          }      
+        }
+      return { submit, form ,options, deleteLicence}
     },
      components: {
       Layout,

@@ -91,7 +91,13 @@
 <div class="tab-content" id="ex1-content">
 <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
 <form @submit.prevent="submit">
-<Datepicker v-model="form.year" yearPicker />
+<!-- <Datepicker v-model="form.year" yearPicker /> -->
+<Multiselect
+     v-model="form.year"
+        placeholder="Select Year"
+        :options="years"
+        :searchable="true"
+      />
 <p v-if="errors.year" class="text-danger">{{ errors.year }}</p>
 <button type="submit" class="btn btn-sm btn-secondary mt-2 float-end justify-content-center">Submit</button>
 </form>
@@ -108,14 +114,15 @@
 </div>
 </Layout>
 </template>
-
+<style src="@vueform/multiselect/themes/default.css"></style>
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-import Datepicker from '@vuepic/vue-datepicker';
+// import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
+import Multiselect from '@vueform/multiselect';
 
 
 import { ref } from 'vue';
@@ -127,11 +134,13 @@ export default {
     licence: Object,
     success: String,
     error: String,
-    renewals: Object
+    renewals: Object,
+    years: Object
   },
 
   setup (props) {
     const year = ref(new Date().getFullYear());
+    let years = props.years;
 
     const form = useForm({
       year: null,
@@ -157,13 +166,14 @@ export default {
         }
         }
 
-    return { year,form, submit, deleteRenewal, limit }
+    return { year,years,form, submit, deleteRenewal, limit }
   },
    components: {
     Layout,
     Link,
     Head,
-    Datepicker,
+    // Datepicker,
+    Multiselect,
     Banner
   },
   

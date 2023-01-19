@@ -3,14 +3,18 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+
 class Licence extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [];
+
+    protected $cascadeDeletes = ['nominations','licence_renewals','alterations','transfers'];
 
     public function company()
     {

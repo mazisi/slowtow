@@ -2,6 +2,7 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
+import { Inertia } from '@inertiajs/inertia'
 
 export default {
  name: "profile-overview",
@@ -42,6 +43,12 @@ export default {
   methods: {
     update() {
           this.$inertia.patch(`/update-temp-licence`, this.form)
+        },
+
+        deleteTempLicence(){
+          if(confirm('Are you sure you want to delete this temporal licence??')){
+            Inertia.delete(`/delete-temporal-licence/${this.licence.slug}`)
+          }      
         }
   },
   components: {
@@ -82,7 +89,8 @@ export default {
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
-          
+          <button v-if="$page.props.auth.has_slowtow_admin_role" 
+           @click="deleteTempLicence" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
         </div>
       </div>
       <div class="row">

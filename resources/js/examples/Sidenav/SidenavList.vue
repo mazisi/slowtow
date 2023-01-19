@@ -422,7 +422,7 @@
       </li>
 
       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
-      ">
+       || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse 
           url="#"
           :aria-controls="''"

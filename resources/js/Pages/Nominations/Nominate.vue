@@ -66,7 +66,7 @@
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
      v-model="form.year"
-        placeholder="Search Year"
+        placeholder="Select Year"
         :options="years"
         :searchable="true"
       />

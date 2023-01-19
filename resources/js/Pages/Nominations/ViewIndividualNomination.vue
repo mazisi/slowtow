@@ -324,7 +324,7 @@ export default{
     
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
-    <button v-if="nomination.client_paid_date == null" 
+    <button v-if="nomination.client_paid_date" 
     @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
@@ -612,7 +612,7 @@ Action
       <i class="fa fa-link h5" aria-hidden="true"></i>
     </a>
 
-    <a v-else @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else-if="latest_renewal_doc == null" @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
 
   </li>  
@@ -620,14 +620,14 @@ Action
 </div>
 
 <div class="text-end ">
-<Link v-if="latest_renewal_doc !== null
-&& police_clearance_doc !== null
+<Link v-if="police_clearance_doc !== null
 && certified_id_doc !== null
 && attorney_doc !== null
 && liquor_board !== null
 && nomination_forms !== null" 
 :href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
 </Link>
+
 <Link v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</Link>
 <a v-if="nomination.merged_document !== null" 
 :href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>

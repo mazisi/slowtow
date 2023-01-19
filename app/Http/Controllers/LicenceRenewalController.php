@@ -10,13 +10,18 @@ use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LiquorBoardRequest;
 use App\Models\RenewalDocument;
+use Illuminate\Support\Facades\DB;
 
 class LicenceRenewalController extends Controller
 {
     public function renewLicence(Request $request){
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
         $renewals = LicenceRenewal::with('licence')->where('licence_id',$licence->id)->orderByDesc('date')->get();
-       return Inertia::render('Renewals/Renewals',['licence' => $licence,'renewals' => $renewals]);
+         $years = DB::table('years')->get()->pluck('year');
+        return Inertia::render('Renewals/Renewals',[
+        'licence' => $licence,
+        'renewals' => $renewals,
+    'years' => $years]);
     }
 
 

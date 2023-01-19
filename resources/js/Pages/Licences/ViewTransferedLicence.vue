@@ -295,7 +295,7 @@ export default {
     </div>
 
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -328,7 +328,7 @@ export default {
     </div>
 
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -388,7 +388,7 @@ export default {
     <a v-if="old_transfer_forms !== null" target="_blank" :href="`${$page.props.blob_file_path}${old_transfer_forms.document}`">
       <i class="fa fa-file-pdf h5 mx-2 text-danger curser-pointer"></i>
       </a><i v-if="old_transfer_forms !== null" @click="deleteDocument(old_transfer_forms.id)" 
-      class="fa fa-trash-o curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
+      class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
       
   </div>
   <button type="button" class=" w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Transfer Forms </button>
@@ -738,7 +738,7 @@ export default {
     </div>
 
     <a v-if="payment_to_liquor_board !== null" @click="deleteDocument(payment_to_liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -770,7 +770,7 @@ export default {
     </div>
 
     <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -780,7 +780,7 @@ export default {
 </ul>  
 <hr/>
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" @input="pushData(7)"
 :checked="view_transfer.status >= 6" type="checkbox">
@@ -788,13 +788,42 @@ export default {
 </div>
 </div>
 
-<div class="col-md-5 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.lodged_at">
+
+   
+   <template v-if="form.lodged_at == null">  
+
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.lodged_at" >
      </div>
-   <div v-if="errors.lodged_at" class="text-danger">{{ errors.lodged_at }}</div>
-   </div>
+     <div v-if="errors.lodged_at" class="text-danger">{{ errors.lodged_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="form.lodged_at == null" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+  </template>
+  
+  <template v-else>
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.delivered_at" >
+     </div>
+     <div v-if="errors.lodged_at" class="text-danger">{{ errors.lodged_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="$page.props.auth.has_slowtow_admin_role" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+  </template>
+
+
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="transfer_logded !== null">
@@ -809,7 +838,7 @@ export default {
     </div>
 
     <a v-if="transfer_logded !== null" @click="deleteDocument(transfer_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Transfer Logded')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -819,7 +848,7 @@ export default {
 </ul>  
 <hr>
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" @input="pushData(8)"
 :checked="view_transfer.status >= 7" type="checkbox">
@@ -827,13 +856,41 @@ export default {
 </div>
 </div>
 
-<div class="col-md-5 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
+
+
+   <template v-if="form.activation_fee_paid_at == null">  
+
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.activation_fee_paid_at" >
      </div>
-   <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
-   </div>
+     <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="form.activation_fee_paid_at == null" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+  </template>
+  
+  <template v-else>
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.delivered_at" >
+     </div>
+     <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="$page.props.auth.has_slowtow_admin_role" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+  </template>
+
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="activation_fee !== null">
@@ -848,7 +905,7 @@ export default {
     </div>
 
     <a v-if="activation_fee !== null" @click="deleteDocument(activation_fee.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -859,7 +916,7 @@ export default {
 <hr>
 
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" @input="pushData(9)"
 :checked="view_transfer.status >= 8" type="checkbox">
@@ -867,13 +924,40 @@ export default {
 </div>
 </div> 
 
-<div class="col-md-5 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.issued_at">
-     </div>
-   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+
+<template v-if="form.issued_at == null">  
+
+  <div class="col-md-5 columns mb-4">
+   <div class="input-group input-group-outline null is-filled ">
+   <label class="form-label">Date</label>
+   <input type="date" class="form-control form-control-default" 
+     v-model="form.issued_at" >
    </div>
+   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+  </div>
+ <div class="col-md-1"></div>
+  <div class="col-md-1 columns">
+   <button v-if="form.issued_at == null" 
+   @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+  </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+   <div class="input-group input-group-outline null is-filled ">
+   <label class="form-label">Date</label>
+   <input type="date" class="form-control form-control-default" 
+     v-model="form.delivered_at" >
+   </div>
+   <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+  </div>
+ <div class="col-md-1"></div>
+  <div class="col-md-1 columns">
+   <button v-if="$page.props.auth.has_slowtow_admin_role" 
+   @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+  </div>
+</template>
+
 
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -889,7 +973,7 @@ export default {
     </div>
 
     <a v-if="transfer_issued !== null" @click="deleteDocument(transfer_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Transfer Issued')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -899,7 +983,7 @@ export default {
 </ul>  
 <hr>
 
-<div class="col-md-6 columns">
+<div class="col-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="active-checkbox" @input="pushData(10)"
 :checked="view_transfer.status >= 9" type="checkbox">
@@ -907,13 +991,40 @@ export default {
 </div>
 </div> 
 
-<div class="col-md-5 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+
+   <template v-if="form.delivered_at == null">  
+
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.delivered_at" >
      </div>
-   <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
-   </div>
+     <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="form.delivered_at == null" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+ </template>
+ 
+ <template v-else>
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.delivered_at" >
+     </div>
+     <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="$page.props.auth.has_slowtow_admin_role" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+ </template>
+
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="transfer_delivered !== null">
@@ -928,7 +1039,7 @@ export default {
     </div>
 
     <a v-if="transfer_delivered !== null" @click="deleteDocument(transfer_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="setDocType('Transfer Delivered')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

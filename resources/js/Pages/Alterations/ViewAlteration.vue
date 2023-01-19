@@ -163,7 +163,7 @@ export default {
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= '1'">
+<input id="client-invoiced" class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= '1'">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>  
@@ -279,9 +279,9 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input style="margin-top: -7px" 
-id="active-checkbox" @input="pushData(4)" type="checkbox" value="4" :checked="alteration.status >= '4'">
-<label class="form-check-label text-body text-truncate status-heading"> Alteration Complete</label>
+<input 
+ class="active-checkbox" id="complete" @input="pushData(4)" type="checkbox" value="4" :checked="alteration.status >= '4'">
+<label for="complete" class="form-check-label text-body text-truncate status-heading"> Alteration Complete</label>
 </div>
 </div> 
 
@@ -291,7 +291,7 @@ id="active-checkbox" @input="pushData(4)" type="checkbox" value="4" :checked="al
             </form>
               </div>
             </div>
-            <hr class="vertical dark" />
+          
           </div>
       <Task :tasks="tasks" :model_id="alteration.id" :errors="errors" :model_type="'Alteration'"/>
         
