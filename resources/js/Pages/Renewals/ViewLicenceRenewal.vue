@@ -29,7 +29,8 @@ export default {
   setup (props) {
     const year = ref(new Date().getFullYear());
     const body_max = ref(100);
-    let show_modal = ref(true);  
+    let show_modal = ref(true); 
+    let show_file_name = ref(false); 
 
     const form = useForm({
       year: props.renewal.date,
@@ -70,6 +71,7 @@ export default {
       }
 
     function getDocType(doc_type){
+      this.show_file_name = true
       this.uploadDoc.doc_type = doc_type 
       this.show_modal =true   
     }
@@ -95,6 +97,7 @@ export default {
       uploadDoc.post('/submit-renewal-document', {
         preserveScroll: true,
         onSuccess: () => { 
+          this.show_file_name = false;
           this.show_modal = false;
           document.querySelector('.modal-backdrop').remove()
           uploadDoc.reset();
@@ -140,7 +143,7 @@ export default {
       }
 
     return { year,form,body_max,show_modal,getFileName, 
-      file_name,
+      file_name,show_file_name,
      updateRenewal,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
@@ -622,7 +625,7 @@ data-bs-dismiss="alert" aria-label="Close">
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

@@ -56,6 +56,7 @@ export default {
     const year = ref(new Date().getFullYear());
     const body_max = ref(100);
     let show_modal = ref(true);  
+    let show_file_name = ref(false);
 
     const form = useForm({
       status: [],
@@ -101,6 +102,7 @@ export default {
             uploadDoc.post('/submit-temporal-licence-document', {
               preserveScroll: true,
               onSuccess: () => { 
+                this.show_file_name = false;
                 this.show_modal = false;
                 let dismiss =  document.querySelector('.modal-backdrop')    
                 dismiss.remove();
@@ -122,7 +124,8 @@ export default {
       this.uploadDoc.doc_type = doc_type
       this.uploadDoc.person_or_company = person_or_company
       this.uploadDoc.merge_number = merge_number
-      this.show_modal =true   
+      this.show_modal =true  
+      this.show_file_name = true; 
     }
 
     function deleteDocument(id){
@@ -175,7 +178,7 @@ export default {
       }
 
     return { year,form,body_max,show_modal,
-     updateLicence,file_name,getFileName,
+     updateLicence,file_name,show_file_name,getFileName,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      computeDocumentDate,deleteDocument,
@@ -1041,7 +1044,7 @@ data-bs-dismiss="alert" aria-label="Close">
          <input type="file" @input="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

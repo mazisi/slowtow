@@ -38,6 +38,7 @@ export default{
   setup (props) {
       let options = props.nominees;
       let show_modal = ref(true);
+      let show_file_name = ref(false);
 
       const updateForm = useForm({
               nomination_year: props.nomination.year,
@@ -85,6 +86,7 @@ export default{
               preserveScroll: true,
               onSuccess: () => { 
                 this.show_modal = false;
+                this.show_file_name = false;
                 let dismiss = document.querySelector('.modal-backdrop') 
                 dismiss.remove();
                 uploadDoc.reset();
@@ -158,13 +160,14 @@ export default{
       
       let file_name = ref('');
       function getFileName(e){
+        this.show_file_name = true;
         this.uploadDoc.document = e.target.files[0];
         this.file_name = e.target.files[0].name;
       }
 
       return{options,pushData,checkBodyLength,body_max,updateNomination,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,
-            computeDocumentDate,deleteDocument,submitDocument,submitTask,
+            computeDocumentDate,deleteDocument,submitDocument,submitTask,show_file_name,
             getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination,file_name,getFileName
 
 
@@ -1017,7 +1020,7 @@ mode="tags"
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

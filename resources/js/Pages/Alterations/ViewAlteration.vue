@@ -24,6 +24,7 @@ export default {
   setup(props) {
       let showMenu = false;
       let show_modal = ref(true);
+      let show_file_name = ref(false);
 
     const form = useForm({
          alteration_date: props.alteration.date,
@@ -55,6 +56,7 @@ export default {
 
     let file_name = ref('');
       function getFileName(e){
+        this.show_file_name = true;
         this.uploadDoc.document = e.target.files[0];
         this.file_name = e.target.files[0].name;
       }
@@ -63,10 +65,12 @@ export default {
             uploadDoc.post('/submit-alteration-document', {
               preserveScroll: true,
               onSuccess: () => { 
+                this.uploadDoc.reset();
+                this.show_file_name = false;
                 this.show_modal = false;
                 let dismiss = document.querySelector('.modal-backdrop') 
                 dismiss.remove();
-                uploadDoc.reset();
+                
            },
             })
           }
@@ -100,6 +104,7 @@ export default {
       form,showMenu,show_modal,
       update,update,
       pushData,file_name,
+      show_file_name,
       getFileName,
       submitDocument,
       deleteDocument,
@@ -318,7 +323,7 @@ export default {
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">

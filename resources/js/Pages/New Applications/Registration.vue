@@ -1433,7 +1433,7 @@
             this.show_modal = false;
             this.show_file_name = false;
             document.querySelector('.modal-backdrop').classList.remove('modal-backdrop');
-            uploadDoc.reset();
+            this.uploadDoc.reset();
            },
         })
       }
@@ -1501,7 +1501,7 @@
        let file_name = ref('');
        
       function getFileName(e){
-        this.show_file_name = true
+        this.show_file_name = true;
         this.uploadDoc.doc = e.target.files[0];
         this.file_name = e.target.files[0].name;
       }

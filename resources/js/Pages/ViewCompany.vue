@@ -506,9 +506,7 @@
     <div class="mb-3 mx-10">
   <input :value="person.pivot.position" @input="getPositionValue($event.target.value)"
   name="position" class="" id="formFileSm" type="text" 
-  style="border: none;background-color: transparent;
-resize: none;
-outline: none;">
+  style="border: none;background-color: transparent;resize: none;outline: none;">
 </div>
 </div>
 </td>
@@ -600,7 +598,7 @@ outline: none;">
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
@@ -739,7 +737,8 @@ export default {
     let showMenu = false;
     let body_max = 100;
     let people_options = props.people;
-    let show_modal = ref(true);  
+    let show_modal = ref(true); 
+    let show_file_name = ref(false); 
 
     const form = useForm({
             company_name: props.company.name,
@@ -849,10 +848,11 @@ export default {
           documentsForm.post(`/submit-company-documents`, {
           preserveScroll: true,
           onSuccess: () => {
-            documentsForm.reset();
-           this.show_modal = false;
-           let dismiss =  document.querySelector('.modal-backdrop')    
-           dismiss.remove();
+            this.documentsForm.reset();
+            this.show_modal = false;
+            this.show_file_name = false;
+           document.querySelector('.modal-backdrop').remove()
+           
           },
         })    
         }
@@ -926,6 +926,7 @@ export default {
       }
       let file_name = ref('');
       function getFileName(e){
+        this.show_file_name = true;
         this.documentsForm.document = e.target.files[0];
         this.file_name = e.target.files[0].name;
       }
@@ -943,6 +944,7 @@ export default {
       unlinkPerson,
       assignActiveValue,
       redirectToWebsite,
+      show_file_name,
       body_max,
       createTask,
       people_options,

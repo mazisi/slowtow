@@ -321,7 +321,7 @@ data-bs-dismiss="alert" aria-label="Close">
          <input type="file" @change="getFileName"
          hidden id="licence-doc"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -397,7 +397,7 @@ props:{
 },
 
 setup (props) {
-
+  let show_file_name = ref(false);
 const form = useForm({
        name: props.person.full_name,
         date_of_birth: props.person.date_of_birth,
@@ -434,16 +434,18 @@ const form = useForm({
       function submitDocument () {
         uploadDoc.post('/upload-person-documents', {
            onSuccess: () => { 
+            this.show_file_name = false;
             this.show_doc_modal = false;
             let dismiss =  document.querySelector('.modal-backdrop')     
             dismiss.remove();
-            uploadDoc.reset()
+            this.uploadDoc.reset()
            },
         })
       }
 
       function getDocType (doc_type) {
         this.show_doc_modal = true;
+        this.show_file_name = true;
         uploadDoc.doc_type = doc_type;
       }
 
@@ -505,7 +507,7 @@ const form = useForm({
       }
 
      return{
-        form,checkBodyLength,body_max,deleteTask,computeExpiryDate,deletePerson,
+        form,show_file_name,checkBodyLength,body_max,deleteTask,computeExpiryDate,deletePerson,
         assignActiveValue,updatePerson,submitTask,deleteDocument,getDocType,submitDocument,
         show_doc_modal,uploadDoc,createTask,file_name,getFileName
      }

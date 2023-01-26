@@ -51,6 +51,7 @@ export default {
     const body_max = ref(100);
     let show_modal = ref(true);
     let options = props.companies_dropdown;
+    let show_file_name = ref(false);
 
     const form = useForm({
           trading_name: props.view_transfer.licence.trading_name,
@@ -104,6 +105,7 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             documentsForm.reset();
+            this.show_file_name = false;
            this.show_modal = false;
            let dismiss =  document.querySelector('.modal-backdrop')    
            dismiss.remove();
@@ -116,6 +118,7 @@ export default {
           documentsForm.document_type = doc_type
           documentsForm.belong_to = belong_to
           documentsForm.document_number = document_number
+          this.show_file_name = false
         }
 
 
@@ -170,12 +173,14 @@ export default {
 
       let file_name = ref('');
       function getFileName(e){
+        this.show_file_name = true;
         this.documentsForm.document = e.target.files[0];
         this.file_name = e.target.files[0].name;
       }
     return {
       pushData,
       file_name,
+      show_file_name,
       mergeForm,
       getFileName,
       mergeDocuments,
@@ -1155,7 +1160,7 @@ export default {
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>
        <div class="col-md-12">
           <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
