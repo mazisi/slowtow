@@ -118,17 +118,16 @@
 
 
 
-                .navbar-vertical .navbar-brand > img, .navbar-vertical .navbar-brand-img {
+.navbar-vertical .navbar-brand > img, .navbar-vertical .navbar-brand-img {
 
-
-
-    max-height: 7rem !important;
+    max-height: 8rem !important;
 
     height: 10rem;
 
-    margin-top: -2.5rem;
+    margin-top: -2.9rem;
 
     margin-left: -1.7rem;
+
 
 }
 

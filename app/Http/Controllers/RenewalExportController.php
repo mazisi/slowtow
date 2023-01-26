@@ -51,7 +51,7 @@ class RenewalExportController extends Controller
             $notesCollection = '';
 
             foreach ($renewals as $renewal) {
-                $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get();
+                $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get(['body']);
             //check if client has been quoted
             $is_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
                 if(!is_null($notesCollection) || !empty($notesCollection)){

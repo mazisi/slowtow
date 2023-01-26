@@ -33,14 +33,6 @@
 <div v-if="errors.name" class="text-danger">{{ errors.name }}</div>
 </div>
 
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Date of Birth</label>
-<input type="date" class="form-control form-control-default" v-model="form.date_of_birth" >
-</div>
-<div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
-</div>               
-
 <div class="col-md-4 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">ID/Passport Number</label>
@@ -51,7 +43,7 @@
 <div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled">
  <label class="form-label">Date of Birth</label>
- <input type="date" class="form-control form-control-default" v-model="form.date_of_birth" >
+ <input type="date" disabled title="This field data is auto calculted." class="form-control form-control-default" v-model="form.date_of_birth" >
   </div>
     <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
 </div>
@@ -103,7 +95,9 @@
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document !== null">
     <a :href="`${$page.props.blob_file_path}${id_document.path}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    <i v-if="id_document.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
+    
     </a>
     </div>
 
@@ -155,7 +149,8 @@
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc !== null">
     <a :href="`${$page.props.blob_file_path}${passport_doc.path}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    <i v-if="passport_doc.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
@@ -184,7 +179,8 @@
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="work_permit_doc !== null">
     <a :href="`${$page.props.blob_file_path}${work_permit_doc.path}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    <i v-if="work_permit_doc.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+    <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
@@ -323,7 +319,7 @@ data-bs-dismiss="alert" aria-label="Close">
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
          <input type="file" @change="getFileName"
-         hidden id="licence-doc" accept=".pdf"/>
+         hidden id="licence-doc"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
        </div>

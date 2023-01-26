@@ -6,10 +6,11 @@ use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\Licence;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
-use App\Models\LiquorBoardRequest;
 use App\Models\RenewalDocument;
+use App\Models\LiquorBoardRequest;
 use Illuminate\Support\Facades\DB;
 
 class LicenceRenewalController extends Controller
@@ -106,25 +107,30 @@ class LicenceRenewalController extends Controller
     }
 
     public function uploadDocuments(Request $request){
-        $request->validate([
-            "document"=> "required|mimes:pdf"
-            ]);
-
-            $fileModel = new RenewalDocument;
-            $fileName = str_replace(' ', '_',$request->document->getClientOriginalName());
-            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->document_name = $fileName;
-            $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-            $fileModel->licence_renewal_id = $request->renewal_id;
-            $fileModel->doc_type = $request->doc_type;
-            $fileModel->date = $request->date;
-            $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-            
-
-       if($fileModel->save()){
-            return back()->with('success','Document uploaded successfully.');
-       }
-       return back()->with('error','Error uploading document.');
+        try {
+            $request->validate([
+                "document"=> "required|mimes:pdf"
+                ]);
+    
+                $fileModel = new RenewalDocument;
+                $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+                $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+                $fileModel->document_name = $fileName;
+                $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+                $fileModel->licence_renewal_id = $request->renewal_id;
+                $fileModel->doc_type = $request->doc_type;
+                $fileModel->date = $request->date;
+                $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+                
+    
+           if($fileModel->save()){
+                return back()->with('success','Document uploaded successfully.');
+           }
+        } catch (\Throwable $th) {
+            //throw $th;
+            return back()->with('error','Error uploading document.');
+        }
+       
     }
 
     public function deleteDocument($id){

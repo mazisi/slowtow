@@ -85,7 +85,12 @@
     </div>
 
       <div class="col-8 columns" >
-        <Datepicker v-model="form.year" yearPicker @update:modelValue="handleDate" />
+        <Multiselect
+         v-model="form.year" 
+         :options="years"
+        :searchable="true"
+        placeholder="Select Year"
+        />
       </div>
   
   <div v-if="form.variation !== 'Temporal Licence'" class="col-4"></div>
@@ -137,7 +142,10 @@
   </div>
 
   <div class="float-end mt-4">
-    <button @click="exportReport" type="button" class="btn btn-success float-end">Export</button>
+    <button @click="exportReport" :disabled="form.processing" 
+    type="button" class="btn btn-success float-end">
+    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Export</button>
   </div>
 
   
@@ -307,6 +315,7 @@ export default {
     licenceTypes: Object,
     companies: Object,
     new_applications: Object,
+    years: Object,
     people: Object,
     emails: Object,
     success: String,
@@ -335,29 +344,36 @@ export default {
 }
 
 const new_app_stages = {
-    "1": "Client Quoted",
-    "2" : "Deposit Paid",
-    "3" : "Client Invoiced",
-    "4":  "Prepare New Application",
-    "5": "Payment to the Liquor Board",
-    "6": "Scanned Application",
-    "7": "Application Lodged",
-    "8": "Initial Inspection",
-    "9": "Liquor Board Requests",
-    "10": "Final Inspection",
-    "11": "Activation Fee Requested",
-    "12": "Client Finalisation Invoice",
-    "13": "Client Paid",
-    "14": "Activation Fee Paid",
-}
 
+     "1" : "Client Quoted",
+     "2" : "Deposit Invoiced",
+     "3": "Deposit Paid",
+     "4": "Payment to the Liquor Board",
+     "5": "Prepare New Application",
+     "6": "Scanned Application",
+     "7": "Application Lodged",
+     "8": "Initial Inspection",
+     "9": "Liquor Board Requests",
+     "10": "Final Inspection",
+     "11": "Activation Fee Requested",
+     "12": "Client Finalisation Invoice",
+     "13": "Client Paid",
+     "14": "Activation Fee Paid",
+     "15": "Licence Issued",
+     "16": "Licence Delivered",
+
+}
+    let years = props.years;
     const provinces = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
-    const boardRegion = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
+    const boardRegion = ['Eastern Cape','Free State','Gauteng Ekurhuleni','Gauteng Johannesburg',
+                        'Gauteng Sedibeng','Gauteng Tshwane',
+                        'KwaZulu-Natal','Limpopo','Mpumalanga',
+                        'Gauteng West Rand','Northern Cape','North West','Western Cape'];
     let licenceTypes = props.licenceTypes;
     let companies = props.companies;
     let people = props.people;
 
-    const date = ref();
+    const date = ref('');
    
     const form = useForm({
       variation: null,
@@ -448,7 +464,8 @@ return{
   isActive,
   btnSecondary,
   btnSuccess,
-  btnPrimary
+  btnPrimary,
+  years
 }
 },
  components: {

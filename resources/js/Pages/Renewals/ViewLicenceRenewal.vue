@@ -233,8 +233,8 @@ export default {
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+      <h6 v-if="client_quoted == null" class="mb-0 text-sm">Document</h6>
+      <h6 v-if="client_quoted !== null" class="mb-0 text-sm">{{ client_quoted.document_name }}</h6>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -280,8 +280,8 @@ export default {
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+      <h6 v-if="client_invoiced == null" class="mb-0 text-sm">Document</h6>
+      <h6 v-if="client_invoiced !== null" class="mb-0 text-sm">{{ client_invoiced.document_name }}</h6>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -382,8 +382,8 @@ export default {
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
+      <h6 v-if="liqour_board == null" class="mb-0 text-sm">Document</h6>
+      <h6 v-if="liqour_board !== null" class="mb-0 text-sm">{{ liqour_board.document_name }}</h6>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -450,11 +450,12 @@ export default {
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="renewal_issued !== null" class="mb-0 text-xs">{{ renewal_issued.document_name }}</p>
+      <h6 v-if="renewal_issued == null" class="mb-0 text-sm">Document</h6>
+      <h6 v-if="renewal_issued !== null" class="mb-0 text-sm">{{ renewal_issued.document_name }}</h6>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" 
+      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
@@ -515,8 +516,8 @@ export default {
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="renewal_doc !== null" class="mb-0 text-xs">{{ renewal_doc.document_name }}</p>
+      <h6 v-if="renewal_doc == null" class="mb-0 text-sm">Document</h6>
+      <h6 v-if="renewal_doc !== null" class="mb-0 text-sm">{{ renewal_doc.document_name }}</h6>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 

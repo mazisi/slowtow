@@ -87,7 +87,7 @@ Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
 Route::get('/insert-years',[InsertTypesController::class,'insert_years']);
 
 
-Route::get('/slowtow-admin-dashboard',[SlotowDashboardController::class,'index'])->name('slowtow_dashboard');
+Route::get('/slotow-admin-dashboard',[SlotowDashboardController::class,'index'])->name('slowtow_dashboard');
 
 
 
@@ -224,10 +224,6 @@ Route::group(['middleware' => ['auth']], function () {
          // Get licence renewals.
 
         Route::get('/renew-licence',[LicenceRenewalController::class,'renewLicence'])->name('renew_licence');
-
-
-
-        //renew licence.submit
 
         Route::post('/submit-licence-renewal',[LicenceRenewalController::class,'store'])->name('renew_licence.submit');
 

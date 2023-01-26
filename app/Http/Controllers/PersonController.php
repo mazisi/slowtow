@@ -81,9 +81,9 @@ class PersonController extends Controller
         ]);
         
         if($person){
-           return Redirect::route('people')->with('success','Person created succesfully.');
+           return Redirect::route('view_person', ['slug' => $person->slug])->with('success','Person created succesfully.');
         }
-        return Redirect::route('people')->with('error','Error creating person.');
+        return Redirect::route('view_person', ['slug' => $person->slug])->with('error','Error creating person.');
     }
 
     public function show($slug){
@@ -134,9 +134,9 @@ class PersonController extends Controller
 
     public function uploadDocument(Request $request){
         $request->validate([
-            "document"=> "required|mimes:pdf",
+            'document' => 'mimes:jpeg,jpg,png,pdf',
             "people_id" => "required|exists:people,id",
-            "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document"
+            "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document,Fingerprints"
             ]);
 
             $fileModel = new PeopleDocument;

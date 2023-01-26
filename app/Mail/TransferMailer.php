@@ -69,7 +69,7 @@ class TransferMailer extends Mailable
                 ]);
 
             }else{
-                return $this->from('no-reply@slowtow.co.za')
+                return $this->from('info@goverify.co.za')
                 ->markdown('emails.ecomms.transferMailer')
                 ->cc('info@slotow.co.za')
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
@@ -81,7 +81,7 @@ class TransferMailer extends Mailable
             }
             
         } catch (\Throwable $th) {
-            return to_route('get_licence_transfers')->with('error','Error sending mail.');
+            return to_route('get_licence_transfers')->with('error','Error!! Please contact support.');
         }
         
     }

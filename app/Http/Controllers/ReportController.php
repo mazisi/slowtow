@@ -21,6 +21,7 @@ use App\Http\Controllers\AlterationExportController;
 class ReportController extends Controller
 {
     public function index(Request $request){
+      $years = DB::table('years')->get()->pluck('year');
         $renewals = LicenceRenewal::with(['licence','renewal_documents' => function ($query){
             $query ->where('doc_type','Client Quoted');            
           }])->paginate(1);
@@ -61,16 +62,18 @@ class ReportController extends Controller
           ->when(!empty(request('selectedDates')), function ($query) use ($request) {
              // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
           });
-      })->where('is_new_app','1')->get();
+      })->where('is_new_app',true)->get();
       
         return Inertia::render('Report',[
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,
              'people' => $people,
-            'new_applications' => $new_applications]);
+            'new_applications' => $new_applications,
+             'years' => $years
+        ]);
     }
 
-    public function export(Request $request){
+    public function export(Request $request){dd($request);
       switch ($request->variation) {
         case 'Renewals':
           RenewalExportController::export($request);          
