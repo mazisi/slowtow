@@ -39,6 +39,7 @@
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Company Type </label>
 <select class="form-control form-control-default" v-model="form.company_type" >
+  <option :value="''" disabled >Select Company Type*</option>
 <option value="Association">Association</option>
 <option value="Close Corporation CC">Close Corporation  CC</option>
 <option value="Individual">Individual</option>
@@ -155,6 +156,7 @@
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
 <select class="form-control form-control-default" v-model="form.business_province" >
+<option :value="''" disabled >Select Province</option>
 <option value="Eastern Cape">Eastern Cape</option>
 <option value="Free State">Free State</option>
 <option value="Gauteng">Gauteng</option>
@@ -213,6 +215,7 @@
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
 <select class="form-control form-control-default" v-model="form.postal_province" >
+  <option :value="''" disabled >Select Province</option>
 <option value="Eastern Cape">Eastern Cape</option>
 <option value="Free State">Free State</option>
 <option value="Gauteng">Gauteng</option>
@@ -325,6 +328,7 @@ export default {
         this.form.postal_address3 = '';
         this.form.postal_province = '';
         this.form.postal_code = '';
+        this.form.business_province = '';
       }
     }
 

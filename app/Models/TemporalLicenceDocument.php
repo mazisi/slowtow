@@ -10,4 +10,14 @@ class TemporalLicenceDocument extends Model
     use HasFactory;
 
     protected $guarded = [];
+    
+     public function getDocumentAttribute($value)
+    {
+        if(str_starts_with($value,"licence-")|| str_starts_with($value,"mrnlabs/")){
+
+            return $value;
+        }
+
+        return "docs/".$value;
+    }
 }

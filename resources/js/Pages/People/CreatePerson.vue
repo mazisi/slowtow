@@ -47,7 +47,7 @@
 <div class="col-md-4 columns">            
   <div class="input-group input-group-outline null is-filled">
    <label class="form-label">ID/Passport Number</label>
-   <input @keyup="getDateOfBirth" required type="text" class="form-control form-control-default" v-model="form.id_or_passport">
+   <input @keyup="getDateOfBirth" @paste="getDateOfBirth" required type="text" class="form-control form-control-default" v-model="form.id_or_passport">
     </div>
      <div v-if="errors.id_or_passport" class="text-danger">{{ errors.i_d_or_passport }}</div>
      </div>
@@ -57,7 +57,7 @@
   <label class="form-label">Date of Birth</label>
   <input type="date" class="form-control form-control-default" v-model="form.date_of_birth" >
    </div>
-     <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
+     <div v-if="date_of_birth" class="text-danger">{{ date_of_birth }}</div>
 </div>  
 
               
@@ -99,7 +99,9 @@
   </div>
     
 
-  <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Create</button></div>
+  <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}" :disabled="form.processing">
+    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Create</button></div>
             </div>
             </form>
               </div>
@@ -129,15 +131,17 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
+import { Head,useForm } from '@inertiajs/inertia-vue3';
+import { ref } from 'vue';
 
 export default {
  props: {
     errors: Object,
+    error: String
   },
-  data() {
-    return {
-        showMenu: false,
-        form: {
+  setup() {
+    let showMenu = ref(false);
+    const form = useForm({
         name: null,
         surname: null,
         date_of_birth: '',
@@ -154,15 +158,13 @@ export default {
         valid_fingerprint: null,
         fingerprint_valid_until: null,
         active: '1',
-        }
-    };
-  },
-  methods: {
-      submit() {
-          this.$inertia.post(`/submit-person`, this.form)
-        },
+        });
 
-        getDateOfBirth(){//needs refactoring
+        function submit() {
+          form.post(`/submit-person`)
+        }
+
+        function getDateOfBirth(){//needs refactoring
           if(this.form.id_or_passport.length === 13){
             let year = this.form.id_or_passport.substring(0,2);
             let month = this.form.id_or_passport.substring(2,4);
@@ -178,7 +180,16 @@ export default {
             this.form.date_of_birth = ''
           }
         }
+  
+
+    return {
+      showMenu,
+      form,submit,
+      getDateOfBirth
+      
+    };
   },
+      
 
   components: {
     Layout,

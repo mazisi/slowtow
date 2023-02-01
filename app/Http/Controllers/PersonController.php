@@ -66,7 +66,10 @@ class PersonController extends Controller
     }
 
     public function store(ValidatePeople $request){
-        
+        $person_exist = People::where('id_or_passport',$request->id_or_passport)->first();
+        if($person_exist){
+            return back()->with('error','This person id or passport number already exist.');
+        }
         $person = People::create([
         'full_name'=> $request->name.' '.$request->surname,
         'active'=> $request->active,
@@ -106,6 +109,7 @@ class PersonController extends Controller
             }
 
     public function update(ValidatePeople $request){
+        
         $person = People::whereSlug($request->slug)->update([
         'full_name'=> $request->name,
         'active'=> $request->active,

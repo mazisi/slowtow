@@ -94,7 +94,7 @@ export default {
         }
 
     function submitDocument(){
-      uploadDoc.post('/submit-renewal-document', {
+      uploadDoc.post('/submit-renewal-documents', {
         preserveScroll: true,
         onSuccess: () => { 
           this.show_file_name = false;
@@ -621,7 +621,7 @@ data-bs-dismiss="alert" aria-label="Close">
 
  
         <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
+        <label for="licence-doc" class="btn btn-dark w-100">Click To Select File</label>
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>

@@ -15,4 +15,14 @@ class LicenceDocument extends Model
     {
         return $this->belongsTo(Licence::class);
     }
+    
+    public function getDocumentFileAttribute($value)
+    {
+        if(str_starts_with($value,"licence-")|| str_starts_with($value,"mrnlabs/")){
+
+            return $value;
+        }
+
+        return "docs/".$value;
+    }
 }

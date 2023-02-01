@@ -231,7 +231,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::patch('/update-renewal',[LicenceRenewalController::class,'update'])->name('update_licence_renewal');
 
-        Route::post('/submit-renewal-document',[LicenceRenewalController::class,'uploadDocuments']);
+        Route::post('/submit-renewal-documents',[LicenceRenewalController::class,'uploadDocuments']);
 
         Route::delete('/delete-renewal-document/{id}',[LicenceRenewalController::class,'deleteDocument']);
 
@@ -261,7 +261,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
 
-        Route::post('/transfer-documents-merge',[TransferDocsController::class,'merge'])->name('transfer_licence_docs');
+        Route::post('/transfer-documents-merge',[TransferDocsController::class,'merge']);
 
         Route::delete('/delete-transfer-document/{document_id}',[TransferDocsController::class,'destroy']);
 
@@ -451,11 +451,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         //transfers mail dispatcher
 
-        Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
+        Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchMail'])->name('dispatch_transfer_mail');
 
         //nomination mail dispatcher
 
-        Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
+        Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchMail'])->name('dispatch_nom_mail');
 
         //dispatch mail without edit
 

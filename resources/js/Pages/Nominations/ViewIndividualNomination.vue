@@ -879,7 +879,7 @@ Action
 <div>
 <button type="submit" :style="{float: 'right'}" class="btn btn-primary" :disabled="updateForm.processing">
 <span v-if="updateForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-Update</button>
+Save</button>
 </div>
 </div>
 </form>

@@ -111,7 +111,7 @@ class LicenceRenewalController extends Controller
             $request->validate([
                 "document"=> "required|mimes:pdf"
                 ]);
-    
+   
                 $fileModel = new RenewalDocument;
                 $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
                 $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
@@ -122,13 +122,13 @@ class LicenceRenewalController extends Controller
                 $fileModel->date = $request->date;
                 $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
                 
-    
+   
            if($fileModel->save()){
                 return back()->with('success','Document uploaded successfully.');
            }
         } catch (\Throwable $th) {
-            //throw $th;
-            return back()->with('error','Error uploading document.');
+            throw $th;
+           //return back()->with('error','Error uploading document.');
         }
        
     }

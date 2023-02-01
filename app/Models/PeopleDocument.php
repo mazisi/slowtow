@@ -15,4 +15,14 @@ class PeopleDocument extends Model
     {
         return $this->belongsTo(People::class);
     }
+    
+     public function getPathAttribute($value)
+    {
+        if(str_starts_with($value,"licence-")|| str_starts_with($value,"mrnlabs/")){
+
+            return $value;
+        }
+
+        return "docs/".$value;
+    }
 }
