@@ -39,6 +39,7 @@ export default{
       let options = props.nominees;
       let show_modal = ref(true);
       let show_file_name = ref(false);
+      let file_name = ref('');
 
       const updateForm = useForm({
               nomination_year: props.nomination.year,
@@ -55,6 +56,7 @@ export default{
             document: null,
             doc_type: null,
             date: null,
+            file_name: file_name,
             nomination_id: props.nomination.id    
           })
 
@@ -158,11 +160,11 @@ export default{
                 }
       }
       
-      let file_name = ref('');
+     
       function getFileName(e){
         this.show_file_name = true;
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
       return{options,pushData,checkBodyLength,body_max,updateNomination,

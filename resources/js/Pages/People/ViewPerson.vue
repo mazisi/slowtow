@@ -398,6 +398,8 @@ props:{
 
 setup (props) {
   let show_file_name = ref(false);
+  let file_name = ref('');
+
 const form = useForm({
        name: props.person.full_name,
         date_of_birth: props.person.date_of_birth,
@@ -426,6 +428,7 @@ const form = useForm({
           doc_type: null,
           document: null,
           doc_expiry: null,
+          file_name: file_name,
           people_id: props.person.id
     });
 
@@ -500,10 +503,10 @@ const form = useForm({
         }
      }
 
-       let file_name = ref('');
+       
       function getFileName(e){
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
      return{

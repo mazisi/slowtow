@@ -57,6 +57,7 @@ export default {
     const body_max = ref(100);
     let show_modal = ref(true);  
     let show_file_name = ref(false);
+    let file_name = ref('');
 
     const form = useForm({
       status: [],
@@ -76,6 +77,7 @@ export default {
       doc_type: null,
       person_or_company: null,
       merge_number: null,
+      file_name: file_name,
       temp_licence_id: props.licence.id    
     })
 
@@ -171,10 +173,10 @@ export default {
           }
       }
 
-      let file_name = ref('');
+      
       function getFileName(e){
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
     return { year,form,body_max,show_modal,

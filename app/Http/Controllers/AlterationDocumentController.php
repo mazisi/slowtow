@@ -15,7 +15,7 @@ class AlterationDocumentController extends Controller
             ]);
 
             $fileModel = new AlterationDocument();
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->file_name);
             $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->alteration_id = $request->alteration_id;
             $fileModel->doc_type = $request->doc_type;

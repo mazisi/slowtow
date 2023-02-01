@@ -144,7 +144,7 @@ class PersonController extends Controller
             ]);
 
             $fileModel = new PeopleDocument;
-            $fileName = $request->document->getClientOriginalName();
+            $fileName = $request->file_name;
             $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
             $fileModel->document = $fileName;

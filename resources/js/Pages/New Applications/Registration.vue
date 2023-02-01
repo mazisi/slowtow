@@ -1233,7 +1233,7 @@
            hidden id="licence-doc" accept=".pdf"/>
            <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
            <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
-           <p>pppppppppppppppppppppppppppppp</p>
+           
          </div>
          <div class="col-md-12">
             <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -1374,6 +1374,8 @@
     setup (props) {
       let show_modal = ref(true);  
       let show_file_name = ref(false);
+      let file_name = ref('');
+      let file_size = ref(null);
 
       const form = useForm({
         deposit_paid_at: props.licence.deposit_paid_at,
@@ -1404,7 +1406,8 @@
         doc: null,
         doc_type: null ,
         num: null,
-        licence_id: props.licence.id
+        licence_id: props.licence.id,
+        file_name: file_name
       })
   
       function submitBoardRequests(){
@@ -1500,14 +1503,13 @@
 //         },
 //         { deep: true }
 //       ) 
-       let file_name = ref('');
-       let file_size = ref(null);
+       
        
       function getFileName(e){
         this.file_size = e.target.files[0].size;
         this.show_file_name = true;
         this.uploadDoc.doc = e.target.files[0];
-        this.file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
       return { 
         form,show_modal,file_size,

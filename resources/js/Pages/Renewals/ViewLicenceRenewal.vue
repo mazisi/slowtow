@@ -31,6 +31,7 @@ export default {
     const body_max = ref(100);
     let show_modal = ref(true); 
     let show_file_name = ref(false); 
+    let file_name = ref('');
 
     const form = useForm({
       year: props.renewal.date,
@@ -48,6 +49,7 @@ export default {
       document: null,
       doc_type: null,
       date: null,
+      file_name: file_name,
       renewal_id: props.renewal.id    
     })
 
@@ -136,10 +138,10 @@ export default {
           }
       }
 
-      let file_name = ref('');
+      
       function getFileName(e){
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
     return { year,form,body_max,show_modal,getFileName, 

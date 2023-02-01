@@ -17,7 +17,7 @@ class TransferDocsController extends Controller
             "document"=> "required|mimes:pdf"
             ]);
             $fileModel = new TransferDocument;
-            $fileName = Str::limit(sha1(now()),5).str_replace(' ', '_',$request->document->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),5).str_replace(' ', '_',$request->file_name);
             $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $request->document->getClientOriginalName();
             $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

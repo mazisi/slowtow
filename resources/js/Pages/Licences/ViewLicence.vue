@@ -451,7 +451,8 @@ export default {
         let options = props.companies;
         let show_current_company = ref(true);
         let change_company = ref(false);
-        let show_modal = ref(true); 
+        let show_modal = ref(true);
+        let file_name = ref(''); 
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -482,6 +483,7 @@ export default {
           doc: null,
           licence_id: props.licence.id,
           doc_type: null,
+          file_name: file_name
        })
  
       function getDocType(doc_type){
@@ -551,10 +553,10 @@ export default {
             return string.substring(0, limit)
         }
 
-        let file_name = ref('');
+        
           function getFileName(e){
             this.originalLicenceForm.doc = e.target.files[0];
-            this.file_name = e.target.files[0].name;
+            this.file_name = e.target.files[0].name.replace(/'/g, "`");
           }
 
     return {

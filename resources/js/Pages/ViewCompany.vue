@@ -738,7 +738,8 @@ export default {
     let body_max = 100;
     let people_options = props.people;
     let show_modal = ref(true); 
-    let show_file_name = ref(false); 
+    let show_file_name = ref(false);
+    let file_name = ref(''); 
 
     const form = useForm({
             company_name: props.company.name,
@@ -796,6 +797,7 @@ export default {
             document: null,
             expiry_date: null,
             doc_type: null,
+            file_name: file_name,
             company_id: props.company.id,
       })
 
@@ -926,11 +928,11 @@ export default {
         }
         
       }
-      let file_name = ref('');
+      
       function getFileName(e){
         this.show_file_name = true;
         this.documentsForm.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
     return {
