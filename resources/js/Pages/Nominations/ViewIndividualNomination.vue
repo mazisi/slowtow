@@ -134,14 +134,7 @@ export default{
       //     updateForm.post(`/merge-document/${props.nomination.id}`)
       // }
 
-      const body_max = 100;
-
-      function checkBodyLength() {
-              if(createTask.body.length > body_max){
-                  createTask.body = createTask.body.substring(0,body_max)
-              }
-              
-          }
+   
           function deleteNomination() {
             if(confirm('Are you sure you want to delete this nomination??')){
               Inertia.delete(`/delete-nomination/${props.nomination.licence.slug}/${props.nomination.slug}`)
@@ -160,15 +153,16 @@ export default{
                 }
       }
       
-     
+      let file_has_apostrophe = ref();
       function getFileName(e){
         this.show_file_name = true;
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      return{options,pushData,checkBodyLength,body_max,updateNomination,
-            removeSelectedNominee,saveNominneesToDatabase,show_modal,
+      return{options,pushData,updateNomination,
+            removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,submitTask,show_file_name,
             getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination,file_name,getFileName
 
@@ -927,9 +921,8 @@ Expire: 23/09/2022</button> -->
 
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6">
-({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
-<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+<label class="form-label">New Task</label>
+<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
 </div>
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
@@ -1023,6 +1016,7 @@ mode="tags"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -1045,7 +1039,7 @@ mode="tags"
   
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing">
+        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
          <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>

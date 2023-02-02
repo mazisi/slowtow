@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\CompanyDocument;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CompanyValidateRequest;
+use App\Models\Licence;
 
 class CompanyController extends Controller
 {
@@ -101,6 +102,7 @@ class CompanyController extends Controller
 
     public function show($slug){
         $company = Company::with('users','licences','people')->whereSlug($slug)->first();
+        $linked_licences = Licence::where('company_id',$company->id)->paginate(10);
         $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->get();
         $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->get();
         $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->get();
@@ -119,7 +121,8 @@ class CompanyController extends Controller
              'cipc_cert' => $cipc_cert,
              'lta_cert' => $lta_cert,
              'company_doc' => $company_doc,
-             'sars_cert' => $sars_cert
+             'sars_cert' => $sars_cert,
+             'linked_licences' => $linked_licences
             ]);
     }
 

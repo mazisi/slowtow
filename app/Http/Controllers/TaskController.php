@@ -15,7 +15,7 @@ class TaskController extends Controller
     public function store(Request $request)
     {
     $request->validate([
-        'body'=> 'required|max:100',
+        'body'=> 'required',
         'model_id' => 'required',
          'model_type' => 'required',
          ]);

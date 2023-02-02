@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('model_type')->nullable();
             $table->string('model_id')->nullable();
             $table->timestamp('date');
-            $table->text('body');
+            $table->longText('body');
             $table->timestamps();
         });
     }

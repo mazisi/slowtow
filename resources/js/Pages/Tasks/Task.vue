@@ -25,9 +25,8 @@
     
     <div class="col-12 columns">    
     <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">New Task<span class="text-danger pl-6">
-    ({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
-    <textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+    <label class="form-label">New Task</label>
+    <textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
     </div>
     <div v-if="errors.model_id">{{ errors.model_id }}</div>
     </div>

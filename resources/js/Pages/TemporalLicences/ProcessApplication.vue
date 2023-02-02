@@ -173,16 +173,17 @@ export default {
           }
       }
 
-      
+      let file_has_apostrophe = ref();
       function getFileName(e){
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
       }
 
     return { year,form,body_max,show_modal,
      updateLicence,file_name,show_file_name,getFileName,
      getRenewalYear, pushData,uploadDoc,
-     getDocType, submitDocument,
+     getDocType, submitDocument,file_has_apostrophe,
      computeDocumentDate,deleteDocument,
      createTask,
      submitTask,
@@ -964,12 +965,12 @@ export default {
 </div>
 
 <hr/>
-      <LiquorBoardRequest 
+      <!-- <LiquorBoardRequest 
       :model_type='`Temporal Licence`'
       :model_id="licence.id" 
       :liqour_board_requests="liqour_board_requests"
-      />
-<hr>
+      /> 
+<hr>-->
 <div class="row">
 <h6 class="text-center">Notes</h6>
 <div class="col-xl-8">
@@ -999,9 +1000,8 @@ data-bs-dismiss="alert" aria-label="Close">
 
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6">
-({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
-<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+<label class="form-label">New Task<span class="text-danger pl-6"></span></label>
+<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
 </div>
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
@@ -1030,16 +1030,6 @@ data-bs-dismiss="alert" aria-label="Close">
       <div class="modal-body">      
         <div class="row">
 
-        <!-- <div class="col-md-12 columns" v-if="uploadDoc.doc_type !== 'Client Quoted'
-        && uploadDoc.doc_type !== 'Renewal Issued'
-        && uploadDoc.doc_type !== 'Renewal Delivered'">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Date</label>
-        <input type="date" required class="form-control form-control-default" 
-         v-model="uploadDoc.date" >
-        </div>
-        <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-        </div> -->
 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
@@ -1047,6 +1037,7 @@ data-bs-dismiss="alert" aria-label="Close">
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
@@ -1058,7 +1049,7 @@ data-bs-dismiss="alert" aria-label="Close">
   
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-secondary" :disabled="uploadDoc.processing">
+        <button type="submit" class="btn btn-secondary" :disabled="uploadDoc.processing || file_has_apostrophe">
          <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>

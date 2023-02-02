@@ -13,10 +13,10 @@
       <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900|Roboto+Slab:400,700"
 
       />
-<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('public/favicon/apple-touch-icon.png') }}">
+{{-- <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('public/favicon/apple-touch-icon.png') }}">
 <link rel="icon" type="{{ asset('public/favicon/image/png') }}" sizes="32x32" href="{{ asset('public/favicon/favicon-32x32.png') }}">
 <link rel="icon" type="{{ asset('public/favicon/image/png') }}" sizes="16x16" href="{{ asset('public/favicon/favicon-16x16.png') }}">
-<link rel="manifest" href="{{ asset('public/favicon/site.webmanifest') }}">
+<link rel="manifest" href="{{ asset('public/favicon/site.webmanifest') }}"> --}}
       <!-- Material Icons -->
 
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>

@@ -28,7 +28,6 @@ export default {
 
   setup (props) {
     const year = ref(new Date().getFullYear());
-    const body_max = ref(100);
     let show_modal = ref(true); 
     let show_file_name = ref(false); 
     let file_name = ref('');
@@ -49,7 +48,6 @@ export default {
       document: null,
       doc_type: null,
       date: null,
-      file_name: file_name,
       renewal_id: props.renewal.id    
     })
 
@@ -66,11 +64,7 @@ export default {
       })
     }
 
-    function checkBodyLength(){//Monitor task body length..
-          if(this.createTask.body.length > this.body_max){
-              this.createTask.body = this.createTask.body.substring(0,this.body_max)
-          }
-      }
+  
 
     function getDocType(doc_type){
       this.show_file_name = true
@@ -138,21 +132,22 @@ export default {
           }
       }
 
-      
+      let file_has_apostrophe = ref();
       function getFileName(e){
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
+        // this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
-    return { year,form,body_max,show_modal,getFileName, 
-      file_name,show_file_name,
+    return { year,form,show_modal,getFileName, 
+      file_name,show_file_name,file_has_apostrophe,
      updateRenewal,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      deleteDocument,
      createTask,
      submitTask,
-     checkBodyLength,
      deleteRenewal,
      limit
      }
@@ -590,9 +585,8 @@ data-bs-dismiss="alert" aria-label="Close">
 
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6">
-({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
-<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+<label class="form-label">New Task</label>
+<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
 </div>
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
@@ -614,35 +608,40 @@ data-bs-dismiss="alert" aria-label="Close">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+        
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      
       </div>
+      
       <form @submit.prevent="submitDocument">
       <input type="hidden" v-model="uploadDoc.doc_type">
-      <div class="modal-body">      
+      <div class="modal-body">   
         <div class="row">
 
- 
         <div class="col-md-12 columns">
         <label for="licence-doc" class="btn btn-dark w-100">Click To Select File</label>
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
-       </div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
+        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
          {{ uploadDoc.progress.percentage }}%
          </progress>
          </div>
          </div>   
+        
       </div>
-  
+    
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing">
+        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
          <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>
+      
       </form>
     </div>
   </div>

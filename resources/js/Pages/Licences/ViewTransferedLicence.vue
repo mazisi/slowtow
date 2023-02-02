@@ -48,7 +48,6 @@ export default {
 
   setup (props) {
     let showMenu = false;
-    const body_max = ref(100);
     let show_modal = ref(true);
     let options = props.companies_dropdown;
     let show_file_name = ref(false);
@@ -161,27 +160,23 @@ export default {
       })
     }
 
-    function checkBodyLength(){//Monitor task body length..
-          if(this.createTask.body.length > this.body_max){
-              this.createTask.body = this.createTask.body.substring(0,this.body_max)
-          }
-      }
-
       function deleteTransfer() {
         if(confirm('Are you sure??')){
           Inertia.delete(`/delete-licence-transfer/${props.view_transfer.slug}/${props.view_transfer.licence.slug}`)
         }
       }
 
-      
+      let file_has_apostrophe = ref();
       function getFileName(e){
         this.show_file_name = true;
         this.documentsForm.document = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
       }
     return {
       pushData,
       file_name,
+      file_has_apostrophe,
       show_file_name,
       mergeForm,
       getFileName,
@@ -197,8 +192,6 @@ export default {
       deleteDocument,
       createTask,
       submitTask,
-      checkBodyLength,
-      body_max,
       deleteTransfer
     }
   },
@@ -1076,13 +1069,13 @@ export default {
       </div>
 
 <hr/>
-      <LiquorBoardRequest 
+      <!-- <LiquorBoardRequest 
       :model_type='`Licence Transfer`'
       :model_id="view_transfer.id" 
       :liqour_board_requests="liqour_board_requests"
       />
       <hr/>
-      
+       -->
 
 
 <div class="row">
@@ -1111,9 +1104,8 @@ export default {
 
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6">
-({{ body_max - createTask.body.length}}/{{ body_max }})</span></label>
-<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+<label class="form-label">New Task</label>
+<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
 </div>
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
@@ -1163,6 +1155,7 @@ export default {
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
        </div>
        <div class="col-md-12">
           <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
@@ -1174,7 +1167,7 @@ export default {
   
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-secondary" :disabled="documentsForm.processing">
+        <button type="submit" class="btn btn-secondary" :disabled="documentsForm.processing || file_has_apostrophe">
          <span v-if="documentsForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>

@@ -441,7 +441,7 @@
   </tr>
 </thead>
 <tbody>
-  <tr v-for="licence in company.licences" :key="licence.id">
+  <tr v-for="licence in linked_licences.data" :key="licence.id">
     <td>
       <div class="d-flex px-2">
     
@@ -463,6 +463,10 @@
 </tbody>
 </table>
 </div>
+<Paginate
+              :modelName="linked_licences"
+              :modelType="ViewCompany"
+              />
 <hr>
 </div>
 
@@ -554,8 +558,8 @@
 </div>
 <div class="col-12 columns">    
 <div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6">{{ body_max - createTask.body.length}}/{{ body_max }}</span></label>
-<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
+<label class="form-label">New Task</label>
+<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
 </div>
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
@@ -599,7 +603,8 @@
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
-       </div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backtick.</p>  
+        </div>
        <div class="col-md-12">
           <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
          {{ documentsForm.progress.percentage }}%
@@ -610,7 +615,7 @@
   
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="documentsForm.processing">
+        <button type="submit" class="btn btn-primary" :disabled="documentsForm.processing || file_has_apostrophe">
          <span v-if="documentsForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>
@@ -713,8 +718,9 @@ import Layout from "../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Multiselect from '@vueform/multiselect';
-import Banner from './components/Banner.vue'
-import { ref } from 'vue'
+import Banner from './components/Banner.vue';
+import { ref } from 'vue';
+import Paginate from '../Shared/Paginate.vue';
 
 export default {
  props: {
@@ -730,7 +736,8 @@ export default {
     sars_cert: Object,
     success: String,
     error: String,
-    message: String
+    message: String,
+    linked_licences: Object
  },  
   
   setup (props) {
@@ -797,7 +804,6 @@ export default {
             document: null,
             expiry_date: null,
             doc_type: null,
-            file_name: file_name,
             company_id: props.company.id,
       })
 
@@ -900,11 +906,6 @@ export default {
         }
       }
 
-      function checkBodyLength(){//Monitor task body length..
-          if(this.createTask.body.length > this.body_max){
-              this.createTask.body = this.createTask.body.substring(0,this.body_max)
-          }
-      }
 
       function unlinkPerson(full_name,id){
         if(confirm(full_name + ' will be removed from this company...Continue..??')){
@@ -928,21 +929,22 @@ export default {
         }
         
       }
-      
+      let file_has_apostrophe = ref();
       function getFileName(e){
         this.show_file_name = true;
         this.documentsForm.document = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
       }
 
     return {
       showMenu,
       file_name,
+      file_has_apostrophe,
       getFileName,
       submit,
       submitTask,
       deleteTask,
-      checkBodyLength,
       addCompanyUser,
       addCompanyUserForm,
       unlinkPerson,
@@ -973,7 +975,8 @@ export default {
     Link,
     Head,
     Multiselect,
-    Banner
+    Banner,
+    Paginate
   },
   
 };

@@ -17,7 +17,7 @@ class LicenceDocsController extends Controller
             ]);
 
             $fileModel = new LicenceDocument;
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->file_name);
+            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->doc->getClientOriginalName());
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
             $fileModel->licence_id = $request->licence_id;

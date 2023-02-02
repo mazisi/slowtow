@@ -322,7 +322,9 @@ data-bs-dismiss="alert" aria-label="Close">
          hidden id="licence-doc"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
          <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
-       </div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry 
+          <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>
+        </div>
        <div class="col-md-12">
           <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
          {{ uploadDoc.progress.percentage }}%
@@ -344,7 +346,7 @@ data-bs-dismiss="alert" aria-label="Close">
   
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing">
+        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
          <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>
@@ -503,16 +505,17 @@ const form = useForm({
         }
      }
 
-       
+     let file_has_apostrophe = ref();
       function getFileName(e){
         this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
       }
 
      return{
         form,show_file_name,checkBodyLength,body_max,deleteTask,computeExpiryDate,deletePerson,
         assignActiveValue,updatePerson,submitTask,deleteDocument,getDocType,submitDocument,
-        show_doc_modal,uploadDoc,createTask,file_name,getFileName
+        show_doc_modal,uploadDoc,createTask,file_name,getFileName,file_has_apostrophe
      }
 },
  components: {

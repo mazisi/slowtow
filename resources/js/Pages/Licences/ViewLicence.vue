@@ -385,6 +385,7 @@ data-bs-dismiss="alert" aria-label="Close">
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
          <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
        </div>
        <div class="col-md-12">
           <progress v-if="originalLicenceForm.progress" :value="originalLicenceForm.progress.percentage" max="100">
@@ -396,7 +397,7 @@ data-bs-dismiss="alert" aria-label="Close">
   
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="originalLicenceForm.processing">
+        <button type="submit" class="btn btn-primary" :disabled="originalLicenceForm.processing || file_has_apostrophe">
          <span v-if="originalLicenceForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
          Save</button>
       </div>
@@ -453,6 +454,7 @@ export default {
         let change_company = ref(false);
         let show_modal = ref(true);
         let file_name = ref(''); 
+        let file_has_apostrophe = ref();
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -483,7 +485,6 @@ export default {
           doc: null,
           licence_id: props.licence.id,
           doc_type: null,
-          file_name: file_name
        })
  
       function getDocType(doc_type){
@@ -556,11 +557,12 @@ export default {
         
           function getFileName(e){
             this.originalLicenceForm.doc = e.target.files[0];
-            this.file_name = e.target.files[0].name.replace(/'/g, "`");
+            this.file_name = e.target.files[0].name;
+            this.file_has_apostrophe = this.file_name.includes("'");
           }
 
     return {
-      showMenu,
+      showMenu,file_has_apostrophe,
       file_name,getFileName,
       createTask,
       body_max,

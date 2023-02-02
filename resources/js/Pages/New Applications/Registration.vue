@@ -1233,19 +1233,19 @@
            hidden id="licence-doc" accept=".pdf"/>
            <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
            <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
-           
-         </div>
+             <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
+           </div>
          <div class="col-md-12">
             <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
            {{ uploadDoc.progress.percentage }}%
            </progress>
            </div>
-           </div>   
+           </div> 
         </div>
     
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing">
+          <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
            <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
            Save</button>
            </div>
@@ -1376,6 +1376,7 @@
       let show_file_name = ref(false);
       let file_name = ref('');
       let file_size = ref(null);
+      let file_has_apostrophe = ref();
 
       const form = useForm({
         deposit_paid_at: props.licence.deposit_paid_at,
@@ -1406,8 +1407,7 @@
         doc: null,
         doc_type: null ,
         num: null,
-        licence_id: props.licence.id,
-        file_name: file_name
+        licence_id: props.licence.id
       })
   
       function submitBoardRequests(){
@@ -1509,12 +1509,14 @@
         this.file_size = e.target.files[0].size;
         this.show_file_name = true;
         this.uploadDoc.doc = e.target.files[0];
-        this.file_name = e.target.files[0].name.replace(/'/g, "`");
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
       }
       return { 
         form,show_modal,file_size,
         file_name,getFileName,
         editBoardRequestForm,
+        file_has_apostrophe,
         editBoardRequest,
         updateBoardRequest,
         updateRegistration,
