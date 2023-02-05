@@ -3,12 +3,20 @@ namespace App\Exports;
 
 use App\Models\LicenceRenewal;
 use App\Models\LicenceRenewalExports;
+use Maatwebsite\Excel\Concerns\FromQuery;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class RenewalExport implements FromCollection, WithHeadings{
 
+
+class RenewalExport implements FromCollection, WithHeadings, ShouldAutoSize{
+
+  use Exportable;
+  
   public function headings():array{
+
     return[
       'ACTIVE/DEACTIVE',
       'TRADING NAME',
@@ -44,5 +52,14 @@ class RenewalExport implements FromCollection, WithHeadings{
         'notes'
     ]);
     }
+
+    public function columnFormats(): array
+    {
+        return [
+            'is_active' => TYPE_BOOL::TYPE_BOOL,
+            'C' => NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE,
+        ];
+    }
+
     
 }

@@ -21,24 +21,27 @@
         <div class="row">
           <!-- :class="{ btnPrimary: isActive }" -->
           <div class="col-4">
-            <button @click="getType('Renewals')" type="button" class="type btn btn btn-success w-45" 
+            <button @click="getType('Renewals')" type="button" class="type btn btn btn-success w-50" 
             >Renewals</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Transfers')" type="button" class="type btn btn-success">Transfers</button>
+            <button @click="getType('Transfers')" type="button" class="type btn btn-success w-50">Transfers</button>
           </div>
           <div class="col-4">
             <button @click="getType('Nominations')" type="button" class="type btn btn-success">Nominations</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('New-Applications')" type="button" class="type btn btn-success w-45">New Applications</button>
+            <button @click="getType('New-Applications')" type="button" class="type btn btn-success w-50">Registrations</button>
+          </div>
+          <div class="col-4">
+            <button @click="getType('Existing-Licences')" type="button" class="type btn btn-success w-50">Existing Licences</button>
           </div>
           <div class="col-4">
             <button @click="getType('Alterations')" type="button" class="type btn btn-success">Alterations</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Temporal Licence')" type="button" class="type btn btn-success w-45">Temporary Applications</button>
+            <button @click="getType('Temporal Licence')" type="button" class="type btn btn-success w-50">Temporary Applications</button>
           </div>
         </div>
 <hr/>
@@ -50,6 +53,13 @@
     <button type="button" class="btn btn-success w-45">Filter By:</button>
   </div>
  
+
+
+  <div v-if="form.variation === 'Renewals'" class="col-8 columns" >
+    <Renewal-Filter/>
+  </div>
+
+  
   <div class="col-8 columns">
     <h5 class="text-center">{{ form.variation }}</h5>
     <Multiselect
@@ -308,6 +318,7 @@ import Multiselect from '@vueform/multiselect';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from './components/Banner.vue';
+import RenewalFilterVue from "./EmailComms/RenewalFilter.vue";
 import { ref } from 'vue'
 
 export default {
@@ -394,7 +405,7 @@ const new_app_stages = {
 
       }
       let element = document.querySelectorAll('.type');
-      console.log(type)
+    
     }
   function getType(type){
      form.variation=type;
@@ -465,7 +476,8 @@ return{
   btnSecondary,
   btnSuccess,
   btnPrimary,
-  years
+  years,
+  RenewalFilterVue
 }
 },
  components: {
