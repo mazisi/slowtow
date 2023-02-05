@@ -54,14 +54,8 @@
   </div>
  
 
-
-  <div v-if="form.variation === 'Renewals'" class="col-8 columns" >
-    <Renewal-Filter/>
-  </div>
-
   
-  <div class="col-8 columns">
-    <h5 class="text-center">{{ form.variation }}</h5>
+  <div class="col-8 columns">    
     <Multiselect
             v-model="form.month"           
                :options="months"
@@ -69,6 +63,8 @@
                placeholder="Month"
              />
   </div>
+
+  
   <div class="col-4 columns">
     <div class="input-group input-group-outline null is-filled" >
       <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
@@ -78,6 +74,48 @@
        </select>
     </div>
   </div>
+
+
+
+
+
+
+  <div v-if="form.variation === 'Renewals'" class="col-8 columns" >
+    <Multiselect
+        v-model="form.renewal_stages"           
+        :options="renewal_stages"
+          mode="tags"
+        :taggable="true"
+        placeholder="Filter By Stage"/>
+  </div>
+
+  <div v-if="form.variation === 'Transfers'" class="col-8 columns" >
+    <Multiselect
+        v-model="form.transfer_stages"           
+        :options="transfer_stages"
+          mode="tags"
+        :taggable="true"
+        placeholder="Filter By Stage"/>
+  </div>
+
+  <div v-if="form.variation === 'Nominations'" class="col-8 columns" >
+    <Multiselect
+        v-model="form.nomination_stages"           
+        :options="nomination_stages"
+        mode="tags"
+        :taggable="true"
+        placeholder="Filter By Stage"/>
+  </div>
+  <div :class="{ 'col-4': form.variation === 'Renewals' 
+  || form.variation === 'Transfers' 
+  || form.variation === 'Nominations'
+  || form.variation === 'Nominations'
+   }"></div>
+  <!-- //////////////////////////////////////////////////////////////////////////////////////was here ..do registration-->
+
+
+
+
   <div v-if="form.variation !== 'Temporal Licence'" class="col-8 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
@@ -318,7 +356,6 @@ import Multiselect from '@vueform/multiselect';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from './components/Banner.vue';
-import RenewalFilterVue from "./EmailComms/RenewalFilter.vue";
 import { ref } from 'vue'
 
 export default {
@@ -398,8 +435,47 @@ const new_app_stages = {
       selectedDates:[],
       boardRegion: [],
       licence_types: [],
-      new_app_stages: []
+      new_app_stages: [],
+      renewal_stages: [],
+      transfer_stages: []
     })
+
+    const renewal_stages = {
+    "1": "Client Quoted",
+    "2" : "Client Invoiced",
+    "3" : "Client Paid",
+    "4":  "Payment To Liquor Board",
+    "5": "Renewal Issued",
+    "6": "Renewal Delivered"
+    }
+
+    const transfer_stages = {
+      "1" : "Client Quoted",
+      "2" : "Client Invoiced",
+      "3" : "Client Paid",
+      "4" : "Prepare Transfer Application",
+      "5" : "Payment To The Liquor Board",
+      "6" : "Scanned Application",
+      "7" : "Application Logded",
+      "8" : "Activation Fee Paid",
+      "9" : "Transfer Issued",
+      "1" : "Transfer Delivered"
+    }
+
+    const nomination_stages = {
+      "1" : "Client Quoted",
+      "2" : "Client Invoiced",
+      "3" : "Client Paid",
+      "4" : "Payment to the Liquor Board",
+      "5" : "Select nominees",
+      "6" : "Prepare Nomination Application", 
+      "7" : "Scanned Application",
+      "8" : "Nomination Lodged", 
+      "9" : "Nomination Issued", 
+      "1" : "Nomination Delivered" 
+    }
+
+
     function addClass(type){
       if(type){
 
@@ -407,6 +483,8 @@ const new_app_stages = {
       let element = document.querySelectorAll('.type');
     
     }
+
+
   function getType(type){
      form.variation=type;
      addClass(type);
@@ -459,6 +537,9 @@ const new_app_stages = {
 
 return{
   limit,
+  renewal_stages,
+  transfer_stages,
+  nomination_stages,
   getType,
   form,
   months,
@@ -477,7 +558,6 @@ return{
   btnSuccess,
   btnPrimary,
   years,
-  RenewalFilterVue
 }
 },
  components: {

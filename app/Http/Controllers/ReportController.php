@@ -73,7 +73,7 @@ class ReportController extends Controller
         ]);
     }
 
-    public function export(Request $request){
+    public function export(Request $request){dd($request);
       switch ($request->variation) {
         case 'Renewals':
           RenewalExportController::export($request);          
