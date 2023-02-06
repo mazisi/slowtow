@@ -24,34 +24,47 @@ public static function export($request){
                     
                 }
 
-             $transfers = LicenceTransfer::with("licence")->when(function($query) use($request){
-                $query->whereHas('licence', function($query) use($request){
-                    $query->when($request->month, function($query) use($request){
-                        $query->whereMonth('licence_date', $request->month);
-                    })
-                    ->when(request('activeStatus') == 'Active', function ($query) {
-                        $query->whereNotNull('is_licence_active');
-                    })
-                    ->when(request('activeStatus') == 'Inactive', function ($query) {
-                        $query->whereNull('is_licence_active');
-                    })
-                    ->when(!empty(request('province')), function ($query) use ($request) {
-                        $query->whereIn('province',$request->province);
-                    })
-                    ->when(!empty(request('boardRegion')), function ($query) use ($request) {
-                        $query->whereIn('board_region',$request->boardRegion);
-                    })
-                    ->when(!empty(request('applicant')), function ($query) use ($request) {
-                        $query->where('belongs_to',$request->applicant);
-                    })
-                    ->when(!empty(request('licence_types')), function ($query) use ($request) {
-                        $query->whereIn('licence_type_id',$request->licence_types);
-                    });
-                });
+                $transfers = DB::table('licence_transfers')
+                    ->selectRaw("licence_transfers.id, is_licence_active, trading_name, licence_transfers.date, 
+                                 licence_transfers.lodged_at, licence_transfers.status, payment_to_liquor_board_at, issued_at, delivered_at,province")
 
-                })->when(!empty(request('selectedDates')), function ($query) use ($request) {
-                      $query->whereIn('date',$request->selectedDates);
-                })->get();
+                    ->join('licences', 'licences.id' , '=', 'licence_transfers.licence_id')
+
+                    ->when(function($query){
+                        $query->when(request('month'), function($query){
+                            $query->whereMonth('licence_date', request('month'));
+                        })
+                        ->when(request('province'), function ($query)  {
+                            $query->whereIn('licences.province',request('province'));
+                        })
+                        ->when(request('boardRegion'), function ($query)  {
+                            $query->whereIn('board_region',request('boardRegion'));
+                        })
+                        
+                        ->when(request('applicant'), function ($query)  {
+                            $query->where('belongs_to',request('applicant'));
+                        })
+
+                        ->when(request('activeStatus') === 'Inactive', function ($query) {
+                            $query->where('is_licence_active',false);
+                        })
+
+                        ->when(request('activeStatus') == 'Active', function ($query) {
+                            $query->where('is_licence_active', true);
+                        })
+
+                        ->when(request('licence_types'), function ($query)  {
+                            $query->where('licence_type_id',request('licence_types'));
+                        });
+
+                    })->when(request('selectedDates'), function ($query) {
+                          $query->whereIn('year',request('selectedDates'));
+                    })
+                    ->when(request('transfer_stages'), function ($query) {
+                        $query->whereIn('licence_transfers.status', request('transfer_stages'));
+                    })->get();
+
+                        
             $status = '';
             $notesCollection = '';
 
@@ -92,25 +105,26 @@ public static function export($request){
                         return back()->with('error','Could not process request.An unknown error occured');
                         break;
                 }
-                $notes = Task::where('model_id',$transfer->id)->where('model_type','Transfer')->get();
+                $notes = Task::where('model_id',$transfer->id)->where('model_type','Transfer')->get(['body']);
             //check if client has been quoted
-            $is_client_paid = TransferDocument::where('licence_transfer_id',$transfer->id)->where('doc_type','Payment To The Liquor Board')->first();
-                if(!is_null($notesCollection) || !empty($notesCollection)){
+           // $get_invoice_number = DB::table('transfer_documents')->where('licence_transfer_id',$transfer->id)->where('doc_type','Client Invoiced')->first(['document_name']);
+                if(!is_null($notes) || !empty($notes)){
                     foreach ($notes as $note) {
                         $notesCollection .= '|| '. $note->body;
                     }
                 }
+                
                 TransferExport::create([
-                    'trading_name' => $transfer->licence->trading_name,
+                    'trading_name' => $transfer->trading_name,
                     'gau_or_blg_number' => '',
-                    'province' => $transfer->licence->province,
+                    'province' => $transfer->province,
                     'deposit_invoice' => '',
                     'deposit_paid' => '',
                     'date_logded' => $transfer->lodged_at,
                     'proof_of_lodgement' => (is_null($transfer->lodged_at)) ? 'False' : 'True',
                     'payment_date' => $transfer->payment_to_liquor_board_at,
-                    'invoice_number' => null,
-                    'date_granted' => $transfer->renewal_issued_at,
+                    'invoice_number' => '',
+                    'date_granted' => $transfer->issued_at,
                     'finalisation_invoice' => '',
                     'finalisation_payment' => '',
                     'current_status' => $status,

@@ -4,8 +4,9 @@ namespace App\Exports;
 use App\Models\NewAppExport;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class NewAppsExport implements FromCollection, WithHeadings{
+class NewAppsExport implements FromCollection, WithHeadings, ShouldAutoSize{
 
   public function headings():array{
     return[

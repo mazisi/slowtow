@@ -1,12 +1,13 @@
 <?php
 namespace App\Exports;
 
-use App\Models\NominationExport;
 use App\Models\TransferExport;
+use App\Models\NominationExport;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class NominationExports implements FromCollection, WithHeadings{
+class NominationExports implements FromCollection, WithHeadings, ShouldAutoSize{
 
   public function headings():array{
     return[

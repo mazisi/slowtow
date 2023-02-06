@@ -4,8 +4,9 @@ namespace App\Exports;
 use App\Models\TransferExport;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class TransferExports implements FromCollection, WithHeadings{
+class TransferExports implements FromCollection, WithHeadings, ShouldAutoSize{
 
   public function headings():array{
     return[
@@ -35,7 +36,7 @@ class TransferExports implements FromCollection, WithHeadings{
         'finalisation_invoice',
         'finalisation_payment',
         'date_granted',
-        'current_status',
+        'current_status',        
         'notes'
     ]);
     }

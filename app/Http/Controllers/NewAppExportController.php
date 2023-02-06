@@ -24,17 +24,20 @@ class NewAppExportController extends Controller
             $query->when($request->month, function($query) use($request){
                 $query->whereMonth('licence_date', $request->month);
             })
-            ->when(request('activeStatus') == 'Active', function ($query) {
-                        $query->whereNotNull('is_licence_active');
+            ->when(request('activeStatus') === 'Active', function ($query) {
+                        $query->where('is_licence_active',true);
                     })
-                    ->when(request('activeStatus') == 'Inactive', function ($query) {
-                        $query->whereNull('is_licence_active');
+                    ->when(request('activeStatus') === 'Inactive', function ($query) {
+                        $query->where('is_licence_active',false);
              })
             ->when(!empty(request('province')), function ($query) use ($request) {
                 $query->whereIn('province',$request->province);
             })
             ->when(!empty(request('boardRegion')), function ($query) use ($request) {
                 $query->whereIn('board_region',$request->boardRegion);
+            })
+            ->when(request('new_app_stages'), function ($query) {
+                $query->whereIn('status',request('new_app_stages'));
             })
             ->when(!empty(request('applicant')), function ($query) use ($request) {
                 $query->where('belongs_to',$request->applicant);
@@ -43,18 +46,20 @@ class NewAppExportController extends Controller
                 $query->where('licence_type_id',$request->licence_types);
             })
             ->when(!empty(request('selectedDates')), function ($query) use ($request) {
-               // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+               //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
             });
-        })->get();
+        })->where('is_new_app',true)->get();
+
+        
 
     $notesCollection = null;
     $status = '';
 
     foreach ($licences as $licence) {
-        $notes = Task::where('model_id',$licence->id)->where('model_type','Licence')->get();
+        $notes = Task::where('model_id',$licence->id)->where('model_type','Licence')->get(['body']);
     //check if client has been logded
-    $is_client_logded = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Application Lodged')->first();
-        if(!is_null($notesCollection) || !empty($notesCollection)){
+    $is_client_logded = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Application Lodged')->first(['document_name']);
+        if(!is_null($notes) || !empty($notes)){
             foreach ($notes as $note) {
                 $notesCollection += ' || '. $note->body;
             }
@@ -138,6 +143,6 @@ class NewAppExportController extends Controller
 }
 
 public function forceDownload(){
-    return Excel::download(new NewAppsExport(), 'newApps.xlsx');
+    return Excel::download(new NewAppsExport(), 'registration.xlsx');
 }
 }

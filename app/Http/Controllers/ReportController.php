@@ -73,7 +73,7 @@ class ReportController extends Controller
         ]);
     }
 
-    public function export(Request $request){dd($request);
+    public function export(Request $request){
       switch ($request->variation) {
         case 'Renewals':
           RenewalExportController::export($request);          
@@ -87,9 +87,14 @@ class ReportController extends Controller
           NominationExportController::export($request);          
           return Inertia::location(env('APP_URL').'/force-download-nomination-export');
           break;
-        case 'New-Applications':
+        case 'Registrations':
           NewAppExportController::export($request);          
            return Inertia::location(env('APP_URL').'/force-download-new-app-export');
+          break;
+
+        case 'Existing-Licences':
+          ExistingLicenceExportController::export($request);          
+            return Inertia::location(env('APP_URL').'/force-download-new-app-export');
           break;
         case 'Temporal Licence':
           TemporaLExportController::export($request);          

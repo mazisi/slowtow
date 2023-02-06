@@ -32,7 +32,7 @@
           </div>
 
           <div class="col-4">
-            <button @click="getType('New-Applications')" type="button" class="type btn btn-success w-50">Registrations</button>
+            <button @click="getType('Registrations')" type="button" class="type btn btn-success w-50">Registrations</button>
           </div>
           <div class="col-4">
             <button @click="getType('Existing-Licences')" type="button" class="type btn btn-success w-50">Existing Licences</button>
@@ -55,7 +55,8 @@
  
 
   
-  <div class="col-8 columns">    
+  <div class="col-8 columns">
+    <h5 class="text-center">{{ form.variation }}</h5>    
     <Multiselect
             v-model="form.month"           
                :options="months"
@@ -106,16 +107,57 @@
         :taggable="true"
         placeholder="Filter By Stage"/>
   </div>
+
+  <div v-if="form.variation === 'Registrations'" class="col-8 columns" >
+    <Multiselect
+    v-model="form.new_app_stages"           
+    :options="new_app_stages"
+     mode="tags"
+    :taggable="true"
+    placeholder="Filter By Stage"/>
+  </div>
+
+  <div v-if="form.variation === 'Alterations'" class="col-8 columns" >
+    <Multiselect
+    v-model="form.alteration_stages"           
+    :options="alteration_stages"
+     mode="tags"
+    :taggable="true"
+    placeholder="Filter By Stage"/>
+  </div>
+
+  <div v-if="form.variation === 'Temporal Licence'" class="col-8 columns">
+    <Multiselect
+    v-model="form.temp_licence_stages"           
+    :options="temp_licence_stages"
+     mode="tags"
+    :taggable="true"
+    placeholder="Filter By Stage"/>
+  </div>
+
+  <div v-if="form.variation === 'Existing-Licences'" class="col-8 columns">
+    <Multiselect
+    v-model="form.new_app_stages"           
+    :options="new_app_stages"
+     mode="tags"
+    :taggable="true"
+    placeholder="Filter By Stage"/>
+  </div>
+
+
+  
   <div :class="{ 'col-4': form.variation === 'Renewals' 
   || form.variation === 'Transfers' 
   || form.variation === 'Nominations'
   || form.variation === 'Nominations'
-   }"></div>
-  <!-- //////////////////////////////////////////////////////////////////////////////////////was here ..do registration-->
-
-
-
-
+  || form.variation === 'Registrations'//New Apps
+  || form.variation === 'Alterations'
+  || form.variation === 'Temporal Licence'
+  || form.variation === 'Existing-Licences'
+   }">
+  </div>
+  
+ 
   <div v-if="form.variation !== 'Temporal Licence'" class="col-8 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
@@ -127,6 +169,11 @@
           placeholder="Province"/>
       </div>
     </div>
+
+
+
+
+
     <div v-if="form.variation !== 'Temporal Licence'" class="col-4">
       <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
       {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
@@ -178,16 +225,6 @@
       </div>
   </div>
 
-  <div class="col-4"></div>
-  <div v-if="form.variation === 'New-Applications'" class="col-8 mt-3">
-    <Multiselect
-        v-model="form.new_app_stages"           
-        :options="new_app_stages"
-          mode="tags"
-        :taggable="true"
-        @select="fetchNewAppWithStages"
-        placeholder="Filter By Stage"/>
-  </div>
 
   <div class="float-end mt-4">
     <button @click="exportReport" :disabled="form.processing" 
@@ -199,7 +236,7 @@
   
 </div>
 
-<div v-if="form.variation === 'New-Applications'" class="table-responsive p-0">
+<div v-if="form.variation === 'Registrations'" class="table-responsive p-0">
   <table class="table align-items-center mb-0">
         <thead>
           <tr>
@@ -437,7 +474,10 @@ const new_app_stages = {
       licence_types: [],
       new_app_stages: [],
       renewal_stages: [],
-      transfer_stages: []
+      transfer_stages: [],
+      nomination_stages: [],
+      alteration_stages: [],
+      temp_licence_stages: []
     })
 
     const renewal_stages = {
@@ -459,7 +499,7 @@ const new_app_stages = {
       "7" : "Application Logded",
       "8" : "Activation Fee Paid",
       "9" : "Transfer Issued",
-      "1" : "Transfer Delivered"
+      "10" : "Transfer Delivered"
     }
 
     const nomination_stages = {
@@ -472,10 +512,27 @@ const new_app_stages = {
       "7" : "Scanned Application",
       "8" : "Nomination Lodged", 
       "9" : "Nomination Issued", 
-      "1" : "Nomination Delivered" 
+      "10" : "Nomination Delivered" 
     }
 
+    const alteration_stages = {
+        "1" : "Client Invoiced",
+        "2" : "Client Paid",
+        "3" : "Alteration Details Captured", 
+        "4" : "Alteration Complete",
+    }
 
+    const temp_licence_stages = {
+     "1" : "Client Quoted",
+     "2" : "Client Invoiced",
+     "3" : "Client Paid",
+     "4" : "Collate Temporary Licence Documents ",
+     "5" : "Payment To The Liquor Board ",
+     "6" : "Scanned Application",
+     "7" : "Temporary Licence Lodged",  
+     "8" : "Temporary Licence Issued", 
+     "9" : "Temporary Licence Delivered", 
+    }
     function addClass(type){
       if(type){
 
@@ -540,6 +597,8 @@ return{
   renewal_stages,
   transfer_stages,
   nomination_stages,
+  alteration_stages,
+  temp_licence_stages,
   getType,
   form,
   months,

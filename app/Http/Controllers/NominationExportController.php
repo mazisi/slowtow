@@ -28,7 +28,8 @@ class NominationExportController extends Controller
 
        
                 $nominations = DB::table('nominations')
-                            ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
+                            ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, 
+                                         nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
                                 nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
                                 nominations.status ")
                             ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
@@ -57,6 +58,9 @@ class NominationExportController extends Controller
                                 })->when(request('selectedDates'), function ($query) {
                                       $query->whereIn('year',request('selectedDates'));
                                 })
+                                ->when(request('nomination_stages'), function ($query) {
+                                    $query->whereIn('nominations.status',request('nomination_stages'));
+                              })
                             ->get();
         
         $status = '';
@@ -64,10 +68,10 @@ class NominationExportController extends Controller
         
         foreach ($nominations as $nom) {
             
-            $notes = Task::where('model_id',$nom->id)->where('model_type','Nomination')->get();
+            $notes = Task::where('model_id',$nom->id)->where('model_type','Nomination')->get(['body']);
 
        // $is_client_paid = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Payment To The Liquor Board')->first();
-            if(!is_null($notesCollection) || !empty($notesCollection)){
+            if(!is_null($notes) || !empty($notes)){
                 foreach ($notes as $note) {
                     $notesCollection .= '|| '. $note->body;
                 }
@@ -122,8 +126,9 @@ class NominationExportController extends Controller
                 'notes' => $notesCollection
             ]);
         }
-          } catch (\Throwable $th) {throw $th;
-          // return back()->with('error','An unknown error occured.');
+          } catch (\Throwable $th) {
+            //throw $th;
+           return back()->with('error','An unknown error occured.');
          }
     
         

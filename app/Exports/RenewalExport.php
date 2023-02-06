@@ -53,13 +53,7 @@ class RenewalExport implements FromCollection, WithHeadings, ShouldAutoSize{
     ]);
     }
 
-    public function columnFormats(): array
-    {
-        return [
-            'is_active' => TYPE_BOOL::TYPE_BOOL,
-            'C' => NumberFormat::FORMAT_CURRENCY_EUR_SIMPLE,
-        ];
-    }
+
 
     
 }

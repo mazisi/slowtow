@@ -19,30 +19,7 @@ class RenewalExportController extends Controller
                         $exist->delete();
                     }  
                 }
-                
-            // $renewals = LicenceRenewal::with("licence")->when($request,function($query) use($request){
-            //         $query->whereHas('licence', function($query) use($request){
-            //             $query->when(request('month, function($query) use($request){
-            //                 $query->whereMonth('licence_date', $request->month);
-            //             })
-                        
-            //             ->when(request('province'), function ($query) use ($request) {
-            //                 $query->whereIn('province',$request->province);
-            //             })
-            //             ->when(request('boardRegion'), function ($query) use ($request) {
-            //                 $query->whereIn('board_region',$request->boardRegion);
-            //             })
-            //             ->when(request('applicant'), function ($query) use ($request) {
-            //                 $query->where('belongs_to',$request->applicant);
-            //             })
-            //             ->when(request('licence_types'), function ($query) use ($request) {
-            //                 $query->where('licence_type_id',$request->licence_types);
-            //             });
-            //         });
-    
-            //         })->when(request('selectedDates'), function ($query) use ($request) {
-            //               $query->whereIn('year',$request->selectedDates);
-            //         })->get();
+               
 
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
@@ -70,6 +47,10 @@ class RenewalExportController extends Controller
 
                         })->when(request('selectedDates'), function ($query) {
                               $query->whereIn('year',request('selectedDates'));
+                        })
+
+                        ->when(request('renewal_stages'), function ($query) {
+                            $query->whereIn('licence_renewals.stage',request('renewal_stages'));
                         })
                     ->get();
         
