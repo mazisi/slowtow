@@ -15,6 +15,13 @@ return new class extends Migration
     {
         Schema::create('alteration_exports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('trading_name');
+            $table->string('licence_number')->nullable();
+            $table->string('province')->nullable();
+            $table->boolean('date_logded')->nullable();
+            $table->date('date_granted')->nullable();
+            $table->longText('notes')->nullable();
             $table->timestamps();
         });
     }

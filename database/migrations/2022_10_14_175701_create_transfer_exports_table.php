@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('transfer_exports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('trading_name');
             $table->string('gau_or_blg_number')->nullable();
             $table->string('province')->nullable();

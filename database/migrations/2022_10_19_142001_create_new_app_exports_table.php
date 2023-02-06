@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('new_app_exports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('trading_name');
             $table->string('licence_type');
             $table->string('licence_number')->nullable();

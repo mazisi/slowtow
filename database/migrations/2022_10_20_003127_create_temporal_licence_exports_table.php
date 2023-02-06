@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('temporal_licence_exports', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('event_name');
             $table->string('applicant');
             $table->string('event_dates')->nullable();
@@ -26,6 +27,7 @@ return new class extends Migration
             $table->string('date_granted')->nullable();
             $table->string('current_status')->nullable();
             $table->longText('notes')->nullable();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

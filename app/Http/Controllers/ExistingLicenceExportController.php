@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use App\Models\Licence;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Models\ExistingLicenceExport;
 use App\Exports\ExistingLicenceExports;
 
@@ -47,13 +49,13 @@ class ExistingLicenceExportController extends Controller
                //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
             });
         })->where('is_new_app',NULL)
-        ->orWhere('is_new_app','1')
+        ->orWhere('is_new_app','0')
         ->get(['id','trading_name','licence_number','licence_type_id','province','deposit_paid_at',
                  'application_lodged_at','activation_fee_paid_at','client_paid_at','status','is_new_app']);
 
-        
-dd($licences);
-    $notesCollection = null;
+        // dd($licences);
+
+    $notesCollection = '';
     $status = '';
 
     foreach ($licences as $licence) {
@@ -62,7 +64,7 @@ dd($licences);
     $is_client_logded = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Application Lodged')->first(['document_name']);
         if(!is_null($notes) || !empty($notes)){
             foreach ($notes as $note) {
-                $notesCollection += ' || '. $note->body;
+                $notesCollection .= ' || '. $note->body;
             }
         }
           

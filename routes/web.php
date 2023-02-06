@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AlterationDocumentController;
+use App\Http\Controllers\AlterationExportController;
 use Inertia\Inertia;
 
 use Illuminate\Support\Facades\Route;
@@ -74,7 +75,7 @@ use App\Http\Controllers\DispatchMailWithoutEditingController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
-
+use App\Http\Controllers\ExistingLicenceExportController;
 use App\Http\Controllers\Slowtowdmin\AdminsController;
 
 
@@ -319,7 +320,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/force-download-new-app-export',[NewAppExportController::class,'forceDownload']);
 
+        Route::get('/force-download-existing-licence-export',[ExistingLicenceExportController::class,'forceDownload']);
+
         Route::get('/force-download-temp-licence-export',[TemporaLExportController::class,'forceDownload']);
+
+        Route::get('/force-download-alteration-export',[AlterationExportController::class,'forceDownload']);
 
 
 

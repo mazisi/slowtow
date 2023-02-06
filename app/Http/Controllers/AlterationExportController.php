@@ -19,58 +19,56 @@ class AlterationExportController extends Controller
             }  
         }
 
-    $alterations = Alteration::with("licence")->when(function($query) use($request){
-        $query->whereHas('licence', function($query) use($request){
-            $query->when($request->month, function($query) use($request){
-                $query->whereMonth('licence_date', $request->month);
-            })
-            ->when(request('activeStatus') == 'Active', function ($query) {
-                        $query->whereNotNull('is_licence_active');
-                    })
-             ->when(request('activeStatus') == 'Inactive', function ($query) {
-                    $query->whereNull('is_licence_active');
-             })
-            ->when(!empty(request('province')), function ($query) use ($request) {
-                $query->whereIn('province',$request->province);
-            })
-            ->when(!empty(request('boardRegion')), function ($query) use ($request) {
-                $query->whereIn('board_region',$request->boardRegion);
-            })
-            ->when(!empty(request('applicant')), function ($query) use ($request) {
-                $query->where('belongs_to',$request->applicant);
-            })
-            ->when(!empty(request('licence_types')), function ($query) use ($request) {
-                $query->where('licence_type_id',$request->licence_types);
-            });
-        });
 
-        })->when(!empty(request('selectedDates')), function ($query) use ($request) {
-              $query->whereIn(DB::raw('MONTH(date)'), $request->month);
-        })->get();
+
+        $alterations = DB::table('alterations')
+                            ->selectRaw("alterations.id, licences.trading_name, licences.licence_number, licences.province, 
+                            licences.licence_issued_at, licences.application_lodged_at,alterations.status ")
+                            ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
+                                ->when(function($query){
+                                    $query->when(request('month'), function($query){
+                                        $query->whereMonth('licence_date', request('month'));
+                                    })
+                                    ->when(request('activeStatus') == 'Active', function ($query) {
+                                        $query->where('is_licence_active',true);
+                                    })
+                                    ->when(request('activeStatus') == 'Inactive', function ($query) {
+                                        $query->where('is_licence_active',false);
+                                    })
+                                    ->when(request('province'), function ($query) {
+                                        $query->whereIn('province',request('province'));
+                                    })
+                                    ->when(request('boardRegion'), function ($query) {
+                                        $query->whereIn('board_region',request('boardRegion'));
+                                    })
+                                    ->when(request('applicant'), function ($query) {
+                                        $query->where('belongs_to',request('applicant'));
+                                    });
+
+                                })
+                                ->when(request('alteration_stages'), function ($query) {
+                                    $query->whereIn('alterations.status',request('alteration_stages'));
+                              })
+                            ->get();
       
     $notesCollection = '';
 
     foreach ($alterations as $alteration) {
-        $notes = Task::where('model_id',$alteration->id)->where('model_type','Alteration')->get();
+        $notes = Task::where('model_id',$alteration->id)->where('model_type','Alteration')->get(['body']);
     
-        if(!is_null($notesCollection) || !empty($notesCollection)){
+        if(!is_null($notes) || !empty($notes)){
             foreach ($notes as $note) {
-                $notesCollection += ' '. $note;
+                $notesCollection .= ' '. $note->body;
             }
         }
         AlterationExport::create([
-            // 'trading_name' => $alteration->licence->trading_name,
-            // 'licence_number' => $alteration->licence->licence_number,
-            // 'province' => $alteration->date,
-            // 'date_logded' => $alteration,
-            // 'is_quote_sent' => (is_null($alteration->is_quote_sent)) ? 'False' : 'True',
-            // 'payment_date' => $alteration->client_paid_at,
-            // 'invoice_number' => null,
-            // 'payment_to_liquour_board' => $alteration->payment_to_liqour_board_at,
-            // 'renewal_granted' => $alteration->renewal_issued_at,
-            // 'delivery_date' => $alteration->renewal_delivery_at,
-            // 'proof_of_delivery' => null,
-            // 'notes' => $notesCollection
+            'user_id' => auth()->id(),
+            'trading_name' => $alteration->trading_name,
+            'licence_number' => $alteration->licence_number,
+            'province' => $alteration->province,
+            'date_logded' => $alteration->application_lodged_at,
+            'date_granted' => $alteration->licence_issued_at,
+            'notes' => $notesCollection
         ]);
     }
     
@@ -79,6 +77,6 @@ class AlterationExportController extends Controller
 }
 
 public function forceDownload(){
-   return Excel::download(new AlterationExports, 'alteration.xlsx');
+   return Excel::download(new AlterationExports, 'alterations.xlsx');
 }
 }
