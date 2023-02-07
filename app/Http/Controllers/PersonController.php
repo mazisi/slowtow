@@ -19,7 +19,7 @@ class PersonController extends Controller
                 return $query->where('full_name','LIKE','%'.request('term').'%')
                 ->orWhere('email_address_1','LIKE','%'.request('term').'%')
                 ->orWhere('email_address_2','LIKE','%'.request('term').'%')
-                ->whereNotNull('active');
+                ->where('active',true);
             
             })
 
@@ -28,7 +28,7 @@ class PersonController extends Controller
                     return $query->where('full_name','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_1','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_2','LIKE','%'.request('term').'%')
-                    ->whereNull('active');
+                    ->where('active',false);
                 
                 })
 
@@ -37,7 +37,7 @@ class PersonController extends Controller
                     return $query->where('full_name','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_1','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_2','LIKE','%'.request('term').'%')
-                    ->whereNotNull('active');
+                    ->where('active',true);
                 
                 })
 
@@ -49,12 +49,12 @@ class PersonController extends Controller
 
             ->when(request('active_status') ==='Inactive', 
                 function ($query){ 
-                    return $query->whereNull('active');                
+                    return $query->where('active',true);                
                 })
 
                 ->when(request('active_status') ==='Active', 
                 function ($query){ 
-                    return $query->whereNotNull('active');                
+                    return $query->where('active',true);                
                 })
             ->latest()->paginate(20)->withQueryString();
 
