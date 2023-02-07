@@ -29,6 +29,7 @@
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Applicant</label>
     <select v-model="form.belongs_to" class="form-control form-control-default" required>
+    <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>
     </select>
@@ -78,6 +79,7 @@
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Licence Type</label>
     <select v-model="form.licence_type" class="form-control form-control-default" required>
+      <option :value="''" disabled selected>Licence Type</option>
       <option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
    </select>
     </div>
@@ -87,6 +89,7 @@
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">Liquor Board Region</label>
       <select required class="form-control form-control-default" v-model="form.board_region" >
+        <option :value="''" disabled selected>Select Liquor Board Region</option>
       <option value="Eastern Cape">Eastern Cape</option>
       <option value="Free State">Free State</option>
       <option value="Gauteng Ekurhuleni">Gauteng Ekurhuleni</option>
@@ -138,6 +141,7 @@
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Province</label>
     <select required class="form-control form-control-default" v-model="form.province" >
+      <option :value="''" disabled selected>Selected Province</option>
     <option value="Eastern Cape">Eastern Cape</option>
     <option value="Free State">Free State</option>
     <option value="Gauteng">Gauteng</option>

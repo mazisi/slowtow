@@ -5,8 +5,6 @@ namespace App\Http\Controllers;
 use App\Exports\TemporalLicenceExports;
 use App\Models\Task;
 use App\Models\TemporalLicence;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\TemporalLicenceExport;
 use App\Models\TemporalLicenceDocument;
@@ -14,7 +12,7 @@ use App\Models\TemporalLicenceDocument;
 class TemporaLExportController extends Controller
 {
     public static function export($request){
-        $exists = TemporalLicenceExport::get();                
+        $exists = TemporalLicenceExport::where('user_id', auth()->id())->get();                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();
@@ -25,6 +23,15 @@ class TemporaLExportController extends Controller
             $query->when($request->month, function($query) use($request){
                 $query->whereMonth('start_date', $request->month);
             })
+            ->when(request('temp_licence_stages'), function ($query) {
+                $query->whereIn('status',request('temp_licence_stages'));
+            })
+            ->when(request('activeStatus') === 'Active', function ($query) {
+                $query->where('active',true);
+            })
+            ->when(request('activeStatus') === 'Inactive', function ($query) {
+                $query->where('active',false);
+             })
             ->when(!empty(request('selectedDates')), function ($query) use ($request) {
                 $query->whereIn('start_date',$request->selectedDates);
             })
@@ -32,14 +39,15 @@ class TemporaLExportController extends Controller
                 $query->where('belongs_to',$request->applicant);
             });
         })->get();
-    // $licences = TemporalLicence::get();
-    $notesCollection = null;
-    $status = '';
+
+            // $licences = TemporalLicence::get();
+            $notesCollection = '';
+            $status = '';
 
     foreach ($licences as $licence) {
-        $notes = Task::where('model_id',$licence->id)->where('model_type','Temporal Licence')->get();
+        $notes = Task::where('model_id',$licence->id)->where('model_type','Temporal Licence')->get(['body']);
    
-        if(!is_null($notesCollection) || !empty($notesCollection)){
+        if(!is_null($notes) || !empty($notes)){
             foreach ($notes as $note) {
                 $notesCollection .= ' || '. $note->body;
             }
@@ -92,14 +100,15 @@ class TemporaLExportController extends Controller
                         break;
                 }
                 //get invoice number
-    $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Client Invoiced')->first();
-    $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Licence Lodged')->first();
-
+    $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Client Invoiced')->first(['document_name']);
+    $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Licence Lodged')->first(['id']);
+     
         TemporalLicenceExport::create([
+            'user_id' => auth()->id(),
             'event_name' => $licence->event_name,
             'applicant' => $applicant,
-            'event_dates' => optional($licence->start_date)->format('d-m-Y'). ' - '.optional($licence->end_date)->format('d-m-Y'),
-            // 'province' => $licence->address,
+            'event_dates' => date('d-m-Y', strtotime($licence->start_date)). ' - '.date('d-m-Y', strtotime($licence->end_date)),
+            'region' => $licence->address,
             'invoice_number' => is_null($get_invoice_number) ? '' : $get_invoice_number->document_name,
             'payment_date' => $licence->client_paid_at,
             'licence_number' => $licence->liquor_licence_number,

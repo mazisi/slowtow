@@ -57,6 +57,7 @@
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Company Type </label>
 <select class="form-control form-control-default" v-model="form.company_type">
+<option :value="''" disabled>Select Type</option>
 <option value="Association">Association</option>
 <option value="Close Corporation -CC">Close Corporation&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;&#160;-CC</option>
 <option value="Individual">Individual</option>

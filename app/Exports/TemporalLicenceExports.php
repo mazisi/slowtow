@@ -1,12 +1,13 @@
 <?php
 namespace App\Exports;
 
-use App\Models\TemporalLicenceExport;
 use App\Models\TransferExport;
+use App\Models\TemporalLicenceExport;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class TemporalLicenceExports implements FromCollection, WithHeadings{
+class TemporalLicenceExports implements FromCollection, WithHeadings, ShouldAutoSize{
 
   public function headings():array{
     return[
@@ -14,6 +15,7 @@ class TemporalLicenceExports implements FromCollection, WithHeadings{
       'APPLICANT',
       'EVENT DATES',
       'INVOICE NUMBER',
+      'PROVINCE/REGION',
       'PAYMENT DATE',
       'LICENCE NUMBER',
       'DATE LODGED',
@@ -29,6 +31,7 @@ class TemporalLicenceExports implements FromCollection, WithHeadings{
           'applicant',
           'event_dates',
           'invoice_number',
+          'region',
           'payment_date',
           'licence_number',
           'date_lodged',

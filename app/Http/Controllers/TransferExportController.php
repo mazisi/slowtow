@@ -15,7 +15,7 @@ class TransferExportController extends Controller
 {
 public static function export($request){
     
-            $exists = TransferExport::get();
+            $exists = TransferExport::where('user_id',auth()->id())->get();
                           
                 if(!is_null($exists)){
                     foreach ($exists as $exist) {
@@ -64,7 +64,7 @@ public static function export($request){
                         $query->whereIn('licence_transfers.status', request('transfer_stages'));
                     })->get();
 
-                        
+                                            
             $status = '';
             $notesCollection = '';
 
@@ -115,13 +115,14 @@ public static function export($request){
                 }
                 
                 TransferExport::create([
+                    'user_id' => auth()->id(),
                     'trading_name' => $transfer->trading_name,
                     'gau_or_blg_number' => '',
                     'province' => $transfer->province,
                     'deposit_invoice' => '',
                     'deposit_paid' => '',
                     'date_logded' => $transfer->lodged_at,
-                    'proof_of_lodgement' => (is_null($transfer->lodged_at)) ? 'False' : 'True',
+                    'proof_of_lodgement' => (is_null($transfer->lodged_at)) ? 'FALSE' : 'TRUE',
                     'payment_date' => $transfer->payment_to_liquor_board_at,
                     'invoice_number' => '',
                     'date_granted' => $transfer->issued_at,

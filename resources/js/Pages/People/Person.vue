@@ -25,7 +25,7 @@
 <div class="col-2">
 <div class="input-group input-group-outline null is-filled">
 <select @change="search"  v-model="form.active_status" class="form-control form-control-default">
-  <option :value="``" disabled>Filter Options</option>
+  <option :value="``" disabled selected>Filter Options</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
 <option value="Inactive">Inactive</option>

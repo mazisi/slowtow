@@ -13,7 +13,7 @@ use App\Models\LicenceRenewalExports;
 class RenewalExportController extends Controller
 {
     public static function export($request){
-                $exists = LicenceRenewalExports::get();                
+                $exists = LicenceRenewalExports::where('user_id',auth()->id())->get();                
                 if(!is_null($exists)){
                     foreach ($exists as $exist) {
                         $exist->delete();
@@ -23,7 +23,7 @@ class RenewalExportController extends Controller
 
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
-                                 licence_renewals.client_paid_at, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
+                                 licence_renewals.client_paid_at,licence_renewals.status, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
                                  is_quote_sent")
 
                     ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')
@@ -42,7 +42,7 @@ class RenewalExportController extends Controller
                                 $query->where('belongs_to',request('applicant'));
                             })
                             ->when(request('licence_types'), function ($query)  {
-                                $query->where('licence_type_id',request('licence_types'));
+                                $query->whereIn('licence_type_id',request('licence_types'));
                             });
 
                         })->when(request('selectedDates'), function ($query) {
@@ -50,13 +50,12 @@ class RenewalExportController extends Controller
                         })
 
                         ->when(request('renewal_stages'), function ($query) {
-                            $query->whereIn('licence_renewals.stage',request('renewal_stages'));
+                            $query->whereIn('licence_renewals.status',request('renewal_stages'));
                         })
                     ->get();
         
             $notesCollection = ' ';
 
-            
 
             foreach ($renewals as $renewal) {
                 $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get(['body']);
@@ -71,13 +70,14 @@ class RenewalExportController extends Controller
                 }
                 
                 LicenceRenewalExports::create([
+                    'user_id' => auth()->id(),
                     'licence_renewal_id' => $renewal->id,
                     'is_active' => ($renewal->is_licence_active) ? 'A' : 'D',
                     'trading_name' => $renewal->trading_name,
                     'licence_number' => $renewal->licence_number,
                     'renewal_date' => $renewal->date,
                     'is_quoted' => (is_null($is_quoted)) ? 'FALSE' : 'TRUE',
-                    'is_quote_sent' => (is_null($renewal->is_quote_sent)) ? 'False' : 'True',
+                    'is_quote_sent' => (is_null($renewal->is_quote_sent)) ? 'FALSE' : 'TRUE',
                     'payment_date' => $renewal->client_paid_at,
                     'invoice_number' => null,
                     'payment_to_liquour_board' => $renewal->payment_to_liquor_board_at,

@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class AlterationExportController extends Controller
 {
     public static function export($request){
-        $exists = AlterationExport::get();                
+        $exists = AlterationExport::where('user_id',auth()->id())->get();                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();

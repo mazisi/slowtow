@@ -246,11 +246,11 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-  <h6 v-if="licence.people === null">Temporal Licence For: 
+  <h6 v-if="licence.people === null">Temporary Licence For: 
       <Link :href="`/view-company/${licence.company.slug}`" class="text-success">{{ licence.company.name }}
       </Link>
   </h6>
-    <h6 v-else>Temporal Licence For: <Link :href="`/view-person/${licence.people.slug}`" class="text-success">{{ licence.people.full_name }}</Link></h6>
+    <h6 v-else>Temporary Licence For: <Link :href="`/view-person/${licence.people.slug}`" class="text-success">{{ licence.people.full_name }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
       <span class="font-weight-bold ms-1" v-if="licence.status == '1'">Client Quoted</span>
      <span v-if="licence.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>

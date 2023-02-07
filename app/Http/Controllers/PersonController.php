@@ -65,11 +65,12 @@ class PersonController extends Controller
         return Inertia::render('People/CreatePerson');
     }
 
-    public function store(ValidatePeople $request){
-        $person_exist = People::where('id_or_passport',$request->id_or_passport)->first();
-        if($person_exist){
-            return back()->with('error','This person id or passport number already exist.');
-        }
+    public function store(Request $request){
+       
+        $request->validate([
+            'name' => 'required|string|max:200',
+            'id_or_passport' => 'required|unique:people,id_or_passport'
+        ]);
         $person = People::create([
         'full_name'=> $request->name.' '.$request->surname,
         'active'=> $request->active,
@@ -100,7 +101,7 @@ class PersonController extends Controller
         return Inertia::render('People/ViewPerson',[
             'person' => $person,
             'tasks' => $tasks,
-           'id_document' => $id_document,
+            'id_document' => $id_document,
             'police_clearance' => $police_clearance,
             'passport_doc' => $passport_doc,
             'work_permit_doc' => $work_permit_doc,
@@ -164,7 +165,6 @@ class PersonController extends Controller
     public function deleteDocument($slug){
         $model = PeopleDocument::whereSlug($slug)->first();
         if(!is_null($model->document)){
-            //unlink(public_path('storage/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

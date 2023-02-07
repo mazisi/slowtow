@@ -46,7 +46,7 @@ export default {
         },
 
         deleteTempLicence(){
-          if(confirm('Are you sure you want to delete this temporal licence??')){
+          if(confirm('Are you sure you want to delete this temporary licence??')){
             Inertia.delete(`/delete-temporal-licence/${this.licence.slug}`)
           }      
         }
@@ -85,7 +85,7 @@ export default {
        
         <div class="col-auto my-auto">
           <div class="h-100">
-            <h5 class="mb-1">View Temporal Licence</h5>
+            <h5 class="mb-1">View Temporary Licence</h5>
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">

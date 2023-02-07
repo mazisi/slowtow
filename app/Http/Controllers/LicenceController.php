@@ -20,9 +20,9 @@ class LicenceController extends Controller
                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
                        ->orWhere('trading_name','LIKE','%'.request('term').'%');
 
-        })->when(request('term') && request('active_status') == 'Active', 
+        })->when(request('term') && request('active_status') === 'Active', 
             function ($query){ 
-                return $query->whereNotNull('is_licence_active')
+                return $query->where('is_licence_active',true)
                 ->orWhere('licence_number','LIKE','%'.request('term').'%')
                 ->orWhere('old_licence_number','LIKE','%'.request('term').'%');
             
@@ -51,7 +51,7 @@ class LicenceController extends Controller
                 function ($query){ 
                     return $query->whereMonth('licence_date',request('licence_date'))
                     ->where('licence_type_id',request('licence_type'))
-                    ->whereNull('is_licence_active');                
+                    ->where('is_licence_active',false);                
                 })
 
             ->when(request('term') && request('active_status') =='Active' && request('licence_type'), 
@@ -126,7 +126,7 @@ class LicenceController extends Controller
             "licence_type" => "required",
             "company" => "required|exists:companies,id",
             "province" => "required",
-            "licence_number" => "required"
+            "licence_number" => "required|unique:licences,licence_number"
         ]);
         Licence::create([
             "trading_name" => $request->trading_name,

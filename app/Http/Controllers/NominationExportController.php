@@ -18,7 +18,7 @@ class NominationExportController extends Controller
     public static function export($request){
 
           try {
-            $exists = NominationExport::get();
+            $exists = NominationExport::where('user_id',auth()->id())->get();
                       
             if(!is_null($exists)){
                 foreach ($exists as $exist) {
@@ -48,6 +48,10 @@ class NominationExportController extends Controller
                                     ->when(request('province'), function ($query) {
                                         $query->whereIn('province',request('province'));
                                     })
+                                    ->when(request('licence_types'), function ($query)  {
+                                        $query->whereIn('licence_type_id',request('licence_types'));
+                                    })
+
                                     ->when(request('boardRegion'), function ($query) {
                                         $query->whereIn('board_region',request('boardRegion'));
                                     })
@@ -73,7 +77,7 @@ class NominationExportController extends Controller
        // $is_client_paid = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Payment To The Liquor Board')->first();
             if(!is_null($notes) || !empty($notes)){
                 foreach ($notes as $note) {
-                    $notesCollection .= '|| '. $note->body;
+                    $notesCollection .=  $note->body .' ->';
                 }
             }
             switch ($nom->status) {
@@ -113,6 +117,7 @@ class NominationExportController extends Controller
             }
 
             NominationExport::create([
+                'user_id' => auth()->id(),
                 'trading_name' => $nom->trading_name,
                 'client_name' =>  $nom->full_name,
                 'licence_number' => $nom->licence_number,
@@ -120,7 +125,7 @@ class NominationExportController extends Controller
                 'invoice_number' => null,
                 'payment_date' => $nom->payment_to_liquor_board_at,
                 'date_logded' => $nom->nomination_lodged_at,
-                'proof_of_lodgement' => (is_null($nom->nomination_lodged_at)) ? 'False' : 'True',
+                'proof_of_lodgement' => (is_null($nom->nomination_lodged_at)) ? 'FALSE' : 'TRUE',
                 'date_granted' => '',
                 'current_status' => $status,                
                 'notes' => $notesCollection

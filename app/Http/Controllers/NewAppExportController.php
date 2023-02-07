@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class NewAppExportController extends Controller
 {
     public static function export($request){
-        $exists = NewAppExport::get();                
+        $exists = NewAppExport::where('user_id',auth()->id())->get();                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();
@@ -119,6 +119,7 @@ class NewAppExportController extends Controller
                     break;
                 }
         NewAppExport::create([
+            'user_id' => auth()->id(),
             'trading_name' => $licence->trading_name,
             'licence_number' => $licence->licence_number,
             'licence_type' => $licence->licence_type->licence_type,

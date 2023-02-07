@@ -13,7 +13,7 @@ use App\Exports\ExistingLicenceExports;
 class ExistingLicenceExportController extends Controller
 {
     public static function export($request){
-        $exists = ExistingLicenceExport::get();                
+        $exists = ExistingLicenceExport::where('user_id',auth()->id())->get();                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();
@@ -122,6 +122,7 @@ class ExistingLicenceExportController extends Controller
                     break;
                 }
         ExistingLicenceExport::create([
+            'user_id' => auth()->id(),
             'trading_name' => $licence->trading_name,
             'licence_number' => $licence->licence_number,
             'licence_type' => $licence->licence_type->licence_type,

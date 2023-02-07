@@ -74,7 +74,7 @@ export default {
        
         <div class="col-auto my-auto">
           <div class="h-100">
-            <h5 class="mb-1">New Temporal Licence</h5>
+            <h5 class="mb-1">New Temporary Licence</h5>
           </div>
         </div>
         <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
