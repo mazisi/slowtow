@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Task;
 use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
+use Illuminate\Support\Carbon;
 use App\Models\RenewalDocument;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -13,13 +14,15 @@ use App\Models\LicenceRenewalExports;
 class RenewalExportController extends Controller
 {
     public static function export($request){
-                $exists = LicenceRenewalExports::where('user_id',auth()->id())->get();                
+                $exists = LicenceRenewalExports::where('user_id',auth()->id())->get(['id']);                
                 if(!is_null($exists)){
                     foreach ($exists as $exist) {
                         $exist->delete();
                     }  
                 }
                
+
+           
 
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
@@ -29,12 +32,18 @@ class RenewalExportController extends Controller
                     ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')
 
                         ->when(function($query){
-                            $query->when(request('month'), function($query){
-                                $query->whereMonth('licence_date', request('month'));
+                            $query->when(request('month_from') && request('month_to'), function($query){
+                                $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
                             })
+                  
+                            ->when(request('month_from') && !request('month_to'), function ($query)  {
+                                $query->whereMonth('licence_date', request('month_from'));
+                            })
+
                             ->when(request('province'), function ($query)  {
                                 $query->whereIn('province',request('province'));
                             })
+
                             ->when(request('boardRegion'), function ($query)  {
                                 $query->whereIn('board_region',request('boardRegion'));
                             })
@@ -45,14 +54,25 @@ class RenewalExportController extends Controller
                                 $query->whereIn('licence_type_id',request('licence_types'));
                             });
 
-                        })->when(request('selectedDates'), function ($query) {
-                              $query->whereIn('year',request('selectedDates'));
-                        })
+                            })->when(request('selectedDates'), function ($query) {
+                                $query->whereIn('year',request('selectedDates'));
+                            })
 
-                        ->when(request('renewal_stages'), function ($query) {
-                            $query->whereIn('licence_renewals.status',request('renewal_stages'));
-                        })
-                    ->get();
+                            ->when(request('renewal_stages'), function ($query) {
+                                $query->whereIn('licence_renewals.status',request('renewal_stages'));
+                            })
+                            ->get([
+                                'id',
+                                'is_licence_active',
+                                'trading_name',
+                                'licence_number',
+                                'date',
+                                'is_quote_sent',
+                                'client_paid_at',
+                                'payment_to_liquor_board_at',
+                                'renewal_issued_at',
+                                'renewal_delivered_at',
+                            ]);
         
             $notesCollection = ' ';
 
@@ -61,7 +81,7 @@ class RenewalExportController extends Controller
                 $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get(['body']);
 
             //check if client has been quoted
-                   $is_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
+                   $is_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first(['id']);
 
                 if(!is_null($notes) || !empty($notes)){
                     foreach ($notes as $note) {

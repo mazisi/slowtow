@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('province')->nullable();
             $table->date('date_logded')->nullable();
             $table->date('date_granted')->nullable();
+            $table->date('proof_lodgiment')->nullable();
+            $table->string('status')->nullable();
             $table->longText('notes')->nullable();
             $table->timestamps();
         });

@@ -222,7 +222,7 @@ export default {
 .columns{
   margin-bottom: 1rem;
 }
-#active-checkbox{
+.active-checkbox{
   margin-top: -10px;
   margin-left: 3px;
 }
@@ -276,9 +276,9 @@ export default {
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(1)"
+<input id="client-quoted" class="active-checkbox" @input="pushData(1)"
 :checked="view_transfer.status >= 1" type="checkbox" >
-<label class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
+<label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
 </div>
 <ul class="list-group">
@@ -308,9 +308,9 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(2)"
+<input id="client-invoiced" class="active-checkbox" @input="pushData(2)"
 :checked="view_transfer.status >= 2" type="checkbox" >
-<label class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
+<label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
 </div>
 </div> 
 
@@ -340,18 +340,18 @@ export default {
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(3)"
+<input id="client-paid" class="active-checkbox" @input="pushData(3)"
 :checked="view_transfer.status >= 3" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>  
 <hr>
 
 <div class="col-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(4)"
+<input id="prepare" class="active-checkbox" @input="pushData(4)"
 :checked="view_transfer.status >= 4" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
+<label for="prepare" class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
 </div>
 </div> 
  <div class="col-4 columns">
@@ -707,22 +707,46 @@ export default {
 
 
 
-<div class="col-md-6 columns">
+<div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(5)"
+<input id="liquor-b" class="active-checkbox" @input="pushData(5)"
 :checked="view_transfer.status >= 5" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
+<label for="liquor-b" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
 
-<div class="col-md-5 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.payment_to_liquor_board_at">
-     </div>
-   <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
-   </div>
+   <template v-if="form.issued_at == null">  
 
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.payment_to_liquor_board_at" >
+     </div>
+     <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="form.payment_to_liquor_board_at == null" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+  </template>
+  
+  <template v-else>
+    <div class="col-md-5 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="form.delivered_at" >
+     </div>
+     <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+    </div>
+   <div class="col-md-1"></div>
+    <div class="col-md-1 columns">
+     <button v-if="$page.props.auth.has_slowtow_admin_role" 
+     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+  </template>
 
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -751,9 +775,9 @@ export default {
 <hr>
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(6)"
+<input id="scanned-app" class="active-checkbox" @input="pushData(6)"
 :checked="view_transfer.status >= 6" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
+<label for="scanned-app" class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
 </div>
 </div>
 <ul class=" list-group">
@@ -782,9 +806,9 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(7)"
+<input id="app-logded" class="active-checkbox" @input="pushData(7)"
 :checked="view_transfer.status >= 6" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Application Logded</label>
+<label for="app-logded" class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>
 
@@ -812,7 +836,7 @@ export default {
      <div class="input-group input-group-outline null is-filled ">
      <label class="form-label">Date</label>
      <input type="date" class="form-control form-control-default" 
-       v-model="form.delivered_at" >
+       v-model="form.lodged_at" >
      </div>
      <div v-if="errors.lodged_at" class="text-danger">{{ errors.lodged_at }}</div>
     </div>
@@ -850,9 +874,9 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(8)"
+<input id="activation-fee" class="active-checkbox" @input="pushData(8)"
 :checked="view_transfer.status >= 7" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
+<label for="activation-fee" class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>
 
@@ -918,9 +942,9 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(9)"
+<input id="transfer-issued" class="active-checkbox" @input="pushData(9)"
 :checked="view_transfer.status >= 8" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
+<label for="transfer-issued" class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
 
@@ -985,9 +1009,9 @@ export default {
 
 <div class="col-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" @input="pushData(10)"
+<input id="transfer-delivered" class="active-checkbox" @input="pushData(10)"
 :checked="view_transfer.status >= 9" type="checkbox">
-<label class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
+<label for="transfer-delivered" class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 
 

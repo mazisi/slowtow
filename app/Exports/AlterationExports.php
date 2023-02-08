@@ -26,7 +26,9 @@ class AlterationExports implements FromCollection, WithHeadings, ShouldAutoSize{
         'licence_number',
         'province',
         'date_logded',
+        'proof_lodgiment',
         'date_granted',
+        'status',
         'notes'
         ]);
     }

@@ -15,7 +15,7 @@ class TransferExportController extends Controller
 {
 public static function export($request){
     
-            $exists = TransferExport::where('user_id',auth()->id())->get();
+            $exists = TransferExport::where('user_id',auth()->id())->get(['id']);
                           
                 if(!is_null($exists)){
                     foreach ($exists as $exist) {
@@ -31,8 +31,12 @@ public static function export($request){
                     ->join('licences', 'licences.id' , '=', 'licence_transfers.licence_id')
 
                     ->when(function($query){
-                        $query->when(request('month'), function($query){
-                            $query->whereMonth('licence_date', request('month'));
+                        $query->when(request('month_from') && request('month_to'), function($query){
+                            $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                        })
+              
+                        ->when(request('month_from') && !request('month_to'), function ($query)  {
+                            $query->whereMonth('licence_date', request('month_from'));
                         })
                         ->when(request('province'), function ($query)  {
                             $query->whereIn('licences.province',request('province'));
@@ -62,9 +66,17 @@ public static function export($request){
                     })
                     ->when(request('transfer_stages'), function ($query) {
                         $query->whereIn('licence_transfers.status', request('transfer_stages'));
-                    })->get();
+                    })->get([
+                        'trading_name',
+                        'province',
+                        'board_region',
+                        'lodged_at',
+                        'payment_to_liquor_board_at',
+                        'issued_at',
+                        'status'
+                    ]);
 
-                                            
+                             
             $status = '';
             $notesCollection = '';
 
@@ -118,7 +130,7 @@ public static function export($request){
                     'user_id' => auth()->id(),
                     'trading_name' => $transfer->trading_name,
                     'gau_or_blg_number' => '',
-                    'province' => $transfer->province,
+                    'province' => $transfer->province.'/'.$transfer->board_region,
                     'deposit_invoice' => '',
                     'deposit_paid' => '',
                     'date_logded' => $transfer->lodged_at,

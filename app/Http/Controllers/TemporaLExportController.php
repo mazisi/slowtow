@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\TemporalLicenceExports;
 use App\Models\Task;
 use App\Models\TemporalLicence;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\TemporalLicenceExport;
+use App\Exports\TemporalLicenceExports;
 use App\Models\TemporalLicenceDocument;
 
 class TemporaLExportController extends Controller
 {
     public static function export($request){
-        $exists = TemporalLicenceExport::where('user_id', auth()->id())->get();                
+        $exists = TemporalLicenceExport::where('user_id', auth()->id())->get(['id']);                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();
@@ -20,9 +21,13 @@ class TemporaLExportController extends Controller
         }
 
        $licences = TemporalLicence::where(function($query) use($request){
-            $query->when($request->month, function($query) use($request){
-                $query->whereMonth('start_date', $request->month);
-            })
+        $query->when(request('month_from') && request('month_to'), function($query){
+            $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+        })
+
+        ->when(request('month_from') && !request('month_to'), function ($query)  {
+            $query->whereMonth('licence_date', request('month_from'));
+        })
             ->when(request('temp_licence_stages'), function ($query) {
                 $query->whereIn('status',request('temp_licence_stages'));
             })
@@ -33,14 +38,23 @@ class TemporaLExportController extends Controller
                 $query->where('active',false);
              })
             ->when(!empty(request('selectedDates')), function ($query) use ($request) {
-                $query->whereIn('start_date',$request->selectedDates);
+                $query->whereIn(DB::raw('MONTH(start_date)'),$request->selectedDates);
             })
             ->when(!empty(request('applicant')), function ($query) use ($request) {
                 $query->where('belongs_to',$request->applicant);
             });
-        })->get();
+        })->get([
+            'id',
+            'event_name',
+            'belongs_to',
+            'address',
+            'client_paid_at',
+            'liquor_licence_number',
+            'logded_at',
+            'delivered_at',
+            'status',
+        ]);
 
-            // $licences = TemporalLicence::get();
             $notesCollection = '';
             $status = '';
 
@@ -49,7 +63,7 @@ class TemporaLExportController extends Controller
    
         if(!is_null($notes) || !empty($notes)){
             foreach ($notes as $note) {
-                $notesCollection .= ' || '. $note->body;
+                $notesCollection .= $note->body.' ';
             }
         }
             switch ($licence->status) {
@@ -126,6 +140,6 @@ class TemporaLExportController extends Controller
 }
 
 public function forceDownload(){
-    return Excel::download(new TemporalLicenceExports(), 'temporal-licences.xlsx');
+    return Excel::download(new TemporalLicenceExports(), 'temporary_licences.xlsx');
 }
 }

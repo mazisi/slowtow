@@ -49,39 +49,31 @@
 <!-- ################################################ -->
 
 <div class="row" v-if="form.variation">
-  <div class="col-4 columns">
-    <button type="button" class="btn btn-success w-45">Filter By:</button>
-  </div>
- 
-
   
-  <div class="col-8 columns">
-    <h5 class="text-center">{{ form.variation }}</h5>    
+
+  <h5 class="text-center">{{ form.variation }}</h5>   
+  <div class="col-6 columns">
+     
     <Multiselect
-            v-model="form.month"           
+            v-model="form.month_from"           
                :options="months"
                :taggable="true"
-               placeholder="Month"
+               placeholder="From"
              />
   </div>
 
-  
-  <div class="col-4 columns">
-    <div class="input-group input-group-outline null is-filled" >
-      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
-          <option :value="''" disabled selected>Active/Inactive</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-       </select>
-    </div>
+  <div class="col-6 columns">
+     
+    <Multiselect
+            v-model="form.month_to"           
+               :options="months"
+               :taggable="true"
+               :required="true"
+               placeholder="To"
+             />
   </div>
 
-
-
-
-
-
-  <div v-if="form.variation === 'Renewals'" class="col-8 columns" >
+  <div v-if="form.variation === 'Renewals'" class="col-6 columns" >
     <Multiselect
         v-model="form.renewal_stages"           
         :options="renewal_stages"
@@ -90,7 +82,7 @@
         placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Transfers'" class="col-8 columns" >
+  <div v-if="form.variation === 'Transfers'" class="col-6 columns" >
     <Multiselect
         v-model="form.transfer_stages"           
         :options="transfer_stages"
@@ -99,7 +91,7 @@
         placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Nominations'" class="col-8 columns" >
+  <div v-if="form.variation === 'Nominations'" class="col-6 columns" >
     <Multiselect
         v-model="form.nomination_stages"           
         :options="nomination_stages"
@@ -108,7 +100,7 @@
         placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Registrations'" class="col-8 columns" >
+  <div v-if="form.variation === 'Registrations'" class="col-6 columns" >
     <Multiselect
     v-model="form.new_app_stages"           
     :options="new_app_stages"
@@ -117,7 +109,7 @@
     placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Alterations'" class="col-8 columns" >
+  <div v-if="form.variation === 'Alterations'" class="col-6 columns" >
     <Multiselect
     v-model="form.alteration_stages"           
     :options="alteration_stages"
@@ -126,7 +118,7 @@
     placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Temporal Licence'" class="col-8 columns">
+  <div v-if="form.variation === 'Temporal Licence'" class="col-6 columns">
     <Multiselect
     v-model="form.temp_licence_stages"           
     :options="temp_licence_stages"
@@ -135,7 +127,7 @@
     placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Existing-Licences'" class="col-8 columns">
+  <div v-if="form.variation === 'Existing-Licences'" class="col-6 columns">
     <Multiselect
     v-model="form.new_app_stages"           
     :options="new_app_stages"
@@ -146,7 +138,7 @@
 
 
   
-  <div :class="{ 'col-4': form.variation === 'Renewals' 
+  <!-- <div :class="{ 'col-4': form.variation === 'Renewals' 
   || form.variation === 'Transfers' 
   || form.variation === 'Nominations'
   || form.variation === 'Nominations'
@@ -155,10 +147,10 @@
   || form.variation === 'Temporal Licence'
   || form.variation === 'Existing-Licences'
    }">
-  </div>
+  </div> -->
   
  
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-8 columns" >
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-6 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
           v-model="form.province"          
@@ -174,12 +166,12 @@
 
 
 
-    <div v-if="form.variation !== 'Temporal Licence'" class="col-4">
+    <!-- <div v-if="form.variation !== 'Temporal Licence'" class="col-4">
       <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
       {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
-    </div>
+    </div> -->
 
-      <div class="col-8 columns" >
+      <div class="col-6 columns" >
         <Multiselect
          v-model="form.year" 
          :options="years"
@@ -188,8 +180,8 @@
         />
       </div>
   
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-4"></div>
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-8">
+  
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-6">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
@@ -201,8 +193,8 @@
       </div>
   </div>
 
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-4"></div>
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-8  mt-3">
+  
+  <div v-if="form.variation !== 'Temporal Licence'" class="col-6 ">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.licence_types"           
@@ -214,9 +206,8 @@
       </div>
   </div>
 
-  <div class="col-4"></div>
-  <div class="col-8 mt-3">
-    <div class="input-group input-group-outline null is-filled">
+  <div class="col-6 ">
+    <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Applicant</option>
       <option value="Company">Company</option>
@@ -252,7 +243,6 @@
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Scanned Application</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Application Lodged</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Initial Inspection</th>
-            <!-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Liquor Board Requests</th> -->
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Final Inspection</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Client Paid</th>
             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Activation Fee Paid</th>
@@ -322,11 +312,7 @@
               {{ new_application.initial_inspection_at }}
              </td>
     
-             <!-- <td class="text-center">
-
-              <p v-for="liquor_board_request in new_application.liquor_board_requests ">{{ liquor_board_request.body }}</p>
-             </td> -->
-    
+             
              <td class="text-center">
               <span v-if="new_application.status >= 10">{{ new_application.final_inspection_at }}</span>
              </td>
@@ -463,7 +449,8 @@ const new_app_stages = {
     const form = useForm({
       variation: null,
       activeStatus: '',
-      month: '',
+      month_from: '',
+      month_to: '',
       year: '',
       applicant: '',
       person: [],
@@ -591,6 +578,7 @@ const new_app_stages = {
           return string.substring(0, limit)
         }
         }
+      
 
 return{
   limit,

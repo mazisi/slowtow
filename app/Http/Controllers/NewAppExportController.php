@@ -13,7 +13,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class NewAppExportController extends Controller
 {
     public static function export($request){
-        $exists = NewAppExport::where('user_id',auth()->id())->get();                
+        $exists = NewAppExport::where('user_id',auth()->id())->get(['id']);                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();
@@ -21,15 +21,20 @@ class NewAppExportController extends Controller
         }
 
         $licences = Licence::where(function($query) use($request){
-            $query->when($request->month, function($query) use($request){
-                $query->whereMonth('licence_date', $request->month);
-            })
-            ->when(request('activeStatus') === 'Active', function ($query) {
+            $query->when(request('activeStatus') === 'Active', function ($query) {
                         $query->where('is_licence_active',true);
                     })
                     ->when(request('activeStatus') === 'Inactive', function ($query) {
                         $query->where('is_licence_active',false);
+                    })
+
+             ->when(request('month_from') && request('month_to'), function($query){
+                $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
              })
+
+            ->when(request('month_from') && !request('month_to'), function ($query)  {
+                $query->whereMonth('licence_date', request('month_from'));
+            })
             ->when(!empty(request('province')), function ($query) use ($request) {
                 $query->whereIn('province',$request->province);
             })
@@ -48,7 +53,8 @@ class NewAppExportController extends Controller
             ->when(!empty(request('selectedDates')), function ($query) use ($request) {
                //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
             });
-        })->where('is_new_app',true)->get();
+        })->where('is_new_app',true)->get(['id','trading_name','licence_number','licence_type_id','province','deposit_paid_at',
+        'application_lodged_at','activation_fee_paid_at','client_paid_at','status','is_new_app']);
 
         
 
@@ -61,7 +67,7 @@ class NewAppExportController extends Controller
     $is_client_logded = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Application Lodged')->first(['document_name']);
         if(!is_null($notes) || !empty($notes)){
             foreach ($notes as $note) {
-                $notesCollection += ' || '. $note->body;
+                $notesCollection +=$note->body .' || ';
             }
         }
           
@@ -144,6 +150,6 @@ class NewAppExportController extends Controller
 }
 
 public function forceDownload(){
-    return Excel::download(new NewAppsExport(), 'registration.xlsx');
+    return Excel::download(new NewAppsExport(), 'registrations.xlsx');
 }
 }

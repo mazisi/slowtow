@@ -34,7 +34,6 @@ class ReportController extends Controller
         $licenceTypes = LicenceType::pluck('licence_type', 'id');
         $companies = Company::pluck('name','id');        
         $people = People::pluck('full_name','id');
-        // $new_applications = Licence::with('licence_type')->where('is_new_app','1')->get();
         $sortedStatus = Arr::sort($request->new_app_stages);
 
         $new_applications = Licence::with('licence_type')->where(function($query) use($request,$sortedStatus){
@@ -68,7 +67,7 @@ class ReportController extends Controller
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,
              'people' => $people,
-            'new_applications' => $new_applications,
+              'new_applications' => $new_applications,
              'years' => $years
         ]);
     }

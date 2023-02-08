@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\Licence;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\ExistingLicenceExport;
 use App\Exports\ExistingLicenceExports;
@@ -13,7 +14,7 @@ use App\Exports\ExistingLicenceExports;
 class ExistingLicenceExportController extends Controller
 {
     public static function export($request){
-        $exists = ExistingLicenceExport::where('user_id',auth()->id())->get();                
+        $exists = ExistingLicenceExport::where('user_id',auth()->id())->get(['id']);                
         if(!is_null($exists)){
             foreach ($exists as $exist) {
                 $exist->delete();
@@ -21,9 +22,14 @@ class ExistingLicenceExportController extends Controller
         }
 
         $licences = Licence::where(function($query) use($request){
-            $query->when($request->month, function($query) use($request){
-                $query->whereMonth('licence_date', $request->month);
+            $query->when(request('month_from') && request('month_to'), function($query){
+                $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
             })
+
+            ->when(request('month_from') && !request('month_to'), function ($query)  {
+                $query->whereMonth('licence_date', request('month_from'));
+            })
+            
             ->when(request('activeStatus') === 'Active', function ($query) {
                         $query->where('is_licence_active',true);
                     })
