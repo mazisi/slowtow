@@ -15,6 +15,11 @@ class RenewalExport implements FromCollection, WithHeadings, ShouldAutoSize{
 
   use Exportable;
   
+  // public function __construct(LicenceRenewal $renewal)
+  //   {
+  //       dd($this->renewal = $renewal);
+  //   }
+
   public function headings():array{
 
     return[

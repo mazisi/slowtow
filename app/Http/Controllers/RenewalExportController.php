@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use Illuminate\Support\Str;
 use App\Exports\RenewalExport;
 use App\Models\LicenceRenewal;
 use Illuminate\Support\Carbon;
@@ -14,7 +15,7 @@ use App\Models\LicenceRenewalExports;
 class RenewalExportController extends Controller
 {
     public static function export($request){
-                $exists = LicenceRenewalExports::where('user_id',auth()->id())->get(['id']);                
+                $exists = LicenceRenewalExports::where('user_id',auth()->id())->get(['id']); 
                 if(!is_null($exists)){
                     foreach ($exists as $exist) {
                         $exist->delete();
@@ -93,7 +94,7 @@ class RenewalExportController extends Controller
                     'user_id' => auth()->id(),
                     'licence_renewal_id' => $renewal->id,
                     'is_active' => ($renewal->is_licence_active) ? 'A' : 'D',
-                    'trading_name' => $renewal->trading_name,
+                    'trading_name' => Str::replace("'", "`", $renewal->trading_name),
                     'licence_number' => $renewal->licence_number,
                     'renewal_date' => $renewal->date,
                     'is_quoted' => (is_null($is_quoted)) ? 'FALSE' : 'TRUE',
@@ -108,7 +109,7 @@ class RenewalExportController extends Controller
                 ]);
             }
             
-           
+           // return Excel::download(new RenewalExport(), 'renewals.xlsx');
            
     }
 

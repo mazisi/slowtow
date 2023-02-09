@@ -24,7 +24,7 @@
 <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
 
 <li><hr class="text-danger"></li>
-<li><button v-if="$page.props.auth.has_slowtow_admin_role" 
+<li v-if="$page.props.auth.has_slowtow_admin_role" ><button 
   @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
 <i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</button></li>
 </ul>
