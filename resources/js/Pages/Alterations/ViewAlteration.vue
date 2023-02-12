@@ -15,6 +15,7 @@ export default {
     success: String,
     error: String,
     tasks: Object,
+    client_quoted: Object,
     client_invoiced: Object,  //doc
     alteration_letter: Object,   //doc
     site_map_file: Object   //doc
@@ -31,7 +32,7 @@ export default {
          alteration_date: props.alteration.date,
          licence_slug: props.alteration.licence.slug,
          slug: props.alteration.slug,
-         description: props.alteration.description,
+         client_paid_at: props.alteration.client_paid_at,
          status: [],
          invoiced_at: props.alteration.invoiced_at      
       })
@@ -129,10 +130,14 @@ export default {
   },
 };
 //Status keys:
-//1 => Client Invoiced
-//2 => Client Paid
-//3 => Alteration Details Captured
-//4 => Alteration Complete
+// 1. Client Quoted
+//2 => Client Invoiced
+//3 => Client Paid
+//4 => Prepare Alterations Application
+//5 => Payment to the Liquor Board
+//6 => Alterations Lodged
+//7 => Alterations Certificate Issued
+//8 => Alterations Delivered
 </script>
 <style>
 .columns{
@@ -169,13 +174,46 @@ export default {
               <div class="p-3 card-body">
   <form @submit.prevent="update">
 <div class="row">
+
+
+  <div class="col-12 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <input id="client-invoiced" class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= '1'">
+    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
+    </div>
+  </div>  
+   
+    
+    <div class="col-9 columns">
+    <ul class="list-group">
+      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+        <div class="avatar me-3" v-if="client_quoted !== null">
+        <a :href="`${$page.props.blob_file_path}${client_quoted.path}`" target="_blank">
+        <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+        </a>
+        </div>
+        <div class="d-flex align-items-start flex-column justify-content-center">
+          <h6 class="mb-0 text-sm">Document</h6>
+           <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ getDocumentType('Client Quoted') }}</p>
+          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+        </div>
+        <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+        </a>
+        <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+      </li> 
+    </ul>
+    </div>
+<hr/>
+
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-invoiced" class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= '1'">
+<input id="client-invoiced" class="active-checkbox" @input="pushData(2)" type="checkbox" value="1" :checked="alteration.status >= 2">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>  
-<hr/>
+
 
 <div class="col-9 columns">
 <ul class="list-group">
@@ -186,7 +224,7 @@ export default {
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Scanned Invoice</h6>
+      <h6 class="mb-0 text-sm">Document</h6>
        <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ getDocumentType(client_invoiced.path) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
@@ -198,30 +236,37 @@ export default {
   </li> 
 </ul>
 </div>
-<div class="col-3 columns">
-  <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Invoice Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.invoiced_at">
-    </div>
-     <div v-if="errors.invoiced_at" class="text-danger">{{ errors.invoiced_at }}</div>
-</div>
-<hr>
-<div class="col-md-12 columns">
+
+<hr/>
+
+<div class="col-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="client-paid" @input="pushData(2)" type="checkbox" value="2" :checked="alteration.status >= '2'">
+<input class="active-checkbox" id="client-paid" @input="pushData(3)" type="checkbox" value="2" :checked="alteration.status >= 3">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
+
+ <div class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+    </div>
+     <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+</div>
+<div class="col-1"></div>
+<div class="col-2 float-end">
+  <button class="btn btn-sm btn-secondary">Save</button>
+</div>
 <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-details" @input="pushData(3)" type="checkbox" value="3" :checked="alteration.status >= '3'">
-<label class="form-check-label text-body text-truncate status-heading" for="alteration-details">Alteration Details Captured</label>
+<input class="active-checkbox" id="alteration-details" @input="pushData(4)" type="checkbox" value="3" :checked="alteration.status >= 4">
+<label class="form-check-label text-body text-truncate status-heading" for="alteration-details">Prepare Alterations Application</label>
 </div>
 </div> 
 <hr>
-
+<!-- 
   <div class="col-3 columns">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Alteration Date *</label>
@@ -236,7 +281,7 @@ export default {
 <input type="text" class="form-control form-control-default" v-model="form.description" >
 </div>
 <div v-if="errors.description" class="text-danger">{{ errors.description }}</div>
-</div>
+</div> -->
 
 
 <div class="col-12 columns">

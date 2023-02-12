@@ -24,11 +24,12 @@ class TransferLicenceController extends Controller
                                                 ]);
     }
 
-    public function store(Request $request,$slug){
+    public function store(Request $request,$slug){dd($request);
        $request->validate([
            "new_company" => "required|exists:companies,id",
            "old_company_id" => "required|exists:companies,id"
        ]);
+       
 
       $sorted_statuses = Arr::sort($request->status);
       $transfer = LicenceTransfer::create([

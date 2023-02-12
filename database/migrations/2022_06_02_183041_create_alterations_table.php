@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('alterations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
-            $table->date('date');
+            $table->date('date')->nullable();
             $table->string('status')->nullable();
             $table->text('description')->nullable();
             $table->string('slug');

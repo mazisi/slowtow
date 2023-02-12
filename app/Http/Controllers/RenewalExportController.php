@@ -11,19 +11,15 @@ use App\Models\RenewalDocument;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Models\LicenceRenewalExports;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 
 class RenewalExportController extends Controller
 {
-    public static function export($request){
-                $exists = LicenceRenewalExports::where('user_id',auth()->id())->get(['id']); 
-                if(!is_null($exists)){
-                    foreach ($exists as $exist) {
-                        $exist->delete();
-                    }  
-                }
-               
 
-           
+    public $arrayData = array();
+    public static function export($request){
 
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
@@ -74,48 +70,51 @@ class RenewalExportController extends Controller
                                 'renewal_issued_at',
                                 'renewal_delivered_at',
                             ]);
+
         
             $notesCollection = ' ';
-
-
-            foreach ($renewals as $renewal) {
-                $notes = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get(['body']);
-
-            //check if client has been quoted
-                   $is_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first(['id']);
-
-                if(!is_null($notes) || !empty($notes)){
-                    foreach ($notes as $note) {
-                        $notesCollection .=  $note->body. ' ';
-                    }
-                }
-                
-                LicenceRenewalExports::create([
-                    'user_id' => auth()->id(),
-                    'licence_renewal_id' => $renewal->id,
-                    'is_active' => ($renewal->is_licence_active) ? 'A' : 'D',
-                    'trading_name' => Str::replace("'", "`", $renewal->trading_name),
-                    'licence_number' => $renewal->licence_number,
-                    'renewal_date' => $renewal->date,
-                    'is_quoted' => (is_null($is_quoted)) ? 'FALSE' : 'TRUE',
-                    'is_quote_sent' => (is_null($renewal->is_quote_sent)) ? 'FALSE' : 'TRUE',
-                    'payment_date' => $renewal->client_paid_at,
-                    'invoice_number' => null,
-                    'payment_to_liquour_board' => $renewal->payment_to_liquor_board_at,
-                    'renewal_granted' => $renewal->renewal_issued_at,
-                    'delivery_date' => $renewal->renewal_delivered_at,
-                    'proof_of_delivery' => null,
-                    'notes' => $notesCollection
-                ]);
-            }
             
-           // return Excel::download(new RenewalExport(), 'renewals.xlsx');
+            $arr_of_renewals = $renewals->toArray();
+
+            for($i = 0; $i < count($arr_of_renewals); $i++ ){
+
+                $notes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body']);
+
+                //check if client has been quoted
+                       $is_quoted = RenewalDocument::where('licence_renewal_id',$arr_of_renewals[$i]->id)->where('doc_type','Client Quoted')->first(['id']);
+    
+                    if(!is_null($notes) || !empty($notes)){
+                        foreach ($notes as $note) {
+                            $notesCollection .=  $note->body. ' ';
+                        }
+                    }
+
+            $data = [ 
+                       $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
+                       $arr_of_renewals[$i]->trading_name, 
+                       $arr_of_renewals[$i]->licence_number,
+                       $arr_of_renewals[$i]->date,
+                       is_null($is_quoted) ? 'FALSE' : 'TRUE',
+                       is_null($arr_of_renewals[$i]->is_quote_sent) ? 'FALSE' : 'TRUE',
+                       $arr_of_renewals[$i]->client_paid_at,
+                       NULL,
+                       $arr_of_renewals[$i]->payment_to_liquor_board_at,
+                       $arr_of_renewals[$i]->renewal_issued_at,
+                       $arr_of_renewals[$i]->renewal_delivered_at,
+                       NULL,
+                       $notesCollection
+                    ];
+
+            //$this->arrayData[] = $data;
+
+                }
+    
            
     }
 
     public function forceDownload()
     {
-        return Excel::download(new RenewalExport, 'renewals.xlsx');
+        return Excel::download(new RenewalExport(['name','eamail']), 'renewals.xlsx');
     }
 
 }

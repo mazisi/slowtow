@@ -18,10 +18,7 @@ export default {
     
      let options = props.nominees;
      const form = useForm({
-         alteration_date: '',
          licence_id: props.licence.id,
-         licence_slug: props.licence.slug,
-         description: '',
          status: [],
         })
 
@@ -48,10 +45,16 @@ export default {
   },
 };
 //Status keys:
-//1 => Client Invoiced
-//2 => Client Paid
-//3 => Alteration Details Captured
-//4 => Alteration Complete
+// 1. Client Quoted
+//2 => Client Invoiced
+//3 => Client Paid
+//4 => Prepare Alterations Application
+//5 => Payment to the Liquor Board
+//6 => Alterations Lodged
+//7 => Alterations Certificate Issued
+//8 => Alterations Delivered
+
+
 </script>
 <style>
 .columns{
@@ -86,15 +89,15 @@ export default {
 <input type="hidden" v-model="form.slug">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
-<label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
+<input id="client-Quoted" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
+<label for="client-Quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div>  
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
-<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+<input id="client-Invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
+<label for="client-Invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
 <hr/>
@@ -102,12 +105,12 @@ export default {
 
 <div class="col-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="alteration-details" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
-<label for="alteration-details" class="form-check-label text-body text-truncate status-heading">Alteration Details Captured</label>
+<input id="alteration-Paid" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
+<label for="alteration-Paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>
 
-
+<!-- 
 
 <div class="col-3 columns">
     <div class="input-group input-group-outline null is-filled">
@@ -123,7 +126,7 @@ export default {
 <input type="text" class="form-control form-control-default" v-model="form.description" >
 </div>
 <div v-if="errors.description" class="text-danger">{{ errors.description }}</div>
-</div>
+</div> -->
 
 
 <hr>
@@ -131,11 +134,42 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="alteration-complete" class="active-checkbox" v-model="form.status" type="checkbox" value="4">
-<label for="alteration-complete" class="form-check-label text-body text-truncate status-heading"> Alteration Complete</label>
+<input id="alteration-Application" class="active-checkbox" v-model="form.status" type="checkbox" value="4">
+<label for="alteration-Application" class="form-check-label text-body text-truncate status-heading">Prepare Alterations Application</label>
 </div>
 </div> 
 
+<hr/>
+<div class="col-md-12 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+  <input id="alteration-Liquor" class="active-checkbox" v-model="form.status" type="checkbox" value="5">
+  <label for="alteration-Liquor" class="form-check-label text-body text-truncate status-heading">Payment to the Liquor Board</label>
+  </div>
+  </div> 
+
+  <hr/>
+  <div class="col-md-12 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <input id="alteration-Lodged" class="active-checkbox" v-model="form.status" type="checkbox" value="6">
+    <label for="alteration-Lodged" class="form-check-label text-body text-truncate status-heading">Alterations Lodged</label>
+    </div>
+ </div> 
+ <hr/>
+    <div class="col-md-12 columns">
+      <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+      <input id="alteration-Certificate" class="active-checkbox" v-model="form.status" type="checkbox" value="7">
+      <label for="alteration-Certificate" class="form-check-label text-body text-truncate status-heading">Alterations Certificate Issued</label>
+      </div>
+    </div> 
+
+<hr/>
+  <div class="col-md-12 columns">
+    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+    <input id="alteration-Delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="8">
+    <label for="alteration-Delivered" class="form-check-label text-body text-truncate status-heading">Alterations Delivered</label>
+    </div>
+  </div> 
+  <hr/>
 <div>
   <button :disabled="form.processing" type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">
     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

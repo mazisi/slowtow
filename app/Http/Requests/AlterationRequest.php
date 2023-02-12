@@ -24,7 +24,7 @@ class AlterationRequest extends FormRequest
     public function rules()
     {
         return [
-            'alteration_date' => 'required|date'
+            'status.*' => 'required'
         ];
     }
 }

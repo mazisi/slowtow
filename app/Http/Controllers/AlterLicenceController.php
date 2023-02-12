@@ -20,16 +20,14 @@ class AlterLicenceController extends Controller
   }
 
     public function newAlteration(Request $request){
-        $licence = Licence::with('alterations')->whereSlug($request->slug)->first();
+        $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name']);
         return Inertia::render('Alterations/AlterLicence',['licence'=> $licence]);
     }
 
     public function store(AlterationRequest $request,$licence_id){
           $alter = Alteration::create([
             'licence_id' => $licence_id,
-            'date' => $request->alteration_date,
             'status'  => last($request->status),
-            'description' => $request->description,
             'slug' => sha1(time()),
           ]);
           if($alter){
@@ -41,6 +39,7 @@ class AlterLicenceController extends Controller
 
     public function show($slug){
       $alteration = Alteration::with('licence')->whereSlug($slug)->first();
+      $client_quoted = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Quoted')->first();
       $client_invoiced = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
       $alteration_letter = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alteration Letter')->first();
       $site_map_file = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','SiteMap File')->first();
@@ -48,6 +47,7 @@ class AlterLicenceController extends Controller
       
       return Inertia::render('Alterations/ViewAlteration',[
         'alteration' => $alteration,
+        'client_quoted' => $client_quoted,
         'client_invoiced' => $client_invoiced,
         'alteration_letter' => $alteration_letter,
         'site_map_file' => $site_map_file,
