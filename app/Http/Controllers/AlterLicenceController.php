@@ -44,22 +44,39 @@ class AlterLicenceController extends Controller
       $alteration_letter = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alteration Letter')->first();
       $site_map_file = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','SiteMap File')->first();
       $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->whereUserId(auth()->id())->get();
-      
+      $application_form = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Application Form')->first(['id','path']);
+      $dimensional_plans = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Fully Dimensional Plans')->first(['id','path','document_name']);
+      $poa_res = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','POA & RES')->first(['id','path','document_name']);
+      $smoking_affidavict = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Smoking Affidavit')->first(['id','path','document_name']);
+      $payment_to_liquor_board = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Payment To The Liquor Board')->first(['id','path','document_name']);
+      $liqour_board = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Payment to the Liquor Board-2')->first(['id','path','document_name']);
+      $alteration_logded = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Lodged')->first(['id','path','document_name']);
+      $certification_issued = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Certificate Issued')->first(['id','path','document_name']);
+      $alteration_delivered = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Delivered')->first(['id','path','document_name']);
       return Inertia::render('Alterations/ViewAlteration',[
         'alteration' => $alteration,
         'client_quoted' => $client_quoted,
         'client_invoiced' => $client_invoiced,
         'alteration_letter' => $alteration_letter,
         'site_map_file' => $site_map_file,
+        'application_form' => $application_form,
+        'dimensional_plans' => $dimensional_plans,
+        'poa_res' => $poa_res,
+        'smoking_affidavict'  => $smoking_affidavict,
+        'payment_to_liquor_board' => $payment_to_liquor_board,
+        'liqour_board'  => $liqour_board,
+        'alteration_logded' => $alteration_logded,
+        'certification_issued'  => $certification_issued,
+        'alteration_delivered' => $alteration_delivered,
         'tasks' => $tasks
       ]);
     }
 
 
     public function update(Request $request){
-      $request->validate([
-        'alteration_date' => 'required|date'
-      ]);
+      // $request->validate([
+      //   'alteration_date' => 'required|date'
+      // ]);
       $status = null;
       $alter = Alteration::whereSlug($request->slug)->first();
       if(!is_null($alter->status) && empty($request->status)){
@@ -72,8 +89,12 @@ class AlterLicenceController extends Controller
        $alter = Alteration::whereSlug($request->slug)->update([
         'status' => $status,
         'date' => $request->alteration_date,
-        'description' => $request->description,
-        'invoiced_at' => $request->invoiced_at
+        'invoiced_at' => $request->invoiced_at,
+        'client_paid_at' => $request->client_paid_at,
+         'liquor_board_at' => $request->liquor_board_at, 
+         'logded_at' => $request->logded_at,
+         'certification_issued_at' => $request->certification_issued_at,
+         'delivered_at' => $request->delivered_at    
        ]);
        if($alter){
         return back()->with('success','Alteration updated succesfully.');

@@ -24,7 +24,7 @@ class TransferLicenceController extends Controller
                                                 ]);
     }
 
-    public function store(Request $request,$slug){dd($request);
+    public function store(Request $request,$slug){
        $request->validate([
            "new_company" => "required|exists:companies,id",
            "old_company_id" => "required|exists:companies,id"

@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alteration;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\AlterationDocument;
+use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+use ZipStream\File;
 
 class AlterationDocumentController extends Controller
 {
@@ -15,10 +18,12 @@ class AlterationDocumentController extends Controller
             ]);
 
             $fileModel = new AlterationDocument();
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),3).str_replace(' ', '_',$request->document->getClientOriginalName());
             $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->alteration_id = $request->alteration_id;
             $fileModel->doc_type = $request->doc_type;
+            $fileModel->num = $request->doc_number;
+            $fileModel->document_name = $request->file_name;
             $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->save();
        
@@ -35,4 +40,31 @@ class AlterationDocumentController extends Controller
             return back()->with('error','Error deleting document.');
         }
     }
+
+
+    public function merge(Request $request){
+
+        $exist =  Alteration::whereId($request->alteration_id)->whereNotNull('merged_document')->first(); 
+        $merger = PDFMerger::init();           
+          if (! is_null($exist)) {
+            unlink(storage_path('app/public/').$exist->merged_document);
+            $exist->update(['merged_document' => null]);
+          }
+                
+         $alterations =  AlterationDocument::where('alteration_id',$request->alteration_id)->whereNotNull('num')->orderBy('num','ASC')->get();
+         $model =  Alteration::whereId($request->alteration_id)->first();
+          foreach ($alterations as $alteration) {
+            $merger->addPDF(env('BLOB_FILE_PATH').$alteration->path, 'all');
+          }
+          $fileName = 'merged_alteration_'.time().'.pdf';
+          $merger->merge();
+
+          $model->update(['merged_document' => $fileName]);
+
+          $merger->save(storage_path('/app/public/'.$fileName));
+          return back()->with('success','Document merged successfully.');
+          
+
+    }
+
 }

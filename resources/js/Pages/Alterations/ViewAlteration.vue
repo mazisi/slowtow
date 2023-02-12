@@ -17,8 +17,16 @@ export default {
     tasks: Object,
     client_quoted: Object,
     client_invoiced: Object,  //doc
-    alteration_letter: Object,   //doc
-    site_map_file: Object   //doc
+    liqour_board: Object,   // secod doc
+    site_map_file: Object,   //doc
+    application_form: Object,
+    dimensional_plans: Object,
+    poa_res: Object,
+    smoking_affidavict: Object,
+    payment_to_liquor_board: Object,
+    alteration_logded: Object,
+    certification_issued: Object,
+    alteration_delivered: Object
 
 
   },
@@ -34,12 +42,17 @@ export default {
          slug: props.alteration.slug,
          client_paid_at: props.alteration.client_paid_at,
          status: [],
-         invoiced_at: props.alteration.invoiced_at      
+         invoiced_at: props.alteration.invoiced_at,
+         liquor_board_at: props.alteration.liquor_board_at, 
+         logded_at: props.alteration.logded_at,
+         certification_issued_at: props.alteration.certification_issued_at,
+         delivered_at: props.alteration.delivered_at     
       })
 
       const uploadDoc = useForm({
             document: null,
             doc_type: null,
+            doc_number: null,
             file_name: file_name,
             alteration_id: props.alteration.id    
           })
@@ -87,8 +100,9 @@ export default {
           }
         }
 
-      function getDocType(doc_type) {
-        uploadDoc.doc_type = doc_type
+      function getDocType(doc_type, doc_number='') {
+        uploadDoc.doc_type = doc_type;
+        uploadDoc.doc_number = doc_number;
         this.show_modal = true
       }
 
@@ -104,9 +118,15 @@ export default {
       }
     }
 
+    function mergeDocuments(){
+      Inertia.post(`/merge-alteration-documents/${props.alteration.id}`, {
+              //
+      })
+    }
+
     return {
       form,showMenu,show_modal,
-      update,update,
+      update,update,mergeDocuments,
       pushData,file_name,
       show_file_name,
       getFileName,
@@ -178,8 +198,8 @@ export default {
 
   <div class="col-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input id="client-invoiced" class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= '1'">
-    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
+    <input id="client-quoted" class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= 1">
+    <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
     </div>
   </div>  
    
@@ -209,7 +229,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-invoiced" class="active-checkbox" @input="pushData(2)" type="checkbox" value="1" :checked="alteration.status >= 2">
+<input id="client-invoiced" class="active-checkbox" @input="pushData(2)" type="checkbox" value="2" :checked="alteration.status >= 2">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>  
@@ -241,7 +261,7 @@ export default {
 
 <div class="col-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="client-paid" @input="pushData(3)" type="checkbox" value="2" :checked="alteration.status >= 3">
+<input class="active-checkbox" id="client-paid" @input="pushData(3)" type="checkbox" value="3" :checked="alteration.status >= 3">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -261,10 +281,141 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-details" @input="pushData(4)" type="checkbox" value="3" :checked="alteration.status >= 4">
+<input class="active-checkbox" id="alteration-details" @input="pushData(4)" type="checkbox" value="4" :checked="alteration.status >= 4">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-details">Prepare Alterations Application</label>
 </div>
 </div> 
+
+
+<div class="row">
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="application_form !== ''">
+    <a v-if="application_form" :href="`${$page.props.blob_file_path}${application_form.path}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Application Form </h6>
+      <p v-if="application_form" class="mb-0 text-xs">
+        {{ application_form.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="application_form" @click="deleteDocument(application_form.path)" type="button" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Application Form',1)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="dimensional_plans !== ''">
+    <a v-if="dimensional_plans" :href="`${$page.props.blob_file_path}${dimensional_plans.path}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Fully Dimensional Plans</h6>
+      <p v-if="dimensional_plans" class="mb-0 text-xs">
+        {{ dimensional_plans.document_name ? dimensional_plans.document_name : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="dimensional_plans" @click="deleteDocument(dimensional_plans.id)" type="button" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Fully Dimensional Plans',2)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" 
+    class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="payment_to_liquor_board !== ''">
+    <a v-if="payment_to_liquor_board" :href="`${$page.props.blob_file_path}${payment_to_liquor_board.path}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Payment To The Liquor Board</h6>
+       <p v-if="payment_to_liquor_board" class="mb-0 text-xs">
+        {{ payment_to_liquor_board.document_name ? payment_to_liquor_board.document_name : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="payment_to_liquor_board" @click="deleteDocument(payment_to_liquor_board.id)" type="button" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Payment To The Liquor Board',5)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</ul>
+<hr class="vertical dark" />
+</div>
+
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="poa_res">
+    <a v-if="poa_res.path" :href="`${$page.props.blob_file_path}${poa_res.path}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">POA & RES</h6>
+      <p v-if="poa_res" class="mb-0 text-xs">{{ poa_res.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+
+    <button  v-if="poa_res" @click="deleteDocument(poa_res.id)" type="button" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('POA & RES',3)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="smoking_affidavict !== ''">
+    <a v-if="smoking_affidavict" :href="`${$page.props.blob_file_path}${smoking_affidavict.path}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center" style="margin-left: -1rem">
+      <h6 class="mb-0 text-sm">Smoking Affidavit</h6>
+       <p v-if="smoking_affidavict" class="mb-0 text-xs">
+        {{ smoking_affidavict.document_name ? smoking_affidavict.document_name : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="smoking_affidavict" @click="deleteDocument(smoking_affidavict.id)" type="button" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Smoking Affidavit',4)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+</ul>
+<button 
+v-if="application_form !== null
+&& smoking_affidavict !== null
+&& poa_res !== null
+&& payment_to_liquor_board !== null
+&& dimensional_plans !== null" 
+type="button" 
+ @click="mergeDocuments" class="btn btn-sm btn-secondary float-end">Compile & Merge</button>
+ <button v-else class="btn btn-sm btn-secondary float-end" disabled="disabled">Compile & Merge</button>
+</div>
+</div>
 <hr>
 <!-- 
   <div class="col-3 columns">
@@ -284,59 +435,168 @@ export default {
 </div> -->
 
 
-<div class="col-12 columns">
+<div class="col-5 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="alteration-board2" @input="pushData(5)" type="checkbox" value="5" :checked="alteration.status >= 5">
+<label class="form-check-label text-body text-truncate status-heading" for="alteration-board2">Payment to the Liquor Board</label>
+</div>
+
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="alteration_letter !== null">
-    <a :href="`${$page.props.blob_file_path}${alteration_letter.path}`" target="_blank">
+    <div class="avatar me-3" v-if="liqour_board !== null">
+    <a :href="`${$page.props.blob_file_path}${liqour_board.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Alteration Letter</h6>
-       <p v-if="alteration_letter !== null" class="mb-0 text-xs">{{ getDocumentType(alteration_letter.path)}}</p>
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="alteration_letter !== null" @click="deleteDocument(alteration_letter.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Alteration Letter')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType('Payment to the Liquor Board-2')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
+
+</div>
+<div class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+    </div>
+     <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+</div>
+<div class="col-1"></div>
+<div class="col-2 float-end">
+  <button class="btn btn-sm btn-secondary">Save</button>
+</div>
+<hr/>
+
+
+<div class="col-5 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="alteration-logded" @input="pushData(6)" type="checkbox" value="6" :checked="alteration.status >= 6">
+<label class="form-check-label text-body text-truncate status-heading" for="alteration-logded">Alterations Lodged</label>
 </div>
 
-<div class="col-12 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="site_map_file !== null">
-    <a :href="`${$page.props.blob_file_path}${site_map_file.path}`" target="_blank">
+    <div class="avatar me-3" v-if="alteration_logded !== null">
+    <a :href="`${$page.props.blob_file_path}${alteration_logded.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">SiteMap File</h6>
-       <p v-if="site_map_file !== null" class="mb-0 text-xs">{{ getDocumentType(site_map_file.path) }}</p>
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p v-if="alteration_logded !== null" class="mb-0 text-xs">{{ alteration_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="site_map_file !== null" @click="deleteDocument(site_map_file.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="alteration_logded !== null" @click="deleteDocument(alteration_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('SiteMap File')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType('Alterations Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
+
 </div>
-<hr>
+<div class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.logded_at">
+    </div>
+     <div v-if="errors.logded_at" class="text-danger">{{ errors.logded_at }}</div>
+</div>
+<div class="col-1"></div>
+<div class="col-2 float-end">
+  <button class="btn btn-sm btn-secondary">Save</button>
+</div>
+<hr/>
+
+<div class="col-5 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="alteration-issued" @input="pushData(7)" type="checkbox" value="7" :checked="alteration.status >= 7">
+<label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Certificate Issued</label>
+</div>
+
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="certification_issued !== null">
+    <a :href="`${$page.props.blob_file_path}${certification_issued.path}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+       <p v-if="certification_issued !== null" class="mb-0 text-xs">{{ certification_issued.document_name }}</p>
+      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+    <a v-if="certification_issued !== null" @click="deleteDocument(certification_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Alterations Certificate Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+  </li> 
+</ul>
+
+</div>
+<div class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.certification_issued_at">
+    </div>
+     <div v-if="errors.certification_issued_at" class="text-danger">{{ errors.certification_issued_at }}</div>
+</div>
+<div class="col-1"></div>
+<div class="col-2 float-end">
+  <button class="btn btn-sm btn-secondary">Save</button>
+</div>
+<hr/>
 
 
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input 
- class="active-checkbox" id="complete" @input="pushData(4)" type="checkbox" value="4" :checked="alteration.status >= '4'">
-<label for="complete" class="form-check-label text-body text-truncate status-heading"> Alteration Complete</label>
+<div class="col-5 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+<input class="active-checkbox" id="alteration-issued" @input="pushData(8)" type="checkbox" value="8" :checked="alteration.status >= 8">
+<label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Delivered</label>
 </div>
-</div> 
+
+<ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="avatar me-3" v-if="alteration_delivered !== null">
+    <a :href="`${$page.props.blob_file_path}${alteration_delivered.path}`" target="_blank">
+    <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+    </a>
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Document</h6>
+      <p v-if="alteration_delivered !== null" class="mb-0 text-xs">{{ alteration_delivered.document_name }}</p>
+      <p v-if="!alteration_delivered" class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    </div>
+    <a v-if="alteration_delivered !== null" @click="deleteDocument(alteration_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
+    </a>
+    <a v-else @click="getDocType('Alterations Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+  </li> 
+</ul>
+
+</div>
+<div class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+    </div>
+     <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+</div>
+<div class="col-1"></div>
+<div class="col-2 float-end">
+  <button class="btn btn-sm btn-secondary">Save</button>
+</div>
+<hr/>
+
 
 <div>
   <button type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">Save</button></div>

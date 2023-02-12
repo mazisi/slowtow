@@ -284,6 +284,8 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::delete('/delete-alteration-document/{id}',[AlterationDocumentController::class,'destroy']);
 
+        Route::post('/merge-alteration-documents/{alteration_id}',[AlterationDocumentController::class,'merge']);
+
 
 
         Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
@@ -310,7 +312,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
 
-        Route::post('/export-report/',[ReportController::class,'export'])->name('export');
+        Route::get('/export-report/',[ReportController::class,'export'])->name('export');
 
         Route::get('/force-download-renewal-export',[RenewalExportController::class,'forceDownload']);
 

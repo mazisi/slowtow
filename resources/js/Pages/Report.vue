@@ -547,13 +547,23 @@ const new_app_stages = {
    }
 
    const exportReport = () => {
-    form.post(`/export-report`, {
-           preserveScroll: true,
-           onSuccess: () => {
-            //
-           },
-          })  
-       
+    let url =
+    `/export-report?variation=${form.variation}&month_from=${form.month_from}
+    &month_to=${form.month_to}&year=${form.year}&applicant=${form.applicant}
+    &person=${form.person}&company=${form.company}&province=${form.province}
+    &selectedDates=${form.selectedDates}&boardRegion=${form.boardRegion}
+    &licence_types=${form.licence_types}&new_app_stages=${form.new_app_stages}
+    &renewal_stages=${form.renewal_stages}&transfer_stages=${form.transfer_stages}
+    &nomination_stages=${form.nomination_stages}&alteration_stages=${form.alteration_stages}
+    &temp_licence_stages=${form.temp_licence_stages}&activeStatus=${form.activeStatus}`
+    // form.post(`/export-report`, {
+    //        preserveScroll: true,
+    //        onSuccess: () => {
+    //         //
+    //        },
+    //       })  
+    window.open(url,'_blank');
+     
    }
 
    const fetchNewAppWithStages = () => {
