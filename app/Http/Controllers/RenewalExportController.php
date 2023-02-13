@@ -20,6 +20,12 @@ class RenewalExportController extends Controller
 
     
     public static function export($request){
+
+                                   // redirect output to client browser
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="myfile.xlsx"');
+    header('Cache-Control: max-age=0');
+
         $arrayData = array();
         $arr_of_renewals = [];
                     $renewals = DB::table('licence_renewals')
@@ -98,7 +104,20 @@ class RenewalExportController extends Controller
             $arrayData[] = $data;
 
                 }
-                dd($arrayData);
+              $spreadsheet = new Spreadsheet();
+
+
+            $spreadsheet->getActiveSheet()
+            ->fromArray(
+            $arrayData,   // The data to set
+            NULL,        // Array values with this value will not be set
+            'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+            );
+
+
+$writer = new Xlsx($spreadsheet);
+$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'xlsx');
+$writer->save('php://output');
     
            
     }
