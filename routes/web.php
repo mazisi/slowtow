@@ -312,7 +312,7 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
 
-        Route::get('/export-report/',[ReportController::class,'export'])->name('export');
+        Route::get('/export-report',[ReportController::class,'export'])->name('export');
 
         Route::get('/force-download-renewal-export',[RenewalExportController::class,'forceDownload']);
 

@@ -405,7 +405,7 @@ export default {
   </li>
 
 </ul>
-<Link v-if="alteration.merged_document !==null" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" disabled="disabled">View</Link>
+<a v-if="alteration.merged_document !==null" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
 
 <button 
 v-if="application_form !== null
@@ -413,7 +413,7 @@ v-if="application_form !== null
 && poa_res !== null
 && payment_to_liquor_board !== null
 && dimensional_plans !== null" 
-type="button" 
+ type="button" 
  @click="mergeDocuments" class="btn btn-sm btn-secondary float-end">Compile & Merge</button>
  <button v-else class="btn btn-sm btn-secondary float-end" disabled="disabled">Compile & Merge</button>
 </div>

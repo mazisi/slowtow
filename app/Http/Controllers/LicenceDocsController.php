@@ -11,7 +11,7 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
 {
-    public function store(Request $request){dd($request);
+    public function store(Request $request){
         $request->validate([
             "doc"=> "required|mimes:pdf"
             ]);
@@ -19,7 +19,7 @@ class LicenceDocsController extends Controller
             $fileModel = new LicenceDocument;
             $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->doc->getClientOriginalName());
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->document_name = $fileName;
+            $fileModel->document_name = $request->doc->getClientOriginalName();
             $fileModel->licence_id = $request->licence_id;
             $fileModel->document_type = $request->doc_type;
             $fileModel->num = $request->num;

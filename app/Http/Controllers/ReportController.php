@@ -75,8 +75,7 @@ class ReportController extends Controller
     public function export(Request $request){
       switch ($request->variation) {
         case 'Renewals':
-          RenewalExportController::export($request);          
-          return Inertia::location(env('APP_URL').'/force-download-renewal-export');
+          RenewalExportController::export($request); 
           break;
         case 'Transfers':
           TransferExportController::export($request);          

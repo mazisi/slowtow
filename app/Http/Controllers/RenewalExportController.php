@@ -3,14 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use Illuminate\Support\Str;
-use App\Exports\RenewalExport;
-use App\Models\LicenceRenewal;
-use Illuminate\Support\Carbon;
 use App\Models\RenewalDocument;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\LicenceRenewalExports;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -20,7 +14,28 @@ class RenewalExportController extends Controller
 
     
     public static function export($request){
-        $arrayData = array();
+
+
+       
+        
+        $arrayData = array(
+            array(
+                'ACTIVE/DEACTIVE',
+                'TRADING NAME',
+                'LICENCE NUMBER',
+                'RENEWAL DATE',
+                'RENEWAL AMOUNT',
+                'QUOTED',
+                'QUOTE SENT',
+                'PAYMENT DATE',
+                'INVOICE NUMBER',
+                'PAYMENT TO LIQUOR BOARD',
+                'RENEWAL GRANTED',
+                'DELIVERY DATE ',
+                'PROOF OF DELIVERY',
+                'REASON / NOTES'
+            )
+        );
         $arr_of_renewals = [];
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
@@ -39,32 +54,43 @@ class RenewalExportController extends Controller
                             })
 
                             ->when(request('province'), function ($query)  {
-                                $query->whereIn('province',request('province'));
+                                $query->whereIn('province',array_values(explode(",",request('province'))));
                             })
 
                             ->when(request('boardRegion'), function ($query)  {
-                                $query->whereIn('board_region',request('boardRegion'));
+                                $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
                             })
                             ->when(request('applicant'), function ($query)  {
                                 $query->where('belongs_to',request('applicant'));
                             })
                             ->when(request('licence_types'), function ($query)  {
-                                $query->whereIn('licence_type_id',request('licence_types'));
+                                $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                             });
 
                             })->when(request('selectedDates'), function ($query) {
-                                $query->whereIn('year',request('selectedDates'));
+                                $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
                             })
 
                             ->when(request('renewal_stages'), function ($query) {
-                                $query->whereIn('licence_renewals.status',request('renewal_stages'));
+                                $query->whereIn('licence_renewals.status',array_values(explode(",",request('renewal_stages'))));
                             })
-                           ->get();
+                           ->get([
+                                'id',
+                                'is_licence_active',
+                                'trading_name',
+                                'licence_number',
+                                'date',
+                                'is_quote_sent',
+                                'client_paid_at',
+                                'payment_to_liquor_board_at',
+                                'renewal_issued_at',
+                                'renewal_delivered_at',
+                            ]);
 
         
             $notesCollection = ' ';
             
-            $arr_of_renewals = $renewals->toArray();
+            $arr_of_renewals = $renewals->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 
@@ -98,14 +124,36 @@ class RenewalExportController extends Controller
             $arrayData[] = $data;
 
                 }
-                dd($arrayData);
+
+                header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                header('Content-Disposition: attachment;filename="renewals_report.xlsx"');
+                header('Cache-Control: max-age=0');
+
+                
+            $spreadsheet = new Spreadsheet();
+        
+
+            $spreadsheet->getActiveSheet()
+            ->fromArray(
+            $arrayData,   // The data to set
+            NULL,        // Array values with this value will not be set
+            'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+            );
+            
+            foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
+                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+             }
+
+            $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+            
+            $writer = new Xlsx($spreadsheet);
+            $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+            $writer->save('php://output');
+                
     
            
     }
 
-    public function forceDownload()
-    {
-        return Excel::download(new RenewalExport, 'renewals.xlsx');
-    }
+   
 
 }
