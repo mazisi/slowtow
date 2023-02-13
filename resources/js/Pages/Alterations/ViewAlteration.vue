@@ -214,13 +214,13 @@ export default {
         </div>
         <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-           <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ getDocumentType('Client Quoted') }}</p>
+           <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
           <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
         </div>
         <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
       </li> 
     </ul>
@@ -405,6 +405,8 @@ export default {
   </li>
 
 </ul>
+<Link v-if="alteration.merged_document !==null" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" disabled="disabled">View</Link>
+
 <button 
 v-if="application_form !== null
 && smoking_affidavict !== null

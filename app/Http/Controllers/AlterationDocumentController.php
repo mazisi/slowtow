@@ -23,7 +23,7 @@ class AlterationDocumentController extends Controller
             $fileModel->alteration_id = $request->alteration_id;
             $fileModel->doc_type = $request->doc_type;
             $fileModel->num = $request->doc_number;
-            $fileModel->document_name = $request->file_name;
+            $fileModel->document_name = $request->document->getClientOriginalName();
             $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->save();
        

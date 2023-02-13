@@ -503,10 +503,15 @@ const new_app_stages = {
     }
 
     const alteration_stages = {
-        "1" : "Client Invoiced",
-        "2" : "Client Paid",
-        "3" : "Alteration Details Captured", 
-        "4" : "Alteration Complete",
+        "1" : "Client Quoted",
+        "2" : "Client Invoiced",
+        "3" : "Client Paid", 
+        "4" : "Prepare Alterations Application",
+        "5" : "Payment to the Liquor Board",
+        "6" : "Alterations Lodged",
+        "7" : "Alterations Certificate Issued",
+        "8" : "Alterations Delivered",
+
     }
 
     const temp_licence_stages = {

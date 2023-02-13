@@ -18,8 +18,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 class RenewalExportController extends Controller
 {
 
-    public $arrayData = array();
+    
     public static function export($request){
+        $arrayData = array();
         $arr_of_renewals = [];
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
@@ -60,50 +61,51 @@ class RenewalExportController extends Controller
                             })
                            ->get();
 
-        dd($renewals);
+        
             $notesCollection = ' ';
             
-            // $arr_of_renewals = $renewals->toArray();
+            $arr_of_renewals = $renewals->toArray();
 
-            // for($i = 0; $i < count($arr_of_renewals); $i++ ){
+            for($i = 0; $i < count($arr_of_renewals); $i++ ){
 
-            //     $notes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body']);
+                $notes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body']);
 
-            //     //check if client has been quoted
-            //            $is_quoted = RenewalDocument::where('licence_renewal_id',$arr_of_renewals[$i]->id)->where('doc_type','Client Quoted')->first(['id']);
+                //check if client has been quoted
+                       $is_quoted = RenewalDocument::where('licence_renewal_id',$arr_of_renewals[$i]->id)->where('doc_type','Client Quoted')->first(['id']);
     
-            //         if(!is_null($notes) || !empty($notes)){
-            //             foreach ($notes as $note) {
-            //                 $notesCollection .=  $note->body. ' ';
-            //             }
-            //         }
+                    if(!is_null($notes) || !empty($notes)){
+                        foreach ($notes as $note) {
+                            $notesCollection .=  $note->body. ' ';
+                        }
+                    }
 
-            // $data = [ 
-            //            $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
-            //            $arr_of_renewals[$i]->trading_name, 
-            //            $arr_of_renewals[$i]->licence_number,
-            //            $arr_of_renewals[$i]->date,
-            //            is_null($is_quoted) ? 'FALSE' : 'TRUE',
-            //            is_null($arr_of_renewals[$i]->is_quote_sent) ? 'FALSE' : 'TRUE',
-            //            $arr_of_renewals[$i]->client_paid_at,
-            //            NULL,
-            //            $arr_of_renewals[$i]->payment_to_liquor_board_at,
-            //            $arr_of_renewals[$i]->renewal_issued_at,
-            //            $arr_of_renewals[$i]->renewal_delivered_at,
-            //            NULL,
-            //            $notesCollection
-            //         ];
+            $data = [ 
+                       $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
+                       $arr_of_renewals[$i]->trading_name, 
+                       $arr_of_renewals[$i]->licence_number,
+                       $arr_of_renewals[$i]->date,
+                       is_null($is_quoted) ? 'FALSE' : 'TRUE',
+                       is_null($arr_of_renewals[$i]->is_quote_sent) ? 'FALSE' : 'TRUE',
+                       $arr_of_renewals[$i]->client_paid_at,
+                       NULL,
+                       $arr_of_renewals[$i]->payment_to_liquor_board_at,
+                       $arr_of_renewals[$i]->renewal_issued_at,
+                       $arr_of_renewals[$i]->renewal_delivered_at,
+                       NULL,
+                       $notesCollection
+                    ];
 
-            // //$this->arrayData[] = $data;
+            $arrayData[] = $data;
 
-            //     }
+                }
+                dd($arrayData);
     
            
     }
 
     public function forceDownload()
     {
-        return Excel::download(new RenewalExport(['name','eamail']), 'renewals.xlsx');
+        return Excel::download(new RenewalExport, 'renewals.xlsx');
     }
 
 }
