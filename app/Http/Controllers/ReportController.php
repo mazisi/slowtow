@@ -79,15 +79,12 @@ class ReportController extends Controller
           break;
         case 'Transfers':
           TransferExportController::export($request);          
-          return Inertia::location(env('APP_URL').'/force-download-transfer-export');
           break;
         case 'Nominations':
           NominationExportController::export($request);          
-          return Inertia::location(env('APP_URL').'/force-download-nomination-export');
           break;
         case 'Registrations':
-          NewAppExportController::export($request);          
-           return Inertia::location(env('APP_URL').'/force-download-new-app-export');
+          NewAppExportController::export($request);
           break;
 
         case 'Existing-Licences':
@@ -101,7 +98,6 @@ class ReportController extends Controller
 
           case 'Alterations':
             AlterationExportController::export($request);          
-              return Inertia::location(env('APP_URL').'/force-download-alteration-export');
             break;         
         
         default:

@@ -3,35 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\Nomination;
-use Illuminate\Http\Request;
-use App\Models\NominationExport;
-use App\Exports\NominationExports;
-use App\Models\NominationDocument;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-ini_set('memory_limit', '1024M');
+// ini_set('memory_limit', '1024M');
 
 class NominationExportController extends Controller
 {
     public static function export($request){
 
           try {
-            $exists = NominationExport::where('user_id',auth()->id())->get(['id']);
-                      
-            if(!is_null($exists)){
-                foreach ($exists as $exist) {
-                    $exist->delete();
-                }                  
-            }
-
-       
+            $arrayData = array(
+                array(
+                    'TRADING NAME',
+                    'Client Name',
+                    'LICENCE NUMBER',
+                    'PROVINCE/REGION',
+                    'INVOICE NUMBER',
+                    'PAYMENT DATE',
+                    'DATE LODGED',
+                    'PROOF OF LODGEMENT',
+                    'DATE GRANTED',
+                    'CURRENT STATUS',
+                    'COMMENTS'
+                )
+            );
+            $arr_of_nominations = [];
+            
+                  
                 $nominations = DB::table('nominations')
                             ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, 
                                          nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
                                 nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
-                                nominations.status ")
+                                nominations.status, nominations.nomination_issued_at,board_region")
                             ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
                             ->join('people', 'people.id' , '=', 'nomination_people.people_id' )
                             ->join('licences', 'licences.id' , '=', 'nominations.licence_id' )
@@ -50,111 +55,135 @@ class NominationExportController extends Controller
                                         $query->whereNull('is_licence_active');
                                     })
                                     ->when(request('province'), function ($query) {
-                                        $query->whereIn('province',request('province'));
+                                        $query->whereIn('province',array_values(explode(",",request('province'))));
                                     })
                                     ->when(request('licence_types'), function ($query)  {
-                                        $query->whereIn('licence_type_id',request('licence_types'));
+                                        $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                                     })
 
                                     ->when(request('boardRegion'), function ($query) {
-                                        $query->whereIn('board_region',request('boardRegion'));
+                                        $query->whereIn('board_region', array_values(explode(",",request('boardRegion'))));
                                     })
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
                                     });
 
                                 })->when(request('selectedDates'), function ($query) {
-                                      $query->whereIn('year',request('selectedDates'));
+                                      $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
                                 })
                                 ->when(request('nomination_stages'), function ($query) {
-                                    $query->whereIn('nominations.status',request('nomination_stages'));
+                                    $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
                               })
-                            ->get([
-                                'id',
-                                'trading_name',
-                                'full_name',
-                                'licence_number',
-                                'board_region',
-                                'province',
-                                'payment_to_liquor_board_at',
-                                'nomination_lodged_at',
-                                'status'
-                            ]);
+                                ->get([
+                                    'id',
+                                    'trading_name',
+                                    'full_name',
+                                    'licence_number',
+                                    'board_region',
+                                    'province',
+                                    'payment_to_liquor_board_at',
+                                    'nomination_lodged_at',
+                                    'status'
+                                ]);
         
-        $status = '';
-        $notesCollection = '';
+                            $status = '';
+                            $notesCollection = '';
+                
+                            $arr_of_nominations = $nominations->toArray(); 
         
-        foreach ($nominations as $nom) {
-            
-            $notes = Task::where('model_id',$nom->id)->where('model_type','Nomination')->get(['body']);
-
-       // $is_client_paid = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Payment To The Liquor Board')->first();
-            if(!is_null($notes) || !empty($notes)){
-                foreach ($notes as $note) {
-                    $notesCollection .=  $note->body .' ';
-                }
-            }
-            switch ($nom->status) {
+        for($i = 0; $i < count($arr_of_nominations); $i++ ){
+            switch ($arr_of_nominations[$i]->status) {
                 case '1':
-                   $status = 'Client Quoted';
-                    break;
-                case '2':
-                    $status = 'Client Invoiced';
-                    break;
-                case '3':
-                    $status = 'Client Paid';
-                    break;
-                case '4':
-                    $status = 'Payment To The Liquor Board';
-                    break;
-                case '5':
-                    $status = 'Select Nominees';
-                    break;
-                case '6':
-                    $status = 'Prepare Nomination Application';
-                    break;
-                case '7':
-                    $status = 'Scanned Application';
-                    break;
-                case '8':
-                    $status = 'Nomination Lodged';
-                    break;
-                case '9':
-                    $status = 'Nomination Issued';
-                    break;
-                case '10':
-                    $status = 'Nomination Delivered';
-                    break;
-                default:
-                    //
-                    break;
+                    $status = 'Client Quoted';
+                     break;
+                 case '2':
+                     $status = 'Client Invoiced';
+                     break;
+                 case '3':
+                     $status = 'Client Paid';
+                     break;
+                 case '4':
+                     $status = 'Payment To The Liquor Board';
+                     break;
+                 case '5':
+                     $status = 'Select Nominees';
+                     break;
+                 case '6':
+                     $status = 'Prepare Nomination Application';
+                     break;
+                 case '7':
+                     $status = 'Scanned Application';
+                     break;
+                 case '8':
+                     $status = 'Nomination Lodged';
+                     break;
+                 case '9':
+                     $status = 'Nomination Issued';
+                     break;
+                 case '10':
+                     $status = 'Nomination Delivered';
+                     break;
+                 default:
+                     //
+                     break;
             }
 
-            NominationExport::create([
-                'user_id' => auth()->id(),
-                'trading_name' => $nom->trading_name,
-                'client_name' =>  $nom->full_name,
-                'licence_number' => $nom->licence_number,
-                'province' => $nom->province.'/'.$nom->board_region,
-                'invoice_number' => null,
-                'payment_date' => $nom->payment_to_liquor_board_at,
-                'date_logded' => $nom->nomination_lodged_at,
-                'proof_of_lodgement' => (is_null($nom->nomination_lodged_at)) ? 'FALSE' : 'TRUE',
-                'date_granted' => '',
-                'current_status' => $status,                
-                'notes' => $notesCollection
-            ]);
-        }
+            $notes = Task::where('model_id',$arr_of_nominations[$i]->id)->where('model_type','Nomination')->get(['body']);
+
+            // $is_client_paid = NominationDocument::where('nomination_id',$arr_of_nominations[$i]->id)->where('doc_type','Payment To The Liquor Board')->first();
+
+        
+                if(!is_null($notes) || !empty($notes)){
+                    foreach ($notes as $note) {
+                        $notesCollection .=  $note->body. ' ';
+                    }
+                }
+
+        $data = [ 
+                   $arr_of_nominations[$i]->trading_name, 
+                   $arr_of_nominations[$i]->full_name, 
+                   $arr_of_nominations[$i]->licence_number, 
+                   $arr_of_nominations[$i]->province.'/'.$arr_of_nominations[$i]->board_region,
+                   'NULL',
+                   $arr_of_nominations[$i]->payment_to_liquor_board_at,
+                   $arr_of_nominations[$i]->nomination_lodged_at,
+                   (is_null($arr_of_nominations[$i]->nomination_lodged_at)) ? 'FALSE' : 'TRUE',
+                   $arr_of_nominations[$i]->nomination_issued_at,
+                   $status,
+                   $notesCollection
+                ];
+
+        $arrayData[] = $data;
+
+            }
+
+            $spreadsheet = new Spreadsheet();
+            $spreadsheet->getActiveSheet()
+             ->fromArray(
+             $arrayData,   // The data to set
+             NULL,        // Array values with this value will not be set
+             'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+             );
+ 
+    foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
+                 $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+              }
+ 
+     $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+     
+     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+     header('Content-Disposition: attachment;filename="nominations_'.now()->format('d_m_y').'.xlsx"');
+     header('Cache-Control: max-age=0');        
+    $writer = new Xlsx($spreadsheet);
+    $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+    $writer->save('php://output');
+
           } catch (\Throwable $th) {
             //throw $th;
-           return back()->with('error','An unknown error occured.');
+          return back()->with('error','An unknown error occured.');
          }
     
         
 }
 
-
-public function forceDownload() {
-    return Excel::download(new NominationExports(), 'nominations.xlsx');
-}
 }

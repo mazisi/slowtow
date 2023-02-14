@@ -14,7 +14,24 @@ class RenewalExportController extends Controller
 
     
     public static function export($request){
-        $arrayData = array();
+        $arrayData = array(
+            array(
+                'ACTIVE/DEACTIVE',
+                'TRADING NAME',
+                'LICENCE NUMBER',
+                'RENEWAL DATE',
+                'RENEWAL AMOUNT',
+                'QUOTED',
+                'QUOTE SENT',
+                'PAYMENT DATE',
+                'INVOICE NUMBER',
+                'PAYMENT TO LIQUOR BOARD',
+                'RENEWAL GRANTED',
+                'DELIVERY DATE ',
+                'PROOF OF DELIVERY',
+                'REASON / NOTES'
+            )
+        );
         $arr_of_renewals = [];
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
@@ -53,18 +70,7 @@ class RenewalExportController extends Controller
                             ->when(request('renewal_stages'), function ($query) {
                                 $query->whereIn('licence_renewals.status',array_values(explode(",",request('renewal_stages'))));
                             })
-                           ->get([
-                                'id',
-                                'is_licence_active',
-                                'trading_name',
-                                'licence_number',
-                                'date',
-                                'is_quote_sent',
-                                'client_paid_at',
-                                'payment_to_liquor_board_at',
-                                'renewal_issued_at',
-                                'renewal_delivered_at',
-                            ]);
+                           ->get();
 
         
             $notesCollection = ' ';
@@ -103,7 +109,26 @@ class RenewalExportController extends Controller
             $arrayData[] = $data;
 
                 }
-                dd($arrayData);
+                $spreadsheet = new Spreadsheet();
+           $spreadsheet->getActiveSheet()
+            ->fromArray(
+            $arrayData,   // The data to set
+            NULL,        // Array values with this value will not be set
+            'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+            );
+
+   foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
+                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+             }
+
+    $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+    
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    header('Content-Disposition: attachment;filename="renewals_'.now()->format('d_m_y').'.xlsx"');
+    header('Cache-Control: max-age=0');        
+$writer = new Xlsx($spreadsheet);
+$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+$writer->save('php://output');
     
            
     }
