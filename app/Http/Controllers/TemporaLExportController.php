@@ -3,143 +3,233 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use App\Models\TemporalLicence;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Models\TemporalLicenceExport;
-use App\Exports\TemporalLicenceExports;
 use App\Models\TemporalLicenceDocument;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class TemporaLExportController extends Controller
 {
     public static function export($request){
-        $exists = TemporalLicenceExport::where('user_id', auth()->id())->get(['id']);                
-        if(!is_null($exists)){
-            foreach ($exists as $exist) {
-                $exist->delete();
-            }  
-        }
+        $arr_of_licences = [];
+        $arrayData = array(
+            array(
+            'EVENT NAME',
+            'APPLICANT',
+            'EVENT DATES',
+            'INVOICE NUMBER',
+            'PROVINCE/REGION',
+            'PAYMENT DATE',
+            'LICENCE NUMBER',
+            'DATE LODGED',
+            'PROOF OF LODGEMENT',
+            'DATE GRANTED',
+            'CURRENT STATUS',
+            'COMMENTS'
+            )
+        );
 
-       $licences = TemporalLicence::where(function($query) use($request){
-        $query->when(request('month_from') && request('month_to'), function($query){
-            $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
-        })
-
-        ->when(request('month_from') && !request('month_to'), function ($query)  {
-            $query->whereMonth('licence_date', request('month_from'));
-        })
-            ->when(request('temp_licence_stages'), function ($query) {
-                $query->whereIn('status',request('temp_licence_stages'));
-            })
-            ->when(request('activeStatus') === 'Active', function ($query) {
-                $query->where('active',true);
-            })
-            ->when(request('activeStatus') === 'Inactive', function ($query) {
-                $query->where('active',false);
-             })
-            ->when(!empty(request('selectedDates')), function ($query) use ($request) {
-                $query->whereIn(DB::raw('MONTH(start_date)'),$request->selectedDates);
-            })
-            ->when(!empty(request('applicant')), function ($query) use ($request) {
-                $query->where('belongs_to',$request->applicant);
-            });
-        })->get([
-            'id',
-            'event_name',
-            'belongs_to',
-            'address',
-            'client_paid_at',
-            'liquor_licence_number',
-            'logded_at',
-            'delivered_at',
-            'status',
-        ]);
-
-            $notesCollection = '';
-            $status = '';
-
-    foreach ($licences as $licence) {
-        $notes = Task::where('model_id',$licence->id)->where('model_type','Temporal Licence')->get(['body']);
-   
-        if(!is_null($notes) || !empty($notes)){
-            foreach ($notes as $note) {
-                $notesCollection .= $note->body.' ';
-            }
-        }
-            switch ($licence->status) {
-                case '1':
-                   $status = 'Client Quoted';
-                    break;
-                case '2':
-                    $status = 'Client Invoiced';
-                    break;
-                case '3':
-                    $status = 'Client Paid';
-                    break;
-                case '4':
-                    $status = 'Prepare Temporary Application';
-                    break;
-                case '5':
-                    $status = 'Payment To The Liquor Board';
-                    break;
-                case '6':
-                    $status = 'Scanned Application';
-                    break;
-                case '7':
-                    $status = 'Temporary Licence Lodged ';
-                    break;
-                case '8':
-                    $status = 'Temporary Licence Issued ';
-                    break;
-                case '9':
-                    $status = 'Temporary Licence Delivered';
-                    break;
-               
-                default:
-                    return back()->with('error','Could not process request.An unknown error occured');
-                    break;
-                }
-
-                $applicant = '';
-                switch ($licence->belongs_to) {
-                    case 'Company':
-                        $applicant = $licence->company->name;
-                        break;
-                    case 'Person':
-                        $applicant = $licence->people->full_name;
-                        break;
+       $people_temp_licences = DB::table('temporal_licences')
+       ->join('people', 'temporal_licences.people_id', '=', 'people.id')       
                     
-                    default:
-                        //
-                        break;
-                }
-                //get invoice number
-    $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Client Invoiced')->first(['document_name']);
-    $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$licence->id)->where('doc_type','Licence Lodged')->first(['id']);
-     
-        TemporalLicenceExport::create([
-            'user_id' => auth()->id(),
-            'event_name' => $licence->event_name,
-            'applicant' => $applicant,
-            'event_dates' => date('d-m-Y', strtotime($licence->start_date)). ' - '.date('d-m-Y', strtotime($licence->end_date)),
-            'region' => $licence->address,
-            'invoice_number' => is_null($get_invoice_number) ? '' : $get_invoice_number->document_name,
-            'payment_date' => $licence->client_paid_at,
-            'licence_number' => $licence->liquor_licence_number,
-            'date_lodged' => optional($licence->logded_at)->format('d-m-Y'),
-            'proof_of_lodgement' => is_null($licence_logded) ? 'FALSE': 'TRUE',
-            'date_granted' => optional($licence->delivered_at)->format('d M Y'),
-            'current_status' => $status,
-            'notes' => $notesCollection
+            ->when($request,function($query){
+                $query->when(request('month_from') && request('month_to'), function($query){
+                    $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                })
+                
+                ->when(request('month_from') && !request('month_to'), function ($query)  {
+                    $query->whereMonth('licence_date', request('month_from'));
+                })
+                    ->when(request('temp_licence_stages'), function ($query) {
+                        $query->whereIn('temporal_licences.status',array_values(explode(",",request('temp_licence_stages'))));
+                    })
+                    ->when(request('activeStatus') === 'Active', function ($query) {
+                        $query->where('active',true);
+                    })
+                    ->when(request('activeStatus') === 'Inactive', function ($query) {
+                        $query->where('active',false);
+                     })
+
+                     ->when(!empty(request('temp_licence_region')), function ($query) {
+                        $query->whereIn('address',array_values(explode(",",request('temp_licence_region'))));
+                    })
+
+                    ->when(!empty(request('selectedDates')), function ($query) {
+                        $query->whereIn(DB::raw('MONTH(start_date)'),array_values(explode(",",request('selectedDates'))));
+                    })
+                    ->when(!empty(request('applicant')), function ($query) {
+                        $query->where('belongs_to',request('applicant'));
+                    });
+                 })->get(
+                    [
+                    'temporal_licences.id',
+                    'event_name',
+                    'belongs_to',
+                    'address',
+                    'client_paid_at',
+                    'liquor_licence_number',
+                    'latest_lodgment_date',
+                    'delivered_at',
+                    'status',
+                    'full_name',
+                    'start_date',
+                    'end_date',
+                ]);
+
+                $company_temp_licences = DB::table('temporal_licences')
+                ->join('companies', 'temporal_licences.company_id', '=', 'companies.id')   
+                             
+                     ->when($request,function($query){
+                         $query->when(request('month_from') && request('month_to'), function($query){
+                             $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                         })
+                         
+                         ->when(request('month_from') && !request('month_to'), function ($query)  {
+                             $query->whereMonth('licence_date', request('month_from'));
+                         })
+                             ->when(request('temp_licence_stages'), function ($query) {
+                                 $query->whereIn('temporal_licences.status',array_values(explode(",",request('temp_licence_stages'))));
+                             })
+                             ->when(request('activeStatus') === 'Active', function ($query) {
+                                 $query->where('active',true);
+                             })
+                             ->when(request('activeStatus') === 'Inactive', function ($query) {
+                                 $query->where('active',false);
+                              })
+
+                              ->when(!empty(request('temp_licence_region')), function ($query) {
+                                $query->whereIn('address',array_values(explode(",",request('temp_licence_region'))));
+                            })
+                             ->when(!empty(request('selectedDates')), function ($query) {
+                                 $query->whereIn(DB::raw('MONTH(start_date)'),array_values(explode(",",request('selectedDates'))));
+                             })
+                             ->when(!empty(request('applicant')), function ($query) {
+                                 $query->where('belongs_to',request('applicant'));
+                             });
+                          })->get(
+                             [
+                             'temporal_licences.id',
+                             'event_name',
+                             'belongs_to',
+                             'address',
+                             'client_paid_at',
+                             'liquor_licence_number',
+                             'latest_lodgment_date',
+                             'delivered_at',
+                             'start_date',
+                             'end_date',
+                             'status',
+                             'name',
+                         ]);
+    $merged_data = $people_temp_licences->merge($company_temp_licences);
+
+    $status = '';
+    $applicant = '';
+    $notesCollection = '';
+
+    $arr_of_licences = $merged_data->toArray(); 
+
+    for($i = 0; $i < count($arr_of_licences); $i++ ){
+
+        switch ($arr_of_licences[$i]->status) {
+            case '1':
+               $status = 'Client Quoted';
+                break;
+            case '2':
+                $status = 'Client Invoiced';
+                break;
+            case '3':
+                $status = 'Client Paid';
+                break;
+            case '4':
+                $status = 'Prepare Temporary Application';
+                break;
+            case '5':
+                $status = 'Payment To The Liquor Board';
+                break;
+            case '6':
+                $status = 'Scanned Application';
+                break;
+            case '7':
+                $status = 'Temporary Licence Lodged ';
+                break;
+            case '8':
+                $status = 'Temporary Licence Issued ';
+                break;
+            case '9':
+                $status = 'Temporary Licence Delivered';
+                break;
+           
+            default:
+                $status = 'NULL';
+                break;
+            }
+
             
-        ]);
-    }
-    
+            switch ($arr_of_licences[$i]->belongs_to) {
+                case 'Company':
+                    $applicant = $arr_of_licences[$i]->name;
+                    break;
+                case 'Person':
+                    $applicant = $arr_of_licences[$i]->full_name;
+                    break;                
+                default:
+                    $applicant = "Null";
+                    break;
+            }
+
+            $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body']);
    
+    $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Client Invoiced')->first(['document_name']);
+    $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Licence Lodged')->first(['id']);
+
+            if(!is_null($notes) || !empty($notes)){
+                foreach ($notes as $note) {
+                    $notesCollection .=  $note->body. ' ';
+                }
+            }
+
+       $data = [ 
+
+               $arr_of_licences[$i]->event_name, 
+               $applicant,
+               date('d-m-Y', strtotime($arr_of_licences[$i]->start_date)). ' - '.date('d-m-Y', strtotime($arr_of_licences[$i]->end_date)),
+               $arr_of_licences[$i]->address,
+               is_null($get_invoice_number) ? '' : $get_invoice_number->document_name,
+               $arr_of_licences[$i]->client_paid_at,
+               $arr_of_licences[$i]->liquor_licence_number,
+               optional($arr_of_licences[$i]->latest_lodgment_date)->format('d-m-Y'),
+               is_null($licence_logded) ? 'FALSE': 'TRUE',
+               optional($arr_of_licences[$i]->delivered_at)->format('d M Y'),
+               $status,
+               $notesCollection
+            ];
+
+    $arrayData[] = $data;
+
+        }
+            $spreadsheet = new Spreadsheet();
+            $spreadsheet->getActiveSheet()
+             ->fromArray(
+             $arrayData,   // The data to set
+             NULL,        // Array values with this value will not be set
+             'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+             );
+ 
+        foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
+                    $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+                }
+    
+        $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+        
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="temporal_licences_'.now()->format('d_m_y').'.xlsx"');
+        header('Cache-Control: max-age=0');        
+        $writer = new Xlsx($spreadsheet);
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer->save('php://output');
    
 }
 
-public function forceDownload(){
-    return Excel::download(new TemporalLicenceExports(), 'temporary_licences.xlsx');
-}
+
 }

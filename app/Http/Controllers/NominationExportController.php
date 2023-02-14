@@ -124,7 +124,7 @@ class NominationExportController extends Controller
                      $status = 'Nomination Delivered';
                      break;
                  default:
-                     //
+                     $status = 'Null';
                      break;
             }
 

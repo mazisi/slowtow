@@ -22,8 +22,6 @@ use App\Http\Controllers\LicenceController;
 
 use App\Http\Controllers\Auth\LoginController;
 
-use App\Http\Controllers\ConsultantController;
-
 use App\Http\Controllers\EmailCommsController;
 
 use App\Http\Controllers\NominationController;
@@ -313,38 +311,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
 
         Route::get('/export-report',[ReportController::class,'export'])->name('export');
-
-        Route::get('/force-download-renewal-export',[RenewalExportController::class,'forceDownload']);
-
-        Route::get('/force-download-transfer-export',[TransferExportController::class,'forceDownload']);
-
-        Route::get('/force-download-nomination-export',[NominationExportController::class,'forceDownload'])->name('force_download_nomination_export');
-
-        Route::get('/force-download-new-app-export',[NewAppExportController::class,'forceDownload']);
-
-        Route::get('/force-download-existing-licence-export',[ExistingLicenceExportController::class,'forceDownload']);
-
-        Route::get('/force-download-temp-licence-export',[TemporaLExportController::class,'forceDownload']);
-
-        Route::get('/force-download-alteration-export',[AlterationExportController::class,'forceDownload']);
-
-
-
-        //Consultants
-
-        // Route::get('/consultants',[ConsultantController::class,'index'])->name('consultants');
-
-        // Route::get('/create-consultant',[ConsultantController::class,'create'])->name('create_consultant');
-
-        // Route::post('/submit-consultant',[ConsultantController::class,'store'])->name('submit_consultant');
-
-        // Route::get('/view-consultant/{slug}',[ConsultantController::class,'show'])->name('view_consultant');
-
-        // Route::delete('/unlink-consultant/{id}',[ConsultantController::class,'unlinkConsultant'])->name('unlink_consultant');
-
-        // Route::patch('/update-consultant/{slug}',[ConsultantController::class,'update'])->name('update_consultant');
-
-
 
 
 

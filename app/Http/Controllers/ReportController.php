@@ -89,11 +89,9 @@ class ReportController extends Controller
 
         case 'Existing-Licences':
           ExistingLicenceExportController::export($request);
-            return Inertia::location(env('APP_URL').'/force-download-existing-licence-export');
           break;
         case 'Temporal Licence':
           TemporaLExportController::export($request);          
-            return Inertia::location(env('APP_URL').'/force-download-temp-licence-export');
           break;
 
           case 'Alterations':

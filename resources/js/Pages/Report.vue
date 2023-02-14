@@ -206,6 +206,18 @@
       </div>
   </div>
 
+  <div v-if="form.variation == 'Temporal Licence'" class="col-6 ">
+    <div class="input-group input-group-outline null is-filled">
+      <Multiselect
+      v-model="form.temp_licence_region"           
+      :options="temp_licence_regions"
+       mode="tags"
+      :taggable="true"
+      @select="fetchNewAppWithStages"
+      placeholder="Region"/>
+      </div>
+  </div>
+
   <div class="col-6 ">
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
@@ -464,7 +476,8 @@ const new_app_stages = {
       transfer_stages: [],
       nomination_stages: [],
       alteration_stages: [],
-      temp_licence_stages: []
+      temp_licence_stages: [],
+      temp_licence_region: []
     })
 
     const renewal_stages = {
@@ -513,6 +526,13 @@ const new_app_stages = {
         "8" : "Alterations Delivered",
 
     }
+    const temp_licence_regions = {
+      "Ekurhuleni": "Ekurhuleni",
+      "Johannesburg": "Johannesburg",
+      "Sedibeng" : "Sedibeng",
+      "Tshwane" : "Tshwane",
+      "West Rand" : "West Rand"
+  }
 
     const temp_licence_stages = {
      "1" : "Client Quoted",
@@ -560,7 +580,7 @@ const new_app_stages = {
     &licence_types=${form.licence_types}&new_app_stages=${form.new_app_stages}
     &renewal_stages=${form.renewal_stages}&transfer_stages=${form.transfer_stages}
     &nomination_stages=${form.nomination_stages}&alteration_stages=${form.alteration_stages}
-    &temp_licence_stages=${form.temp_licence_stages}&activeStatus=${form.activeStatus}`
+    &temp_licence_stages=${form.temp_licence_stages}&temp_licence_region=${form.temp_licence_region}&activeStatus=${form.activeStatus}`
     // form.post(`/export-report`, {
     //        preserveScroll: true,
     //        onSuccess: () => {
@@ -602,6 +622,7 @@ return{
   nomination_stages,
   alteration_stages,
   temp_licence_stages,
+  temp_licence_regions,
   getType,
   form,
   months,

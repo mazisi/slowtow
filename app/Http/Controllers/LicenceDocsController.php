@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use File;
+
 use App\Models\Licence;
+use Illuminate\Http\File;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
@@ -15,7 +17,7 @@ class LicenceDocsController extends Controller
         $request->validate([
             "doc"=> "required|mimes:pdf"
             ]);
-
+            $path = Storage::putFileAs('storage/licenceDocuments/logo.pdf', new File('storage/licenceDocuments/logo.pdf'), $request->doc->getClientOriginalName());dd($path);
             $fileModel = new LicenceDocument;
             $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->doc->getClientOriginalName());
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));

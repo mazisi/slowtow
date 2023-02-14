@@ -120,7 +120,7 @@ public static function export($request){
                         $status = 'Transfer Delivered';
                         break;
                     default:
-                        return back()->with('error','Could not process request.An unknown error occured');
+                        $status = 'Null';
                         break;
                 }
 

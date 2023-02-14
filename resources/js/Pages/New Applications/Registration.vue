@@ -1054,7 +1054,7 @@
               </a>
               <a v-else @click="getDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
               class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-              <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
+              <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
               </a>
             </li>
           </ul>

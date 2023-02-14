@@ -102,8 +102,8 @@ class AlterationExportController extends Controller
                             $status = 'Alterations Delivered';
                             break;
                         default:
-                           return back()->with('error','Could not process request.An unknown error occured');
-                        break;
+                            $status = 'Null';
+                            break;
                         }
 
                         $notes = Task::where('model_id',$arr_of_alterations[$i]->id)->where('model_type','Alteration')->get(['body']);

@@ -70,7 +70,19 @@ class RenewalExportController extends Controller
                             ->when(request('renewal_stages'), function ($query) {
                                 $query->whereIn('licence_renewals.status',array_values(explode(",",request('renewal_stages'))));
                             })
-                           ->get();
+                           ->get([
+                                'id',
+                                'is_licence_active',
+                                'trading_name',
+                                'licence_number',
+                                'date',
+                                'is_quote_sent',
+                                'client_paid_at',
+                                'payment_to_liquor_board_at',
+                                'renewal_issued_at',
+                                'renewal_delivered_at',
+                            ]
+                           );
 
         
             $notesCollection = ' ';
@@ -91,18 +103,20 @@ class RenewalExportController extends Controller
                     }
 
             $data = [ 
+
                        $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
                        $arr_of_renewals[$i]->trading_name, 
                        $arr_of_renewals[$i]->licence_number,
                        $arr_of_renewals[$i]->date,
+                       'NULL',
                        is_null($is_quoted) ? 'FALSE' : 'TRUE',
                        is_null($arr_of_renewals[$i]->is_quote_sent) ? 'FALSE' : 'TRUE',
                        $arr_of_renewals[$i]->client_paid_at,
-                       NULL,
+                       'NULL',
                        $arr_of_renewals[$i]->payment_to_liquor_board_at,
                        $arr_of_renewals[$i]->renewal_issued_at,
                        $arr_of_renewals[$i]->renewal_delivered_at,
-                       NULL,
+                       'NULL',
                        $notesCollection
                     ];
 
@@ -110,25 +124,25 @@ class RenewalExportController extends Controller
 
                 }
                 $spreadsheet = new Spreadsheet();
-           $spreadsheet->getActiveSheet()
-            ->fromArray(
-            $arrayData,   // The data to set
-            NULL,        // Array values with this value will not be set
-            'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
-            );
+                $spreadsheet->getActiveSheet()
+                    ->fromArray(
+                    $arrayData,   // The data to set
+                    NULL,        // Array values with this value will not be set
+                    'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+                    );
 
-   foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
-                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
-             }
+                foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
+                                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+                            }
 
-    $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
-    
-    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    header('Content-Disposition: attachment;filename="renewals_'.now()->format('d_m_y').'.xlsx"');
-    header('Cache-Control: max-age=0');        
-$writer = new Xlsx($spreadsheet);
-$writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-$writer->save('php://output');
+                    $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+                    
+                    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                    header('Content-Disposition: attachment;filename="renewals_'.now()->format('d_m_y').'.xlsx"');
+                    header('Cache-Control: max-age=0');        
+                    $writer = new Xlsx($spreadsheet);
+                    $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+                    $writer->save('php://output');
     
            
     }
