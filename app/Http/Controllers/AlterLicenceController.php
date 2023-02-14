@@ -20,7 +20,7 @@ class AlterLicenceController extends Controller
   }
 
     public function newAlteration(Request $request){
-        $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name']);
+        $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name','slug']);
         return Inertia::render('Alterations/AlterLicence',['licence'=> $licence]);
     }
 
