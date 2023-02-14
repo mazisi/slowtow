@@ -289,14 +289,14 @@
     
              <td class="text-center">
               <p class="align-center text-xs font-weight-bold mb-0">
-                <span v-if="new_application.status >= '3'">{{ new_application.is_client_invoiced }}</span>
+                <span v-if="new_application.status >= 3">{{ new_application.is_client_invoiced }}</span>
               </p>
              </td>
     
              
              <td class="text-center">
               <p class="align-center text-xs font-weight-bold mb-0">
-                <span v-if="new_application.status >= '4'">Application preparation</span>
+                <span v-if="new_application.status >= 4">Application preparation</span>
               </p>
              </td>
     
