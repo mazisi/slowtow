@@ -12,32 +12,44 @@ use App\Models\LicenceDocument;
 use App\Models\LicenceTransfer;
 use App\Models\TransferDocument;
 use App\Models\LiquorBoardRequest;
+use App\Models\People;
 
 class TransferLicenceController extends Controller
 {
     public function index(Request $request){//NB..licence slug
         $licence = Licence::with('company','people')->whereSlug($request->slug)->first();
         $companies_dropdown = Company::where('id','!=',$licence->company_id)->pluck('name','id');//get companies list
+        $people_dropdown = People::where('id','!=',$licence->people_id)->pluck('full_name','id');
         return Inertia::render('Licences/TransferLicence',
                                                 ['licence' => $licence,
-                                               'companies_dropdown' => $companies_dropdown
+                                               'companies_dropdown' => $companies_dropdown,
+                                               'people_dropdown'  => $people_dropdown
                                                 ]);
     }
 
     public function store(Request $request,$slug){
-       $request->validate([
-           "new_company" => "required|exists:companies,id",
-           "old_company_id" => "required|exists:companies,id"
-       ]);
+      if($request->belongs_to === 'Person'){
+          $request->validate([
+            "new_person" => "required|exists:people,id",
+            "belongs_to" => "required|in:Person,Company"
+        ]);
+      }else{
+            $request->validate([
+              "new_company" => "required|exists:companies,id",
+              "belongs_to" => "required|in:Person,Company"
+          ]);
+      }
        
-
+    
       $sorted_statuses = Arr::sort($request->status);
       $transfer = LicenceTransfer::create([
+        'transfered_to' => $request->belongs_to,
         'licence_id'=> $request->licence_id,
         'company_id'=> $request->new_company,
+        'people_id'=> $request->new_person,
         'old_company_id' => $request->old_company_id,
         'status' => last($sorted_statuses),
-        'slug' => $request->old_company.sha1(time())
+        'slug' => sha1(time())
        ]);
 
        if($transfer){
@@ -61,7 +73,7 @@ class TransferLicenceController extends Controller
        * View licence transfer individually.
        */
       public function viewTransferedLicence($slug){
-        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents')->whereSlug($slug)->first();
+        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents','people')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
 
         $companies_dropdown = Company::pluck('name','id');

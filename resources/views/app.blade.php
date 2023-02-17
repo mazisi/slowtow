@@ -40,7 +40,9 @@
         @inertiaHead
 
         <style>
-
+  .multiselect{
+    margin:top: 1rem; border-color: #4caf50 !important;box-shadow: inset 1px 0 #4caf50
+  }
             .half-circle-spinner, .half-circle-spinner * {
 
                   box-sizing: border-box;

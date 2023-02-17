@@ -182,9 +182,9 @@
 <hr>
 <div class="col-12 columns">            
   <div class="input-group input-group-outline is-filled">
-  <input style="margin-top: -6px; margin-right: 3px;" @change="copyBusinessAddress" 
+  <input id="same-address" style="margin-top: -6px; margin-right: 3px;" @change="copyBusinessAddress" 
    type="checkbox" v-model="form.copy_address" >
-  <label>Same as Business Address</label>
+  <label for="same-address">Same as Business Address</label>
   </div>
   <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
   </div> 

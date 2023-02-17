@@ -201,6 +201,7 @@ class NewAppExportController extends Controller
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
+        die;
 }
 
 }

@@ -12,6 +12,7 @@ export default {
     errors: Object,
     licence: Object,
     companies_dropdown: Array,
+    people_dropdown: Array,
     success: String,
     error: String,
 
@@ -19,13 +20,16 @@ export default {
 
   setup (props) {
     let showMenu = false;
-    let options = props.companies_dropdown;
+    let company_options = props.companies_dropdown;
+    let people_options = props.people_dropdown;
 
     const form = useForm({
           old_company: props.licence.company ?  props.licence.company.name : props.licence.people.full_name,
           old_company_id: props.licence.company ?  props.licence.company_id : props.licence.people_id,
           new_company: null,
+          new_person: null,
           licence_id: props.licence.id,
+          belongs_to: '',
           status: [],
     })
         function submit(){
@@ -37,14 +41,24 @@ export default {
           })  
         }
 
-function assignActiveValue(event){
+      function assignActiveValue(event){
         this.form.active = event
       }
-      
+
+
+     function changeApplicant(event){
+        if(event.target.value === 'Company'){
+          form.belongs_to = event.target.value;
+        }else{
+          form.belongs_to = event.target.value;
+        }
+     }
     return {
       form,
       submit,
-      options,
+      changeApplicant,
+      company_options,
+      people_options,
       assignActiveValue,
     }
   },
@@ -75,7 +89,7 @@ function assignActiveValue(event){
 .columns{
   margin-bottom: 1rem;
 }
-#active-checkbox{
+.active-checkbox{
   margin-top: -10px;
   margin-left: 3px;
 }
@@ -109,8 +123,8 @@ function assignActiveValue(event){
 <input type="hidden" v-model="form.licence_id"> 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="1">
-<label class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
+<input id="client-quoted" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
+<label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
 </div>     
 
@@ -118,23 +132,23 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="2">
-<label class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
+<input id="client-invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
+<label id="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
 </div>
 </div>   
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="3">
-<label class="form-check-label text-body text-truncate status-heading">Client Paid</label>
+<input id="client-paid" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
+<label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>  
 <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="4">
-<label class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
+<input id="prepare" class="active-checkbox" v-model="form.status" type="checkbox" value="4">
+<label for="prepare" class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
 </div>
 </div> 
 
@@ -146,22 +160,40 @@ function assignActiveValue(event){
    <div v-if="errors.old_company" class="text-danger">{{ errors.old_company }}</div>
    </div>
 
-   <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="mx-6 mt-2">Transfering To</label>
+    <div class="col-4 columns">
+      <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Applicant</label>
+        <select @change="changeApplicant($event)" class="form-control form-control-default" required>
+        <option :value="''" disabled selected>Select Applicant</option>
+        <option value="Company">Company</option>
+        <option value="Person">Person</option>
+        </select>
+       </div>
      </div>
-   </div>
+ 
 
-  <div class="col-md-4 columns">
+  <div class="col-md-4 columns" v-if="form.belongs_to === 'Company'">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
      v-model="form.new_company"
         placeholder="Current Licence Holder"
-        :options="options"
+        :options="company_options"
         :searchable="true"
       />
     </div>
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
+</div>
+
+<div class="col-md-4 columns" v-else-if="form.belongs_to === 'Person'">
+  <div class="input-group input-group-outline null is-filled">
+     <Multiselect
+     v-model="form.new_person"
+        placeholder="Current Licence Holder"
+        :options="people_options"
+        :searchable="true"
+      />
+    </div>
+ <div v-if="errors.new_person" class="text-danger">{{ errors.new_person }}</div>
 </div>
 
    <!-- <div class="col-4 columns">
@@ -176,30 +208,30 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="5">
-<label class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
+<input id="liquour-board" class="active-checkbox" v-model="form.status" type="checkbox" value="5">
+<label for="liquour-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div>  
 <hr>
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="6">
-<label class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
+<input id="scanned-app" class="active-checkbox" v-model="form.status" type="checkbox" value="6">
+<label for="scanned-app" class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
 </div>
 </div>
 <hr/>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="7">
-<label class="form-check-label text-body text-truncate status-heading">Application Logded</label>
+<input id="app-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="7">
+<label for="app-logded" class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>  
 <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="8">
-<label class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
+<input id="activation" class="active-checkbox" v-model="form.status" type="checkbox" value="8">
+<label for="activation" class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>  
 <hr>
@@ -207,16 +239,16 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="9">
-<label class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
+<input id="transfer-issued" class="active-checkbox" v-model="form.status" type="checkbox" value="9">
+<label for="transfer-issued" class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
 <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="10">
-<label class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
+<input id="transfer-delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="10">
+<label for="transfer-delivered" class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 
 <hr>
@@ -225,16 +257,16 @@ function assignActiveValue(event){
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="11">
-<label class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
+<input id="tranfer-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="11">
+<label for="tranfer-logded" class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
 </div>
 </div> 
 
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="active-checkbox" v-model="form.status" type="checkbox" value="12">
-<label class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
+<input id="cert-received" class="active-checkbox" v-model="form.status" type="checkbox" value="12">
+<label for="cert-received" class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
 </div>
 </div> 
 

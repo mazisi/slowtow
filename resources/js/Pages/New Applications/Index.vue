@@ -34,7 +34,7 @@
     <option value="Person">Person</option>
     </select>
     </div>
-    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+    <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
     </div>
 
   

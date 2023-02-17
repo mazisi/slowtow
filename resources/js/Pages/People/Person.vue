@@ -39,7 +39,7 @@
 <div class="">
 <div class=" px-0 pb-2">
 <div class="table-responsive p-0">
-<table class="table align-items-center mb-0">
+<table class="table table-striped table-hover ">
 <thead>
 <tr>
 <th class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Active</th>
@@ -50,7 +50,7 @@
 <tbody>
 <tr v-for="person in people.data" :key="person.id">
 <td>
-<div class="avatar-group mt-2">
+<div class="avatar-group ">
 <i v-if="person.active" class="fa fa-check text-info" aria-hidden="true"></i>
 <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
 </div>

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('licence_id')->constrained()->onDelete('cascade');
             $table->foreignId('company_id')->constrained()->onDelete('cascade');
             $table->integer('old_company_id');
+            $table->string('transfered_to')->nullable();
             $table->date('date')->nullable();
             $table->string('status')->nullable();
             $table->date('lodged_at')->nullable();

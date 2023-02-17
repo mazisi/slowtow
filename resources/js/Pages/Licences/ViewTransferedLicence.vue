@@ -5,6 +5,7 @@ import { Link,useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
+import Banner from '../components/Banner.vue';
 
 
 export default {
@@ -199,7 +200,8 @@ export default {
     Layout,
     Multiselect,
     Link,
-    LiquorBoardRequest
+    LiquorBoardRequest,
+    Banner
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -240,10 +242,7 @@ export default {
 <template>
 <Layout>
 <div class="container-fluid">
-    <div class="page-header min-height-100 border-radius-xl mt-4" style="background-image: url('https://images.unsplash.com/photo-1531512073830-ba890ca4eba2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80');
-      ">
-      <span class="mask bg-gradient-success opacity-6"></span>
-    </div>
+    <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
@@ -368,14 +367,24 @@ export default {
      </div>
    </div>
 
-  <div class="col-4 columns">
+  <div v-if="view_transfer.transfered_to === 'Company'" class="col-4 columns" >
   <div class="input-group input-group-outline null is-filled">
-     <Multiselect
+    <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default">
+
+     <!-- <Multiselect
      v-model="form.new_company"
         placeholder="Current Licence Holder"
         :options="options"
         :searchable="true"
-      />
+        :disabled="true"
+      /> -->
+    </div>
+ <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
+</div>
+
+<div v-else-if="view_transfer.transfered_to === 'Person'" class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+    <input :value="view_transfer.people.full_name" type="text" required readonly title="You can`t change this field." class="form-control form-control-default">
     </div>
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>

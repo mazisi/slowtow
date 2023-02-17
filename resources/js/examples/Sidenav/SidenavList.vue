@@ -444,18 +444,6 @@
 
 
 
-
-   <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
-   ">
-  <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
-    <div class="text-center d-flex align-items-center justify-content-center me-2">
-    <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>
-    <span class="nav-link-text ms-1">Back</span>
-  </a>
-  <div class="collapse"></div>
-</li>
-
-
     </ul>
     
   </div>

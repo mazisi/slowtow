@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceDocument;
 use App\Models\LicenceType;
+use App\Models\People;
 use Illuminate\Http\Request;
 use App\Models\Task;
 
@@ -114,25 +115,32 @@ class LicenceController extends Controller
 
     public function create(){
         $companies = Company::pluck('name','id');
+        $people = People::pluck('full_name','id');
         $licence_dropdowns = LicenceType::get();
         return Inertia::render('Licences/CreateLicence',['licence_dropdowns' => $licence_dropdowns,
-        'companies' => $companies]);
+        'companies' => $companies, 'people' => $people]);
     }
 
     public function store(Request $request){
+       if($request->belongs_to === 'Company'){
+          $request->validate(["company" => "required|exists:companies,id"]);
+       }elseif($request->belongs_to === 'Person'){
+           $request->validate([ "person" => "required|exists:people,id"]);
+       }
+       $request->validate([
+        "trading_name" => "required",
+        "licence_type" => "required",
+        "province" => "required",
+        "licence_number" => "required|unique:licences,licence_number"
+    ]);
        
-        $request->validate([
-            "trading_name" => "required",
-            "licence_type" => "required",
-            "company" => "required|exists:companies,id",
-            "province" => "required",
-            "licence_number" => "required|unique:licences,licence_number"
-        ]);
         Licence::create([
             "trading_name" => $request->trading_name,
+            'belongs_to' => $request->belongs_to,
             "licence_type_id" => $request->licence_type,
             "licence_date" => $request->licence_date,
             "company_id"   => $request->company,
+            "people_id"   => $request->person,
             "licence_number" => $request->licence_number,
             "old_licence_number" => $request->old_licence_number,
             "address" => $request->address,

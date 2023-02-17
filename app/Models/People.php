@@ -35,4 +35,9 @@ class People extends Model
        return $this->hasMany(Licence::class);
     }
 
+    public function licence_transfer(){
+        return $this->hasMany(LicenceTransfer::class);
+     }
+ 
+
 }

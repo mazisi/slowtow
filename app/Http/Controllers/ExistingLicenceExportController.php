@@ -193,10 +193,11 @@ class ExistingLicenceExportController extends Controller
                 );
 
             foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
-                            $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
-                        }
+                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->getAlignment()->setWrapText(true)->setAutoSize(true);
+             }
 
                 $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setWrapText(true);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="existing_licences_'.now()->format('d_m_y').'.xlsx"');
@@ -204,6 +205,7 @@ class ExistingLicenceExportController extends Controller
                 $writer = new Xlsx($spreadsheet);
                 $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
                 $writer->save('php://output');
+                die;
    
 }
 

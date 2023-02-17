@@ -220,14 +220,16 @@ class TemporaLExportController extends Controller
                     $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
                 }
     
-        $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="temporal_licences_'.now()->format('d_m_y').'.xlsx"');
+        header('Content-Disposition: attachment;filename="temporary_licences_'.now()->format('d_m_y').'.xlsx"');
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
+        die;
    
 }
 

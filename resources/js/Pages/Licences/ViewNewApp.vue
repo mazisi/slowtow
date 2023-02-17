@@ -66,7 +66,7 @@
   <div class="col-4 columns">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Applicant</label>
-    <select v-model="form.belongs_to" class="form-control form-control-default" required>
+    <select disabled v-model="form.belongs_to" class="form-control form-control-default" required>
     <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>

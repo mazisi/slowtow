@@ -63,6 +63,7 @@
                      <td  class="text-center" v-else-if="currentCompany.pivot.status == 6"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Activation Fee Paid</Link></td>
                      <td  class="text-center" v-else-if="currentCompany.pivot.status == 8"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Issued</Link></td>
                      <td  class="text-center" v-else-if="currentCompany.pivot.status == 9"><Link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">Transfer Delivered</Link></td>
+                     <td  class="text-center" v-else></td>
                       <td class="text-center">
                     <inertia-link :href="`/view-transfered-licence/${currentCompany.pivot.slug}`">
                     <i class="fa fa-eye  " aria-hidden="true"></i>
@@ -88,7 +89,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 
 export default {
-  name: "dashboard-default",
+  name: "Transfers",
   props: {
     licence: Object,
     success: String,

@@ -32,16 +32,39 @@
 <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
 </div>
 
-<div class="col-md-6 columns">
+<div class="col-6 columns" >
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Applicant</label>
+  <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
+  <option :value="''" disabled selected>Select Applicant</option>
+  <option value="Company">Company</option>
+  <option value="Person">Person</option>
+  </select>
+  </div>
+  <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
+  </div>
+
+<div class="col-md-6 columns" v-if="form.belongs_to === 'Company'">
  <Multiselect
      v-model="form.company"
         placeholder="Search company"
-        :options="options"
+        :options="company_options"
         :searchable="true"
-        style="margin:top: 1rem;"
+        :class="multiselect"
       />
 <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
 </div>
+
+<div class="col-md-6 columns" v-if="form.belongs_to === 'Person'">
+  <Multiselect
+      v-model="form.person"
+         placeholder="Search Person"
+         :options="people_options"
+         :searchable="true"
+         style="margin:top: 1rem;"
+       />
+ <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
+ </div>
 
 <div class="col-md-6 columns">
 <div class="input-group input-group-outline null is-filled">
@@ -169,14 +192,16 @@ export default {
  props: {
     errors: Object,
     licence_dropdowns: Object,
-    companies: Object,
+    companies: Array,
+    people: Array,
     success: String,
     error: String,
   },
   
   
   setup (props) {
-    let options = props.companies;
+    let company_options = props.companies;
+    let people_options = props.people;
 
     const form = useForm({
           trading_name: '',
@@ -189,8 +214,10 @@ export default {
           address2: '',
           address3: '',
           province: '',
-          company: '',
-          postal_code: ''   
+          company: '',//company id
+          person: '', //person id
+          postal_code: '',
+          belongs_to: ''   
     })
 
     function submit() {
@@ -199,7 +226,18 @@ export default {
       })
       
     }
-    return { submit,options, form }
+
+     function selectApplicant(event){
+      if(form.belongs_to === 'Company'){
+        form.belongs_to = event.target.value;
+      }else{
+        form.belongs_to = event.target.value;
+      }
+
+     }
+    
+
+    return { submit,selectApplicant,company_options, people_options, form }
   },
    components: {
     Layout,

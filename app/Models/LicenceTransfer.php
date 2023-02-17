@@ -25,4 +25,9 @@ class LicenceTransfer extends Model
     {
        return $this->belongsTo(Company::class,'licence_transfer','old_company_id','licence_id')->withPivot('status','slug','date');
     }
+
+    public function people()
+    {
+       return $this->belongsTo(People::class);
+    }
 }

@@ -55,25 +55,42 @@
 <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
 </div>
 
-<div class="col-md-12 columns" v-if="show_current_company">
+<div class="col-md-12 columns" v-if="licence.belongs_to === 'Company'">
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label mb-4">Current Company</label>
+<input type="text" disabled class="form-control form-control-default" v-model="form.company" >
+</div>
+<div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
+</div>
+<div class="col-md-12 columns" v-else-if="licence.belongs_to === 'Person'">
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label mb-4">Current Person</label>
+  <input type="text" disabled class="form-control form-control-default" v-model="form.person" >
+  </div>
+  <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
+  </div>
+
+<!-- <div class="col-md-12 columns" v-if="licence.belongs_to === 'Company'">
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label mb-4">Current Company</label>
 <input type="text" @focus="changeCompany" class="form-control form-control-default" v-model="form.company" >
 </div>
-<div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-</div>
-
-<div class="col-md-12 columns" v-if="change_company">
-<Multiselect
-v-model="form.change_company"
-:options="options"
-:searchable="true"
-placeholder="Search Company..."
-class="form-label"
-/>
 
 <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
 </div>
+
+<div class="col-md-12 columns" v-if="licence.belongs_to === 'Person'">
+  <Multiselect
+  v-model="form.change_company"
+  :options="options"
+  :searchable="true"
+   placeholder="Search Company..."
+   class="form-label"
+   :disabled="true"
+  />
+  
+  <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+  </div> -->
 
 
 <div class="col-md-12 columns">
@@ -305,14 +322,18 @@ Action
 </thead>
 <tbody>
 <tr>
-<td v-if="licence.company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
+<td v-if="licence.belongs_to ==='Company' && licence.company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
+<td v-else-if="licence.belongs_to ==='Person' && licence.people.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
 <td v-else class=" text-sm text-danger"><i class="fa fa-times"></i></td>
 <td class="align-middle text-sm">
-<Link class="text-sm text-center align-middle" :href="`/view-company/${licence.company.slug}`">
+<Link v-if="licence.belongs_to ==='Company'" :href="`/view-company/${licence.company.slug}`" class="text-sm text-center align-middle">
   <h6 class="mb-0 ">{{ limit(licence.company.name) }}</h6></Link>
+  <Link v-else-if="licence.belongs_to ==='Person'" :href="`/view-person/${licence.people.slug}`" class="text-sm text-center align-middle">
+    <h6 class="mb-0 ">{{ limit(licence.people.full_name) }}</h6></Link>
 </td>
 <td class="text-center">
-<Link :href="`/view-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
+<Link v-if="licence.belongs_to ==='Company'" :href="`/view-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
+<Link v-else-if="licence.belongs_to ==='Person'" :href="`/view-person/${licence.people.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
 </td>
 </tr>
 </tbody>
@@ -469,8 +490,10 @@ export default {
          address2: props.licence.address2,
          address3: props.licence.address3,
          province: props.licence.province,
-         company: props.licence.company.name,
-         company_id: props.licence.company.id,
+         company: props.licence.belongs_to === 'Company' ? props.licence.company.name : '',
+         person: props.licence.belongs_to === 'Person' ? props.licence.people.full_name : '',
+         company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
+         person_id: props.licence.belongs_to === 'Person' ? props.licence.people.id : '',
          change_company: '',  
     })
 
