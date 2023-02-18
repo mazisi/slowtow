@@ -76,7 +76,7 @@ class TransferLicenceController extends Controller
         $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents','people')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
 
-        $companies_dropdown = Company::pluck('name','id');
+        // $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->whereUserId(auth()->id())->get();
 
         $old_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
@@ -111,8 +111,6 @@ class TransferLicenceController extends Controller
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
-          'companies_dropdown' => $companies_dropdown,
-
           'old_transfer_forms' =>$old_transfer_forms,
           'current_transfer_forms' => $current_transfer_forms,
           'smoking_affidavict' => $smoking_affidavict,

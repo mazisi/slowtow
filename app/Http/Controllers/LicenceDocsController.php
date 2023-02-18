@@ -17,7 +17,8 @@ class LicenceDocsController extends Controller
         $request->validate([
             "doc"=> "required|mimes:pdf"
             ]);
-           // $path = Storage::putFileAs('storage/licenceDocuments/logo.pdf', new File('storage/licenceDocuments/logo.pdf'), $request->doc->getClientOriginalName());dd($path);
+           //$path = Storage::disk('local')->putFileAs('storage/licenceDocuments/logo.pdf', new File('storage/licenceDocuments/logo.pdf'), $request->doc->getClientOriginalName());
+           //dd($path);
             $fileModel = new LicenceDocument;
             $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->doc->getClientOriginalName());
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));

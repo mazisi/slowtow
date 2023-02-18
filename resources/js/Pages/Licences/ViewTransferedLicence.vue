@@ -13,7 +13,7 @@ export default {
   liqour_board_requests: Object,
     errors: Object,
     view_transfer: Object,
-    companies_dropdown: Array,
+    // companies_dropdown: Array,
     success: String,
     error: String,
     tasks: Object,
@@ -50,7 +50,7 @@ export default {
   setup (props) {
     let showMenu = false;
     let show_modal = ref(true);
-    let options = props.companies_dropdown;
+    // let options = props.companies_dropdown;
     let show_file_name = ref(false);
     let file_name = ref('');
 
@@ -184,7 +184,6 @@ export default {
       mergeDocuments,
       submitDocuments,
       submit,
-      options,
       show_modal,
       assignActiveValue,
       documentsForm,
@@ -369,7 +368,9 @@ export default {
 
   <div v-if="view_transfer.transfered_to === 'Company'" class="col-4 columns" >
   <div class="input-group input-group-outline null is-filled">
-    <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default">
+    <label class="form-label">Current Licence Holder</label>
+    <input :value="view_transfer.licence.company.name" type="text" required 
+    disabled title="You can`t change this field." class="form-control form-control-default">
 
      <!-- <Multiselect
      v-model="form.new_company"
@@ -384,6 +385,7 @@ export default {
 
 <div v-else-if="view_transfer.transfered_to === 'Person'" class="col-4 columns">
   <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Current Licence Holder</label>
     <input :value="view_transfer.people.full_name" type="text" required readonly title="You can`t change this field." class="form-control form-control-default">
     </div>
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
