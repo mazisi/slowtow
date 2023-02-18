@@ -22,14 +22,14 @@ class AlterationExports implements FromCollection, WithHeadings, ShouldAutoSize{
     }
     public function collection(){
         return AlterationExport::get([
-        'trading_name',
-        'licence_number',
-        'province',
-        'date_logded',
-        'proof_lodgiment',
-        'date_granted',
-        'status',
-        'notes'
+        // 'trading_name',
+        // 'licence_number',
+        // 'province',
+        // 'date_logded',
+        // 'proof_lodgiment',
+        // 'date_granted',
+        // 'status',
+        // 'notes'
         ]);
     }
 }
