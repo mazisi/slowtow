@@ -41,7 +41,7 @@
             <button @click="getType('Alterations')" type="button" class="type btn btn-success">Alterations</button>
           </div>
           <div class="col-4">
-            <button @click="getType('Temporal Licence')" type="button" class="type btn btn-success w-50">Temporary Applications</button>
+            <button @click="getType('Temporary Licence')" type="button" class="type btn btn-success w-50">Temporary Applications</button>
           </div>
         </div>
 <hr/>
@@ -118,7 +118,7 @@
     placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Temporal Licence'" class="col-6 columns">
+  <div v-if="form.variation === 'Temporary Licence'" class="col-6 columns">
     <Multiselect
     v-model="form.temp_licence_stages"           
     :options="temp_licence_stages"
@@ -144,13 +144,13 @@
   || form.variation === 'Nominations'
   || form.variation === 'Registrations'//New Apps
   || form.variation === 'Alterations'
-  || form.variation === 'Temporal Licence'
+  || form.variation === 'Temporary Licence'
   || form.variation === 'Existing-Licences'
    }">
   </div> -->
   
  
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-6 columns" >
+  <div v-if="form.variation !== 'Temporary Licence'" class="col-6 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
           v-model="form.province"          
@@ -166,7 +166,7 @@
 
 
 
-    <!-- <div v-if="form.variation !== 'Temporal Licence'" class="col-4">
+    <!-- <div v-if="form.variation !== 'Temporary Licence'" class="col-4">
       <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
       {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
     </div> -->
@@ -181,7 +181,7 @@
       </div>
   
   
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-6">
+  <div v-if="form.variation !== 'Temporary Licence'" class="col-6">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
@@ -194,7 +194,7 @@
   </div>
 
   
-  <div v-if="form.variation !== 'Temporal Licence'" class="col-6 ">
+  <div v-if="form.variation !== 'Temporary Licence'" class="col-6 ">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.licence_types"           
@@ -206,7 +206,7 @@
       </div>
   </div>
 
-  <div v-if="form.variation == 'Temporal Licence'" class="col-6 ">
+  <div v-if="form.variation == 'Temporary Licence'" class="col-6 ">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.temp_licence_region"           

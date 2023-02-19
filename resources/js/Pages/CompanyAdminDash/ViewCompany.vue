@@ -124,50 +124,68 @@
 
 <div class="col-md-6 columns">
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="company_doc !== ''">
-    <a v-for="doc in company_doc" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <div class="me-3" v-if="company_doc">
+    <a v-if="company_doc" :href="`${$page.props.blob_file_path}${company_doc.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
-    <div class="d-flex align-items-start flex-column justify-content-center">
+    <div class="d-flex align-items-start flex-column justify-content-center" style="margin-left: -3px;">
       <h6 class="mb-0 text-sm">Company Documents</h6>
-      <p v-if="company_doc.length > 0" class="mb-0 text-xs">Name: {{ company_doc[0].document_name }}</p>
+      <p v-if="company_doc" class="mb-0 text-xs">Name: {{ company_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
+    <button  v-if="company_doc" @click="deleteDocument(company_doc.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
 
+    <button v-else @click="getDocType('Company-Document')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
     
   </li>
 
-    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="cipc_cert !== ''">
-    <a v-for="doc in cipc_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="cipc_cert">
+    <a v-if="cipc_cert" :href="`${$page.props.blob_file_path}${cipc_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">CIPC Certificate</h6>
-       <p v-if="cipc_cert.length > 0" class="mb-0 text-xs">Name: {{ cipc_cert[0].document_name }}</p>
+       <p v-if="cipc_cert" class="mb-0 text-xs">Name: {{ cipc_cert.document_name }}</p>
        <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    
+    <button  v-if="cipc_cert" @click="deleteDocument(cipc_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('CIPC-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
   </li>
 
-    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="bee_cert !== ''">
-    <a v-for="doc in bee_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="bee_cert">
+    <a v-if="bee_cert" :href="`${$page.props.blob_file_path}${bee_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">BEE Certificate</h6>
-      <p v-if="bee_cert.length > 0" class="mb-0 text-xs">Name: {{ bee_cert[0].document_name }}</p>
-      <p v-if="bee_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(bee_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-if="bee_cert" class="mb-0 text-xs">Name: {{ bee_cert.document_name }}</p>
+      <p v-if="bee_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(bee_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
+    <button  v-if="bee_cert" @click="deleteDocument(bee_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
    
+    <button v-else @click="getDocType('BEE-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
   </li>
   
   </div>
@@ -175,36 +193,71 @@
 <ul class="list-group">
 
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="lta_cert !== ''">
-    <a v-for="doc in lta_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <div class="me-3" v-if="lta_cert">
+    <a v-if="lta_cert" :href="`${$page.props.blob_file_path}${lta_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">LTA Certificate</h6>
-      <p v-if="lta_cert.length > 0" class="mb-0 text-xs">Name: {{ lta_cert[0].document_name }}</p>
+      <p v-if="lta_cert" class="mb-0 text-xs">Name: {{ lta_cert.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    
+    <button  v-if="lta_cert" @click="deleteDocument(lta_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+    <button v-else @click="getDocType('LTA-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
   </li>
 
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="contrib_cert !== ''">
-    <a v-for="doc in contrib_cert" :key="doc.id" :href="`/storage/app/public/${doc.document_file}`" target="_blank">
+    <div class="me-3" v-if="contrib_cert">
+    <a v-if="contrib_cert" :href="`${$page.props.blob_file_path}${contrib_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Contribution Certificate</h6>
-      <p v-if="contrib_cert.length > 0" class="mb-0 text-xs">Name: {{ contrib_cert[0].document_name }}</p>
-      <p v-if="contrib_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(contrib_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-if="contrib_cert" class="mb-0 text-xs">Name: {{ contrib_cert.document_name }}</p>
+      <p v-if="contrib_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(contrib_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
-    
+    <button  v-if="contrib_cert" @click="deleteDocument(contrib_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Contribution-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="sars_cert">
+    <a v-if="sars_cert" :href="`${$page.props.blob_file_path}${sars_cert.document_file}`" target="_blank">
+    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">SARS Certificate</h6>
+      <p v-if="sars_cert" class="mb-0 text-xs">Name: {{ sars_cert.document_name }}</p>
+      <p v-if="sars_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(sars_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+
+    <button  v-if="sars_cert" @click="deleteDocument(sars_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('SARS-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
   </li>
 
 
@@ -428,44 +481,55 @@
 </div> -->
 
 
+<div v-if="show_modal" class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="submitDocuments">
+      <input type="hidden" v-model="documentsForm.doc_type">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns" v-if="documentsForm.doc_type == 'CIPC-Certificate' 
+                                          || documentsForm.doc_type == 'BEE-Certificate'
+                                          || documentsForm.doc_type == 'SARS-Certificate'">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Expiry Date</label>
+        <input type="date" required class="form-control form-control-default" 
+         v-model="documentsForm.expiry_date" >
+        </div>
+        <div v-if="errors.expiry_date" class="text-danger">{{ errors.expiry_date }}</div>
+        </div>
 
-<!-- <div class="row">
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No tasks found.</h6>
-</div>
-
-</div>
-
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6">{{ body_max - createTask.body.length}}/{{ body_max }}</span></label>
-<textarea v-model="createTask.body" @input='checkBodyLength' class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
+        <div class="col-md-12 columns">
+        <label for="licence-doc" class="btn btn-dark w-100" href="#!">Click To Upload File</label>
+         <input type="file" @change="getFileName"
+         hidden id="licence-doc" accept=".pdf"/>
+         <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
+         <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backtick.</p>  
+        </div>
+       <div class="col-md-12">
+          <progress v-if="documentsForm.progress" :value="documentsForm.progress.percentage" max="100">
+         {{ documentsForm.progress.percentage }}%
+         </progress>
+         </div>
+         </div>   
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" :disabled="documentsForm.processing || file_has_apostrophe">
+         <span v-if="documentsForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
 </div>
 
-<button :disabled="createTask.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Submit</button>
-
-</form>
-</div>
-</div> -->
 
 </div>
 </div>
@@ -499,6 +563,7 @@ import { ref } from 'vue'
 export default {
  props: {
     tasks: Object,
+    sars_cert: Object,
     errors: Object,
     company: Object,
     people: Array,
@@ -516,7 +581,9 @@ export default {
     let showMenu = false;
     let body_max = 100;
     let people_options = props.people;
-    let show_modal = ref(true);  
+    let show_modal = ref(true); 
+    let show_file_name = ref(false);
+    let file_name = ref('');  
 
     const form = useForm({
             company_name: props.company.name,
@@ -556,6 +623,7 @@ export default {
             expiry_date: null,
             doc_type: null,
             company_id: props.company.id,
+            company_name: props.company.name,
       })
 
 
@@ -598,22 +666,20 @@ export default {
            preserveScroll: true,
            onSuccess: (page) => { 
             this.show_modal = false;
-          let dismiss =  document.querySelector('.modal-backdrop') 
-         
-           dismiss.remove();
+          document.querySelector('.modal-backdrop').remove();
             addPeopleForm.reset();
            },
           })  
         }
 
       function submitDocuments(){
-          documentsForm.post(`/submit-company-documents`, {
+          documentsForm.post(`/company/submit-company-documents`, {
           preserveScroll: true,
           onSuccess: () => {
             documentsForm.reset();
            this.show_modal = false;
-           let dismiss =  document.querySelector('.modal-backdrop')    
-           dismiss.remove();
+           this.show_file_name = false;
+           document.querySelector('.modal-backdrop').remove();
           },
         })    
         }
@@ -688,9 +754,20 @@ export default {
           return string.substring(0, limit)
         }
         }
+
+
+        let file_has_apostrophe = ref();
+      function getFileName(e){
+        this.show_file_name = true;
+        this.documentsForm.document = e.target.files[0];
+        this.file_name = e.target.files[0].name;
+        this.file_has_apostrophe = this.file_name.includes("'");
+      }
+
     return {
       limit,
-      submit,
+      file_has_apostrophe,
+      submit,getFileName,
       submitTask,
       deleteTask,
       checkBodyLength,
@@ -712,7 +789,9 @@ export default {
       editPerson,
       getPositionValue,
       updatePerson,
-      show_modal
+      show_modal,
+      show_file_name,
+      file_name, 
     }
   },
 

@@ -36,7 +36,7 @@
             </Link> -->
           <Link :href="`/company/my-temp-licences`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
             <mini-statistics-card
-              :title="{ text: 'Temporal Licences', value: temp_licences }"
+              :title="{ text: 'Temporary Licences', value: temp_licences }"
               :icon="{
                 name: 'weekend',
                 color: 'text-white',

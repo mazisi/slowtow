@@ -21,12 +21,13 @@ class CompanyController extends Controller
 
     public function show($slug){
         $company = Company::with('users','licences','people')->whereSlug($slug)->first();
-        $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->get();
-        $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->get();
-        $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->get();
-        $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->get();
-        $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->get();
-        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->get();
+        $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->first();
+        $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->first();
+        $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->first();
+        $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->first();
+        $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->first();
+        $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->first();
+        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->first();
         $people = People::pluck('full_name','id');
         
         return Inertia::render('CompanyAdminDash/ViewCompany',[
@@ -37,6 +38,7 @@ class CompanyController extends Controller
              'bee_cert' => $bee_cert,
              'cipc_cert' => $cipc_cert,
              'lta_cert' => $lta_cert,
+             'sars_cert'  => $sars_cert,
              'company_doc' => $company_doc
             ]);
     }

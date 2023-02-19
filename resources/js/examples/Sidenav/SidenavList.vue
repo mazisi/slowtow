@@ -99,7 +99,7 @@
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'my_temp_licences'}"
           collapseRef="/company/my-temp-licences"
-          navText="Temporal Licences">
+          navText="Temporary Licences">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
               >timer</i

@@ -153,7 +153,7 @@ export default {
 <td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ limit(licence.trading_name) }}</Link></td>
 <td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.licence_date }}</Link></td>
-<td class="text-center"><Link :href="`/company/view-my-licences/${licence.slug}`">{{ licence.licence_type.licence_type }}</Link></td>
+<td class="text-center"><Link :href="`/company/view-my-licences/${licence.slug}`">{{ limit(licence.licence_type.licence_type) }}</Link></td>
 <td><Link :href="`/company/view-my-licences/${licence.slug}`">{{ limit(licence.company.name) }}</Link></td>
 <td class="text-center">
 <Link :href="`/company/view-my-licences/${licence.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>

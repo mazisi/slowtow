@@ -139,7 +139,7 @@ export default {
       }
 
       function deleteTemporalLicence(){
-        if(confirm('Are you sure you want to delete this licence??')){
+        if(confirm('Are you sure you want to delete this temporary licence??')){
           Inertia.delete(`/delete-temporal-licence/${props.licence.slug}`, {
             //
           })
