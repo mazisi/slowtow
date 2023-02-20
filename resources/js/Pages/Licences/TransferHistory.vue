@@ -43,7 +43,7 @@
                           <h6 class="mb-0 text-sm">
                           {{ limit(licence.old_company[index].name) }}
                            </h6>    
-                          </Link>                      
+                        </Link>                      
                         </div>
                         </td>
                     <td class="text-center">

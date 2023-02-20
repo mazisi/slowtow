@@ -30,6 +30,7 @@ export default {
           new_person: null,
           licence_id: props.licence.id,
           belongs_to: '',
+          transfered_from: props.licence.company ?  'Company' : 'Person',
           status: [],
     })
         function submit(){

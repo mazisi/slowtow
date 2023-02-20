@@ -32,11 +32,6 @@ class Company extends Model
        return $this->hasMany(Licence::class);
     }
 
-   //   public function consultants()
-   //   {
-   //    return $this->belongsToMany(Consultant::class)->withPivot('position','percentage','id');
-   //  }
-    
 
     public function temporal_licences()
     {

@@ -13,6 +13,7 @@ export default {
   liqour_board_requests: Object,
     errors: Object,
     view_transfer: Object,
+    new_company: Object,
     // companies_dropdown: Array,
     success: String,
     error: String,
@@ -57,7 +58,6 @@ export default {
     const form = useForm({
           trading_name: props.view_transfer.licence.trading_name,
           new_company: props.view_transfer.company_id,
-          old_company: props.view_transfer.licence.old_company[0].name,
           transfer_date: props.view_transfer.date,
           lodged_at: props.view_transfer.lodged_at,
           activation_fee_paid_at: props.view_transfer.activation_fee_paid_at,
@@ -353,11 +353,17 @@ export default {
 </div>
 </div> 
  <div class="col-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
+    <div v-if="view_transfer.licence.old_company" class="input-group input-group-outline null is-filled ">
     <label class="form-label">Previous Licence Holder</label>
-    <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" v-model="form.old_company" >
+    <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" 
+      :value="view_transfer.licence.old_company[0].name" >
      </div>
-   <div v-if="errors.old_company" class="text-danger">{{ errors.old_company }}</div>
+
+     <div v-if="view_transfer.licence.people" class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Previous Licence Holder</label>
+      <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" 
+        :value="view_transfer.licence.people.full_name" >
+       </div>
    </div>
 
    <div class="col-4 columns">
@@ -369,7 +375,7 @@ export default {
   <div v-if="view_transfer.transfered_to === 'Company'" class="col-4 columns" >
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Current Licence Holder</label>
-    <input :value="view_transfer.licence.company.name" type="text" required 
+    <input :value="new_company.name" type="text" required 
     disabled title="You can`t change this field." class="form-control form-control-default">
 
      <!-- <Multiselect
