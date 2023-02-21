@@ -17,54 +17,69 @@
                   <table class="table align-items-center mb-0">
                     <thead>
                       <tr>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Previous Licence Holder
                         </th>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                         Current Licence Holder
                         </th>
                         
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Stage
                         </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                        <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         View
                         </th>
                         
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for=" (  currentCompany, index  )   in licence.transfers" :key="index" >
-                        <td class="text-center">
-                        <div class="d-flex flex-column justify-content-left">
-                            <Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">
-                              <h6 class="mb-0 text-sm">
-                              {{ licence.old_company[index].name }}
+                      <tr v-for=" (  transfer, index  ) in transfers" :key="index" >
+                        <td >
+                        <div class="d-flex justify-content-left">
+                            <Link v-if="transfer.transfered_from === 'Company'" :href="`/company/view-my-transfer/${transfer.slug}`">
+                              <h6 class="mb-0 mx-4 text-sm">
+                              {{ limit(transfer.old_company.name) }}
                                </h6>    
-                              </Link>                      
-                        </div>
+                            </Link> 
+    
+                            <Link v-if="transfer.transfered_from === 'Person'" :href="`/company/view-my-transfer/${transfer.slug}`">
+                              <h6 class="mb-0 text-sm">
+                              {{ limit(transfer.old_person.full_name) }}
+                               </h6>    
+                            </Link>                      
+                            </div>
                             </td>
-                        <td class="text-center align-items-left">
-                          <Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`" 
-                          class="d-flex flex-column justify-content-left">
-                            <h6 class="mb-0 text-sm">
-                            {{ currentCompany.name }}
-                             </h6>    
+                        <td >
+                          
+                          <Link v-if="transfer.transfered_to === 'Company'" :href="`/company/view-my-transfer/${transfer.slug}`">
+                            <h6 class="text-sm">
+                            {{ limit(transfer.new_company.name) }}
+                          </h6>    
                             </Link>  
+                            <Link v-if="transfer.transfered_to === 'Person'" :href="`/company/view-my-transfer/${transfer.slug}`">
+                              <h6 class="text-sm">
+                              {{ limit(transfer.new_person.full_name) }}
+                            </h6>    
+                              </Link>  
                          
                         </td>
-                         <td  class="text-center" v-if="currentCompany.pivot.status == 1"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Client Quoted</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 2"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Client Invoiced</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 3"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Client Paid</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 4"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Collate Transfer Documents</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 5"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Payment To The Liquor Board</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 6"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Activation Fee Paid</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 8"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Transfer Issued</Link></td>
-                         <td  class="text-center" v-else-if="currentCompany.pivot.status == 9"><Link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">Transfer Delivered</Link></td>
-                          <td class="text-center">
-                        <inertia-link :href="`/company/view-my-transfer/${currentCompany.pivot.slug}`">
-                        <i class="fa fa-eye  " aria-hidden="true"></i>
-                        </inertia-link>
+              <td  v-if="transfer.status == 1"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Client Quoted</Link></td>
+              <td  v-else-if="transfer.status == 2"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Client Invoiced</Link></td>
+              <td  v-else-if="transfer.status == 3"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Client Paid</Link></td>
+              <td  v-else-if="transfer.status == 4"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Prepare Transfer Application</Link></td>
+              <td  v-else-if="transfer.status == 5"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Payment To The Liquor Board</Link></td>
+              <td  v-else-if="transfer.status == 6"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Scanned Application</Link></td>
+              <td  v-else-if="transfer.status == 7"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Application Logded</Link></td>
+              <td  v-else-if="transfer.status == 8"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Activation Fee Paid</Link></td>
+              <td  v-else-if="transfer.status == 9"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Transfer Issued</Link></td>
+              <td  v-else-if="transfer.status == 10"><Link :href="`/company/view-my-transfer/${transfer.slug}`">Transfer Delivered</Link></td>
+              
+    
+                      <td >
+                        <Link :href="`/company/view-my-transfer/${transfer.slug}`">
+                        <i class="fa fa-eye  mx-4" aria-hidden="true"></i>
+                        </Link>
                           
                         </td>
                       </tr>
@@ -88,6 +103,7 @@
     export default {
       name: "dashboard-default",
       props: {
+        transfers: Object,
         licence: Object,
         success: String,
         error: String,
@@ -98,6 +114,14 @@
         Layout,
         Link,
         Banner
+        },
+        methods: {
+          limit(string='', limit=25){
+          if(string.length >= limit){
+          return string.substring(0, limit) + '...'
+        }  
+          return string.substring(0, limit)
+        }
         },
     
     };

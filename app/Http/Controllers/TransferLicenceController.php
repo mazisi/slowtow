@@ -27,7 +27,7 @@ class TransferLicenceController extends Controller
                                                 ]);
     }
 
-    public function store(Request $request,$slug){dd($request);
+    public function store(Request $request,$slug){
       if($request->belongs_to === 'Person'){
           $request->validate([
             "new_person" => "required|exists:people,id",
@@ -42,15 +42,16 @@ class TransferLicenceController extends Controller
           ]);
       }
        
-    
+  
       $sorted_statuses = Arr::sort($request->status);
       $transfer = LicenceTransfer::create([
         'transfered_to' => $request->belongs_to,
         'transfered_from' => $request->transfered_from,
         'licence_id'=> $request->licence_id,
+        'old_people_id'=> $request->transfered_from ==='Person' ? $request->old_company_id : NULL,
         'company_id'=> $request->new_company,
         'people_id'=> $request->new_person,
-        'old_company_id' => $request->old_company_id,
+        'old_company_id' => $request->transfered_from === 'Company' ? $request->old_company_id : NULL,
         'status' => last($sorted_statuses),
         'slug' => sha1(time())
        ]);
@@ -68,16 +69,21 @@ class TransferLicenceController extends Controller
        * View all licence transfer history for a certain licence
        */
       public function transferHistory(Request $request){
-        $licence = Licence::with('transfers','old_company','people')->whereSlug($request->slug)->first();
-        return Inertia::render('Licences/TransferHistory',['licence' => $licence]);
+      $licence = Licence::whereSlug($request->slug)->first(['trading_name','slug']);
+      
+      $transfers = LicenceTransfer::with('old_person','new_person','old_company','new_company')
+          ->whereHas('licence', function ($query) use($request) {
+            $query->where('slug',$request->slug);
+          })->get();
+        return Inertia::render('Licences/TransferHistory',['licence' => $licence, 'transfers' => $transfers]);
       }
 
       /**
        * View licence transfer individually.
        */
       public function viewTransferedLicence($slug){
-        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents','people')->whereSlug($slug)->first();
-        $new_company = Company::whereId($view_transfer->company_id)->first(['id','name']);
+        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence')->whereSlug($slug)->first();
+        
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
       
         // $companies_dropdown = Company::pluck('name','id');
@@ -115,7 +121,6 @@ class TransferLicenceController extends Controller
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
-                 'new_company' => $new_company,
           'old_transfer_forms' =>$old_transfer_forms,
           'current_transfer_forms' => $current_transfer_forms,
           'smoking_affidavict' => $smoking_affidavict,

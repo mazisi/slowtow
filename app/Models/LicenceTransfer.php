@@ -23,11 +23,20 @@ class LicenceTransfer extends Model
 
     public function old_company()
     {
-       return $this->belongsTo(Company::class,'licence_transfer','old_company_id','licence_id')->withPivot('status','slug','date');
+       return $this->belongsTo(Company::class,'old_company_id');
+    }
+    public function new_company()
+    {
+       return $this->belongsTo(Company::class,'company_id');
     }
 
-    public function people()
+    public function old_person()
     {
-       return $this->belongsTo(People::class);
+       return $this->belongsTo(People::class, 'old_people_id');
+    }
+
+    public function new_person()
+    {
+       return $this->belongsTo(People::class,'people_id');
     }
 }

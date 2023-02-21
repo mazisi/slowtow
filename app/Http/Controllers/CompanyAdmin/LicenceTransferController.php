@@ -14,12 +14,18 @@ use App\Models\Company;
 class LicenceTransferController extends Controller
 {
     public function index(Request $request){
-        $licence = Licence::with('transfers','old_company')->whereSlug($request->slug)->first();
-        return Inertia::render('CompanyAdminDash/Transfers/MyTransfers',['licence' => $licence]);
+        $licence = Licence::whereSlug($request->slug)->first(['trading_name','slug']);
+      
+      $transfers = LicenceTransfer::with('old_person','new_person','old_company','new_company')
+          ->whereHas('licence', function ($query) use($request) {
+            $query->where('slug',$request->slug);
+          })->get();
+
+        return Inertia::render('CompanyAdminDash/Transfers/MyTransfers',['licence' => $licence, 'transfers' => $transfers]);
     }
 
     public function view_my_transfer($slug) {
-        $view_transfer = LicenceTransfer::with('licence.company','licence.old_company','transfer_documents')->whereSlug($slug)->first();
+        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence')->whereSlug($slug)->first();
         $get_current_company = Company::whereId($view_transfer->company_id)->first(['name']);
         $old_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $current_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
@@ -47,7 +53,7 @@ class LicenceTransferController extends Controller
         $transfer_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id',$view_transfer->id)->first();
         $transfer_delivered = TransferDocument::where('doc_type','Transfer Delivered')->where('licence_transfer_id',$view_transfer->id)->first();
         $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
-        $latest_renewal = LicenceDocument::where('doc_type','Latest Renewal')->where('licence_transfer_id',$view_transfer->id)->first();
+        $latest_renewal = LicenceDocument::where('document_type','Latest Renewal')->where('licence_id',$view_transfer->id)->first();
         $scanned_application = TransferDocument::where('doc_type','Scanned Application')->where('licence_transfer_id',$view_transfer->id)->first();
         
         return Inertia::render('CompanyAdminDash/Transfers/ViewMyTransfers',

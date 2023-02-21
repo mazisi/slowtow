@@ -13,7 +13,6 @@ export default {
   liqour_board_requests: Object,
     errors: Object,
     view_transfer: Object,
-    new_company: Object,
     // companies_dropdown: Array,
     success: String,
     error: String,
@@ -353,16 +352,16 @@ export default {
 </div>
 </div> 
  <div class="col-4 columns">
-    <div v-if="view_transfer.licence.old_company" class="input-group input-group-outline null is-filled ">
+    <div v-if="view_transfer.transfered_from === 'Company'" class="input-group input-group-outline null is-filled ">
     <label class="form-label">Previous Licence Holder</label>
     <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" 
-      :value="view_transfer.licence.old_company[0].name" >
+      :value="view_transfer.old_company.name" >
      </div>
 
-     <div v-if="view_transfer.licence.people" class="input-group input-group-outline null is-filled ">
+     <div v-else-if="view_transfer.transfered_from === 'Person'" class="input-group input-group-outline null is-filled ">
       <label class="form-label">Previous Licence Holder</label>
       <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" 
-        :value="view_transfer.licence.people.full_name" >
+        :value="view_transfer.old_person.full_name" >
        </div>
    </div>
 
@@ -375,7 +374,7 @@ export default {
   <div v-if="view_transfer.transfered_to === 'Company'" class="col-4 columns" >
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Current Licence Holder</label>
-    <input :value="new_company.name" type="text" required 
+    <input :value="view_transfer.new_company.name" type="text" required 
     disabled title="You can`t change this field." class="form-control form-control-default">
 
      <!-- <Multiselect
@@ -392,7 +391,7 @@ export default {
 <div v-else-if="view_transfer.transfered_to === 'Person'" class="col-4 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Current Licence Holder</label>
-    <input :value="view_transfer.people.full_name" type="text" required readonly title="You can`t change this field." class="form-control form-control-default">
+    <input :value="view_transfer.new_person.full_name" type="text" required readonly title="You can`t change this field." class="form-control form-control-default">
     </div>
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>
@@ -732,7 +731,7 @@ export default {
 </div>
 </div> 
 
-   <template v-if="form.issued_at == null">  
+   <template v-if="form.payment_to_liquor_board_at == null">  
 
     <div class="col-md-5 columns mb-4">
      <div class="input-group input-group-outline null is-filled ">
@@ -754,9 +753,9 @@ export default {
      <div class="input-group input-group-outline null is-filled ">
      <label class="form-label">Date</label>
      <input type="date" class="form-control form-control-default" 
-       v-model="form.delivered_at" >
+       v-model="form.payment_to_liquor_board_at" >
      </div>
-     <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
+     <div v-if="errors.payment_to_liquor_board_at" class="text-danger">{{ errors.payment_to_liquor_board_at }}</div>
     </div>
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
@@ -988,7 +987,7 @@ export default {
    <div class="input-group input-group-outline null is-filled ">
    <label class="form-label">Date</label>
    <input type="date" class="form-control form-control-default" 
-     v-model="form.delivered_at" >
+     v-model="form.issued_at" >
    </div>
    <div v-if="errors.issued_at" class="text-danger">{{ errors.issued_at }}</div>
   </div>
@@ -1101,7 +1100,7 @@ export default {
             </form>
               </div>
             </div>
-            <hr class="vertical dark" />
+          
           </div>
       <!-- //tasks were here -->
         
