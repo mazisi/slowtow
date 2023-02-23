@@ -124,12 +124,12 @@ public static function export($request){
                         break;
                 }
 
-                $notes = Task::where('model_id',$arr_of_transfers[$i]->id)->where('model_type','Transfer')->get(['body']);
+                $notes = Task::where('model_id',$arr_of_transfers[$i]->id)->where('model_type','Transfer')->get(['body','created_at']);
 
             
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->body. ' ';
+                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                         }
                     }
   
@@ -167,7 +167,7 @@ public static function export($request){
                  
               }
      
-     $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+     $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
      $spreadsheet->getActiveSheet()->getStyle('A1:L1')
      ->getAlignment()->setWrapText(true);
 

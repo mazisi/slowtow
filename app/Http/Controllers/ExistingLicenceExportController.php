@@ -153,13 +153,13 @@ class ExistingLicenceExportController extends Controller
                         break;
                     }
 
-                    $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Licence')->get(['body']);
+                    $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
                     //check if client has been logded
                     $is_client_logded = LicenceDocument::where('licence_id',$arr_of_licences[$i]->id)->where('document_type','Application Lodged')->first(['document_name']);
     
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->body. ' ';
+                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                         }
                     }
 

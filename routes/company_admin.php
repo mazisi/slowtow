@@ -5,6 +5,8 @@ use App\Http\Controllers\CompanyDocsController;
 use App\Http\Controllers\CompanyAdmin\CompanyController;
 use App\Http\Controllers\CompanyAdmin\LicenceController;
 use App\Http\Controllers\CompanyAdmin\DashboardController;
+use App\Http\Controllers\CompanyAdmin\AlterationController;
+use App\Http\Controllers\CompanyAdmin\NominationController;
 use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 
@@ -48,6 +50,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/my-temp-licences',[TemporalLicenceController::class,'index'])->name('my_temp_licences');
 
         Route::get('/view-my-temp-licences/{slug}',[TemporalLicenceController::class,'show']);
+
+
+        Route::get('/nominations',[NominationController::class,'index'])->name('my_nominations');
+
+        Route::get('/view-nomination/{slug}',[NominationController::class,'show'])->name('view_nomination');
+
+
+        Route::get('/alterations',[AlterationController::class,'index'])->name('company_alterations');
+        Route::get('/view-company-alteration/{slug}',[AlterationController::class,'show'])->name('view_company_alteration');
     });
 
   });   

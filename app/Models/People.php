@@ -12,6 +12,11 @@ class People extends Model
     
     protected $guarded = [];
 
+    public function getDateOfBirthAttribute($value){
+
+        return date("d-m-Y", strtotime($value));
+    }
+
     public function nominations(){
         return $this->belongsToMany(Nomination::class)->withPivot('relationship','terminated_at','id');
     }

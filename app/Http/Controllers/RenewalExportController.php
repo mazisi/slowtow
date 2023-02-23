@@ -91,14 +91,14 @@ class RenewalExportController extends Controller
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 
-                $notes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body']);
+                $notes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body','created_at']);
 
                 //check if client has been quoted
                        $is_quoted = RenewalDocument::where('licence_renewal_id',$arr_of_renewals[$i]->id)->where('doc_type','Client Quoted')->first(['id']);
     
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->body. ' ';
+                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                         }
                     }
 
@@ -135,7 +135,8 @@ class RenewalExportController extends Controller
                                 $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
                             }
 
-                    $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+                    $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getFont()->setBold(true);
+                    $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
                     
                     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                     header('Content-Disposition: attachment;filename="renewals_'.now()->format('d_m_y').'.xlsx"');

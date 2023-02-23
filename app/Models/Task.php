@@ -9,5 +9,9 @@ class Task extends Model
 {
     use HasFactory;
 
+    public function getCreatedAtAttribute($value){
+
+        return date("d-m-Y g:i a", strtotime($value));
+    }
     protected $guarded = [];
 }

@@ -106,14 +106,14 @@ class AlterationExportController extends Controller
                             break;
                         }
 
-                        $notes = Task::where('model_id',$arr_of_alterations[$i]->id)->where('model_type','Alteration')->get(['body']);
+                        $notes = Task::where('model_id',$arr_of_alterations[$i]->id)->where('model_type','Alteration')->get(['body','created_at']);
 
                         $proof_of_logdiment = AlterationDocument::where('alteration_id',$arr_of_alterations[$i]->id)->where('doc_type','Alterations Lodged')->first(['id']);
 
 
                         if(!is_null($notes) || !empty($notes)){
                             foreach ($notes as $note) {
-                            $notesCollection .=  $note->body. ' ';
+                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                             }
                         }
                         $data = [

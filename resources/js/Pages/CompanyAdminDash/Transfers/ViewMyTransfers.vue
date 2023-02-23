@@ -162,7 +162,7 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-6 col-7">
-  <h5>Transfer Info for: <Link :href="`/view-licence?slug=${view_transfer.licence.slug}`" class="text-success">
+  <h5>Transfer Info for: <Link :href="`/company/view-my-licences/${view_transfer.licence.slug}`" class="text-success">
     {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h5>
   <p class="text-sm mb-0">Current Stage: 
     <span class="font-weight-bold ms-1" v-if="view_transfer.status == '1'">Client Quoted</span>
@@ -593,7 +593,7 @@ export default {
 
 
 
-<div class="col-md-5 columns">
+<div class="col-8 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="liquor-b" class="active-checkbox" 
 :checked="view_transfer.status >= 5" type="checkbox" disabled>
@@ -601,36 +601,15 @@ export default {
 </div>
 </div> 
 
-   <template v-if="view_transfer.payment_to_liquor_board_at == null">  
-
-    <div class="col-md-5 columns mb-4">
+ 
+    <div class="col-4 columns mb-4">
      <div class="input-group input-group-outline null is-filled ">
      <label class="form-label">Date</label>
      <input type="date" class="form-control form-control-default" 
        v-model="view_transfer.payment_to_liquor_board_at" >
      </div>
     </div>
-   <div class="col-md-1"></div>
-    <div class="col-md-1 columns">
-     <button v-if="view_transfer.payment_to_liquor_board_at == null" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
-    </div>
-  </template>
-  
-  <template v-else>
-    <div class="col-md-5 columns mb-4">
-     <div class="input-group input-group-outline null is-filled ">
-     <label class="form-label">Date</label>
-     <input type="date" class="form-control form-control-default" 
-       v-model="view_transfer.payment_to_liquor_board_at" >
-     </div>
-    </div>
-   <div class="col-md-1"></div>
-    <div class="col-md-1 columns">
-     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
-    </div>
-  </template>
+   
 
 <ul class=" list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -688,7 +667,7 @@ export default {
 </ul>  
 <hr/>
 
-<div class="col-md-5 columns">
+<div class="col-8 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="app-logded" class="active-checkbox"
 :checked="view_transfer.status >= 6" type="checkbox" disabled>
@@ -697,37 +676,15 @@ export default {
 </div>
 
 
-   
-   <template v-if="view_transfer.lodged_at == null">  
+    <div class="col-4 columns mb-4">
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" 
+       v-model="view_transfer.lodged_at" >
+     </div>
+    </div>
 
-    <div class="col-md-5 columns mb-4">
-     <div class="input-group input-group-outline null is-filled ">
-     <label class="form-label">Date</label>
-     <input type="date" class="form-control form-control-default" 
-       v-model="view_transfer.lodged_at" >
-     </div>
-    </div>
-   <div class="col-md-1"></div>
-    <div class="col-md-1 columns">
-     <button v-if="view_transfer.lodged_at == null" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
-    </div>
-  </template>
   
-  <template v-else>
-    <div class="col-md-5 columns mb-4">
-     <div class="input-group input-group-outline null is-filled ">
-     <label class="form-label">Date</label>
-     <input type="date" class="form-control form-control-default" 
-       v-model="view_transfer.lodged_at" >
-     </div>
-    </div>
-   <div class="col-md-1"></div>
-    <div class="col-md-1 columns">
-     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
-    </div>
-  </template>
 
 
 <ul class=" list-group">

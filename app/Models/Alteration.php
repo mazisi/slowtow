@@ -12,6 +12,11 @@ class Alteration extends Model
 
     protected $guarded = [];
 
+    public function getCreatedAtAttribute($value){
+
+        return date("d-m-Y", strtotime($value));
+    }
+
     public function licence()
     {
         return $this->belongsTo(Licence::class);

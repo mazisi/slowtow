@@ -14,7 +14,7 @@ use App\Http\Requests\AlterationRequest;
 class AlterLicenceController extends Controller
 {
 
-  public function index(Request $request){//return nominations page
+  public function index(Request $request){
     $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name','slug']);
     return Inertia::render('Alterations/Alteration',['licence'=> $licence]);
   }

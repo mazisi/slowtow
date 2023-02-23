@@ -311,7 +311,7 @@ export default{
 </div>
 </div>
 
- <template v-if="nomination.payment_to_liquor_board_at == null">
+ <template v-if="nomination.client_paid_date == null">
   <div class="col-md-5 columns mb-4">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
@@ -454,7 +454,7 @@ Action
 </div>
 </td>
 <td class="text-center">{{ person.date_of_birth }}</td>
-<td class="text-center">{{ person.id_number }}</td>
+<td class="text-center">{{ person.id_or_passport }}</td>
 <td class="text-center">
 <i @click="removeSelectedNominee(person.id)" 
  style="cursor: pointer;"

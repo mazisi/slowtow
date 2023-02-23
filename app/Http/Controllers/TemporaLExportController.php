@@ -178,14 +178,14 @@ class TemporaLExportController extends Controller
                     break;
             }
 
-            $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body']);
+            $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body','created_at']);
    
     $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Client Invoiced')->first(['document_name']);
     $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Licence Lodged')->first(['id']);
 
             if(!is_null($notes) || !empty($notes)){
                 foreach ($notes as $note) {
-                    $notesCollection .=  $note->body. ' ';
+                    $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                 }
             }
 

@@ -90,7 +90,6 @@ name: "dashboard-default",
     <thead>
       <tr>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alteration Date</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Description</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Complete</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
@@ -100,14 +99,8 @@ name: "dashboard-default",
        
         <td class="text-center text-sm">
           <Link :href="`/view-alteration/${alter.slug}`">
-          {{ new Date(alter.date).toLocaleString().split(',')[0] }}
+          {{ alter.created_at }}
           </Link>
-        </td>
-         <td class="text-sm text-center">
-          <Link :href="`/view-alteration/${alter.slug}`">
-            {{ limit(alter.description) }}
-          </Link>
-        
         </td>
         
         <td class="text-sm text-center">
@@ -126,15 +119,13 @@ name: "dashboard-default",
 
      <tbody v-else>
         <td></td>
-        <td></td>
-        <td>No alterations found.</td>
+        <td class="text-danger">No alterations found.</td>
         </tbody>
   </table>
 </div>
 
 </div>
 </div>
-<hr class="vertical dark" />
 </div>
 
 </div>

@@ -128,14 +128,14 @@ class NominationExportController extends Controller
                      break;
             }
 
-            $notes = Task::where('model_id',$arr_of_nominations[$i]->id)->where('model_type','Nomination')->get(['body']);
+            $notes = Task::where('model_id',$arr_of_nominations[$i]->id)->where('model_type','Nomination')->get(['body','created_at']);
 
             // $is_client_paid = NominationDocument::where('nomination_id',$arr_of_nominations[$i]->id)->where('doc_type','Payment To The Liquor Board')->first();
 
         
                 if(!is_null($notes) || !empty($notes)){
                     foreach ($notes as $note) {
-                        $notesCollection .=  $note->body. ' ';
+                        $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                     }
                 }
 
@@ -169,11 +169,13 @@ class NominationExportController extends Controller
                  $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
               }
  
-     $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+     $spreadsheet->getActiveSheet()->getStyle('A1:J1')->getFont()->setBold(true);
+     $spreadsheet->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setWrapText(true);
      
      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
      header('Content-Disposition: attachment;filename="nominations_'.now()->format('d_m_y').'.xlsx"');
-     header('Cache-Control: max-age=0');        
+     header('Cache-Control: max-age=0');   
+          
     $writer = new Xlsx($spreadsheet);
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
     $writer->save('php://output');

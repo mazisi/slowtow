@@ -150,13 +150,13 @@ class NewAppExportController extends Controller
                 break;
             }
 
-            $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Licence')->get(['body']);
+            $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
             //check if client has been logded
             $is_client_logded = LicenceDocument::where('licence_id',$arr_of_licences[$i]->id)->where('document_type','Application Lodged')->first(['document_name']);
 
             if(!is_null($notes) || !empty($notes)){
                 foreach ($notes as $note) {
-                    $notesCollection .=  $note->body. ' ';
+                    $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                 }
             }
 
@@ -193,7 +193,8 @@ class NewAppExportController extends Controller
                     $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
                 }
     
-        $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getFont()->setBold(true);
+        $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getAlignment()->setWrapText(true);
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="registrations_'.now()->format('d_m_y').'.xlsx"');
