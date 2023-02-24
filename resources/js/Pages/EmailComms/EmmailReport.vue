@@ -78,7 +78,7 @@ export default {
          <option value="renewals">Renewals</option>
          <option value="transfers">Transfers</option>
          <option value="nominations">Nominations</option>
-         <!-- <option value="5">Temporal Licences</option> -->
+         <!-- <option value="5">Temporary Licences</option> -->
          
          </select>
          </div>         

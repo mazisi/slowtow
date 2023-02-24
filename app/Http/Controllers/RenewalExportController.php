@@ -34,7 +34,7 @@ class RenewalExportController extends Controller
         );
         $arr_of_renewals = [];
                     $renewals = DB::table('licence_renewals')
-                    ->selectRaw("licence_renewals.id, is_licence_active, trading_name, licence_number, licence_renewals.date, 
+                    ->selectRaw("licence_renewals.id, is_licence_active, trading_name, board_region,licence_number, licence_renewals.date, 
                                  licence_renewals.client_paid_at,licence_renewals.status, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
                                  is_quote_sent")
 
@@ -54,6 +54,7 @@ class RenewalExportController extends Controller
                             })
 
                             ->when(request('boardRegion'), function ($query)  {
+                                // $query->whereIn(DB::raw('licences.board_region'),array_values(explode(",",request('boardRegion'))));
                                 $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
                             })
                             ->when(request('applicant'), function ($query)  {
@@ -72,6 +73,7 @@ class RenewalExportController extends Controller
                             })
                            ->get([
                                 'id',
+                                'board_region',
                                 'is_licence_active',
                                 'trading_name',
                                 'licence_number',
@@ -81,8 +83,7 @@ class RenewalExportController extends Controller
                                 'payment_to_liquor_board_at',
                                 'renewal_issued_at',
                                 'renewal_delivered_at',
-                            ]
-                           );
+                            ]);
 
         
             $notesCollection = ' ';
@@ -103,7 +104,6 @@ class RenewalExportController extends Controller
                     }
 
             $data = [ 
-
                        $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
                        $arr_of_renewals[$i]->trading_name, 
                        $arr_of_renewals[$i]->licence_number,

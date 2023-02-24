@@ -232,24 +232,21 @@ export default {
 
 <hr/>
 
-<div class="col-5 columns">
+<div class="col-7 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" disabled value="3" :checked="alteration.status >= 3">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
 
- <div class="col-4 columns">
+ <div class="col-5 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+    <input type="date" readonly class="form-control form-control-default" v-model="form.client_paid_at">
     </div>
      <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
 </div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+
 <hr>
 
 <div class="col-md-12 columns">
@@ -384,7 +381,7 @@ export default {
 <hr>
 
 
-<div class="col-5 columns">
+<div class="col-7 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="alteration-board2" type="checkbox" disabled value="5" :checked="alteration.status >= 5">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-board2">Payment to the Liquor Board</label>
@@ -411,21 +408,18 @@ export default {
 </ul>
 
 </div>
-<div class="col-4 columns">
+<div class="col-5 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+    <input type="date" readonly class="form-control form-control-default" v-model="form.liquor_board_at">
     </div>
      <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
 </div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+
 <hr/>
 
 
-<div class="col-5 columns">
+<div class="col-7 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="alteration-logded" type="checkbox" disabled value="6" :checked="alteration.status >= 6">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-logded">Alterations Lodged</label>
@@ -452,20 +446,17 @@ export default {
 </ul>
 
 </div>
-<div class="col-4 columns">
+<div class="col-5 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.logded_at">
+    <input type="date" readonly class="form-control form-control-default" v-model="form.logded_at">
     </div>
      <div v-if="errors.logded_at" class="text-danger">{{ errors.logded_at }}</div>
 </div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+
 <hr/>
 
-<div class="col-5 columns">
+<div class="col-7 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="alteration-issued" type="checkbox" disabled value="7" :checked="alteration.status >= 7">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Certificate Issued</label>
@@ -492,21 +483,18 @@ export default {
 </ul>
 
 </div>
-<div class="col-4 columns">
+<div class="col-5 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.certification_issued_at">
+    <input type="date" readonly class="form-control form-control-default" v-model="form.certification_issued_at">
     </div>
      <div v-if="errors.certification_issued_at" class="text-danger">{{ errors.certification_issued_at }}</div>
 </div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+
 <hr/>
 
 
-<div class="col-5 columns">
+<div class="col-7 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="alteration-issued" type="checkbox" disabled value="8" :checked="alteration.status >= 8">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Delivered</label>
@@ -533,17 +521,14 @@ export default {
 </ul>
 
 </div>
-<div class="col-4 columns">
+<div class="col-5 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+    <input type="date" readonly class="form-control form-control-default" v-model="form.delivered_at">
     </div>
      <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
 </div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+
 <hr/>
 
             </div>

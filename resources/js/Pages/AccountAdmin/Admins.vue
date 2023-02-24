@@ -1,6 +1,7 @@
 <template>
   <Layout>
-    <div class="container-fluid py-4">
+    <div class="container-fluid">
+      <Banner/>
       <div class="row">
         <div class="col-12">
           <div class="card my-4">
@@ -76,10 +77,10 @@
         <a  
          class="dropdown-item border-radius-md" href="javascript:;"> Deactivate </a>
         </li>
-        <li  v-else @click="deActivateuser(user.id, user.is_active)">
+        <li v-else @click="deActivateuser(user.id, user.is_active)">
           <a class="dropdown-item border-radius-md" href="javascript:;"> Activate </a>
         </li>
-    <!-- <li><a class="dropdown-item border-radius-md" href="javascript:;"> Delete </a></li> -->
+    <li><a class="dropdown-item text-danger" href="javascript:;"> <i class="fa fa-trash"></i> Delete </a></li>
   </ul></div>
 </td>
                     </tr>
@@ -213,6 +214,7 @@
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
   import { Inertia } from '@inertiajs/inertia';
   import { ref } from 'vue';
+  import Banner from '../components/Banner.vue'
   
   export default {
    props: {
@@ -312,7 +314,7 @@
       Layout,
       Link,
       Head,
-      Inertia
+      Banner
     },
     
   };

@@ -22,7 +22,6 @@
       <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet"/>
 
       
-
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
 
 
@@ -126,6 +125,7 @@
 .navbar-vertical .navbar-brand > img, .navbar-vertical .navbar-brand-img {
 
     max-height: 8rem !important;
+    width: 200px;
 
     height: 10rem;
 
@@ -148,9 +148,8 @@
 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
 
-        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
+       <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 
     </body>
 
 </html>
-
