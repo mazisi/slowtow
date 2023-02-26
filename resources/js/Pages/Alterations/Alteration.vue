@@ -89,7 +89,7 @@ name: "dashboard-default",
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alteration Date</th>
+        <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alteration Date</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Complete</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
@@ -97,8 +97,8 @@ name: "dashboard-default",
     <tbody v-if="$props. licence.alterations.length > 0">
       <tr v-for="alter in licence.alterations" :key="alter.id">
        
-        <td class="text-center text-sm">
-          <Link :href="`/view-alteration/${alter.slug}`">
+        <td class="text-sm" >
+          <Link :href="`/view-alteration/${alter.slug}`" style="margin-left: 12px;">
           {{ alter.created_at }}
           </Link>
         </td>

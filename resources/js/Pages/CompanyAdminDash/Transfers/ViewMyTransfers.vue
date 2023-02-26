@@ -161,7 +161,7 @@ export default {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-9 col-9">
   <h5>Transfer Info for: <Link :href="`/company/view-my-licences/${view_transfer.licence.slug}`" class="text-success">
     {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h5>
   <p class="text-sm mb-0">Current Stage: 
@@ -177,7 +177,7 @@ export default {
    <span v-if="view_transfer.status == '10'" class="font-weight-bold ms-1">Transfer Delivered</span>
  </p>
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
+  <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
      @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
@@ -206,7 +206,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+      <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
     </div>
 
   </li>
@@ -232,7 +232,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+      <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
     </div>
 
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -621,7 +621,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="payment_to_liquor_board !== null" class="mb-0 text-xs">{{ payment_to_liquor_board.document_name }}</p>
+      <p v-if="payment_to_liquor_board !== null" class="mb-0 text-xs limit-file-name">{{ payment_to_liquor_board.document_name }}</p>
     </div>
 
     <a v-if="payment_to_liquor_board !== null" @click="deleteDocument(payment_to_liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -653,7 +653,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="scanned_application !== null" class="mb-0 text-xs">{{ scanned_application.document_name }}</p>
+      <p v-if="scanned_application !== null" class="mb-0 text-xs limit-file-name">{{ scanned_application.document_name }}</p>
     </div>
 
     <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -697,7 +697,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="transfer_logded !== null" class="mb-0 text-xs">{{ transfer_logded.document_name }}</p>
+      <p v-if="transfer_logded !== null" class="mb-0 text-xs limit-file-name">{{ transfer_logded.document_name }}</p>
     </div>
 
     <a v-if="transfer_logded !== null" @click="deleteDocument(transfer_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -762,7 +762,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="activation_fee !== null" class="mb-0 text-xs">{{ activation_fee.document_name }}</p>
+      <p v-if="activation_fee !== null" class="mb-0 text-xs limit-file-name">{{ activation_fee.document_name }}</p>
     </div>
 
     <a v-if="activation_fee !== null" @click="deleteDocument(activation_fee.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -828,7 +828,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="transfer_issued !== null" class="mb-0 text-xs">{{ transfer_issued.document_name }}</p>
+      <p v-if="transfer_issued !== null" class="mb-0 text-xs limit-file-name">{{ transfer_issued.document_name }}</p>
     </div>
 
     <a v-if="transfer_issued !== null" @click="deleteDocument(transfer_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -892,7 +892,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="transfer_delivered !== null" class="mb-0 text-xs">{{ transfer_delivered.document_name }}</p>
+      <p v-if="transfer_delivered !== null" class="mb-0 text-xs limit-file-name">{{ transfer_delivered.document_name }}</p>
     </div>
 
     <a v-if="transfer_delivered !== null" @click="deleteDocument(transfer_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

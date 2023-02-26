@@ -245,7 +245,7 @@ export default {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-9 col-9">
   <h6 v-if="licence.people === null">Temporary Licence For: 
       <Link :href="`/view-company/${licence.company.slug}`" class="text-success">{{ licence.company.name }}
       </Link>
@@ -265,7 +265,7 @@ export default {
    </p>
 
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
+  <div class="col-lg-3 col-3 my-auto text-end">
     <button @click="deleteTemporalLicence" class=" border-radius-md btn-danger" style="border: none">
       <i class="fa fa-trash-o cursor-pointer" aria-hidden="true" ></i> Delete</button>
   </div>
@@ -296,7 +296,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+      <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -330,7 +330,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+      <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -713,7 +713,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
+      <p v-if="liqour_board !== null" class="mb-0 text-xs limit-file-name">{{ liqour_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -747,7 +747,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="scanned_app !== null" class="mb-0 text-xs">{{ scanned_app.document_name }}</p>
+      <p v-if="scanned_app !== null" class="mb-0 text-xs limit-file-name">{{ scanned_app.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -805,7 +805,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_logded !== null" class="mb-0 text-xs">{{ licence_logded.document_name }}</p>
+      <p v-if="licence_logded !== null" class="mb-0 text-xs limit-file-name">{{ licence_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="licence_logded !== null" @click="deleteDocument(licence_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -867,7 +867,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_issued !== null" class="mb-0 text-xs">{{ licence_issued.document_name }}</p>
+      <p v-if="licence_issued !== null" class="mb-0 text-xs limit-file-name">{{ licence_issued.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -931,7 +931,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
+      <p v-if="licence_delivered !== null" class="mb-0 text-xs limit-file-name">{{ licence_delivered.document_name }}</p>
        <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 

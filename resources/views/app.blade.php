@@ -133,8 +133,13 @@
 
     margin-left: -1.7rem;
 
+    }
 
-}
+    .limit-file-name{
+      width: 90px; 
+      overflow: hidden; 
+      height: 30px
+    }
 
                 </style>
 

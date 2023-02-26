@@ -177,12 +177,12 @@ export default {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-9 col-9">
    <h6> Alteration Info for: 
     <Link :href="`/view-licence?slug=${alteration.licence.slug}`">
       <span class="text-success">{{ alteration.licence.trading_name }}</span></Link></h6>
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
+  <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
     @click="deleteAlteration(alteration.slug)" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
@@ -214,7 +214,7 @@ export default {
         </div>
         <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-           <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+           <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
           <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
         </div>
         <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -245,7 +245,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ getDocumentType(client_invoiced.path) }}</p>
+       <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ getDocumentType(client_invoiced.path) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -298,7 +298,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Application Form </h6>
-      <p v-if="application_form" class="mb-0 text-xs">
+      <p v-if="application_form" class="mb-0 text-xs limit-file-name">
         {{ application_form.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
@@ -320,7 +320,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Fully Dimensional Plans</h6>
-      <p v-if="dimensional_plans" class="mb-0 text-xs">
+      <p v-if="dimensional_plans" class="mb-0 text-xs limit-file-name">
         {{ dimensional_plans.document_name ? dimensional_plans.document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
@@ -342,7 +342,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Payment To The Liquor Board</h6>
-       <p v-if="payment_to_liquor_board" class="mb-0 text-xs">
+       <p v-if="payment_to_liquor_board" class="mb-0 text-xs limit-file-name">
         {{ payment_to_liquor_board.document_name ? payment_to_liquor_board.document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
@@ -369,7 +369,7 @@ export default {
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">POA & RES</h6>
-      <p v-if="poa_res" class="mb-0 text-xs">{{ poa_res.document_name }}</p>
+      <p v-if="poa_res" class="mb-0 text-xs limit-file-name">{{ poa_res.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
@@ -391,7 +391,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center" style="margin-left: -1rem">
       <h6 class="mb-0 text-sm">Smoking Affidavit</h6>
-       <p v-if="smoking_affidavict" class="mb-0 text-xs">
+       <p v-if="smoking_affidavict" class="mb-0 text-xs limit-file-name">
         {{ smoking_affidavict.document_name ? smoking_affidavict.document_name : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
@@ -452,7 +452,7 @@ v-if="application_form !== null
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
+       <p v-if="liqour_board !== null" class="mb-0 text-xs limit-file-name">{{ liqour_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -493,7 +493,7 @@ v-if="application_form !== null
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="alteration_logded !== null" class="mb-0 text-xs">{{ alteration_logded.document_name }}</p>
+       <p v-if="alteration_logded !== null" class="mb-0 text-xs limit-file-name">{{ alteration_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="alteration_logded !== null" @click="deleteDocument(alteration_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -533,7 +533,7 @@ v-if="application_form !== null
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="certification_issued !== null" class="mb-0 text-xs">{{ certification_issued.document_name }}</p>
+       <p v-if="certification_issued !== null" class="mb-0 text-xs limit-file-name">{{ certification_issued.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="certification_issued !== null" @click="deleteDocument(certification_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -574,7 +574,7 @@ v-if="application_form !== null
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="alteration_delivered !== null" class="mb-0 text-xs">{{ alteration_delivered.document_name }}</p>
+      <p v-if="alteration_delivered !== null" class="mb-0 text-xs limit-file-name">{{ alteration_delivered.document_name }}</p>
       <p v-if="!alteration_delivered" class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="alteration_delivered !== null" @click="deleteDocument(alteration_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

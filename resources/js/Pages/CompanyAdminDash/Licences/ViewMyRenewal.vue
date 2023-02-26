@@ -130,7 +130,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+      <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
@@ -156,7 +156,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+      <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
       <p v-if="client_invoiced !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(client_invoiced.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
@@ -214,7 +214,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="liqour_board !== null" class="mb-0 text-xs">{{ liqour_board.document_name }}</p>
+      <p v-if="liqour_board !== null" class="mb-0 text-xs limit-file-name">{{ liqour_board.document_name }}</p>
       <p v-if="liqour_board !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(liqour_board.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
@@ -249,7 +249,7 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="renewal_issued !== null" class="mb-0 text-xs">{{ renewal_issued.document_name }}</p>
+      <p v-if="renewal_issued !== null" class="mb-0 text-xs limit-file-name">{{ renewal_issued.document_name }}</p>
       <p v-if="renewal_issued !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_issued.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
@@ -286,7 +286,7 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="renewal_doc !== null" class="mb-0 text-xs">{{ renewal_doc.document_name }}</p>
+      <p v-if="renewal_doc !== null" class="mb-0 text-xs limit-file-name">{{ renewal_doc.document_name }}</p>
       <p v-if="renewal_doc !== null" class="mb-0 text-xs text-dark">Date:{{ computeDocumentDate(renewal_doc.date) }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>

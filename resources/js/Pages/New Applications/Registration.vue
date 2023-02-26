@@ -5,7 +5,7 @@
       <Banner/>
       <div class="card card-body mx-3 mx-md-4 mt-n6">
         <div class="row">
-    <div class="col-lg-6 col-7">
+    <div class="col-lg-12 col-12">
      <h6>Process Registration for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
       {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
      <p class="text-sm mb-0">Current Stage: 
@@ -50,7 +50,7 @@
   </div>   
   <hr>
   
-  
+  limit-file-name
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="client-invoiced" type="checkbox"
@@ -70,7 +70,7 @@
     
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+          <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
         </div>
     
         <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" 
@@ -174,7 +174,7 @@
     
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="payment_to_liqour_board" class="mb-0 text-xs">{{ payment_to_liqour_board.document_name }}</p>
+          <p v-if="payment_to_liqour_board" class="mb-0 text-xs limit-file-name">{{ payment_to_liqour_board.document_name }}</p>
         </div>
     
         <a v-if="payment_to_liqour_board" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -652,7 +652,7 @@
       </div>
       <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="scanned_application !== null" class="mb-0 text-xs">{{ scanned_application.document_name }}</p>
+        <p v-if="scanned_application !== null" class="mb-0 text-xs limit-file-name">{{ scanned_application.document_name }}</p>
       </div>
       <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
@@ -717,7 +717,7 @@
       
          <div class=" d-flex align-items-start flex-column justify-content-center">
             <h6 class="mb-0 text-sm ">Document</h6>
-            <p v-if="application_logded !== null" class="mb-0 text-xs">{{ application_logded.document_name }}</p>
+            <p v-if="application_logded !== null" class="mb-0 text-xs limit-file-name">{{ application_logded.document_name }}</p>
           </div>
       
           <a v-if="application_logded !== null" @click="deleteDocument(application_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -769,6 +769,7 @@
 
         <ul class="list-group">
           <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+            
             <div class="avatar me-3" v-if="initial_inspection_doc !== null">
             <a :href="`${$page.props.blob_file_path}${initial_inspection_doc.document_file}`" target="_blank">
             <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
@@ -777,7 +778,12 @@
         
            <div class="d-flex align-items-start flex-column justify-content-center">
               <h6 class="mb-0 text-sm">Document</h6>
-              <p v-if="initial_inspection_doc !== null" class="mb-0 text-xs">{{ initial_inspection_doc.document_name }}</p>
+              
+                <p v-if="initial_inspection_doc !== null" class="mb-0 text-xs limit-file-name">
+                  {{ initial_inspection_doc.document_name }}
+                </p>
+           
+              
             </div>
         
             <a v-if="initial_inspection_doc !== null" @click="deleteDocument(initial_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -844,7 +850,7 @@
   
      <div class="d-flex align-items-start flex-column justify-content-center">
         <h6 class="mb-0 text-sm">Document</h6>
-        <p v-if="final_inspection_doc !== null" class="mb-0 text-xs">{{ final_inspection_doc.document_name }}</p>
+        <p v-if="final_inspection_doc !== null" class="mb-0 text-xs limit-file-name">{{ final_inspection_doc.document_name }}</p>
       </div>
   
       <a v-if="final_inspection_doc !== null" @click="deleteDocument(final_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -914,7 +920,7 @@
     
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="activation_fee_requested_doc !== null" class="mb-0 text-xs">{{ activation_fee_requested_doc.document_name }}</p>
+          <p v-if="activation_fee_requested_doc !== null" class="mb-0 text-xs limit-file-name">{{ activation_fee_requested_doc.document_name }}</p>
         </div>
     
         <a v-if="activation_fee_requested_doc !== null" @click="deleteDocument(activation_fee_requested_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -946,7 +952,7 @@
       
          <div class="d-flex align-items-start flex-column justify-content-center">
             <h6 class="mb-0 text-sm">Document</h6>
-            <p v-if="client_finalisation !== null" class="mb-0 text-xs">{{ client_finalisation.document_name }}</p>
+            <p v-if="client_finalisation !== null" class="mb-0 text-xs limit-file-name">{{ client_finalisation.document_name }}</p>
           </div>
       
           <a v-if="client_finalisation !== null" @click="deleteDocument(client_finalisation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -1046,7 +1052,7 @@
           
              <div class="d-flex align-items-start flex-column justify-content-center">
                 <h6 class="mb-0 text-sm">Document</h6>
-                <p v-if="activation_fee_paid !== null" class="mb-0 text-xs">{{ activation_fee_paid.document_name }}</p>
+                <p v-if="activation_fee_paid !== null" class="mb-0 text-xs limit-file-name">{{ activation_fee_paid.document_name }}</p>
               </div>
           
               <a v-if="activation_fee_paid !== null" @click="deleteDocument(activation_fee_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -1111,7 +1117,7 @@
             
                <div class="d-flex align-items-start flex-column justify-content-center">
                   <h6 class="mb-0 text-sm">Document</h6>
-                  <p v-if="licence_issued_doc !== null" class="mb-0 text-xs">{{ licence_issued_doc.document_name }}</p>
+                  <p v-if="licence_issued_doc !== null" class="mb-0 text-xs limit-file-name">{{ licence_issued_doc.document_name }}</p>
                 </div>
             
                 <a v-if="licence_issued_doc !== null" @click="deleteDocument(licence_issued_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -1177,7 +1183,7 @@
               
                  <div class="d-flex align-items-start flex-column justify-content-center">
                     <h6 class="mb-0 text-sm">Document</h6>
-                    <p v-if="licence_delivered !== null" class="mb-0 text-xs">{{ licence_delivered.document_name }}</p>
+                    <p v-if="licence_delivered !== null" class="mb-0 text-xs limit-file-name">{{ licence_delivered.document_name }}</p>
                   </div>
               
                   <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

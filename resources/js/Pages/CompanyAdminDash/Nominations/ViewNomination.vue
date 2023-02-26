@@ -142,7 +142,7 @@ export default{
 <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
-<div class="col-lg-6 col-7">
+<div class="col-lg-12 col-12">
 <h6><Link :href="`/company/view-my-licences/?slug=${nomination.licence.slug}`" class="text-success">
   {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
 <p class="text-sm mb-0">Current Stage: 
@@ -189,7 +189,7 @@ export default{
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="client_quoted !== null" class="mb-0 text-xs">{{ client_quoted.document_name }}</p>
+       <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -220,7 +220,7 @@ export default{
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="client_invoiced !== null" class="mb-0 text-xs">{{ client_invoiced.document_name }}</p>
+       <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -286,7 +286,7 @@ export default{
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="liquor_board !== null" class="mb-0 text-xs">{{ liquor_board.document_name }}</p>
+       <p v-if="liquor_board !== null" class="mb-0 text-xs limit-file-name">{{ liquor_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <!-- <p v-if="liquor_board !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(liquor_board.date) }}</p> -->
     </div>
@@ -380,7 +380,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm"> Nomination Forms </h6>
-       <p v-if="nomination_forms !== null" class="mb-0 text-xs">{{ nomination_forms.document_name }}</p>
+       <p v-if="nomination_forms !== null" class="mb-0 text-xs limit-file-name">{{ nomination_forms.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="nomination_forms !== null" @click="deleteDocument(nomination_forms.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
@@ -419,7 +419,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Signed Power Of Attorney And Resolution </h6>
-       <p v-if="attorney_doc !== null" class="mb-0 text-xs">{{ attorney_doc.document_name }}</p>
+       <p v-if="attorney_doc !== null" class="mb-0 text-xs limit-file-name">{{ attorney_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="attorney_doc !== null" @click="deleteDocument(attorney_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
@@ -441,7 +441,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">ID Documents</h6>
-       <p v-if="certified_id_doc !== null" class="mb-0 text-xs">{{ certified_id_doc.document_name }}</p>
+       <p v-if="certified_id_doc !== null" class="mb-0 text-xs limit-file-name">{{ certified_id_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="certified_id_doc !== null" @click="deleteDocument(certified_id_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
@@ -463,7 +463,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Police Clearances </h6>
-       <p v-if="police_clearance_doc !== null" class="mb-0 text-xs">{{ police_clearance_doc.document_name }}</p>
+       <p v-if="police_clearance_doc !== null" class="mb-0 text-xs limit-file-name">{{ police_clearance_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="police_clearance_doc !== null" @click="deleteDocument(police_clearance_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
@@ -486,7 +486,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Latest renewal/ licence</h6>
-       <p v-if="latest_renewal_doc !== null" class="mb-0 text-xs">{{ latest_renewal_doc.document_name }}</p>
+       <p v-if="latest_renewal_doc !== null" class="mb-0 text-xs limit-file-name">{{ latest_renewal_doc.document_name }}</p>
       <!-- <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p> -->
     </div>
     <a v-if="latest_renewal_doc !== null" @click="deleteDocument(latest_renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
@@ -525,7 +525,7 @@ Action
         </div>
         <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-           <p v-if="scanned_app !== null" class="mb-0 text-xs">{{ scanned_app.document_name }}</p>
+           <p v-if="scanned_app !== null" class="mb-0 text-xs limit-file-name">{{ scanned_app.document_name }}</p>
           <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
           <p v-if="scanned_app !== null" class="mb-0 text-xs"></p>
         </div>
@@ -558,7 +558,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="nomination_logded !== null" class="mb-0 text-xs">{{ nomination_logded.document_name }}</p>
+       <p v-if="nomination_logded !== null" class="mb-0 text-xs limit-file-name">{{ nomination_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="nomination_logded !== null" class="mb-0 text-xs"></p>
     </div>
@@ -605,7 +605,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="nomination_issued !== null" class="mb-0 text-xs">{{ nomination_issued.document_name }}</p>
+       <p v-if="nomination_issued !== null" class="mb-0 text-xs limit-file-name">{{ nomination_issued.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -653,7 +653,7 @@ Action
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="nomination_delivered !== null" class="mb-0 text-xs">{{ nomination_delivered.document_name }}</p>
+       <p v-if="nomination_delivered !== null" class="mb-0 text-xs limit-file-name">{{ nomination_delivered.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="nomination_delivered !== null" class="mb-0 text-xs"></p>
     </div>
