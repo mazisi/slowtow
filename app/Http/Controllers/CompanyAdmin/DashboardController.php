@@ -14,7 +14,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-
         $companies = Company::whereHas('users', function($query){
             $query->where('user_id',auth()->id());
         })->get();

@@ -62,7 +62,7 @@ class AdminsController extends Controller
                 'full_name' => 'required',
                 'role' => 'required'
             ]);    
-           $user= User::whereId($request->id)->update([
+           User::find($request->id)->update([
             'name' => $request->full_name,
             'email' => $request->email,
            ]);
@@ -76,13 +76,23 @@ class AdminsController extends Controller
     public function deactivate($id, $status){
       try {
         if($status == 0){
-          User::whereid($id)->update(['is_active' => true]);
+          User::find($id)->update(['is_active' => true]);
         }else{
-          User::whereid($id)->update(['is_active' => false]);
+          User::find($id)->update(['is_active' => false]);
         }       
         return back();
       } catch (\Throwable $th) {
         throw $th;
+      }
+    }
+
+    public function destroy($id){
+      try {
+          User::find($id)->delete();            
+        return back()->with('success','User deleted successfully.');;
+      } catch (\Throwable $th) {
+        throw $th;
+        //return back()->with('error','Error deleting user.');
       }
     }
 }

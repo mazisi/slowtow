@@ -1,14 +1,12 @@
 <?php
 
-use App\Http\Controllers\AlterationDocumentController;
-use App\Http\Controllers\AlterationExportController;
 use Inertia\Inertia;
-
 use Illuminate\Support\Facades\Route;
-
 use Illuminate\Foundation\Application;
 
 use App\Http\Controllers\TaskController;
+
+use App\Http\Controllers\IssueController;
 
 use App\Http\Controllers\PersonController;
 
@@ -58,23 +56,26 @@ use App\Http\Controllers\TemporalLicenceController;
 
 use App\Http\Controllers\TransferLicenceController;
 
+use App\Http\Controllers\AlterationExportController;
+
 use App\Http\Controllers\NominationExportController;
+
+use App\Http\Controllers\AlterationDocumentController;
 
 use App\Http\Controllers\Auth\PasswordResetController;
 
 use App\Http\Controllers\LiquorBoardRequestController;
 
+use App\Http\Controllers\Slowtowdmin\AdminsController;
+
 use App\Http\Controllers\TemporalLicenceDocsController;
 
 use App\Http\Controllers\NominationEmailCommsController;
 
-use App\Http\Controllers\DispatchMailWithoutEditingController;
-
-use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
-
-use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 use App\Http\Controllers\ExistingLicenceExportController;
-use App\Http\Controllers\Slowtowdmin\AdminsController;
+use App\Http\Controllers\DispatchMailWithoutEditingController;
+use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
+use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 
 
 
@@ -110,11 +111,9 @@ Route::group(['middleware' => ['guest']], function () {
 
 
 
-Route::group(['middleware' => ['auth']], function () { 
-
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 
-    Route::group(['middleware' => ['role:slowtow-admin|slowtow-user']], function () {
+    Route::group(['middleware' => ['auth','role:slowtow-admin|slowtow-user']], function () {
 
 
 
@@ -125,6 +124,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::patch('/update-user',[AdminsController::class,'update']);
 
         Route::post('/deactivate-user/{id}/{status}',[AdminsController::class,'deactivate']);
+
+        Route::patch('/delete-user/{id}',[AdminsController::class,'destroy']);
 
 
 
@@ -434,7 +435,15 @@ Route::group(['middleware' => ['auth']], function () {
 
         //Route::post('/dispatchMail', [DispatchMailWithoutEditingController::class,'dispatchMail'])->name('dispatch_mail_without_editing');
 
+
+
+        Route::get('issues', [IssueController::class,'index'])->name('issues');
+        Route::get('create-issue', [IssueController::class,'create'])->name('create_issue');
+        Route::get('view-issue/{slug}', [IssueController::class,'show'])->name('view_issue');
+        Route::post('submit-issue', [IssueController::class,'store'])->name('submit_issue');
+        Route::post('change-issue-status/{slug}/{status}', [IssueController::class,'changeStatus']);
+        Route::patch('update-issue/{slug}', [IssueController::class,'update']);
     });
 
-});
+
 

@@ -144,6 +144,20 @@
         </sidenav-collapse>
       </li>
 
+      <li v-if="$page.props.currentRoute == 'issues'" class="nav-item">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          collapseRef="/create-issue"
+          navText="Add New Issue"
+        >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">control_point_duplicate</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
       <li v-if="$page.props.currentRoute == 'companies' 
       || $page.props.currentRoute == 'view_company'
       && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
@@ -373,7 +387,7 @@
 
 
       <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>  
-
+      
 
       <li class="nav-item">
   <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
@@ -439,10 +453,24 @@
           </template>
         </sidenav-collapse>
       </li>
-      <hr v-if="$page.props.auth.has_slowtow_admin_role
-      "/>
 
-
+      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+        <sidenav-collapse 
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active: $page.props.currentRoute == 'issues'
+          || $page.props.currentRoute == 'get_licence_transfers'
+          || $page.props.currentRoute == 'get_nominations'}"
+          collapseRef="/issues"
+          navText="Issues">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">bug_report</i>
+            
+          </template>
+        </sidenav-collapse>
+      </li>
+      <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
 
     </ul>
     

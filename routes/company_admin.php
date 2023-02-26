@@ -10,9 +10,8 @@ use App\Http\Controllers\CompanyAdmin\NominationController;
 use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 
-Route::group(['middleware' => ['auth']], function () { 
 
-  Route::group(['middleware' => ['role:company-admin']], function () {
+  Route::group(['middleware' => ['auth','role:company-admin']], function () {
       
       Route::prefix('company')->group(function () {
 
@@ -62,4 +61,3 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
   });   
-});

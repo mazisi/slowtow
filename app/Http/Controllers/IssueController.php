@@ -1,0 +1,82 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Issue;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class IssueController extends Controller
+{
+    public function index()
+    {        
+        $issues = Issue::with('user.company')->latest()->paginate(20);
+        return Inertia::render('Issues/Issue',['issues' => $issues]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Issues/CreateIssue');
+    }
+
+    public function store(Request $request)
+    {
+        try {
+            $request->validate([
+                "severity" => "required|in:High,Moderate,Low",
+                'body' => "required"
+            ]);
+    
+            
+            Issue::create([
+                "user_id" => auth()->id(),
+                "body"    => $request->body,
+                "severity" => $request->severity,
+                "url" => $request->url,
+                "slug" => sha1(time())
+            ]);
+            return to_route('issues')->with('success','Issue submitted successfully.');
+        } catch (\Throwable $th) {
+            return back()->with('error','Error creating issue.');
+        }
+    }
+
+    public function show($slug){
+        $issue = Issue::with('user.company')->whereSlug($slug)->first();
+        return Inertia::render('Issues/ViewIssue',['issue' => $issue]);
+    }
+
+    public function changeStatus($slug,$status)
+    {
+        if($status === 'Deleted'){
+            Issue::whereSlug($slug)->delete();
+          return to_route('issues')->with('success','Status updated successfully.');;
+        }
+
+        Issue::whereSlug($slug)->update([
+            'status' => $status
+        ]);
+        
+        return back()->with('success','Status updated successfully.');
+    }
+
+    public function update(Request $request, $slug){
+
+      try {
+        $request->validate([
+            "severity" => "required|in:High,Moderate,Low",
+            'body' => "required"
+        ]);
+
+        Issue::whereSlug($slug)->update([
+            "body"    => $request->body,
+            "severity" => $request->severity,
+            "url" => $request->url
+        ]);
+        
+        return back()->with('success','Issue updated successfully.');
+      } catch (\Throwable $th) {
+        return back()->with('error','Error Updating Issue.');
+      }
+    }
+}
