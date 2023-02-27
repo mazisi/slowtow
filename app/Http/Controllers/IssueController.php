@@ -8,9 +8,27 @@ use Inertia\Inertia;
 
 class IssueController extends Controller
 {
-    public function index()
-    {
-        
+    public function index() {   
+         if(auth()->user()->hasRole('company-admin')){
+            $issues = Issue::with('user.company')
+            ->when(request('status'), 
+                function ($query){ 
+                    return $query->where('status',request('status'));
+                
+                })->when(request('priority'), 
+                    function ($query){ 
+                        return $query->where('severity',request('priority'));                 
+                    })
+    
+                    ->when(request('priority') && request('status'), 
+                    function ($query){ 
+                        return $query->where('severity',request('priority'))
+                        ->where('status',request('status'));                
+                    })
+                    ->whereUserId(auth()->id())
+                   ->latest()->paginate(50);
+                   return Inertia::render('CompanyAdminDash/Issues/Issues',['issues' => $issues]);
+         } else {
         $issues = Issue::with('user.company')
         ->when(request('status'), 
             function ($query){ 
@@ -27,7 +45,9 @@ class IssueController extends Controller
                     ->where('status',request('status'));                
                 })
 
-               ->latest()->get();
+               ->latest()->paginate(50);
+    }   
+       
         return Inertia::render('Issues/Issue',['issues' => $issues]);
     }
 

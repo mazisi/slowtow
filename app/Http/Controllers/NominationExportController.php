@@ -74,6 +74,7 @@ class NominationExportController extends Controller
                                 ->when(request('nomination_stages'), function ($query) {
                                     $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
                               })
+                              ->orderBy('trading_name')
                                 ->get([
                                     'id',
                                     'trading_name',

@@ -106,7 +106,9 @@ class TemporaLExportController extends Controller
                              ->when(!empty(request('applicant')), function ($query) {
                                  $query->where('belongs_to',request('applicant'));
                              });
-                          })->get(
+                          })
+                          ->orderBy('event_name')
+                          ->get(
                              [
                              'temporal_licences.id',
                              'event_name',

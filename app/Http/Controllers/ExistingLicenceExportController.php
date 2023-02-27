@@ -35,16 +35,16 @@ class ExistingLicenceExportController extends Controller
         $licences = DB::table('licences')
                  ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
                               deposit_paid_at, application_lodged_at, activation_fee_paid_at, client_paid_at,
-                              client_paid_at,status")
+                              client_paid_at,status, board_region")
 
                  ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
 
-                     ->when(function($query){
+                     ->when($request,function($query){
                         $query->when(request('month_from') && request('month_to'), function($query){
                             $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
                          })
                
-                         ->when(request('month_from') && !request('month_to'), function ($query)  {
+                         ->when(request('month_from') && !request('month_to'), function ($query){
                             $query->whereMonth('licence_date', request('month_from'));
                         })
 
@@ -55,27 +55,28 @@ class ExistingLicenceExportController extends Controller
                             $query->where('is_licence_active',false);
                         })
 
-                        ->when(!empty(request('province')), function ($query) {
+                        ->when(request('province'), function ($query) {
                             $query->whereIn('province',array_values(explode(",",request('province'))));
                         })
-                        ->when(!empty(request('boardRegion')), function ($query) {
+                        ->when(request('boardRegion'), function ($query) {
                             $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
                         })
                         ->when(request('new_app_stages'), function ($query) {
                             $query->whereIn('status', array_values(explode(",",request('new_app_stages'))));
                         })
-                        ->when(!empty(request('applicant')), function ($query) {
+                        ->when(request('applicant'), function ($query) {
                             $query->where('belongs_to',request('applicant'));
                         })
-                        ->when(!empty(request('licence_types')), function ($query) {
-                            $query->where('licence_type_id',request('licence_types'));
+                        ->when(request('licence_types'), function ($query) {
+                            $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                         })
 
-                        ->when(!empty(request('selectedDates')), function ($query) {
+                        ->when(request('selectedDates'), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          });
                         })->where('is_new_app',NULL)
-                        ->orWhere('is_new_app','0')
+                        ->orWhere('is_new_app',0)
+                        ->orderBy('trading_name')
                         ->get([
                             'id',
                             'trading_name',
@@ -83,15 +84,14 @@ class ExistingLicenceExportController extends Controller
                             'licence_type_id',
                             'licence_type',
                             'province',
+                            'board_region',
                             'deposit_paid_at',
-                             'application_lodged_at',
-                             'activation_fee_paid_at',
-                             'client_paid_at','status','is_new_app'
+                            'application_lodged_at',
+                            'activation_fee_paid_at',
+                            'client_paid_at','status',
+                            'is_new_app'
                             ]);
-                            
-                        
 
-   
             $status = '';
             $notesCollection = '';
             
@@ -193,11 +193,11 @@ class ExistingLicenceExportController extends Controller
                 );
 
             foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
-                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->getAlignment()->setWrapText(true)->setAutoSize(true);
+                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);;
              }
 
-                $spreadsheet->getActiveSheet()->getStyle('A1:M1')->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setWrapText(true);
+                $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getFont()->setBold(true);
+                $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getAlignment()->setWrapText(true);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="existing_licences_'.now()->format('d_m_y').'.xlsx"');

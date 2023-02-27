@@ -79,7 +79,7 @@
 
 <div class="px-0 pb-2">
 <div class="table-responsive p-0">
-  <table class="table table-striped table-hover">
+  <table class="table table-striped table-hover" style="font-size:85%">
 <thead>
 <tr>
 <th>Active</th>

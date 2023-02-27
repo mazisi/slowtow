@@ -71,7 +71,8 @@ class RenewalExportController extends Controller
                             ->when(request('renewal_stages'), function ($query) {
                                 $query->whereIn('licence_renewals.status',array_values(explode(",",request('renewal_stages'))));
                             })
-                           ->get([
+                            ->orderBy('trading_name')
+                            ->get([
                                 'id',
                                 'board_region',
                                 'is_licence_active',

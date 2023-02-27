@@ -454,14 +454,14 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
+      <li class="nav-item" >
         <sidenav-collapse 
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
           :class="{ active: $page.props.currentRoute == 'issues'
-          || $page.props.currentRoute == 'get_licence_transfers'
-          || $page.props.currentRoute == 'get_nominations'}"
+          || $page.props.currentRoute == 'create_issue'
+          || $page.props.currentRoute == 'view_issue'}"
           collapseRef="/issues"
           navText="Issues">
           <template v-slot:icon>
