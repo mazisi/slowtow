@@ -230,7 +230,7 @@
 
 
   <div class="float-end mt-4">
-    <button @click="exportReport" :disabled="form.processing" 
+    <button @click="exportReport" :disabled="form.processing || !form.variation" 
     type="button" class="btn btn-success float-end">
     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     Export</button>

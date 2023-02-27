@@ -9,8 +9,25 @@ use Inertia\Inertia;
 class IssueController extends Controller
 {
     public function index()
-    {        
-        $issues = Issue::with('user.company')->latest()->paginate(20);
+    {
+        
+        $issues = Issue::with('user.company')
+        ->when(request('status'), 
+            function ($query){ 
+                return $query->where('status',request('status'));
+            
+            })->when(request('priority'), 
+                function ($query){ 
+                    return $query->where('severity',request('priority'));                 
+                })
+
+                ->when(request('priority') && request('status'), 
+                function ($query){ 
+                    return $query->where('severity',request('priority'))
+                    ->where('status',request('status'));                
+                })
+
+               ->latest()->get();
         return Inertia::render('Issues/Issue',['issues' => $issues]);
     }
 

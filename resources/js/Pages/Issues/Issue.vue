@@ -7,16 +7,10 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
     <div class="col-12">
     <div class="row">
-    <div  class="col-md-12 col-xl-12 col-lg-12">
-    <div class="input-group input-group-outline null is-filled">
-    <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
-    <input v-model="term" type="text" placeholder="Search by ticket id" class="form-control form-control-default">
-    </div>
-    </div>
     
     <div class="col-md-4 col-xl-4 col-lg-4 filters">
     <div class="input-group input-group-outline null is-filled">
-    <select @change="search" v-model="form.active_status" class="form-control form-control-default">
+    <select @change="search" v-model="form.status" class="form-control form-control-default">
     <option :value="''" disabled selected>Filter By Status</option>
     <option value="Resolved" class="text-success">Resolved</option>
     <option value="Pending" class="text-warning">Pending</option>
@@ -29,28 +23,8 @@
     
     <div class="col-md-4 col-xl-4 col-lg-4 filters">
     <div class="input-group input-group-outline null is-filled">
-    <select @change="search" v-model="form.licence_date" class="form-control form-control-default">
-    <option :value="''" disabled selected>Filter By Month</option>
-    <option value="01">January</option>
-    <option value="02">February</option>
-    <option value="03">March</option>
-    <option value="04">April</option>
-    <option value="05">May</option>
-    <option value="06">June</option>
-    <option value="07">July</option>
-    <option value="08">August</option>
-    <option value="09">September</option>
-    <option value="10">October</option>
-    <option value="11">November</option>
-    <option value="12">December</option>
-    </select>
-    </div>
-    </div>
-    
-    <div class="col-md-4 col-xl-4 col-lg-4 filters">
-    <div class="input-group input-group-outline null is-filled">
-    <select @change="search" v-model="form.province" class="form-control form-control-default">
-    <option :value="''" disabled selected>Filter By Severity</option>
+    <select @change="search" v-model="form.priority" class="form-control form-control-default">
+    <option :value="''" disabled selected>Filter By Priority</option>
     <option value="High" class="text-danger">High</option>
     <option value="Moderate" class="text-warning">Moderate</option>
     <option value="Low" class="text-dark">Low</option>
@@ -70,6 +44,7 @@
       <tr>
          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Author </th>
          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Company </th>
+         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Priority </th>
          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Issued At </th>
          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">View</th>
@@ -96,6 +71,14 @@
          </td>
          <td class="align-middle text-center text-sm">
           <Link :href="`/view-issue/${issue.slug}`">
+            <span v-if="issue.severity === 'High'" class="badge badge-sm bg-gradient-danger">High</span>
+            <span v-else-if="issue.severity === 'Moderate'" class="badge badge-sm bg-gradient-warning">Moderate</span>
+            <span v-else class="badge badge-sm bg-gradient-success">Low</span>
+          </Link>
+        </td>
+
+        <td class="align-middle text-center text-sm">
+          <Link :href="`/view-issue/${issue.slug}`">
             <span v-if="issue.status === 'Resolved'" class="badge badge-sm bg-gradient-success">Resolved</span>
             <span v-else-if="issue.status === 'Pending'" class="badge badge-sm bg-gradient-warning">Pending</span>
             <span v-else class="badge badge-sm bg-gradient-danger">Declined</span>
@@ -116,24 +99,6 @@
    </tbody>
 </table>
     
-<!--     
-    <nav aria-label="Licences Pagination mt-2">
-      <ul class="pagination justify-content-end">
-        <li class="page-item" :class="{ disabled: issues.prev_page_url == null }">
-          <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
-        </li>
-        <template v-for="(link, key) in issues.links">
-        <li class="page-item " :class="{ 'active': link.active }">
-          
-          <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
-        
-        </li>
-      </template>
-        <li class="page-item" :class="{ disabled: issues.next_page_url == null }">
-          <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
-        </li>
-      </ul>
-    </nav> -->
     </div>
     </div>
     
@@ -188,11 +153,9 @@
         let currentPage =  reactive(props.issues.current_page);
     
         const form = useForm({
-              term: term,
-              active_status: '',
-              licence_type: '',
-              licence_date: '',
-              province: ''
+              status: '',
+              month: '',
+              priority: ''
             })
     function getArrowBbuttons(key){
       if(key !== 0){
