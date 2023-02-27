@@ -1,6 +1,18 @@
 <template>
     <li class="nav-item" v-if="$page.props.currentRoute == 'view_my_licences'">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
+         :class="{ active:  $page.props.currentRoute == 'company_registrations'}"
+         :href="`/company/registration?slug=${$page.props.slug}`">
+        <div class="text-center d-flex align-items-center justify-content-center me-2">
+        <i class="material-icons-round opacity-10 fs-5">app_registration</i>
+        </div>
+        <span class="nav-link-text ms-1">Registration</span>
+        
+        </Link>
+      </li>
+
+      <li class="nav-item" v-if="$page.props.currentRoute == 'view_my_licences'">
+        <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'my_renewals'}"
          :href="`/company/my-renewals?slug=${$page.props.slug}`">
         <div class="text-center d-flex align-items-center justify-content-center me-2">

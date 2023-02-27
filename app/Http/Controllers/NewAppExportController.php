@@ -36,11 +36,11 @@ class NewAppExportController extends Controller
         $licences = DB::table('licences')
                  ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
                               deposit_paid_at, application_lodged_at, activation_fee_paid_at, client_paid_at,
-                              client_paid_at,status")
+                              client_paid_at,status, board_region")
 
                  ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
 
-                     ->when(function($query){
+                     ->when($request,function($query){
                         $query->when(request('month_from') && request('month_to'), function($query){
                             $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
                          })
@@ -69,19 +69,21 @@ class NewAppExportController extends Controller
                             $query->where('belongs_to',request('applicant'));
                         })
                         ->when(!empty(request('licence_types')), function ($query) {
-                            $query->where('licence_type_id',request('licence_types'));
+                            $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                         })
 
                         ->when(!empty(request('selectedDates')), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          });
                         })->where('is_new_app',true)
+                        ->orderBy('trading_name')
                         ->get([
                             'id',
                             'trading_name',
                             'licence_number',
                             'licence_type_id',
                             'licence_type',
+                            'board_region',
                             'province',
                             'deposit_paid_at',
                              'application_lodged_at',

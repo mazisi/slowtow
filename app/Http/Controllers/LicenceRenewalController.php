@@ -144,10 +144,10 @@ class LicenceRenewalController extends Controller
 
     public function destroy($licence_slug, $slug){
         try {
-            $renewal = LicenceRenewal::whereSlug($slug)->first();
-        if($renewal->delete()){
+            LicenceRenewal::whereSlug($slug)->delete();
+        
             return to_route('renew_licence',['slug' => $licence_slug])->with('success','Renewal deleted successful.');
-        }
+      
         } catch (\Throwable $th) {
             return to_route('renew_licence',['slug' => $licence_slug])->with('error','Error deleting renewal.');
         }

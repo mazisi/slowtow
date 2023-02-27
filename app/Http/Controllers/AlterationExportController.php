@@ -58,7 +58,8 @@ class AlterationExportController extends Controller
                                 ->when(request('alteration_stages'), function ($query) {
                                     $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
                               })
-                            ->get([
+                              ->orderBy('trading_name')
+                              ->get([
                                 'certification_issued_at',
                                 'id','trading_name',
                                 'licence_number',

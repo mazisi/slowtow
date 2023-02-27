@@ -71,7 +71,7 @@ public static function export($request){
                     })
                     ->when(request('transfer_stages'), function ($query) {
                         $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
-                    })->get([
+                    })->orderBy('trading_name')->get([
                         'trading_name',
                         'province',
                         'board_region',

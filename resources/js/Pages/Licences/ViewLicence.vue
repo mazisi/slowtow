@@ -4,12 +4,12 @@
   <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
-<div class="col-lg-6 col-7">
+<div class="col-lg-9 col-9">
 <h6 class="mb-1">Licence Info: {{ licence.trading_name ? licence.trading_name : '' }}</h6>
 </div>
 
 
-<div class="col-lg-6 col-5 my-auto text-end">
+<div class="col-lg-3 col-3 my-auto text-end">
 <div class="dropdown float-lg-end pe-4">
 <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>

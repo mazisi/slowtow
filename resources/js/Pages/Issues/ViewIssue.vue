@@ -14,8 +14,19 @@
                'btn-warning': issue.status === 'Pending',
                'btn-danger': issue.status === 'Declined'
                 }" 
-            class="btn btn-sm">{{ issue.status }}</button>
-            <button type="button" 
+            class="btn btn-sm">
+            {{ issue.status }}</button>
+            <button v-if="$page.props.auth.has_company_admin_role  || $page.props.auth.has_user_admin_role" type="button" 
+            :class="{ 
+               'btn-success': issue.status === 'Resolved',
+               'btn-warning': issue.status === 'Pending',
+               'btn-danger': issue.status === 'Declined'
+                }" 
+            class="btn btn-sm">
+            
+            </button>
+
+            <button v-if="$page.props.auth.has_slowtow_admin_role" type="button" 
             :class="{ 
                'btn-success': issue.status === 'Resolved',
                'btn-warning': issue.status === 'Pending',
@@ -24,7 +35,7 @@
             class="btn btn-sm dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                 <span class="visually-hidden">Toggle Dropdown</span>
             </button>
-            <ul class="dropdown-menu dropdown-menu-dark">
+            <ul class="dropdown-menu dropdown-menu-dark" v-if="$page.props.auth.has_slowtow_admin_role">
                 <li><Link @click="changeStatus('Resolved')" class="dropdown-item" href="#">Resolved</Link></li>
                 <li><Link @click="changeStatus('Pending')" class="dropdown-item" href="#">Pending</Link></li>
                 <li><Link @click="changeStatus('Declined')" class="dropdown-item" href="#">Declined</Link></li>
