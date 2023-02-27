@@ -9,6 +9,7 @@ use App\Http\Controllers\CompanyAdmin\AlterationController;
 use App\Http\Controllers\CompanyAdmin\NominationController;
 use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
+use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
 
   Route::group(['middleware' => ['auth','role:company-admin']], function () {
@@ -58,6 +59,8 @@ use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 
         Route::get('/alterations',[AlterationController::class,'index'])->name('company_alterations');
         Route::get('/view-company-alteration/{slug}',[AlterationController::class,'show'])->name('view_company_alteration');
+
+        Route::get('/registration',[CompanyRegistrationController::class,'registration'])->name('company_registration');
     });
 
   });   

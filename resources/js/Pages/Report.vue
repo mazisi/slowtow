@@ -21,7 +21,7 @@
         <div class="row">
           <!-- :class="{ btnPrimary: isActive }" -->
           <div class="col-4">
-            <button @click="getType('Renewals')" type="button" class="type btn btn btn-success w-50" 
+            <button @click="getType('Renewals')" type="button" class="type btn btn-primary btn-success  w-50" 
             >Renewals</button>
           </div>
           <div class="col-4">

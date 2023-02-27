@@ -86,7 +86,7 @@ export default {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-9 col-9">
    <h6>Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
     <Link :href="`/company/view-my-licences/${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name ? renewal.licence.trading_name : '' }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
@@ -99,7 +99,7 @@ export default {
     </p>
    
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
+  <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteRenewal" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   
   </div>
