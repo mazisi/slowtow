@@ -81,7 +81,7 @@ class ReportController extends Controller
         case 'Nominations':
           NominationExportController::export($request);          
           break;
-        case 'Registrations':
+        case 'New Applications':
           NewAppExportController::export($request);
           break;
 

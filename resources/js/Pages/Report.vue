@@ -32,7 +32,7 @@
           </div>
 
           <div class="col-4">
-            <button @click="getType('Registrations')" type="button" class="type btn btn-success w-50">Registrations</button>
+            <button @click="getType('New Applications')" type="button" class="type btn btn-success w-50">New Applications</button>
           </div>
           <div class="col-4">
             <button @click="getType('Existing-Licences')" type="button" class="type btn btn-success w-50">Existing Licences</button>
@@ -100,7 +100,7 @@
         placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Registrations'" class="col-6 columns" >
+  <div v-if="form.variation === 'New Applications'" class="col-6 columns" >
     <Multiselect
     v-model="form.new_app_stages"           
     :options="new_app_stages"
@@ -142,7 +142,7 @@
   || form.variation === 'Transfers' 
   || form.variation === 'Nominations'
   || form.variation === 'Nominations'
-  || form.variation === 'Registrations'//New Apps
+  || form.variation === 'New Applications'//New Apps
   || form.variation === 'Alterations'
   || form.variation === 'Temporary Licence'
   || form.variation === 'Existing-Licences'
@@ -239,7 +239,7 @@
   
 </div>
 
-<div v-if="form.variation === 'Registrations'" class="table-responsive p-0">
+<div v-if="form.variation === 'New Applications'" class="table-responsive p-0">
   <table class="table align-items-center mb-0">
         <thead>
           <tr>
