@@ -50,7 +50,7 @@
   </div>   
   <hr>
   
-  limit-file-name
+
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="client-invoiced" type="checkbox"

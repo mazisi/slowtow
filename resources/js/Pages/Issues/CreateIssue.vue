@@ -27,7 +27,7 @@
         <div class="columns col-md-6 col-xl-6 col-lg-6 columns">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Page Url</label>
-        <input type="text" v-model="issueForm.url" required class="form-control form-control-default" placeholder="e.g goverify.co.za/licences">
+        <input type="text" v-model="issueForm.url" class="form-control form-control-default" placeholder="e.g goverify.co.za/licences">
         </div>
         <div v-if="errors.severity" class="text-danger">{{ errors.severity }}</div>
         </div>

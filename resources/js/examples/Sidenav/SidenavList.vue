@@ -459,14 +459,13 @@
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
-          :class="{ active: $page.props.currentRoute == 'issues'
+          :class="{ active: $page.props.currentRoute === 'issues'
           || $page.props.currentRoute == 'create_issue'
           || $page.props.currentRoute == 'view_issue'}"
           collapseRef="/issues"
           navText="Issues">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">bug_report</i>
-            
+            <i class="material-icons-round opacity-10 fs-5">bug_report</i>            
           </template>
         </sidenav-collapse>
       </li>

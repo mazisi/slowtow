@@ -21,7 +21,7 @@
         <div class="row">
           <!-- :class="{ btnPrimary: isActive }" -->
           <div class="col-4">
-            <button @click="getType('Renewals')" type="button" class="type btn btn btn-success w-50" 
+            <button @click="getType('Renewals')" type="button" class="type btn btn-primary btn-success  w-50" 
             >Renewals</button>
           </div>
           <div class="col-4">
@@ -230,7 +230,7 @@
 
 
   <div class="float-end mt-4">
-    <button @click="exportReport" :disabled="form.processing" 
+    <button @click="exportReport" :disabled="form.processing || !form.variation" 
     type="button" class="btn btn-success float-end">
     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     Export</button>

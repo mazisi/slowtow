@@ -177,4 +177,9 @@ public function view_my_renewal($slug){
    ]);
 }
     
+
+public function registration()
+{
+    # code...
+}
 }
