@@ -125,9 +125,9 @@
 .navbar-vertical .navbar-brand > img, .navbar-vertical .navbar-brand-img {
 
     max-height: 8rem !important;
-    width: 200px;
+    width: 250px;
 
-    height: 10rem;
+    height: 11rem;
 
     margin-top: -2.9rem;
 

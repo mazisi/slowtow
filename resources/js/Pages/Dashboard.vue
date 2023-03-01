@@ -8,7 +8,7 @@
             <mini-statistics-card
               :title="{ text: 'Licences', value: licences }"
               :icon="{
-                name: 'weekend',
+                name: 'wine_bar',
                 color: 'text-white',
                 background: 'dark',
               }"

@@ -21,7 +21,7 @@
           collapseRef="/licences"
           navText="Licences">
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
+            <i class="material-icons-round opacity-10 fs-5">wine_bar</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -67,7 +67,7 @@
           navText="Companies"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">table_view</i>
+            <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -102,7 +102,7 @@
           navText="Temporary Licences">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
-              >timer</i
+              >schedule</i
             >
           </template>
         </sidenav-collapse>
@@ -191,7 +191,7 @@
           navText="New Person"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">add</i>
+            <i class="material-icons-round opacity-10 fs-5">add_ic_call</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -379,7 +379,7 @@
           navText="Upload Contacts"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">add</i>
+            <i class="material-icons-round opacity-10 fs-5">upload</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -412,7 +412,7 @@
           navText="Contacts">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
-              >contacts</i
+              >contact_phone</i
             >
           </template>
         </sidenav-collapse>
@@ -430,7 +430,7 @@
           navText="Reports"
         >
           <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">notifications</i>
+            <i class="material-icons-round opacity-10 fs-5">insights</i>
           </template>
         </sidenav-collapse>
       </li>
@@ -472,7 +472,6 @@
       <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
 
     </ul>
-    
   </div>
 </template>
 <script>
