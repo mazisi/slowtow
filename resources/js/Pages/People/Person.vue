@@ -1,8 +1,6 @@
 <style>
  
-  .table thead th {
-    padding: 0;
-    }
+  
 #with-thrashed{
   margin-top: 3px;
   margin-left: 3px;

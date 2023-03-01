@@ -104,7 +104,7 @@ class LicenceController extends Controller
 
                 ->when(request('active_status') =='Inactive', 
                 function ($query){ 
-                    return $query->whereNull('is_licence_active');                
+                    return $query->where('is_licence_active',false);                
                 })
             ->latest()->paginate(20)->withQueryString();
             

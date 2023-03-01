@@ -18,7 +18,8 @@
     <input v-model="form.header" type="checkbox" id="has-header">
   </div> -->
 <li class="list-group-item d-flex align-items-center border-0 mb-2 rounded" style="background-color: #f4f6f7;">
-<input @input="form.csv_file = $event.target.files[0]" type="file" required aria-label="..." />
+
+  <input @input="form.csv_file = $event.target.files[0]" class="form-control form-control-lg" id="formFileLg" type="file">
 <p v-if="errors.csv_file" class="text-danger">{{ errors.csv_file }}</p>
 </li>
 <progress v-if="form.progress" :value="form.progress.percentage" max="100">

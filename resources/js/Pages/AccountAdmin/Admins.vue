@@ -84,13 +84,20 @@
       <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
         <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
       </a>
-      <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" style="">
+      <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" >
+        <li><a @click="editUser(user.id,user.name,user.email,user.roles[0].name)" 
+          data-bs-toggle="modal" data-bs-target="#edit-user" class="dropdown-item active" href="#!">
+          <i class="fa fa-pencil"></i> Edit</a>
+        </li>
+        
         <li v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)">
           <a  
-           class="dropdown-item border-radius-md" href="javascript:;"> Deactivate </a>
+           class="dropdown-item border-radius-md" href="javascript:;"> 
+           <i class="fa fa-minus-square"></i> Deactivate </a>
           </li>
           <li v-else @click="deActivateuser(user.id, user.is_active)">
-            <a class="dropdown-item border-radius-md" href="javascript:;"> Activate </a>
+            <a class="dropdown-item border-radius-md" href="javascript:;">
+              <i class="fa fa-plus-square-o"></i> Activate </a>
           </li>
       <li><a @click="deleteUser(user.name, user.id)" class="dropdown-item text-danger" href="javascript:;"> 
         <i class="fa fa-trash-o"></i> Delete </a></li>
@@ -196,7 +203,37 @@
                   <input type="email" required class="form-control form-control-default" v-model="editForm.email" >
                   </div>
                   <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
-                  </div>     
+                  </div> 
+                  
+                  <div class="col-9 columns">
+                    <div class="input-group input-group-outline null is-filled ">
+                    <label class="form-label">Change Password</label>
+                    <input type="text" class="form-control form-control-default" v-model="editForm.password" >
+                    </div>
+                    <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
+                  </div>
+                  <div class="col-2 columns">
+                    <button type="button" @click="generateEditPassword" class="btn btn-sm btn-secondary">Generate</button>
+                  </div>
+
+                  <!-- <div class="col-12 columns">
+                    <div class="input-group input-group-outline null is-filled ">
+                    <label for="pro-pic" class="btn mb-0 bg-gradient-dark btn-md null w-100">Change Picture</label>
+                    <input type="file" id="pro-pic" hidden @change="getFileName" />
+                      <div v-if="file_name"><span class="text-success" v-text="file_name"></span></div>
+                      <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry 
+                        <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).</p>  
+                    </div>
+                    <div v-if="errors.picture" class="text-danger">{{ errors.picture }}</div>
+                  </div>
+
+                  <div class="col-md-12">
+                    <progress v-if="editForm.progress" :value="editForm.progress.percentage" max="100">
+                      {{ editForm.progress.percentage }}%
+                      </progress>
+                    
+                   </div> -->
+
              </div>
           </div>
       
@@ -247,6 +284,8 @@
 
           let showMenu = ref(false);
           let show_modal = ref(true); 
+          let file_name = ref('');
+          let file_has_apostrophe = ref(''); 
   
           const form = useForm({
             full_name: '',
@@ -255,19 +294,20 @@
             password: '' 
           }) 
 
-          const editForm = useForm({
+          let editForm = useForm({
             full_name: '',
             email: '',
             role: '',
-            id: ''
+            password: '',
+            id: '',
           }) 
         
           function submitUser() {
             form.post('/submit-user', {
               onSuccess: () => {
                 this.show_modal = false;
-                document.querySelector('.modal-backdrop').remove()
-                form.reset('body','full_name','email','role')
+                document.querySelector('.modal-backdrop').remove();
+                form.reset('body','full_name','email','role');
               }
              })
           }
@@ -290,6 +330,25 @@
             }            
           }
 
+          //DRY--Will come to this!!!!!!!!!!!!!
+          function generateEditPassword(){
+            let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let passwordLength = 8;
+
+            if(this.editForm.password == ''){
+              for (var i = 0; i <= passwordLength; i++) {
+                  var randomNumber = Math.floor(Math.random() * chars.length);
+                  this.editForm.password += chars.substring(randomNumber, randomNumber +1);
+             }
+            }else{
+              this.editForm.password = '';
+              for (var i = 0; i <= passwordLength; i++) {
+                  var randomNumber = Math.floor(Math.random() * chars.length);
+                  this.editForm.password += chars.substring(randomNumber, randomNumber +1);
+               }
+            }            
+          }
+
           function editUser(user_id,name,email,role){
             this.editForm.full_name = name;
             this.editForm.email = email;
@@ -301,8 +360,8 @@
           function updateUser(){
             editForm.patch('/update-user', {
               onSuccess: () => {
-                this.show_modal = false
-                document.querySelector('.modal-backdrop').remove()
+                this.show_modal = false;
+                document.querySelector('.modal-backdrop').remove();
               }
              })
           }
@@ -325,17 +384,27 @@
              }
           }
 
+
+          function getFileName(e){
+            this.editForm.picture = e.target.files[0];
+            this.file_name = e.target.files[0].name;
+            this.file_has_apostrophe = this.file_name.includes("'");
+          }
   
       return {
         form,
+        editForm,
         deleteUser,
+        file_name,
+        getFileName,
+        file_has_apostrophe,
         showMenu,
         show_modal,
         submitUser,
         generatePassword,
+        generateEditPassword,
         editUser,
-        editForm,
-        updateUser,
+       updateUser,
         deActivateuser,
       }
     },

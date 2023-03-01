@@ -20,6 +20,7 @@ export default {
      const form = useForm({
          licence_id: props.licence.id,
          status: [],
+         alteration_date: ''
         })
 
     function submit() {
@@ -74,7 +75,7 @@ export default {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-12 col-12">
    <h6>New Alteration for: <Link :href="`/view-licence?slug=${licence.slug}`"><span class="text-success">{{ licence.trading_name }}</span></Link></h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end"></div>
@@ -110,24 +111,6 @@ export default {
 </div>
 </div>
 
-<!-- 
-
-<div class="col-3 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Alteration Date *</label>
-    <input type="date" class="form-control form-control-default" v-model="form.alteration_date">
-    </div>
-     <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
-  </div>
-
-  <div class="col-9 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Description</label>
-<input type="text" class="form-control form-control-default" v-model="form.description" >
-</div>
-<div v-if="errors.description" class="text-danger">{{ errors.description }}</div>
-</div> -->
-
 
 <hr>
 
@@ -148,12 +131,21 @@ export default {
   </div> 
 
   <hr/>
-  <div class="col-md-12 columns">
+  <div class="col-md-8 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input id="alteration-Lodged" class="active-checkbox" v-model="form.status" type="checkbox" value="6">
     <label for="alteration-Lodged" class="form-check-label text-body text-truncate status-heading">Alterations Lodged</label>
     </div>
  </div> 
+
+ <div class="col-4 columns">
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Date Of Application</label>
+  <input type="date" class="form-control form-control-default" v-model="form.alteration_date">
+  </div>
+   <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
+</div>
+
  <hr/>
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
@@ -179,7 +171,7 @@ export default {
             </form>
               </div>
             </div>
-            <hr class="vertical dark" />
+         
           </div>
       <!-- //tasks were here -->
         

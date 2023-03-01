@@ -27,6 +27,7 @@ class AlterLicenceController extends Controller
     public function store(AlterationRequest $request,$licence_id){
           $alter = Alteration::create([
             'licence_id' => $licence_id,
+            'date'    => $request->alteration_date,
             'status'  => last($request->status),
             'slug' => sha1(time()),
           ]);
@@ -92,7 +93,7 @@ class AlterLicenceController extends Controller
         'invoiced_at' => $request->invoiced_at,
         'client_paid_at' => $request->client_paid_at,
          'liquor_board_at' => $request->liquor_board_at, 
-         'logded_at' => $request->logded_at,
+         'date' => $request->date,
          'certification_issued_at' => $request->certification_issued_at,
          'delivered_at' => $request->delivered_at    
        ]);

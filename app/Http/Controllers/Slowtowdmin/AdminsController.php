@@ -60,12 +60,14 @@ class AdminsController extends Controller
             $request->validate([
                 'email' => 'required|email',
                 'full_name' => 'required',
-                'role' => 'required'
             ]);    
            User::find($request->id)->update([
             'name' => $request->full_name,
             'email' => $request->email,
            ]);
+           if(request('password')){
+            User::find($request->id)->update(['password' => Hash::make($request->password)]);
+           }
            return back()->with('success','User updated successfully.');
         } catch (\Throwable $th) {
           //throw $th;

@@ -37,14 +37,13 @@ export default {
       let file_name = ref('');
 
     const form = useForm({
-         alteration_date: props.alteration.date,
          licence_slug: props.alteration.licence.slug,
          slug: props.alteration.slug,
          client_paid_at: props.alteration.client_paid_at,
          status: [],
          invoiced_at: props.alteration.invoiced_at,
          liquor_board_at: props.alteration.liquor_board_at, 
-         logded_at: props.alteration.logded_at,
+         date: props.alteration.date,
          certification_issued_at: props.alteration.certification_issued_at,
          delivered_at: props.alteration.delivered_at     
       })
@@ -419,22 +418,7 @@ v-if="application_form !== null
 </div>
 </div>
 <hr>
-<!-- 
-  <div class="col-3 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Alteration Date *</label>
-    <input type="date" class="form-control form-control-default" v-model="form.alteration_date">
-    </div>
-     <div v-if="errors.alteration_date" class="text-danger">{{ errors.alteration_date }}</div>
-  </div>
 
-  <div class="col-9 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Description</label>
-<input type="text" class="form-control form-control-default" v-model="form.description" >
-</div>
-<div v-if="errors.description" class="text-danger">{{ errors.description }}</div>
-</div> -->
 
 
 <div class="col-5 columns">
@@ -507,10 +491,10 @@ v-if="application_form !== null
 </div>
 <div class="col-4 columns">
   <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.logded_at">
+    <label class="form-label">Date Of Application</label>
+    <input type="date" class="form-control form-control-default" v-model="form.date">
     </div>
-     <div v-if="errors.logded_at" class="text-danger">{{ errors.logded_at }}</div>
+     <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
 </div>
 <div class="col-1"></div>
 <div class="col-2 float-end">
@@ -601,7 +585,7 @@ v-if="application_form !== null
 
 
 <div>
-  <button type="submit" class="btn btn-sm btn-secondary ms-2" :style="{float: 'right'}">Save</button></div>
+  <button type="submit" class="btn btn-primary ms-2" :style="{float: 'right'}">Save</button></div>
             </div>
             </form>
               </div>

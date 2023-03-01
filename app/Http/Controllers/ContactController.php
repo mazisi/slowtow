@@ -37,7 +37,6 @@ class ContactController extends Controller{
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email'
         ]);
         $model = Contact::whereId($id)->update([
             'first_name' => $request->first_name,
@@ -56,7 +55,6 @@ class ContactController extends Controller{
         $request->validate([
             'first_name' => 'required|string',
             'last_name' => 'required|string',
-            'email' => 'required|email'
         ]);
 
         $contact = Contact::create([
