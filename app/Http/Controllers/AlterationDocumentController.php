@@ -7,7 +7,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\AlterationDocument;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
-use ZipStream\File;
+use Illuminate\Http\File;
+use Illuminate\Support\Facades\Storage;
 
 class AlterationDocumentController extends Controller
 {
@@ -16,7 +17,7 @@ class AlterationDocumentController extends Controller
             "document"=> "required|mimes:pdf",
             "doc_type"=> "required"
             ]);
-
+            
             $fileModel = new AlterationDocument();
             $fileName = Str::limit(sha1(now()),3).str_replace(' ', '_',$request->document->getClientOriginalName());
             $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));

@@ -112,6 +112,7 @@ class LicenceController extends Controller
        $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
     }
+    
 
     public function create(){
         $companies = Company::pluck('name','id');

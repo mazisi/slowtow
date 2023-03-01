@@ -87,7 +87,7 @@ class TemporalLicenceController extends Controller
            'event_name' => 'required',
            'start_date' => 'required|date',
            'end_date' => 'required|date',
-           'latest_lodgment_date'=> 'required|date',
+           'latest_lodgment_date'=> 'required',
            'belongs_to' => 'required|in:Person,Company'
            ]);
            if(is_null($request->person)){
@@ -100,7 +100,7 @@ class TemporalLicenceController extends Controller
                 'application_type' => $request->application_type,
                 'address' => $request->address,
                 'belongs_to' => $request->belongs_to,
-                'latest_lodgment_date'  => Carbon::parse($request->latest_lodgment_date)->format('m-d-Y'),
+                'latest_lodgment_date'  => $request->latest_lodgment_date,
                 'slug' => sha1(time()),
                 ]);
 

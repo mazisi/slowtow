@@ -47,18 +47,22 @@ class AlterationExportController extends Controller
                                     ->when(request('province'), function ($query) {
                                         $query->whereIn('province',array_values(explode(",",request('province'))));
                                     })
+                                    
                                     ->when(request('boardRegion'), function ($query) {
                                         $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
                                     })
+                                    
+                                     ->when(request('alteration_stages'), function ($query) {
+                                            $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
+                                        })
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
                                     });
 
                                 })
-                                ->when(request('alteration_stages'), function ($query) {
-                                    $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
-                              })
+                               
                               ->orderBy('trading_name')
+                              ->whereNull('alterations.deleted_at')
                               ->get([
                                 'certification_issued_at',
                                 'id','trading_name',

@@ -40,7 +40,7 @@ class RenewalExportController extends Controller
 
                     ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')
 
-                        ->when(function($query){
+                        ->when($request,function($query){
                             $query->when(request('month_from') && request('month_to'), function($query){
                                 $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
                             })
@@ -60,16 +60,17 @@ class RenewalExportController extends Controller
                             ->when(request('applicant'), function ($query)  {
                                 $query->where('belongs_to',request('applicant'));
                             })
-                            ->when(request('licence_types'), function ($query)  {
-                                $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
-                            });
-
-                            })->when(request('selectedDates'), function ($query) {
-                                $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
+                            ->when(request('year'), function ($query) {
+                                $query->whereIn('date',array_values(explode(",",request('year'))));
                             })
 
                             ->when(request('renewal_stages'), function ($query) {
                                 $query->whereIn('licence_renewals.status',array_values(explode(",",request('renewal_stages'))));
+                            })
+                            ->when(request('licence_types'), function ($query)  {
+                                $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                            });
+
                             })
                             ->orderBy('trading_name')
                             ->get([
