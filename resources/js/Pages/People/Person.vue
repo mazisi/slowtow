@@ -37,7 +37,7 @@
 <div class="">
 <div class=" px-0 pb-2">
 <div class="table-responsive p-0">
-<table class="table table-striped table-hover ">
+<table class="table table-striped table-hover " style="font-size:90%">
 <thead>
 <tr>
 <th class="ps-2 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Active</th>
@@ -87,7 +87,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm ,Link } from '@inertiajs/inertia-vue3';
-import { ref, watch, reactive } from 'vue';
+import { ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue'
 import Paginate from "@/Shared/Paginate.vue";

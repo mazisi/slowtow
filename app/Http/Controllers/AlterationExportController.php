@@ -28,7 +28,7 @@ class AlterationExportController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, licences.board_region,licences.application_lodged_at,alterations.status ")
+                            licences.licence_issued_at, licences.board_region,licences.date,alterations.status ")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
@@ -71,7 +71,7 @@ class AlterationExportController extends Controller
                                 'province',
                                 'status',
                                 'board_region',
-                                'application_lodged_at',
+                                'date',
                                 'licence_issued_at'
                             ]);
   
@@ -125,7 +125,7 @@ class AlterationExportController extends Controller
                         $arr_of_alterations[$i]->trading_name, 
                         $arr_of_alterations[$i]->licence_number, 
                         $arr_of_alterations[$i]->province.'/'.$arr_of_alterations[$i]->board_region,
-                        $arr_of_alterations[$i]->application_lodged_at,
+                        $arr_of_alterations[$i]->date,
                         is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
                         $arr_of_alterations[$i]->certification_issued_at,
                         $status, 
@@ -149,8 +149,7 @@ class AlterationExportController extends Controller
                 }
 
                 $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle('A1:H1')
-                 ->getAlignment()->setWrapText(true);
+                $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setWrapText(true);
 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="alterations_'.now()->format('d_m_y').'.xlsx"');
