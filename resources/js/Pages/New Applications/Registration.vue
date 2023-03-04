@@ -1383,6 +1383,7 @@
       let file_name = ref('');
       let file_size = ref(null);
       let file_has_apostrophe = ref();
+      
 
       const form = useForm({
         deposit_paid_at: props.licence.deposit_paid_at,
@@ -1396,6 +1397,7 @@
         licence_issued_at: props.licence.licence_issued_at,
         licence_delivered_at: props.licence.licence_delivered_at,
         status: [],
+        unChecked: false
        })
   
       const boardRequests = useForm({
@@ -1460,8 +1462,10 @@
 
            if (e.target.checked) {
               this.form.status[0] = status_value;
+              this.form.unChecked = false;
             }else if(!e.target.checked){
-              this.form.status[0] = e.target.value -1;
+              this.form.unChecked = true
+              this.form.status[0] = e.target.value;
             }
         }
         function mergeDocs(){

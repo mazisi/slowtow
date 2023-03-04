@@ -323,7 +323,7 @@ export default{
     
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
-    <button v-if="nomination.client_paid_date" 
+    <button v-if="nomination.client_paid_date == null" 
     @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>

@@ -214,8 +214,11 @@ class NewApplicationController extends Controller
             $db_status = $licence->status;
             $status = $db_status;
         }elseif(!empty($request->status)){
-            $sorted_statuses = Arr::sort($request->status);
-            $status = last($sorted_statuses);
+            if($request->isChecked){
+                $status = $request->status[0] - 1;
+            }else{
+                $status = $request->status[0];
+            }
         }
         if($status >= 15){
             $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
