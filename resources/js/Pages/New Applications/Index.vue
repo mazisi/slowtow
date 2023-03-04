@@ -141,7 +141,7 @@
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Province</label>
     <select required class="form-control form-control-default" v-model="form.province" >
-      <option :value="''" disabled selected>Selected Province</option>
+      <option :value="''" disabled selected>Select Province</option>
     <option value="Eastern Cape">Eastern Cape</option>
     <option value="Free State">Free State</option>
     <option value="Gauteng">Gauteng</option>

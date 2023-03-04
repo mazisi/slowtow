@@ -10,7 +10,7 @@
 <div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
 <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
-<input v-model="term" placeholder="Search" type="text" class="form-control form-control-default">
+<input v-model="term" placeholder="Search" type="text" class="form-control form-control-default" autofocus>
 </div>
 </div>
 

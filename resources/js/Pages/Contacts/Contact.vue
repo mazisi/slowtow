@@ -21,7 +21,7 @@
   </div>
   <div class="col-8">
   <div class="input-group input-group-outline null is-filled">
-<input v-model="q" type="text" class="form-control form-control-default" placeholder="Search by full name and surname">
+<input v-model="q" type="text" class="form-control form-control-default" placeholder="Search..." autofocus>
 </div>
   </div>
   <div class="col-2 my-auto text-end">

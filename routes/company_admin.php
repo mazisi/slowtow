@@ -54,7 +54,7 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
         Route::get('/nominations',[NominationController::class,'index'])->name('my_nominations');
 
-        Route::get('/view-nomination/{slug}',[NominationController::class,'show'])->name('view_nomination');
+        Route::get('/view-nomination/{slug}',[NominationController::class,'show'])->name('view_company__nomination');
 
 
         Route::get('/alterations',[AlterationController::class,'index'])->name('company_alterations');
