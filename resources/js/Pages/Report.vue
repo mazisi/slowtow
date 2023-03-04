@@ -448,10 +448,12 @@ const new_app_stages = {
 }
     let years = props.years;
     const provinces = ['Eastern Cape','Free State','Gauteng','KwaZulu-Natal','Limpopo','Mpumalanga','Northern Cape','North West','Western Cape'];
+
     const boardRegion = ['Eastern Cape','Free State','Gauteng Ekurhuleni','Gauteng Johannesburg',
                         'Gauteng Sedibeng','Gauteng Tshwane',
                         'KwaZulu-Natal','Limpopo','Mpumalanga',
                         'Gauteng West Rand','Northern Cape','North West','Western Cape'];
+                        
     let licenceTypes = props.licenceTypes;
     let companies = props.companies;
     let people = props.people;

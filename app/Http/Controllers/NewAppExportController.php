@@ -75,7 +75,9 @@ class NewAppExportController extends Controller
                         ->when(!empty(request('selectedDates')), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          });
-                        })->where('is_new_app',true)
+                        })
+                        ->whereNull('deleted_at')
+                        ->where('is_new_app',true)
                         ->orderBy('trading_name')
                         ->get([
                             'id',
@@ -169,11 +171,11 @@ class NewAppExportController extends Controller
                $arr_of_licences[$i]->province,
                'NULL',
                is_null($arr_of_licences[$i]->deposit_paid_at) ? 'FALSE': 'TRUE',
-               optional($arr_of_licences[$i]->application_lodged_at)->format('d M Y'),
+               $arr_of_licences[$i]->application_lodged_at,
                is_null($is_client_logded) ? 'FALSE': 'TRUE',
                $arr_of_licences[$i]->activation_fee_paid_at,
                'NULL',
-               optional($arr_of_licences[$i]->client_paid_at)->format('d M Y'),
+               $arr_of_licences[$i]->client_paid_at,
                'NULL',
                $status,
                'NULL',

@@ -47,7 +47,7 @@ public static function export($request){
                             $query->whereIn('licences.province',array_values(explode(",",request('province'))));
                         })
                         ->when(request('boardRegion'), function ($query)  {
-                            $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
+                            $query->whereIn('licences.board_region',array_values(explode(",",request('boardRegion'))));
                         })
                         
                         ->when(request('applicant'), function ($query)  {
@@ -71,7 +71,9 @@ public static function export($request){
                     })
                     ->when(request('transfer_stages'), function ($query) {
                         $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
-                    })->orderBy('trading_name')->get([
+                    })
+                    ->whereNull('licences.deleted_at')->whereNull('licence_transfers.deleted_at')
+                    ->orderBy('trading_name')->get([
                         'trading_name',
                         'province',
                         'board_region',
@@ -172,7 +174,7 @@ public static function export($request){
      ->getAlignment()->setWrapText(true);
 
      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-     header('Content-Disposition: attachment;filename="tranfers_'.now()->format('d_m_y').'.xlsx"');
+     header('Content-Disposition: attachment;filename="transfers_'.now()->format('d_m_y').'.xlsx"');
      header('Cache-Control: max-age=0');        
     $writer = new Xlsx($spreadsheet);
     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');

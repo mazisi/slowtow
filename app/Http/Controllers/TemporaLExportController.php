@@ -34,11 +34,11 @@ class TemporaLExportController extends Controller
                     
             ->when($request,function($query){
                 $query->when(request('month_from') && request('month_to'), function($query){
-                    $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                    $query->whereBetween(DB::raw('MONTH(start_date)'),[request('month_from'), request('month_to')]);
                 })
                 
                 ->when(request('month_from') && !request('month_to'), function ($query)  {
-                    $query->whereMonth('licence_date', request('month_from'));
+                    $query->whereMonth('start_date', request('month_from'));
                 })
                     ->when(request('temp_licence_stages'), function ($query) {
                         $query->whereIn('temporal_licences.status',array_values(explode(",",request('temp_licence_stages'))));
@@ -81,11 +81,11 @@ class TemporaLExportController extends Controller
                              
                      ->when($request,function($query){
                          $query->when(request('month_from') && request('month_to'), function($query){
-                             $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                             $query->whereBetween(DB::raw('MONTH(start_date)'),[request('month_from'), request('month_to')]);
                          })
                          
                          ->when(request('month_from') && !request('month_to'), function ($query)  {
-                             $query->whereMonth('licence_date', request('month_from'));
+                             $query->whereMonth('start_date', request('month_from'));
                          })
                              ->when(request('temp_licence_stages'), function ($query) {
                                  $query->whereIn('temporal_licences.status',array_values(explode(",",request('temp_licence_stages'))));

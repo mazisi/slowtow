@@ -158,7 +158,7 @@ class NewApplicationController extends Controller
         $activation_fee_paid  = LicenceDocument::where('document_type','Activation Fee Paid')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $licence_issued_doc  = LicenceDocument::where('document_type','Licence Issued')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $licence_delivered  = LicenceDocument::where('document_type','Licence Delivered')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
-        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->get();
         
         
         return Inertia::render('New Applications/Registration',[

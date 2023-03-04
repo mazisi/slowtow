@@ -4,8 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Models\Licence;
-//use File;
-use Illuminate\Http\File;
+use File;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 //use Illuminate\Http\File;

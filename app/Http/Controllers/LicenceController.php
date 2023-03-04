@@ -17,9 +17,9 @@ class LicenceController extends Controller
         $licences = Licence::with(["company","people","licence_type"])
 
         ->when(request('term'), function ($query) {
-            return $query->where('licence_number','LIKE','%'.request('term').'%')
+            return $query->where('trading_name','LIKE','%'.request('term').'%')
                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                       ->orWhere('trading_name','LIKE','%'.request('term').'%');
+                       ->orWhere('licence_number','LIKE','%'.request('term').'%');
 
         })->when(request('term') && request('active_status') === 'Active', 
             function ($query){ 
@@ -39,6 +39,12 @@ class LicenceController extends Controller
             ->when(request('licence_type'), 
                 function ($query){ 
                     return $query->where('licence_type_id',request('licence_type'));                
+                })
+                
+                ->when(request('active_status') == 'Active' && request('licence_type'), 
+                function ($query){ 
+                    return $query->where('is_licence_active',true)
+                    ->where('licence_type_id',request('licence_type'));                
                 })
 
 
@@ -78,7 +84,7 @@ class LicenceController extends Controller
 
             ->when(request('active_status') =='Active', 
                 function ($query){ 
-                    return $query->whereNotNull('is_licence_active');                
+                    return $query->where('is_licence_active',true);                
                 })
             
             ->when(request('province'), 
@@ -88,14 +94,26 @@ class LicenceController extends Controller
 
             ->when(request('province') && request('term'), 
                 function ($query){ 
-                    $query->where('province', 'LIKE','%'.request('province').'%')
-                    ->where('trading_name','LIKE','%'.request('term').'%')
+                    $query->where('trading_name','LIKE','%'.request('term').'%')
                     ->orWhere('licence_number','LIKE','%'.request('term').'%')
                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
                     ->orWhereHas('company', function($query){
                       $query->where('name', 'like', '%'.request('term').'%');                
-                });
-            })            
+                })->where('province', 'LIKE','%'.request('province').'%');
+            })   
+            
+            ->when(request('province') && request('term') && request('active_status') == 'Active', 
+                function ($query){ 
+                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                    ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                    ->orWhereHas('company', function($query){
+                      $query->where('name', 'like', '%'.request('term').'%');                
+                })->where('is_licence_active',true)->where('province', request('province'));
+            })   
+            
+            
+            
 
             ->when(request('licence_date'), 
                 function ($query){
@@ -112,6 +130,7 @@ class LicenceController extends Controller
        $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
     }
+    
 
     public function create(){
         $companies = Company::pluck('name','id');
@@ -168,7 +187,7 @@ class LicenceController extends Controller
         $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->get();
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
-        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->get();
 
         if($licence->is_new_app){
             $view = 'ViewNewApp';

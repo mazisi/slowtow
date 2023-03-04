@@ -44,7 +44,7 @@
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input id="client-quoted" class="active-checkbox" type="checkbox" 
   :checked="licence.status >= '1'"
-  @input="pushData(1)" value="1">
+  @input="pushData($event,1)" value="1">
   <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
   </div>
   </div>   
@@ -54,7 +54,7 @@
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="client-invoiced" type="checkbox"
-    @input="pushData(2)" 
+    @input="pushData($event,2)" 
     :checked="licence.status >= 2"
     value="2">
     <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoiced</label>
@@ -87,7 +87,7 @@
   <div class="col-md-5 columns">
   <div class="form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="deposit-paid"  type="checkbox"
-  @input="pushData(3)" value="3"
+  @input="pushData($event,3)" value="3"
   :checked="licence.status >= 3">
   <label for="deposit-paid" class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
   </div>
@@ -127,7 +127,7 @@
 
   <div class="col-md-5 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox" id="payment" type="checkbox" @input="pushData(4)"
+    <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,4)"
     :checked="licence.status >= 4" value="5">
     <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
     </div>
@@ -191,7 +191,7 @@
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
       <input class="active-checkbox" id="prepare-new-app"  type="checkbox"
-      @input="pushData(5)" 
+      @input="pushData($event,5)" 
       :checked="licence.status >= 5"
       value="4">
       <label for="prepare-new-app" class="form-check-label text-body text-truncate status-heading">Prepare New Application</label>
@@ -635,7 +635,7 @@
   <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="issued" type="checkbox" 
-  @input="pushData(6)" :checked="licence.status >= 6" value="6">
+  @input="pushData($event,6)" :checked="licence.status >= 6" value="6">
   <label for="issued" class="form-check-label text-body text-truncate status-heading"> Scanned Application  </label>
   </div>
   </div> 
@@ -671,7 +671,7 @@
   <div class="col-md-6 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="application-logded" type="checkbox" 
-    @input="pushData(7)" :checked="licence.status >= 7" value="7">
+    @input="pushData($event,7)" :checked="licence.status >= 7" value="7">
     <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Application Lodged  </label>
     </div>
     </div>
@@ -734,7 +734,7 @@
        <div class="col-md-6 columns">
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
         <input class="active-checkbox" id="initial" type="checkbox"
-        @input="pushData(8)" :checked="licence.status >= 8" value="8">
+        @input="pushData($event,8)" :checked="licence.status >= 8" value="8">
         <label for="initial" class="form-check-label text-body text-truncate status-heading"> Initial Inspection</label>
         </div>  
         </div>
@@ -802,7 +802,7 @@
   <div class="col-md-6 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="final-inspection" type="checkbox"
-  @input="pushData(10)" :checked="licence.status >= 10" value="10">
+  @input="pushData($event,10)" :checked="licence.status >= 10" value="10">
   <label for="final-inspection" class="form-check-label text-body text-truncate status-heading"> Final Inspection</label>
   </div>
   </div>
@@ -870,7 +870,7 @@
   <div class="col-md-6 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="activation-fee" type="checkbox"
-    @input="pushData(11)" :checked="licence.status >= 11" value="11">
+    @input="pushData($event,11)" :checked="licence.status >= 11" value="11">
     <label for="activation-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Requested </label>
     </div>
     </div>
@@ -937,7 +937,7 @@
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
       <input class="active-checkbox" id="finat" type="checkbox"
-      @input="pushData(12)" :checked="licence.status >= 12" value="12">
+      @input="pushData($event,12)" :checked="licence.status >= 12" value="12">
       <label for="finat" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoiced </label>
       </div>
       </div>
@@ -969,7 +969,7 @@
       <div class="col-md-6 columns">
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
         <input class="active-checkbox" id="client-paid" type="checkbox"
-        @input="pushData(13)" :checked="licence.status >= 13" value="13">
+        @input="pushData($event,13)" :checked="licence.status >= 13" value="13">
         <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Client Paid </label>
         </div>
         </div>
@@ -1005,7 +1005,7 @@
         <div class="col-md-6 columns">
           <div class=" form-switch d-flex ps-0 ms-0  is-filled">
           <input class="active-checkbox" id="activ-fee" type="checkbox" 
-          @input="pushData(14)" :checked="licence.status >= 14" value="14">
+          @input="pushData($event,14)" :checked="licence.status >= 14" value="14">
           <label for="activ-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Paid </label>
           </div>
           </div>
@@ -1069,7 +1069,7 @@
           <div class="col-md-6 columns">
             <div class=" form-switch d-flex ps-0 ms-0  is-filled">
             <input class="active-checkbox" id="licence-issued" type="checkbox"
-            @input="pushData(15)" :checked="licence.status >= 15" value="15">
+            @input="pushData($event,15)" :checked="licence.status >= 15" value="15">
             <label for="licence-issued" class="form-check-label text-body text-truncate status-heading"> Licence Issued </label>
             </div>
             </div>
@@ -1137,7 +1137,7 @@
             <div class="col-md-6 columns mb-4">
               <div class=" form-switch d-flex ps-0 ms-0  is-filled">
               <input class="active-checkbox" id="licence-delivered" type="checkbox" 
-              @input="pushData(16)" :checked="licence.status >= 16">
+              @input="pushData($event,16)" :checked="licence.status >= 16">
               <label for="licence-delivered" class="form-check-label text-body text-truncate status-heading"> Licence Delivered </label>
               </div>
               </div>
@@ -1454,18 +1454,14 @@
           preserveScroll: true,
         })
       }
-  
-    
-      function pushData(status_value){
-           if (event.target.checked) {
-              if(this.form.status.includes(status_value)){
-                  return;
-                }else{
-                  this.form.status.push(status_value)
-                  //alert(this.form.status[0] = status_value)
-                } 
-            }else if(!event.target.checked){
-            //
+ 
+
+      function pushData(e,status_value){
+
+           if (e.target.checked) {
+              this.form.status[0] = status_value;
+            }else if(!e.target.checked){
+              this.form.status[0] = e.target.value -1;
             }
         }
         function mergeDocs(){

@@ -69,7 +69,7 @@ class NominationController extends Controller
         $nomination = Nomination::with('licence','people','merged_document')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
         $nominees = People::pluck('full_name','id');
-        $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->whereUserId(auth()->id())->get();
+        $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
         
 $client_quoted = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Quoted')->first();
 $client_invoiced = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Invoiced')->first();

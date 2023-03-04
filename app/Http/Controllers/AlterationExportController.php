@@ -27,16 +27,16 @@ class AlterationExportController extends Controller
 
 
         $alterations = DB::table('alterations')
-                            ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, licences.board_region,licences.application_lodged_at,alterations.status ")
+                            ->selectRaw("alterations.id, alterations.certification_issued_at, alterations.date, licences.trading_name, licences.licence_number, licences.province, 
+                            licences.licence_issued_at,licences.belongs_to, licences.board_region,alterations.status ")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
-                                        $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                                        $query->whereBetween(DB::raw('MONTH(date)'),[request('month_from'), request('month_to')]);
                                      })
                         
                                     ->when(request('month_from') && !request('month_to'), function ($query)  {
-                                        $query->whereMonth('licence_date', request('month_from'));
+                                        $query->whereMonth('date', request('month_from'));
                                     })
                                     ->when(request('activeStatus') == 'Active', function ($query) {
                                         $query->where('is_licence_active',true);
@@ -47,18 +47,22 @@ class AlterationExportController extends Controller
                                     ->when(request('province'), function ($query) {
                                         $query->whereIn('province',array_values(explode(",",request('province'))));
                                     })
+                                    
                                     ->when(request('boardRegion'), function ($query) {
                                         $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
                                     })
+                                    
+                                     ->when(request('alteration_stages'), function ($query) {
+                                            $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
+                                        })
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
                                     });
 
                                 })
-                                ->when(request('alteration_stages'), function ($query) {
-                                    $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
-                              })
+                               
                               ->orderBy('trading_name')
+                              ->whereNull('licences.deleted_at')->whereNull('alterations.deleted_at')
                               ->get([
                                 'certification_issued_at',
                                 'id','trading_name',
@@ -67,7 +71,7 @@ class AlterationExportController extends Controller
                                 'province',
                                 'status',
                                 'board_region',
-                                'application_lodged_at',
+                                'date',
                                 'licence_issued_at'
                             ]);
   
@@ -117,11 +121,13 @@ class AlterationExportController extends Controller
                             $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                             }
                         }
+                        
+                        
                         $data = [
                         $arr_of_alterations[$i]->trading_name, 
                         $arr_of_alterations[$i]->licence_number, 
                         $arr_of_alterations[$i]->province.'/'.$arr_of_alterations[$i]->board_region,
-                        $arr_of_alterations[$i]->application_lodged_at,
+                        $arr_of_alterations[$i]->date,
                         is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
                         $arr_of_alterations[$i]->certification_issued_at,
                         $status, 
@@ -145,8 +151,7 @@ class AlterationExportController extends Controller
                 }
 
                 $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
-                $spreadsheet->getActiveSheet()->getStyle('A1:H1')
-                 ->getAlignment()->setWrapText(true);
+                $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getAlignment()->setWrapText(true);
 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
                 header('Content-Disposition: attachment;filename="alterations_'.now()->format('d_m_y').'.xlsx"');

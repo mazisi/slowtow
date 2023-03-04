@@ -59,7 +59,7 @@ class LicenceRenewalController extends Controller
         $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
         $renewal_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Delivered')->first();
         $liqour_board = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Payment To The Liquor Board')->first();
-        $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->whereUserId(auth()->id())->get();
+        $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get();
         return Inertia::render('Renewals/ViewLicenceRenewal',[
             'renewal' => $renewal,
             'tasks'  => $tasks,

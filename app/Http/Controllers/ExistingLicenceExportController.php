@@ -74,7 +74,9 @@ class ExistingLicenceExportController extends Controller
                         ->when(request('selectedDates'), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          });
-                        })->where('is_new_app',NULL)
+                        })
+                        ->whereNull('deleted_at')
+                        ->where('is_new_app',NULL)
                         ->orWhere('is_new_app',0)
                         ->orderBy('trading_name')
                         ->get([

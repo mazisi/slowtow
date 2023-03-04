@@ -44,7 +44,7 @@ class AlterLicenceController extends Controller
       $client_invoiced = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
       $alteration_letter = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alteration Letter')->first();
       $site_map_file = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','SiteMap File')->first();
-      $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->whereUserId(auth()->id())->get();
+      $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->get();
       $application_form = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Application Form')->first(['id','path']);
       $dimensional_plans = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Fully Dimensional Plans')->first(['id','path','document_name']);
       $poa_res = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','POA & RES')->first(['id','path','document_name']);

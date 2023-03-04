@@ -87,7 +87,7 @@ class TemporalLicenceController extends Controller
            'event_name' => 'required',
            'start_date' => 'required|date',
            'end_date' => 'required|date',
-           'latest_lodgment_date'=> 'required|date',
+           'latest_lodgment_date'=> 'required',
            'belongs_to' => 'required|in:Person,Company'
            ]);
            if(is_null($request->person)){
@@ -100,7 +100,7 @@ class TemporalLicenceController extends Controller
                 'application_type' => $request->application_type,
                 'address' => $request->address,
                 'belongs_to' => $request->belongs_to,
-                'latest_lodgment_date'  => Carbon::parse($request->latest_lodgment_date)->format('m-d-Y'),
+                'latest_lodgment_date'  => $request->latest_lodgment_date,
                 'slug' => sha1(time()),
                 ]);
 
@@ -165,7 +165,7 @@ class TemporalLicenceController extends Controller
         $licence_logded = TemporalLicenceDocument::where('doc_type','Licence Lodged')->where('temporal_licence_id',$licence->id)->first();
         $licence_issued = TemporalLicenceDocument::where('doc_type','Licence Issued')->where('temporal_licence_id',$licence->id)->first();
         $licence_delivered = TemporalLicenceDocument::where('doc_type','Licence Delivered')->where('temporal_licence_id',$licence->id)->first();
-        $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+        $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->get();
         $scanned_app = TemporalLicenceDocument::where('doc_type','Scanned Application')->where('temporal_licence_id',$licence->id)->first();
     
 
