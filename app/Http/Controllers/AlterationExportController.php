@@ -28,15 +28,15 @@ class AlterationExportController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, licences.board_region,licences.date,alterations.status ")
+                            licences.licence_issued_at, licences.board_region,alterations.date,alterations.status ")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
-                                        $query->whereBetween(DB::raw('MONTH(date)'),[request('month_from'), request('month_to')]);
+                                        $query->whereBetween(DB::raw('MONTH(alterations.date)'),[request('month_from'), request('month_to')]);
                                      })
                         
                                     ->when(request('month_from') && !request('month_to'), function ($query)  {
-                                        $query->whereMonth('date', request('month_from'));
+                                        $query->whereMonth('alterations.date', request('month_from'));
                                     })
                                     ->when(request('activeStatus') == 'Active', function ($query) {
                                         $query->where('is_licence_active',true);
