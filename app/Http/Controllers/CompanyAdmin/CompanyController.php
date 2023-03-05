@@ -27,7 +27,7 @@ class CompanyController extends Controller
         $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->first();
         $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->first();
         $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->first();
-        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->whereUserId(auth()->id())->first();
+        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->first();
         $people = People::pluck('full_name','id');
         
         return Inertia::render('CompanyAdminDash/ViewCompany',[

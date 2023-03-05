@@ -137,7 +137,7 @@ class LicenceController extends Controller
         $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->get();
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
-        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->whereUserId(auth()->id())->get();
+        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->get();
 
         return Inertia::render('CompanyAdminDash/Licences/ViewMyLicences',[
                                             'licence' => $licence,
