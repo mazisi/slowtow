@@ -166,13 +166,13 @@ View
 <tbody>
 <tr v-for="company in companies.data" :key="company.id">
 <td class="align-middle text-sm">
-<i v-if="company.active == 1" class="fa fa-check text-info" aria-hidden="true"></i>
+<i v-if="company.active == 1" data-bs-placement="top" title="Active" class="fa fa-check text-success" aria-hidden="true"></i>
 
-<i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
+<i v-else data-bs-placement="top" title="Inactive" class="fa fa-times text-danger" aria-hidden="true"></i>
 </td>
 <td>
 <h6 class="mb-0 text-sm">
-<Link
+<Link data-bs-placement="top" :title="company.name"
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">
 {{ limit(company.name )}}
 </Link>
@@ -181,7 +181,7 @@ View
 
 <td>
 <h6 class="mb-0 text-sm">
-<Link
+<Link data-bs-placement="top" :title="company.company_type"
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">
 {{ limit(company.company_type) }}
 </Link>
@@ -190,14 +190,14 @@ View
 
 <td>
 <h6 class="mb-0 text-sm">
-<Link
+<Link data-bs-placement="top" :title="company.reg_number"
 :href="`/view-company/${company.slug}`" class="px-0 nav-link font-weight-bold lh-1" :class="color ? color : 'text-body'">{{ company.reg_number }}
 </Link>
 </h6>   
 </td>
 
 <td class="text-center">
-<Link :href="`/view-company/${company.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
+<Link data-bs-placement="top" title="View" :href="`/view-company/${company.slug}`"><i class="fa fa-eye  " aria-hidden="true"></i></Link>
 
 </td>
 

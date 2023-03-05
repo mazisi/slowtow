@@ -126,6 +126,8 @@ class TemporalLicenceController extends Controller
            return back()->with('error','AN unknown error occured while creating temporal Licence.');
     }
 
+    
+
     public function show($slug){
         // $companies = Company::pluck('name','id');
         // $people = People::pluck('full_name','id');
@@ -140,8 +142,6 @@ class TemporalLicenceController extends Controller
                 'liquor_licence_number' => $request->liquor_licence_number,
                 'end_date' => $request->end_date,
                 'start_date' => $request->start_date,
-                'reg_number' => $request->reg_number,
-                'id_number' => $request->id_number,
                 "application_type" => $request->application_type,
                 "address" => $request->address,
                 "event_name" => $request->event_name
@@ -262,32 +262,43 @@ class TemporalLicenceController extends Controller
 
 
     public function update_prepared_temp_app(Request $request,$slug){
-        $temp = TemporalLicence::whereSlug($slug)->first();
-        if(!is_null($temp->status) && empty($request->status)){
-            $db_status = $temp->status;
-            $status = $db_status;
-        }elseif(!empty($request->status)){
-            $sorted_statuses = Arr::sort($request->status);
-            $status = last($sorted_statuses);
+        try {
+            $status = '';
+
+            if($request->status){
+                if($request->unChecked){
+                    $status = intval($request->status[0]) - 1;
+                }else{
+                    $status = $request->status[0];
+                }
+            }
+    
+            TemporalLicence::whereSlug($slug)->update(["status" => $status <= 0 ? NULL : $status]);   
+               
+            return back()->with('success','Temporal Licence updated successfully.');
+         
+        } catch (\Throwable $th) {
+            throw $th;
+            //return back()->with('error','An unknown error occured while updating temporal Licence.');
         }
-            $temp->update([
-                'liquor_licence_number' => $request->liquor_licence_number,
+        
+            
+     }
+
+     public function updateDates(Request $request, $slug){
+        try {
+            TemporalLicence::whereSlug($slug)->update([
                 'client_paid_at' => $request->client_paid_at,
                 'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
                 'logded_at' => $request->logded_at,
                 'issued_at' => $request->issued_at,
                 'delivered_at' => $request->delivered_at,
-                'reg_number' => $request->reg_number,
-                'id_number' => $request->id_number,
-                "status" => $status,
                 ]);
-    
-              
-            if($temp){
-               return back()->with('success','Temporal Licence updated successfully.');
-            }
-            return back()->with('error','An unknown error occured while updating temporal Licence.');
-     }
+                return back()->with('success','Date updated successfully.');
+        } catch (\Throwable $th) {
+            return back()->with('error','An unknown error occured while updating date.');
+        }
+    }
 
      public function destroy($slug){
         try {

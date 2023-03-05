@@ -259,9 +259,9 @@
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
-data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
+<a @click="deleteNote(task.id)" href="#!" class="float-end">
+      <i class="fa fa-trash-o text-danger "></i>
+    </a>
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
 </div>
 </div>
@@ -488,14 +488,7 @@ const form = useForm({
         return new Date(date_param).toLocaleString().split(',')[0]
       };
 
-      function deleteTask(task_id){
-         if(confirm('Are you sure??')){
-            createTask.delete(`/delete-task/${task_id}`, {
-                onFinish: () => createTask.reset(),
-            })
-          }
-      };
-
+      
  
      const body_max = 100;
      function checkBodyLength(){
@@ -511,10 +504,18 @@ const form = useForm({
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
+      function deleteNote(id){
+        if(confirm('This note will be deleted. Continue ?')){
+          Inertia.delete(`/delete-task/${id}`, {
+             preserveScroll: true,
+           }); 
+        }
+      }
+
      return{
-        form,show_file_name,checkBodyLength,body_max,deleteTask,computeExpiryDate,deletePerson,
+        form,show_file_name,checkBodyLength,body_max,computeExpiryDate,deletePerson,
         assignActiveValue,updatePerson,submitTask,deleteDocument,getDocType,submitDocument,
-        show_doc_modal,uploadDoc,createTask,file_name,getFileName,file_has_apostrophe
+        show_doc_modal,uploadDoc,createTask,file_name,getFileName,file_has_apostrophe,deleteNote
      }
 },
  components: {

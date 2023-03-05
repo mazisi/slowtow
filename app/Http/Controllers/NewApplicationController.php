@@ -212,7 +212,7 @@ class NewApplicationController extends Controller
         $licence_date = null;
         if($request->status){
             if($request->unChecked){
-                $status = $request->status[0] - 1;
+                $status = intval($request->status[0]) - 1;
             }else{
                 $status = $request->status[0];
             }

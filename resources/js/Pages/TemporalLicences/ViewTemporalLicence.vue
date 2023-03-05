@@ -23,7 +23,7 @@ export default {
           application_type: this.licence.application_type,
           liquor_licence_number: this.licence.liquor_licence_number,
           reg_number: this.licence.company ? this.licence.company.reg_number: '',
-          id_number: this.licence.people ? this.licence.people.id_number: '',
+          id_or_passport: this.licence.people ? this.licence.people.id_or_passport: '',
           belongs_to: this.licence.belongs_to,
           company_name: this.licence.company ? this.licence.company.name : '',
           person: this.licence.people ? this.licence.people.full_name : ''
@@ -199,9 +199,9 @@ export default {
    <div class="col-md-4 columns" v-else>
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">ID Number</label>
-    <input type="text" disabled class="form-control form-control-default" v-model="form.id_number">
+    <input type="text" disabled class="form-control form-control-default" v-model="form.id_or_passport">
      </div>
-   <div v-if="errors.id_number" class="text-danger">{{ errors.id_number }}</div>
+   <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
    </div>
 
   

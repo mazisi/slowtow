@@ -133,7 +133,7 @@
   <div class="col-md-5 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,4)"
-    :checked="licence.status >= 4" value="5">
+    :checked="licence.status >= 4" value="4">
     <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
     </div>
     </div> 
@@ -201,7 +201,7 @@
       <input class="active-checkbox" id="prepare-new-app"  type="checkbox"
       @input="pushData($event,5)" 
       :checked="licence.status >= 5"
-      value="4">
+      value="5">
       <label for="prepare-new-app" class="form-check-label text-body text-truncate status-heading">Prepare New Application</label>
       </div>
       </div>
@@ -680,7 +680,7 @@
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="application-logded" type="checkbox" 
     @input="pushData($event,7)" :checked="licence.status >= 7" value="7">
-    <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Application Lodged  </label>
+    <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Application Lodged (Proof of Lodgement)  </label>
     </div>
     </div>
       

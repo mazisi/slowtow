@@ -388,6 +388,8 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::patch('/update-temp-licence', [TemporalLicenceController::class,'update'])->name('update_temp_licence');
 
+        Route::patch('/update-process-app-date/{slug}', [TemporalLicenceController::class,'updateDates']);
+
         
 
         Route::post('/submit-temporal-licence-document', [TemporalLicenceDocsController::class,'store']);

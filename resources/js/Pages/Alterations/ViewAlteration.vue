@@ -41,6 +41,7 @@ export default {
          slug: props.alteration.slug,
          client_paid_at: props.alteration.client_paid_at,
          status: [],
+         unChecked: false,
          invoiced_at: props.alteration.invoiced_at,
          liquor_board_at: props.alteration.liquor_board_at, 
          date: props.alteration.date,
@@ -646,8 +647,8 @@ v-if="application_form !== null
 
 <div class="col-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-issued" @input="pushData($event,8)" type="checkbox" value="8" :checked="alteration.status >= 8">
-<label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Delivered</label>
+<input class="active-checkbox" id="alteration-delivered" @input="pushData($event,8)" type="checkbox" value="8" :checked="alteration.status >= 8">
+<label class="form-check-label text-body text-truncate status-heading" for="alteration-delivered">Alterations Delivered</label>
 </div>
 
 <ul class="list-group">

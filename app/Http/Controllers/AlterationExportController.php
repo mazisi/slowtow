@@ -60,9 +60,8 @@ class AlterationExportController extends Controller
                                     });
 
                                 })
-                               
+                                ->whereNull('alterations.deleted_at')
                               ->orderBy('trading_name')
-                              ->whereNull('alterations.deleted_at')
                               ->get([
                                 'certification_issued_at',
                                 'id','trading_name',

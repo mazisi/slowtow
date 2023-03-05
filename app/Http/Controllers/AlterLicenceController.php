@@ -75,33 +75,27 @@ class AlterLicenceController extends Controller
 
 
     public function update(Request $request){
-      // $request->validate([
+      try {
+       // $request->validate([
       //   'alteration_date' => 'required|date'
       // ]);
       $status = null;
-      $alter = Alteration::whereSlug($request->slug)->first();
-      if(!is_null($alter->status) && empty($request->status)){
-        $db_status = $alter->status;
-        $status = $db_status;
-    }elseif(!empty($request->status)){
-        $sorted_statuses = Arr::sort($request->status);
-        $status = last($sorted_statuses);
+      if($request->status){
+        if($request->unChecked){
+            $status = intval($request->status[0]) - 1;
+        }else{
+            $status = $request->status[0];
+        }
     }
-       $alter = Alteration::whereSlug($request->slug)->update([
-        'status' => $status,
-        'date' => $request->alteration_date,
-        'invoiced_at' => $request->invoiced_at,
-        'client_paid_at' => $request->client_paid_at,
-         'liquor_board_at' => $request->liquor_board_at, 
-         'date' => $request->date,
-         'certification_issued_at' => $request->certification_issued_at,
-         'delivered_at' => $request->delivered_at    
+       Alteration::whereSlug($request->slug)->update([
+        'status' => $status <= 0 ? NULL : $status,
        ]);
-       if($alter){
+      
         return back()->with('success','Alteration updated succesfully.');
-       }
-       return back()->with('error','Error updating alteration.');
-
+       
+      } catch (\Throwable $th) {
+        return back()->with('error','Error updating alteration.');
+      }
     }
 
 

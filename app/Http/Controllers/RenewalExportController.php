@@ -71,11 +71,7 @@ class RenewalExportController extends Controller
                                 $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                             });
 
-<<<<<<< HEAD
-                            })->whereNull('licences.deleted_at')
-=======
-                            })
->>>>>>> 2ffeb2bbc63f4cb0aa6f42c113a47831cc856a5f
+                            })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
                             ->orderBy('trading_name')
                             ->get([
                                 'id',

@@ -145,6 +145,14 @@ export default {
         // this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
+      function deleteNote(id){
+        if(confirm('This note will be deleted. Continue ?')){
+          Inertia.delete(`/delete-task/${id}`, {
+             preserveScroll: true,
+           }); 
+        }
+      }
+
     return { year,form,show_modal,getFileName, 
       file_name,show_file_name,file_has_apostrophe,
      updateRenewal,updateDate,
@@ -154,7 +162,7 @@ export default {
      createTask,
      submitTask,
      deleteRenewal,
-     limit
+     limit,deleteNote
      }
   },
    components: {
@@ -197,7 +205,7 @@ export default {
       <div class="row">
   <div class="col-lg-9 col-9">
    <h6>Process Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
-    <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ limit(renewal.licence.trading_name) }}</Link></h6>
+    <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
        <span class="font-weight-bold ms-1" v-if="renewal.status == '1'">Client Quoted</span>
       <span v-if="renewal.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
@@ -589,9 +597,9 @@ export default {
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
-data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
+<a @click="deleteNote(task.id)" href="#!" class="float-end">
+      <i class="fa fa-trash-o text-danger "></i>
+    </a>
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
 </div>
 </div>

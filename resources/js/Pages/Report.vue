@@ -19,30 +19,36 @@
         </div>
 
         <div class="row">
-          <!-- :class="{ btnPrimary: isActive }" -->
           <div class="col-4">
-            <button @click="getType('Renewals')" type="button" class="type btn btn-primary btn-success  w-50" 
-            >Renewals</button>
+            <button @click="getType('Alterations')" type="button" class="type btn btn-success w-50">Alterations</button>
           </div>
+
           <div class="col-4">
-            <button @click="getType('Transfers')" type="button" class="type btn btn-success w-50">Transfers</button>
+            <button @click="getType('Existing-Licences')" type="button" class="type btn btn-success w-50">Existing Licences</button>
           </div>
-          <div class="col-4">
-            <button @click="getType('Nominations')" type="button" class="type btn btn-success">Nominations</button>
-          </div>
+
 
           <div class="col-4">
             <button @click="getType('New Applications')" type="button" class="type btn btn-success w-50">New Applications</button>
           </div>
+
           <div class="col-4">
-            <button @click="getType('Existing-Licences')" type="button" class="type btn btn-success w-50">Existing Licences</button>
+            <button @click="getType('Nominations')" type="button" class="type btn btn-success w-50">Nominations</button>
           </div>
+          
           <div class="col-4">
-            <button @click="getType('Alterations')" type="button" class="type btn btn-success">Alterations</button>
+            <button @click="getType('Renewals')" type="button" class="type btn btn-primary btn-success  w-50" 
+            >Renewals</button>
           </div>
+
           <div class="col-4">
             <button @click="getType('Temporary Licence')" type="button" class="type btn btn-success w-50">Temporary Applications</button>
           </div>
+
+          <div class="col-4">
+            <button @click="getType('Transfers')" type="button" class="type btn btn-success w-50">Transfers</button>
+          </div>
+          
         </div>
 <hr/>
 

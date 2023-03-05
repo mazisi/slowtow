@@ -350,9 +350,9 @@ Action
 <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex justify-content-center align-items-center" 
-data-bs-dismiss="alert" aria-label="Close">
-<i class="far fa-trash-alt me-2" aria-hidden="true"></i></button> -->
+<a @click="deleteNote(task.id)" href="#!" class="float-end">
+      <i class="fa fa-trash-o text-danger "></i>
+    </a>
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
 </div>
 </div>
@@ -585,10 +585,18 @@ export default {
             this.file_has_apostrophe = this.file_name.includes("'");
           }
 
+      function deleteNote(id){
+        if(confirm('This note will be deleted. Continue ?')){
+          Inertia.delete(`/delete-task/${id}`, {
+             preserveScroll: true,
+           }); 
+        }
+      }
     return {
       showMenu,file_has_apostrophe,
       file_name,getFileName,
       createTask,
+      deleteNote,
       body_max,
       show_modal,
       show_current_company,
