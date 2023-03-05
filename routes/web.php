@@ -207,7 +207,7 @@ Route::group(['middleware' => ['guest']], function () {
 
         ///Update status on check
 
-        Route::patch('/update-new-reg/{slug}',[NewApplicationController::class,'updateRegistrationViaWatch']);
+        Route::patch('/update-registration-date/{slug}',[NewApplicationController::class,'updateRegistrationDate']);
 
         Route::post('/merge-licence-docs/{id}',[LicenceDocsController::class,'merge']);
 
@@ -235,6 +235,8 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::delete('/delete-renewal-document/{id}',[LicenceRenewalController::class,'deleteDocument']);
 
+        Route::patch('/update-renewal-date/{slug}',[LicenceRenewalController::class,'updateDates']);
+
         Route::delete('/delete-licence-renewal/{licence_slug}/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
 
 
@@ -254,6 +256,7 @@ Route::group(['middleware' => ['guest']], function () {
         Route::delete('/delete-licence-transfer/{slug}/{licence_slug}',[TransferLicenceController::class,'destroy'])->name('delete_licence_transfer');
 
         Route::patch('/update-licence-transfer',[TransferLicenceController::class,'update'])->name('update_licence_transfer');
+        Route::patch('/update-transfer-date/{slug}',[TransferLicenceController::class,'updateDates']);
 
 
 
@@ -284,6 +287,8 @@ Route::group(['middleware' => ['guest']], function () {
         Route::delete('/delete-alteration-document/{id}',[AlterationDocumentController::class,'destroy']);
 
         Route::post('/merge-alteration-documents/{alteration_id}',[AlterationDocumentController::class,'merge']);
+
+        Route::patch('/update-alteration-date/{slug}',[AlterLicenceController::class,'updateAlterationDate']);
 
 
 
@@ -357,6 +362,8 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::delete('/delete-nomination/{licence_slug}/{slug}',[NominationController::class,'destroy']);
 
+        Route::patch('/update-nomination-date/{slug}',[NominationController::class,'updateDate']);
+
 
 
         Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');
@@ -416,8 +423,6 @@ Route::group(['middleware' => ['guest']], function () {
         //Emmails Not sent 
 
         Route::get('emails-report', [EmailReportController::class,'index']);
-
-
 
         //renewals mail dispatcher
 

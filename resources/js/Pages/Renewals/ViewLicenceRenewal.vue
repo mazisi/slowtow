@@ -36,6 +36,7 @@ export default {
       year: props.renewal.date,
       licence_id: props.renewal.id,
       status: [],
+      unChecked: false,
       client_paid_at: props.renewal.client_paid_at,
       payment_to_liquor_board_at: props.renewal.payment_to_liquor_board_at,
       renewal_issued_at: props.renewal.renewal_issued_at,
@@ -120,17 +121,21 @@ export default {
 
     
 
-    function pushData(status_value){
-         if (event.target.checked) {
-            if(this.form.status.includes(status_value)){
-                return;
-              }else{
-                this.form.status.push(status_value)
-              } 
-          }else if(!event.target.checked){
-          // alert('unticked')
+      function pushData(e,status_value){
+          if (e.target.checked) {
+            this.form.status[0] = status_value;
+            this.form.unChecked = false;
+          }else if(!e.target.checked){
+            this.form.unChecked = true
+            this.form.status[0] = e.target.value;
           }
-      }
+          }
+
+          function updateDate(){
+            form.patch(`/update-renewal-date/${props.renewal.slug}`, {
+             preserveScroll: true,
+           }) 
+          }
 
       let file_has_apostrophe = ref();
       function getFileName(e){
@@ -142,7 +147,7 @@ export default {
 
     return { year,form,show_modal,getFileName, 
       file_name,show_file_name,file_has_apostrophe,
-     updateRenewal,
+     updateRenewal,updateDate,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      deleteDocument,
@@ -220,7 +225,7 @@ export default {
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-quoted" class="active-checkbox" type="checkbox" 
 :checked="renewal.status >= '1'"
-@input="pushData(1)" value="1">
+@input="pushData($event,1)" value="1">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div> 
@@ -253,23 +258,41 @@ export default {
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
-@input="pushData(2)" 
+@input="pushData($event,2)" 
 :checked="renewal.status >= '2'">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
 
-<div class="col-md-4 columns">    
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Date</label>
-  <input type="date" class="form-control form-control-default" v-model="form.client_invoiced_at" >
-  </div>
-  <div v-if="errors.client_invoiced_at" class="text-danger">{{ errors.client_invoiced_at }}</div>
-</div>
 
-<div class="col-md-2 columns">    
-  <button class="btn btn-secondary btn-sm">Save</button>
+<template v-if="renewal.client_invoiced_at == null">
+  <div class="col-md-4 columns" >
+     <div class="input-group input-group-outline null is-filled ">
+     <label class="form-label">Date</label>
+     <input type="date" class="form-control form-control-default" v-model="form.client_invoiced_at">
+      </div>
+    <div v-if="errors.client_invoiced_at" class="text-danger">{{ errors.client_invoiced_at }}</div>
+    </div> 
+    
+ <div class="col-md-1 columns">
+     <button :disabled="!form.client_invoiced_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+ </div>
+</template>
+
+<template v-else>
+ <div class="col-md-4 columns" >
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" v-model="form.client_invoiced_at">
+     </div>
+   <div v-if="errors.client_invoiced_at" class="text-danger">{{ errors.client_invoiced_at }}</div>
+   </div> 
+   
+<div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+    <button :disabled="!form.client_invoiced_at" @click="updateDate"  
+    type="button" class="btn btn-sm btn-secondary">Save</button>
 </div>
+</template>
 
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
@@ -299,7 +322,7 @@ export default {
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
-@input="pushData(3)" value="3" :checked="renewal.status >= '3'">
+@input="pushData($event,3)" value="3" :checked="renewal.status >= '3'">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -314,7 +337,7 @@ export default {
      </div> 
      
   <div class="col-md-1 columns">
-      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+      <button :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
@@ -328,7 +351,7 @@ export default {
     </div> 
     
  <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-     <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+     <button :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
 </template>
 
@@ -336,7 +359,7 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="payment" type="checkbox" @input="pushData(4)" value="4"
+<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,4)" value="4"
 :checked="renewal.status >= '4'">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
@@ -354,7 +377,7 @@ export default {
       </div> 
       
    <div class="col-md-1 columns">
-       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+       <button :disabled="!form.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -368,7 +391,7 @@ export default {
      </div> 
      
   <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+      <button :disabled="!form.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
  </template>
 
@@ -401,7 +424,7 @@ export default {
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
-@input="pushData(5)" value="5" :checked="renewal.status >= 5">
+@input="pushData($event,5)" value="5" :checked="renewal.status >= 5">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Renewal Issued</label>
 </div>
 </div> 
@@ -418,7 +441,7 @@ export default {
       </div> 
       
    <div class="col-md-1 columns">
-       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+       <button :disabled="!form.renewal_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -432,7 +455,7 @@ export default {
      </div> 
      
   <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+      <button :disabled="!form.renewal_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
  </template>
 
@@ -473,7 +496,7 @@ export default {
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="delivered" type="checkbox" value="6"
-@input="pushData(6)" :checked="renewal.status == '6'">
+@input="pushData($event,6)" :checked="renewal.status == '6'">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Renewal Delivered</label>
 </div>
 </div>
@@ -488,7 +511,7 @@ export default {
       </div> 
       
    <div class="col-md-1 columns">
-       <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+       <button :disabled="!form.renewal_delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -502,7 +525,8 @@ export default {
      </div> 
      
   <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-      <button type="submit" class="btn btn-sm btn-secondary">Save</button>
+      <button :disabled="!form.renewal_delivered_at" @click="updateDate"  
+      type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
  </template>
 

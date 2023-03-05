@@ -104,6 +104,20 @@ class AlterLicenceController extends Controller
 
     }
 
+
+    public function updateAlterationDate(Request $request, $slug){
+      Alteration::whereSlug($slug)->update([
+        'invoiced_at' => $request->invoiced_at,
+        'client_paid_at' => $request->client_paid_at,
+         'liquor_board_at' => $request->liquor_board_at, 
+         'date' => $request->date,
+         'certification_issued_at' => $request->certification_issued_at,
+         'delivered_at' => $request->delivered_at    
+       ]);
+        return back()->with('success','Date updated succesfully.');
+       
+    }
+
     public function destroy($slug, $licence_slug)
     {
        $alter = Alteration::whereSlug($slug)->first();

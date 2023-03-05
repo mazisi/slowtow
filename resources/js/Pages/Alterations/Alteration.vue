@@ -67,12 +67,12 @@ name: "dashboard-default",
 <div class="row gx-4">
 
 <div class="row">
-  <div class="col-lg-9 col-9">
+  <div class="col-lg-10 col-10">
    <h6 class="mb-1">Alterations for:  
     <Link :href="`/view-licence?slug=${licence.slug}`">
       <span class="text-success">{{ licence.trading_name ? licence.trading_name: '' }}</span></Link></h6>
   </div>
-  <div class="col-lg-3 col-3 my-auto text-end">
+  <div class="col-lg-2 col-2 my-auto text-end">
     <Link :href="`/new-alteration?slug=${licence.slug }`" class="btn btn-sm btn-secondary"> New Alteration</Link>
   </div>
 </div>

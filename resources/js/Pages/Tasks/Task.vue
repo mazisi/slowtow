@@ -5,9 +5,13 @@
     <div class="row">
     <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
     <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-    <span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
+    <span class="alert-icon"><i class=""></i></span>
+    <span class="alert-text"> 
     <span class="text-sm">{{ task.body }}</span>
     </span>
+    <a @click="deleteNote(task.id)" href="#!" class="float-end">
+      <i class="fa fa-trash-o text-danger "></i>
+    </a>
     <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
     </div>
     </div>
@@ -42,6 +46,8 @@
 <script>
   import { ref } from 'vue';
   import { useForm } from '@inertiajs/inertia-vue3';
+  import { Inertia } from '@inertiajs/inertia';
+
   export default{
     props: {
       tasks: Object,
@@ -69,8 +75,16 @@
                 this.createTask.body = this.createTask.body.substring(0,this.body_max)
             }
         }
+
+        function deleteNote(id){
+        if(confirm('This note will be deleted. Continue ?')){
+          Inertia.delete(`/delete-task/${id}`, {
+             preserveScroll: true,
+           }); 
+        }
+      }
         return{
-          createTask,submitTask,checkBodyLength,body_max
+          createTask,submitTask,checkBodyLength,body_max,deleteNote
         }
     }
   }

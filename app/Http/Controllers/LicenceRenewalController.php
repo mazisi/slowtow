@@ -76,28 +76,22 @@ class LicenceRenewalController extends Controller
 
     public function update(Request $request){
        $request->validate([
-        'year' => 'required',
         'renewal_id' => 'required'
        ]);
 
        $ren = LicenceRenewal::find($request->renewal_id);
        $status = null;
-        if(!is_null($ren->status) && empty($request->status)){
-            $db_status = $ren->status;
-            $status = $db_status;
-        }elseif(!empty($request->status)){
-            $sorted_statuses = Arr::sort($request->status);
-            $status = last($sorted_statuses);
+        if($request->status){
+            if($request->unChecked){
+                $status = $request->status[0] - 1;
+            }else{
+                $status = $request->status[0];
+            }
         }
 
        $ren->update([
         'date' => $request->year,
-        'status' => $status,
-        'client_paid_at' => $request->client_paid_at,
-        'renewal_issued_at' => $request->renewal_issued_at,
-        'renewal_delivered_at' => $request->renewal_delivered_at,
-        'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
-        'client_invoiced_at' => $request->client_invoiced_at
+        'status' => $status <= 0 ? NULL : $status,
         
        ]);
        if($ren){
@@ -133,10 +127,21 @@ class LicenceRenewalController extends Controller
        
     }
 
+    public function updateDates(Request $request, $slug){
+            LicenceRenewal::whereSlug($slug)->update([
+                'client_paid_at' => $request->client_paid_at,
+                'renewal_issued_at' => $request->renewal_issued_at,
+                'renewal_delivered_at' => $request->renewal_delivered_at,
+                'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+                'client_invoiced_at' => $request->client_invoiced_at
+                
+            ]);
+        return back()->with('success','Date updated successfully.');
+}
+
     public function deleteDocument($id){
         $model = RenewalDocument::find($id);
         if(!is_null($model->document_name)){
-            //unlink(public_path('storage/app/public/renewalDocuments/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

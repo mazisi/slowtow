@@ -60,12 +60,14 @@ export default {
           form.patch(`/update-alteration`)
         }
 
-    function pushData(event){
-      if(this.form.status.includes(event)){
-        return;
-      }else{
-        this.form.status.push(event)
-      }
+    function pushData(e,status_value){
+      if (e.target.checked) {
+            this.form.status[0] = status_value;
+            this.form.unChecked = false;
+          }else if(!e.target.checked){
+            this.form.unChecked = true
+            this.form.status[0] = e.target.value;
+          }
       
     }
 
@@ -123,8 +125,14 @@ export default {
       })
     }
 
+    function updateDate(){
+        form.patch(`/update-alteration-date/${props.alteration.slug}`, {
+             preserveScroll: true,
+           }) 
+      }
+
     return {
-      form,showMenu,show_modal,
+      form,showMenu,show_modal,updateDate,
       update,update,mergeDocuments,
       pushData,file_name,
       show_file_name,
@@ -197,7 +205,7 @@ export default {
 
   <div class="col-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input id="client-quoted" class="active-checkbox" @input="pushData(1)" type="checkbox" value="1" :checked="alteration.status >= 1">
+    <input id="client-quoted" class="active-checkbox" @input="pushData($event,1)" type="checkbox" value="1" :checked="alteration.status >= 1">
     <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
     </div>
   </div>  
@@ -228,7 +236,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-invoiced" class="active-checkbox" @input="pushData(2)" type="checkbox" value="2" :checked="alteration.status >= 2">
+<input id="client-invoiced" class="active-checkbox" @input="pushData($event,2)" type="checkbox" value="2" :checked="alteration.status >= 2">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>  
@@ -260,27 +268,50 @@ export default {
 
 <div class="col-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="client-paid" @input="pushData(3)" type="checkbox" value="3" :checked="alteration.status >= 3">
+<input class="active-checkbox" id="client-paid" @input="pushData($event,3)" type="checkbox" value="3" :checked="alteration.status >= 3">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
 
- <div class="col-4 columns">
-  <div class="input-group input-group-outline null is-filled">
+
+<template v-if="alteration.client_paid_at == null">
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.client_paid_at" >
     </div>
-     <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-</div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="alteration.client_paid_at == null" 
+    :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.client_paid_at" >
+    </div>
+    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
 <hr>
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-details" @input="pushData(4)" type="checkbox" value="4" :checked="alteration.status >= 4">
+<input class="active-checkbox" id="alteration-details" @input="pushData($event,4)" type="checkbox" value="4" :checked="alteration.status >= 4">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-details">Prepare Alterations Application</label>
 </div>
 </div> 
@@ -423,7 +454,7 @@ v-if="application_form !== null
 
 <div class="col-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-board2" @input="pushData(5)" type="checkbox" value="5" :checked="alteration.status >= 5">
+<input class="active-checkbox" id="alteration-board2" @input="pushData($event,5)" type="checkbox" value="5" :checked="alteration.status >= 5">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-board2">Payment to the Liquor Board</label>
 </div>
 
@@ -448,23 +479,46 @@ v-if="application_form !== null
 </ul>
 
 </div>
-<div class="col-4 columns">
-  <div class="input-group input-group-outline null is-filled">
+
+<template v-if="alteration.liquor_board_at == null">
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.liquor_board_at" >
     </div>
-     <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
-</div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+    <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="alteration.liquor_board_at == null" 
+    :disabled="!form.liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.liquor_board_at" >
+    </div>
+    <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    :disabled="!form.liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
 <hr/>
 
 
 <div class="col-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-logded" @input="pushData(6)" type="checkbox" value="6" :checked="alteration.status >= 6">
+<input class="active-checkbox" id="alteration-logded" @input="pushData($event,6)" type="checkbox" value="6" :checked="alteration.status >= 6">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-logded">Alterations Lodged</label>
 </div>
 
@@ -489,22 +543,46 @@ v-if="application_form !== null
 </ul>
 
 </div>
-<div class="col-4 columns">
-  <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Date Of Application</label>
-    <input type="date" class="form-control form-control-default" v-model="form.date">
+
+<template v-if="alteration.date == null">
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.date" >
     </div>
-     <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
-</div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+    <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="alteration.date == null" 
+    :disabled="!form.date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.date" >
+    </div>
+    <div v-if="errors.date" class="text-danger">{{ errors.date }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    :disabled="!form.date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
 <hr/>
 
 <div class="col-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-issued" @input="pushData(7)" type="checkbox" value="7" :checked="alteration.status >= 7">
+<input class="active-checkbox" id="alteration-issued" @input="pushData($event,7)" type="checkbox" value="7" :checked="alteration.status >= 7">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Certificate Issued</label>
 </div>
 
@@ -529,23 +607,46 @@ v-if="application_form !== null
 </ul>
 
 </div>
-<div class="col-4 columns">
-  <div class="input-group input-group-outline null is-filled">
+
+<template v-if="alteration.certification_issued_at == null">
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.certification_issued_at">
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.certification_issued_at" >
     </div>
-     <div v-if="errors.certification_issued_at" class="text-danger">{{ errors.certification_issued_at }}</div>
-</div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+    <div v-if="errors.certification_issued_at" class="text-danger">{{ errors.certification_issued_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="alteration.certification_issued_at == null" 
+    :disabled="!form.certification_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.certification_issued_at" >
+    </div>
+    <div v-if="errors.certification_issued_at" class="text-danger">{{ errors.certification_issued_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    :disabled="!form.certification_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
 <hr/>
 
 
 <div class="col-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="alteration-issued" @input="pushData(8)" type="checkbox" value="8" :checked="alteration.status >= 8">
+<input class="active-checkbox" id="alteration-issued" @input="pushData($event,8)" type="checkbox" value="8" :checked="alteration.status >= 8">
 <label class="form-check-label text-body text-truncate status-heading" for="alteration-issued">Alterations Delivered</label>
 </div>
 
@@ -570,17 +671,40 @@ v-if="application_form !== null
 </ul>
 
 </div>
-<div class="col-4 columns">
-  <div class="input-group input-group-outline null is-filled">
+
+<template v-if="alteration.delivered_at == null">
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.delivered_at">
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.delivered_at" >
     </div>
-     <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
-</div>
-<div class="col-1"></div>
-<div class="col-2 float-end">
-  <button class="btn btn-sm btn-secondary">Save</button>
-</div>
+    <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="alteration.delivered_at == null" 
+    :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
+
+<template v-else>
+  <div class="col-md-5 columns mb-4">
+    <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Date</label>
+    <input type="date" class="form-control form-control-default" 
+      v-model="form.delivered_at" >
+    </div>
+    <div v-if="errors.delivered_at" class="text-danger">{{ errors.delivered_at }}</div>
+   </div>
+    
+   <div class="col-md-1"></div>
+   <div class="col-md-1 columns">
+    <button v-if="$page.props.auth.has_slowtow_admin_role"
+    :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   </div>
+</template>
 <hr/>
 
 

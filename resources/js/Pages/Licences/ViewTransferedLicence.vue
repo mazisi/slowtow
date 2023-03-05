@@ -66,6 +66,7 @@ export default {
           slug: props.view_transfer.slug,
           licence_id: props.view_transfer.id,
           status: [],
+          unChecked: false,
     })
 
     const documentsForm = useForm({
@@ -127,16 +128,14 @@ export default {
         this.form.active = event
       }
 
-      function pushData(status_value) {
-          if (event.target.checked) {
-              if(form.status.includes(status_value)){
-                        return;
-                        }else{
-                          form.status.push(status_value)
-                        } 
-                }else if(!event.target.checked){
-                  form.status.pop()
-                }
+      function pushData(e,status_value) {
+        if (e.target.checked) {
+            this.form.status[0] = status_value;
+            this.form.unChecked = false;
+          }else if(!e.target.checked){
+            this.form.unChecked = true
+            this.form.status[0] = e.target.value;
+          }
       }
 
       function deleteDocument(id){
@@ -173,7 +172,15 @@ export default {
         this.file_name = e.target.files[0].name;
         this.file_has_apostrophe = this.file_name.includes("'");
       }
+
+      function updateDate(){
+        form.patch(`/update-transfer-date/${props.view_transfer.slug}`, {
+             preserveScroll: true,
+           }) 
+      }
+
     return {
+      updateDate,
       pushData,
       file_name,
       file_has_apostrophe,
@@ -243,7 +250,7 @@ export default {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-10 col-10">
   <h5>Transfer Info for: <Link :href="`/view-licence?slug=${view_transfer.licence.slug}`" class="text-success">
     {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h5>
   <p class="text-sm mb-0">Current Stage: 
@@ -259,7 +266,7 @@ export default {
    <span v-if="view_transfer.status == '10'" class="font-weight-bold ms-1">Transfer Delivered</span>
  </p>
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
+  <div class="col-lg-2 col-2 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
      @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
@@ -273,8 +280,8 @@ export default {
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-quoted" class="active-checkbox" @input="pushData(1)"
-:checked="view_transfer.status >= 1" type="checkbox" >
+<input id="client-quoted" class="active-checkbox" @input="pushData($event,1)"
+:checked="view_transfer.status >= 1" type="checkbox" value="1">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
 </div>
@@ -305,8 +312,8 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-invoiced" class="active-checkbox" @input="pushData(2)"
-:checked="view_transfer.status >= 2" type="checkbox" >
+<input id="client-invoiced" class="active-checkbox" @input="pushData($event,2)"
+:checked="view_transfer.status >= 2" type="checkbox" value="2">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
 </div>
 </div> 
@@ -337,8 +344,8 @@ export default {
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" class="active-checkbox" @input="pushData(3)"
-:checked="view_transfer.status >= 3" type="checkbox">
+<input id="client-paid" class="active-checkbox" @input="pushData($event,3)"
+:checked="view_transfer.status >= 3" type="checkbox" value="3">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>  
@@ -346,8 +353,8 @@ export default {
 
 <div class="col-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="prepare" class="active-checkbox" @input="pushData(4)"
-:checked="view_transfer.status >= 4" type="checkbox">
+<input id="prepare" class="active-checkbox" @input="pushData($event,4)"
+:checked="view_transfer.status >= 4" type="checkbox" value="4">
 <label for="prepare" class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
 </div>
 </div> 
@@ -725,8 +732,8 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="liquor-b" class="active-checkbox" @input="pushData(5)"
-:checked="view_transfer.status >= 5" type="checkbox">
+<input id="liquor-b" class="active-checkbox" @input="pushData($event,5)"
+:checked="view_transfer.status >= 5" type="checkbox" value="5">
 <label for="liquor-b" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
@@ -744,7 +751,8 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.payment_to_liquor_board_at == null" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.payment_to_liquor_board_at" @click="updateDate"
+      type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
   
@@ -760,7 +768,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 
@@ -791,8 +799,8 @@ export default {
 <hr>
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="scanned-app" class="active-checkbox" @input="pushData(6)"
-:checked="view_transfer.status >= 6" type="checkbox">
+<input id="scanned-app" class="active-checkbox" @input="pushData($event,6)"
+:checked="view_transfer.status >= 6" type="checkbox" value="6">
 <label for="scanned-app" class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
 </div>
 </div>
@@ -822,8 +830,8 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="app-logded" class="active-checkbox" @input="pushData(7)"
-:checked="view_transfer.status >= 6" type="checkbox">
+<input id="app-logded" class="active-checkbox" @input="pushData($event,7)"
+:checked="view_transfer.status >= 7" type="checkbox" value="7">
 <label for="app-logded" class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>
@@ -843,7 +851,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.lodged_at == null" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
   
@@ -859,7 +867,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 
@@ -890,8 +898,8 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="activation-fee" class="active-checkbox" @input="pushData(8)"
-:checked="view_transfer.status >= 7" type="checkbox">
+<input id="activation-fee" class="active-checkbox" @input="pushData($event,8)"
+:checked="view_transfer.status >= 8" type="checkbox" value="8">
 <label for="activation-fee" class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>
@@ -911,7 +919,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.activation_fee_paid_at == null" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.activation_fee_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
   
@@ -927,7 +935,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.activation_fee_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 
@@ -958,8 +966,8 @@ export default {
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="transfer-issued" class="active-checkbox" @input="pushData(9)"
-:checked="view_transfer.status >= 8" type="checkbox">
+<input id="transfer-issued" class="active-checkbox" @input="pushData($event,9)"
+:checked="view_transfer.status >= 9" type="checkbox" value="9">
 <label for="transfer-issued" class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
@@ -978,7 +986,7 @@ export default {
  <div class="col-md-1"></div>
   <div class="col-md-1 columns">
    <button v-if="form.issued_at == null" 
-   @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   :disabled="!form.issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
@@ -994,7 +1002,7 @@ export default {
  <div class="col-md-1"></div>
   <div class="col-md-1 columns">
    <button v-if="$page.props.auth.has_slowtow_admin_role" 
-   @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+   :disabled="!form.issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
@@ -1025,8 +1033,8 @@ export default {
 
 <div class="col-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="transfer-delivered" class="active-checkbox" @input="pushData(10)"
-:checked="view_transfer.status >= 9" type="checkbox">
+<input id="transfer-delivered" class="active-checkbox" @input="pushData($event,10)"
+:checked="view_transfer.status >= 10" type="checkbox" value="10">
 <label for="transfer-delivered" class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 
@@ -1045,7 +1053,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.delivered_at == null" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
  </template>
  
@@ -1061,7 +1069,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     @click="submit" type="submit" class="btn btn-sm btn-secondary">Save</button>
+     :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
  </template>
 

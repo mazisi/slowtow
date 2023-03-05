@@ -49,7 +49,8 @@ export default{
               nomination_issued_at: props.nomination.nomination_issued_at,
               nomination_delivered_at: props.nomination.nomination_delivered_at,
               payment_to_liquor_board_at: props.nomination.payment_to_liquor_board_at,
-              status: [],      
+              status: [], 
+              unChecked: false,     
       });
 
       const uploadDoc = useForm({
@@ -141,16 +142,20 @@ export default{
             }
           }
 
-      function pushData(status_value) {
-          if (event.target.checked) {
-              if(updateForm.status.includes(status_value)){
-                        return;
-                        }else{
-                          updateForm.status.push(status_value)
-                        } 
-                }else if(!event.target.checked){
-                  updateForm.status.pop()
-                }
+      function pushData(e,status_value) {
+        if (e.target.checked) {
+            this.updateForm.status[0] = status_value;
+            this.updateForm.unChecked = false;
+          }else if(!e.target.checked){
+            this.updateForm.unChecked = true
+            this.updateForm.status[0] = e.target.value;
+          }
+      }
+
+      function updateDate(){
+        updateForm.patch(`/update-nomination-date/${props.nomination.slug}`, {
+             preserveScroll: true,
+           }) 
       }
       
       let file_has_apostrophe = ref();
@@ -161,7 +166,15 @@ export default{
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      return{options,pushData,updateNomination,
+      function deleteNote(id){
+        if(confirm('This note will be deleted. Continue ?')){
+          Inertia.delete(`/delete-task/${id}`, {
+             preserveScroll: true,
+           }); 
+        }
+      }
+
+      return{options,pushData,updateNomination,updateDate,deleteNote,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,submitTask,show_file_name,
             getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination,file_name,getFileName
@@ -210,7 +223,7 @@ export default{
 <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
-<div class="col-lg-6 col-7">
+<div class="col-lg-10 col-10">
 <h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">
   {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
 <p class="text-sm mb-0">Current Stage: 
@@ -228,7 +241,7 @@ export default{
 
   
 </div>
-<div class="col-lg-6 col-5 my-auto text-end">
+<div class="col-lg-2 col-2 my-auto text-end">
   <button v-if="$page.props.auth.has_slowtow_admin_role" 
   @click="deleteNomination" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
  
@@ -243,8 +256,8 @@ export default{
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-quoted" type="checkbox" @input="pushData(1)"
-:checked="nomination.status >= '1'" class="active-checkbox">
+<input id="client-quoted" type="checkbox" @input="pushData($event,1)"
+:checked="nomination.status >= 1" value="1" class="active-checkbox">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div>  
@@ -274,8 +287,8 @@ export default{
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-inv" type="checkbox" @input="pushData(2)"
-:checked="nomination.status >= '2'" class="active-checkbox">
+<input id="client-inv" type="checkbox" @input="pushData($event,2)"
+:checked="nomination.status >= 2" value="2" class="active-checkbox">
 <label for="client-inv" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
@@ -305,8 +318,8 @@ export default{
 <hr>
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" type="checkbox" @input="pushData(3)"
-:checked="nomination.status >= '3'" class="active-checkbox">
+<input id="client-paid" type="checkbox" @input="pushData($event,3)"
+:checked="nomination.status >= 3" value="3" class="active-checkbox">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>
@@ -324,7 +337,7 @@ export default{
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.client_paid_date == null" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.client_paid_date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -341,15 +354,15 @@ export default{
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.client_paid_date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr>
 
 <div class="col-md-5 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input id="liquor-board" type="checkbox" @input="pushData(4)"
-  :checked="nomination.status >= '4'" class="active-checkbox">
+  <input id="liquor-board" type="checkbox" @input="pushData($event,4)"
+  :checked="nomination.status >= 4" value="4" class="active-checkbox">
   <label for="liquor-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
   </div>
   </div>
@@ -367,7 +380,7 @@ export default{
   <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.payment_to_liquor_board_at == null" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -383,7 +396,7 @@ export default{
   <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.payment_to_liquor_board_at" @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
  
@@ -413,8 +426,8 @@ export default{
 
 <div class="col-md-11 d-flex columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="Select nominees" type="checkbox" @input="pushData(5)"
-:checked="nomination.status >= '5'" class="active-checkbox">
+<input id="Select nominees" type="checkbox" @input="pushData($event,5)"
+:checked="nomination.status >= 5" value="5" class="active-checkbox">
 </div>
 
 <label for="Select nominees" class="form-check-label text-body text-truncate status-heading">Select Person(s) To Nominate</label>
@@ -476,8 +489,8 @@ Action
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="documents-required" type="checkbox" @input="pushData(6)"
-:checked="nomination.status >= '6'" class="active-checkbox">
+<input id="documents-required" type="checkbox" @input="pushData($event,6)"
+:checked="nomination.status >= 6" value="6" class="active-checkbox">
 <label for="documents-required" class="form-check-label text-body text-truncate status-heading">Prepare Nomination Application </label>
 </div>
 </div>
@@ -636,8 +649,8 @@ Action
 
 <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input id="scanned-app" type="checkbox" @input="pushData(7)"
-  :checked="nomination.status >= '7'" class="active-checkbox">
+  <input id="scanned-app" type="checkbox" @input="pushData($event,7)"
+  :checked="nomination.status >= 7" value="7" class="active-checkbox">
   <label for="scanned-app" class="form-check-label text-body text-truncate status-heading">Scanned Application </label>
   </div>
   </div>
@@ -668,8 +681,8 @@ Action
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="nomination-logded" type="checkbox" @input="pushData(8)"
-:checked="nomination.status >= '8'" class="active-checkbox">
+<input id="nomination-logded" type="checkbox" @input="pushData($event,8)"
+:checked="nomination.status >= 8" value="8" class="active-checkbox">
 <label for="nomination-logded" class="form-check-label text-body text-truncate status-heading">Application Lodged</label>
 </div>
 </div>
@@ -710,7 +723,7 @@ Action
  <div class="col-md-1"></div>
  <div class="col-md-1 columns">
   <button v-if="nomination.nomination_lodged_at == null" 
-  @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+  :disabled="!updateForm.nomination_lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
 </template>
 
@@ -726,7 +739,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.nomination_lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr>
@@ -734,8 +747,8 @@ Action
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="nomination-issued" type="checkbox" @input="pushData(9)"
-:checked="nomination.status >= '9'" class="active-checkbox">
+<input id="nomination-issued" type="checkbox" @input="pushData($event,9)"
+:checked="nomination.status >= 9" value="9" class="active-checkbox">
 <label for="nomination-issued" class="form-check-label text-body text-truncate status-heading">Nomination Issued</label>
 </div>
 </div>
@@ -776,7 +789,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.nomination_issued_at == null" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.nomination_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -792,7 +805,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.nomination_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
 <hr>
@@ -802,8 +815,8 @@ Action
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="nomination-delivered" type="checkbox" @input="pushData(10)"
-:checked="nomination.status >= '10'" class="active-checkbox">
+<input id="nomination-delivered" type="checkbox" @input="pushData($event,10)"
+:checked="nomination.status >= 10" value="10" class="active-checkbox">
 <label for="nomination-delivered" class="form-check-label text-body text-truncate status-heading"> Nomination Delivered</label>
 </div>
 </div> 
@@ -844,7 +857,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.nomination_delivered_at == null" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.nomination_delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -861,7 +874,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    @click="updateNomination" type="submit" class="btn btn-sm btn-secondary">Save</button>
+    :disabled="!updateForm.nomination_delivered_at" @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
 <hr>
@@ -901,9 +914,10 @@ Save</button>
 <span class="alert-text"> 
 <span class="text-sm">{{ task.body }}</span>
 </span>
-<!-- <button @click="deleteTask(task.id)" type="button" class="btn-close d-flex mr-4 justify-content-center align-items-center" 
-data-bs-dismiss="alert" aria-label="Close">
-Expire: 23/09/2022</button> -->
+<a @click="deleteNote(task.id)" href="#!" class="float-end">
+  <i class="fa fa-trash-o text-danger "></i>
+</a>
+
 <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString() }}</p>
 </div>
 </div>

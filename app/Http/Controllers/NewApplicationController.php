@@ -210,11 +210,8 @@ class NewApplicationController extends Controller
         $licence = Licence::whereSlug($slug)->first();
         $status = '';
         $licence_date = null;
-        if(!is_null($licence->status) && empty($request->status)){
-            $db_status = $licence->status;
-            $status = $db_status;
-        }elseif(!empty($request->status)){
-            if($request->isChecked){
+        if($request->status){
+            if($request->unChecked){
                 $status = $request->status[0] - 1;
             }else{
                 $status = $request->status[0];
@@ -233,19 +230,9 @@ class NewApplicationController extends Controller
             
         }
         $licence->update([
-            'deposit_paid_at' => $request->deposit_paid_at,
-            'liquor_board_at' => $request->liquor_board_at,
-            'application_lodged_at' => $request->application_lodged_at,
-            'initial_inspection_at' => $request->initial_inspection_at,
-            'final_inspection_at' => $request->final_inspection_at,
-            'activation_fee_requested_at' =>$request->activation_fee_requested_at,
-            'client_paid_at' => $request->client_paid_at,
-            'activation_fee_paid_at' => $request->activation_fee_paid_at,
-            'licence_issued_at' => $request->licence_issued_at,
-            'licence_delivered_at' => $request->licence_delivered_at,
             'licence_date' => $licence_date,
             'renewal_amount' => $request->renewal_amount,
-            'status' => $status,
+            'status' => $status <= 0 ? NULL : $status,
            ]);
            
            return back()->with('success','Updated successfully');
@@ -256,13 +243,22 @@ class NewApplicationController extends Controller
        
     }
 
-public function updateRegistrationViaWatch(Request $request, $slug)
+public function updateRegistrationDate(Request $request, $slug)
 {
-   $licence = Licence::whereSlug($slug)->first();
-   $licence->update([
-    'status' => $request->status[0]
-   ]);
-   return back();
+    Licence::whereSlug($slug)->update([
+        'deposit_paid_at' => $request->deposit_paid_at,
+        'liquor_board_at' => $request->liquor_board_at,
+        'application_lodged_at' => $request->application_lodged_at,
+        'initial_inspection_at' => $request->initial_inspection_at,
+        'final_inspection_at' => $request->final_inspection_at,
+        'activation_fee_requested_at' =>$request->activation_fee_requested_at,
+        'client_paid_at' => $request->client_paid_at,
+        'activation_fee_paid_at' => $request->activation_fee_paid_at,
+        'licence_issued_at' => $request->licence_issued_at,
+        'licence_delivered_at' => $request->licence_delivered_at,
+       ]);
+   return back()->with('success','Date updated successfully.');
 }
+
 
 }

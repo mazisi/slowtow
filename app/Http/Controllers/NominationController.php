@@ -123,33 +123,42 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     }
 
     public function update(Request $request){
-        $status = null;
-        $request->validate([
-            'nomination_year' => 'required',
-            'nomination_id' => 'required|exists:nominations,id'
-        ]);
-        $nom= Nomination::find($request->nomination_id);
-        if(!is_null($nom->status) && empty($request->status)){
-            $db_status = $nom->status;
-            $status = $db_status;
-        }elseif(!empty($request->status)){
-            $sorted_statuses = Arr::sort($request->status);
-            $status = last($sorted_statuses);
+        try {
+            $status = null;
+            $request->validate([
+                'nomination_id' => 'required|exists:nominations,id'
+            ]);
+    
+        if($request->status){
+            if($request->unChecked){
+                $status = intval($request->status[0]) - 1;
+            }else{
+                $status = $request->status[0];
+            }
         }
-        $nom->update([
+        Nomination::find($request->nomination_id)->update([
             "year" => $request->nomination_year,
-            "status" => $status,
+            "status" => $status <= 0 ? NULL : $status,
+            
+        ]);
+             return back()->with('success','Nomination updated succesfully.');
+        
+       
+        } catch (\Throwable $th) {
+            throw $th;
+            //return back()->with('error','Error updating nomination.');
+        }
+    }
+
+    public function updateDate(Request $request, $slug){
+        Nomination::whereSlug($slug)->update([
             "client_paid_date" => $request->client_paid_date,
             "nomination_lodged_at" => $request->nomination_lodged_at,
             "nomination_issued_at" => $request->nomination_issued_at,
             "nomination_delivered_at" => $request->nomination_delivered_at,
-            "payment_to_liquor_board_at" => $request->payment_to_liquor_board_at
-            
+            "payment_to_liquor_board_at" => $request->payment_to_liquor_board_at            
         ]);
-        if($nom){
-           return back()->with('success','Nomination updated succesfully.');
-        }
-        return back()->with('error','Error updating nomination.');
+        return back()->with('success','Date updated succesfully.');
     }
 
     public function addSelectedNominees(Request $request){

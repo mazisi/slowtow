@@ -155,27 +155,33 @@ class TransferLicenceController extends Controller
 
       public function update(Request $request) {
       
-        $trans= LicenceTransfer::find($request->licence_id);
-        if(!is_null($trans->status) && empty($request->status)){
-            $db_status = $trans->status;
-            $status = $db_status;
-        }elseif(!empty($request->status)){
-            $sorted_statuses = Arr::sort($request->status);
-            $status = last($sorted_statuses);
-        }
+        if($request->status){
+          if($request->unChecked){
+              $status = intval($request->status[0]) - 1;
+          }else{
+              $status = $request->status[0];
+          }
+      }
         $update = LicenceTransfer::whereSlug($request->slug)->update([
-          'status' => $status,
-          'date' => $request->transfer_date,
-          'lodged_at' => $request->lodged_at,
-          'activation_fee_paid_at' => $request->activation_fee_paid_at,
-          'issued_at' => $request->issued_at,
-          'delivered_at' => $request->delivered_at,
-          'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+          'status' => $status <= 0 ? NULL : $status,
+          'date' => $request->transfer_date
         ]);
         if ($update) {
           return back()->with('success','Licence transfer updated successfully.');
         }
         return back()->with('error','Error updating transfered licence.');
+      }
+
+      public function updateDates(Request $request, $slug){
+        LicenceTransfer::whereSlug($slug)->update([
+          'lodged_at' => $request->lodged_at,
+          'activation_fee_paid_at' => $request->activation_fee_paid_at,
+          'issued_at' => $request->issued_at,
+          'delivered_at' => $request->delivered_at,
+          'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+            
+        ]);
+         return back()->with('success','Date updated successfully.');
       }
 
       /**
