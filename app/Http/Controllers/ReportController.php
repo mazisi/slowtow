@@ -72,9 +72,12 @@ class ReportController extends Controller
 
     public function export(Request $request){
       switch ($request->variation) {
-        case 'Renewals':
-          RenewalExportController::export($request); 
+        case 'All':
+          AllReportsController::exportAll($request); 
           break;
+          case 'Renewals':
+            RenewalExportController::export($request); 
+            break;            
         case 'Transfers':
           TransferExportController::export($request);          
           break;

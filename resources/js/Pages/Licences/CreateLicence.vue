@@ -230,8 +230,10 @@ export default {
      function selectApplicant(event){
       if(form.belongs_to === 'Company'){
         form.belongs_to = event.target.value;
+        form.person='';
       }else{
         form.belongs_to = event.target.value;
+        form.company='';
       }
 
      }

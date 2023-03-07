@@ -18,10 +18,11 @@ class LicenceDocsController extends Controller
         $request->validate([
             "doc"=> "required|mimes:pdf"
             ]);
-          //  $path = Storage::disk('local')->putFileAs('storage/licenceDocuments/logo.pdf', new File('storage/licenceDocuments/logo.pdf'), $request->doc->getClientOriginalName());
-          //  dd($path);
+            
+            $removeSpace = str_replace(' ', '_',$request->doc->getClientOriginalName());
+            
             $fileModel = new LicenceDocument;
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->doc->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace);
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $request->doc->getClientOriginalName();
             $fileModel->licence_id = $request->licence_id;

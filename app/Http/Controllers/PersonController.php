@@ -144,8 +144,9 @@ class PersonController extends Controller
             "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document,Fingerprints"
             ]);
 
+            $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
             $fileModel = new PeopleDocument;
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),7).str_replace('-', '_',$removeSpace);
             $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
             $fileModel->document = $fileName;

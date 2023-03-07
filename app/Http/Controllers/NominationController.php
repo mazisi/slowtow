@@ -186,9 +186,10 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         $request->validate([
             "document"=> "required|mimes:pdf"
             ]);
-
+            
+           $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
            $fileModel = new NominationDocument;
-           $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+           $fileName = Str::limit(sha1(now()),7).str_replace('-', '_',$removeSpace);
            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
            $fileModel->document_name = $fileName;
            $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

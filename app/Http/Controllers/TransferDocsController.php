@@ -16,8 +16,9 @@ class TransferDocsController extends Controller
         $request->validate([
             "document"=> "required|mimes:pdf"
             ]);
+            $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
             $fileModel = new TransferDocument;
-            $fileName = Str::limit(sha1(now()),5).str_replace(' ', '_',$request->document->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),5).str_replace(' ', '_',$removeSpace);
             $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $request->document->getClientOriginalName();
             $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

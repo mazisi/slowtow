@@ -211,6 +211,11 @@ public function updatePeople(Request $request,$pivot_id){
     public function destroy($slug){
         try {
             $company = Company::whereSlug($slug);
+            $deleteLicences = Licence::where('company_id',$company->id)->get(['id']);
+            foreach ($deleteLicences as $deleteLicence) {
+                $deleteLicence->delete();
+            }
+            
             if($company->delete()){
                 return to_route('companies')->with('success','Company deleted successfully.');            
             }

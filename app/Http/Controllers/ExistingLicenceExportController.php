@@ -195,7 +195,7 @@ class ExistingLicenceExportController extends Controller
                 );
 
             foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
-                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);;
+                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
              }
 
                 $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getFont()->setBold(true);

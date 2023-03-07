@@ -19,8 +19,9 @@ class TemporalLicenceDocsController extends Controller
         ]); 
 
         try {
-          $fileModel = new TemporalLicenceDocument;
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+            $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+            $fileModel = new TemporalLicenceDocument;
+            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$removeSpace);
             $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             $fileModel->document_name = $fileName;
             $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

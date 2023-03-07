@@ -18,7 +18,7 @@ class PeopleDocument extends Model
     
      public function getPathAttribute($value)
     {
-        if(str_starts_with($value,"licence-")|| str_starts_with($value,"mrnlabs/")){
+        if(str_starts_with($value,"people-")|| str_starts_with($value,"mrnlabs/")){
 
             return $value;
         }

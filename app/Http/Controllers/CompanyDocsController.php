@@ -16,8 +16,9 @@ class CompanyDocsController extends Controller
             ]);
 
             try {
+                $removeSpace = str_replace('-', '_',$request->document->getClientOriginalName());
                 $fileModel = new CompanyDocument;
-                $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
+                $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$removeSpace);
                 $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
                 $fileModel->document_name = $request->document->getClientOriginalName();
                 $fileModel->uploaded_by = $request->user()->hasRole('company-admin') ? auth()->id() : NULL;

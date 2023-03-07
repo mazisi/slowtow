@@ -28,7 +28,7 @@
   <div class="col-12 columns">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Applicant</label>
-    <select v-model="form.belongs_to" class="form-control form-control-default" required>
+    <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
     <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>
@@ -162,7 +162,7 @@
     </div>    
     </div>
     <div>
-      <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
+      <button :disabled="form.processing || filterForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
       <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       <span class="visually-hidden">Loading...</span> Submit</button>
     </div>
@@ -233,11 +233,7 @@
             company: ''  
       })
 
-      if(form.belongs_to === 'Company'){
-        options = props.companies;
-      }else{
-        options = props.persons;
-      }
+    
       
       function submit() {
         form.post('/submit-new-app', {
@@ -245,8 +241,19 @@
         })
         
       }
+
+      function selectApplicant(event){
+      if(form.belongs_to === 'Company'){
+        form.belongs_to = event.target.value;
+        form.person='';
+      }else{
+        form.belongs_to = event.target.value;
+        form.company='';
+      }
+
+     }
       
-      return { submit, form ,options, idRegForm, filterForm}
+      return { submit, form ,options, idRegForm, selectApplicant, filterForm}
       
     },
     

@@ -20,6 +20,10 @@
 
         <div class="row">
           <div class="col-4">
+            <button @click="getType('All')" type="button" class="type btn btn-success w-50">All</button>
+          </div>
+
+          <div class="col-4">
             <button @click="getType('Alterations')" type="button" class="type btn btn-success w-50">Alterations</button>
           </div>
 
@@ -224,7 +228,17 @@
       </div>
   </div>
 
-  <div class="col-6 ">
+  <div class="col-6" :class="{'mt-3' : form.variation == 'All'}">
+    <div class="input-group columns input-group-outline null is-filled">
+      <select v-model="form.is_licence_complete" class="form-control form-control-default">
+      <option :value="''" disabled selected>Choose..</option>
+      <option value="Outstanding">Outstanding</option>
+      <option value="Complete">Complete</option>
+      </select>
+      </div>
+  </div>
+
+  <div class="col-6" :class="{'mt-3' : form.variation == 'All'}">
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Applicant</option>
@@ -233,6 +247,7 @@
       </select>
       </div>
   </div>
+
 
 
   <div class="float-end mt-4">
@@ -473,6 +488,7 @@ const new_app_stages = {
       month_to: '',
       year: '',
       applicant: '',
+      is_license_complete: '',
       person: [],
       company: [],
       province: [],
@@ -588,13 +604,9 @@ const new_app_stages = {
     &licence_types=${form.licence_types}&new_app_stages=${form.new_app_stages}
     &renewal_stages=${form.renewal_stages}&transfer_stages=${form.transfer_stages}
     &nomination_stages=${form.nomination_stages}&alteration_stages=${form.alteration_stages}
-    &temp_licence_stages=${form.temp_licence_stages}&temp_licence_region=${form.temp_licence_region}&activeStatus=${form.activeStatus}`
-    // form.post(`/export-report`, {
-    //        preserveScroll: true,
-    //        onSuccess: () => {
-    //         //
-    //        },
-    //       })  
+    &temp_licence_stages=${form.temp_licence_stages}&temp_licence_region=${form.temp_licence_region}
+    &activeStatus=${form.activeStatus}&is_licence_complete=${form.is_license_complete}`
+    
     window.open(url,'_blank');
      
    }

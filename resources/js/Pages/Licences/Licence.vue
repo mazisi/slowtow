@@ -4,7 +4,7 @@
 
 <Banner/>
 
-<div class="card card-body mx-3 mx-md-4 mt-n6">
+<div class="card card-body mt-n6">
 <div class="col-12">
 <div class="row">
 <div  class="col-md-12 col-xl-12 col-lg-12">
@@ -83,12 +83,11 @@
 <thead>
 <tr>
 <th>Active</th>
-<th>Trading Name</th>
-<th>Licence Number</th>
-<th>Licence Date</th>
-<th>Licence Type</th>
-<th>Company</th>
-<th>View</th>
+<th class="ps-2">Trading Name</th>
+<th class="ps-2">Licence Number</th>
+<th class="ps-2">Licence Date</th>
+<th class="ps-2">Licence Type</th>
+<th class="ps-2">Company</th>
 </tr>
 </thead>
 <tbody>
@@ -99,12 +98,8 @@
 <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_number">{{ licence.licence_number }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_date">{{ licence.licence_date }}</Link></td>
 <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_type.licence_type">{{ limit(licence.licence_type.licence_type) }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company == null ? licence.people.full_name : licence.company.name }}</Link></td>
+<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.company == null ? limit(licence.people.full_name) : limit(licence.company.name) }}</Link></td>
 
-<td class="text-center">
-<Link :href="`/view-licence?slug=${licence.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
-
-</td>
 </tr>
 </tbody>
 </table>

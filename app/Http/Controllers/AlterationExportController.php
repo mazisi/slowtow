@@ -146,7 +146,7 @@ class AlterationExportController extends Controller
                 );
 
                 foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
-                $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+                    $spreadsheet->getActiveSheet()->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
                 }
 
                 $spreadsheet->getActiveSheet()->getStyle('A1:H1')->getFont()->setBold(true);
