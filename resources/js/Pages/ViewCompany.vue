@@ -34,8 +34,8 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
-<input id="active-checkbox" type="checkbox" :checked="form.active == '1'" 
-@input="assignActiveValue($event.target.value)" value="1">
+<input id="active-checkbox" type="checkbox" :checked="company.active == '1'" 
+@input="assignActiveValue($event,1)" value="1">
 </div>
 </div>
 
@@ -472,8 +472,8 @@
 </div>
 
 <div class="row">
-<div class="col-sm-12 col-lg-4"></div>
-<div class="col-sm-12 col-lg-4">
+<div class="col-12 col-lg-4"></div>
+<div class="col-12 col-lg-4">
 <h6 class="text-center">People Linked To : {{ company.name }}</h6>
 </div>
 <div class="col-sm-12 col-lg-4 text-end">
@@ -497,12 +497,12 @@
   </tr>
 </thead>
 <tbody>
-  <tr v-for="person in company.people" :key="person.id">
+  <tr v-if="company.people" v-for="person in company.people" :key="person.id">
     <td>
       <div class="d-flex px-2">
     
     <div class="d-flex flex-column">
-      <Link :href="`/view-consultant/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>                          
+      <Link :href="`view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>                          
     </div>
       </div>
     </td>
@@ -525,6 +525,9 @@
     </td>
     
   </tr> 
+  <tr>
+    <td style="text-align: right;"> No people found.</td>
+  </tr>
 </tbody>
 </table>
 </div>
@@ -633,7 +636,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add People</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Add People </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <form @submit.prevent="submitPeople">
@@ -773,8 +776,9 @@ export default {
             postal_address3: props.company.postal_code3,
             postal_province: props.company.postal_province,
             postal_code: props.company.postal_code,
-           company_id: props.company.id,
-            active: props.company.active,
+            company_id: props.company.id,
+            status: '',
+            unChecked: false,
             province: props.company.business_province,
             copy_address: false
     })
@@ -921,8 +925,15 @@ export default {
 
       
 
-      function assignActiveValue(event){
-        this.form.active = event
+      function assignActiveValue(e,status_value){
+        if (e.target.checked) {
+              this.form.status = status_value;
+              this.form.unChecked = false;
+            }else if(!e.target.checked){
+              this.form.unChecked = true
+              this.form.status = e.target.value;
+            }
+            Inertia.patch(`/update-company-active-status/${props.company.slug}`)
       }
 
       function redirectToWebsite(url){

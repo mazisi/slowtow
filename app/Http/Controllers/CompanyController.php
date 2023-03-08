@@ -149,7 +149,7 @@ class CompanyController extends Controller
             'postal_code3' => $request->postal_address3,
             'postal_province' => $request->postal_province,
             'postal_code' => $request->postal_code,
-            'active' => $request->active,
+            'active' => $request->status,
         ]);
         if($company){
             return to_route('view_company',['slug'=> $company->slug])->with('success','Company updated successfully.');
@@ -159,6 +159,10 @@ class CompanyController extends Controller
 
     }
 
+    public function updateActiveStatus($slug)
+    {
+        dd('fine');
+    }
     public function attachPeopleToCompany(Request $request,$company_id){
         $company = Company::find($company_id);
         foreach ($request->people as $person) {

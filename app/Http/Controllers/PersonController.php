@@ -8,6 +8,7 @@ use App\Models\People;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\ValidatePeople;
+use App\Models\Licence;
 use App\Models\PeopleDocument;
 use Illuminate\Support\Facades\Redirect;
 
@@ -131,6 +132,11 @@ class PersonController extends Controller
     public function destroy($slug){
         $del = People::whereSlug($slug)->firstOrFail();
         if($del->delete()){
+            $del_licences = Licence::where('people_id',$del->id)->get(['id']);
+            foreach ($del_licences as $delete_lic) {
+                $delete_lic->delete();
+            }
+
             return Redirect::route('people')->with('success','Person deleted succesfully.');
         }
         return Redirect::route('people')->with('error','Error updated person.');

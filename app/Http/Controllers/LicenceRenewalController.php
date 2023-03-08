@@ -141,10 +141,9 @@ class LicenceRenewalController extends Controller
 
     public function deleteDocument($id){
         $model = RenewalDocument::find($id);
-        if(!is_null($model->document_name)){
             $model->delete();
             return back()->with('success','Document removed successfully.');
-        }
+        
     }
 
     public function destroy($licence_slug, $slug){

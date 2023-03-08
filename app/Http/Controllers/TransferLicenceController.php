@@ -57,9 +57,20 @@ class TransferLicenceController extends Controller
        ]);
 
        if($transfer){
-         Licence::where('company_id',$request->old_company_id)->update([
-                          'company_id' => $request->new_company
-         ]);
+                if($transfer->transfered_to === 'Company'){
+                  Licence::whereId($transfer->licence_id)->update([
+                    'company_id' => $request->new_company,
+                    'people_id' => NULL,
+                    'belongs_to' => 'Company'
+                  ]);
+                }else{
+                  Licence::whereId($transfer->licence_id)->update([
+                    'people_id' => $transfer->people_id,
+                    'company_id' => NULL,
+                    'belongs_to' => 'Person'
+                  ]);
+                }
+         
          return to_route('view_transfered_licence',['slug' => $transfer->slug])->with('success','Licence transfered successfully.');
        }
        return back()->with('errror','Oopps!!! An error occured while attempting licence transfer.');

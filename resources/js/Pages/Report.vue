@@ -230,7 +230,7 @@
 
   <div class="col-6" :class="{'mt-3' : form.variation == 'All'}">
     <div class="input-group columns input-group-outline null is-filled">
-      <select v-model="form.is_licence_complete" class="form-control form-control-default">
+      <select v-model="form.is_license_complete" class="form-control form-control-default">
       <option :value="''" disabled selected>Choose..</option>
       <option value="Outstanding">Outstanding</option>
       <option value="Complete">Complete</option>

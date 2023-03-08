@@ -165,6 +165,8 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::delete('/delete-company/{slug}',[CompanyController::class,'destroy']);
 
+        Route::patch('/update-company-active-status/{slug}',[CompanyController::class,'updateActiveStatus']);
+
 
 
         Route::delete('/unlink-person/{id}',[CompanyController::class,'unlinkPerson'])->name('unlink_person');
