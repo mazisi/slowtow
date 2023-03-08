@@ -88,10 +88,10 @@ class ReportController extends Controller
           NewAppExportController::export($request);
           break;
 
-        case 'Existing-Licences':
+        case 'Existing Licences':
           ExistingLicenceExportController::export($request);
           break;
-        case 'Temporary Licence':
+        case 'Temporary Licences':
           TemporaLExportController::export($request);          
           break;
 

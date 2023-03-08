@@ -21,7 +21,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active Person</label>
-<input type="checkbox" value="1" id="active-checkbox" @input="assignActiveValue($event.target.value)" :checked="person.active == 1">
+<input type="checkbox" value="1" id="active-checkbox" @input="assignActiveValue($event,1)" :checked="person.active == 1">
 </div>
 </div>
 
@@ -474,9 +474,25 @@ const form = useForm({
       })
     };
 
-    function assignActiveValue (active_value) {
-      form.active = active_value
-    };
+    function assignActiveValue(e,status_value){
+       
+       const updateStatusForm = useForm({
+           unChecked: null,
+           status: null,
+        });
+
+       if (e.target.checked) {
+             updateStatusForm.status = status_value;
+             updateStatusForm.unChecked = false;
+           }else if(!e.target.checked){
+             updateStatusForm.unChecked = true
+             updateStatusForm.status = e.target.value;
+           }
+           updateStatusForm.patch(`/update-person-active-status/${props.person.slug}`,{
+            ///do something
+            })
+          
+     }
 
     function deletePerson (full_name) {
          if (confirm('Are you sure you want to delete ' + full_name + '??')) {

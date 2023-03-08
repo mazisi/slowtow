@@ -43,7 +43,7 @@
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <label class="form-check-label mb-0 text-body text-truncate">Active</label>
 <input id="active-checkbox" type="checkbox" value="1"
-@input="assignActiveValue($event.target.value)" :checked="licence.is_licence_active == '1'">
+   @input="assignActiveValue($event,1)" :checked="licence.is_licence_active == '1'">
 </div>
 </div>
 
@@ -201,18 +201,18 @@
 <div class="col-md-6 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="original_lic !== ''">
-    <a v-for="doc in original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <div class="me-3" v-if="original_lic">
+    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence</h6>
-      <p v-if="original_lic.length > 0" class="mb-0 text-xs">
-        {{ original_lic[0].document_name ? original_lic[0].document_name : '' }}</p>
+      <p v-if="original_lic" class="mb-0 text-xs">
+        {{ original_lic.document_name ? removeFilePath(original_lic.document_name) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    <button  v-if="original_lic.length > 0" @click="deleteDocument(original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="original_lic" @click="deleteDocument(original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -223,18 +223,18 @@
 
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="duplicate_original_lic !== ''">
-    <a v-for="doc in duplicate_original_lic" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <div class="me-3" v-if="duplicate_original_lic">
+    <a v-if="duplicate_original_lic" :href="`${$page.props.blob_file_path}${duplicate_original_lic.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original</h6>
-      <p v-if="duplicate_original_lic.length > 0" class="mb-0 text-xs">
-        {{ duplicate_original_lic[0].document_name ? duplicate_original_lic[0].document_name : '' }}</p>
+      <p v-if="duplicate_original_lic" class="mb-0 text-xs">
+        {{ duplicate_original_lic.document_name ? removeFilePath(duplicate_original_lic.document_name) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    <button  v-if="duplicate_original_lic.length > 0" @click="deleteDocument(duplicate_original_lic[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="duplicate_original_lic" @click="deleteDocument(duplicate_original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -250,19 +250,19 @@
 <div class="col-md-6 columns">
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="original_lic_delivered !== ''">
-    <a v-for="doc in original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <div class="me-3" v-if="original_lic_delivered">
+    <a v-if="original_lic_delivered" :href="`${$page.props.blob_file_path}${original_lic_delivered.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
-      <p v-if="original_lic_delivered.length > 0" class="mb-0 text-xs">{{ original_lic_delivered[0].document_name ? original_lic_delivered[0].document_name : '' }}</p>
+      <p v-if="original_lic_delivered" class="mb-0 text-xs">{{ original_lic_delivered.document_name ? removeFilePath(original_lic_delivered.document_name) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
-    <button  v-if="original_lic_delivered.length > 0" @click="deleteDocument(original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -273,18 +273,18 @@
 
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="duplicate_original_lic_delivered !== ''">
-    <a v-for="doc in duplicate_original_lic_delivered" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <div class="me-3" v-if="duplicate_original_lic_delivered">
+    <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
-       <p v-if="duplicate_original_lic_delivered.length > 0" class="mb-0 text-xs">
-        {{ duplicate_original_lic_delivered[0].document_name ? duplicate_original_lic_delivered[0].document_name : '' }}</p>
+       <p v-if="duplicate_original_lic_delivered" class="mb-0 text-xs">
+        {{ duplicate_original_lic_delivered.document_name ? removeFilePath(duplicate_original_lic_delivered.document_name) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    <button  v-if="duplicate_original_lic_delivered.length > 0" @click="deleteDocument(duplicate_original_lic_delivered[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="duplicate_original_lic_delivered" @click="deleteDocument(duplicate_original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -567,9 +567,25 @@ export default {
                 this.createTask.body = this.createTask.body.substring(0,this.body_max)
             }
         }
-        function assignActiveValue(checkbox_value){
-          this.form.is_licence_active = checkbox_value
-        }
+        
+        function assignActiveValue(e,status_value){       
+                const updateStatusForm = useForm({
+                    unChecked: null,
+                    status: null,
+                  });
+
+                if (e.target.checked) {
+                      updateStatusForm.status = status_value;
+                      updateStatusForm.unChecked = false;
+                    }else if(!e.target.checked){
+                      updateStatusForm.unChecked = true
+                      updateStatusForm.status = e.target.value;
+                    }
+                    updateStatusForm.patch(`/update-licence-active-status/${props.licence.slug}`,{
+                      ///do something
+                      })
+          
+     }
 
         function limit(string = '', limit = 25) {
           if(string.length >= limit){
@@ -592,11 +608,21 @@ export default {
            }); 
         }
       }
+
+      function removeFilePath(file_name){
+        if(file_name.includes('mrnlabs')){
+          let getFileName = file_name.split('/');
+            return  getFileName[1];
+          }  
+            return file_name;
+      }
+
     return {
       showMenu,file_has_apostrophe,
       file_name,getFileName,
       createTask,
       deleteNote,
+      removeFilePath,
       body_max,
       show_modal,
       show_current_company,

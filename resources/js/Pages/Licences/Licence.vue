@@ -199,16 +199,16 @@ function getArrowBbuttons(key){
 
         function paginateNext(){          
           if(props.licences.current_page < props.licences.last_page){            
-            this.nextPage = props.licences.current_page + 1;
-            this.currentPage =  props.licences.current_page+1;
-            Inertia.get('/licences', { page: this.nextPage }, { preserveState: true, replace: true });            
+            nextPage = props.licences.current_page + 1;
+            currentPage =  props.licences.current_page+1;
+            Inertia.get('/licences', { page: nextPage }, { preserveState: true, replace: true });            
           } 
         }
 
         function paginatePrev(){         
-            this.prevPage = props.licences.current_page - 1;
-            this.currentPage =  props.licences.current_page-1;
-            Inertia.get('/licences', { page: this.prevPage }, { preserveState: true, replace: true });
+            prevPage = props.licences.current_page - 1;
+            currentPage =  props.licences.current_page-1;
+            Inertia.get('/licences', { page: prevPage }, { preserveState: true, replace: true });
           
         }
 

@@ -8,7 +8,7 @@
 <h6 class="mb-1">Company Info: {{ company.name }}</h6>
 </div>
 <div class="col-lg-3 col-3 my-auto text-end">
-<div class="dropdown float-lg-end pe-4">
+<div v-if="$page.props.auth.has_slowtow_admin_role" class="dropdown float-lg-end pe-4">
 <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
 </a>
@@ -138,18 +138,18 @@
 <div class="col-md-6 columns">
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="company_doc !== ''">
-    <a v-for="doc in company_doc" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <a v-if="company_doc" :href="`${$page.props.blob_file_path}${company_doc.document_file}`" target="_blank">
+     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Company Documents</h6>
-      <p v-if="company_doc.length > 0" class="mb-0 text-xs">Name: {{ company_doc[0].document_name }}</p>
+      <p v-if="company_doc" class="mb-0 text-xs">Name: {{ company_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
-    <button  v-if="company_doc.length > 0" @click="deleteDocument(company_doc[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="company_doc" @click="deleteDocument(company_doc.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -159,18 +159,18 @@
   </li>
 
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="cipc_cert !== ''">
-    <a v-for="doc in cipc_cert" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
+    <div class="me-3" v-if="cipc_cert">
+    <a v-if="cipc_cert" :href="`${$page.props.blob_file_path}${cipc_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">CIPC Certificate</h6>
-       <p v-if="cipc_cert.length > 0" class="mb-0 text-xs">Name: {{ cipc_cert[0].document_name }}</p>
+       <p v-if="cipc_cert" class="mb-0 text-xs">Name: {{ cipc_cert.document_name }}</p>
        <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    <button  v-if="cipc_cert.length > 0" @click="deleteDocument(cipc_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="cipc_cert" @click="deleteDocument(cipc_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -180,19 +180,19 @@
   </li>
 
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="bee_cert !== ''">
-    <a v-for="doc in bee_cert" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
+    <div class="me-3" v-if="bee_cert">
+    <a v-if="bee_cert" :href="`${$page.props.blob_file_path}${bee_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">BEE Certificate</h6>
-      <p v-if="bee_cert.length > 0" class="mb-0 text-xs">Name: {{ bee_cert[0].document_name }}</p>
-      <p v-if="bee_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(bee_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-if="bee_cert" class="mb-0 text-xs">Name: {{ bee_cert.document_name }}</p>
+      <p v-if="bee_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(bee_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
-    <button  v-if="bee_cert.length > 0" @click="deleteDocument(bee_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="bee_cert" @click="deleteDocument(bee_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
    
@@ -206,18 +206,18 @@
 <ul class="list-group">
 
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="lta_cert !== ''">
-    <a v-for="doc in lta_cert" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <div class="me-3" v-if="lta_cert">
+    <a v-if="lta_cert" :href="`${$page.props.blob_file_path}${lta_cert.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">LTA Certificate</h6>
-      <p v-if="lta_cert.length > 0" class="mb-0 text-xs">Name: {{ lta_cert[0].document_name }}</p>
+      <p v-if="lta_cert" class="mb-0 text-xs">Name: {{ lta_cert.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-    <button  v-if="lta_cert.length > 0" @click="deleteDocument(lta_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="lta_cert" @click="deleteDocument(lta_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
     <button v-else @click="getDocType('LTA-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -227,20 +227,20 @@
 
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="contrib_cert !== ''">
-    <a v-for="doc in contrib_cert" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
-    <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    <div class="me-3" v-if="contrib_cert">
+    <a v-if="contrib_cert" :href="`${$page.props.blob_file_path}${contrib_cert.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Contribution Certificate</h6>
-      <p v-if="contrib_cert.length > 0" class="mb-0 text-xs">Name: {{ contrib_cert[0].document_name }}</p>
-      <p v-if="contrib_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(contrib_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-if="contrib_cert" class="mb-0 text-xs">Name: {{ contrib_cert.document_name }}</p>
+      <p v-if="contrib_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(contrib_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
-    <button  v-if="contrib_cert.length > 0" @click="deleteDocument(contrib_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="contrib_cert" @click="deleteDocument(contrib_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -251,20 +251,20 @@
 
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="sars_cert !== ''">
-    <a v-for="doc in sars_cert" :key="doc.id" :href="`${$page.props.blob_file_path}${doc.document_file}`" target="_blank">
+    <div class="me-3" v-if="sars_cert">
+    <a v-if="sars_cert" :href="`${$page.props.blob_file_path}${sars_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
 
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">SARS Certificate</h6>
-      <p v-if="sars_cert.length > 0" class="mb-0 text-xs">Name: {{ sars_cert[0].document_name }}</p>
-      <p v-if="sars_cert.length > 0" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(sars_cert[0].expiry_date).toLocaleString().split(',')[0] }}</p>
+      <p v-if="sars_cert" class="mb-0 text-xs">Name: {{ sars_cert.document_name }}</p>
+      <p v-if="sars_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(sars_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
 
-    <button  v-if="sars_cert.length > 0" @click="deleteDocument(sars_cert[0].id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <button  v-if="sars_cert" @click="deleteDocument(sars_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
@@ -273,16 +273,6 @@
     </button>
   </li>
 
-
-
-</ul>
-</div>
-
-<div class="col-md-6 columns">
-<ul class="list-group">
-  
-
- 
 </ul>
 </div>
 
@@ -444,15 +434,14 @@
 <tbody>
   <tr v-for="licence in linked_licences.data" :key="licence.id">
     <td>
-      <div class="d-flex px-2">
-    
+      <div class="d-flex px-2">    
     <div class="d-flex flex-column">
-      <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name: ''  }}</h6></Link>                          
+      <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name : ''  }}</h6></Link>                          
     </div>
       </div>
     </td>
-    <td class="text-center">{{ licence.licence_number }}</td>
-    <td class="text-center">{{ licence.licence_date }}</td>
+    <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_number }}</Link></td>
+    <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_date }}</Link></td>
     <td class="text-center">
     <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 ms-2 justify-content-center">
     <i class="fa fa-eye"></i></Link>
@@ -465,9 +454,9 @@
 </table>
 </div>
 <Paginate
-              :modelName="linked_licences"
-              :modelType="ViewCompany"
-              />
+  :modelName="linked_licences"
+  :modelType="ViewCompany"
+  />
 <hr>
 </div>
 
@@ -571,7 +560,9 @@
 <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
-<button :disabled="createTask.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
+<button
+  v-if="$page.props.auth.has_slowtow_admin_role"
+ :disabled="createTask.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Submit</button>
 
@@ -926,14 +917,23 @@ export default {
       
 
       function assignActiveValue(e,status_value){
+       
+        const updateStatusForm = useForm({
+            unChecked: null,
+            status: null,
+         });
+
         if (e.target.checked) {
-              this.form.status = status_value;
-              this.form.unChecked = false;
+              updateStatusForm.status = status_value;
+              updateStatusForm.unChecked = false;
             }else if(!e.target.checked){
-              this.form.unChecked = true
-              this.form.status = e.target.value;
+              updateStatusForm.unChecked = true
+              updateStatusForm.status = e.target.value;
             }
-            Inertia.patch(`/update-company-active-status/${props.company.slug}`)
+            updateStatusForm.patch(`/update-company-active-status/${props.company.slug}`,{
+             ///do something
+             })
+           
       }
 
       function redirectToWebsite(url){
@@ -944,6 +944,7 @@ export default {
         }
         
       }
+
       let file_has_apostrophe = ref();
       function getFileName(e){
         this.show_file_name = true;

@@ -16,7 +16,7 @@ use App\Models\People;
 
 class TransferLicenceController extends Controller
 {
-    public function index(Request $request){//NB..licence slug
+    public function index(Request $request){
         $licence = Licence::with('company','people')->whereSlug($request->slug)->first();
         $companies_dropdown = Company::where('id','!=',$licence->company_id)->pluck('name','id');//get companies list
         $people_dropdown = People::where('id','!=',$licence->people_id)->pluck('full_name','id');

@@ -43,9 +43,9 @@ export default {
         }
 
         function paginatePrev(){         
-            this.prevPage = props.companies.current_page - 1;
-            this.currentPage =  props.companies.current_page-1;
-            Inertia.get('/companies', { page: this.prevPage }, { preserveState: true, replace: true });
+            prevPage = props.companies.current_page - 1;
+            currentPage =  props.companies.current_page-1;
+            Inertia.get('/companies', { page: prevPage }, { preserveState: true, replace: true });
           
         }
 

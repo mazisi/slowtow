@@ -187,6 +187,8 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
+        Route::patch('/update-licence-active-status/{slug}',[LicenceController::class,'updateActiveStatus']);
+
 
 
         //New Apps
@@ -337,6 +339,8 @@ Route::group(['middleware' => ['guest']], function () {
         Route::post('/upload-person-documents', [PersonController::class,'uploadDocument']);
 
         Route::delete('/delete-person-document/{slug}', [PersonController::class,'deleteDocument']);
+
+        Route::patch('/update-person-active-status/{slug}',[PersonController::class,'updateActiveStatus']);
 
        
 

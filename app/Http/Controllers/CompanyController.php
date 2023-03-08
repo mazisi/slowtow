@@ -56,7 +56,7 @@ class CompanyController extends Controller
                 function ($query){ 
                     $query->where('company_type','LIKE','%'.request('company_type').'%');                
                 })
-                ->latest()->paginate(20)->withQueryString();
+                ->latest()->paginate(1)->withQueryString();
 
         return Inertia::render('Company',['companies'=> $companies]);
     }
@@ -103,13 +103,13 @@ class CompanyController extends Controller
     public function show($slug){
         $company = Company::with('users','licences','people')->whereSlug($slug)->first();
         $linked_licences = Licence::where('company_id',$company->id)->paginate(10);
-        $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->get();
-        $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->get();
-        $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->get();
-        $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->get();
-        $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->get();
+        $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->latest()->first();
+        $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->latest()->first();
+        $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->latest()->first();
+        $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->latest()->first();
+        $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->latest()->first();
         $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->get();
-        $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->get();
+        $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->latest()->first();
         $people = People::pluck('full_name','id');
         
         return Inertia::render('ViewCompany',[
@@ -149,7 +149,6 @@ class CompanyController extends Controller
             'postal_code3' => $request->postal_address3,
             'postal_province' => $request->postal_province,
             'postal_code' => $request->postal_code,
-            'active' => $request->status,
         ]);
         if($company){
             return to_route('view_company',['slug'=> $company->slug])->with('success','Company updated successfully.');
@@ -159,10 +158,16 @@ class CompanyController extends Controller
 
     }
 
-    public function updateActiveStatus($slug)
-    {
-        dd('fine');
+    public function updateActiveStatus(Request $request,$slug){
+        $comp =Company::whereSlug($slug)->first();
+        if($request->unChecked){
+          $comp->update(['active' => NULL]);
+        }else{
+            $comp->update(['active' => $request->status]);
+        }
+        return back()->with('success','Saved.');
     }
+
     public function attachPeopleToCompany(Request $request,$company_id){
         $company = Company::find($company_id);
         foreach ($request->people as $person) {

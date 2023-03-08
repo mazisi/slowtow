@@ -31,21 +31,21 @@ import { Link } from '@inertiajs/inertia-vue3';
 
     setup(props){
       let nextPage = ref(0);
-    let prevPage =  ref(0);
-    let currentPage =  reactive(props.modelName.current_page);
+      let prevPage =  ref(0);
+      let currentPage =  reactive(props.modelName.current_page);
     
       function paginateNext(){
           if(props.modelName.current_page < props.modelName.last_page){            
-            this.nextPage = props.modelName.current_page + 1;
-            this.currentPage =  props.modelName.current_page+1;
-            Inertia.get(`${props.modelName.next_page_url}`, { page: this.nextPage }, { preserveState: true, replace: true });            
+            nextPage = props.modelName.current_page + 1;
+            currentPage =  props.modelName.current_page+1;
+            Inertia.get(`${props.modelName.next_page_url}`, { page: nextPage }, { preserveState: true, replace: true });            
           } 
         }
 
         function paginatePrev(){         
-            this.prevPage = props.modelName.current_page - 1;
-            this.currentPage =  props.modelName.current_page-1;
-            Inertia.get(`${props.modelName.prev_page_url}`, { page: this.prevPage }, { preserveState: true, replace: true });
+            prevPage = props.modelName.current_page - 1;
+            currentPage =  props.modelName.current_page-1;
+            Inertia.get(`${props.modelName.prev_page_url}`, { page: prevPage }, { preserveState: true, replace: true });
           
         }
 

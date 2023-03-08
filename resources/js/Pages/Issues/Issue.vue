@@ -174,16 +174,16 @@
   
           function paginateNext(){          
             if(props.issues.current_page < props.issues.last_page){            
-              this.nextPage = props.issues.current_page + 1;
-              this.currentPage =  props.issues.current_page+1;
-              Inertia.get('/issues', { page: this.nextPage }, { preserveState: true, replace: true });            
+              nextPage = props.issues.current_page + 1;
+              currentPage =  props.issues.current_page+1;
+              Inertia.get('/issues', { page: nextPage }, { preserveState: true, replace: true });            
             } 
           }
   
           function paginatePrev(){         
-              this.prevPage = props.issues.current_page - 1;
-              this.currentPage =  props.issues.current_page-1;
-              Inertia.get('/issues', { page: this.prevPage }, { preserveState: true, replace: true });
+              prevPage = props.issues.current_page - 1;
+              currentPage =  props.issues.current_page-1;
+              Inertia.get('/issues', { page: prevPage }, { preserveState: true, replace: true });
             
           }
   

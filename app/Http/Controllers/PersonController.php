@@ -178,5 +178,15 @@ class PersonController extends Controller
         return back()->with('error','An error occurred while deleting document');
     }
 
+
+    public function updateActiveStatus(Request $request,$slug){
+        $person =People::whereSlug($slug)->first();
+        if($request->unChecked){
+          $person->update(['active' => NULL]);
+        }else{
+            $person->update(['active' => $request->status]);
+        }
+        return back()->with('success','Saved.');
+    }
     
 }

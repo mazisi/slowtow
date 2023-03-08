@@ -140,6 +140,17 @@ class LicenceController extends Controller
         'companies' => $companies, 'people' => $people]);
     }
 
+
+    public function updateActiveStatus(Request $request,$slug){
+        $lic =Licence::whereSlug($slug)->first();
+        if($request->unChecked){
+          $lic->update(['is_licence_active' => NULL]);
+        }else{
+            $lic->update(['is_licence_active' => $request->status]);
+        }
+        return back()->with('success','Saved.');
+    }
+
     public function store(Request $request){
        if($request->belongs_to === 'Company'){
           $request->validate(["company" => "required|exists:companies,id"]);
@@ -181,10 +192,10 @@ class LicenceController extends Controller
     public function show(Request $request){
         $view = '';
         $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
-        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->get();
-        $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->get();
-        $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->get();
-        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->get();
+        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->latest()->first();
+        $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->latest()->first();
+        $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->latest()->first();
+        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->latest()->first();
         $companies = Company::pluck('name','id');
         $licence_dropdowns = LicenceType::get();
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->get();
@@ -227,7 +238,6 @@ class LicenceController extends Controller
             "address3" => $request->address3,
             "province" => $request->province,
             "postal_code" => $request->postal_code,
-            "is_licence_active" => $request->is_licence_active,
             "company_id" => $company_var
         ]);
         if($update){

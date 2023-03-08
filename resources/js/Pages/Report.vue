@@ -20,37 +20,37 @@
 
         <div class="row">
           <div class="col-4">
-            <button @click="getType('All')" type="button" class="type btn btn-success w-50">All</button>
+            <button @click="getType($event,'All')" type="button" class="btn btn-success w-50">All</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('Alterations')" type="button" class="type btn btn-success w-50">Alterations</button>
+            <button @click="getType($event,'Alterations')" type="button" class=" btn btn-success w-50">Alterations</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('Existing-Licences')" type="button" class="type btn btn-success w-50">Existing Licences</button>
+            <button @click="getType($event,'Existing Licences')" type="button" class=" btn btn-success w-50">Existing Licences</button>
           </div>
 
 
           <div class="col-4">
-            <button @click="getType('New Applications')" type="button" class="type btn btn-success w-50">New Applications</button>
+            <button @click="getType($event,'New Applications')" type="button" class=" btn btn-success w-50">New Applications</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('Nominations')" type="button" class="type btn btn-success w-50">Nominations</button>
+            <button @click="getType($event,'Nominations')" type="button" class=" btn btn-success w-50">Nominations</button>
           </div>
           
           <div class="col-4">
-            <button @click="getType('Renewals')" type="button" class="type btn btn-primary btn-success  w-50" 
+            <button @click="getType($event,'Renewals')" type="button" class=" btn btn-primary btn-success  w-50" 
             >Renewals</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('Temporary Licence')" type="button" class="type btn btn-success w-50">Temporary Applications</button>
+            <button @click="getType($event,'Temporary Licences')" type="button" class=" btn btn-success w-50">Temporary Applications</button>
           </div>
 
           <div class="col-4">
-            <button @click="getType('Transfers')" type="button" class="type btn btn-success w-50">Transfers</button>
+            <button @click="getType($event,'Transfers')" type="button" class=" btn btn-success w-50">Transfers</button>
           </div>
           
         </div>
@@ -137,7 +137,7 @@
     placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Existing-Licences'" class="col-6 columns">
+  <div v-if="form.variation === 'Existing Licences'" class="col-6 columns">
     <Multiselect
     v-model="form.new_app_stages"           
     :options="new_app_stages"
@@ -155,7 +155,7 @@
   || form.variation === 'New Applications'//New Apps
   || form.variation === 'Alterations'
   || form.variation === 'Temporary Licence'
-  || form.variation === 'Existing-Licences'
+  || form.variation === 'Existing Licences'
    }">
   </div> -->
   
@@ -429,6 +429,7 @@ export default {
 
   setup(props) {
   let isActive = ref(false);
+  let notActive = ref(true);
   const btnSecondary = ref('btn-secondary');
   const btnSuccess = ref('btn-success');
   const btnPrimary = ref('btn-primary');
@@ -569,19 +570,47 @@ const new_app_stages = {
      "8" : "Temporary Licence Issued", 
      "9" : "Temporary Licence Delivered", 
     }
-    function addClass(type){
-      if(type){
+    function addClass(event,type){
+      // if(type == 'All'){
+      //   event.target.classList.remove('type')
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+      // }else if(type == 'Alterations'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
 
-      }
-      let element = document.querySelectorAll('.type');
+      // }else if(type == 'Existing Licences'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+        
+      // }else if(type == 'New Applications'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+        
+      // }else if(type == 'Nominations'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+        
+      // }else if(type == 'Temporary Licences'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+        
+      // }else if(type == 'Transfers'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+        
+      // }else if(type == 'Renewals'){
+      //   event.target.classList.remove('btn-success')
+      //   event.target.classList.add('btn-secondary')
+        
+      // }
     
     }
 
 
-  function getType(type){
+  function getType(event,type){
      form.variation=type;
-     addClass(type);
-     this.isActive = true;
+     addClass(event,type);
      form.reset('activeStatus','month','year','applicant','person','company',
      'province','month','selectedDates','boardRegion','licence_types','new_app_stages')
    }
@@ -661,6 +690,7 @@ return{
   btnSuccess,
   btnPrimary,
   years,
+  notActive
 }
 },
  components: {
