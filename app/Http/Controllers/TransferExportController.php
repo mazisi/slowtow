@@ -64,6 +64,16 @@ public static function export($request){
 
                         ->when(request('licence_types'), function ($query)  {
                             $query->where('licence_type_id',request('licence_types'));
+                        })
+
+                        ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            $query->where('licence_transfers.status','<', 10)
+                            ->orWhere('licence_transfers.status', 0)
+                            ->orWhereNull('licence_transfers.status');
+                        })
+    
+                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                            $query->where('licence_transfers.status',10);
                         });
 
                     })->when(request('selectedDates'), function ($query) {
@@ -83,7 +93,7 @@ public static function export($request){
                         'status'
                     ]);
 
-                             
+                   
             $status = '';
             $notesCollection = '';
 

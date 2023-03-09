@@ -21,6 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'picture',
         'password',
         'people_id',
         'is_active',
@@ -45,6 +46,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function getPictureAttribute($value)
+    {
+        if($value){
+            return env('AZURE_STORAGE_CONTAINER').'/'.$value;
+        }
+        
+    }
 
     public function company()
     {

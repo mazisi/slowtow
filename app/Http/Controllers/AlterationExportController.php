@@ -28,7 +28,7 @@ class AlterationExportController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, licences.board_region,alterations.date,alterations.status ")
+                            licences.licence_issued_at, licences.board_region,alterations.date, alterations.status ")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
@@ -57,6 +57,16 @@ class AlterationExportController extends Controller
                                         })
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
+                                    })
+
+                                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                        $query->where('alterations.status','<', 8)
+                                        ->orWhere('alterations.status', 0)
+                                        ->orWhereNull('alterations.status');
+                                    })
+                
+                                    ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                        $query->where('alterations.status',8);
                                     });
 
                                 })

@@ -69,6 +69,15 @@ class RenewalExportController extends Controller
                             })
                             ->when(request('licence_types'), function ($query)  {
                                 $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                            })
+                            ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                $query->where('licence_renewals.status','<', 6)
+                                ->orWhere('licence_renewals.status', 0)
+                                ->orWhereNull('licence_renewals.status');
+                            })
+
+                            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                $query->where('licence_renewals.status',6);
                             });
 
                             })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
@@ -80,6 +89,7 @@ class RenewalExportController extends Controller
                                 'trading_name',
                                 'licence_number',
                                 'date',
+                                'licence_renewals.status',
                                 'is_quote_sent',
                                 'client_paid_at',
                                 'payment_to_liquor_board_at',
@@ -87,7 +97,6 @@ class RenewalExportController extends Controller
                                 'renewal_delivered_at',
                             ]);
 
-       
             $notesCollection = ' ';
             
             $arr_of_renewals = $renewals->toArray(); 

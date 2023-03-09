@@ -396,7 +396,7 @@
 </div>
 </div>
 </div>
-<div>
+<div v-if="$page.props.auth.has_slowtow_admin_role">
 <button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button>
 </div>
 </form>

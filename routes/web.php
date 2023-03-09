@@ -121,7 +121,7 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::post('/submit-user',[AdminsController::class,'store']);
 
-        Route::patch('/update-user',[AdminsController::class,'update']);
+        Route::post('/update-user',[AdminsController::class,'update']);
 
         Route::post('/deactivate-user/{id}/{status}',[AdminsController::class,'deactivate']);
 

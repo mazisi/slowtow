@@ -49,13 +49,16 @@
 <tr v-for="person in people.data" :key="person.id">
 <td>
 <div class="avatar-group ">
-<i v-if="person.active" class="fa fa-check text-info" aria-hidden="true"></i>
+<i v-if="person.active" class="fa fa-check text-success" aria-hidden="true"></i>
 <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
 </div>
 </td>
 <td class="align-middle text-center text-sm">
 <Link :href="`/view-person/${person.slug}`">
 <h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>
+<p v-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_1.toLowerCase() }} </p>
+<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_2.toLowerCase() }} </p>
+<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_3.toLowerCase() }} </p>
 </td>
 <td class="align-middle d-flex justify-content-center">
 <Link :href="`/view-person/${person.slug}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">

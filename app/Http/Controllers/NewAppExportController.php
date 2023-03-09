@@ -74,7 +74,17 @@ class NewAppExportController extends Controller
 
                         ->when(!empty(request('selectedDates')), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
-                         });
+                         })
+                         ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            $query->where('status','<', 16)
+                            ->orWhere('status', 0)
+                            ->orWhereNull('status');
+                        })
+    
+                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                            $query->where('status',16);
+                        });
+                        
                         })
                         ->whereNull('deleted_at')
                         ->where('is_new_app',true)

@@ -18,7 +18,7 @@
             <mini-statistics-card
               :title="{ text: 'Companies', value: companies }"
               :icon="{
-                name: 'leaderboard',
+                name: 'store',
                 color: 'text-white',
                 background: 'primary',
               }"
@@ -46,8 +46,8 @@
             </Link>
         </div>
       
-        <div class="invisible row mt-4">
-          <div class="col-lg-6 col-md-6 mt-4">
+        <div class=" row mt-4">
+          <div class="d-none col-lg-6 col-md-6 mt-4">
             <chart-holder-card
               title="Licences"
             >
@@ -56,13 +56,13 @@
                   labels: month,
                   datasets: {
                     label: 'Licences',
-                    data: [50, 20, 10, 22, 50, 10, 40, 55, 70, 65, 15, 25],
+                    data: [50, 80, 20, 10, 22, 50, 10, 40, 55, 70, 65, 15, 25],
                   },
                 }"
               />
             </chart-holder-card>
           </div>
-          <div class="col-lg-6 col-md-6 mt-4">
+          <div class="col-12 col-12 mt-4">
             <chart-holder-card
               title="Licences"
               color="success"
@@ -70,6 +70,9 @@
               <reports-line-chart
                 :chart="{
                   labels: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
                     'Apr',
                     'May',
                     'Jun',
@@ -82,7 +85,7 @@
                   ],
                   datasets: {
                     label: 'Licences',
-                    data: [50, 40, 300, 320, 500, 350, 200, 230, 500],
+                    data: [jan, feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec],
                   },
                 }"
               />
@@ -111,7 +114,19 @@ export default {
     companies: Number,
     people: Number,
     temp_licences: Number,
-    count_group_licences: Object
+    count_group_licences: Object,
+    jan: Number,
+    feb: Number,
+    mar: Number,
+    apr: Number,
+    may: Number,
+    jun: Number,
+    jul: Number,
+    aug: Number,
+    sep: Number,
+    oct: Number,
+    nov:Number,
+    dec: Number
   },
   data() {
     return {

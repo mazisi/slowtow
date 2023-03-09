@@ -273,8 +273,7 @@ export default {
      <span v-if="licence.status == '6'" class="font-weight-bold ms-1">Scanned Application</span>
      <span v-if="licence.status == '7'" class="font-weight-bold ms-1">Temporary Licence Lodged</span>
      <span v-if="licence.status == '8'" class="font-weight-bold ms-1">Temporary Licence Issued</span>
-     <span v-if="licence.status == '9'" class="font-weight-bold ms-1">Transfer Issued</span>
-     <span v-if="licence.status == '10'" class="font-weight-bold ms-1">Temporary Licence Delivered</span>
+     <span v-if="licence.status == '9'" class="font-weight-bold ms-1">Temporary Licence Delivered</span>
    </p>
 
   </div>

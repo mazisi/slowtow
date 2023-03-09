@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 class AdminsController extends Controller
 {
     public function index(){
-      $users = User::with('roles')->latest()->get(['id','name','email','created_at','is_active','last_activity_at']);
+      $users = User::with('roles')->latest()->paginate(10,['id','name','email','created_at','picture','is_active','last_activity_at']);
       return Inertia::render('AccountAdmin/Admins',['users' => $users]);
     }
 
@@ -68,10 +68,21 @@ class AdminsController extends Controller
            if(request('password')){
             User::find($request->id)->update(['password' => Hash::make($request->password)]);
            }
+
+           if($request->hasFile('profilePic')){
+            $request->validate(['profilePic' => 'required|image|mimes:jpeg,png,jpg|max:2048']);
+
+            $removeSpace = str_replace(' ', '_',$request->profilePic->getClientOriginalName());
+            $fileName = str_replace('-', '_',$removeSpace);
+            
+             $request->file('profilePic')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+             User::find($request->id)->update(['picture' => $fileName]);
+           }
+
            return back()->with('success','User updated successfully.');
         } catch (\Throwable $th) {
-          //throw $th;
-          return back()->with('error','ERROR UPDATING USER');
+          throw $th;
+          //return back()->with('error','ERROR UPDATING USER');
         }
     }
 

@@ -40,7 +40,7 @@ class NominationExportController extends Controller
                             ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
                             ->join('people', 'people.id' , '=', 'nomination_people.people_id' )
                             ->join('licences', 'licences.id' , '=', 'nominations.licence_id' )
-                                ->when(function($query){
+                                ->when($request,function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
                                         $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
                                     })
@@ -74,6 +74,16 @@ class NominationExportController extends Controller
                                 ->when(request('nomination_stages'), function ($query) {
                                     $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
                               })
+
+                              ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                $query->where('nominations.status','<', 10)
+                                ->orWhere('nominations.status', 0)
+                                ->orWhereNull('nominations.status');
+                            })
+        
+                            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                $query->where('nominations.status',10);
+                            })
                               ->whereNull('licences.deleted_at')->whereNull('nominations.deleted_at')
                               ->orderBy('trading_name')
                                 ->get([
@@ -85,7 +95,7 @@ class NominationExportController extends Controller
                                     'province',
                                     'payment_to_liquor_board_at',
                                     'nomination_lodged_at',
-                                    'status'
+                                    'nomination.status'
                                 ]);
         
                             $status = '';

@@ -47,7 +47,9 @@
 <div class="col-md-4 columns">            
   <div class="input-group input-group-outline null is-filled">
    <label class="form-label">ID/Passport Number</label>
-   <input @keyup="getDateOfBirth" @paste="getDateOfBirth" required type="text" class="form-control form-control-default" v-model="form.id_or_passport">
+   <input @keyup="getDateOfBirth" @paste="getDateOfBirth" required type="text"
+    class="form-control form-control-default" v-model="form.id_or_passport"
+    max="11" />
     </div>
      <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
    </div>
@@ -165,7 +167,7 @@ export default {
         }
 
         function getDateOfBirth(){//needs refactoring
-          if(this.form.id_or_passport.length === 13){
+          if(this.form.id_or_passport.length === 11){
             let year = this.form.id_or_passport.substring(0,2);
             let month = this.form.id_or_passport.substring(2,4);
             let day = this.form.id_or_passport.substring(4,6);

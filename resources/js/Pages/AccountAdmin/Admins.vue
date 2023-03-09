@@ -33,19 +33,24 @@
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Full Name </th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> Function </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 "> Function </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Last Activity </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="user in users" :key="user.id">
+                      <tr v-for="user in users.data" :key="user.id">
                         <td>
                           <div class="d-flex px-2 py-1">
                             <div>
-                              <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" 
+                              
+                              <img v-if="user.picture" :src="`${$page.props.blob_file_path}${user.picture}`" 
                               class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+
+                              <img v-else :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" 
+                              class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+
                             </div>
                             <div class="d-flex flex-column justify-content-center">
                               <h6 class="mb-0 text-sm">{{ user.name }}</h6>
@@ -67,18 +72,7 @@
                         <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">
                           {{ user.last_activity_at  }}</span></td>
                         <td class="align-middle text-center">
-                        <!-- Example split danger button -->
-    <!-- <div class="dropdown">
-      <button class="btn btn-sm  btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
-        Action
-      </button>
-      <ul v-if="user.roles[0].name == 'slowtow-user'" class="dropdown-menu dropdown-menu-dark" aria-labelledby="dropdownMenuButton2">
-        <li><a @click="editUser(user.id,user.name,user.email,user.roles[0].name)" data-bs-toggle="modal" data-bs-target="#edit-user" class="dropdown-item active" href="#!">Edit</a></li>
-        <li>
-          <a v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Deactivate</a>
-          <a v-else @click="deActivateuser(user.id, user.is_active)" class="dropdown-item" href="#">Activate</a></li>
-      </ul>
-    </div> -->
+          
   
     <div class="dropdown float-lg-end pe-4">
       <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
@@ -111,7 +105,10 @@
   
   </div>
   </div>
-  
+  <Paginate
+  :modelName="users"
+  :modelType="Users"
+  />
   </div>
   </div>
   </div>
@@ -216,10 +213,10 @@
                     <button type="button" @click="generateEditPassword" class="btn btn-sm btn-secondary">Generate</button>
                   </div>
 
-                  <!-- <div class="col-12 columns">
+                  <div class="col-12 columns">
                     <div class="input-group input-group-outline null is-filled ">
-                    <label for="pro-pic" class="btn mb-0 bg-gradient-dark btn-md null w-100">Change Picture</label>
-                    <input type="file" id="pro-pic" hidden @change="getFileName" />
+                    <label for="propic" class="btn mb-0 bg-gradient-dark btn-md null w-100">Change Picture</label>
+                    <input type="file" @change="getFileName($event)" hidden id="propic" />
                       <div v-if="file_name"><span class="text-success" v-text="file_name"></span></div>
                       <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry 
                         <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).</p>  
@@ -232,7 +229,7 @@
                       {{ editForm.progress.percentage }}%
                       </progress>
                     
-                   </div> -->
+                   </div>
 
              </div>
           </div>
@@ -269,7 +266,8 @@
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
   import { Inertia } from '@inertiajs/inertia';
   import { ref } from 'vue';
-  import Banner from '../components/Banner.vue'
+  import Banner from '../components/Banner.vue';
+  import Paginate from '../../Shared/Paginate.vue';
   
   export default {
    props: {
@@ -294,12 +292,13 @@
             password: '' 
           }) 
 
-          let editForm = useForm({
+          const editForm = useForm({
             full_name: '',
             email: '',
             role: '',
             password: '',
             id: '',
+            profilePic: null
           }) 
         
           function submitUser() {
@@ -330,7 +329,7 @@
             }            
           }
 
-          //DRY--Will come to this!!!!!!!!!!!!!
+          //DRY PRNCIPLE VIOLATED--Will come to this!!!!!!!!!!!!!
           function generateEditPassword(){
             let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             let passwordLength = 8;
@@ -358,7 +357,7 @@
           }
 
           function updateUser(){
-            editForm.patch('/update-user', {
+            editForm.post('/update-user', {
               onSuccess: () => {
                 this.show_modal = false;
                 document.querySelector('.modal-backdrop').remove();
@@ -386,7 +385,7 @@
 
 
           function getFileName(e){
-            this.editForm.picture = e.target.files[0];
+            this.editForm.profilePic = e.target.files[0];
             this.file_name = e.target.files[0].name;
             this.file_has_apostrophe = this.file_name.includes("'");
           }
@@ -412,7 +411,8 @@
       Layout,
       Link,
       Head,
-      Banner
+      Banner,
+      Paginate
     },
     
   };
