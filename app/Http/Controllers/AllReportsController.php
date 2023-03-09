@@ -62,12 +62,21 @@ class AllReportsController extends Controller
                                         })
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
+                                    })
+                                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                        $query->where('alterations.status','<', 8)
+                                        ->orWhere('alterations.status', 0)
+                                        ->orWhereNull('alterations.status');
+                                    })
+                
+                                    ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                        $query->where('alterations.status',8);
                                     });
 
                                 })
                                 ->whereNull('alterations.deleted_at')
-                              ->orderBy('trading_name')
-                              ->get([
+                                ->orderBy('trading_name')
+                                ->get([
                                 'certification_issued_at',
                                 'id','trading_name',
                                 'licence_number',
@@ -225,7 +234,17 @@ class AllReportsController extends Controller
 
                         ->when(request('selectedDates'), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
-                         });
+                         })
+
+                         ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            $query->where('status','<', 16)
+                            ->orWhere('status', 0)
+                            ->orWhereNull('status');
+                        })
+    
+                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                            $query->where('status',16);
+                        });
                         })
                         ->whereNull('deleted_at')
                         ->where('is_new_app',NULL)
@@ -427,7 +446,16 @@ class AllReportsController extends Controller
 
                         ->when(!empty(request('selectedDates')), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
-                         });
+                         })
+                         ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            $query->where('status','<', 16)
+                            ->orWhere('status', 0)
+                            ->orWhereNull('status');
+                        })
+    
+                         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                            $query->where('status',16);
+                          });
                         })
                         ->whereNull('deleted_at')
                         ->where('is_new_app',true)
@@ -625,6 +653,17 @@ class AllReportsController extends Controller
                             ->when(request('nomination_stages'), function ($query) {
                                 $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
                           })
+
+                          ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            $query->where('nominations.status','<', 10)
+                            ->orWhere('nominations.status', 0)
+                            ->orWhereNull('nominations.status');
+                        })
+    
+                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                            $query->where('nominations.status',10);
+                        })
+
                           ->whereNull('licences.deleted_at')->whereNull('nominations.deleted_at')
                           ->orderBy('trading_name')
                             ->get([
@@ -789,6 +828,15 @@ class AllReportsController extends Controller
                             })
                             ->when(request('licence_types'), function ($query)  {
                                 $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                            })
+                            ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                $query->where('licence_renewals.status','<', 6)
+                                ->orWhere('licence_renewals.status', 0)
+                                ->orWhereNull('licence_renewals.status');
+                            })
+
+                            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                $query->where('licence_renewals.status',6);
                             });
 
                             })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
@@ -917,7 +965,17 @@ class AllReportsController extends Controller
                     })
                     ->when(!empty(request('applicant')), function ($query) {
                         $query->where('belongs_to',request('applicant'));
+                    })
+                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                        $query->where('temporal_licences.status','<', 9)
+                        ->orWhere('temporal_licences.status', 0)
+                        ->orWhereNull('temporal_licences.status');
+                    })
+
+                    ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                        $query->where('temporal_licences.status',9);
                     });
+
                  })->whereNull('temporal_licences.deleted_at')
                  ->orderBy('event_name')
                  ->get(
@@ -965,7 +1023,16 @@ class AllReportsController extends Controller
                              })
                              ->when(!empty(request('applicant')), function ($query) {
                                  $query->where('belongs_to',request('applicant'));
-                             });
+                             })
+                             ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                $query->where('temporal_licences.status','<', 9)
+                                ->orWhere('temporal_licences.status', 0)
+                                ->orWhereNull('temporal_licences.status');
+                            })
+        
+                            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                $query->where('temporal_licences.status',9);
+                            });
                           })->whereNull('temporal_licences.deleted_at')
                           ->orderBy('event_name')
                           ->get([
@@ -1143,6 +1210,16 @@ class AllReportsController extends Controller
     
                             ->when(request('licence_types'), function ($query)  {
                                 $query->where('licence_type_id',request('licence_types'));
+                            })
+
+                            ->when(request('is_licence_complete') === 'Outstanding', function ($query) {
+                                $query->where('licence_transfers.status','<', 10)
+                                ->orWhere('licence_transfers.status', 0)
+                                ->orWhereNull('licence_transfers.status');
+                            })
+        
+                            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                $query->where('licence_transfers.status',10);
                             });
     
                         })->when(request('selectedDates'), function ($query) {

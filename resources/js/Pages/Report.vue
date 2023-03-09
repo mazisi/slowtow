@@ -571,59 +571,100 @@ const new_app_stages = {
      "9" : "Temporary Licence Delivered", 
     }
 
-    
+  //  REFACTOR ME PLEASE
    function addClass(event,type){
-    //   if(type == 'All'){
-    //     event.target.classList.remove('type')
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-    //   }else if(type == 'Alterations'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-
-    //   }else if(type == 'Existing Licences'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-        
-    //   }else if(type == 'New Applications'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-        
-    //   }else if(type == 'Nominations'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-        
-    //   }else if(type == 'Temporary Licences'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-        
-    //   }else if(type == 'Transfers'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-        
-    //   }else if(type == 'Renewals'){
-    //     event.target.classList.remove('btn-success')
-    //     event.target.classList.add('btn-secondary')
-        
-    //   
-
     const buttons = document.querySelectorAll('.w-50')
+  
 
-buttons.forEach(panel =>{
-    panel.addEventListener('click', () =>{
-        removeActiveClasses()
-        panel.classList.add('btn-secondary')
+      if(type == 'All'){
+        event.target.classList.remove('type')
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+
+        buttons.forEach(button => {
+          if(event.target !== button){
+            button.classList.remove('btn-info')
+            button.classList.add('btn-success')
+          }      
+        })
+
+      }else if(type == 'Alterations'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+        buttons.forEach(button => {
+          if(event.target !== button){
+            button.classList.remove('btn-info')
+            button.classList.add('btn-success')
+          }      
+        })
+      }else if(type == 'Existing Licences'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+
+        buttons.forEach(button => {
+      if(event.target !== button){
+          button.classList.remove('btn-info')
+          button.classList.add('btn-success')
+         }      
+        })
+        
+      }else if(type == 'New Applications'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+
+        buttons.forEach(button => {
+      if(event.target !== button){
+        button.classList.remove('btn-info')
+        button.classList.add('btn-success')
+      }      
     })
-})
-    
+        
+      }else if(type == 'Nominations'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+
+        buttons.forEach(button => {
+      if(event.target !== button){
+        button.classList.remove('btn-info')
+        button.classList.add('btn-success')
+      }      
+    })
+        
+      }else if(type == 'Temporary Licences'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+        buttons.forEach(button => {
+      if(event.target !== button){
+        button.classList.remove('btn-info')
+        button.classList.add('btn-success')
+      }      
+    })
+
+      }else if(type == 'Transfers'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info')
+
+        buttons.forEach(button => {
+      if(event.target !== button){
+        button.classList.remove('btn-info')
+        button.classList.add('btn-success')
+      }      
+    })
+        
+      }else if(type == 'Renewals'){
+        event.target.classList.remove('btn-success')
+        event.target.classList.add('btn-info') 
+        buttons.forEach(button => {
+      if(event.target !== button){
+        button.classList.remove('btn-info')
+        button.classList.add('btn-success')
+      }      
+    })   
+
+      }
     }
    
- 
-function removeActiveClasses(){
-    buttons.forEach(panel =>{
-        panel.classList.remove('btn-secondary')
-    })
-}
+
 
   function getType(event,type){
      form.variation=type;
@@ -682,8 +723,7 @@ function removeActiveClasses(){
       
 
 return{
-  limit,
-  removeActiveClasses,
+  limit,addClass,
   renewal_stages,
   transfer_stages,
   nomination_stages,
