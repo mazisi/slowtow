@@ -91,10 +91,11 @@ class LicenceController extends Controller
                    $query->where('trading_name','LIKE','%'.request('term').'%')
                     ->orWhere('licence_number','LIKE','%'.request('term').'%')
                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                    ->whereNull('is_licence_active')
+                    ->orWhere('is_licence_active','0')
                     ->orWhereHas('company', function($query){
                       $query->where('name', 'like', '%'.request('term').'%');                
-                })->whereNull('is_licence_active')
-                ->orWhere('is_licence_active','0');
+                });
                })
 
             ->when(request('active_status') =='Active', 
@@ -144,7 +145,7 @@ class LicenceController extends Controller
             ->latest()->paginate(20)->withQueryString();
             
 
-         $all_licence_types = LicenceType::get();
+       $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
     }
     
