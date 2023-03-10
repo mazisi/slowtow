@@ -24,6 +24,8 @@ class LicenceController extends Controller
         })->when(request('term') && request('active_status') === 'Active', 
             function ($query){ 
                 return $query->where('is_licence_active',true)
+                ->orWhere('is_licence_active','1')
+                ->whereNotNull('is_licence_active')
                 ->orWhere('licence_number','LIKE','%'.request('term').'%')
                 ->orWhere('old_licence_number','LIKE','%'.request('term').'%');
             
@@ -44,7 +46,8 @@ class LicenceController extends Controller
                 ->when(request('active_status') == 'Active' && request('licence_type'), 
                 function ($query){ 
                     return $query->where('is_licence_active',true)
-                    ->where('licence_type_id',request('licence_type'));                
+                    ->where('licence_type_id',request('licence_type'))
+                    ->where('is_licence_active',true);                
                 })
 
 
@@ -58,7 +61,9 @@ class LicenceController extends Controller
                 function ($query){ 
                     return $query->whereMonth('licence_date',request('licence_date'))
                     ->where('licence_type_id',request('licence_type'))
-                    ->where('is_licence_active',false);                
+                    ->where('is_licence_active',false)
+                    ->whereNull('is_licence_active')
+                    ->orWhere('is_licence_active','0');                
                 })
 
             ->when(request('term') && request('active_status') =='Active' && request('licence_type'), 
@@ -70,16 +75,26 @@ class LicenceController extends Controller
                     ->where('licence_type_id',request('licence_type'))
                     ->whereNotNull('is_licence_active');                
                 })
+                
+                ->when(request('term') && request('active_status') === 'Inactive' && request('licence_type'), 
+                        function ($query){
+                            return $query->where('licence_type_id',request('licence_type'))
+                                ->where('trading_name','LIKE','%'.request('term').'%')
+                                ->orWhere('licence_number','LIKE','%'.request('term').'%')
+                                ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                                ->whereNull('is_licence_active')
+                                ->orWhere('is_licence_active','0');                
+                        })
 
             ->when(request('term') && request('active_status') =='Inactive', 
                 function ($query){ 
                    $query->where('trading_name','LIKE','%'.request('term').'%')
                     ->orWhere('licence_number','LIKE','%'.request('term').'%')
                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                    ->whereNull('is_licence_active')
                     ->orWhereHas('company', function($query){
                       $query->where('name', 'like', '%'.request('term').'%');                
-                });
+                })->whereNull('is_licence_active')
+                ->orWhere('is_licence_active','0');
                })
 
             ->when(request('active_status') =='Active', 
@@ -122,12 +137,14 @@ class LicenceController extends Controller
 
                 ->when(request('active_status') =='Inactive', 
                 function ($query){ 
-                    return $query->where('is_licence_active',false);                
+                    return $query->where('is_licence_active',false)
+                    ->orWhereNull('is_licence_active')
+                    ->orWhere('is_licence_active',0);                
                 })
             ->latest()->paginate(20)->withQueryString();
             
 
-       $all_licence_types = LicenceType::get();
+         $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
     }
     
