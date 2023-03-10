@@ -14,7 +14,7 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class AllReportsController extends Controller
 {
-    public static function exportAll($request){dd($request);
+    public static function exportAll($request){
 
         $alterationData = array(
             array(                

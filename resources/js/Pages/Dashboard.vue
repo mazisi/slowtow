@@ -62,7 +62,7 @@
               />
             </chart-holder-card>
           </div>
-          <div class="col-12 col-12 mt-4">
+          <div class="invisible col-12 col-12 mt-4">
             <chart-holder-card
               title="Licences"
               color="success"

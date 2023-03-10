@@ -110,7 +110,7 @@
         placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'New Applications'" class="col-6 columns" >
+  <div v-if="form.variation === 'New Applications' || form.variation === 'All'" class="col-6 columns" >
     <Multiselect
     v-model="form.new_app_stages"           
     :options="new_app_stages"
@@ -128,7 +128,7 @@
     placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Temporary Licence'" class="col-6 columns">
+  <div v-if="form.variation === 'Temporary Licences'" class="col-6 columns">
     <Multiselect
     v-model="form.temp_licence_stages"           
     :options="temp_licence_stages"
@@ -154,13 +154,13 @@
   || form.variation === 'Nominations'
   || form.variation === 'New Applications'//New Apps
   || form.variation === 'Alterations'
-  || form.variation === 'Temporary Licence'
+  || form.variation === 'Temporary Licences'
   || form.variation === 'Existing Licences'
    }">
   </div> -->
   
  
-  <div v-if="form.variation !== 'Temporary Licence'" class="col-6 columns" >
+  <div v-if="form.variation !== 'Temporary Licences'" class="col-6 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
           v-model="form.province"          
@@ -176,7 +176,7 @@
 
 
 
-    <!-- <div v-if="form.variation !== 'Temporary Licence'" class="col-4">
+    <!-- <div v-if="form.variation !== 'Temporary Licences'" class="col-4">
       <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
       {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
     </div> -->
@@ -191,7 +191,7 @@
       </div>
   
   
-  <div v-if="form.variation !== 'Temporary Licence'" class="col-6">
+  <div v-if="form.variation !== 'Temporary Licences'" class="col-6">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
@@ -204,7 +204,7 @@
   </div>
 
   
-  <div v-if="form.variation !== 'Temporary Licence'" class="col-6 ">
+  <div v-if="form.variation !== 'Temporary Licences'" class="col-6 ">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.licence_types"           
@@ -216,7 +216,7 @@
       </div>
   </div>
 
-  <div v-if="form.variation == 'Temporary Licence'" class="col-6 ">
+  <div v-if="form.variation == 'Temporary Licences'" class="col-6 ">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.temp_licence_region"           
@@ -227,21 +227,22 @@
       placeholder="Region"/>
       </div>
   </div>
-
-  <div class="col-6" :class="{'mt-3' : form.variation == 'All'}">
+  <!-- :class="{'mt-3' : form.variation == 'All'}"
+:class="{'mt-3' : form.variation == 'All'}" -->
+  <div class="col-6" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.is_license_complete" class="form-control form-control-default">
-      <option :value="''" disabled selected>Choose..</option>
+      <option :value="''" disabled selected>Outstanding Or Complete?</option>
       <option value="Outstanding">Outstanding</option>
       <option value="Complete">Complete</option>
       </select>
       </div>
   </div>
 
-  <div class="col-6" :class="{'mt-3' : form.variation == 'All'}">
+  <div class="col-6" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
-      <option :value="''" disabled selected>Applicant</option>
+      <option :value="''" disabled selected>Select Applicant</option>
       <option value="Company">Company</option>
       <option value="Person">Person</option>
       </select>
@@ -699,7 +700,7 @@ const new_app_stages = {
    }
 
    const fetchNewAppWithStages = () => {
-    if(form.variation === 'New-App'){
+    if(form.variation === 'New Applications'){
       form.get(`/reports`, {
             preserveScroll: true,
             onSuccess: () => {
