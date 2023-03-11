@@ -17,8 +17,8 @@ class PersonController extends Controller
     public function index(){
         $people = People::when(request('term') && request('active_status') === 'Active', 
             function ($query){
-                $query->where('full_name','LIKE','%'.request('term').'%')
-                     ->where('active','1');
+                $query->where('full_name','LIKE','%'.request('term').'%');
+                $query->where('active','1');
             
             })
 
@@ -26,8 +26,8 @@ class PersonController extends Controller
                 function ($query){
                     $query
                     ->whereNull('active')
-                    ->orWhere('active','0')
-                    ->where('full_name','LIKE','%'.request('term').'%')
+                    ->orWhere('active','0');
+                    $query->where('full_name','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_1','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_2','LIKE','%'.request('term').'%');
                 
