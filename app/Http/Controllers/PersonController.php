@@ -16,47 +16,42 @@ class PersonController extends Controller
 {
     public function index(){
         $people = People::when(request('term') && request('active_status') === 'Active', 
-            function ($query){ 
-                return $query->where('full_name','LIKE','%'.request('term').'%')
-                ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                ->orWhere('email_address_2','LIKE','%'.request('term').'%')
-                ->where('active',true);
+            function ($query){
+                $query->where('full_name','LIKE','%'.request('term').'%')
+                     ->where('active','1');
             
             })
 
             ->when(request('term') && request('active_status') === 'Inactive', 
-                function ($query){ 
-                    return $query->where('full_name','LIKE','%'.request('term').'%')
+                function ($query){
+                    $query
+                    ->whereNull('active')
+                    ->orWhere('active','0')
+                    ->where('full_name','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                    ->orWhere('email_address_2','LIKE','%'.request('term').'%')
-                    ->where('active',false);
+                    ->orWhere('email_address_2','LIKE','%'.request('term').'%');
                 
                 })
 
-                ->when(request('term'), 
-                function ($query){ 
-                    return $query->where('full_name','LIKE','%'.request('term').'%')
-                    ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                    ->orWhere('email_address_2','LIKE','%'.request('term').'%')
-                    ->where('active',true);
+                ->when(request('term') && !request('active_status'), 
+                    function ($query){ 
+                        return $query->where('full_name','LIKE','%'.request('term').'%')
+                        ->orWhere('email_address_1','LIKE','%'.request('term').'%')
+                        ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+                    
+                    })
                 
+
+            ->when(!request('term') && request('active_status') ==='Inactive', 
+                function ($query){
+                    return $query->whereNull('active')
+                                 ->orWhere('active','0');                
                 })
 
-                ->when(request('active_status') === 'All', 
-                function ($query){ 
-                    return $query->whereNotNull('full_name');
-                
-                })
-
-            ->when(request('active_status') ==='Inactive', 
-                function ($query){ 
-                    return $query->where('active',true);                
-                })
-
-                ->when(request('active_status') ==='Active', 
-                function ($query){ 
-                    return $query->where('active',true);                
-                })
+                ->when(!request('term') && request('active_status') ==='Active', 
+                    function ($query){
+                        return $query->orWhere('active','1');                
+                    })
             ->latest()->paginate(20)->withQueryString();
 
         return Inertia::render('People/Person',['people' => $people]);
