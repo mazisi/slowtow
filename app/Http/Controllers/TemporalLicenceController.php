@@ -32,46 +32,46 @@ class TemporalLicenceController extends Controller
                 ->orWhere('event_name','LIKE','%'.request('term').'%');
             
             })
-          ->when(request('term') && request('active_status') == 'Active', 
-            function ($query){ 
-                return $query->whereHas('company', function($query){
-                    $query->where('name', 'like', '%'.request('term').'%');
-                })->orWhereHas('people', function($query){
-                    $query->where('full_name', 'like', '%'.request('term').'%');                                      
-                          })->whereNotNull('active')
-                ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
-                ->orWhere('start_date','LIKE','%'.request('term').'%')
-                ->orWhere('end_date','LIKE','%'.request('term').'%')
-                ->orWhere('event_name','LIKE','%'.request('term').'%');
+        //   ->when(request('term') && request('active_status') == 'Active', 
+        //     function ($query){ 
+        //         return $query->whereHas('company', function($query){
+        //             $query->where('name', 'like', '%'.request('term').'%');
+        //         })->orWhereHas('people', function($query){
+        //             $query->where('full_name', 'like', '%'.request('term').'%');                                      
+        //                   })->whereNotNull('active')
+        //         ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
+        //         ->orWhere('start_date','LIKE','%'.request('term').'%')
+        //         ->orWhere('end_date','LIKE','%'.request('term').'%')
+        //         ->orWhere('event_name','LIKE','%'.request('term').'%');
             
-            })
+        //     })
 
-            ->when(request('term') && request('active_status') == 'Inactive', 
-                function ($query){ 
-                    return $query->whereHas('company', function($query){
-                        $query->where('name', 'like', '%'.request('term').'%');
+            // ->when(request('term') && request('active_status') == 'Inactive', 
+            //     function ($query){ 
+            //         return $query->whereHas('company', function($query){
+            //             $query->where('name', 'like', '%'.request('term').'%');
                         
-                    })->orWhereHas('people', function($query){
-                        $query->where('full_name', 'like', '%'.request('term').'%');                                      
-                    })
-                    ->orWhere('event_name','LIKE','%'.request('term').'%')
-                    ->where('active','!=','1')
-                    ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
-                    ->orWhere('start_date','LIKE','%'.request('term').'%')
-                    ->orWhere('end_date','LIKE','%'.request('term').'%');
+            //         })->orWhereHas('people', function($query){
+            //             $query->where('full_name', 'like', '%'.request('term').'%');                                      
+            //         })
+            //         ->orWhere('event_name','LIKE','%'.request('term').'%')
+            //         ->where('active','!=','1')
+            //         ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
+            //         ->orWhere('start_date','LIKE','%'.request('term').'%')
+            //         ->orWhere('end_date','LIKE','%'.request('term').'%');
                 
-                })
+            //     })
 
-            ->when(request('active_status') =='Inactive', 
-                function ($query){ 
-                    $query->whereNull('active');                
-                })
+            // ->when(request('active_status') =='Inactive', 
+            //     function ($query){ 
+            //         $query->whereNull('active');                
+            //     })
 
-                ->when(request('active_status') =='Active', 
-                function ($query){ 
-                    $query->whereNotNull('active');                
-                })
-                ->paginate(20)->withQueryString();
+            //     ->when(request('active_status') =='Active', 
+            //     function ($query){ 
+            //         $query->whereNotNull('active');                
+            //     })
+                ->latest()->paginate(20)->withQueryString();
 
         return Inertia::render('TemporalLicences/TemporalLicence',['licences' => $licences]);
     }

@@ -245,6 +245,19 @@ class LicenceController extends Controller
                               ->whereMonth('licence_date',request('licence_date'));         
                 })
 
+//Licence date and licence_type and inactive and province
+                ->when(request('licence_date') 
+                      && request('active_status') == 'Inactive'
+                      && request('licence_type') 
+                      && request('province'),
+                    function ($query){
+                        $query->whereMonth('licence_date',request('licence_date'))
+                              ->where('licence_type_id',request('licence_type'))
+                              ->where('province',request('province'))
+                              ->whereNull('is_licence_active')
+                              ->orWhere('is_licence_active','0');         
+                })
+
 
 
         

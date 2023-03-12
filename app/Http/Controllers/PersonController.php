@@ -18,26 +18,23 @@ class PersonController extends Controller
         $people = People::when(request('term') && request('active_status') === 'Active', 
             function ($query){
                 $query->where('full_name','LIKE','%'.request('term').'%');
-                $query->where('active','1');
+                $query->where('active','1')->orWhere('active',true);
             
             })
 
             ->when(request('term') && request('active_status') === 'Inactive', 
                 function ($query){
-                    $query
-                    ->whereNull('active')
-                    ->orWhere('active','0');
-                    $query->where('full_name','LIKE','%'.request('term').'%')
-                    ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                    ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+                    
+                    $query->where('full_name','LIKE','%'.request('term').'%');
+                          $query->whereNull('active')
+                          ->orWhere('active','0')
+                          ->orWhere('active',false);
                 
                 })
 
                 ->when(request('term') && !request('active_status'), 
                     function ($query){ 
-                        return $query->where('full_name','LIKE','%'.request('term').'%')
-                        ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                        ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+                        return $query->where('full_name','LIKE','%'.request('term').'%');
                     
                     })
                 
@@ -50,7 +47,7 @@ class PersonController extends Controller
 
                 ->when(!request('term') && request('active_status') ==='Active', 
                     function ($query){
-                        return $query->orWhere('active','1');                
+                        return $query->where('active','1');                
                     })
             ->latest()->paginate(20)->withQueryString();
 
