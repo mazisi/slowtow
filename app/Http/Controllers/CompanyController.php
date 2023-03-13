@@ -19,15 +19,13 @@ class CompanyController extends Controller
     public function index(){
 
         $companies = Company::
-        when(request('term') 
+          when(request('term') 
             && !request('active_status') 
             && !request('company_type'), 
             function ($query) {
-            return $query
-            ->where(function($query){
                 $query->where('name','LIKE','%'.request('term').'%')
                 ->orWhere('reg_number','LIKE','%'.request('term').'%');  
-            });
+            
             
         })
 
@@ -48,14 +46,10 @@ class CompanyController extends Controller
             && request('active_status') == 'Active'
             && request('company_type'), 
             function ($query) {
-            return $query
-            ->where(function($query){
                 $query->where('name','LIKE','%'.request('term').'%')
-                      ->where('company_type','LIKE','%'.request('company_type').'%')
-                      ->where('active',true)
-                      ->orWhere('active','1');   
-              });
-            
+                      ->where('company_type', 'LIKE','%'.request('company_type').'%')
+                      ->where('active','1');   
+                         
         })
 
 //Search and company type and All
@@ -63,41 +57,20 @@ class CompanyController extends Controller
             && request('active_status') == 'All'
             && request('company_type'), 
             function ($query) {
-            return $query
-            ->where(function($query){
                 $query->where('name','LIKE','%'.request('term').'%')
                       ->where('company_type','LIKE','%'.request('company_type').'%');   
-              });
+             
             
         })
 
-
-//Search and company type and Inactive
-        ->when(request('term') 
-            && request('active_status') == 'Inactive'
-            && request('company_type'), 
-            function ($query) {
-            return $query
-            ->where(function($query){
-                $query->where('name','LIKE','%'.request('term').'%')
-                      ->where('company_type','LIKE','%'.request('company_type').'%')
-                      ->where('active',NULL)
-                      ->orWhere('active','0');   
-              });
-            
-        })
-
-//Search and company type and Inactive
+//Search and Inactive
         ->when(request('term') 
             && request('active_status') == 'Inactive'
             && !request('company_type'), 
             function ($query) {
-            return $query
-            ->where(function($query){
                 $query->where('name','LIKE','%'.request('term').'%')
-                      ->where('active',NULL)
-                      ->orWhere('active','0');   
-              });
+                      ->where('active','0');   
+             
             
         })
 
@@ -106,42 +79,38 @@ class CompanyController extends Controller
             && request('active_status') == 'Active'
             && !request('company_type'), 
             function ($query) {
-            return $query
-            ->where(function($query){
                 $query->where('name','LIKE','%'.request('term').'%')
-                      ->where('active',true)
-                      ->orWhere('active','1');   
-              });
+                      ->where('active','1');   
+              
             
         })
 
 
 
 
-        ->when(request('active_status') == 'Inactive', 
+        ->when(!request('term')  && !request('company_type') && request('active_status') == 'Inactive', 
             function ($query){ 
-                return $query->whereNull('active')->orWhere('active','0');            
+                return $query->where('active','0');            
             })
 
-            ->when(request('active_status') == 'Active', 
+            ->when(!request('term')  && !request('company_type') && request('active_status') == 'Active', 
             function ($query){ 
-                return $query->where('active',true)->orWhere('active','1');            
+                return $query->where('active','1');            
             })
                 
-                ->when(request('company_type') && request('active_status') == 'Inactive', 
-                function ($query){ 
-                    $query->whereNull('active')
-                          ->where('company_type','LIKE','%'.request('company_type').'%');            
-                })
-
-                ->when(request('company_type') && request('active_status') == 'Active', 
+                ->when(!request('term') && request('company_type') && request('active_status') == 'Inactive', 
                 function ($query){ 
                     $query->where('active',true)
-                         ->orWhere('active','1')
                           ->where('company_type','LIKE','%'.request('company_type').'%');            
                 })
 
-            ->when(request('company_type'), 
+                ->when(!request('term') && request('company_type') && request('active_status') == 'Active', 
+                function ($query){ 
+                    $query->where('active',true)
+                          ->where('company_type','LIKE','%'.request('company_type').'%');            
+                })
+
+            ->when(!request('term')  && !request('active_status') && request('company_type'), 
                 function ($query){ 
                     $query->where('company_type','LIKE','%'.request('company_type').'%');                
                 })
@@ -250,7 +219,7 @@ class CompanyController extends Controller
     public function updateActiveStatus(Request $request,$slug){
         $comp =Company::whereSlug($slug)->first();
         if($request->unChecked){
-          $comp->update(['active' => NULL]);
+          $comp->update(['active' => 0]);
         }else{
             $comp->update(['active' => $request->status]);
         }

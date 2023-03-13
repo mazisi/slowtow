@@ -22,7 +22,7 @@
                     <th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Previous Licence Holder
                     </th>
-                    <th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                    <th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Current Licence Holder
                     </th>
                     
@@ -37,49 +37,50 @@
                 </thead>
                 <tbody>
                   <tr v-for=" (  transfer, index  ) in transfers" :key="index" >
-                    <td class="text-center">
-                    <div class="d-flex flex-column justify-content-left">
-                        <Link v-if="transfer.transfered_from === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
+                    <td >
+                    <div class="d-flex flex-column">
+                        <Link class="ml-1" v-if="transfer.transfered_from === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
                           <h6 class="mb-0 text-sm">
                           {{ limit(transfer.old_company.name) }}
                            </h6>    
                         </Link> 
 
-                        <Link v-if="transfer.transfered_from === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
+                        <Link class="ml-1" v-if="transfer.transfered_from === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
                           <h6 class="mb-0 text-sm">
                           {{ limit(transfer.old_person.full_name) }}
                            </h6>    
                         </Link>                      
                         </div>
                         </td>
-                    <td class="text-center">
+                    <td >
                       
-                      <Link v-if="transfer.transfered_to === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
+                      <Link class="ml-1" v-if="transfer.transfered_to === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
                         <h6 class="text-sm">
                         {{ limit(transfer.new_company.name) }}
                       </h6>    
                         </Link>  
-                        <Link v-if="transfer.transfered_to === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
+                        <Link class="ml-1" v-if="transfer.transfered_to === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
                           <h6 class="text-sm">
                           {{ limit(transfer.new_person.full_name) }}
                         </h6>    
                           </Link>  
                      
                     </td>
-          <td  class="text-center" v-if="transfer.status == 1"><Link :href="`/view-transfered-licence/${transfer.slug}`">Client Quoted</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 2"><Link :href="`/view-transfered-licence/${transfer.slug}`">Client Invoiced</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 3"><Link :href="`/view-transfered-licence/${transfer.slug}`">Client Paid</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 4"><Link :href="`/view-transfered-licence/${transfer.slug}`">Prepare Transfer Application</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 5"><Link :href="`/view-transfered-licence/${transfer.slug}`">Payment To The Liquor Board</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 6"><Link :href="`/view-transfered-licence/${transfer.slug}`">Scanned Application</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 7"><Link :href="`/view-transfered-licence/${transfer.slug}`">Application Logded</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 8"><Link :href="`/view-transfered-licence/${transfer.slug}`">Activation Fee Paid</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 9"><Link :href="`/view-transfered-licence/${transfer.slug}`">Transfer Issued</Link></td>
-          <td  class="text-center" v-else-if="transfer.status == 10"><Link :href="`/view-transfered-licence/${transfer.slug}`">Transfer Delivered</Link></td>
+          <td   v-if="transfer.status == 1"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Client Quoted</Link></td>
+          <td   v-else-if="transfer.status == 2"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Client Invoiced</Link></td>
+          <td   v-else-if="transfer.status == 3"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Client Paid</Link></td>
+          <td   v-else-if="transfer.status == 4"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Prepare Transfer Application</Link></td>
+          <td   v-else-if="transfer.status == 5"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Payment To The Liquor Board</Link></td>
+          <td   v-else-if="transfer.status == 6"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Scanned Application</Link></td>
+          <td   v-else-if="transfer.status == 7"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Application Logded</Link></td>
+          <td   v-else-if="transfer.status == 8"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Activation Fee Paid</Link></td>
+          <td   v-else-if="transfer.status == 9"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Transfer Issued</Link></td>
+          <td   v-else-if="transfer.status == 10"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Transfer Delivered</Link></td>
+          <td   v-else></td>
           
 
-  <td class="text-center">
-                    <Link :href="`/view-transfered-licence/${transfer.slug}`">
+  <td >
+                    <Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">
                     <i class="fa fa-eye  " aria-hidden="true"></i>
                     </Link>
                       
@@ -96,7 +97,9 @@
     </div>
   </Layout>
 </template>
-
+<style scoped>
+    .ml-1{margin-left: 1.2rem;}
+</style>
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';

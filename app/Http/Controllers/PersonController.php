@@ -66,7 +66,6 @@ class PersonController extends Controller
         ]);
         $person = People::create([
         'full_name'=> $request->name.' '.$request->surname,
-        'active'=> $request->active,
         'date_of_birth' => $request->date_of_birth,
         'id_or_passport' => $request->id_or_passport,
         'email_address_1' => $request->email_address_1,
@@ -106,7 +105,6 @@ class PersonController extends Controller
         
         $person = People::whereSlug($request->slug)->update([
         'full_name'=> $request->name,
-        'active'=> $request->active,
         'date_of_birth' => $request->date_of_birth,
         'id_or_passport' => $request->id_or_passport,
         'email_address_1' => $request->email_address_1,
@@ -174,7 +172,7 @@ class PersonController extends Controller
     public function updateActiveStatus(Request $request,$slug){
         $person =People::whereSlug($slug)->first();
         if($request->unChecked){
-          $person->update(['active' => NULL]);
+          $person->update(['active' => 0]);
         }else{
             $person->update(['active' => $request->status]);
         }
