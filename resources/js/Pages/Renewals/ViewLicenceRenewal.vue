@@ -5,7 +5,8 @@ import { Inertia } from '@inertiajs/inertia';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
-import Banner from '../components/Banner.vue'
+import Banner from '../components/Banner.vue';
+import Task from "../Tasks/Task.vue";
 
 import { ref } from 'vue';
 
@@ -49,27 +50,17 @@ export default {
       document: null,
       doc_type: null,
       date: null,
+      stage: null,
       renewal_id: props.renewal.id    
     })
 
-    const createTask = useForm({
-          body: '',
-          model_type: 'Licence Renewal',
-          model_id: props.renewal.id,
-          taskDate: ''     
-    })
-
-    function submitTask(){
-      createTask.post('/submit-task', {
-          onSuccess: () => createTask.reset(),
-      })
-    }
-
+   
   
 
-    function getDocType(doc_type){
-      this.show_file_name = true
-      this.uploadDoc.doc_type = doc_type 
+    function getDocType(stage=null,doc_type){
+      this.show_file_name = true;
+      this.uploadDoc.doc_type = doc_type;
+      this.uploadDoc.stage = stage;
       this.show_modal =true   
     }
 
@@ -145,13 +136,7 @@ export default {
         // this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
-      function deleteNote(id){
-        if(confirm('This note will be deleted. Continue ?')){
-          Inertia.delete(`/delete-task/${id}`, {
-             preserveScroll: true,
-           }); 
-        }
-      }
+     
 
     return { year,form,show_modal,getFileName, 
       file_name,show_file_name,file_has_apostrophe,
@@ -159,10 +144,8 @@ export default {
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      deleteDocument,
-     createTask,
-     submitTask,
      deleteRenewal,
-     limit,deleteNote
+     limit
      }
   },
    components: {
@@ -171,7 +154,8 @@ export default {
     Head,
     Datepicker,
     LiquorBoardRequest,
-    Banner
+    Banner,
+    Task
   },
   
 };
@@ -184,7 +168,7 @@ export default {
 // 6 => Renewal Delivered
 
 </script>
-<style>
+<style scoped>
 .columns{
   margin-bottom: 1rem;
 }
@@ -194,6 +178,12 @@ export default {
 }
 .status-heading{
   font-weight: 700;
+}
+
+.limit-file-namee{
+  width: 90px; 
+  overflow: hidden;
+  height: 16px
 }
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
@@ -213,6 +203,7 @@ export default {
       <span v-if="renewal.status == '4'" class="font-weight-bold ms-1">Payment To The Liquor Board</span>
       <span v-if="renewal.status == '5'" class="font-weight-bold ms-1">Renewal Issued</span>
       <span v-if="renewal.status == '6'" class="font-weight-bold ms-1">Renewal Delivered</span>
+      <span v-else class="font-weight-bold ms-1"></span>
     </p>
    
   </div>
@@ -247,14 +238,14 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 v-if="client_quoted == null" class="mb-0 text-sm">Document</h6>
-      <h6 v-if="client_quoted !== null" class="mb-0 text-sm limit-file-name">{{ client_quoted.document_name }}</h6>
+      <p v-if="client_quoted !== null" class="mb-0 text-sm">{{ client_quoted.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
@@ -312,14 +303,14 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 v-if="client_invoiced == null" class="mb-0 text-sm">Document</h6>
-      <h6 v-if="client_invoiced !== null" class="mb-0 text-sm limit-file-name">{{ client_invoiced.document_name }}</h6>
+      <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-namee">{{ client_invoiced.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
@@ -414,14 +405,14 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 v-if="liqour_board == null" class="mb-0 text-sm">Document</h6>
-      <h6 v-if="liqour_board !== null" class="mb-0 text-sm limit-file-name">{{ liqour_board.document_name }}</h6>
+      <p v-if="liqour_board !== null" class="mb-0 text-sm limit-file-namee">{{ liqour_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
     <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
@@ -482,14 +473,14 @@ export default {
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 v-if="renewal_issued == null" class="mb-0 text-sm">Document</h6>
-      <h6 v-if="renewal_issued !== null" class="mb-0 text-sm limit-file-name">{{ renewal_issued.document_name }}</h6>
+      <p v-if="renewal_issued !== null" class="mb-0 text-sm limit-file-namee">{{ renewal_issued.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
     <a v-if="renewal_issued !== null" @click="deleteDocument(renewal_issued.id)" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a @click="getDocType('Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a @click="getDocType(5,'Renewal Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
@@ -549,14 +540,14 @@ export default {
 
    <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 v-if="renewal_doc == null" class="mb-0 text-sm">Document</h6>
-      <h6 v-if="renewal_doc !== null" class="mb-0 text-sm limit-file-name">{{ renewal_doc.document_name }}</h6>
+      <p v-if="renewal_doc !== null" class="mb-0 text-sm limit-file-namee">{{ renewal_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
 
     <a v-if="renewal_doc !== null" @click="deleteDocument(renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Renewal Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(6,'Renewal Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-success" aria-hidden="true"></i>
     </a>
@@ -588,48 +579,7 @@ export default {
 /> 
 <hr/>
 -->
-<div class="row">
-<h6 class="text-center">Notes</h6>
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
-    </a>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No notes found.</h6>
-</div>
-
-</div>
-
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task</label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-</div>
-
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Save
-</button>
-</form>
-</div>
-</div>
+<Task :tasks="tasks" :model_id="renewal.id" :errors="errors" :model_type="'Licence Renewal'"/>
 
 
 </div>

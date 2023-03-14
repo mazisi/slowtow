@@ -9,7 +9,7 @@
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">New Nomination For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
+<h6 class="mb-1">Nominations For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
   {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
 </div>
 </div>
@@ -33,7 +33,7 @@
                   </tr>
                 </thead>
                  <tbody>
-                  <tr v-for="nom in nomination_years" :key="nom.id" >
+                  <tr v-if="nomination_years.data" v-for="nom in nomination_years.data" :key="nom.id" >
                     <td>
                       <div class="text-center" >                       
                    
@@ -47,14 +47,17 @@
                       <i class="fa fa-eye"></i></Link>
                       </td>
                   </tr>
+                  <tr v-else>
+                    <p class="text-center text-danger text-sm">No nominations found.</p>
+                  </tr>
                   </tbody>
               </table>
               
             </div>
-            <!-- <PaginateVue 
+            <PaginateVue 
               :modelName="nomination_years"
               :modelType="Nominations"
-              /> -->
+              />
             </div>
             <div class="col-2"></div>
 <div class="col-6 position-relative">

@@ -254,7 +254,7 @@
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">move_down</i>
         </div>
-        <span class="nav-link-text ms-1">Transfer</span>
+        <span class="nav-link-text ms-1">Transfers</span>
         
         </Link>
       </li>

@@ -36,7 +36,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for=" (  transfer, index  ) in transfers" :key="index" >
+                  <tr v-for=" (  transfer, index  ) in transfers.data" :key="index" >
                     <td >
                     <div class="d-flex flex-column">
                         <Link class="ml-1" v-if="transfer.transfered_from === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
@@ -79,7 +79,7 @@
           <td   v-else></td>
           
 
-  <td >
+                 <td >
                     <Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">
                     <i class="fa fa-eye  " aria-hidden="true"></i>
                     </Link>
@@ -92,6 +92,10 @@
               </table>
             </div>
           </div>
+          <Paginate
+            :modelName="transfers"
+            :modelType="Transfers"
+            />
         </div>
       </div>
     </div>
@@ -104,6 +108,7 @@
 import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
+import Paginate from '../../Shared/Paginate.vue';
 
 export default {
   name: "Transfers",
@@ -127,7 +132,8 @@ export default {
   components: {
     Layout,
     Link,
-    Banner
+    Banner,
+    Paginate
     },
 
 };

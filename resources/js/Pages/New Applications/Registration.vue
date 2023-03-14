@@ -78,7 +78,7 @@
         href="javascript:;">
         <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-if="client_invoiced == null" @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+        <a v-if="client_invoiced == null" @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
         class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5 upload-icon" aria-hidden="true"></i>
         </a>
@@ -188,7 +188,7 @@
         <a v-if="payment_to_liqour_board" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
+        <a v-else @click="getDocType(4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
         class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5" aria-hidden="true"></i>
         </a>
@@ -213,7 +213,7 @@
    </div>
     <div class="col-md-1 d-flex">
       <i v-if="gba_application_form === null" 
-      @click="getDocType('GLB Application Forms',1)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'GLB Application Forms',1)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else :href="`${$page.props.blob_file_path}${gba_application_form.document_file}`" target="_blank">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -665,7 +665,7 @@
       <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
-      <a @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
+      <a @click="getDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
       <i class="fa fa-upload h5" aria-hidden="true"></i>
       </a>
@@ -735,7 +735,7 @@
           <a v-if="application_logded !== null" @click="deleteDocument(application_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
           <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
           </a>
-          <a v-else @click="getDocType('Application Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
+          <a v-else @click="getDocType(7,'Application Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
           class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
           <i class="fa fa-upload h5 " aria-hidden="true"></i>
           </a>
@@ -805,7 +805,7 @@
             <a v-if="initial_inspection_doc !== null" @click="deleteDocument(initial_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
             <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
             </a>
-            <a v-else @click="getDocType('Initial Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
+            <a v-else @click="getDocType(8,'Initial Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
             class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
             <i class="fa fa-upload h5" aria-hidden="true"></i>
             </a>
@@ -875,7 +875,7 @@
       <a v-if="final_inspection_doc !== null" @click="deleteDocument(final_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
-      <a v-else @click="getDocType('Final Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
+      <a v-else @click="getDocType(10,'Final Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-upload h5" aria-hidden="true"></i>
       </a>
@@ -947,7 +947,7 @@
         <a v-if="activation_fee_requested_doc !== null" @click="deleteDocument(activation_fee_requested_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Activation Fee Requested')" data-bs-toggle="modal" data-bs-target="#documents" 
+        <a v-else @click="getDocType(11,'Activation Fee Requested')" data-bs-toggle="modal" data-bs-target="#documents" 
         class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5" aria-hidden="true"></i>
         </a>
@@ -979,7 +979,7 @@
           <a v-if="client_finalisation !== null" @click="deleteDocument(client_finalisation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
           <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
           </a>
-          <a v-else @click="getDocType('Client Finalisation Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+          <a v-else @click="getDocType(12,'Client Finalisation Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
           class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
           <i class="fa fa-upload h5" aria-hidden="true"></i>
           </a>
@@ -1087,7 +1087,7 @@
               <a v-if="activation_fee_paid !== null" @click="deleteDocument(activation_fee_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
               <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
               </a>
-              <a v-else @click="getDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
+              <a v-else @click="getDocType(14,'Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
               class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
               <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
               </a>
@@ -1156,7 +1156,7 @@
                 <a v-if="licence_issued_doc !== null" @click="deleteDocument(licence_issued_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
                 <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
                 </a>
-                <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+                <a v-else @click="getDocType(15,'Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
                 class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
                 <i class="fa fa-upload h5" aria-hidden="true"></i>
                 </a>
@@ -1226,7 +1226,7 @@
                   <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
                   <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
                   </a>
-                  <a v-else @click="getDocType('Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+                  <a v-else @click="getDocType(16,'Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
                   class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
                   <i class="fa fa-upload h5" aria-hidden="true"></i>
                   </a>
@@ -1452,6 +1452,7 @@
         doc: null,
         doc_type: null ,
         num: null,
+        stage: null,
         licence_id: props.licence.id
       })
   
@@ -1462,8 +1463,9 @@
         })
       }
   
-      function getDocType(doc_type,num=null){
-        this.uploadDoc.doc_type = doc_type
+      function getDocType(stage=null,doc_type,num=null){
+        this.uploadDoc.doc_type = doc_type;
+        this.uploadDoc.stage = stage;
         this.uploadDoc.num = num 
         this.show_modal =true   
       }

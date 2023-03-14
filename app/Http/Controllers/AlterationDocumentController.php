@@ -18,18 +18,28 @@ class AlterationDocumentController extends Controller
             "doc_type"=> "required"
             ]);
             
+
             $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
-            $fileModel = new AlterationDocument();
             $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
             $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->alteration_id = $request->alteration_id;
-            $fileModel->doc_type = $request->doc_type;
-            $fileModel->num = $request->doc_number;
-            $fileModel->document_name = $request->document->getClientOriginalName();
-            $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-            $fileModel->save();
-       
-      return back()->with('success','Document uploaded successfully.');
+            
+
+            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+              $fileModel = new AlterationDocument;
+              $fileModel->alteration_id = $request->alteration_id;
+              $fileModel->doc_type = $request->doc_type;
+              $fileModel->num = $request->doc_number;
+              $fileModel->document_name = $request->document->getClientOriginalName();
+              $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+  
+              if($fileModel->save()){
+                Alteration::whereId($fileModel->alteration_id)->update(['status' => $request->stage]);
+                return back()->with('success','Document uploaded successfully.');
+              }
+            }else{
+              dd('File NOT found.');
+            }
+           
     
     }
     public function destroy($id)

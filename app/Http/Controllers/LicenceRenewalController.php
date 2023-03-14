@@ -17,7 +17,7 @@ class LicenceRenewalController extends Controller
 {
     public function renewLicence(Request $request){
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
-        $renewals = LicenceRenewal::with('licence')->where('licence_id',$licence->id)->orderByDesc('date')->get();
+        $renewals = LicenceRenewal::with('licence')->where('licence_id',$licence->id)->orderByDesc('date')->paginate(10)->withQueryString();
          $years = DB::table('years')->get()->pluck('year');
         return Inertia::render('Renewals/Renewals',[
         'licence' => $licence,
@@ -59,7 +59,7 @@ class LicenceRenewalController extends Controller
         $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
         $renewal_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Delivered')->first();
         $liqour_board = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Payment To The Liquor Board')->first();
-        $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->get();
+        $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->latest()->paginate(4)->withQueryString();
         return Inertia::render('Renewals/ViewLicenceRenewal',[
             'renewal' => $renewal,
             'tasks'  => $tasks,
@@ -106,23 +106,34 @@ class LicenceRenewalController extends Controller
                 "document"=> "required|mimes:pdf"
                 ]);
    
-                $fileModel = new RenewalDocument;
-                $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$request->document->getClientOriginalName());
-                $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-                $fileModel->document_name = $fileName;
+                
+
+                $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+                $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
+                $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+                           
+
+            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                $fileModel = new RenewalDocument; 
+                $fileModel->document_name = $request->document->getClientOriginalName();
                 $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
                 $fileModel->licence_renewal_id = $request->renewal_id;
                 $fileModel->doc_type = $request->doc_type;
                 $fileModel->date = $request->date;
                 $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-                
-   
-           if($fileModel->save()){
-                return back()->with('success','Document uploaded successfully.');
-           }
+  
+                if($fileModel->save()){
+                    LicenceRenewal::whereId($fileModel->licence_renewal_id)->update(['status' => $request->stage]);
+                   return back()->with('success','Document uploaded successfully.');
+                 }
+                 
+            }else{
+              dd('File NOT found.');
+              return back()->with('error','Error uploading document.');
+            }
         } catch (\Throwable $th) {
-            throw $th;
-           //return back()->with('error','Error uploading document.');
+            //throw $th;
+           return back()->with('error','Error uploading document.');
         }
        
     }

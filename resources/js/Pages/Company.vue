@@ -3,7 +3,8 @@ import Layout from "../Shared/Layout.vue";
 import { ref, watch, reactive } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import { Link, useForm } from '@inertiajs/inertia-vue3';
-import Banner from './components/Banner.vue'
+import Banner from './components/Banner.vue';
+import Paginate from "../Shared/Paginate.vue";
 
 
 export default {
@@ -16,9 +17,6 @@ export default {
   },
 
   setup(props) {
-    let nextPage = ref(0);
-    let prevPage =  ref(0);
-    let currentPage =  reactive(props.companies.current_page);
 
     const term = ref('');
     const form = useForm({
@@ -34,21 +32,6 @@ export default {
             onSuccess: () => {},            
         })
     }
-    function paginateNext(){          
-          if(props.companies.current_page < props.companies.last_page){            
-            nextPage = props.companies.current_page + 1;
-            currentPage =  props.companies.current_page+1;
-            Inertia.get(`/companies`, { page: nextPage }, { preserveState: true, replace: true });            
-          } 
-        }
-
-        function paginatePrev(){         
-            prevPage = props.companies.current_page - 1;
-            currentPage =  props.companies.current_page-1;
-            Inertia.get('/companies', { page: prevPage }, { preserveState: true, replace: true });
-          
-        }
-
         function limit(string, limit=25){
           if(string.length >= limit){
           return string.substring(0, limit) + '...'
@@ -56,11 +39,7 @@ export default {
           return string.substring(0, limit)
         }
 
-        function getArrowButtons(key){
-              if(key !== 0){
-                return key;
-              }  
-        }
+     
        watch(term, _.debounce(function (value) {
           Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
         }, 1000));
@@ -69,19 +48,14 @@ export default {
       term,
       form,
       search,
-      nextPage,
-      prevPage,
-      currentPage,
-      paginateNext,
-      paginatePrev,
-      limit,
-      getArrowButtons
+      limit
     }
   },
   components: {
     Layout,
     Link,
-    Banner
+    Banner,
+    Paginate
 },
 };
 </script>
@@ -207,23 +181,10 @@ View
 </tbody>
 </table>
 
-<nav aria-label="Companies Pagination mt-2">
-  <ul class="pagination justify-content-end">
-    <li class="page-item" :class="{ disabled: companies.prev_page_url == null }">
-      <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
-    </li>
-    <template v-for="(link, key) in companies.links">
-    <li class="page-item " :class="{ 'active': link.active }">
-      
-      <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowButtons(key)"></Link>
-    
-    </li>
-  </template>
-    <li class="page-item" :class="{ disabled: companies.next_page_url == null }">
-      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
-    </li>
-  </ul>
-</nav>
+<Paginate
+  :modelName="companies"
+  :modelType="Companies"
+  />
 
 </div>
 </div>

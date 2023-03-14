@@ -1,7 +1,8 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Head,Link } from '@inertiajs/inertia-vue3';
-import Banner from '../components/Banner.vue'
+import Banner from '../components/Banner.vue';
+import Paginate from "../../Shared/Paginate.vue";
 
 export default {
 name: "dashboard-default",
@@ -9,6 +10,7 @@ name: "dashboard-default",
     errors: Object,
     licence_dropdowns: Object,
     licence: Object,
+    alterations: Object,
     success: String,
     error: String,
   },
@@ -26,7 +28,8 @@ name: "dashboard-default",
     Layout,
     Link,
     Head,
-    Banner
+    Banner,
+    Paginate
   },
 
   methods: {
@@ -94,12 +97,12 @@ name: "dashboard-default",
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
-    <tbody v-if="$props. licence.alterations.length > 0">
-      <tr v-for="alter in licence.alterations" :key="alter.id">
+    <tbody v-if="alterations">
+      <tr v-for="alter in alterations.data" :key="alter.id">
        
         <td class="text-sm" >
           <Link :href="`/view-alteration/${alter.slug}`" style="margin-left: 12px;">
-          {{ alter.date }}
+          {{ alter.logded_at }}
           </Link>
         </td>
         
@@ -125,6 +128,11 @@ name: "dashboard-default",
 </div>
 
 </div>
+
+<Paginate
+  :modelName="alterations"
+  :modelType="Alterations"
+  />
 </div>
 </div>
 

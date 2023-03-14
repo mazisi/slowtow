@@ -251,47 +251,9 @@
 
 </div>
 
-<div class="row">
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
-    </a>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No tasks found.</h6>
-</div>
+<Task :tasks="tasks" :model_id="person.id" :errors="errors" :model_type="'Person'"/>
 
-</div>
 
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6"></span></label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-</div>
-
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Save
-</button>
-</form>
-</div>
-</div>
 </div>
 </div>
 
@@ -380,6 +342,7 @@ import Layout from "../../Shared/Layout.vue";
 import { ref } from "vue";
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
+import Task from "../Tasks/Task.vue";
 
 export default {
 
@@ -536,7 +499,8 @@ const form = useForm({
 },
  components: {
     Layout,
-    Banner
+    Banner,
+    Task
   },
 }
 </script>

@@ -166,7 +166,7 @@ class CompanyController extends Controller
         $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->latest()->first();
         $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->latest()->first();
         $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->latest()->first();
-        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->get();
+        $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->latest()->paginate(4)->withQueryString();
         $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->latest()->first();
         $people = People::pluck('full_name','id');
         

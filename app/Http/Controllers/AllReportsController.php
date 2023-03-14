@@ -33,15 +33,15 @@ class AllReportsController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, licences.board_region,alterations.date,alterations.status ")
+                            licences.licence_issued_at, alterations.logded_at,licences.board_region,alterations.date,alterations.status ")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
-                                        $query->whereBetween(DB::raw('MONTH(alterations.date)'),[request('month_from'), request('month_to')]);
+                                        $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
                                      })
                         
                                     ->when(request('month_from') && !request('month_to'), function ($query)  {
-                                        $query->whereMonth('alterations.date', request('month_from'));
+                                        $query->whereMonth('alterations.logded_at', request('month_from'));
                                     })
                                     ->when(request('activeStatus') == 'Active', function ($query) {
                                         $query->where('is_licence_active',true);
@@ -140,7 +140,7 @@ class AllReportsController extends Controller
                         $arr_of_alterations[$i]->trading_name, 
                         $arr_of_alterations[$i]->licence_number, 
                         $arr_of_alterations[$i]->province.'/'.$arr_of_alterations[$i]->board_region,
-                        $arr_of_alterations[$i]->date,
+                        $arr_of_alterations[$i]->logded_at,
                         is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
                         $arr_of_alterations[$i]->certification_issued_at,
                         $status, 

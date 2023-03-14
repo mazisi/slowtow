@@ -15,8 +15,11 @@ class AlterLicenceController extends Controller
 {
 
   public function index(Request $request){
-    $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name','slug']);
-    return Inertia::render('Alterations/Alteration',['licence'=> $licence]);
+    $licence = Licence::whereSlug($request->slug)->first(['id','trading_name','slug']);
+    $alterations = Alteration::where('licence_id',$licence->id)->latest()->paginate(10)->withQueryString();
+    return Inertia::render('Alterations/Alteration',[
+      'licence'=> $licence,
+      'alterations' => $alterations]);
   }
 
     public function newAlteration(Request $request){
@@ -27,7 +30,7 @@ class AlterLicenceController extends Controller
     public function store(AlterationRequest $request,$licence_id){
           $alter = Alteration::create([
             'licence_id' => $licence_id,
-            'date'    => $request->alteration_date,
+            'logded_at'    => $request->alteration_date,
             'status'  => last($request->status),
             'slug' => sha1(time()),
           ]);
@@ -44,7 +47,7 @@ class AlterLicenceController extends Controller
       $client_invoiced = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
       $alteration_letter = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alteration Letter')->first();
       $site_map_file = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','SiteMap File')->first();
-      $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->get();
+      $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->latest()->paginate(4)->withQueryString();
       $application_form = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Application Form')->first(['id','path']);
       $dimensional_plans = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Fully Dimensional Plans')->first(['id','path','document_name']);
       $poa_res = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','POA & RES')->first(['id','path','document_name']);
@@ -101,9 +104,10 @@ class AlterLicenceController extends Controller
 
     public function updateAlterationDate(Request $request, $slug){
       Alteration::whereSlug($slug)->update([
-        'invoiced_at' => $request->invoiced_at,
-        'client_paid_at' => $request->client_paid_at,
+          'invoiced_at' => $request->invoiced_at,
+         'client_paid_at' => $request->client_paid_at,
          'liquor_board_at' => $request->liquor_board_at, 
+         'logded_at' => $request->date,
          'date' => $request->date,
          'certification_issued_at' => $request->certification_issued_at,
          'delivered_at' => $request->delivered_at    

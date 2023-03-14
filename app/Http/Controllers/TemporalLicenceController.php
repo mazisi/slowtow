@@ -165,7 +165,7 @@ class TemporalLicenceController extends Controller
         $licence_logded = TemporalLicenceDocument::where('doc_type','Licence Lodged')->where('temporal_licence_id',$licence->id)->first();
         $licence_issued = TemporalLicenceDocument::where('doc_type','Licence Issued')->where('temporal_licence_id',$licence->id)->first();
         $licence_delivered = TemporalLicenceDocument::where('doc_type','Licence Delivered')->where('temporal_licence_id',$licence->id)->first();
-        $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->get();
+        $tasks = Task::where('model_type','Temporal Licence')->where('model_id',$licence->id)->latest()->paginate(4)->withQueryString();
         $scanned_app = TemporalLicenceDocument::where('doc_type','Scanned Application')->where('temporal_licence_id',$licence->id)->first();
     
 

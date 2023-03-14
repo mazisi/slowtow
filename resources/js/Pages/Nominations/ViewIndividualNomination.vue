@@ -8,6 +8,8 @@ import { Inertia } from '@inertiajs/inertia';
 import { ref } from "vue";
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
+import Task from "../Tasks/Task.vue";
+
 
 export default{
   props:{
@@ -57,33 +59,23 @@ export default{
             document: null,
             doc_type: null,
             date: null,
+            stage: null,
             file_name: file_name,
             nomination_id: props.nomination.id    
           })
-
-          const createTask = useForm({
-                body: '',
-                model_type: 'Nomination',
-                model_id: props.nomination.id,
-                taskDate: ''     
-          });
 
       const nomineeForm = useForm({//This handles attachment of nominees 
               selected_nominess: [],
               nomination_id: props.nomination.id
       });
 
-      function getDocType(doc_type) {
-        uploadDoc.doc_type = doc_type
-        this.show_modal = true
+      function getDocType(stage=null,doc_type) {
+        uploadDoc.doc_type = doc_type;
+        uploadDoc.stage = stage;
+        this.show_modal = true;
       }
 
-      function submitTask() {
-            createTask.post('/submit-task', {
-                onSuccess: () => createTask.reset(),
-            })
-      }
-
+     
       function submitDocument(){
             uploadDoc.post('/submit-nomination-document', {
               preserveScroll: true,
@@ -166,18 +158,11 @@ export default{
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      function deleteNote(id){
-        if(confirm('This note will be deleted. Continue ?')){
-          Inertia.delete(`/delete-task/${id}`, {
-             preserveScroll: true,
-           }); 
-        }
-      }
-
-      return{options,pushData,updateNomination,updateDate,deleteNote,
+ 
+      return{options,pushData,updateNomination,updateDate,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
-            computeDocumentDate,deleteDocument,submitDocument,submitTask,show_file_name,
-            getDocType,nomineeForm,createTask,uploadDoc,updateForm,deleteNomination,file_name,getFileName
+            computeDocumentDate,deleteDocument,submitDocument,show_file_name,
+            getDocType,nomineeForm,uploadDoc,updateForm,file_name,getFileName
 
 
       }
@@ -189,7 +174,8 @@ export default{
     Multiselect,
     Datepicker,
     LiquorBoardRequest,
-    Banner
+    Banner,
+    Task
   },
 
   // 1= > Client Quoted
@@ -237,6 +223,7 @@ export default{
  <span v-if="nomination.status == '8'" class="font-weight-bold ms-1">Nomination Lodged </span>
  <span v-if="nomination.status == '9'" class="font-weight-bold ms-1">Nomination Issued</span>
  <span v-if="nomination.status == '10'" class="font-weight-bold ms-1">Nomination Delivered</span>
+ <span v-else class="font-weight-bold ms-1"></span>
 </p>
 
   
@@ -278,7 +265,7 @@ export default{
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -309,7 +296,7 @@ export default{
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>
 </ul>
@@ -417,7 +404,7 @@ export default{
     <a v-if="liquor_board !== null" @click="deleteDocument(liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType6(6,4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -512,7 +499,7 @@ Action
     <a v-if="nomination_forms !== null" @click="deleteDocument(nomination_forms.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -551,7 +538,7 @@ Action
     <a v-if="attorney_doc !== null" @click="deleteDocument(attorney_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -573,7 +560,7 @@ Action
     <a v-if="certified_id_doc !== null" @click="deleteDocument(certified_id_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -595,7 +582,7 @@ Action
     <a v-if="police_clearance_doc !== null" @click="deleteDocument(police_clearance_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -624,7 +611,7 @@ Action
       <i class="fa fa-link h5" aria-hidden="true"></i>
     </a>
 
-    <a v-else-if="latest_renewal_doc == null" @click="getDocType('Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else-if="latest_renewal_doc == null" @click="getDocType(6,'Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
 
   </li>  
@@ -671,7 +658,7 @@ Action
         <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-else @click="getDocType(7,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
       </li>  
     </ul>
@@ -704,7 +691,7 @@ Action
     <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(8,'Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -769,7 +756,7 @@ Action
     <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(9,'Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -838,7 +825,7 @@ Action
     <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(10,'Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>   
 </ul>
@@ -904,51 +891,7 @@ Save</button>
       :model_id="nomination.id" 
       :liqour_board_requests="liqour_board_requests"
       /> -->
-<div class="row">
-<hr>
-<h6 class="text-center">Notes</h6>
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-  <i class="fa fa-trash-o text-danger "></i>
-</a>
-
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.date).toLocaleString() }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No tasks found.</h6>
-</div>
-
-</div>
-
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task</label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-</div>
-
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Save Note
-</button>
-</form>
-</div>
-</div>
-
+      <Task :tasks="tasks" :model_id="nomination.id" :errors="errors" :model_type="'Nomination'"/>
 </div>
 </div>
 </div>

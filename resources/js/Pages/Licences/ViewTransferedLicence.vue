@@ -6,6 +6,7 @@ import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
+import Task from "../Tasks/Task.vue";
 
 
 export default {
@@ -74,7 +75,8 @@ export default {
       belong_to: '',
       document_number: '',
       file_name: file_name,
-      document: null
+      document: null,
+      stage: null
     })
     
     const mergeForm = useForm({
@@ -115,7 +117,8 @@ export default {
         })    
         }
 
-        function setDocType(doc_type,belong_to='',document_number=''){
+        function setDocType(stage=null,doc_type,belong_to='',document_number=''){
+          this.documentsForm.stage = stage;
           this.show_modal=true;
           documentsForm.document_type = doc_type
           documentsForm.belong_to = belong_to
@@ -213,7 +216,8 @@ export default {
     Multiselect,
     Link,
     LiquorBoardRequest,
-    Banner
+    Banner,
+    Task
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -258,8 +262,8 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-10 col-10">
-  <h5>Transfer Info for: <Link :href="`/view-licence?slug=${view_transfer.licence.slug}`" class="text-success">
-    {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h5>
+  <h6>Transfer Info for: <Link :href="`/view-licence?slug=${view_transfer.licence.slug}`" class="text-success">
+    {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h6>
   <p class="text-sm mb-0">Current Stage: 
     <span class="font-weight-bold ms-1" v-if="view_transfer.status == '1'">Client Quoted</span>
    <span v-if="view_transfer.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
@@ -271,6 +275,7 @@ export default {
    <span v-if="view_transfer.status == '8'" class="font-weight-bold ms-1">Activation Fee Paid</span>
    <span v-if="view_transfer.status == '9'" class="font-weight-bold ms-1">Transfer Issued</span>
    <span v-if="view_transfer.status == '10'" class="font-weight-bold ms-1">Transfer Delivered</span>
+   <span v-else class="font-weight-bold ms-1"></span>
  </p>
   </div>
   <div class="col-lg-2 col-2 my-auto text-end">
@@ -308,7 +313,7 @@ export default {
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -341,7 +346,7 @@ export default {
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -413,7 +418,7 @@ export default {
 <div class="d-flex justify-content-center w-100">
   <div class="px-3 d-flex mb-2 active w-10"> 
     
-    <i v-if="old_transfer_forms == null" @click="setDocType('Transfer Forms','Old Licence Holder',3)" 
+    <i v-if="old_transfer_forms == null" @click="setDocType(4,'Transfer Forms','Old Licence Holder',3)" 
     data-bs-toggle="modal" data-bs-target="#upload-documents" class="fa fa-upload h5 " aria-hidden="true"></i>
     <a v-if="old_transfer_forms !== null" target="_blank" :href="`${$page.props.blob_file_path}${old_transfer_forms.document}`">
       <i class="fa fa-file-pdf h5 mx-2 text-danger curser-pointer"></i>
@@ -423,7 +428,7 @@ export default {
   </div>
   <button type="button" class=" w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Transfer Forms </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-    <i v-if="current_transfer_forms == null" @click="setDocType('Transfer Forms','Current Licence Holder',4)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <i v-if="current_transfer_forms == null" @click="setDocType(4,'Transfer Forms','Current Licence Holder',4)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
     <a v-if="current_transfer_forms !== null" target="_blank" :href="`${$page.props.blob_file_path}${current_transfer_forms.document}`">
      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -436,7 +441,7 @@ export default {
   <div class="px-3 mb-2 active w-10"> <i class="fa fa-times-circle h5" aria-hidden="true"></i> </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Smoking Affidavit </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-    <i v-if="smoking_affidavict == null" @click="setDocType('Smoking Affidavit','Current Licence Holder',5)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <i v-if="smoking_affidavict == null" @click="setDocType(4,'Smoking Affidavit','Current Licence Holder',5)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
     <a v-if="smoking_affidavict !== null" target="_blank" :href="`${$page.props.blob_file_path}${smoking_affidavict.document}`">
      <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -795,7 +800,7 @@ export default {
     <a v-if="payment_to_liquor_board !== null" @click="deleteDocument(payment_to_liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(5,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -827,7 +832,7 @@ export default {
     <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -895,7 +900,7 @@ export default {
     <a v-if="transfer_logded !== null" @click="deleteDocument(transfer_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Transfer Logded')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(7,'Transfer Logded')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -962,7 +967,7 @@ export default {
     <a v-if="activation_fee !== null" @click="deleteDocument(activation_fee.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(8,'Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -1030,7 +1035,7 @@ export default {
     <a v-if="transfer_issued !== null" @click="deleteDocument(transfer_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Transfer Issued')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(9,'Transfer Issued')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -1096,7 +1101,7 @@ export default {
     <a v-if="transfer_delivered !== null" @click="deleteDocument(transfer_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="setDocType('Transfer Delivered')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <a v-else @click="setDocType(10,'Transfer Delivered')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
@@ -1133,58 +1138,7 @@ export default {
        -->
 
 
-<div class="row">
-<h6 class="text-center">Notes</h6>
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
-    </a>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No notes found.</h6>
-</div>
-
-</div>
-
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task</label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-</div>
-
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Save
-</button>
-</form>
-</div>
-</div>
-
-
-
-
-
-
-
-
-
-
+       <Task :tasks="tasks" :model_id="view_transfer.id" :errors="errors" :model_type="'Transfer'"/>
 
 
 

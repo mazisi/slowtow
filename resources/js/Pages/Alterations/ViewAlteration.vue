@@ -44,7 +44,7 @@ export default {
          unChecked: false,
          invoiced_at: props.alteration.invoiced_at,
          liquor_board_at: props.alteration.liquor_board_at, 
-         date: props.alteration.date,
+         date: props.alteration.logded_at,
          certification_issued_at: props.alteration.certification_issued_at,
          delivered_at: props.alteration.delivered_at     
       })
@@ -53,6 +53,7 @@ export default {
             document: null,
             doc_type: null,
             doc_number: null,
+            stage: null,
             file_name: file_name,
             alteration_id: props.alteration.id    
           })
@@ -102,9 +103,10 @@ export default {
           }
         }
 
-      function getDocType(doc_type, doc_number='') {
+      function getDocType(stage=null,doc_type, doc_number='') {
         uploadDoc.doc_type = doc_type;
         uploadDoc.doc_number = doc_number;
+        uploadDoc.stage = stage;
         this.show_modal = true
       }
 
@@ -228,7 +230,7 @@ export default {
         <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
       </li> 
     </ul>
@@ -259,7 +261,7 @@ export default {
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -337,7 +339,7 @@ export default {
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
-    <button v-else @click="getDocType('Application Form',1)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <button v-else @click="getDocType(4,'Application Form',1)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
@@ -359,7 +361,7 @@ export default {
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
-    <button v-else @click="getDocType('Fully Dimensional Plans',2)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" 
+    <button v-else @click="getDocType(4,'Fully Dimensional Plans',2)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" 
     class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
@@ -381,7 +383,7 @@ export default {
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
-    <button v-else @click="getDocType('Payment To The Liquor Board',5)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <button v-else @click="getDocType(4,'Payment To The Liquor Board',5)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
@@ -408,7 +410,7 @@ export default {
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
-    <button v-else @click="getDocType('POA & RES',3)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <button v-else @click="getDocType(4,'POA & RES',3)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
@@ -430,7 +432,7 @@ export default {
     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
     </button>
 
-    <button v-else @click="getDocType('Smoking Affidavit',4)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
+    <button v-else @click="getDocType(4,'Smoking Affidavit',4)" type="button" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-10 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
@@ -474,7 +476,7 @@ v-if="application_form !== null
     <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Payment to the Liquor Board-2')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(5,'Payment to the Liquor Board-2')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -538,7 +540,7 @@ v-if="application_form !== null
     <a v-if="alteration_logded !== null" @click="deleteDocument(alteration_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Alterations Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(6,'Alterations Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -602,7 +604,7 @@ v-if="application_form !== null
     <a v-if="certification_issued !== null" @click="deleteDocument(certification_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Alterations Certificate Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(7,'Alterations Certificate Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -666,7 +668,7 @@ v-if="application_form !== null
     <a v-if="alteration_delivered !== null" @click="deleteDocument(alteration_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Alterations Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(8,'Alterations Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>

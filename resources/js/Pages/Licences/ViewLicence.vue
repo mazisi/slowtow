@@ -340,46 +340,10 @@ Action
 </table>
 </div>
 <hr>
-<h6 class="text-center text-decoration-underline">Notes</h6>
-</div>
-<div class="row">
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
-    </a>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No tasks found.</h6>
-</div>
-
-</div>
-
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6"></span></label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
 </div>
 
 
-<button type="submit" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center">Save</button>
-</form>
-</div>
-</div>
+<Task :tasks="tasks" :model_id="licence.id" :errors="errors" :model_type="'Licence'"/>
 
 </div>
 
@@ -450,7 +414,9 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue'
-import { ref } from 'vue'
+import { ref } from 'vue';
+import Paginate from "../../Shared/Paginate.vue";
+import Task from "../Tasks/Task.vue";
 
 export default {
  props: {
@@ -497,13 +463,7 @@ export default {
          change_company: '',  
     })
 
-//Now handle task creation..
-       const createTask = useForm({
-          body: '',
-          model_type: 'Licence',
-          model_id: props.licence.id,
-          taskDate: new Date().getDate()+'/'+(new Date().getMonth()+1)+'/'+new Date().getFullYear()
-       })
+
 //Insert original licence 
        const originalLicenceForm = useForm({
           doc: null,
@@ -550,23 +510,7 @@ export default {
             Inertia.delete(`/delete-licence/${props.licence.slug}`)
           }      
         }
-        // store task
-        function submitTask() {
-          createTask.post('/submit-task', {
-            onSuccess: () => form.reset('body'),
-           })
-        }
 
-        function deleteTask(task_id){//delete task
-          if(confirm('Are you sure??')){
-            Inertia.delete(`/delete-task/${task_id}`)
-          }
-        }
-          function checkBodyLength(){//Monitor task body length..
-            if(this.createTask.body.length > this.body_max){
-                this.createTask.body = this.createTask.body.substring(0,this.body_max)
-            }
-        }
         
         function assignActiveValue(e,status_value){       
                 const updateStatusForm = useForm({
@@ -601,13 +545,7 @@ export default {
             this.file_has_apostrophe = this.file_name.includes("'");
           }
 
-      function deleteNote(id){
-        if(confirm('This note will be deleted. Continue ?')){
-          Inertia.delete(`/delete-task/${id}`, {
-             preserveScroll: true,
-           }); 
-        }
-      }
+  
 
       function removeFilePath(file_name){
         if(file_name.includes('mrnlabs')){
@@ -620,10 +558,7 @@ export default {
     return {
       showMenu,file_has_apostrophe,
       file_name,getFileName,
-      createTask,
-      deleteNote,
       removeFilePath,
-      body_max,
       show_modal,
       show_current_company,
       change_company,
@@ -633,9 +568,6 @@ export default {
       changeCompany,
       updateLicence,
       deleteLicence,
-      submitTask,
-      deleteTask,
-      checkBodyLength,
       assignActiveValue,
       originalLicenceForm,
       uploadOriginalLicenceDoc,
@@ -648,7 +580,9 @@ export default {
     Link,
     Head,
     Multiselect,
-    Banner
+    Banner,
+    Paginate,
+    Task
   },
   
 };

@@ -1,9 +1,9 @@
 <template>
   <div class="row">
     <h6 class="text-center">Notes</h6>
-    <div class="col-xl-8">
+    <div class="col-8">
     <div class="row">
-    <div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
+    <div v-for="task in tasks.data" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
     <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
     <span class="alert-icon"><i class=""></i></span>
     <span class="alert-text"> 
@@ -18,11 +18,17 @@
     <h6 v-if="!tasks" class="text-center">No notes found.</h6>
     </div>
     
+
+    <Paginate v-if="tasks.data.length"
+    :modelName="tasks"
+    :modelType="Tasks"
+    /> 
+    
     </div>
     
-    <div class="col-xl-4">
+    <div class="col-4">
     <form @submit.prevent="submitTask">
-    <div class="col-md-12 columns">
+    <div class="col-12 columns">
     <label class="form-check-label text-body text-truncate status-heading">New Note:
     <span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
     </div>
@@ -39,14 +45,17 @@
       Save
     </button>
     </form>
+    
     </div>
+     
     </div>
-  
+    
 </template>
 <script>
   import { ref } from 'vue';
   import { useForm } from '@inertiajs/inertia-vue3';
   import { Inertia } from '@inertiajs/inertia';
+  import Paginate from '../../Shared/Paginate.vue';
 
   export default{
     props: {
@@ -86,6 +95,9 @@
         return{
           createTask,submitTask,checkBodyLength,body_max,deleteNote
         }
+    },
+    components:{
+      Paginate
     }
   }
 </script>

@@ -522,53 +522,10 @@
 </div>
 
 <hr>
-<h6 class="text-center text-decoration-underline">Notes</h6>
-</div>
-
-
-
-<div class="row">
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
-    </a>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString().split(',')[0] }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No tasks found.</h6>
-</div>
 
 </div>
 
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task</label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-</div>
-
-<button
-  v-if="$page.props.auth.has_slowtow_admin_role"
- :disabled="createTask.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Submit</button>
-
-</form>
-</div>
-</div>
+<Task :tasks="tasks" :model_id="company.id" :errors="errors" :model_type="'Company'"/>
 
 </div>
 </div>
@@ -719,6 +676,7 @@ import Multiselect from '@vueform/multiselect';
 import Banner from './components/Banner.vue';
 import { ref } from 'vue';
 import Paginate from '../Shared/Paginate.vue';
+import Task from "./Tasks/Task.vue";
 
 export default {
  props: {
@@ -740,7 +698,6 @@ export default {
   
   setup (props) {
     let showMenu = false;
-    let body_max = 100;
     let people_options = props.people;
     let show_modal = ref(true); 
     let show_file_name = ref(false);
@@ -791,13 +748,6 @@ export default {
     }
 
 
-
-      const createTask = useForm({
-          body: '',
-          taskDate: null,
-          model_type: 'Company',
-          model_id: props.company.id,
-      })
 
       const documentsForm = useForm({
             document: null,
@@ -889,21 +839,7 @@ export default {
       })
       
     }
-            // store task
-      function submitTask() {
-        createTask.post('/submit-task',{
-          ///do something
-        })
-        createTask.reset()
-      }
-
-      function deleteTask(task_id){
-        if(confirm('Are you sure??')){
-          createTask.delete(`/delete-task/${task_id}`,{
-          ///do something
-        })
-        }
-      }
+ 
 
 
       function unlinkPerson(full_name,id){
@@ -968,16 +904,12 @@ export default {
       file_has_apostrophe,
       getFileName,
       submit,
-      submitTask,
-      deleteTask,
       addCompanyUser,
       addCompanyUserForm,
       unlinkPerson,
       assignActiveValue,
       redirectToWebsite,
       show_file_name,
-      body_max,
-      createTask,
       people_options,
       form,
       documentsForm,
@@ -1001,7 +933,8 @@ export default {
     Head,
     Multiselect,
     Banner,
-    Paginate
+    Paginate,
+    Task
   },
   
 };

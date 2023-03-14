@@ -85,7 +85,7 @@ class TransferLicenceController extends Controller
       $transfers = LicenceTransfer::with('old_person','new_person','old_company','new_company')
           ->whereHas('licence', function ($query) use($request) {
             $query->where('slug',$request->slug);
-          })->get();
+          })->paginate(15)->withQueryString();
         return Inertia::render('Licences/TransferHistory',['licence' => $licence, 'transfers' => $transfers]);
       }
 
@@ -98,7 +98,7 @@ class TransferLicenceController extends Controller
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
       
         // $companies_dropdown = Company::pluck('name','id');
-        $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->get();
+        $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->latest()->paginate(4)->withQueryString();
 
         $old_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
         $current_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();

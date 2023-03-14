@@ -19,8 +19,7 @@ class NominationController extends Controller
 {
     public function index(Request $request){
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
-        // $nomination_years = Nomination::paginate(10)->withQueryString();
-        $nomination_years = Nomination::latest()->where('licence_id',$licence->id)->get();
+        $nomination_years = Nomination::where('licence_id',$licence->id)->orderBy('year','DESC')->paginate(10)->withQueryString();
         $years = DB::table('years')->get()->pluck('year');//dropdown of years
         return Inertia::render('Nominations/Nominate',[
             'licence' => $licence,
@@ -69,7 +68,7 @@ class NominationController extends Controller
         $nomination = Nomination::with('licence','people','merged_document')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
         $nominees = People::pluck('full_name','id');
-        $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
+        $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->latest()->paginate(4)->withQueryString();
         
 $client_quoted = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Quoted')->first();
 $client_invoiced = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Invoiced')->first();
@@ -145,8 +144,8 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         
        
         } catch (\Throwable $th) {
-            throw $th;
-            //return back()->with('error','Error updating nomination.');
+            //throw $th;
+            return back()->with('error','Error updating nomination.');
         }
     }
 
@@ -187,21 +186,29 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             "document"=> "required|mimes:pdf"
             ]);
             
+           
            $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
-           $fileModel = new NominationDocument;
-           $fileName = Str::limit(sha1(now()),7).str_replace('-', '_',$removeSpace);
-           $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-           $fileModel->document_name = $fileName;
-           $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-           $fileModel->nomination_id = $request->nomination_id;
-           $fileModel->doc_type = $request->doc_type;
-           $fileModel->date = $request->date;
-           $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+           $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
+           $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+           
+            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                $fileModel = new NominationDocument;
+                $fileModel->document_name = $fileName;
+                $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+                $fileModel->nomination_id = $request->nomination_id;
+                $fileModel->doc_type = $request->doc_type;
+                $fileModel->date = $request->date;
+                $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+  
+              if($fileModel->save()){
+                Nomination::whereId($fileModel->nomination_id)->update(['status' => $request->stage]);
+                    return back()->with('success','Document uploaded successfully.');
+               }
+            }else{
+              dd('File NOT found.');
+              return back()->with('error','Error uploading document.');
+            }
 
-       if($fileModel->save()){
-            return back()->with('success','Document uploaded successfully.');
-       }
-       return back()->with('error','Error uploading document.');
     }
 
     public function deleteDocument($id){

@@ -9,7 +9,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 //use Illuminate\Http\File;
 use App\Models\LicenceDocument;
-use Illuminate\Support\Facades\Storage;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
@@ -19,17 +18,27 @@ class LicenceDocsController extends Controller
             "doc"=> "required|mimes:pdf"
             ]);
             
-            $removeSpace = str_replace(' ', '_',$request->doc->getClientOriginalName());
             
-            $fileModel = new LicenceDocument;
-            $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace);
+            $removeSpace = str_replace(' ', '_',$request->doc->getClientOriginalName());
+            $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace); 
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->document_name = $request->doc->getClientOriginalName();
-            $fileModel->licence_id = $request->licence_id;
-            $fileModel->document_type = $request->doc_type;
-            $fileModel->num = $request->num;
-            $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-            $fileModel->save();
+
+            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+              $fileModel = new LicenceDocument;
+              $fileModel->document_name = $request->doc->getClientOriginalName();
+              $fileModel->licence_id = $request->licence_id;
+              $fileModel->document_type = $request->doc_type;
+              $fileModel->num = $request->num;
+              $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+  
+              if($fileModel->save()){
+                 Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage]);
+              }
+            }else{
+              dd('File NOT found.');
+            }
+
+           
 
             $updateLicence = Licence::find($request->licence_id);
             switch ($request->doc_type) {

@@ -16,19 +16,31 @@ class TransferDocsController extends Controller
         $request->validate([
             "document"=> "required|mimes:pdf"
             ]);
+           
+            
             $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
-            $fileModel = new TransferDocument;
-            $fileName = Str::limit(sha1(now()),5).str_replace(' ', '_',$removeSpace);
-            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->document_name = $request->document->getClientOriginalName();
-            $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-            $fileModel->licence_transfer_id = $transfer_id;
-            $fileModel->doc_type = $request->document_type;
-            $fileModel->num = $request->document_number;
-            $fileModel->belongs_to = $request->belong_to;
-            $fileModel->slug = sha1(now());
-            $fileModel->save();
-      return back()->with('success','Document uploaded successfully.');
+            $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
+            $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+            
+
+            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+              $fileModel = new TransferDocument;
+              $fileModel->document_name = $request->document->getClientOriginalName();
+              $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+              $fileModel->licence_transfer_id = $transfer_id;
+              $fileModel->doc_type = $request->document_type;
+              $fileModel->num = $request->document_number;
+              $fileModel->belongs_to = $request->belong_to;
+              $fileModel->slug = sha1(now());
+  
+              if($fileModel->save()){
+                LicenceTransfer::whereId($fileModel->licence_transfer_id)->update(['status' => $request->stage]);
+                return back()->with('success','Document uploaded successfully.');
+              }
+            }else{
+              dd('File NOT found.');
+            }
+      
     
     }
 

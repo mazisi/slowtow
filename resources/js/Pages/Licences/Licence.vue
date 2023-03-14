@@ -105,23 +105,11 @@
 </table>
 
 
-<nav aria-label="Licences Pagination mt-2">
-  <ul class="pagination justify-content-end">
-    <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
-      <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
-    </li>
-    <template v-for="(link, key) in licences.links">
-    <li class="page-item " :class="{ 'active': link.active }">
-      
-      <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowBbuttons(key)"></Link>
-    
-    </li>
-  </template>
-    <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
-      <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
-    </li>
-  </ul>
-</nav>
+<Paginate
+  :modelName="licences"
+  :modelType="Licences"
+  />
+
 </div>
 </div>
 
@@ -151,7 +139,8 @@ import Layout from "../../Shared/Layout.vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import { reactive, ref, watch } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
-import Banner from '../components/Banner.vue'
+import Banner from '../components/Banner.vue';
+import Paginate from "../../Shared/Paginate.vue";
 
 export default {
     props: {
@@ -165,14 +154,13 @@ export default {
     components: {
         Layout,
         Link,
-        Banner
+        Banner,
+        Paginate
     },
 
     setup(props) {
 
     const term = ref('')
-    let nextPage = ref(0);
-    let prevPage =  ref(0);
     let currentPage =  reactive(props.licences.current_page);
 
     const form = useForm({
@@ -182,12 +170,7 @@ export default {
           licence_date: '',
           province: ''
         })
-function getArrowBbuttons(key){
-  if(key !== 0){
-    return key;
-  }
-  
-}
+
        function limit(string='', limit = 25) {
         if(string !== ''){
           if(string.length >= limit){
@@ -195,21 +178,6 @@ function getArrowBbuttons(key){
         }  
           return string.substring(0, limit)
         }
-        }
-
-        function paginateNext(){          
-          if(props.licences.current_page < props.licences.last_page){            
-            nextPage = props.licences.current_page + 1;
-            currentPage =  props.licences.current_page+1;
-            Inertia.get('/licences', { page: nextPage }, { preserveState: true, replace: true });            
-          } 
-        }
-
-        function paginatePrev(){         
-            prevPage = props.licences.current_page - 1;
-            currentPage =  props.licences.current_page-1;
-            Inertia.get('/licences', { page: prevPage }, { preserveState: true, replace: true });
-          
         }
 
        function search(){
@@ -229,13 +197,7 @@ function getArrowBbuttons(key){
           limit,
           form,
           term,
-          search,
-          paginateNext,
-          nextPage,
-          prevPage,
-          paginatePrev,
-          currentPage,
-          getArrowBbuttons
+          search
         }
     },
 

@@ -16,9 +16,6 @@ export default {
 
   setup(props) {
     const term = ref('');
-    let nextPage = ref(0);
-    let prevPage =  ref(0);
-    let currentPage =  reactive(props.licences.current_page);
 
     const form = useForm({
           term: term,
@@ -31,27 +28,7 @@ export default {
         preserveState: true
      })     
    }
-   function paginateNext(){          
-          if(props.licences.current_page < props.licences.last_page){            
-            nextPage = props.licences.current_page + 1;
-            currentPage =  props.licences.current_page + 1;
-            Inertia.get('/temp-licences', { page: nextPage }, { preserveState: true, replace: true });            
-          } 
-        }
-
-        function paginatePrev(){         
-            prevPage = props.licences.current_page - 1;
-            currentPage =  props.licences.current_page-1;
-            Inertia.get('/temp-licences', { page: prevPage }, { preserveState: true, replace: true });
-          
-        }
-
-        function getArrowButtons(key){
-              if(key !== 0){
-                return key;
-              }  
-        }
-
+   
         function limit(string='', limit=25){
           if(string){
             if(string.length >= limit){
@@ -69,13 +46,7 @@ export default {
     return {
      term,
      form,
-     nextPage,
-     prevPage,
-     currentPage,
      search,
-     paginateNext,
-     paginatePrev,
-     getArrowButtons,
      limit
     }
   },
@@ -102,7 +73,7 @@ export default {
       <div class="col-12">
       <form>
      <div class="row">
-       <div class="col-9">
+       <div class="col-12">
         <div class="input-group input-group-outline null is-filled">
   <input v-model="term" type="text" class="form-control form-control-default" placeholder="Search..">
    </div>
@@ -110,12 +81,12 @@ export default {
        <div class="col-2">
         <div class="input-group input-group-outline null is-filled">
 
-  <select @change="search" v-model="form.active_status" class="form-control form-control-default">
+  <!-- <select @change="search" v-model="form.active_status" class="form-control form-control-default">
     <option :value="''" disabled selected>Filter By</option>
    <option value="All">All</option>
    <option value="Active">Active</option>
    <option value="Inactive">Inactive</option>
-  </select>
+  </select> -->
 
    </div>
        </div>
@@ -197,23 +168,10 @@ export default {
               </table>
             </div>
           </div>
-          <nav aria-label="Temp-Licence Pagination mt-2">
-            <ul class="pagination justify-content-end">
-              <li class="page-item" :class="{ disabled: licences.prev_page_url == null }">
-                <Link preserve-state as="button" type="button" @click=paginatePrev class="page-link">Prev</Link>
-              </li>
-              <template v-for="(link, key) in licences.links">
-              <li class="page-item " :class="{ 'active': link.active }">
-                
-                <Link preserve-state class="page-link" :href="link.url" v-show="key && link.url !== null" v-html="getArrowButtons(key)"></Link>
-              
-              </li>
-            </template>
-              <li class="page-item" :class="{ disabled: licences.next_page_url == null }">
-                <Link preserve-state as="button" @click=paginateNext type="button" class="page-link">Next</Link>
-              </li>
-            </ul>
-          </nav>
+          <Paginate
+            :modelName="licences"
+            :modelType="Temp-Licences"
+            />
         </div>
       </div>
     </div>
