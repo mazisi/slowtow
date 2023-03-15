@@ -41,7 +41,7 @@
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
         },
-        "fileExists": [
+        "files": [
             "app/Helpers/CheckFileExist.php"
         ]
     },

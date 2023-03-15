@@ -3,8 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Http\Request;
+use App\Events\LogUserActivity;
 
 class TaskController extends Controller
 {
@@ -34,6 +35,8 @@ class TaskController extends Controller
     public function destroy($id)
     {
        $task = Task::find($id);
+       $activity = 'Deleted Task: ' . $task->body;
+       event(new LogUserActivity(auth()->user(), $activity));
        if($task->delete()){
         return back()->with('success','Task deleted successfully.');
         }

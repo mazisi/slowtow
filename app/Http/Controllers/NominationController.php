@@ -205,8 +205,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
                     return back()->with('success','Document uploaded successfully.');
                }
             }else{
-              dd('File NOT found.');
-              return back()->with('error','Error uploading document.');
+                return back()->with('error','Azure storage could not be reached.Please try again.');
             }
 
     }

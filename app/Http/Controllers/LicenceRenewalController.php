@@ -128,8 +128,7 @@ class LicenceRenewalController extends Controller
                  }
                  
             }else{
-              dd('File NOT found.');
-              return back()->with('error','Error uploading document.');
+                return back()->with('error','Azure storage could not be reached.Please try again.');
             }
         } catch (\Throwable $th) {
             //throw $th;

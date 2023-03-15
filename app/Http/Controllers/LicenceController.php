@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Task;
 use Inertia\Inertia;
+use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
-use App\Models\LicenceDocument;
 use App\Models\LicenceType;
-use App\Models\People;
 use Illuminate\Http\Request;
-use App\Models\Task;
+use App\Events\LogUserActivity;
+use App\Models\LicenceDocument;
 
 class LicenceController extends Controller
 {
@@ -498,24 +499,29 @@ class LicenceController extends Controller
         "licence_number" => "required|unique:licences,licence_number"
     ]);
        
-        Licence::create([
-            "trading_name" => $request->trading_name,
-            'belongs_to' => $request->belongs_to,
-            "licence_type_id" => $request->licence_type,
-            "licence_date" => $request->licence_date,
-            "company_id"   => $request->company,
-            "people_id"   => $request->person,
-            "licence_number" => $request->licence_number,
-            "old_licence_number" => $request->old_licence_number,
-            "address" => $request->address,
-            "address2" => $request->address2,
-            "address3" => $request->address3,
-            "province" => $request->province,
-            "postal_code" => $request->postal_code,
-            "is_licence_active" => $request->is_licence_active,
-            'slug' => sha1(time()),
-        ]);
-        return redirect(route('licences'))->with('success','Licence created successfully.');
+   try {
+    $licence = Licence::create([
+        "trading_name" => $request->trading_name,
+        'belongs_to' => $request->belongs_to,
+        "licence_type_id" => $request->licence_type,
+        "licence_date" => $request->licence_date,
+        "company_id"   => $request->company,
+        "people_id"   => $request->person,
+        "licence_number" => $request->licence_number,
+        "old_licence_number" => $request->old_licence_number,
+        "address" => $request->address,
+        "address2" => $request->address2,
+        "address3" => $request->address3,
+        "province" => $request->province,
+        "postal_code" => $request->postal_code,
+        'slug' => sha1(time()),
+    ]);
+    $activity = 'Licence created By: ' . $licence->trading_name.', '.$licence->licence_number;
+    event(new LogUserActivity(auth()->user(), $activity));
+    return redirect(route('licences'))->with('success','Licence created successfully.');
+   } catch (\Throwable $th) {
+    return back()->with('success','Licence created successfully.');
+   }
     }
 
     /**
@@ -582,6 +588,8 @@ class LicenceController extends Controller
 
     public function destroy($slug){
         $licence = Licence::whereSlug($slug)->first();
+        $activity = 'Deleted Licence By: ' . $licence->trading_name.', '.$licence->licence_number;
+        event(new LogUserActivity(auth()->user(), $activity));
         if($licence->delete()){
            return to_route('licences')->with('success','Licences deleted successfully.');
         }

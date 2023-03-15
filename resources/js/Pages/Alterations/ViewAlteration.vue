@@ -179,6 +179,8 @@ export default {
 .status-heading{
   font-weight: 700;
 }
+
+
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
@@ -728,7 +730,8 @@ v-if="application_form !== null
   </div>
 
 
-  <div v-if="show_modal" class="modal fade" id="document-upload" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div v-if="show_modal" class="modal fade" id="document-upload" tabindex="-1" 
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

@@ -24,7 +24,7 @@ class AlterationDocumentController extends Controller
             $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             
 
-            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
               $fileModel = new AlterationDocument;
               $fileModel->alteration_id = $request->alteration_id;
               $fileModel->doc_type = $request->doc_type;
@@ -37,7 +37,7 @@ class AlterationDocumentController extends Controller
                 return back()->with('success','Document uploaded successfully.');
               }
             }else{
-              dd('File NOT found.');
+              return back()->with('error','Azure storage could not be reached.Please try again.');              
             }
            
     

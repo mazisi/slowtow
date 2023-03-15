@@ -114,6 +114,12 @@ return [
         'emergency' => [
             'path' => storage_path('logs/laravel.log'),
         ],
+
+        'user_log' => [//Defined by Mazisi for logging in user activity
+            'driver' => 'single',
+            'path' => storage_path('logs/user_log.log'),
+            'level' => 'debug',
+        ],
     ],
 
 ];

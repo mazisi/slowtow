@@ -35,7 +35,7 @@ class LicenceDocsController extends Controller
                  Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage]);
               }
             }else{
-              dd('File NOT found.');
+              return back()->with('error','Azure storage could not be reached.Please try again.');
             }
 
            
