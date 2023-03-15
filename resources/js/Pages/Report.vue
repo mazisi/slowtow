@@ -249,14 +249,18 @@
       </div>
   </div>
 
+<div class="d-flex mt-4" style="justify-content: space-between">
+  
+    <button @click="resetFilters" class="btn btn-sm btn-primary">Reset All Filters</button>
+  
+  
 
-
-  <div class="float-end mt-4">
-    <button @click="exportReport" :disabled="form.processing || !form.variation" 
-    type="button" class="btn btn-success float-end">
-    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    Export</button>
-  </div>
+      <button @click="exportReport" :disabled="form.processing || !form.variation" 
+      type="button" class="btn btn-success float-end">
+      <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+      Export</button>
+    
+</div>
 
   
 </div>
@@ -721,7 +725,29 @@ const new_app_stages = {
           return string.substring(0, limit)
         }
         }
-      
+
+
+      function resetFilters(){
+        form.activeStatus = '';
+        form.month_from = '';
+        form.month_to = '';
+        form.year = '';
+        form.applicant = '';
+        form.is_license_complete = '';
+        form.person = null;
+        form.company = null;
+        form.province = null;
+        form.selectedDates = null;
+        form.boardRegion = null;
+        form.licence_types = null;
+        form.new_app_stages = null;
+        form.renewal_stages = null;
+        form.transfer_stages = null;
+        form.nomination_stages = null;
+        form.alteration_stages = null;
+        form.temp_licence_stages = null;
+        form.temp_licence_region = null
+      }
 
 return{
   limit,addClass,
@@ -749,7 +775,8 @@ return{
   btnSuccess,
   btnPrimary,
   years,
-  notActive
+  notActive,
+  resetFilters
 }
 },
  components: {

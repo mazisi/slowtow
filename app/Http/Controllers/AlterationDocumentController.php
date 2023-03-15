@@ -7,8 +7,6 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\AlterationDocument;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
-use Illuminate\Http\File;
-use Illuminate\Support\Facades\Storage;
 
 class AlterationDocumentController extends Controller
 {

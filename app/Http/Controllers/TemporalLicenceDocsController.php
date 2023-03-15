@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CompanyDocument;
+use File;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\PeopleDocument;
+use App\Events\LogUserActivity;
+use App\Models\CompanyDocument;
 use App\Models\TemporalLicence;
 use App\Models\TemporalLicenceDocument;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
-use File;
 
 class TemporalLicenceDocsController extends Controller
 {
@@ -19,22 +20,28 @@ class TemporalLicenceDocsController extends Controller
         ]); 
 
         try {
-            $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+          $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+          $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
+          $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+          
+
+          if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
             $fileModel = new TemporalLicenceDocument;
-            $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$removeSpace);
-            $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-            $fileModel->document_name = $fileName;
+            $fileModel->document_name = $request->document->getClientOriginalName();
             $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
             $fileModel->temporal_licence_id = $request->temp_licence_id;
             $fileModel->doc_type = $request->doc_type;
             $fileModel->num = $request->merge_number;
             $fileModel->belongs_to = $request->person_or_company;
             $fileModel->slug = sha1(now());
-            
-      if($fileModel->save()){
-        return back()->with('success','Document uploaded successfully.');
-      }
-      return back()->with('error','Error uploading document.');
+
+            if($fileModel->save()){
+              TemporalLicence::whereId($fileModel->temporal_licence_id)->update(['status' => $request->stage]);
+              return back()->with('success','Document uploaded successfully.');
+            }
+          }else{
+            return back()->with('error','Azure storage could not be reached.Please try again.');              
+          }
         } catch (\Throwable $th) {
           return back()->with('error','An unknown error while uploading document.');
         }
@@ -43,10 +50,17 @@ class TemporalLicenceDocsController extends Controller
 }
 
 public function destroy($id){
-  $model = TemporalLicenceDocument::find($id);
- 
-      $model->delete();
-      return back()->with('success','Document removed successfully.');
+       try {
+
+          $model = TemporalLicenceDocument::find($id);
+          $activity = 'Deleted Temporal Document: ' . $model->document_name;
+          event(new LogUserActivity(auth()->user(), $activity)); 
+          $model->delete();
+        return back()->with('success','Document removed successfully.');
+
+       } catch (\Throwable $th) {
+         return back()->with('error','Error removing document.');
+       }
 
 }
 

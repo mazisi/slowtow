@@ -72,8 +72,6 @@ use App\Http\Controllers\TemporalLicenceDocsController;
 
 use App\Http\Controllers\NominationEmailCommsController;
 
-use App\Http\Controllers\ExistingLicenceExportController;
-use App\Http\Controllers\DispatchMailWithoutEditingController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 
@@ -112,14 +110,13 @@ Route::group(['middleware' => ['guest']], function () {
 
 
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
-
+    //Error Pages
+    Route::get('error',function(){
+        return Inertia::render('ErrorPages/Error');
+      });
     Route::group(['middleware' => ['auth','role:slowtow-admin|slowtow-user']], function () {
 
-        //Error Pages
-        Route::get('internal-server-error',function(){
-          return Inertia::render('ErrorPages/_500');
-        });
-
+        
 
 
         Route::get('/slotow-admins',[AdminsController::class,'index'])->name('slotow_admins');

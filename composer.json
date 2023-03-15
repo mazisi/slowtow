@@ -42,7 +42,8 @@
             "Database\\Seeders\\": "database/seeders/"
         },
         "files": [
-            "app/Helpers/CheckFileExist.php"
+            "app/Helpers/CheckFileExist.php",
+            "app/Helpers/connectionStatus.php"            
         ]
     },
     "autoload-dev": {

@@ -7,9 +7,9 @@ use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\PeopleDocument;
+use App\Events\LogUserActivity;
 use App\Models\TemporalLicence;
 use App\Models\LiquorBoardRequest;
 use App\Models\TemporalLicenceDocument;
@@ -32,45 +32,7 @@ class TemporalLicenceController extends Controller
                 ->orWhere('event_name','LIKE','%'.request('term').'%');
             
             })
-        //   ->when(request('term') && request('active_status') == 'Active', 
-        //     function ($query){ 
-        //         return $query->whereHas('company', function($query){
-        //             $query->where('name', 'like', '%'.request('term').'%');
-        //         })->orWhereHas('people', function($query){
-        //             $query->where('full_name', 'like', '%'.request('term').'%');                                      
-        //                   })->whereNotNull('active')
-        //         ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
-        //         ->orWhere('start_date','LIKE','%'.request('term').'%')
-        //         ->orWhere('end_date','LIKE','%'.request('term').'%')
-        //         ->orWhere('event_name','LIKE','%'.request('term').'%');
-            
-        //     })
-
-            // ->when(request('term') && request('active_status') == 'Inactive', 
-            //     function ($query){ 
-            //         return $query->whereHas('company', function($query){
-            //             $query->where('name', 'like', '%'.request('term').'%');
-                        
-            //         })->orWhereHas('people', function($query){
-            //             $query->where('full_name', 'like', '%'.request('term').'%');                                      
-            //         })
-            //         ->orWhere('event_name','LIKE','%'.request('term').'%')
-            //         ->where('active','!=','1')
-            //         ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
-            //         ->orWhere('start_date','LIKE','%'.request('term').'%')
-            //         ->orWhere('end_date','LIKE','%'.request('term').'%');
-                
-            //     })
-
-            // ->when(request('active_status') =='Inactive', 
-            //     function ($query){ 
-            //         $query->whereNull('active');                
-            //     })
-
-            //     ->when(request('active_status') =='Active', 
-            //     function ($query){ 
-            //         $query->whereNotNull('active');                
-            //     })
+        
                 ->latest()->paginate(20)->withQueryString();
 
         return Inertia::render('TemporalLicences/TemporalLicence',['licences' => $licences]);
@@ -129,8 +91,6 @@ class TemporalLicenceController extends Controller
     
 
     public function show($slug){
-        // $companies = Company::pluck('name','id');
-        // $people = People::pluck('full_name','id');
         $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
 
         return Inertia::render('TemporalLicences/ViewTemporalLicence',['licence' => $licence]);
@@ -278,8 +238,8 @@ class TemporalLicenceController extends Controller
             return back()->with('success','Temporal Licence updated successfully.');
          
         } catch (\Throwable $th) {
-            throw $th;
-            //return back()->with('error','An unknown error occured while updating temporal Licence.');
+            //throw $th;
+            return back()->with('error','An unknown error occured while updating temporal Licence.');
         }
         
             
@@ -302,7 +262,9 @@ class TemporalLicenceController extends Controller
 
      public function destroy($slug){
         try {
-            $licence = TemporalLicence::whereSlug($slug);
+            $licence = TemporalLicence::whereSlug($slug)->first();
+            $activity = 'Deleted Temporal Licence: ' . $licence->event_name;
+            event(new LogUserActivity(auth()->user(), $activity));
             if($licence->delete()){
                return to_route('temp_licences')->with('success','Temporal Licence deleted successfully.');
             }

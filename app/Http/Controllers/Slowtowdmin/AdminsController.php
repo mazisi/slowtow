@@ -81,8 +81,8 @@ class AdminsController extends Controller
 
            return back()->with('success','User updated successfully.');
         } catch (\Throwable $th) {
-          throw $th;
-          //return back()->with('error','ERROR UPDATING USER');
+         // throw $th;
+          return back()->with('error','ERROR UPDATING USER');
         }
     }
 
@@ -95,7 +95,8 @@ class AdminsController extends Controller
         }       
         return back();
       } catch (\Throwable $th) {
-        throw $th;
+        // throw $th;
+        return back()->with('error','Error activating/deactivating user.');
       }
     }
 
@@ -104,8 +105,8 @@ class AdminsController extends Controller
           User::find($id)->delete();            
         return back()->with('success','User deleted successfully.');;
       } catch (\Throwable $th) {
-        throw $th;
-        //return back()->with('error','Error deleting user.');
+        //throw $th;
+        return back()->with('error','Error deleting user.');
       }
     }
 }

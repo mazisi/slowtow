@@ -6,6 +6,7 @@ import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
+import Task from "../Tasks/Task.vue";
 
 import { ref } from 'vue';
 
@@ -78,28 +79,11 @@ export default {
       doc_type: null,
       person_or_company: null,
       merge_number: null,
+      stage: null,
       file_name: file_name,
       temp_licence_id: props.licence.id    
     })
 
-    const createTask = useForm({
-          body: '',
-          model_type: 'Temporal Licence',
-          model_id: props.licence.id,
-          taskDate: ''     
-    })
-
-    function submitTask(){
-      createTask.post('/submit-task', {
-          onSuccess: () => createTask.reset(),
-      })
-    }
-
-    function checkBodyLength(){//Monitor task body length..Or just use watcher
-          if(this.createTask.body.length > this.body_max){
-              this.createTask.body = this.createTask.body.substring(0,this.body_max)
-          }
-      }
 
       function submitDocument(){
             uploadDoc.post('/submit-temporal-licence-document', {
@@ -123,8 +107,9 @@ export default {
             mergeForm.post(`/merge-temporal-documents/${type}`)
           }
 
-    function getDocType(doc_type,person_or_company,merge_number){
-      this.uploadDoc.doc_type = doc_type
+    function getDocType(stage=null,doc_type,person_or_company,merge_number){
+      this.uploadDoc.stage = stage;
+      this.uploadDoc.doc_type = doc_type;
       this.uploadDoc.person_or_company = person_or_company
       this.uploadDoc.merge_number = merge_number
       this.show_modal =true  
@@ -179,13 +164,7 @@ export default {
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      function deleteNote(id){
-        if(confirm('This note will be deleted. Continue ?')){
-          Inertia.delete(`/delete-task/${id}`, {
-             preserveScroll: true,
-           }); 
-        }
-      }
+      
 
       function updateDate(){
         form.patch(`/update-process-app-date/${props.licence.slug}`, {
@@ -193,14 +172,12 @@ export default {
            }) 
       }
 
-    return { year,form,body_max,show_modal,
+    return { year,form,show_modal,
      updateLicence,file_name,show_file_name,getFileName,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,file_has_apostrophe,
-     computeDocumentDate,deleteDocument,deleteNote,
-     createTask,updateDate,
-     submitTask,
-     checkBodyLength,
+     computeDocumentDate,deleteDocument,
+     updateDate,
      mergeDocuments,
      mergeForm,
      deleteTemporalLicence
@@ -212,7 +189,8 @@ export default {
     Head,
     Datepicker,
     LiquorBoardRequest,
-    Banner
+    Banner,
+    Task
   },
 
   watch: {
@@ -316,7 +294,7 @@ export default {
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -350,7 +328,7 @@ export default {
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -415,7 +393,7 @@ export default {
   <div class="col-sm-5">
     <button type="button" class="btn btn-outline-success document-names">Application Form </button>
      <i v-if="company_application_form === null"
-      @click="getDocType('Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(4,'Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_application_form !== null" @click="deleteDocument(company_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
      <a v-if="company_application_form !== null" :href="`${$page.props.blob_file_path}${company_application_form.document}`" target="_blank">
@@ -433,14 +411,14 @@ export default {
     </a> <br>
 
        <button type="button" class="btn btn-outline-success document-names">POA &amp; RES</button> 
-       <i v-if="company_poa == null" @click="getDocType('POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
+       <i v-if="company_poa == null" @click="getDocType(4,'POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 curser-pointer mx-2"></i>
          <i v-if="company_poa !== null" @click="deleteDocument(company_poa.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
      <a v-if="company_poa !== null" :href="`${$page.props.blob_file_path}${company_poa.document}`" target="_blank">
      <i v-if="company_poa !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
-        <i v-if="company_annexure_b == null" @click="getDocType('Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
+        <i v-if="company_annexure_b == null" @click="getDocType(4,'Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_annexure_b !== null" @click="deleteDocument(company_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_annexure_b !== null" :href="`${$page.props.blob_file_path}${company_annexure_b.document}`" target="_blank">
@@ -455,7 +433,7 @@ export default {
         <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> -->
 
         <button type="button" class="btn btn-outline-success document-names"> CIPC Certificate</button>
-         <i v-if="company_cipc == null" @click="getDocType('CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
+         <i v-if="company_cipc == null" @click="getDocType(4,'CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
          class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_cipc !== null" @click="deleteDocument(company_cipc.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_cipc !== null" :href="`${$page.props.blob_file_path}${company_cipc.document}`" target="_blank">
@@ -466,7 +444,7 @@ export default {
   
   <div class="col-sm-5">
   <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
-     <i v-if="company_id_document == null" @click="getDocType('ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
+     <i v-if="company_id_document == null" @click="getDocType(4,'ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_id_document !== null" @click="deleteDocument(company_id_document.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_id_document !== null" :href="`${$page.props.blob_file_path}${company_id_document.document}`" target="_blank">
@@ -554,7 +532,7 @@ export default {
   <div class="col-sm-5">
     <button type="button" class="btn btn-outline-success document-names">Application Form </button>
      <i v-if="individual_application_form === null"
-      @click="getDocType('Application Form','Individual',1)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(4,'Application Form','Individual',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_application_form !== null" @click="deleteDocument(individual_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
      <a v-if="individual_application_form !== null" :href="`${$page.props.blob_file_path}${individual_application_form.document}`" target="_blank">
@@ -572,14 +550,14 @@ export default {
     </a> <br>
 
        <button type="button" class="btn btn-outline-success document-names">Power Of Attorney</button> 
-       <i v-if="power_of_attorney == null" @click="getDocType('Power Of Attorney','Individual',3)" data-bs-toggle="modal" data-bs-target="#documents" 
+       <i v-if="power_of_attorney == null" @click="getDocType(4,'Power Of Attorney','Individual',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 curser-pointer mx-2"></i>
          <i v-if="power_of_attorney !== null" @click="deleteDocument(power_of_attorney.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
      <a v-if="power_of_attorney !== null" :href="`${$page.props.blob_file_path}${power_of_attorney.document}`" target="_blank">
      <i v-if="power_of_attorney !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
-        <i v-if="individual_annexure_b == null" @click="getDocType('Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
+        <i v-if="individual_annexure_b == null" @click="getDocType(4,'Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="individual_annexure_b !== null" @click="deleteDocument(individual_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="individual_annexure_b !== null" :href="`${$page.props.blob_file_path}${individual_annexure_b.document}`" target="_blank">
@@ -607,7 +585,7 @@ export default {
   
   <div class="col-sm-5">
      <button type="button" class="btn btn-outline-success document-names">Representations</button>
-  <i v-if="individual_representations == null" @click="getDocType('Representations','Individual',7)" data-bs-toggle="modal" data-bs-target="#documents" 
+  <i v-if="individual_representations == null" @click="getDocType(4,'Representations','Individual',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_representations !== null" @click="deleteDocument(individual_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="individual_representations !== null" :href="`${$page.props.blob_file_path}${individual_representations.document}`" target="_blank">
@@ -616,14 +594,14 @@ export default {
 
 
     <button type="button" class="btn btn-outline-success document-names">Landlord Letter</button>
-     <i v-if="individual_landlord_letter == null" @click="getDocType('Landlord Letter','Individual',8)" data-bs-toggle="modal" data-bs-target="#documents" 
+     <i v-if="individual_landlord_letter == null" @click="getDocType(4,'Landlord Letter','Individual',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_landlord_letter  !== null" @click="deleteDocument(individual_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="individual_landlord_letter !== null" :href="`${$page.props.blob_file_path}${individual_landlord_letter.document}`" target="_blank">
         <i v-if="individual_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
-      <i v-if="individual_security_letter == null" @click="getDocType('Security Letter','Individual',9)" data-bs-toggle="modal" data-bs-target="#documents" 
+      <i v-if="individual_security_letter == null" @click="getDocType(4,'Security Letter','Individual',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_security_letter  !== null" @click="deleteDocument(individual_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="individual_security_letter !== null" :href="`${$page.props.blob_file_path}${individual_security_letter.document}`" target="_blank">
@@ -631,7 +609,7 @@ export default {
 
 
       <button type="button" class="btn btn-outline-success document-names">Advert/Blurb</button>
-      <i v-if="individual_advert == null" @click="getDocType('Advert/Blurb','Individual',10)" 
+      <i v-if="individual_advert == null" @click="getDocType(4,'Advert/Blurb','Individual',10)" 
       data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_advert  !== null" @click="deleteDocument(individual_advert.id)" 
@@ -641,7 +619,7 @@ export default {
 
 
     <button type="button" class="btn btn-outline-success document-names">Plan/Maps</button>
-    <i v-if="individual_plan == null" @click="getDocType('Plan/Maps','Individual',11)" 
+    <i v-if="individual_plan == null" @click="getDocType(4,'Plan/Maps','Individual',11)" 
       data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_plan  !== null" @click="deleteDocument(individual_plan.id)" 
@@ -733,7 +711,7 @@ export default {
     <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(5,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -766,7 +744,7 @@ export default {
     <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a @click="getDocType('Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a @click="getDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -825,7 +803,7 @@ export default {
     <a v-if="licence_logded !== null" @click="deleteDocument(licence_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a @click="getDocType('Licence Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a @click="getDocType(7,'Licence Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -888,7 +866,7 @@ export default {
     <a v-if="licence_issued !== null" @click="deleteDocument(licence_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(8,'Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -952,7 +930,7 @@ export default {
     <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType('Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
+    <a v-else @click="getDocType(9,'Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
     </a>
@@ -985,48 +963,8 @@ export default {
       :liqour_board_requests="liqour_board_requests"
       /> 
 <hr>-->
-<div class="row">
-<h6 class="text-center">Notes</h6>
-<div class="col-xl-8">
-<div class="row">
-<div v-for="task in tasks" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
-<div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
-<span class="alert-icon"><i class=""></i></span><span class="alert-text"> 
-<span class="text-sm">{{ task.body }}</span>
-</span>
-<a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
-    </a>
-<p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
-</div>
-</div>
-<h6 v-if="!tasks" class="text-center">No notes found.</h6>
-</div>
+<Task :tasks="tasks" :model_id="licence.id" :errors="errors" :model_type="'Temporal Licence'"/>
 
-</div>
-
-<div class="col-xl-4">
-<form @submit.prevent="submitTask">
-<div class="col-md-12 columns">
-<label class="form-check-label text-body text-truncate status-heading">New Note:
-<span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
-</div>
-
-<div class="col-12 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">New Task<span class="text-danger pl-6"></span></label>
-<textarea v-model="createTask.body" class="form-control form-control-default" rows="3" ></textarea>
-</div>
-<div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-</div>
-
-<button :disabled="createTask.processing" class="btn btn-sm btn-secondary ms-2 mt-1 float-end justify-content-center" type="submit">
-  <span v-if="createTask.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  Save
-</button>
-</form>
-</div>
-</div>
 </div>
 </div>
 

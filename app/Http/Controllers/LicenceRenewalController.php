@@ -9,6 +9,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
+use App\Events\LogUserActivity;
 use App\Models\RenewalDocument;
 use App\Models\LiquorBoardRequest;
 use Illuminate\Support\Facades\DB;
@@ -138,21 +139,32 @@ class LicenceRenewalController extends Controller
     }
 
     public function updateDates(Request $request, $slug){
-            LicenceRenewal::whereSlug($slug)->update([
-                'client_paid_at' => $request->client_paid_at,
-                'renewal_issued_at' => $request->renewal_issued_at,
-                'renewal_delivered_at' => $request->renewal_delivered_at,
-                'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
-                'client_invoiced_at' => $request->client_invoiced_at
-                
-            ]);
-        return back()->with('success','Date updated successfully.');
-}
+            try {
+                LicenceRenewal::whereSlug($slug)->update([
+                    'client_paid_at' => $request->client_paid_at,
+                    'renewal_issued_at' => $request->renewal_issued_at,
+                    'renewal_delivered_at' => $request->renewal_delivered_at,
+                    'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+                    'client_invoiced_at' => $request->client_invoiced_at
+                    
+                ]);
+            return back()->with('success','Date updated successfully.');
+            } catch (\Throwable $th) {
+                return back()->with('error','Error updating date.');
+            }
+      }
 
     public function deleteDocument($id){
-        $model = RenewalDocument::find($id);
-            $model->delete();
-            return back()->with('success','Document removed successfully.');
+            try {
+                $model = RenewalDocument::find($id);
+                $activity = 'Deleted Licence Renewal Document: ' . $model->document_name;
+                event(new LogUserActivity(auth()->user(), $activity));
+                if($model->delete()){
+                    return back()->with('success','Document removed successfully.');
+                }
+            } catch (\Throwable $th) {
+                return back()->with('error','Error deleting document.');
+            }
         
     }
 

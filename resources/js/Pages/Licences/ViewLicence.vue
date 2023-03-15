@@ -417,6 +417,8 @@ import Banner from '../components/Banner.vue'
 import { ref, vue } from 'vue';
 import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
  props: {
@@ -485,6 +487,9 @@ export default {
       function updateLicence() {
          form.patch(`/update-licence/${props.licence.slug}`, {
           preserveScroll: true,
+          onSuccess: () => { 
+           notify()
+         },
         })    
         }
 
@@ -557,7 +562,11 @@ export default {
       }
       
       
-
+      const notify = () => {
+      toast("Wow so easy !", {
+        autoClose: 1000,
+      }); // ToastOptions
+    }
 
     return {
       showMenu,file_has_apostrophe,
@@ -567,7 +576,7 @@ export default {
       show_current_company,
       change_company,
       options,
-      form,
+      form,toast,notify,
       limit,
       changeCompany,
       updateLicence,

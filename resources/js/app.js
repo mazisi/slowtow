@@ -9,7 +9,7 @@ import MaterialDashboard from "./material-dashboard";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { Link } from '@inertiajs/inertia-vue3';
-// import helper from '../js/helper.js';
+import Vue3Toasity from 'vue3-toastify';
 
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css'
@@ -24,6 +24,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(store)
+            .use(Vue3Toasity)
             .use(MaterialDashboard)
             .component('InertiaLink', Link)
             .component('Datepicker', Datepicker)

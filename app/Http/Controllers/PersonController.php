@@ -17,32 +17,40 @@ class PersonController extends Controller
     public function index(){
         $people = People::when(request('term') && request('active_status') === 'Active', 
             function ($query){
-                $query->where('full_name','LIKE','%'.request('term').'%');
-                $query->where('active','1')->orWhere('active',true);
+                $query->where('active','1')
+                ->orWhere(function ($query) {
+                    $query->where('full_name','LIKE','%'.request('term').'%')
+                    ->where('email_address_1','LIKE','%'.request('term').'%')
+                    ->where('email_address_2','LIKE','%'.request('term').'%');
+                });
             
             })
 
             ->when(request('term') && request('active_status') === 'Inactive', 
                 function ($query){
                     
-                    $query->where('full_name','LIKE','%'.request('term').'%');
-                          $query->whereNull('active')
-                          ->orWhere('active','0')
-                          ->orWhere('active',false);
+                    $query->where('active','0')
+                          ->orWhere(function ($query) {
+                            $query->where('full_name','LIKE','%'.request('term').'%')
+                            ->where('email_address_1','LIKE','%'.request('term').'%')
+                            ->where('email_address_2','LIKE','%'.request('term').'%');
+                        });
                 
                 })
 
                 ->when(request('term') && !request('active_status'), 
                     function ($query){ 
-                        return $query->where('full_name','LIKE','%'.request('term').'%');
+                            $query->where('full_name','LIKE','%'.request('term').'%')
+                                  ->orWhere('email_address_1','LIKE','%'.request('term').'%')
+                                  ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+                        
                     
                     })
                 
 
             ->when(!request('term') && request('active_status') ==='Inactive', 
                 function ($query){
-                    return $query->whereNull('active')
-                                 ->orWhere('active','0');                
+                    return $query->where('active','0');                
                 })
 
                 ->when(!request('term') && request('active_status') ==='Active', 

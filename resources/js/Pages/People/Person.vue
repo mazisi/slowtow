@@ -79,7 +79,7 @@
   />
   
 </div>
-{{ links }}
+
 </div>
 </div>
 

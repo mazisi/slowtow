@@ -28,7 +28,7 @@ class UserLastActivity
             }
             
         } catch (\Throwable $th) {
-            throw $th;
+            //throw $th;
             
         }
         return $next($request);

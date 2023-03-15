@@ -24,10 +24,7 @@ class LicenceController extends Controller
             && !request('active_status') 
             && !request('province'), 
             function ($query) {
-            return $query
-            ->where(function($query){
-
-                $query->where(function($query){
+              $query->where(function($query){
                     $query->where('trading_name','LIKE','%'.request('term').'%')
                        ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
                        ->orWhere('licence_number','LIKE','%'.request('term').'%');
@@ -36,9 +33,7 @@ class LicenceController extends Controller
                 // $query->orWhereHas('company', function($query){
                 //     $query->where('name', 'like', '%'.request('term').'%');                
                 // });   
-            });
-            
-        })
+            })
           
 // search plus licence date    
         ->when(request('term') 
