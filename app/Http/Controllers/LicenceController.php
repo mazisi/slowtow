@@ -28,9 +28,9 @@ class LicenceController extends Controller
             ->where(function($query){
 
                 $query->where(function($query){
-                    $query->where('trading_name','LIKE','%'.request('term').'%');
-                    // ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                    //    ->orWhere('licence_number','LIKE','%'.request('term').'%');
+                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                       ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                       ->orWhere('licence_number','LIKE','%'.request('term').'%');
                     });
 
                 // $query->orWhereHas('company', function($query){
@@ -48,20 +48,45 @@ class LicenceController extends Controller
             && !request('province'), 
             function ($query){
                 $query->whereMonth('licence_date',request('licence_date'))
-                      ->where('trading_name','LIKE','%'.request('term').'%'); 
+                ->orWhere(function ($query) {
+                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                    ->where('old_licence_number','LIKE','%'.request('term').'%')
+                    ->where('licence_number','LIKE','%'.request('term').'%');
+                });
             
             })
+            
+            //Search and province and licence date
+                ->when(request('term') 
+                    && request('province') 
+                    && !request('active_status')
+                    && !request('licence_type') 
+                    && request('licence_date'),
+                    function ($query){
+                        $query->where('province',request('province'))
+                        ->whereMonth('licence_date',request('licence_date'))
+                        ->orWhere(function ($query) {
+                            $query->where('trading_name','LIKE','%'.request('term').'%')
+                            ->where('old_licence_number','LIKE','%'.request('term').'%')
+                            ->where('licence_number','LIKE','%'.request('term').'%');
+                        });
+                        
+                })
 
-// search and licence date and licence_type
+       // search and licence date and licence_type
             ->when(request('term') 
                 && request('licence_date') 
                 && request('licence_type') 
                 && !request('active_status') 
                 && !request('province'),
-                function ($query){ 
+                function ($query){
                     $query->where('licence_type_id',request('licence_type'))
                     ->whereMonth('licence_date',request('licence_date'))
-                    ->where('trading_name','LIKE','%'.request('term').'%');
+                    ->orWhere(function ($query) {
+                        $query->where('trading_name','LIKE','%'.request('term').'%')
+                        ->where('old_licence_number','LIKE','%'.request('term').'%')
+                        ->where('licence_number','LIKE','%'.request('term').'%');
+                    });
                     // ->orWhereHas('company', function($query){
                     //     $query->where('name', 'like', '%'.request('term').'%');                
                     //  });               
@@ -74,10 +99,14 @@ class LicenceController extends Controller
                 && request('active_status') == 'Active'
                 && !request('province'),
                 function ($query){ 
-                    $query->where('is_licence_active',1)
+                    $query->where('is_licence_active',true)
                           ->where('licence_type_id',request('licence_type'))
                           ->whereMonth('licence_date',request('licence_date'))
-                          ->where('trading_name','LIKE','%'.request('term').'%');            
+                          ->orWhere(function ($query) {
+                            $query->where('trading_name','LIKE','%'.request('term').'%')
+                            ->where('old_licence_number','LIKE','%'.request('term').'%')
+                            ->where('licence_number','LIKE','%'.request('term').'%');
+                        });
                 })
 
 //search and licence date and licence_type and activeStatus == Inactive
@@ -89,8 +118,12 @@ class LicenceController extends Controller
                     function ($query){
                         $query->where('licence_type_id',request('licence_type'))
                         ->whereMonth('licence_date',request('licence_date'))
-                        ->where('trading_name','LIKE','%'.request('term').'%');
-                        $query->where('is_licence_active',0);
+                        ->where('is_licence_active',0)
+                        ->orWhere(function ($query) {
+                            $query->where('trading_name','LIKE','%'.request('term').'%')
+                            ->where('old_licence_number','LIKE','%'.request('term').'%')
+                            ->where('licence_number','LIKE','%'.request('term').'%');
+                        });
                                               
                 })
 
@@ -105,7 +138,11 @@ class LicenceController extends Controller
                               ->where('is_licence_active',1)
                               ->where('licence_type_id',request('licence_type'))
                               ->whereMonth('licence_date',request('licence_date'))
-                              ->where('trading_name','LIKE','%'.request('term').'%');           
+                              ->orWhere(function ($query) {
+                                $query->where('trading_name','LIKE','%'.request('term').'%')
+                                ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                ->where('licence_number','LIKE','%'.request('term').'%');
+                            });
                 })
 
 // search and licence date and licence_type and activeStatus == Inactive plus province
@@ -119,7 +156,11 @@ class LicenceController extends Controller
                               ->where('is_licence_active',0)
                               ->where('licence_type_id',request('licence_type'))
                               ->whereMonth('licence_date',request('licence_date'))
-                              ->where('trading_name','LIKE','%'.request('term').'%');                
+                              ->orWhere(function ($query) {
+                                $query->where('trading_name','LIKE','%'.request('term').'%')
+                                ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                ->where('licence_number','LIKE','%'.request('term').'%');
+                            });
                 })
 
  // search and licence date and activeStatus == Inactive plus province-----------------------------------------------------------------
@@ -132,7 +173,11 @@ class LicenceController extends Controller
                             $query->where('province',request('province'))
                                 ->where('is_licence_active',0)
                                 ->whereMonth('licence_date',request('licence_date'))
-                                ->where('trading_name','LIKE','%'.request('term').'%');                
+                                ->orWhere(function ($query) {
+                                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                                    ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                    ->where('licence_number','LIKE','%'.request('term').'%');
+                                });
                         })
 
 // search and licence date, licence type and province
@@ -145,7 +190,11 @@ class LicenceController extends Controller
                          $query->whereMonth('licence_date',request('licence_date'))
                               ->where('licence_type_id',request('licence_type'))
                               ->where('province',request('province'))
-                              ->where('trading_name','LIKE','%'.request('term').'%');                
+                              ->orWhere(function ($query) {
+                                $query->where('trading_name','LIKE','%'.request('term').'%')
+                                ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                ->where('licence_number','LIKE','%'.request('term').'%');
+                            });
                      })
 
 // search and licence date and activeStatus == Inactive plus province
@@ -157,7 +206,11 @@ class LicenceController extends Controller
                  function ($query){
                      $query->where('is_licence_active',0)
                          ->whereMonth('licence_date',request('licence_date'))
-                         ->where('trading_name','LIKE','%'.request('term').'%');                
+                         ->orWhere(function ($query) {
+                            $query->where('trading_name','LIKE','%'.request('term').'%')
+                            ->where('old_licence_number','LIKE','%'.request('term').'%')
+                            ->where('licence_number','LIKE','%'.request('term').'%');
+                        });
                  })
 
 
@@ -170,7 +223,11 @@ class LicenceController extends Controller
                      function ($query){
                          $query->where('licence_type_id',request('licence_type'))
                              ->where('is_licence_active',0)
-                             ->where('trading_name','LIKE','%'.request('term').'%');                
+                             ->orWhere(function ($query) {
+                                $query->where('trading_name','LIKE','%'.request('term').'%')
+                                ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                ->where('licence_number','LIKE','%'.request('term').'%');
+                            });
                      })
 //Search and province only
                 ->when(request('term') 
@@ -180,9 +237,12 @@ class LicenceController extends Controller
                     && !request('licence_date'),
                     function ($query){
                         $query->where('province', 'LIKE','%'.request('province').'%')
-                              ->where('trading_name','LIKE','%'.request('term').'%')
-                              ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                              ->orWhere('licence_number','LIKE','%'.request('term').'%');           
+                                ->orWhere(function ($query) {
+                                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                                    ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                    ->where('licence_number','LIKE','%'.request('term').'%');
+                                });
+                              
                 })
 
 //Search and licence_type only
@@ -193,9 +253,11 @@ class LicenceController extends Controller
                     && !request('licence_date'),
                     function ($query){ 
                         $query->where('licence_type_id',request('licence_type'))
-                              ->where('trading_name','LIKE','%'.request('term').'%')
-                              ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                              ->orWhere('licence_number','LIKE','%'.request('term').'%');            
+                                ->orWhere(function ($query) {
+                                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                                    ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                    ->where('licence_number','LIKE','%'.request('term').'%');
+                                });            
                 })
 // search and activeStatus == Active 
                  ->when(request('term') 
@@ -204,10 +266,12 @@ class LicenceController extends Controller
                     && request('active_status') == 'Active'
                     && !request('province'),
                     function ($query){
-                        $query->where('is_licence_active',1)
-                            ->where('trading_name','LIKE','%'.request('term').'%')
-                            ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                            ->orWhere('licence_number','LIKE','%'.request('term').'%');        
+                        $query->where('is_licence_active',true)
+                                ->orWhere(function ($query) {
+                                    $query->where('trading_name','LIKE','%'.request('term').'%')
+                                    ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                    ->where('licence_number','LIKE','%'.request('term').'%');
+                                });       
                 })
 
  // search and activeStatus == Inactive 
@@ -218,9 +282,11 @@ class LicenceController extends Controller
                     && !request('province'),
                     function ($query){ 
                         $query->where('is_licence_active',0)
-                              ->where('trading_name','LIKE','%'.request('term').'%')
-                              ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                              ->orWhere('licence_number','LIKE','%'.request('term').'%');         
+                        ->orWhere(function ($query) {
+                            $query->where('trading_name','LIKE','%'.request('term').'%')
+                            ->where('old_licence_number','LIKE','%'.request('term').'%')
+                            ->where('licence_number','LIKE','%'.request('term').'%');
+                        });         
                 })
 
 //Search and province and Active
@@ -231,10 +297,12 @@ class LicenceController extends Controller
                     && !request('licence_date'),
                     function ($query){
                         $query->where('province', request('province'))
-                              ->where('is_licence_active', 1)
-                              ->where('trading_name','LIKE','%'.request('term').'%')
-                              ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                              ->orWhere('licence_number','LIKE','%'.request('term').'%');           
+                              ->where('is_licence_active', true)
+                              ->orWhere(function ($query) {
+                                $query->where('trading_name','LIKE','%'.request('term').'%')
+                                ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                ->where('licence_number','LIKE','%'.request('term').'%');
+                            });         
                 })
 
 //Search and province and Inactive
@@ -244,67 +312,13 @@ class LicenceController extends Controller
                     && !request('licence_type') 
                     && !request('licence_date'),
                     function ($query){
-                        $query->where('trading_name','LIKE','%'.request('term').'%');
-
-                        $query->where('province',request('province'));
-                        $query->where('is_licence_active', 0);          
-                })
-//Search and province and licence date
-                ->when(request('term') 
-                    && request('province') 
-                    && !request('active_status')
-                    && !request('licence_type') 
-                    && request('licence_date'),
-                    function ($query){
-                        $query->where('trading_name','LIKE','%'.request('term').'%');
-                        $query->where('province',request('province'));
-                        $query->whereMonth('licence_date',request('licence_date'));          
-                })
-//Active and licence date and licence type
-                ->when(!request('term') 
-                    && !request('province') 
-                    && request('active_status') == 'Active'
-                    && request('licence_type') 
-                    && request('licence_date'),
-                    function ($query){
-                        $query->where('is_licence_active',1)
-                        ->whereMonth('licence_date',request('licence_date'))
-                        ->where('licence_type_id',request('licence_type'));          
-                })
-
-//Active and province and licence type
-                ->when(!request('term') 
-                    && request('province') 
-                    && request('active_status') == 'Active'
-                    && request('licence_type') 
-                    && !request('licence_date'),
-                    function ($query){
-                        $query->where('is_licence_active',1)
-                        ->where('province',request('province'))
-                        ->where('licence_type_id',request('licence_type'));          
-                })
-//Inactive and province and licence type
-                ->when(!request('term') 
-                    && request('province') 
-                    && request('active_status') == 'Inactive'
-                    && request('licence_type') 
-                    && !request('licence_date'),
-                    function ($query){
-                        $query->where('is_licence_active',0)
-                        ->where('province',request('province'))
-                        ->where('licence_type_id',request('licence_type'));          
-                })
-
-//Inactive and licence date and licence type
-                ->when(!request('term') 
-                    && !request('province') 
-                    && request('active_status') == 'Inactive'
-                    && request('licence_type') 
-                    && request('licence_date'),
-                    function ($query){
-                        $query->where('is_licence_active',0)
-                        ->whereMonth('licence_date',request('licence_date'))
-                        ->where('licence_type_id',request('licence_type'));          
+                        $query->where('province',request('province'))
+                               ->where('is_licence_active', 0)
+                               ->orWhere(function ($query) {
+                                $query->where('trading_name','LIKE','%'.request('term').'%')
+                                ->where('old_licence_number','LIKE','%'.request('term').'%')
+                                ->where('licence_number','LIKE','%'.request('term').'%');
+                            });
                 })
 //Active and licence_type
                 ->when(!request('term') 
@@ -313,7 +327,7 @@ class LicenceController extends Controller
                     && request('licence_type') 
                     && request('active_status') == 'Active',
                     function ($query){ 
-                        $query->where('is_licence_active',1)
+                        $query->where('is_licence_active',true)
                               ->where('licence_type_id',request('licence_type'));         
                 })
 //Inactive and licence_type
@@ -341,7 +355,7 @@ class LicenceController extends Controller
                     && request('active_status') == 'Active',
                     function ($query){ 
                         $query->whereMonth('licence_date',request('licence_date'))
-                              ->where('is_licence_active',1);                              
+                              ->where('is_licence_active',true);                              
                 })
 
 //Active and province
@@ -349,7 +363,7 @@ class LicenceController extends Controller
                        && request('province'),
                     function ($query){ 
                         $query->where('province', 'LIKE','%'.request('province').'%')
-                              ->where('is_licence_active',1);                              
+                              ->where('is_licence_active',true);                              
                 })
 
 //Inactive and province
@@ -395,7 +409,7 @@ class LicenceController extends Controller
                         && request('active_status') == 'Active' 
                         && request('licence_type'), 
                         function ($query){ 
-                            return $query->where('is_licence_active',1)
+                            return $query->where('is_licence_active',true)
                             ->where('licence_type_id',request('licence_type'));               
                 })
 
@@ -414,7 +428,7 @@ class LicenceController extends Controller
                           && request('active_status') == 'Active' 
                           && request('licence_type'), 
                     function ($query){ 
-                        return $query->where('is_licence_active',1)
+                        return $query->where('is_licence_active',true)
                         ->where('licence_type_id',request('licence_type'));               
                 })
 
@@ -428,7 +442,7 @@ class LicenceController extends Controller
 
             ->when(request('active_status') =='Active', 
                 function ($query){ 
-                    return $query->where('is_licence_active',1);                
+                    return $query->where('is_licence_active',true);                
                 })
             
             ->when(request('province')
@@ -465,7 +479,6 @@ class LicenceController extends Controller
        $all_licence_types = LicenceType::get();
         return Inertia::render('Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
     }
-    
 
     public function create(){
         $companies = Company::pluck('name','id');
@@ -519,9 +532,10 @@ class LicenceController extends Controller
     $activity = 'Licence created By: ' . $licence->trading_name.', '.$licence->licence_number;
     event(new LogUserActivity(auth()->user(), $activity));
     return redirect(route('licences'))->with('success','Licence created successfully.');
-   } catch (\Throwable $th) {
-    return back()->with('success','Licence created successfully.');
-   }
+    
+        } catch (\Throwable $th) {
+            return back()->with('success','Error creating Licence');
+        }
     }
 
     /**

@@ -414,7 +414,7 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue'
-import { ref } from 'vue';
+import { ref, vue } from 'vue';
 import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
 
@@ -436,13 +436,14 @@ export default {
   
   setup (props) {
         let showMenu = false;
-        let body_max = 100;
         let options = props.companies;
         let show_current_company = ref(true);
         let change_company = ref(false);
         let show_modal = ref(true);
         let file_name = ref(''); 
         let file_has_apostrophe = ref();
+
+        
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -554,6 +555,9 @@ export default {
           }  
             return file_name;
       }
+      
+      
+
 
     return {
       showMenu,file_has_apostrophe,
@@ -575,6 +579,7 @@ export default {
       deleteDocument
     }
   },
+
    components: {
     Layout,
     Link,

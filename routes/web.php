@@ -115,6 +115,11 @@ Route::group(['middleware' => ['guest']], function () {
 
     Route::group(['middleware' => ['auth','role:slowtow-admin|slowtow-user']], function () {
 
+        //Error Pages
+        Route::get('internal-server-error',function(){
+          return Inertia::render('ErrorPages/_500');
+        });
+
 
 
         Route::get('/slotow-admins',[AdminsController::class,'index'])->name('slotow_admins');

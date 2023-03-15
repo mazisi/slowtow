@@ -29,6 +29,7 @@ createInertiaApp({
             .component('Datepicker', Datepicker)
             .mixin({ methods: { route } })
             .mount(el);
+            
     },
 });
 

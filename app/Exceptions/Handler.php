@@ -2,8 +2,9 @@
 
 namespace App\Exceptions;
 
-use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Inertia\Inertia;
+use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
 {
@@ -50,12 +51,18 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $e){
             $response = parent::render($request, $e);
 
-            if ($response->status() === 419) {
+            if (! app()->environment(['local', 'testing']) && in_array($response->status(), [500, 503, 404, 403])) {
+                return Inertia::render('Error', ['status' => $response->status()])
+                    ->toResponse($request)
+                    ->setStatusCode($response->status());
+            } elseif ($response->status() === 419) {
                 return back()->with([
-                    '419_error' => 'The page expired, please try again.',
+                    'message' => 'The page expired, please try again.',
                 ]);
+            } elseif ($response->status() === 500) {
+                return redirect('/internal-server-error');
             }
-
+        
             return $response;
         }
 }
