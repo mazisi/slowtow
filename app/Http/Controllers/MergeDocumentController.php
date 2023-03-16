@@ -12,7 +12,10 @@ class MergeDocumentController extends Controller{
 
     public function merge($id){
 
-       $nominations =  NominationDocument::where('nomination_id',$id)->get();
+       try {
+        
+
+        $nominations =  NominationDocument::where('nomination_id',$id)->get();
       
           $merger = PDFMerger::init();
 
@@ -61,6 +64,11 @@ class MergeDocumentController extends Controller{
             return back()->with('success','Document merged successfully.');
           }        
           return back()->with('error','Error uploading document.');
+
+
+       } catch (\Throwable $th) {
+          return back()->with('error','Error uploading document.');
+       }
 
     }
 

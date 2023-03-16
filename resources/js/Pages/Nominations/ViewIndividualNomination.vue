@@ -9,6 +9,8 @@ import { ref } from "vue";
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 
 export default{
@@ -82,8 +84,12 @@ export default{
               onSuccess: () => { 
                 this.show_modal = false;
                 this.show_file_name = false;
-                let dismiss = document.querySelector('.modal-backdrop') 
-                dismiss.remove();
+                let dismiss = document.querySelector('.modal-backdrop').remove();
+                if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
                 uploadDoc.reset();
            },
             })
@@ -92,7 +98,13 @@ export default{
       function deleteDocument(id){
           if(confirm('Document will be deleted permanently...Continue ??')){
             Inertia.delete(`/delete-nomination-document/${id}`, {
-              //
+              onSuccess: () => { 
+                   if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+            }
             })
           }
         }
@@ -108,6 +120,13 @@ export default{
             onSuccess: () => { 
               this.show_modal = false;        
               document.querySelector('.modal-backdrop').remove();
+            
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+               
               nomineeForm.reset();
             },
           })
@@ -115,12 +134,28 @@ export default{
 
 
       function removeSelectedNominee(nominee_id) {
-          Inertia.post(`/detach-nominee/${props.nomination.id}/${nominee_id}`)
+          Inertia.post(`/detach-nominee/${props.nomination.id}/${nominee_id}`,{
+            onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
+          })
       }
 
 
       function updateNomination() {
-          updateForm.patch(`/update-nominee`)
+          updateForm.patch(`/update-nominee`,{
+            onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
+          })
       }
 
       // const mergeDocument = () => {
@@ -147,6 +182,13 @@ export default{
       function updateDate(){
         updateForm.patch(`/update-nomination-date/${props.nomination.slug}`, {
              preserveScroll: true,
+             onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
            }) 
       }
       
@@ -196,7 +238,7 @@ export default{
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,
             getDocType,nomineeForm,uploadDoc,updateForm,file_name,getFileName,notify,
-            checkingFileProgress, viewFile
+            checkingFileProgress, viewFile, deleteNomination
 
 
 
@@ -288,7 +330,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
+    <a @click="viewFile(client_quoted.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -297,10 +339,10 @@ export default{
        <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -319,7 +361,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
+    <a @click="viewFile(client_invoiced.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -328,10 +370,10 @@ export default{
        <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>
 </ul>
@@ -426,7 +468,7 @@ export default{
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liquor_board !== null">
-    <a :href="`${$page.props.blob_file_path}${liquor_board.document}`" target="_blank">
+    <a @click="viewFile(liquor_board.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -434,12 +476,11 @@ export default{
       <h6 class="mb-0 text-sm">Document</h6>
        <p v-if="liquor_board !== null" class="mb-0 text-xs limit-file-name">{{ liquor_board.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      <!-- <p v-if="liquor_board !== null" class="mb-0 text-xs">Date: {{ computeDocumentDate(liquor_board.date) }}</p> -->
     </div>
-    <a v-if="liquor_board !== null" @click="deleteDocument(liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="liquor_board !== null" @click="deleteDocument(liquor_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType6(6,4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -522,7 +563,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_forms !== null">
-    <a :href="`${$page.props.blob_file_path}${nomination_forms.document}`" target="_blank">
+    <a @click="viewFile(nomination_forms.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -531,10 +572,10 @@ Action
        <p v-if="nomination_forms !== null" class="mb-0 text-xs limit-file-name">{{ nomination_forms.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="nomination_forms !== null" @click="deleteDocument(nomination_forms.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="nomination_forms !== null" @click="deleteDocument(nomination_forms.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(6,'Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li> 
 </ul>
@@ -548,9 +589,9 @@ Action
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Proof Of Payment</h6>
     </div>
-    <a v-if="liquor_board !== null" :href="`${$page.props.blob_file_path}${liquor_board.document}`" class="mb-0 btn btn-link ms-auto" href="javascript:;">
+    <a v-if="liquor_board !== null" @click="viewFile(liquor_board.id)" href="#!" class="mb-0 btn btn-link ms-auto" >
     <i class="fa fa-link h5 " aria-hidden="true"></i></a>
-    <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" href="javascript:;">
+    <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" >
       <i class="fa fa-link h5" aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -561,7 +602,7 @@ Action
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="attorney_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${attorney_doc.document}`" target="_blank">
+    <a @click="viewFile(attorney_doc.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -570,10 +611,10 @@ Action
        <p v-if="attorney_doc !== null" class="mb-0 text-xs limit-file-name">{{ attorney_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="attorney_doc !== null" @click="deleteDocument(attorney_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="attorney_doc !== null" @click="deleteDocument(attorney_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(6,'Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -583,7 +624,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certified_id_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${certified_id_doc.document}`" target="_blank">
+    <a @click="viewFile(certified_id_doc.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -592,10 +633,10 @@ Action
        <p v-if="certified_id_doc !== null" class="mb-0 text-xs limit-file-name">{{ certified_id_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="certified_id_doc !== null" @click="deleteDocument(certified_id_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="certified_id_doc !== null" @click="deleteDocument(certified_id_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(6,'ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -605,7 +646,7 @@ Action
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${police_clearance_doc.document}`" target="_blank">
+    <a @click="viewFile(police_clearance_doc.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -614,10 +655,10 @@ Action
        <p v-if="police_clearance_doc !== null" class="mb-0 text-xs limit-file-name">{{ police_clearance_doc.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="police_clearance_doc !== null" @click="deleteDocument(police_clearance_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="police_clearance_doc !== null" @click="deleteDocument(police_clearance_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(6,'Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else @click="getDocType(6,'Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -627,7 +668,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="latest_renewal_doc !== null">
-    <a v-if="latest_renewal_doc !== null" :href="`${$page.props.blob_file_path}${latest_renewal_doc.document}`" target="_blank">
+    <a v-if="latest_renewal_doc !== null" @click="viewFile(latest_renewal_doc.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     
@@ -637,16 +678,16 @@ Action
        <p v-if="latest_renewal_doc !== null" class="mb-0 text-xs limit-file-name">{{ latest_renewal_doc.document_name }}</p>
       <!-- <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p> -->
     </div>
-    <a v-if="latest_renewal_doc !== null" @click="deleteDocument(latest_renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-if="latest_renewal_doc !== null" @click="deleteDocument(latest_renewal_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
 
     <a v-if="latest_renewal_licence_doc !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
-      :href="`${$page.props.blob_file_path}${latest_renewal_licence_doc.document_file}`">
+    @click="viewFile(latest_renewal_licence_doc.id)" href="#!">
       <i class="fa fa-link h5" aria-hidden="true"></i>
     </a>
 
-    <a v-else-if="latest_renewal_doc == null" @click="getDocType(6,'Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" href="javascript:;">
+    <a v-else-if="latest_renewal_doc == null" @click="getDocType(6,'Latest Renewal/Licence')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
 
   </li>  
@@ -664,7 +705,7 @@ Action
 
 <Link v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</Link>
 <a v-if="nomination.merged_document !== null" 
-:href="`/storage/app/public/${nomination.merged_document.file_name}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
+:href="`/storage/app/public/${nomination.merged_document}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>
 <hr>
 
@@ -680,7 +721,7 @@ Action
     <ul class="list-group">
      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="scanned_app !== null">
-        <a :href="`${$page.props.blob_file_path}${scanned_app.document}`" target="_blank">
+        <a @click="viewFile(scanned_app.id)" href="#!">
         <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -690,10 +731,10 @@ Action
           <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
           <p v-if="scanned_app !== null" class="mb-0 text-xs"></p>
         </div>
-        <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
         <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-else @click="getDocType(7,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <a v-else @click="getDocType(7,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
         <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
       </li>  
     </ul>
@@ -713,7 +754,7 @@ Action
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded !== null">
-    <a :href="`${$page.props.blob_file_path}${nomination_logded.document}`" target="_blank">
+    <a @click="viewFile(nomination_logded.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -723,10 +764,10 @@ Action
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="nomination_logded !== null" class="mb-0 text-xs"></p>
     </div>
-    <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(8,'Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(8,'Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -779,7 +820,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
-    <a :href="`${$page.props.blob_file_path}${nomination_issued.document}`" target="_blank">
+    <a @click="viewFile(nomination_issued.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -788,10 +829,10 @@ Action
        <p v-if="nomination_issued !== null" class="mb-0 text-xs limit-file-name">{{ nomination_issued.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
     </div>
-    <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(9,'Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(9,'Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>  
 </ul>
@@ -847,7 +888,7 @@ Action
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
-    <a :href="`${$page.props.blob_file_path}${nomination_delivered.document}`" target="_blank">
+    <a @click="viewFile(nomination_delivered.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -857,10 +898,10 @@ Action
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
       <p v-if="nomination_delivered !== null" class="mb-0 text-xs"></p>
     </div>
-    <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
-    <a v-else @click="getDocType(10,'Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+    <a v-else @click="getDocType(10,'Nomination Delivered')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
   </li>   
 </ul>
@@ -918,7 +959,6 @@ Save</button>
 </div>
 <hr class="vertical dark" />
 </div>
-<!-- //tasks were here -->
 
 </div>
       <!-- <LiquorBoardRequest 
