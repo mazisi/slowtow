@@ -188,24 +188,26 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             "document"=> "required|mimes:pdf"
             ]);
             
-           
-           $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
-           $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
-           $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-           
-           
-                $fileModel = new NominationDocument;
-                $fileModel->document_name = $fileName;
-                $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-                $fileModel->nomination_id = $request->nomination_id;
-                $fileModel->doc_type = $request->doc_type;
-                $fileModel->date = $request->date;
-                $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-  
-              if($fileModel->save()){
-                Nomination::whereId($fileModel->nomination_id)->update(['status' => $request->stage]);
-                    return back()->with('success','Document uploaded successfully.');
-               }
+                $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+                $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
+                $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+
+            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                        $fileModel = new NominationDocument;
+                        $fileModel->document_name = $fileName;
+                        $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+                        $fileModel->nomination_id = $request->nomination_id;
+                        $fileModel->doc_type = $request->doc_type;
+                        $fileModel->date = $request->date;
+                        $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
+        
+                    if($fileModel->save()){
+                        Nomination::whereId($fileModel->nomination_id)->update(['status' => $request->stage]);
+                            return back()->with('success','Document uploaded successfully.');
+                    }
+                }else{
+                    return back()->with('error','Azure storage could not be reached.Please try again.');              
+                }
            
 
     }

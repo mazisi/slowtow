@@ -241,6 +241,7 @@
   import { Inertia } from '@inertiajs/inertia';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
+  import { onMounted } from 'vue';
   
   export default {
    props: {
@@ -294,15 +295,25 @@
         }
 
         const notify = (message) => {
-        toast(message, {
-          autoClose: 2000,
-        });
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
         }
-      const error = (message) => {
-        toast(message, {
-          autoClose: 2000,
+
+        onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
         });
-      }
       return { submit, form ,options, deleteLicence, notify }
     },
      components: {

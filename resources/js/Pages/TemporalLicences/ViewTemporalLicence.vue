@@ -48,7 +48,11 @@ export default {
     function update() {
          form.patch(`/update-temp-licence`, {
           onSuccess: () => { 
-           notify(props.success)
+            if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
          },
           })
         }
@@ -60,9 +64,16 @@ export default {
         }
 
         const notify = (message) => {
-          toast(message, {
+          if(props.success){
+            toast.success(message, {
             autoClose: 2000,
-           });
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
         }
 
     return {

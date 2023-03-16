@@ -3,9 +3,11 @@ import Layout from "../../Shared/Layout.vue";
 import { Head,Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import Paginate from "../../Shared/Paginate.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
-name: "dashboard-default",
+name: "Alterations",
   props: {
     errors: Object,
     licence_dropdowns: Object,
@@ -33,11 +35,20 @@ name: "dashboard-default",
   },
 
   methods: {
-    submit() {
-      this.$inertia.post(`/submit-altered-licence/${this.licence.id}`, this.form)
-    },
 
-    
+   notify(message){
+          if(this.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(this.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        },
+
    limit(string='', limit = 35) {
         if(string){
           if(string.length >= limit){
@@ -108,7 +119,7 @@ name: "dashboard-default",
         
         <td class="text-sm text-center">
           <Link :href="`/view-alteration/${alter.slug}`">
-          <i v-if="alter.status == '4'" class="fa fa-check text-info" aria-hidden="true"></i>
+          <i v-if="alter.status == '8'" class="fa fa-check text-info" aria-hidden="true"></i>
            <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
       </Link>
         </td>

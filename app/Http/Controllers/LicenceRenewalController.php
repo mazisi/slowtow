@@ -172,7 +172,7 @@ class LicenceRenewalController extends Controller
         try {
             LicenceRenewal::whereSlug($slug)->delete();
         
-            return to_route('renew_licence',['slug' => $licence_slug])->with('success','Renewal deleted successful.');
+            return to_route('renew_licence',['slug' => $licence_slug])->with('success','Renewal deleted successfully.');
       
         } catch (\Throwable $th) {
             return to_route('renew_licence',['slug' => $licence_slug])->with('error','Error deleting renewal.');

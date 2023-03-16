@@ -46,7 +46,7 @@ class LicenceController extends Controller
                 ->orWhere(function ($query) {
                     $query->where('trading_name','LIKE','%'.request('term').'%')
                     ->where('old_licence_number','LIKE','%'.request('term').'%')
-                    ->where('licence_number','LIKE','%'.request('term').'%');
+                    ->orWhere('licence_number','LIKE','%'.request('term').'%');
                 });
             
             })

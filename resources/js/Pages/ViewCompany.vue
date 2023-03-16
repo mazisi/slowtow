@@ -138,7 +138,7 @@
 <div class="col-md-6 columns">
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="company_doc !== ''">
-    <a v-if="company_doc" :href="`${$page.props.blob_file_path}${company_doc.document_file}`" target="_blank">
+    <a v-if="company_doc" @click="viewFile(company_doc.id)" href="#!">
      <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -160,7 +160,7 @@
 
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="cipc_cert">
-    <a v-if="cipc_cert" :href="`${$page.props.blob_file_path}${cipc_cert.document_file}`" target="_blank">
+    <a v-if="cipc_cert" @click="viewFile(cipc_cert.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -181,7 +181,7 @@
 
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="bee_cert">
-    <a v-if="bee_cert" :href="`${$page.props.blob_file_path}${bee_cert.document_file}`" target="_blank">
+    <a v-if="bee_cert" @click="viewFile(bee_cert.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -207,7 +207,7 @@
 
 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="lta_cert">
-    <a v-if="lta_cert" :href="`${$page.props.blob_file_path}${lta_cert.document_file}`" target="_blank">
+    <a v-if="lta_cert" @click="viewFile(lta_cert.id)" href="#!">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -228,7 +228,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="contrib_cert">
-    <a v-if="contrib_cert" :href="`${$page.props.blob_file_path}${contrib_cert.document_file}`" target="_blank">
+    <a v-if="contrib_cert" @click="viewFile(contrib_cert.id)" href="#!">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -252,7 +252,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="sars_cert">
-    <a v-if="sars_cert" :href="`${$page.props.blob_file_path}${sars_cert.document_file}`" target="_blank">
+    <a v-if="sars_cert" @click="viewFile(sars_cert.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -674,7 +674,7 @@ import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Multiselect from '@vueform/multiselect';
 import Banner from './components/Banner.vue';
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import Paginate from '../Shared/Paginate.vue';
 import Task from "./Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
@@ -791,11 +791,12 @@ export default {
            editPerson.patch(`/update-position/${pivot_id}`, {
            preserveScroll: true,
            onSuccess: () => {
-            notify(props.success)      
+            if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                   }    
            },
-           onError: () => { 
-              error()
-            },
           })  
         }
 
@@ -805,7 +806,11 @@ export default {
            onSuccess: (page) => { 
             this.show_modal = false;
             document.querySelector('.modal-backdrop').remove();
-            notify(props.success);
+            if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
             addPeopleForm.reset();
            },
            onError: () => { 
@@ -822,7 +827,11 @@ export default {
             this.show_modal = false;
             this.show_file_name = false;
             document.querySelector('.modal-backdrop').remove()
-            notify(props.success);
+            if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
            
           },
           onError: () => { 
@@ -840,11 +849,12 @@ export default {
           if(confirm('Document will be deleted permanently!! Continue??')){
             Inertia.delete(`/delete-company-document/${id}`,{
               onSuccess: () => { 
-               notify(props.success)
-             },
-            onError: () => { 
-              error()
-            },
+               if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+             }
             })
           }
         }
@@ -853,11 +863,12 @@ export default {
           if(confirm(company_name + ' will be deleted.. Continue??')){
             Inertia.delete(`/delete-company/${props.company.slug}`,{
               onSuccess: () => { 
-               notify(props.success)
-              },
-              onError: () => { 
-                error()
-              },
+               if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+              }
             })
           }
         }
@@ -866,11 +877,12 @@ export default {
       form.post('/update-company', {
         preserveScroll: true,
         onSuccess: () => { 
-               notify(props.success)
-             },
-            onError: () => { 
-              error()
-            },
+               if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+             }
       })
       
     }
@@ -881,11 +893,12 @@ export default {
         if(confirm(full_name + ' will be removed from this company...Continue..??')){
           Inertia.delete(`/unlink-person/${id}`,{
             onSuccess: () => { 
-               notify(props.success)
-             },
-            onError: () => { 
-              error()
-            },
+               if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+             }
         })
         }
       }
@@ -908,11 +921,12 @@ export default {
             }
             updateStatusForm.patch(`/update-company-active-status/${props.company.slug}`,{
               onSuccess: () => { 
-               notify(props.success)
-             },
-              onError: () => { 
-              error()
-             },
+                if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+             }
              })
            
       }
@@ -936,15 +950,45 @@ export default {
 
     
       const notify = (message) => {
-        toast(message, {
-          autoClose: 2000,
-        });
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
         }
-      const error = (message) => {
-        toast(message, {
-          autoClose: 2000,
+
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'CompanyDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
+
+         onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
         });
-      }
 
     return {
       showMenu,
@@ -972,7 +1016,8 @@ export default {
       updatePerson,
       show_modal,
       copyBusinessAddress,
-      deleteCompany
+      deleteCompany,
+      viewFile,checkingFileProgress
     }
   },
 

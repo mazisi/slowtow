@@ -110,6 +110,9 @@ import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
+import { onMounted } from 'vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: "Transfers",
@@ -120,16 +123,44 @@ export default {
     error: String,
     errors: Object
   },
+  setup(props){
 
-  methods: {
-    limit(string='', limit=25){
+    function limit(string='', limit=25){
           if(string.length >= limit){
           return string.substring(0, limit) + '...'
         }  
           return string.substring(0, limit)
         }
+
+
+        const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
+    return {
+      limit,
+      notify,
+      toast
+    }
   },
-  
+
   components: {
     Layout,
     Link,

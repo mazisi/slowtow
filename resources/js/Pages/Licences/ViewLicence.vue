@@ -414,7 +414,7 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue'
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
@@ -625,6 +625,14 @@ export default {
                 
                })
          }
+
+         onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
 
     return {
       checkingFileProgress,viewFile,

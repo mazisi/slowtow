@@ -1,10 +1,12 @@
 <script>
 import Layout from "../Shared/Layout.vue";
-import { ref, watch, reactive } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import { Link, useForm } from '@inertiajs/inertia-vue3';
 import Banner from './components/Banner.vue';
 import Paginate from "../Shared/Paginate.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 
 export default {
@@ -44,11 +46,34 @@ export default {
           Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
         }, 1000));
 
+        const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
     return {
       term,
       form,
       search,
-      limit
+      toast,
+      limit,
+      notify
     }
   },
   components: {
@@ -138,7 +163,7 @@ View
 </tr>
 </thead>
 <tbody>
-<tr v-for="company in companies.data" :key="company.id">
+<tr v-if="companies.data" v-for="company in companies.data" :key="company.id">
 <td class="align-middle text-sm">
 <i v-if="company.active == 1" data-bs-placement="top" title="Active" class="fa fa-check text-success" aria-hidden="true"></i>
 
@@ -175,6 +200,11 @@ View
 
 </td>
 
+</tr>
+<tr v-else >
+  <td></td>
+  <td></td>
+  <td><p class="text-danger text-center">No companies found.</p></td>
 </tr>
 
 

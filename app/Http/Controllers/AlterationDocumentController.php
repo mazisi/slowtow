@@ -54,14 +54,16 @@ class AlterationDocumentController extends Controller
 
     public function merge(Request $request){
 
-        $exist =  Alteration::whereId($request->alteration_id)->whereNotNull('merged_document')->first(); 
+        try {
+          
+          $exist =  Alteration::whereId($request->alteration_id)->whereNotNull('merged_document')->first(['id','merged_document']); 
         $merger = PDFMerger::init();           
           if (! is_null($exist)) {
             unlink(storage_path('app/public/').$exist->merged_document);
             $exist->update(['merged_document' => null]);
           }
                 
-         $alterations =  AlterationDocument::where('alteration_id',$request->alteration_id)->whereNotNull('num')->orderBy('num','ASC')->get();
+         $alterations =  AlterationDocument::where('alteration_id',$request->alteration_id)->whereNotNull('num')->orderBy('num','ASC')->get(['path']);
          $model =  Alteration::whereId($request->alteration_id)->first();
           foreach ($alterations as $alteration) {
             $merger->addPDF(env('BLOB_FILE_PATH').$alteration->path, 'all');
@@ -72,7 +74,11 @@ class AlterationDocumentController extends Controller
           $model->update(['merged_document' => $fileName]);
 
           $merger->save(storage_path('/app/public/'.$fileName));
+          
           return back()->with('success','Document merged successfully.');
+        } catch (\Throwable $th) {
+          return back()->with('error','Error merging document.');
+        }
           
 
     }

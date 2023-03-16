@@ -94,7 +94,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document">
-    <a @click="viewFileOnNewTab(id_document.id)" href="#!">
+    <a @click="viewFile(id_document.id)" href="#!">
     <i v-if="id_document.path.includes('.pdf')" class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     
@@ -123,7 +123,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance">
-    <a @click="viewFileOnNewTab(police_clearance.id)" href="#!">
+    <a @click="viewFile(police_clearance.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -148,7 +148,7 @@
   <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc">
-    <a @click="viewFileOnNewTab(passport_doc.id)" href="#!">
+    <a @click="viewFile(passport_doc.id)" href="#!">
     <i v-if="passport_doc.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     </a>
@@ -178,7 +178,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="work_permit_doc">
-    <a @click="viewFileOnNewTab(work_permit_doc.id)" target="#!">
+    <a @click="viewFile(work_permit_doc.id)" target="#!">
     <i v-if="work_permit_doc.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     </a>
@@ -207,7 +207,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="fingerprints !== null">
-    <a :href="`${$page.props.blob_file_path}${fingerprints.path}`" target="_blank">
+    <a @click="viewFile(fingerprints.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -523,7 +523,7 @@ const form = useForm({
 
        
 
-         function viewFileOnNewTab(model_id) {
+         function viewFile(model_id) {
               let model = 'PeopleDocument';
                Inertia.visit(`/view-file/${model}/${model_id}`,{
                 replace: true,
@@ -536,7 +536,7 @@ const form = useForm({
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
         assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
-        show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,viewFileOnNewTab
+        show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,viewFile
      }
 },
  components: {

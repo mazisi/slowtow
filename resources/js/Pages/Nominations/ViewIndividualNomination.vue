@@ -5,7 +5,7 @@ import { Link,useForm } from '@inertiajs/inertia-vue3';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
@@ -158,9 +158,13 @@ export default{
           })
       }
 
-      // const mergeDocument = () => {
-      //     updateForm.post(`/merge-document/${props.nomination.id}`)
-      // }
+      const mergeDocument = () => {
+          Inertia.get(`/merge-document/${props.nomination.id}`,{
+            onStart: () => {
+              checkingFileProgress('Getting your files ready...')  
+            }
+          })
+      }
 
    
           function deleteNomination() {
@@ -233,12 +237,19 @@ export default{
                })
          }
 
- 
+         onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
       return{options,pushData,updateNomination,updateDate,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,
             getDocType,nomineeForm,uploadDoc,updateForm,file_name,getFileName,notify,
-            checkingFileProgress, viewFile, deleteNomination
+            checkingFileProgress, viewFile, deleteNomination,mergeDocument
 
 
 
@@ -520,7 +531,7 @@ Action
 </tr>
 </thead>
 <tbody>
-<tr v-for="person in nomination.people" :key="person.id" >
+<tr v-if="nomination.people" v-for="person in nomination.people" :key="person.id" >
 <td>
 <div class="d-flex px-2 py-1" >
 
@@ -542,7 +553,10 @@ Action
 </Link>
 </td>
 </tr>
-
+<tr v-else >
+  <td></td>
+  <td><p class="text-danger text-center">No nominees found.</p></td>
+</tr>
 
 </tbody>
 </table>
@@ -695,15 +709,16 @@ Action
 </div>
 
 <div class="text-end ">
-<Link v-if="police_clearance_doc !== null
+  <button v-if="police_clearance_doc !== null
 && certified_id_doc !== null
 && attorney_doc !== null
 && liquor_board !== null
-&& nomination_forms !== null" 
-:href="`/merge-document/${nomination.id}`" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
-</Link>
+&& nomination_forms !== null" @click="mergeDocument" type="button" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
+</button>
 
 <Link v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</Link>
+
+
 <a v-if="nomination.merged_document !== null" 
 :href="`/storage/app/public/${nomination.merged_document}`" target="_blank" class="btn btn-sm btn-secondary">View</a>
 </div>

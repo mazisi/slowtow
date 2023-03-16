@@ -128,6 +128,7 @@ import Multiselect from '@vueform/multiselect';
 import Paginate from "@/Shared/Paginate.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { onMounted } from 'vue';
 
 
 import { ref } from 'vue';
@@ -199,6 +200,14 @@ export default {
           });
           }
         }
+
+        onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
 
     return { year,years,form, submit, deleteRenewal, limit,toast, notify }
   },

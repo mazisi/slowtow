@@ -15,11 +15,11 @@ class MergeDocumentController extends Controller{
        try {
         
 
-        $nominations =  NominationDocument::where('nomination_id',$id)->get();
+        $nominations =  NominationDocument::where('nomination_id',$id)->get(['document','licence_id']);
       
           $merger = PDFMerger::init();
 
-          $exist = MergedDocument::where('nomination_id',$id)->first();
+          $exist = MergedDocument::where('nomination_id',$id)->first(['file_name']);
           
           //  Check if original licence
           //  is uploaded or else merge latest renewal
@@ -39,7 +39,7 @@ class MergeDocumentController extends Controller{
 
           }else{
             $nom = Nomination::find($id);
-            $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$nom->licence_id)->first();
+            $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$nom->licence_id)->first(['document_file']);
               if(!$original_licence){
                 return back()->with('error','Original Licence or Latest Renewal NOT found.Please ensure at least on of them is uploaded.');
               }

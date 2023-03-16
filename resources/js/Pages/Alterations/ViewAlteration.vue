@@ -6,6 +6,9 @@ import Banner from '../components/Banner.vue';
 import { Inertia } from '@inertiajs/inertia';
 import { ref } from "vue";
 import Task from "../Tasks/Task.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 
 export default {
   name: "ViewAlteration",
@@ -59,7 +62,15 @@ export default {
           })
 
     function update() {
-          form.patch(`/update-alteration`)
+          form.patch(`/update-alteration`,{
+            onSuccess: () => { 
+               if(props.success){
+                  notify(props.success)
+                }else if(props.error){
+                  notify(props.error)
+                }
+              },
+          })
         }
 
     function pushData(e,status_value){
@@ -88,8 +99,12 @@ export default {
                 this.uploadDoc.reset();
                 this.show_file_name = false;
                 this.show_modal = false;
-                let dismiss = document.querySelector('.modal-backdrop') 
-                dismiss.remove();
+                document.querySelector('.modal-backdrop').remove();
+                 if(props.success){
+                   notify(props.success)
+                 }else if(props.error){
+                  notify(props.error)
+                 }
                 
            },
             })
@@ -98,7 +113,13 @@ export default {
       function deleteDocument(id){
           if(confirm('Document will be deleted...Continue ??')){
             Inertia.delete(`/delete-alteration-document/${id}`, {
-              //
+              onSuccess: () => { 
+               if(props.success){
+                  notify(props.success)
+                }else if(props.error){
+                  notify(props.error)
+                }
+              },
             })
           }
         }
@@ -131,8 +152,48 @@ export default {
     function updateDate(){
         form.patch(`/update-alteration-date/${props.alteration.slug}`, {
              preserveScroll: true,
+             onSuccess: () => { 
+               if(props.success){
+                  notify(props.success)
+                }else if(props.error){
+                  notify(props.error)
+                }
+              },
            }) 
       }
+
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'AlterationDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
 
     return {
       form,showMenu,show_modal,updateDate,
@@ -142,9 +203,10 @@ export default {
       getFileName,
       submitDocument,
       deleteDocument,
-      getDocType,
+      getDocType,toast,
       uploadDoc,getDocumentType,
-      deleteAlteration,file_has_apostrophe
+      deleteAlteration,file_has_apostrophe,
+      viewFile,checkingFileProgress,notify
     };
   },
     
@@ -220,7 +282,7 @@ export default {
     <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="client_quoted !== null">
-        <a :href="`${$page.props.blob_file_path}${client_quoted.path}`" target="_blank">
+        <a @click="viewFile(client_quoted.id)" href="#!">
         <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -251,7 +313,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`${$page.props.blob_file_path}${client_invoiced.path}`" target="_blank">
+    <a @click="viewFile(client_invoiced.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -327,7 +389,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="application_form !== ''">
-    <a v-if="application_form" :href="`${$page.props.blob_file_path}${application_form.path}`" target="_blank">
+    <a v-if="application_form" @click="viewFile(application_form.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -349,7 +411,7 @@ export default {
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="dimensional_plans !== ''">
-    <a v-if="dimensional_plans" :href="`${$page.props.blob_file_path}${dimensional_plans.path}`" target="_blank">
+    <a v-if="dimensional_plans" @click="viewFile(dimensional_plans.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -371,7 +433,7 @@ export default {
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="payment_to_liquor_board !== ''">
-    <a v-if="payment_to_liquor_board" :href="`${$page.props.blob_file_path}${payment_to_liquor_board.path}`" target="_blank">
+    <a v-if="payment_to_liquor_board" @click="viewFile(payment_to_liquor_board.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -397,7 +459,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="poa_res">
-    <a v-if="poa_res.path" :href="`${$page.props.blob_file_path}${poa_res.path}`" target="_blank">
+    <a v-if="poa_res.path" @click="viewFile(poa_res.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -420,7 +482,7 @@ export default {
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="smoking_affidavict !== ''">
-    <a v-if="smoking_affidavict" :href="`${$page.props.blob_file_path}${smoking_affidavict.path}`" target="_blank">
+    <a v-if="smoking_affidavict" @click="viewFile(smoking_affidavict.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -440,7 +502,7 @@ export default {
   </li>
 
 </ul>
-<a v-if="alteration.merged_document !==null" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
+<a v-if="alteration.merged_document" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
 
 <button 
 v-if="application_form !== null
@@ -466,7 +528,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a :href="`${$page.props.blob_file_path}${liqour_board.path}`" target="_blank">
+    <a @click="viewFile(liqour_board.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -530,7 +592,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="alteration_logded !== null">
-    <a :href="`${$page.props.blob_file_path}${alteration_logded.path}`" target="_blank">
+    <a @click="viewFile(alteration_logded.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -594,7 +656,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certification_issued !== null">
-    <a :href="`${$page.props.blob_file_path}${certification_issued.path}`" target="_blank">
+    <a @click="viewFile(certification_issued.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -658,7 +720,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="alteration_delivered !== null">
-    <a :href="`${$page.props.blob_file_path}${alteration_delivered.path}`" target="_blank">
+    <a :click="viewFile(alteration_delivered.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>

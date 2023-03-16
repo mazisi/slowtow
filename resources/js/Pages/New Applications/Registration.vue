@@ -64,7 +64,7 @@
     <ul class="list-group">
       <li class="px-0 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="client_invoiced !== null">
-        <a :href="`${$page.props.blob_file_path}${client_invoiced.document_file}`" target="_blank">
+        <a @click="viewFile(client_invoiced.id)" href="#!">
         <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -175,7 +175,7 @@
     <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="payment_to_liqour_board">
-        <a :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank">
+        <a @click="viewFile(payment_to_liqour_board.id)" href="#!">
         <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -215,7 +215,7 @@
       <i v-if="gba_application_form === null" 
       @click="getDocType(5,'GLB Application Forms',1)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${gba_application_form.document_file}`" target="_blank">
+      <a v-else @click="viewFile(gba_application_form.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="gba_application_form !== null" @click="deleteDocument(gba_application_form.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
       
@@ -226,7 +226,7 @@
     <div class="row"><div class="col-md-7" >
       <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
     </div>
-    <a v-if="payment_to_liqour_board !== null" :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank" class="col-md-1">
+    <a v-if="payment_to_liqour_board !== null" @click="viewFile(payment_to_liqour_board.id)" href="#!" class="col-md-1">
       <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
     </a>
   </div>
@@ -240,7 +240,7 @@
       <i v-if="application_forms === null" 
       @click="getDocType('Application Forms',3)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${application_forms.document_file}`" target="_blank">
+      <a v-else @click="viewFile(application_forms.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="application_forms !== null" @click="deleteDocument(application_forms.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
       
@@ -256,7 +256,7 @@
       <i v-if="company_docs === null" 
       @click="getDocType('Company Documents',4)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${company_docs.document_file}`" target="_blank">
+      <a v-else @click="viewFile(company_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="company_docs !== null" @click="deleteDocument(company_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
       
@@ -271,7 +271,7 @@
       <i v-if="cipc_docs === null" 
       @click="getDocType('CIPC Documents',5)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${cipc_docs.document_file}`" target="_blank">
+      <a v-else @click="viewFile(cipc_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="cipc_docs !== null" @click="deleteDocument(cipc_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
       
@@ -286,7 +286,7 @@
       <i v-if="id_docs === null" 
       @click="getDocType('ID Documents',6)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${id_docs.document_file}`" target="_blank">
+      <a v-else @click="viewFile(id_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="id_docs !== null" @click="deleteDocument(id_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -300,7 +300,7 @@
       <i v-if="police_clearance === null" 
       @click="getDocType('Police Clearance',7)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${police_clearance.document_file}`" target="_blank">
+      <a v-else @click="viewFile(police_clearance.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="police_clearance !== null" @click="deleteDocument(police_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -314,7 +314,7 @@
       <i v-if="tax_clearance === null" 
       @click="getDocType('Tax Clearance',8)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${tax_clearance.document_file}`" target="_blank">
+      <a v-else @click="viewFile(tax_clearance.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="tax_clearance !== null" @click="deleteDocument(tax_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -328,7 +328,7 @@
       <i v-if="lta_certificate === null" 
       @click="getDocType('LTA Certificate',9)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${lta_certificate.document_file}`" target="_blank">
+      <a v-else @click="viewFile(lta_certificate.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="lta_certificate !== null" @click="deleteDocument(lta_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -342,7 +342,7 @@
       <i v-if="shareholding_info === null" 
       @click="getDocType('Shareholding Info',10)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${shareholding_info.document_file}`" target="_blank">
+      <a v-else @click="viewFile(shareholding_info.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="shareholding_info !== null" @click="deleteDocument(shareholding_info.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -356,7 +356,7 @@
       <i v-if="financial_interests === null" 
       @click="getDocType('Financial Interests',11)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${financial_interests.document_file}`" target="_blank">
+      <a v-else @click="viewFile(financial_interests.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="financial_interests !== null" @click="deleteDocument(financial_interests.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -370,7 +370,7 @@
       <i v-if="_500m_affidavict === null" 
       @click="getDocType('500m Affidavit',12)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${_500m_affidavict.document_file}`" target="_blank">
+      <a v-else  @click="viewFile(_500m_affidavict.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="_500m_affidavict !== null" @click="deleteDocument(_500m_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -384,7 +384,7 @@
       <i v-if="government_gazette === null" 
       @click="getDocType('Government Gazette Adverts',13)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${government_gazette.document_file}`" target="_blank">
+      <a v-else @click="viewFile(government_gazette.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="government_gazette !== null" @click="deleteDocument(government_gazette.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -398,7 +398,7 @@
       <i v-if="advert_affidavict === null" 
       @click="getDocType('Advert Affidavit',14)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${advert_affidavict.document_file}`" target="_blank">
+      <a v-else @click="viewFile(advert_affidavict.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="advert_affidavict !== null" @click="deleteDocument(advert_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -414,7 +414,7 @@
       <i v-if="proof_of_occupation === null" 
       @click="getDocType('Proof of Occupation',15)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${proof_of_occupation.document_file}`" target="_blank">
+      <a v-else @click="viewFile(proof_of_occupation.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="proof_of_occupation !== null" @click="deleteDocument(proof_of_occupation.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -427,7 +427,7 @@
       <i v-if="representations === null" 
       @click="getDocType('Representations',16)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${representations.document_file}`" target="_blank">
+      <a v-else @click="viewFile(representations.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="representations !== null" @click="deleteDocument(representations.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -441,7 +441,7 @@
       <i v-if="menu === null" 
       @click="getDocType('Menu',17)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${menu.document_file}`" target="_blank">
+      <a v-else @click="viewFile(menu.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="menu !== null" @click="deleteDocument(menu.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -455,7 +455,7 @@
       <i v-if="photographs === null" 
       @click="getDocType('Photographs',18)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${photographs.document_file}`" target="_blank">
+      <a v-else @click="viewFile(photographs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="photographs !== null" @click="deleteDocument(photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -469,7 +469,7 @@
       <i v-if="consent_letter === null" 
       @click="getDocType('Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${consent_letter.document_file}`" target="_blank">
+      <a v-else @click="viewFile(consent_letter.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="consent_letter !== null" @click="deleteDocument(consent_letter.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -483,7 +483,7 @@
       <i v-if="zoning_certificate === null" 
       @click="getDocType('Zoning Certificate',20)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${zoning_certificate.document_file}`" target="_blank">
+      <a v-else @click="viewFile(zoning_certificate.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="zoning_certificate !== null" @click="deleteDocument(zoning_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -497,7 +497,7 @@
       <i v-if="local_authority === null" 
       @click="getDocType('Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${local_authority.document_file}`" target="_blank">
+      <a v-else @click="viewFile(local_authority.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="local_authority !== null" @click="deleteDocument(local_authority.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -511,7 +511,7 @@
       <i v-if="mapbook_plans === null" 
       @click="getDocType('Mapbook Plans',22)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${mapbook_plans.document_file}`" target="_blank">
+      <a v-else @click="viewFile(mapbook_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="mapbook_plans !== null" @click="deleteDocument(mapbook_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -525,7 +525,7 @@
       <i v-if="google_map_plans === null" 
       @click="getDocType('Google Map Plans',23)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${google_map_plans.document_file}`" target="_blank">
+      <a v-else @click="viewFile(google_map_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="google_map_plans !== null" @click="deleteDocument(google_map_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -539,7 +539,7 @@
       <i v-if="description === null" 
       @click="getDocType('Description',24)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${description.document_file}`" target="_blank">
+      <a v-else @click="viewFile(description.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="description !== null" @click="deleteDocument(description.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -553,7 +553,7 @@
       <i v-if="site_plans === null" 
       @click="getDocType('Site Plans',25)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${site_plans.document_file}`" target="_blank">
+      <a v-else @click="viewFile(site_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="site_plans !== null" @click="deleteDocument(site_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -567,7 +567,7 @@
       <i v-if="dimensional_plans === null" 
       @click="getDocType('Full Dimensioned Plans',26)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${dimensional_plans.document_file}`" target="_blank">
+      <a v-else @click="viewFile(dimensional_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="dimensional_plans !== null" @click="deleteDocument(dimensional_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -581,7 +581,7 @@
       <i v-if="advert_photographs === null" 
       @click="getDocType('Advert Photographs',27)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${advert_photographs.document_file}`" target="_blank">
+      <a v-else @click="viewFile(advert_photographs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="advert_photographs !== null" @click="deleteDocument(advert_photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -595,7 +595,7 @@
       <i v-if="newspaper_adverts === null" 
       @click="getDocType('Newspaper Adverts',28)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${newspaper_adverts.document_file}`" target="_blank">
+      <a v-else @click="viewFile(newspaper_adverts.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
       <i v-if="newspaper_adverts !== null" @click="deleteDocument(newspaper_adverts.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
@@ -654,7 +654,7 @@
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar " v-if="scanned_application !== null">
-      <a :href="`${$page.props.blob_file_path}${scanned_application.document_file}`" target="_blank">
+      <a @click="viewFile(scanned_application.id)" href="#!">
       <i class="fa fa-file-pdf text-lg text-danger h5" aria-hidden="true"></i>
       </a>
       </div>
@@ -665,8 +665,8 @@
       <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
       <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
-      <a @click="getDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
+      <a v-else @click="getDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
+      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" >
       <i class="fa fa-upload h5" aria-hidden="true"></i>
       </a>
     </li>
@@ -722,7 +722,7 @@
       <ul class="list-group">
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
           <div class="avatar me-3" v-if="application_logded !== null">
-          <a :href="`${$page.props.blob_file_path}${application_logded.document_file}`" target="_blank">
+          <a @click="viewFile(application_logded.id)" href="#!">
           <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
           </a>
           </div>
@@ -787,7 +787,7 @@
           <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
             
             <div class="avatar me-3" v-if="initial_inspection_doc !== null">
-            <a :href="`${$page.props.blob_file_path}${initial_inspection_doc.document_file}`" target="_blank">
+            <a @click="viewFile(initial_inspection_doc.id)" href="#!">
             <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
             </a>
             </div>
@@ -862,7 +862,7 @@
   <ul class="list-group">
     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="final_inspection_doc !== null">
-      <a :href="`${$page.props.blob_file_path}${final_inspection_doc.document_file}`" target="_blank">
+      <a @click="viewFile(final_inspection_doc.id)" href="#!">
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
       </div>
@@ -934,7 +934,7 @@
     <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="activation_fee_requested_doc !== null">
-        <a :href="`${$page.props.blob_file_path}${activation_fee_requested_doc.document_file }`" target="_blank">
+        <a @click="viewFile(activation_fee_requested_doc.id)" href="#!">
         <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -966,7 +966,7 @@
       <ul class="list-group">
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
           <div class="avatar me-3" v-if="client_finalisation !== null">
-          <a :href="`${$page.props.blob_file_path}${client_finalisation.document_file}`" target="_blank">
+          <a @click="viewFile(client_finalisation.id)" href="#!">
           <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
           </a>
           </div>
@@ -1074,7 +1074,7 @@
           <ul class="list-group">
             <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
               <div class="avatar me-3" v-if="activation_fee_paid !== null">
-              <a :href="`${$page.props.blob_file_path}${activation_fee_paid.document_file}`" target="_blank">
+              <a @click="viewFile(activation_fee_paid.id)" href="#!">
               <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
               </a>
               </div>
@@ -1143,7 +1143,7 @@
             <ul class="list-group">
               <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                 <div class="avatar me-3" v-if="licence_issued_doc !== null">
-                <a :href="`${$page.props.blob_file_path}${licence_issued_doc.document_file}`" target="_blank">
+                <a @click="viewFile(licence_issued_doc.id)" href="#!">
                 <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
                 </a>
                 </div>
@@ -1213,7 +1213,7 @@
               <ul class="list-group">
                 <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                   <div class="avatar me-3" v-if="licence_delivered !== null">
-                  <a :href="`${$page.props.blob_file_path}${licence_delivered.document_file}`" target="_blank">
+                  <a @click="viewFile(licence_delivered.id)" href="#!">
                   <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
                   </a>
                   </div>

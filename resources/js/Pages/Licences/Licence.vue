@@ -137,7 +137,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3';
-import { reactive, ref, watch } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue';
 import Paginate from "../../Shared/Paginate.vue";
@@ -161,8 +161,6 @@ export default {
     setup(props) {
 
     const term = ref('')
-    let currentPage =  reactive(props.licences.current_page);
-
     const form = useForm({
           term: term,
           active_status: '',
@@ -189,15 +187,37 @@ export default {
         })
         }
 
+        const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
         watch(term, _.debounce(function (value) {
           Inertia.get('/licences', { term: value }, { preserveState: true, replace: true });
         }, 1000));
-          
+        
+        onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
         return {
           limit,
           form,
           term,
-          search
+          search,
+          notify
         }
     },
 

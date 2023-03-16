@@ -10,7 +10,7 @@ import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 
 export default {
   props: {
@@ -175,6 +175,34 @@ export default {
           }
         }
 
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'RenewalDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
+
+         onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
     return { year,form,show_modal,getFileName, notify,
       file_name,show_file_name,file_has_apostrophe,
      updateRenewal,updateDate,
@@ -182,7 +210,7 @@ export default {
      getDocType, submitDocument,
      deleteDocument,
      deleteRenewal,
-     limit,toast
+     limit,toast,viewFile,checkingFileProgress
      }
   },
    components: {
@@ -268,7 +296,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
+    <a @click="viewFile(client_quoted.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -333,7 +361,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
+    <a @click="viewFile(client_invoiced.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -435,7 +463,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
+    <a @click="viewFile(liqour_board.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -504,7 +532,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_issued !== null">
-    <a :href="`${$page.props.blob_file_path}${renewal_issued.document}`" target="_blank">
+    <a @click="viewFile(renewal_issued.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -570,7 +598,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_doc !== null">
-    <a :href="`${$page.props.blob_file_path}${renewal_doc.document}`" target="_blank">
+    <a @click="viewFile(renewal_doc.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>

@@ -2,7 +2,7 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Link,useForm } from '@inertiajs/inertia-vue3';
-import { ref } from 'vue';
+import { ref,onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
@@ -229,6 +229,14 @@ export default {
                 
                })
          }
+
+         onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
 
     
     return {
@@ -739,7 +747,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Proof Of Payment </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-    <a v-if="payment_to_liquor_board !== null" :href="`${$page.props.blob_file_path}${payment_to_liquor_board.document}`" target="_blank">
+    <a v-if="payment_to_liquor_board !== null" @click="viewFile(payment_to_liquor_board.id)" href="#!">
     <i class="fa fa-link float-end h5 "></i>
  </a>
     

@@ -7,8 +7,9 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
-
 import { ref } from 'vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   props: {
@@ -55,7 +56,6 @@ export default {
 
   setup (props) {
     const year = ref(new Date().getFullYear());
-    const body_max = ref(100);
     let show_modal = ref(true);  
     let show_file_name = ref(false);
     let file_name = ref('');
@@ -91,8 +91,14 @@ export default {
               onSuccess: () => { 
                 this.show_file_name = false;
                 this.show_modal = false;
-                let dismiss =  document.querySelector('.modal-backdrop')    
-                dismiss.remove();
+                document.querySelector('.modal-backdrop').remove();
+                
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+
                 uploadDoc.reset();
               },
             })
@@ -104,7 +110,11 @@ export default {
           person_id: props.licence.people_id
           })
           function mergeDocuments(type){
-            mergeForm.post(`/merge-temporal-documents/${type}`)
+            mergeForm.post(`/merge-temporal-documents/${type}`,{
+              onStart: () => { 
+                checkingFileProgress('Checking file availability...') 
+               },
+            })
           }
 
     function getDocType(stage=null,doc_type,person_or_company,merge_number){
@@ -119,7 +129,13 @@ export default {
     function deleteDocument(id){
         if(confirm('Document will be deleted permanently...Continue ??')){
           Inertia.delete(`/delete-temporal-licence-document/${id}`, {
-            //
+            onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
           })
         }
       }
@@ -135,6 +151,13 @@ export default {
     function updateLicence() {
       form.patch(`/update-prepared-temp-app/${props.licence.slug}`, {
         preserveScroll: true,
+        onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
       })
     }
 
@@ -169,8 +192,48 @@ export default {
       function updateDate(){
         form.patch(`/update-process-app-date/${props.licence.slug}`, {
              preserveScroll: true,
+             onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
            }) 
       }
+
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'TemporalLicenceDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
 
     return { year,form,show_modal,
      updateLicence,file_name,show_file_name,getFileName,
@@ -180,7 +243,8 @@ export default {
      updateDate,
      mergeDocuments,
      mergeForm,
-     deleteTemporalLicence
+     deleteTemporalLicence,
+     toast,viewFile,checkingFileProgress,notify
      }
   },
    components: {
@@ -280,7 +344,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
+    <a @click="viewFile(client_quoted.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -314,7 +378,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
+    <a @click="viewFile(client_invoiced.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -396,13 +460,13 @@ export default {
       @click="getDocType(4,'Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_application_form !== null" @click="deleteDocument(company_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="company_application_form !== null" :href="`${$page.props.blob_file_path}${company_application_form.document}`" target="_blank">
+     <a v-if="company_application_form !== null" @click="viewFile(company_application_form.id)" href="#!">
      <i v-if="company_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <a v-if="liqour_board !== null" :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
+      <a v-if="liqour_board !== null" @click="viewFile(liqour_board.id)" href="#!">
     <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
     </a>
     
@@ -414,14 +478,14 @@ export default {
        <i v-if="company_poa == null" @click="getDocType(4,'POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 curser-pointer mx-2"></i>
          <i v-if="company_poa !== null" @click="deleteDocument(company_poa.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="company_poa !== null" :href="`${$page.props.blob_file_path}${company_poa.document}`" target="_blank">
+     <a v-if="company_poa !== null" @click="viewFile(company_poa.id)" href="#!">
      <i v-if="company_poa !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
         <i v-if="company_annexure_b == null" @click="getDocType(4,'Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_annexure_b !== null" @click="deleteDocument(company_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_annexure_b !== null" :href="`${$page.props.blob_file_path}${company_annexure_b.document}`" target="_blank">
+        <a v-if="company_annexure_b !== null" @click="viewFile(company_annexure_b.id)" href="#!">
         <i v-if="company_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
@@ -436,7 +500,7 @@ export default {
          <i v-if="company_cipc == null" @click="getDocType(4,'CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
          class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_cipc !== null" @click="deleteDocument(company_cipc.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_cipc !== null" :href="`${$page.props.blob_file_path}${company_cipc.document}`" target="_blank">
+        <a v-if="company_cipc !== null" @click="viewFile(company_cipc.id)" href="#!">
         <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br> 
     <div class="col-sm-1"> </div>
@@ -447,7 +511,7 @@ export default {
      <i v-if="company_id_document == null" @click="getDocType(4,'ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_id_document !== null" @click="deleteDocument(company_id_document.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_id_document !== null" :href="`${$page.props.blob_file_path}${company_id_document.document}`" target="_blank">
+        <a v-if="company_id_document !== null" @click="viewFile(company_id_document.id)" href="#!">
         <i v-if="company_id_document !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
@@ -455,7 +519,7 @@ export default {
   <i v-if="company_representations == null" @click="getDocType('Representations','Company',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_representations !== null" @click="deleteDocument(company_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_representations !== null" :href="`${$page.props.blob_file_path}${company_representations.document}`" target="_blank">
+        <a v-if="company_representations !== null" @click="viewFile(company_representations.id)" href="#!">
         <i v-if="company_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br>  
 
@@ -464,14 +528,14 @@ export default {
      <i v-if="company_landlord_letter == null" @click="getDocType('Landlord Letter','Company',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_landlord_letter  !== null" @click="deleteDocument(company_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_landlord_letter !== null" :href="`${$page.props.blob_file_path}${company_landlord_letter.document}`" target="_blank">
+        <a v-if="company_landlord_letter !== null" @click="viewFile(company_landlord_letter.id)" href="#!">
         <i v-if="company_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
       <i v-if="company_security_letter == null" @click="getDocType('Security Letter','Company',10)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_security_letter  !== null" @click="deleteDocument(company_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_security_letter !== null" :href="`${$page.props.blob_file_path}${company_security_letter.document}`" target="_blank">
+        <a v-if="company_security_letter !== null" @click="viewFile(company_security_letter.id)" href="#!">
         <i v-if="company_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -481,7 +545,7 @@ export default {
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_advert  !== null" @click="deleteDocument(company_advert.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_advert !== null" :href="`${$page.props.blob_file_path}${company_advert.document}`" target="_blank">
+        <a v-if="company_advert !== null" @click="viewFile(company_advert.id)" href="#!">
         <i v-if="company_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -491,7 +555,7 @@ export default {
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_plan  !== null" @click="deleteDocument(company_plan.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_plan !== null" :href="`${$page.props.blob_file_path}${company_plan.document}`" target="_blank">
+        <a v-if="company_plan !== null" @click="viewFile(company_plan.id)" href="#!">
         <i v-if="company_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
@@ -535,13 +599,13 @@ export default {
       @click="getDocType(4,'Application Form','Individual',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_application_form !== null" @click="deleteDocument(individual_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="individual_application_form !== null" :href="`${$page.props.blob_file_path}${individual_application_form.document}`" target="_blank">
+     <a v-if="individual_application_form !== null" @click="viewFile(individual_application_form.id)" href="#!">
      <i v-if="individual_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <a v-if="liqour_board !== null" :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
+      <a v-if="liqour_board !== null" @click="viewFile(liqour_board.id)" href="#!">
     <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
     </a>
     
@@ -553,14 +617,14 @@ export default {
        <i v-if="power_of_attorney == null" @click="getDocType(4,'Power Of Attorney','Individual',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 curser-pointer mx-2"></i>
          <i v-if="power_of_attorney !== null" @click="deleteDocument(power_of_attorney.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="power_of_attorney !== null" :href="`${$page.props.blob_file_path}${power_of_attorney.document}`" target="_blank">
+     <a v-if="power_of_attorney !== null" @click="viewFile(power_of_attorney.id)" href="#!">
      <i v-if="power_of_attorney !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
         <i v-if="individual_annexure_b == null" @click="getDocType(4,'Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="individual_annexure_b !== null" @click="deleteDocument(individual_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_annexure_b !== null" :href="`${$page.props.blob_file_path}${individual_annexure_b.document}`" target="_blank">
+        <a v-if="individual_annexure_b !== null" @click="viewFile(individual_annexure_b.id)" href="#!">
         <i v-if="individual_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
@@ -573,7 +637,7 @@ export default {
 
 <div v-if="licence.company_id == null">
   <button type="button" class="btn btn-outline-success document-names">ID Dcocument </button>
-     <a v-if="get_person_id_document !== null" :href="`${$page.props.blob_file_path}${get_person_id_document.document}`" target="_blank">
+     <a v-if="get_person_id_document !== null" @click="viewFile(get_person_id_document.id)" href="#!">
         <i  class="fa fa-link h5 mx-2" ></i></a>
     <a v-else :href="`#!`">
         <i  class="fa fa-link h5 mx-2"></i></a> <br> 
@@ -588,7 +652,7 @@ export default {
   <i v-if="individual_representations == null" @click="getDocType(4,'Representations','Individual',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_representations !== null" @click="deleteDocument(individual_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_representations !== null" :href="`${$page.props.blob_file_path}${individual_representations.document}`" target="_blank">
+        <a v-if="individual_representations !== null" @click="viewFile(individual_representations.id)" href="#!">
         <i v-if="individual_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br>  
 
@@ -597,14 +661,14 @@ export default {
      <i v-if="individual_landlord_letter == null" @click="getDocType(4,'Landlord Letter','Individual',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_landlord_letter  !== null" @click="deleteDocument(individual_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_landlord_letter !== null" :href="`${$page.props.blob_file_path}${individual_landlord_letter.document}`" target="_blank">
+        <a v-if="individual_landlord_letter !== null" @click="viewFile(individual_landlord_letter.id)" href="#!">
         <i v-if="individual_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
       <i v-if="individual_security_letter == null" @click="getDocType(4,'Security Letter','Individual',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_security_letter  !== null" @click="deleteDocument(individual_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_security_letter !== null" :href="`${$page.props.blob_file_path}${individual_security_letter.document}`" target="_blank">
+        <a v-if="individual_security_letter !== null" @click="viewFile(individual_security_letter.id)" href="#!">
         <i v-if="individual_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -614,7 +678,7 @@ export default {
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_advert  !== null" @click="deleteDocument(individual_advert.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_advert !== null" :href="`${$page.props.blob_file_path}${individual_advert.document}`" target="_blank">
+        <a v-if="individual_advert !== null" @click="viewFile(individual_advert.id)" href="#!">
         <i v-if="individual_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -624,7 +688,7 @@ export default {
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_plan  !== null" @click="deleteDocument(individual_plan.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_plan !== null" :href="`${$page.props.blob_file_path}${individual_plan.document}`" target="_blank">
+        <a v-if="individual_plan !== null" @click="viewFile(individual_plan.id)" href="#!">
         <i v-if="individual_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
@@ -697,7 +761,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
+    <a @click="viewFile(liqour_board.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -732,7 +796,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="scanned_app !== null">
-    <a :href="`${$page.props.blob_file_path}${scanned_app.document}`" target="_blank">
+    <a @click="viewFile(scanned_app.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -791,7 +855,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_logded !== null">
-    <a :href="`${$page.props.blob_file_path}${licence_logded.document}`" target="_blank">
+    <a @click="viewFile(licence_logded.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -852,7 +916,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_issued !== null">
-    <a :href="`${$page.props.blob_file_path}${licence_issued.document}`" target="_blank">
+    <a @click="viewFile(licence_issued.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -916,7 +980,7 @@ export default {
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_delivered !== null">
-    <a :href="`${$page.props.blob_file_path}${licence_delivered.document}`" target="_blank">
+    <a @click="viewFile(licence_delivered.id)" href="#!">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
