@@ -18,6 +18,8 @@ use App\Http\Controllers\ContactController;
 
 use App\Http\Controllers\LicenceController;
 
+use App\Http\Controllers\ViewFileController;
+
 use App\Http\Controllers\Auth\LoginController;
 
 use App\Http\Controllers\EmailCommsController;
@@ -71,7 +73,6 @@ use App\Http\Controllers\Slowtowdmin\AdminsController;
 use App\Http\Controllers\TemporalLicenceDocsController;
 
 use App\Http\Controllers\NominationEmailCommsController;
-
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 
@@ -407,7 +408,7 @@ Route::group(['middleware' => ['guest']], function () {
         Route::post('/merge-temporal-documents/{type}', [TemporalLicenceDocsController::class,'merge']);
 
         
-
+        Route::get('view-file/{model}/{id}', [ViewFileController::class,'view_file'])->name('view_file');
 
 
         Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');
@@ -445,10 +446,6 @@ Route::group(['middleware' => ['guest']], function () {
         //nomination mail dispatcher
 
         Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchMail'])->name('dispatch_nom_mail');
-
-        //dispatch mail without edit
-
-        //Route::post('/dispatchMail', [DispatchMailWithoutEditingController::class,'dispatchMail'])->name('dispatch_mail_without_editing');
 
 
 

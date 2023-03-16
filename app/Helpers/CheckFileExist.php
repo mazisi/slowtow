@@ -3,7 +3,7 @@
 /**
  * Check if file has been saved in blob storage.
  */
-if (! function_exists('fileExists')) {
+if (! function_exists('fileExist')) {
   function fileExist($remote_file){
     // Initialize cURL
       $ch = curl_init($remote_file);

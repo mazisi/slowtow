@@ -99,11 +99,12 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-// import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from '../components/Banner.vue';
-import PaginateVue from "@/Shared/Paginate.vue";
+import Paginate from "../../Shared/Paginate.vue";
 import Multiselect from '@vueform/multiselect';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 
 import { ref } from 'vue';
@@ -130,18 +131,36 @@ export default {
     function submit() {
       form.post('/submit-nomination', {
         onFinish: () => form.reset('password'),
+        onSuccess: () => { 
+            if(props.success){
+                  notify(props.success)
+               }else if(props.error){
+                  notify(props.error)
+            }
+         }
       })
     }
 
-    return { year, years,form, submit }
+    const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+    return { year, years,form, submit,toast ,notify}
   },
    components: {
     Layout,
     Link,
     Head,
-    // Datepicker,
     Banner,
-    PaginateVue,
+    Paginate,
     Multiselect
   },
   

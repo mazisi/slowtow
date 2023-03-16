@@ -9,7 +9,6 @@ use App\Models\Company;
 use App\Models\Licence;
 use App\Models\Nomination;
 use App\Models\LicenceType;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
 use App\Models\LiquorBoardRequest;
@@ -20,11 +19,11 @@ class NewApplicationController extends Controller
 
     public function create(){
         
-        if(!empty(request('variation')) && request('variation') == 'company'){
-            $comp = Company::whereId(request('value'))->first();
+        if(request('variation') && request('variation') == 'Company'){
+            $comp = Company::whereId(request('id'))->first(['reg_number']);
             $this->get_reg_num_or_id_number = $comp->reg_number;
-          }elseif(!empty(request('variation')) && request('variation') == 'person'){
-           $person = People::whereId(request('value'))->first();
+          }elseif(request('variation') && request('variation') == 'Person'){
+           $person = People::whereId(request('id'))->first(['id_or_passport']);
            $this->get_reg_num_or_id_number = $person->id_or_passport;
           }
 
@@ -59,8 +58,8 @@ class NewApplicationController extends Controller
                 'trading_name' => $request->trading_name,
                 'licence_type_id' => $request->licence_type,
                 'belongs_to' => $request->belongs_to,
-                'company_id' => $request->company,
-                'people_id' => $request->person,
+                'company_id' => $request->belongs_to === 'Company' ? $request->company : NULL,
+                'people_id' => $request->belongs_to === 'Person' ? $request->person: NULL,
                 'board_region' => $request->board_region,
                 'is_new_app' => true,
                 'board_region' => $request->board_region,
@@ -68,15 +67,15 @@ class NewApplicationController extends Controller
                 'address2' => $request->address2,
                 'address3' => $request->address3,
                 'province' => $request->province,
-                'is_licence_active' => 1,
                 'slug' => sha1(now())
                ]);
                if($licence){
-                return to_route('view_licence',['slug' => $licence->slug])->with('success','Licence created successfully.');
+                return to_route('view_licence',['slug' => $licence->slug])->with('success','New App created successfully.');
                }
                
         } catch (\Throwable $th) {
-            return back()->with('error','An error occured.Please try again.');
+            //throw $th;
+           return back()->with('error','An error occured.Please try again.');
         }
        
     }
@@ -235,29 +234,34 @@ class NewApplicationController extends Controller
             'status' => $status <= 0 ? NULL : $status,
            ]);
            
-           return back()->with('success','Updated successfully');
+           return back()->with('success','Status Updated successfully');
        } catch (\Throwable $th) {
          //throw $th;
-         return back()->with('success','An error occured while updating.');
+         return back()->with('error','An error occured while updating.');
        }
        
     }
 
 public function updateRegistrationDate(Request $request, $slug)
 {
-    Licence::whereSlug($slug)->update([
-        'deposit_paid_at' => $request->deposit_paid_at,
-        'liquor_board_at' => $request->liquor_board_at,
-        'application_lodged_at' => $request->application_lodged_at,
-        'initial_inspection_at' => $request->initial_inspection_at,
-        'final_inspection_at' => $request->final_inspection_at,
-        'activation_fee_requested_at' =>$request->activation_fee_requested_at,
-        'client_paid_at' => $request->client_paid_at,
-        'activation_fee_paid_at' => $request->activation_fee_paid_at,
-        'licence_issued_at' => $request->licence_issued_at,
-        'licence_delivered_at' => $request->licence_delivered_at,
-       ]);
-   return back()->with('success','Date updated successfully.');
+    try {
+        
+        Licence::whereSlug($slug)->update([
+            'deposit_paid_at' => $request->deposit_paid_at,
+            'liquor_board_at' => $request->liquor_board_at,
+            'application_lodged_at' => $request->application_lodged_at,
+            'initial_inspection_at' => $request->initial_inspection_at,
+            'final_inspection_at' => $request->final_inspection_at,
+            'activation_fee_requested_at' =>$request->activation_fee_requested_at,
+            'client_paid_at' => $request->client_paid_at,
+            'activation_fee_paid_at' => $request->activation_fee_paid_at,
+            'licence_issued_at' => $request->licence_issued_at,
+            'licence_delivered_at' => $request->licence_delivered_at,
+           ]);
+       return back()->with('success','Date updated successfully.');
+    } catch (\Throwable $th) {
+        return back()->with('error','Error updating date.');
+    }
 }
 
 

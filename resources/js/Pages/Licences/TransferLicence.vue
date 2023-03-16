@@ -2,8 +2,7 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Link,useForm } from '@inertiajs/inertia-vue3';
-import Banner from '../components/Banner.vue'
-import { ref } from 'vue';
+import Banner from '../components/Banner.vue';
 
 
 export default {

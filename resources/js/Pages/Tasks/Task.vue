@@ -56,13 +56,16 @@
   import { useForm } from '@inertiajs/inertia-vue3';
   import { Inertia } from '@inertiajs/inertia';
   import Paginate from '../../Shared/Paginate.vue';
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
 
   export default{
     props: {
       tasks: Object,
       errors: Object,
       model_id: Number,
-      model_type: String
+      model_type: String,
+      success: Object
     },
     setup(props){
       const body_max = ref(100);
@@ -89,15 +92,26 @@
         if(confirm('This note will be deleted. Continue ?')){
           Inertia.delete(`/delete-task/${id}`, {
              preserveScroll: true,
+             onSuccess: () => { 
+              notify(props.success)
+             },
            }); 
         }
       }
+
+      const notify = (message) => {
+        toast(message, {
+          autoClose: 2000,
+        });
+        }
+
         return{
-          createTask,submitTask,checkBodyLength,body_max,deleteNote
+          createTask,submitTask,checkBodyLength,body_max,deleteNote,notify
         }
     },
     components:{
-      Paginate
+      Paginate,
+      toast
     }
   }
 </script>

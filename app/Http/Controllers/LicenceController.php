@@ -529,7 +529,7 @@ class LicenceController extends Controller
     return redirect(route('licences'))->with('success','Licence created successfully.');
     
         } catch (\Throwable $th) {
-            return back()->with('success','Error creating Licence');
+            return back()->with('error','Error creating Licence');
         }
     }
 

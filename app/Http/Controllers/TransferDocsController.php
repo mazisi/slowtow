@@ -24,7 +24,7 @@ class TransferDocsController extends Controller
                 $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
                 
 
-                if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                   $fileModel = new TransferDocument;
                   $fileModel->document_name = $request->document->getClientOriginalName();
                   $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
@@ -58,7 +58,7 @@ class TransferDocsController extends Controller
                unlink(storage_path('app/public/').$exist->merged_document);
                $exist->update(['merged_document' => null]);
              }
-          //   dd($request);
+         
             if(!is_null($request->latest_renewal)){
                 $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$request->original_licence['licence_id'])->first();
                if(!is_null($original_licence)){        
@@ -77,7 +77,7 @@ class TransferDocsController extends Controller
               }
             }
             //get proof of payment to merge
-            $merge_proof_of_payment = TransferDocument::where('licence_transfer_id',$request->transfer_id)->where('doc_type','Payment To The Liquor Board')->first();
+            $merge_proof_of_payment = TransferDocument::where('licence_transfer_id',$request->transfer_id)->where('doc_type','Payment To The Liquor Board')->first(['id','num']);
             $merge_proof_of_payment->update(['num' => 2]);
             
             $transfers =  TransferDocument::where('licence_transfer_id',$request->transfer_id)->whereNotNull('num')->orderBy('num','ASC')->get();
@@ -94,16 +94,20 @@ class TransferDocsController extends Controller
              return back()->with('success','Document merged successfully.');
 
         } catch (\Throwable $th) {
-          return back()->with('error', 'Error merging files');
+          return back()->with('error', 'Error merging files.');
         }
            
  
      }
 
     public function destroy($id){
+           try {
             $model = TransferDocument::find($id);
             $model->delete();
             return back()->with('success','Document removed successfully.');
+           } catch (\Throwable $th) {
+            return back()->with('error', 'Error deleting file.');
+           }
       
     }
 

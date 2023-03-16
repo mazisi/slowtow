@@ -268,6 +268,8 @@
   import { ref } from 'vue';
   import Banner from '../components/Banner.vue';
   import Paginate from '../../Shared/Paginate.vue';
+  import { toast } from 'vue3-toastify';
+   import 'vue3-toastify/dist/index.css';
   
   export default {
    props: {
@@ -306,6 +308,7 @@
               onSuccess: () => {
                 this.show_modal = false;
                 document.querySelector('.modal-backdrop').remove();
+                notify(props.success)
                 form.reset('body','full_name','email','role');
               }
              })
@@ -361,6 +364,7 @@
               onSuccess: () => {
                 this.show_modal = false;
                 document.querySelector('.modal-backdrop').remove();
+                notify(props.success)
               }
              })
           }
@@ -368,7 +372,7 @@
           function deActivateuser(id, status){
             Inertia.post(`/deactivate-user/${id}/${status}`,{
               onSuccess: () => {
-                //
+                notify(props.success)
               }
             })
           }
@@ -377,7 +381,7 @@
             if(confirm(`${name} will be deleted permanently. Continue ?`)){
                 Inertia.patch(`/delete-user/${user_id}`,{
                 onSuccess: () => {
-                  //
+                  notify(props.success)
                 }
                 })
              }
@@ -389,9 +393,16 @@
             this.file_name = e.target.files[0].name;
             this.file_has_apostrophe = this.file_name.includes("'");
           }
+
+          const notify = (message) => {
+              toast(message, {
+                autoClose: 2000,
+              });
+         }
   
       return {
         form,
+        notify,
         editForm,
         deleteUser,
         file_name,
@@ -412,7 +423,8 @@
       Link,
       Head,
       Banner,
-      Paginate
+      Paginate,
+      toast
     },
     
   };

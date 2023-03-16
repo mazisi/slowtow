@@ -121,12 +121,13 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-// import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import Multiselect from '@vueform/multiselect';
 import Paginate from "@/Shared/Paginate.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 
 import { ref } from 'vue';
@@ -152,12 +153,28 @@ export default {
     })
  
     function submit() {
-      Inertia.post('/submit-licence-renewal', form)
+      form.post('/submit-licence-renewal', {
+        onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+         },
+      })
     }
 
     function deleteRenewal(slug){
        if (confirm('Are you sure you want to delete this renewal?')) {
-      this.$inertia.delete(`/delete-licence-renewal/${slug}`)
+       Inertia.delete(`/delete-licence-renewal/${slug}`,{
+        onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+        },
+      })
     }
     }
 
@@ -170,13 +187,25 @@ export default {
         }
         }
 
-    return { year,years,form, submit, deleteRenewal, limit }
+        const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+    return { year,years,form, submit, deleteRenewal, limit,toast, notify }
   },
    components: {
     Layout,
     Link,
     Head,
-    // Datepicker,
     Multiselect,
     Banner,
     Paginate

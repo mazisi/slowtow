@@ -23,7 +23,7 @@ class LicenceRenewalController extends Controller
         return Inertia::render('Renewals/Renewals',[
         'licence' => $licence,
         'renewals' => $renewals,
-    'years' => $years]);
+        'years' => $years]);
     }
 
 
@@ -114,7 +114,7 @@ class LicenceRenewalController extends Controller
                 $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
                            
 
-            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                 $fileModel = new RenewalDocument; 
                 $fileModel->document_name = $request->document->getClientOriginalName();
                 $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

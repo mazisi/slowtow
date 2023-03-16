@@ -158,11 +158,46 @@ export default{
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'NominationDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
+
  
       return{options,pushData,updateNomination,updateDate,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,
-            getDocType,nomineeForm,uploadDoc,updateForm,file_name,getFileName
+            getDocType,nomineeForm,uploadDoc,updateForm,file_name,getFileName,notify,
+            checkingFileProgress, viewFile
+
 
 
       }

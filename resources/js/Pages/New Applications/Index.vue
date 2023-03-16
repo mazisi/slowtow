@@ -28,7 +28,7 @@
   <div class="col-12 columns">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Applicant</label>
-    <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
+    <select v-model="form.belongs_to" class="form-control form-control-default" required>
     <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>
@@ -45,6 +45,7 @@
           placeholder="Search company"
           :options="companies"
           :searchable="true"
+          @select="selectApplicant"
           style="margin:top: 1rem;"
         />
   <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
@@ -56,6 +57,7 @@
            placeholder="Search Person"
            :options="persons"
            :searchable="true"
+           @select="selectApplicant"
            style="margin:top: 1rem;"
          />
    <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
@@ -207,11 +209,7 @@
     
     
     setup (props) {
-      let options;     
-      
-      const filterForm = useForm({
-        variation: ''
-      })
+      let options;   
 
       const form = useForm({
             trading_name: '',
@@ -237,21 +235,47 @@
       
       function submit() {
         form.post('/submit-new-app', {
+          onSuccess: () => { 
+              notify(props.success)
+           },
           preserveScroll: true,
         })
         
       }
 
-      function selectApplicant(event){
-      if(form.belongs_to === 'Company'){
-        form.belongs_to = event.target.value;
-        form.person='';
-      }else{
-        form.belongs_to = event.target.value;
-        form.company='';
-      }
+      const filterForm = useForm({
+        variation: '',
+        id: null,
+        id: form.company ? form.company : form.person
+      })
+
+      function selectApplicant(){
+          if(form.belongs_to === 'Company'){
+            filterForm.variation = 'Company';
+            filterForm.id = form.company;
+            form.person='';
+          }else if(form.belongs_to === 'Person'){
+            filterForm.variation = 'Person';
+            filterForm.id = form.person;
+            form.company='';
+          }
+          
+          filterForm.get(`/create-new-app?id=${filterForm.id}`, {
+                      onSuccess: () => { 
+                          notify(props.success)
+                      },
+            preserveScroll: true,
+            replace: true,
+            preserveState: true
+            })
 
      }
+     
+     const notify = (message) => {
+        toast(message, {
+          autoClose: 2000,
+        });
+        }
       
       return { submit, form ,options, idRegForm, selectApplicant, filterForm}
       
@@ -263,39 +287,7 @@
       Head,
       Multiselect,
       Banner
-    },
-    watch: {
-      'form.company': {
-        handler(newValue, oldValue) {
-          this.filterForm.variation = 'company'
-          this.filterForm.get(`/create-new-app?value=${this.form.company}`, {
-            onSuccess: () => {
-              this.form.company = newValue
-              alert(get_reg_num_or_id_number)
-            },
-            preserveScroll: true,
-            replace: true,
-            preserveState: true
-            })
-        },
-        deep: true
-      },
-      'form.person': {
-        handler(newValue, oldValue) {
-          this.filterForm.variation = 'person'
-          this.filterForm.get(`/create-new-app?value=${this.form.person}`, {
-            onSuccess: () => {
-              this.form.person = newValue
-              alert(get_reg_num_or_id_number)
-            },
-            preserveScroll: true,
-            replace: true,
-            preserveState: true
-            })
-        },
-        deep: true
-      }
-  },
+    }
 
   };
   </script>

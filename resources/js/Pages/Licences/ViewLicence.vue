@@ -202,7 +202,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic">
-    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
+    <a v-if="original_lic" @click="viewFile(original_lic.id)" href="#!">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -224,7 +224,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic">
-    <a v-if="duplicate_original_lic" :href="`${$page.props.blob_file_path}${duplicate_original_lic.document_file}`" target="_blank">
+    <a v-if="duplicate_original_lic" @click="viewFile(duplicate_original_lic.id)" href="#!">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -251,7 +251,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic_delivered">
-    <a v-if="original_lic_delivered" :href="`${$page.props.blob_file_path}${original_lic_delivered.document_file}`" target="_blank">
+    <a v-if="original_lic_delivered" @click="viewFile(original_lic_delivered.id)" href="#!" >
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -274,7 +274,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic_delivered">
-    <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.document_file}`" target="_blank">
+    <a v-if="duplicate_original_lic_delivered" @click="viewFile(duplicate_original_lic_delivered.id)" href="#!" >
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -414,7 +414,7 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue'
-import { ref, vue } from 'vue';
+import { ref } from 'vue';
 import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
@@ -488,8 +488,12 @@ export default {
          form.patch(`/update-licence/${props.licence.slug}`, {
           preserveScroll: true,
           onSuccess: () => { 
-           notify()
-         },
+            if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+         }
         })    
         }
 
@@ -498,8 +502,13 @@ export default {
           preserveScroll: true,
           onSuccess: () => { 
           this.show_modal = false;
-          let dismiss =  document.querySelector('.modal-backdrop')    
-          dismiss.remove();
+          document.querySelector('.modal-backdrop').remove();
+
+                if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
           originalLicenceForm.reset();
          },
         })    
@@ -507,13 +516,29 @@ export default {
 
         function deleteDocument(id){
           if(confirm('Document will be deleted permanently!! Continue??')){
-            Inertia.delete(`/delete-licence-document/${id}`)
+            Inertia.delete(`/delete-licence-document/${id}`,{
+              onSuccess: () => { 
+                if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+               },
+            })
           }
         }
 
        function deleteLicence(){
           if(confirm('Are you sure you want to delete this licence??')){
-            Inertia.delete(`/delete-licence/${props.licence.slug}`)
+            Inertia.delete(`/delete-licence/${props.licence.slug}`,{
+              onSuccess: () => { 
+               if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+              },
+            })
           }      
         }
 
@@ -528,11 +553,17 @@ export default {
                       updateStatusForm.status = status_value;
                       updateStatusForm.unChecked = false;
                     }else if(!e.target.checked){
-                      updateStatusForm.unChecked = true
+                      updateStatusForm.unChecked = true;
                       updateStatusForm.status = e.target.value;
                     }
                     updateStatusForm.patch(`/update-licence-active-status/${props.licence.slug}`,{
-                      ///do something
+                      onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
                       })
           
      }
@@ -562,13 +593,41 @@ export default {
       }
       
       
-      const notify = () => {
-      toast("Wow so easy !", {
-        autoClose: 1000,
-      }); // ToastOptions
-    }
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'LicenceDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
 
     return {
+      checkingFileProgress,viewFile,
       showMenu,file_has_apostrophe,
       file_name,getFileName,
       removeFilePath,

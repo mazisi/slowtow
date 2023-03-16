@@ -2,55 +2,81 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
-import { Inertia } from '@inertiajs/inertia'
+import { Inertia } from '@inertiajs/inertia';
+import { useForm } from '@inertiajs/inertia-vue3';
+import { ref } from 'vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
- name: "profile-overview",
+ name: "ViewTemporalLicence",
  props: {
     errors: Object,
+    success: String,
     licence: Object,
     people: Array
   },
-  data() {
-    return {
-      showMenu: false,
-        form: {
-          slug: this.licence.slug,
-          event_name: this.licence.event_name,
-          start_date: this.licence.start_date,
-          end_date: this.licence.end_date,
-          address: this.licence.address,
-          application_type: this.licence.application_type,
-          liquor_licence_number: this.licence.liquor_licence_number,
-          reg_number: this.licence.company ? this.licence.company.reg_number: '',
-          id_or_passport: this.licence.people ? this.licence.people.id_or_passport: '',
-          belongs_to: this.licence.belongs_to,
-          company_name: this.licence.company ? this.licence.company.name : '',
-          person: this.licence.people ? this.licence.people.full_name : ''
-      },
-    options: this.companies,
-    persons: this.people,
-    };
-  },
+  setup(props) {
+   
+      let showMenu = ref(false);
+      let options = props.companies;
+      let persons = props.people;
+      const form = useForm({
+          slug: props.licence.slug,
+          event_name: props.licence.event_name,
+          start_date: props.licence.start_date,
+          end_date: props.licence.end_date,
+          address: props.licence.address,
+          application_type: props.licence.application_type,
+          liquor_licence_number: props.licence.liquor_licence_number,
+          reg_number: props.licence.company ? props.licence.company.reg_number: '',
+          id_or_passport: props.licence.people ? props.licence.people.id_or_passport: '',
+          belongs_to: props.licence.belongs_to,
+          company_name: props.licence.company ? props.licence.company.name : '',
+          person: props.licence.people ? props.licence.people.full_name : '',
+          latest_lodgment_date: props.licence.latest_lodgment_date
+      })
+    
   
-  computed: {
-    computeLogdementDate(){
-      var d = new Date(this.licence.start_date);
+    function computeLogdementDate(){
+      var d = new Date(props.licence.start_date);
       d.setDate(d.getDate() - 14);
-      return this.form.latest_lodgment_date = d.toLocaleString().split(' ')[0].replace(/,/g, '')
+      return form.latest_lodgment_date = d.toLocaleString().split(' ')[0].replace(/,/g, '')
     }
-  },
-  methods: {
-    update() {
-          this.$inertia.patch(`/update-temp-licence`, this.form)
-        },
 
-        deleteTempLicence(){
+ 
+    function update() {
+         form.patch(`/update-temp-licence`, {
+          onSuccess: () => { 
+           notify(props.success)
+         },
+          })
+        }
+
+        function deleteTempLicence(){
           if(confirm('Are you sure you want to delete this temporary licence??')){
             Inertia.delete(`/delete-temporal-licence/${this.licence.slug}`)
           }      
         }
+
+        const notify = (message) => {
+          toast(message, {
+            autoClose: 2000,
+           });
+        }
+
+    return {
+      showMenu,
+      options,
+      persons,
+      form,notify,
+      computeLogdementDate,
+      update,
+      deleteTempLicence
+    }
   },
+  
+
   components: {
     Layout,
     Multiselect,
@@ -114,7 +140,7 @@ export default {
  <div class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Event Start Date</label>
-    <input type="date" required class="form-control form-control-default" v-model="form.start_date" >
+    <input type="date" required class="form-control form-control-default" v-model="form.start_date" @input="computeLogdementDate">
      </div>
    <div v-if="errors.start_date" class="text-danger">{{ errors.start_date }}</div>
    </div>
@@ -131,7 +157,7 @@ export default {
 <div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled ">
   <label class="form-label">Latest Lodgment Date</label>
-  <input type="text" disabled class="form-control form-control-default" v-model="computeLogdementDate" >
+  <input type="text" disabled class="form-control form-control-default" v-model="form.latest_lodgment_date" >
    </div>
    <div v-if="errors.latest_lodgment_date" class="text-danger">{{ errors.latest_lodgment_date }}</div>
  </div>

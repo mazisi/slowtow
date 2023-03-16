@@ -4,7 +4,6 @@ import { createApp, h } from 'vue';
 import store from "./store";
 import "./assets/css/nucleo-icons.css";
 import "./assets/css/nucleo-svg.css";
-
 import MaterialDashboard from "./material-dashboard";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
@@ -24,7 +23,9 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(store)
-            .use(Vue3Toasity)
+            .use(Vue3Toasity,{
+                autoClose: 3000
+              })
             .use(MaterialDashboard)
             .component('InertiaLink', Link)
             .component('Datepicker', Datepicker)

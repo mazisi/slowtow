@@ -59,12 +59,12 @@ class Handler extends ExceptionHandler
                 return back()->with([
                     'message' => 'The page expired, please try again.',
                 ]);
-            } elseif ($response->status() === 500) {
-                $error_message = 500;
-                return redirect('/error',['error_message' => $error_message]);
-            } elseif($response->status() === 404) {
-                $error_message = 404;
-                return redirect('/error',['error_message' => $error_message]);
+            // } elseif ($response->status() === 500) {
+            //     $error_message = 500;
+            //     return redirect('/error',['error_message' => $error_message]);
+            // } elseif($response->status() === 404) {
+            //     $error_message = 404;
+            //     return redirect('/error',['error_message' => $error_message]);
             }
         
             return $response;

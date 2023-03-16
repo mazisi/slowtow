@@ -397,7 +397,9 @@
 </div>
 </div>
 <div v-if="$page.props.auth.has_slowtow_admin_role">
-<button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button>
+<button type="submit" class="btn btn-secondary ms-2"  :disabled="form.processing" :style="{float: 'right'}">
+  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+ Save</button>
 </div>
 </form>
 <hr>
@@ -491,7 +493,7 @@
       <div class="d-flex px-2">
     
     <div class="d-flex flex-column">
-      <Link :href="`view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>                          
+      <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>                          
     </div>
       </div>
     </td>
@@ -500,7 +502,7 @@
     <div class="mb-3 mx-10">
   <input :value="person.pivot.position" @input="getPositionValue($event.target.value)"
   name="position" class="" id="formFileSm" type="text" 
-  style="border: none;background-color: transparent;resize: none;outline: none;">
+  style="border: none;background-color: transparent;resize: none;outline: none;" />
 </div>
 </div>
 </td>
@@ -514,7 +516,7 @@
     </td>
     
   </tr> 
-  <tr>
+  <tr v-else>
     <td style="text-align: right;"> No people found.</td>
   </tr>
 </tbody>
@@ -675,6 +677,8 @@ import Banner from './components/Banner.vue';
 import { ref } from 'vue';
 import Paginate from '../Shared/Paginate.vue';
 import Task from "./Tasks/Task.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
  props: {
@@ -766,9 +770,13 @@ export default {
         preserveScroll: true,
            onSuccess: () => { 
             this.show_modal = false;
-            let dismiss =  document.querySelector('.modal-backdrop').remove()
+            document.querySelector('.modal-backdrop').remove()
+            notify(props.success);
             addCompanyUserForm.reset();
            },
+           onError: () => { 
+              error()
+            },
           }) 
       } 
 
@@ -776,15 +784,18 @@ export default {
         
 
         function getPositionValue(position){//Get position value on edit 
-          editPerson.position = position
+          editPerson.position = position;
         }
 
         function updatePerson(pivot_id){//Update when you adit position 
            editPerson.patch(`/update-position/${pivot_id}`, {
            preserveScroll: true,
            onSuccess: () => {
-            //         
+            notify(props.success)      
            },
+           onError: () => { 
+              error()
+            },
           })  
         }
 
@@ -793,11 +804,13 @@ export default {
            preserveScroll: true,
            onSuccess: (page) => { 
             this.show_modal = false;
-          let dismiss =  document.querySelector('.modal-backdrop') 
-         
-           dismiss.remove();
+            document.querySelector('.modal-backdrop').remove();
+            notify(props.success);
             addPeopleForm.reset();
            },
+           onError: () => { 
+              error()
+            },
           })  
         }
 
@@ -808,9 +821,13 @@ export default {
             this.documentsForm.reset();
             this.show_modal = false;
             this.show_file_name = false;
-           document.querySelector('.modal-backdrop').remove()
+            document.querySelector('.modal-backdrop').remove()
+            notify(props.success);
            
           },
+          onError: () => { 
+              error()
+            },
         })    
         }
 
@@ -821,19 +838,39 @@ export default {
 
       function deleteDocument(id){
           if(confirm('Document will be deleted permanently!! Continue??')){
-            Inertia.delete(`/delete-company-document/${id}`)
+            Inertia.delete(`/delete-company-document/${id}`,{
+              onSuccess: () => { 
+               notify(props.success)
+             },
+            onError: () => { 
+              error()
+            },
+            })
           }
         }
 
         function deleteCompany(company_name){
           if(confirm(company_name + ' will be deleted.. Continue??')){
-            Inertia.delete(`/delete-company/${props.company.slug}`)
+            Inertia.delete(`/delete-company/${props.company.slug}`,{
+              onSuccess: () => { 
+               notify(props.success)
+              },
+              onError: () => { 
+                error()
+              },
+            })
           }
         }
 
     function submit() {//Update company details
       form.post('/update-company', {
         preserveScroll: true,
+        onSuccess: () => { 
+               notify(props.success)
+             },
+            onError: () => { 
+              error()
+            },
       })
       
     }
@@ -842,8 +879,13 @@ export default {
 
       function unlinkPerson(full_name,id){
         if(confirm(full_name + ' will be removed from this company...Continue..??')){
-          createTask.delete(`/unlink-person/${id}`,{
-          ///do something
+          Inertia.delete(`/unlink-person/${id}`,{
+            onSuccess: () => { 
+               notify(props.success)
+             },
+            onError: () => { 
+              error()
+            },
         })
         }
       }
@@ -865,7 +907,12 @@ export default {
               updateStatusForm.status = e.target.value;
             }
             updateStatusForm.patch(`/update-company-active-status/${props.company.slug}`,{
-             ///do something
+              onSuccess: () => { 
+               notify(props.success)
+             },
+              onError: () => { 
+              error()
+             },
              })
            
       }
@@ -887,17 +934,21 @@ export default {
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      function deleteNote(id){
-        if(confirm('This note will be deleted. Continue ?')){
-          Inertia.delete(`/delete-task/${id}`, {
-             preserveScroll: true,
-           }); 
+    
+      const notify = (message) => {
+        toast(message, {
+          autoClose: 2000,
+        });
         }
+      const error = (message) => {
+        toast(message, {
+          autoClose: 2000,
+        });
       }
 
     return {
       showMenu,
-      deleteNote,
+      notify,
       file_name,
       file_has_apostrophe,
       getFileName,
@@ -909,7 +960,7 @@ export default {
       redirectToWebsite,
       show_file_name,
       people_options,
-      form,
+      form,toast,
       documentsForm,
       getDocType,
       submitDocuments,

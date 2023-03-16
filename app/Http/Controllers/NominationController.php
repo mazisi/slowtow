@@ -27,10 +27,8 @@ class NominationController extends Controller
             'years' => $years
           ]);
     }
-    /**
-     * Insert nomination.
-     * Loop through selected people IDs & insert to database.
-     */
+    
+    
     public function store(Request $request){
         $request->validate([
             "year" => "required",
@@ -176,9 +174,13 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     }
 
     public function detachNominee($nomination_id,$nominee_id){
-        $nom = Nomination::find($nomination_id);
-        $nom->people()->detach($nominee_id);
-        return back();
+        try {
+            $nom = Nomination::find($nomination_id);
+            $nom->people()->detach($nominee_id);
+        return back()->with('success','Person removed successfully.');
+        } catch (\Throwable $th) {
+            return back()->with('error','Error removing person.');
+        }
     }
     
     public function uploadDocument(Request $request){
@@ -191,7 +193,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
            $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
            $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
            
-            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                 $fileModel = new NominationDocument;
                 $fileModel->document_name = $fileName;
                 $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
@@ -214,7 +216,6 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
        try {
         $model = NominationDocument::find($id);
         if(!is_null($model->document)){
-           // unlink(storage_path('/app/public/'.$model->document));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

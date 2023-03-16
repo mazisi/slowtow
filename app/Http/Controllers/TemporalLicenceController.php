@@ -16,7 +16,7 @@ use App\Models\TemporalLicenceDocument;
 
 class TemporalLicenceController extends Controller
 {
-    public function index(Request $request){
+    public function index(){
         
         $licences = TemporalLicence::with('company','people')
         ->when(request('term'), 
@@ -85,7 +85,7 @@ class TemporalLicenceController extends Controller
            if($temp){
               return to_route('view_temp_licence',['slug' => $temp->slug])->with('success','Temporal Licence issued successfully.');
            }
-           return back()->with('error','AN unknown error occured while creating temporal Licence.');
+           return back()->with('error','AN unknown error occured while creating Temporal Licence.');
     }
 
     

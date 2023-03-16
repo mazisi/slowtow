@@ -7,6 +7,8 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 import { ref } from 'vue';
 
@@ -67,7 +69,13 @@ export default {
     function deleteDocument(id){
         if(confirm('Document will be deleted...Continue ??')){
           Inertia.delete(`/delete-renewal-document/${id}`, {
-            //
+            onSuccess: () => {
+              if(props.success){
+                    notify(props.success)
+                      }else if(props.error){
+                        notify(props.error)
+                      }
+          }
           })
         }
       }
@@ -87,7 +95,12 @@ export default {
         onSuccess: () => { 
           this.show_file_name = false;
           this.show_modal = false;
-          document.querySelector('.modal-backdrop').remove()
+          document.querySelector('.modal-backdrop').remove();
+          if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+            }
           uploadDoc.reset();
          },
       })
@@ -96,6 +109,13 @@ export default {
     function updateRenewal() {
       form.patch('/update-renewal', {
         preserveScroll: true,
+        onSuccess: () => { 
+            if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+            }
+         }
       })
     }
 
@@ -125,6 +145,13 @@ export default {
           function updateDate(){
             form.patch(`/update-renewal-date/${props.renewal.slug}`, {
              preserveScroll: true,
+             onSuccess: () => { 
+               if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+           }
            }) 
           }
 
@@ -133,19 +160,29 @@ export default {
         this.uploadDoc.document = e.target.files[0];
         this.file_name = e.target.files[0].name;
         this.file_has_apostrophe = this.file_name.includes("'");
-        // this.file_name = e.target.files[0].name.replace(/'/g, "`");
       }
 
-     
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
 
-    return { year,form,show_modal,getFileName, 
+    return { year,form,show_modal,getFileName, notify,
       file_name,show_file_name,file_has_apostrophe,
      updateRenewal,updateDate,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      deleteDocument,
      deleteRenewal,
-     limit
+     limit,toast
      }
   },
    components: {

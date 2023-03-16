@@ -4,10 +4,10 @@
   <Banner/>
   <div class="card card-body mx-3 mx-md-4 mt-n6">
   <div class="row">
-  <div class="col-lg-6 col-7">
+  <div class="col-lg-9 col-9">
   <h6 class="mb-1">View New Application: <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
   </div>
-  <div class="col-lg-6 col-5 my-auto text-end">
+  <div class="col-lg-3 col-3 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
     <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
     <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
@@ -237,8 +237,10 @@
   import Layout from "../../Shared/Layout.vue";
   import Multiselect from '@vueform/multiselect';
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-  import Banner from '../components/Banner.vue'
-  import { Inertia } from '@inertiajs/inertia'
+  import Banner from '../components/Banner.vue';
+  import { Inertia } from '@inertiajs/inertia';
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
   
   export default {
    props: {
@@ -277,6 +279,9 @@
 
       function submit() {
         form.patch(`/update-new-app/${props.licence.slug}`, {
+          onSuccess: () => { 
+              notify(props.success)
+           },
           preserveScroll: true,
         })
         
@@ -287,14 +292,26 @@
             Inertia.delete(`/delete-licence/${props.licence.slug}`)
           }      
         }
-      return { submit, form ,options, deleteLicence}
+
+        const notify = (message) => {
+        toast(message, {
+          autoClose: 2000,
+        });
+        }
+      const error = (message) => {
+        toast(message, {
+          autoClose: 2000,
+        });
+      }
+      return { submit, form ,options, deleteLicence, notify }
     },
      components: {
       Layout,
       Link,
       Head,
       Multiselect,
-      Banner
+      Banner,
+      toast
     },
     
   };

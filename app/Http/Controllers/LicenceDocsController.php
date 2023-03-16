@@ -23,7 +23,7 @@ class LicenceDocsController extends Controller
             $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace); 
             $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
-            if(fileExists(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
               $fileModel = new LicenceDocument;
               $fileModel->document_name = $request->doc->getClientOriginalName();
               $fileModel->licence_id = $request->licence_id;
@@ -79,7 +79,6 @@ class LicenceDocsController extends Controller
             break;
         }
         if(!is_null($model->document_file)){
-            //unlink(public_path('storage/'.$model->document_file));
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }
@@ -89,7 +88,9 @@ class LicenceDocsController extends Controller
 
     public function merge($licence_id){
 
-      $exist =  Licence::whereId($licence_id)->first(); 
+      try {
+        
+        $exist =  Licence::whereId($licence_id)->first(); 
        $merger = PDFMerger::init();           
           if (! is_null($exist->merged_document)) {
             unlink(storage_path().'app/public/'.$exist->merged_document);
@@ -106,7 +107,11 @@ class LicenceDocsController extends Controller
           $exist->update(['merged_document' => $fileName]);
 
           $merger->save(storage_path('/app/public/'.$fileName));
-          return back()->with('success','Document merged successfully.');
+          return back()->with('success','Documents merged successfully.');
+
+      } catch (\Throwable $th) {
+        return back()->with('error','Error merging documents.');
+      }
           
 
     }

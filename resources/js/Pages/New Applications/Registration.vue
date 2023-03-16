@@ -1352,7 +1352,6 @@
     margin-top: -1.4rem;
   }
 
- 
   
   </style>
 
@@ -1362,8 +1361,10 @@
   import { Inertia } from '@inertiajs/inertia';
   import '@vuepic/vue-datepicker/dist/main.css';
   import Task from "../Tasks/Task.vue";
-  import { ref,watch } from 'vue';
+  import { ref } from 'vue';
   import Banner from '../components/Banner.vue';
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
   
   export default {
     props: {
@@ -1459,7 +1460,14 @@
       function submitBoardRequests(){
         boardRequests.post('/submit-board-request', {
           preserveScroll: true,
-          onSuccess: () => { boardRequests.body = '';},
+          onSuccess: () => { 
+            if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+            boardRequests.body = '';
+          },
         })
       }
   
@@ -1473,7 +1481,13 @@
       function deleteDocument(id){
           if(confirm('Document will be deleted...Continue ??')){
             Inertia.delete(`/delete-licence-document/${id}`, {
-              //
+              onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
             })
           }
         }
@@ -1485,6 +1499,11 @@
             this.show_modal = false;
             this.show_file_name = false;
             document.querySelector('.modal-backdrop').classList.remove('modal-backdrop');
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
             this.uploadDoc.reset();
            },
         })
@@ -1493,6 +1512,13 @@
       function updateRegistration() {//handles dates updates
         form.patch(`/update-new-registration/${props.licence.slug}`, {
           preserveScroll: true,
+          onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
         })
       }
  
@@ -1510,6 +1536,16 @@
         function mergeDocs(){
           Inertia.post(`/merge-licence-docs/${props.licence.id}`, {
           preserveScroll: true,
+          onStart: () => {                  
+                  checkingFileProgress('This operation can take a while depending on number of files...')                
+              },
+          onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
         })
         }
 
@@ -1527,6 +1563,13 @@
       function updateRegistrationDate(){
         form.patch(`/update-registration-date/${props.licence.slug}`, {
           preserveScroll: true,
+          onSuccess: () => { 
+                    if(props.success){
+                        notify(props.success)
+                      }else if(props.error){
+                        notify(props.error)
+                      }
+                      },
         })     
       }
 
@@ -1536,7 +1579,12 @@
           preserveScroll: true,
           onSuccess: () => {
             this.show_modal = false;
-            document.querySelector('.modal-backdrop').remove() 
+            document.querySelector('.modal-backdrop').remove();
+            if(props.success){
+                     notify(props.success)
+             }else if(props.error){
+                      notify(props.error)
+             } 
             }
         })
      }
@@ -1545,6 +1593,13 @@
         function deleteRegistration(){
           form.patch(`/update-registration-date/${props.licence.slug}`, {
           preserveScroll: true,
+          onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
         })   
         }
        
@@ -1555,7 +1610,42 @@
         this.file_name = e.target.files[0].name;
         this.file_has_apostrophe = this.file_name.includes("'");
       }
+
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'LicenceDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
+
       return { 
+        viewFile,checkingFileProgress,notify,
         form,show_modal,file_size,
         file_name,getFileName,updateRegistrationDate,
         editBoardRequestForm,
@@ -1570,7 +1660,8 @@
         submitBoardRequests,
         mergeDocs,show_file_name,
         computeBoardRequestDate,
-        deleteRegistration
+        deleteRegistration,
+        toast
        }
     },
      components: {

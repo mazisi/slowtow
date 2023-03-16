@@ -10,7 +10,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests\ValidatePeople;
 use App\Models\Licence;
 use App\Models\PeopleDocument;
-use Illuminate\Support\Facades\Redirect;
+
+use function PHPUnit\Framework\throwException;
 
 class PersonController extends Controller
 {
@@ -72,22 +73,27 @@ class PersonController extends Controller
             'name' => 'required|string|max:200',
             'id_or_passport' => 'required|unique:people,id_or_passport'
         ]);
-        $person = People::create([
-        'full_name'=> $request->name.' '.$request->surname,
-        'date_of_birth' => $request->date_of_birth,
-        'id_or_passport' => $request->id_or_passport,
-        'email_address_1' => $request->email_address_1,
-        'email_address_2' => $request->email_address_2,
-        'cell_number' => $request->cell_number,
-        'telephone' => $request->telephone,
-        'passport_valid_until' => $request->passport_valid_until,
-         'slug' => sha1(time()),
-        ]);
+       try {
         
-        if($person){
-           return Redirect::route('view_person', ['slug' => $person->slug])->with('success','Person created succesfully.');
-        }
-        return Redirect::route('view_person', ['slug' => $person->slug])->with('error','Error creating person.');
+        $person = People::create([
+            'full_name'=> $request->name.' '.$request->surname,
+            'date_of_birth' => $request->date_of_birth,
+            'id_or_passport' => $request->id_or_passport,
+            'email_address_1' => $request->email_address_1,
+            'email_address_2' => $request->email_address_2,
+            'cell_number' => $request->cell_number,
+            'telephone' => $request->telephone,
+            'passport_valid_until' => $request->passport_valid_until,
+             'slug' => sha1(time()),
+            ]);
+            
+            if($person){
+               return back()->with('success','Person created succesfully.');
+            }
+            return back()->with('error','Error updating person.');
+       } catch (\Throwable $th) {
+         return back()->with('error','Error creating person.');
+       }
     }
 
     public function show($slug){
@@ -111,20 +117,24 @@ class PersonController extends Controller
 
     public function update(ValidatePeople $request){
         
-        $person = People::whereSlug($request->slug)->update([
-        'full_name'=> $request->name,
-        'date_of_birth' => $request->date_of_birth,
-        'id_or_passport' => $request->id_or_passport,
-        'email_address_1' => $request->email_address_1,
-        'email_address_2' => $request->email_address_2,
-        'cell_number' => $request->cell_number,
-        'telephone' => $request->telephone,
-        'passport_valid_until' => $request->passport_valid_until,
-        ]);
-        if($person){
-           return back()->with('success','Person updated succesfully.');
-        }
-        return back()->with('error','Error updating person.');
+       try {
+           $person = People::whereSlug($request->slug)->update([
+            'full_name'=> $request->name,
+            'date_of_birth' => $request->date_of_birth,
+            'id_or_passport' => $request->id_or_passport,
+            'email_address_1' => $request->email_address_1,
+            'email_address_2' => $request->email_address_2,
+            'cell_number' => $request->cell_number,
+            'telephone' => $request->telephone,
+            'passport_valid_until' => $request->passport_valid_until,
+            ]);
+            if($person){
+               return back()->with('success','Person updated succesfully.');
+            }
+            return back()->with('error','Error updating person.');
+       } catch (\Throwable $th) {
+         return back()->with('error','Error updating person.');
+       }
     }
 
     public function destroy($slug){
@@ -135,9 +145,9 @@ class PersonController extends Controller
                 $delete_lic->delete();
             }
 
-            return Redirect::route('people')->with('success','Person deleted succesfully.');
+            return to_route('people')->with('success','Person deleted succesfully.');
         }
-        return Redirect::route('people')->with('error','Error updated person.');
+        return to_route('people')->with('error','Error updated person.');
     }
 
 
@@ -161,9 +171,9 @@ class PersonController extends Controller
             $fileModel->slug = sha1(time());
             
        if($fileModel->save()){
-        return back()->with('message','Document uploaded successfully.');
+        return back()->with('success','Document uploaded successfully.');
        }
-        return back()->with('success','Error uploading document.');
+        return back()->with('error','Error uploading document.');
     
     }
 
@@ -178,13 +188,17 @@ class PersonController extends Controller
 
 
     public function updateActiveStatus(Request $request,$slug){
-        $person =People::whereSlug($slug)->first();
+        try {
+            $person =People::whereSlug($slug)->first();
         if($request->unChecked){
           $person->update(['active' => 0]);
         }else{
             $person->update(['active' => $request->status]);
         }
         return back()->with('success','Saved.');
+        } catch (\Throwable $th) {
+            return back()->with('error','An error occurred.');
+        }
     }
     
 }
