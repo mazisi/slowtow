@@ -180,7 +180,7 @@ methods: {
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ limit(transfer.licence.trading_name) }}</h6>
+              <h6 data-bs-placement="top" :title="transfer.licence.trading_name" class="mb-0 text-sm">{{ limit(transfer.licence.trading_name) }}</h6>
              </div>
           </div>
         </td>

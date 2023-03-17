@@ -783,7 +783,7 @@ v-if="application_form !== null
             </div>
           
           </div>
-      <Task :tasks="tasks" :model_id="alteration.id" :errors="errors" :model_type="'Alteration'"/>
+      <Task :tasks="tasks" :model_id="alteration.id" :success="success" :error="error" :errors="errors" :model_type="'Alteration'"/>
         
         </div>
         

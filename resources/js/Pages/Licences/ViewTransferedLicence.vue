@@ -1186,7 +1186,7 @@ export default {
        -->
 
 
-       <Task :tasks="tasks" :model_id="view_transfer.id" :errors="errors" :model_type="'Transfer'"/>
+       <Task :tasks="tasks" :model_id="view_transfer.id" :success="success" :error="error" :errors="errors" :model_type="'Transfer'"/>
 
 
 

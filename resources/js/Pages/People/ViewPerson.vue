@@ -251,7 +251,7 @@
 
 </div>
 
-<Task :tasks="tasks" :model_id="person.id" :errors="errors" :model_type="'Person'"/>
+<Task :tasks="tasks" :model_id="person.id" :errors="errors" :success="success" :error="error" :model_type="'Person'"/>
 
 
 </div>

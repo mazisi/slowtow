@@ -54,7 +54,7 @@
               </table>
               
             </div>
-            <PaginateVue 
+            <Paginate 
               :modelName="nomination_years"
               :modelType="Nominations"
               />

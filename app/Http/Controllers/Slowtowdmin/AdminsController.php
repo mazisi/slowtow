@@ -93,7 +93,7 @@ class AdminsController extends Controller
         }else{
           User::find($id)->update(['is_active' => false]);
         }       
-        return back();
+        return back()->with('success','Updated!!!');
       } catch (\Throwable $th) {
         // throw $th;
         return back()->with('error','Error activating/deactivating user.');

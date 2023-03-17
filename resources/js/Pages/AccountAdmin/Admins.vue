@@ -308,7 +308,11 @@
               onSuccess: () => {
                 this.show_modal = false;
                 document.querySelector('.modal-backdrop').remove();
-                notify(props.success)
+                if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
                 form.reset('body','full_name','email','role');
               }
              })
@@ -364,7 +368,11 @@
               onSuccess: () => {
                 this.show_modal = false;
                 document.querySelector('.modal-backdrop').remove();
-                notify(props.success)
+                if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
               }
              })
           }
@@ -372,7 +380,11 @@
           function deActivateuser(id, status){
             Inertia.post(`/deactivate-user/${id}/${status}`,{
               onSuccess: () => {
-                notify(props.success)
+                if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
               }
             })
           }
@@ -381,7 +393,11 @@
             if(confirm(`${name} will be deleted permanently. Continue ?`)){
                 Inertia.patch(`/delete-user/${user_id}`,{
                 onSuccess: () => {
-                  notify(props.success)
+                  if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
                 }
                 })
              }
@@ -395,12 +411,20 @@
           }
 
           const notify = (message) => {
-              toast(message, {
-                autoClose: 2000,
-              });
-         }
+            if(props.success){
+              toast.success(message, {
+              autoClose: 2000,
+            });
+            
+            }else if(props.error){
+              toast.error(message, {
+              autoClose: 2000,
+            });
+            }
+        }
   
       return {
+        toast,
         form,
         notify,
         editForm,
@@ -414,8 +438,9 @@
         generatePassword,
         generateEditPassword,
         editUser,
-       updateUser,
+        updateUser,
         deActivateuser,
+        
       }
     },
      components: {
@@ -424,7 +449,7 @@
       Head,
       Banner,
       Paginate,
-      toast
+      
     },
     
   };

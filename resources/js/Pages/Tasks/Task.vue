@@ -78,7 +78,14 @@
   
       function submitTask(){
         createTask.post('/submit-task', {
-            onSuccess: () => createTask.reset(),
+            onSuccess: () => {
+              if(props.success){
+                notify(props.success)
+              }else if(props.error){
+              notify(props.error)
+              }
+              createTask.reset();
+            }
         })
       }
   
@@ -93,16 +100,27 @@
           Inertia.delete(`/delete-task/${id}`, {
              preserveScroll: true,
              onSuccess: () => { 
-              notify(props.success)
+              if(props.success){
+                notify(props.success)
+              }else if(props.error){
+                notify(props.error)
+              }
              },
            }); 
         }
       }
 
       const notify = (message) => {
-        toast(message, {
-          autoClose: 2000,
-        });
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
         }
 
         return{

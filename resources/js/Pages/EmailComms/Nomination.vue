@@ -192,7 +192,8 @@ methods: {
       <tr v-for="nomination in nominations.data" :key="nomination.id">
         <td>
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">{{ limit( nomination.licence.trading_name) }}</h6>
+              <h6 data-bs-placement="top" :title="nomination.licence.trading_name" class="mb-0 text-sm">
+                <Link :href="`/view-nomination/${nomination.slug}`">{{ limit( nomination.licence.trading_name) }}</Link></h6>
           </div>
         </td>
         <td>

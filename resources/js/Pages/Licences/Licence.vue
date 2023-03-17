@@ -92,13 +92,13 @@
 </thead>
 <tbody>
 <tr v-for="licence in licences.data" :key="licence.id">
-<td v-if="licence.is_licence_active == '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
-<td v-else><i class="fa fa-times text-danger" aria-hidden="true"></i></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.trading_name">{{ licence.trading_name }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_number">{{ licence.licence_number }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_date">{{ licence.licence_date }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_type.licence_type">{{ limit(licence.licence_type.licence_type) }}</Link></td>
-<td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.belongs_to == 'Person' ? limit(licence.people.full_name) : limit(licence.company.name) }}</Link></td>
+  <td v-if="licence.is_licence_active == '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
+  <td v-else><i class="fa fa-times text-danger" aria-hidden="true"></i></td>
+  <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.trading_name">{{ licence.trading_name }}</Link></td>
+  <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_number">{{ licence.licence_number }}</Link></td>
+  <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_date">{{ licence.licence_date }}</Link></td>
+  <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_type.licence_type">{{ limit(licence.licence_type.licence_type) }}</Link></td>
+  <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.belongs_to == 'Person' ? limit(licence.people.full_name) : limit(licence.company.name) }}</Link></td>
 
 </tr>
 </tbody>

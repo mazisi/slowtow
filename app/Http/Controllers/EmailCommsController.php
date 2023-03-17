@@ -166,9 +166,12 @@ class EmailCommsController extends Controller
                 }                
                 return Inertia::render('EmailComms/MailTemplate',['licence' => $licence,'template' => $template]);
                 break;
+
+
             case 'alterations':
                 $this->alterationMailer($slug);
                 break;
+
             case 'transfers':
                 $licence = LicenceTransfer::with('licence')->whereSlug($slug)->firstOrFail();   
                 if($licence->status == '1'){//quoted
@@ -224,6 +227,8 @@ class EmailCommsController extends Controller
                 return Inertia::render('EmailComms/TransferTemplate',['licence' => $licence,'template' => $template]);
                 break;
 
+
+                
             case 'nominations':
 
  
@@ -359,7 +364,9 @@ class EmailCommsController extends Controller
             
             //if mail sent then update is quote sent for reporting purposes
             $licence->update(['is_quote_sent' => 'true']);
+
            return back()->with('success','Mail sent successfully.');
+
         } catch (\Throwable $th) {//throw $th;
             $error_message = 'Server Error.';
             Email::insert([
