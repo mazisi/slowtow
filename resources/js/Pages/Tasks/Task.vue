@@ -9,8 +9,8 @@
     <span class="alert-text"> 
     <span class="text-sm">{{ task.body }}</span>
     </span>
-    <a @click="deleteNote(task.id)" href="#!" class="float-end">
-      <i class="fa fa-trash-o text-danger "></i>
+    <a @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
+      <i class="fa fa-trash-o text-white"></i>
     </a>
     <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
     </div>

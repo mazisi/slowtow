@@ -5,22 +5,23 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 
 export default {
-  name: "dashboard-default",
+  name: "email-comms-nominations",
   props: {
     nominations: Object,
     errors: Object,
     error: String,
     success: String
 
-    // 1= > Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Payment to the Liquor Board
-// 5 => Select nominees
-// 6 => Documents Required 
-// 7 => Nomination Lodged 
-// 8 => Nomination issued
-// 9 => Nomination Delievered
+  // 1= > Client Quoted
+  // 2 => Client Invoiced
+  // 3 => Client Paid
+  // 4 => Payment to the Liquor Board
+  // 5 => Select nominees
+  // 6 => Prepare Nomination Application 
+  // 7  => Scanned Application
+  // 8 => Nomination Lodged 
+  // 9 => Nomination Issued
+  // 10 => Nomination Delivered
   },
   data() {
     return {
@@ -73,9 +74,30 @@ methods: {
     getEmmails(){
       this.$inertia.get('/emails-report');
     },
-      alertTempo(){alert('Waiting for data')}
+      alertTempo(){alert('Waiting for data')},
+
+      notify(message){
+          if(this.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(this.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
 
     },
+
+    mounted(){ 
+          if(this.success){
+            notify(this.success)
+          }else if(this.error){
+            notify(this.error)
+          }
+        }
 };
 </script>
 <style>

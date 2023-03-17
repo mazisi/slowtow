@@ -94,10 +94,12 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link, useForm } from '@inertiajs/inertia-vue3';
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   props: {
@@ -107,7 +109,7 @@ export default {
     errors: Object,
   },
 
-  setup() {
+  setup(props) {
   const q = ref('')
 
   const form = useForm({
@@ -125,10 +127,34 @@ export default {
           Inertia.get('/goverify-contacts', { q: value }, { preserveState: true, replace: true });
   }, 2000));
 
+
+  const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
+        onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
     return {
       q,
       search,
-      form
+      form,
+      toast,
+      notify
      }
   },
  components: {

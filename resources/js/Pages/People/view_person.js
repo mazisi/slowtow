@@ -1,6 +1,6 @@
 import { useForm } from '@inertiajs/inertia-vue3';
 import Layout from "../../Shared/Layout.vue";
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
@@ -194,6 +194,15 @@ const form = useForm({
                 
                })
          }
+
+         onMounted(() => {
+          if(props.success){
+            notify(props.success)
+          }else if(props.error){
+            notify(props.error)
+          }
+        });
+
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
         assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
@@ -205,10 +214,5 @@ const form = useForm({
     Banner,
     Task
   },
-  mounted(){
-    console.log(this.props)
-    // if(props.success){
-    //   notify(props.success)
-    // }
-  }
+  
 }

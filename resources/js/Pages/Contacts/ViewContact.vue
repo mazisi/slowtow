@@ -3,11 +3,13 @@ import Layout from "../../Shared/Layout.vue";
 import { Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   
  props: {
-    errors: String,
+    success: String,
     errors: Object,
     error: String,
     contact: Object
@@ -25,7 +27,14 @@ export default {
 
     function update() {
             form.patch(`/update-individual-contact/${props.contact.id}`, {
-                onSuccess: () => form.reset(),
+                onSuccess: () => {
+                  if(props.success){
+                  notify(props.success)
+                  }else if(props.error){
+                  notify(props.error)
+                 }
+                  form.reset()
+                } 
             })
       }
 
@@ -34,11 +43,27 @@ export default {
           Inertia.delete(`/delete-individual-contact/${props.contact.id}`)
         }
       }
+
+      const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
     return{
       showMenu,
       form,
       update,
-      deleteContact
+      deleteContact,
+      toast,
+      notify
     }
   },
   components: {

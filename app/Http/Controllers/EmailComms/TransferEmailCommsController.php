@@ -13,15 +13,17 @@ use Illuminate\Support\Facades\Mail;
 class TransferEmailCommsController extends Controller
 {
     //The following are status keys
+//The following are status keys
 // 1 => Client Quoted
 // 2 => Client Invoiced
 // 3 => Client Paid
-// 4 => Collate Transfer Documents
+// 4 => Prepare Transfer Application
 // 5 => Payment To The Liquor Board
-// 6 => Transfer Logded
-// 7 => Activation Fee Paid
-// 8 => Transfer Issued
-// 9 => Transfer Delivered
+// 6 => Scanned Application
+// 7 => Application Logded
+// 8 => Activation Fee Paid
+// 9 => Transfer Issued
+// 10 => Transfer Delivered
 
 
 
@@ -35,31 +37,40 @@ class TransferEmailCommsController extends Controller
                     break;
                 case '2':
                     $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Client Invoiced')->first();
-                    $stage = 'Client Quoted';
+                    $stage = 'Client Invoiced';
                     break;
                 case '3':
                     $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Client Paid')->first();
-                    break;
                     $stage = 'Client Paid';
+                    break;
                 case '5':
                     $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Payment To The Liquor Board')->first();
-                    break;
                     $stage = 'Payment To The Liquor Board';
+                    break;
+
                 case '6':
-                    $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Transfer Logded')->first();
+                    $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Scanned Application')->first();
+                    $stage = 'Scanned Application';
                     break;
-                    $stage = 'Transfer Logded';
                 case '7':
-                    $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Activation Fee Paid')->first();
+                    $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Transfer Logded')->first();
+                    $stage = 'Transfer Logded';
                     break;
-                    $stage = 'Activation Fee Paid';
                 case '8':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Activation Fee Paid')->first();
+                    $stage = 'Activation Fee Paid';
+                    break;
+                case '9':
                     $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Transfer Issued')->first();
-                    break;
                     $stage = 'Transfer Issued';
-                default:
-                return back()->with('error','Could not send email.');
                     break;
+                case '10':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$licence->id)->where('doc_type','Transfer Delivered')->first();
+                    $stage = 'Transfer Delivered';
+                    break;
+                default:
+                   return back()->with('error','Could not send email.');
+               
             }
            
             //check if licence already inserted in emails 
@@ -81,7 +92,7 @@ class TransferEmailCommsController extends Controller
                         'created_at' => now(),
                         'updated_at' => now()
                     ]);                   
-                    return back()->with('error','Mail NOT SENT!!!!. Document is not yet uploaded.');
+                    return back()->with('error','Quote Document not yet uploaded.');
                 }
             }
             $email = $licence->licence->company->email;
@@ -95,7 +106,7 @@ class TransferEmailCommsController extends Controller
                 }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
                     Mail::to($email2)->send(new TransferMailer($licence, $request->mail_body));
                 }else{
-                    return back()->with('success','Mail NOT sent. Company does not have email addresses.');
+                    return back()->with('error','Mail NOT sent. Company does not have email addresses.');
                 }
 
 

@@ -199,14 +199,14 @@ class EmailCommsController extends Controller
                     <p dir="ltr">Many thanks,</p>
                     <p dir="ltr">&nbsp;</p>';
                     
-                }elseif ($licence->status == '6') {//Logded
+                }elseif ($licence->status == '7') {//Logded
                    
                     $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
                     <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
                     <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$licence->licence->licence_date.'</p>
                     <p dir="ltr">Please see attached proof of lodgement in respect of the transfer application. Please ensure that this is on display until the application has been approved.</p>
                     <p dir="ltr">Many thanks,</p><p>&nbsp;</p>';
-                }elseif ($licence->status == '7') {//Activation Fee Paid 
+                }elseif ($licence->status == '8') {//Activation Fee Paid 
                     $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
                     <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
                     <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$licence->licence->licence_date.'</p>
@@ -214,7 +214,7 @@ class EmailCommsController extends Controller
                     <p dir="ltr">Please see attached proof of payment for the activation fee in the interim, we will advise soonest once the application has been approved.</p>
                     <p dir="ltr">Many thanks,</p>
                     <p dir="ltr">&nbsp;</p>'; 
-                }elseif ($licence->status == '8') {//Issued 
+                }elseif ($licence->status == '9') {//Issued 
                     $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
                     <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
                     <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$licence->licence->licence_date.'</p>
@@ -258,7 +258,7 @@ class EmailCommsController extends Controller
                     <p dir="ltr">Many thanks,</p>
                     <p dir="ltr">&nbsp;</p>';
                     
-                }elseif ($licence->status == '7') {//Logded
+                }elseif ($licence->status == '8') {//Logded
                    
                     $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
                     <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
@@ -266,7 +266,7 @@ class EmailCommsController extends Controller
                     <p dir="ltr">Please see attached proof of lodgement in respect of the appointment of managers application. Please ensure that this is on display in the interim until the application has been approved.</p>
                     <p dir="ltr">Many thanks,</p>
                     <p dir="ltr">&nbsp;</p>';
-                }elseif ($licence->status == '8') {//issued
+                }elseif ($licence->status == '9') {//issued
                     $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
                     <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
                     <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$licence->licence->licence_date.'</p>
@@ -359,7 +359,7 @@ class EmailCommsController extends Controller
                 }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
                     Mail::to($email2)->send(new RenewalMailer($licence, $request->mail_body));
                 }else{
-                    return back()->with('success','Mail NOT sent. Company does not have email addresses.');
+                    return back()->with('error','Mail NOT sent. Company does not have email addresses.');
                 }
             
             //if mail sent then update is quote sent for reporting purposes

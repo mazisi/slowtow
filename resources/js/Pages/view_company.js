@@ -59,22 +59,16 @@ export default {
             status: '',
             unChecked: false,
             province: props.company.business_province,
-            copy_address: false
+            copy_address: true
     })
 
     function copyBusinessAddress(){
       if(form.copy_address){
-        form.copy_address = true;
         form.postal_address = form.business_address;
         form.postal_address2 = form.business_address2;
         form.postal_address3 = form.business_address3;
-        
-        
-      }else{
-        form.copy_address = false;
-        form.postal_address = ''
-        form.postal_address2 = '';
-        form.postal_address3 = '';
+        form.postal_province = form.business_province;
+        form.postal_code = form.business_address_postal_code;
       }
     }
 

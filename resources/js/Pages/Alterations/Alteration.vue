@@ -59,6 +59,15 @@ name: "Alterations",
         }
 
   },
+
+      mounted() {
+          if(this.success){
+            this.notify(this.success)
+          }else if(this.error){
+            this.notify(this.error)
+          }
+        },
+
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
   },
@@ -119,7 +128,7 @@ name: "Alterations",
         
         <td class="text-sm text-center">
           <Link :href="`/view-alteration/${alter.slug}`">
-          <i v-if="alter.status == '8'" class="fa fa-check text-info" aria-hidden="true"></i>
+          <i v-if="alter.status == '8'" class="fa fa-check text-success" aria-hidden="true"></i>
            <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
       </Link>
         </td>

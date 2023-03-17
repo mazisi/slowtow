@@ -33,9 +33,9 @@
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
+<label for="active-checkbox" class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
 <input id="active-checkbox" type="checkbox" :checked="company.active == '1'" 
-@input="assignActiveValue($event,1)" value="1">
+   @input="assignActiveValue($event,1)" value="1">
 </div>
 </div>
 
@@ -340,8 +340,11 @@
 <div class="col-12 columns">            
 <div class="input-group input-group-outline is-filled">
 <input style="margin-top: -9px; margin-right: 3px;" @change="copyBusinessAddress" 
- type="checkbox" v-model="form.copy_address" :checked="form.copy_address">
-<label>Same as Business Address</label>
+ type="checkbox" 
+ :checked="form.postal_address == form.business_address &&
+        form.postal_address2 == form.business_address2 &&
+        form.postal_address3 == form.business_address3" id="same-address"/>
+<label for="same-address">Same as Business Address</label>
 </div>
 <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
 </div> 

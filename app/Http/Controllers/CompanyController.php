@@ -244,7 +244,7 @@ class CompanyController extends Controller
             }
             $company->people()->attach($person);
         }
-        return back()->with('success','People selected successfully.');            
+        return back()->with('success','People added successfully.');            
         
     }
 
@@ -255,7 +255,7 @@ public function updatePeople(Request $request,$pivot_id){
         ->whereId($pivot_id)
         ->update(['position' => $request->position]);
             if($update){
-                return back()->with('success','User position updated successfully.'); 
+                return back()->with('success','Position updated successfully.'); 
             }
 
     } catch (\Throwable $th) {

@@ -3,6 +3,8 @@ import { Link } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
   name: "emmail-comms",
@@ -68,8 +70,30 @@ methods: {
         }  
           return string.substring(0, limit)
         }
+        },
+
+         notify(message){
+          if(this.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(this.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
         }
+
     },
+
+    mounted(){ 
+          if(this.success){
+            notify(this.success)
+          }else if(this.error){
+            notify(this.error)
+          }
+        }
 };
 </script>
 <style>
@@ -215,8 +239,6 @@ methods: {
         <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>
 
-        <!-- <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-primary text-center font-weight-bold text-xs"> 
-          <i class="fa fa-pencil"></i> Edit </Link> -->
 
         <Link :href="`/view-licence-renewal/${renewal.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-eye"></i> View </Link>

@@ -20,8 +20,8 @@
 <div class="row">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label mb-0 text-body text-truncate">Active Person</label>
-<input type="checkbox" value="1" id="active-checkbox" @input="assignActiveValue($event,1)" :checked="person.active == 1">
+<label  for="active-checkbox" class="form-check-label mb-0 text-body text-truncate">Active Person</label>
+<input type="checkbox" value="1" id="active-checkbox" @input="assignActiveValue($event,1)" :checked="person.active == '1'">
 </div>
 </div>
 

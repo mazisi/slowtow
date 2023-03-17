@@ -311,7 +311,7 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::get('/create-contact',[ContactController::class,'createContact'])->name('create_contacts');
 
-        Route::get('/view-contact/{id}',[ContactController::class,'viewContact'])->name('view_contacts');
+        Route::get('/view-contact/{id}',[ContactController::class,'viewContact'])->name('view_contact');
 
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
 

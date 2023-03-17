@@ -5,7 +5,7 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 
 export default {
-  name: "email-comms",
+  name: "email-comms-transfers",
   props: {
     transfers: Object,
     success: String,
@@ -64,8 +64,29 @@ methods: {
 
      getEmmails(){
       this.$inertia.get('/emails-report');
-    }
     },
+    
+    notify(message){
+          if(this.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(this.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+    },
+
+    mounted(){ 
+          if(this.success){
+            notify(this.success)
+          }else if(this.error){
+            notify(this.error)
+          }
+        }
 };
 </script>
 <style>

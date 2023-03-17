@@ -15,7 +15,7 @@ class ContactController extends Controller{
                              ->orWhere('email', 'LIKE', '%'.request('q').'%')
                              ->orWhere('business_phone', 'LIKE', '%'.request('q').'%')
                              ->orWhere('mobile_phone', 'LIKE', '%'.request('q').'%');
-            })->paginate(20)->withQueryString();
+            })->latest()->paginate(20)->withQueryString();
         
         return Inertia::render('Contacts/Contact',['contacts' => $contacts]);
     }
@@ -46,7 +46,7 @@ class ContactController extends Controller{
             'mobile_phone' => $request->mobile_number,
         ]);
         if($model){
-            return to_route('contacts')->with('success','Contact updated succesfully.');
+            return back()->with('success','Contact updated succesfully.');
         }
         return back()->with('error','Error updating contact.');
     }
@@ -65,7 +65,7 @@ class ContactController extends Controller{
             'mobile_phone' => $request->mobile_number,
         ]);
         if($contact){
-            return to_route('contacts')->with('success','Contact created succesfully.');
+            return to_route('view_contact',['id' => $contact->id])->with('success','Contact created succesfully.');
         }
         return back()->with('error','Error creating contact.');
     }

@@ -88,7 +88,7 @@ class PersonController extends Controller
             ]);
             
             if($person){
-               return back()->with('success','Person created succesfully.');
+               return to_route('view_person',['slug' => $person->slug])->with('success','Person created succesfully.');
             }
             return back()->with('error','Error updating person.');
        } catch (\Throwable $th) {

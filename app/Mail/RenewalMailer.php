@@ -45,7 +45,7 @@ class RenewalMailer extends Mailable
                     $get_doc = RenewalDocument::where('licence_renewal_id',$this->renewal->id)->where('doc_type','Renewal Issued')->first();
                     break;
                 default:
-                return 'An error occured.Please try again.';
+                return back('error', 'An error occured.Please try again.');
                     break;
             }
           

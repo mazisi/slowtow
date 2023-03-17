@@ -44,6 +44,8 @@ import Layout from "../../Shared/Layout.vue";
 import { Link,useForm } from '@inertiajs/inertia-vue3';
 import Editor from '@tinymce/tinymce-vue';
 import Banner from '../components/Banner.vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
  props: {
@@ -66,14 +68,34 @@ export default {
     function sendMail() {
       mailForm.post('/dispatchTransferMail', {
         onSuccess: () => {
-          //do something
-        }
+                  if(props.success){
+                  notify(props.success)
+                  }else if(props.error){
+                  notify(props.error)
+                 }
+                  form.reset()
+                } 
         })
     }
 
+    const notify = (message) => {
+          if(props.success){
+            toast.success(message, {
+            autoClose: 2000,
+          });
+          
+          }else if(props.error){
+            toast.error(message, {
+            autoClose: 2000,
+          });
+          }
+        }
+
     return {
       sendMail,
-      mailForm
+      mailForm,
+      toast,
+      notify
     }
   },
    components: {

@@ -317,14 +317,12 @@ export default {
         this.form.postal_address = this.form.business_address;
         this.form.postal_address2 = this.form.business_address2;
         this.form.postal_address3 = this.form.business_address3;
-        this.form.postal_address3 = this.form.business_address3;
         this.form.postal_province = this.form.business_province;
         this.form.postal_code = this.form.business_address_postal_code;
       }else{
         this.form.copy_address = false;
         this.form.postal_address = ''
         this.form.postal_address2 = '';
-        this.form.postal_address3 = '';
         this.form.postal_address3 = '';
         this.form.postal_province = '';
         this.form.postal_code = '';

@@ -30,7 +30,8 @@ class NominationMailer extends Mailable
      */
     public function build(){
         try {
-            
+             // 1= > Client Quoted
+  //
             switch ($this->nomination->status) {      
                 case '1':                
                     $get_doc = NominationDocument::where('nomination_id',$this->nomination->id)->where('doc_type','Client Quoted')->first();
@@ -44,10 +45,10 @@ class NominationMailer extends Mailable
                 case '4':
                     $get_doc = NominationDocument::where('nomination_id',$this->nomination->id)->where('doc_type','Payment To The Liquor Board')->first();
                     break;
-                case '7':
+                case '8':
                     $get_doc = NominationDocument::where('nomination_id',$this->nomination->id)->where('doc_type','Nomination Logded')->first();
                     break;
-                case '8':
+                case '9':
                     $get_doc = NominationDocument::where('nomination_id',$this->nomination->id)->where('doc_type','Nomination Issued')->first();
                     break;
                 default:

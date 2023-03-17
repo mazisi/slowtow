@@ -14,14 +14,16 @@ class NominationEmailCommsController extends Controller
     public function dispatchMail(Request $request){
         try {
            
+  // 1= > Client Quoted
   // 2 => Client Invoiced
   // 3 => Client Paid
   // 4 => Payment to the Liquor Board
   // 5 => Select nominees
-  // 6 => Documents Required 
-  // 7 => Nomination Lodged 
-  // 8 => Nomination issued
-  // 9 => Nomination Delievered  
+  // 6 => Prepare Nomination Application 
+  // 7  => Scanned Application
+  // 8 => Nomination Lodged 
+  // 9 => Nomination Issued
+  // 10 => Nomination Delivered 
   
             $licence = Nomination::with('licence.company')->whereSlug($request->nomination_slug)->firstOrFail();
         switch ($licence->status) {            
@@ -41,11 +43,11 @@ class NominationEmailCommsController extends Controller
                     $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Payment To The Liquor Board')->first();
                     $stage='Payment To The Liquor Board';
                     break;
-                case '7':
+                case '8':
                     $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Nomination Logded')->first();
                     $stage='Nomination Logded';
                     break;
-                case '8':
+                case '9':
                     $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Nomination Issued')->first();
                     $stage='Nomination Issued';
                     break;
@@ -72,7 +74,7 @@ class NominationEmailCommsController extends Controller
                         'created_at' => now(),
                         'updated_at' => now()
                     ]);                   
-                    return back()->with('error','Mail NOT SENT!!!!. Document is not yet uploaded.');
+                    return back()->with('error',' Quote Document is not yet uploaded.');
                 }
             }
             
@@ -87,7 +89,7 @@ class NominationEmailCommsController extends Controller
                 }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
                     Mail::to($email2)->send(new NominationMailer($licence, $request->mail_body));
                 }else{
-                    return back()->with('success','Mail NOT sent. Company does not have email addresses.');
+                    return back()->with('error','Mail NOT sent. Company does not have email addresses.');
                 }
              
             return back()->with('success','Mail sent successfully.');
