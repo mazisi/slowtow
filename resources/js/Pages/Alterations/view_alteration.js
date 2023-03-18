@@ -194,13 +194,13 @@ export default {
                })
          }
 
-         onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        //  onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
     return {
       form,showMenu,show_modal,updateDate,

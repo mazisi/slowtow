@@ -11,18 +11,16 @@ use App\Http\Requests\ValidatePeople;
 use App\Models\Licence;
 use App\Models\PeopleDocument;
 
-use function PHPUnit\Framework\throwException;
-
 class PersonController extends Controller
 {
     public function index(){
         $people = People::when(request('term') && request('active_status') === 'Active', 
             function ($query){
                 $query->where('active','1')
-                ->orWhere(function ($query) {
+                ->where(function ($query) {
                     $query->where('full_name','LIKE','%'.request('term').'%')
-                    ->where('email_address_1','LIKE','%'.request('term').'%')
-                    ->where('email_address_2','LIKE','%'.request('term').'%');
+                    ->orWhere('email_address_1','LIKE','%'.request('term').'%')
+                    ->orWhere('email_address_2','LIKE','%'.request('term').'%');
                 });
             
             })
@@ -31,10 +29,10 @@ class PersonController extends Controller
                 function ($query){
                     
                     $query->where('active','0')
-                          ->orWhere(function ($query) {
+                          ->where(function ($query) {
                             $query->where('full_name','LIKE','%'.request('term').'%')
-                            ->where('email_address_1','LIKE','%'.request('term').'%')
-                            ->where('email_address_2','LIKE','%'.request('term').'%');
+                            ->orWhere('email_address_1','LIKE','%'.request('term').'%')
+                            ->orWhere('email_address_2','LIKE','%'.request('term').'%');
                         });
                 
                 })

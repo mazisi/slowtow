@@ -64,7 +64,13 @@ export default {
         }
 
         watch(term, _.debounce(function (value) {
-          Inertia.get('/licences', { term: value }, { preserveState: true, replace: true });
+          Inertia.get('/licences', { 
+            term: value, 
+            active_status: form.active_status,
+            licence_type: form.licence_type,
+            licence_date: form.licence_date,
+            province: form.province
+           }, { preserveState: true, replace: true });
         }, 1000));
         
         onMounted(() => {
@@ -73,7 +79,12 @@ export default {
           }else if(props.error){
             notify(props.error)
           }
+          
+            //term.value.focus();
+       
         });
+
+        
 
         return {
           limit,

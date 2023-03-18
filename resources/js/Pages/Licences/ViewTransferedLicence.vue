@@ -219,8 +219,14 @@ export default {
 
        
 
-         function viewFile(model_id) {
-              let model = 'TransferDocument';
+         function viewFile(model_id,licence_doc='') {
+          let model = '';
+          if(licence_doc){
+            model = licence_doc;
+          }else{
+            model = 'TransferDocument';
+          }
+             
                Inertia.visit(`/view-file/${model}/${model_id}`,{
                 replace: true,
                 onStart: () => {                  
@@ -230,13 +236,13 @@ export default {
                })
          }
 
-         onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        //  onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
     
     return {
@@ -719,7 +725,7 @@ export default {
         <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
       </a>
 
-      <a v-else-if="original_licence !== null" @click="viewFile(original_licence.id)" href="#!">
+      <a v-else-if="original_licence !== null" @click="viewFile(original_licence.id,'LicenceDocument')" href="#!">
         <i class="fa fa-link float-end h5 curser-pointer"></i>
       </a>
       <i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>

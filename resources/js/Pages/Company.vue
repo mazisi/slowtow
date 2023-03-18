@@ -43,7 +43,12 @@ export default {
 
      
        watch(term, _.debounce(function (value) {
-          Inertia.get('/companies', { term: value }, { preserveState: true, replace: true });
+          Inertia.get('/companies', { 
+            term: value,
+            active_status: form.active_status,
+            company_type: form.company_type,
+            
+           }, { preserveState: true, replace: true });
         }, 1000));
 
         const notify = (message) => {
@@ -59,13 +64,13 @@ export default {
           }
         }
 
-        onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        // onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
     return {
       term,

@@ -166,12 +166,14 @@ export default {
             toast.success(message, {
             autoClose: 2000,
           });
-          
+          props.success='';
+          props.error=''
           }else if(props.error){
             toast.error(message, {
             autoClose: 2000,
           });
           }
+          
         }
 
         function checkingFileProgress(message){
@@ -194,13 +196,13 @@ export default {
                })
          }
 
-         onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        //  onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
     return { year,form,show_modal,getFileName, notify,
       file_name,show_file_name,file_has_apostrophe,

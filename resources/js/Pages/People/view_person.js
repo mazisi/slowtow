@@ -195,13 +195,13 @@ const form = useForm({
                })
          }
 
-         onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        //  onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,

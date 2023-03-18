@@ -30,7 +30,7 @@ export default {
         })
     }
     watch(term, _.debounce(function (value) {
-          Inertia.get('/people', { term: value }, { preserveState: true, replace: true });
+          Inertia.get('/people', { term: value, active_status: form.active_status }, { preserveState: true, replace: true });
         }, 2000));
 
 

@@ -113,7 +113,7 @@ Route::group(['middleware' => ['guest']], function () {
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
     //Error Pages
     Route::get('error',function(){
-        return Inertia::render('ErrorPages/Error');
+        //return Inertia::render('ErrorPages/Error');
       });
     Route::group(['middleware' => ['auth','role:slowtow-admin|slowtow-user']], function () {
 

@@ -199,6 +199,8 @@ export default {
             autoClose: 2000,
           });
           }
+          props.success='';
+          props.error=''
         }
 
         onMounted(() => {

@@ -237,13 +237,13 @@ export default{
                })
          }
 
-         onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        //  onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
       return{options,pushData,updateNomination,updateDate,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
