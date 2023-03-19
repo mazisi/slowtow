@@ -220,7 +220,7 @@ export default {
        
 
          function viewFile(model_id,licence_doc='') {
-          let model = '';
+          let model = '';alert(licence_doc)
           if(licence_doc){
             model = licence_doc;
           }else{
@@ -508,7 +508,7 @@ export default {
   <div class="px-3 d-flex mb-2 active w-10">
     
      <i v-if="old_poa_res_docs == null" 
-     @click="setDocType('POA & RES','Old Licence Holder',6)" data-bs-toggle="modal" data-bs-target="#upload-documents"
+     @click="setDocType(4,'POA & RES','Old Licence Holder',6)" data-bs-toggle="modal" data-bs-target="#upload-documents"
      class="fa fa-upload curser-pointer h5" aria-hidden="true"></i>
      
      <a v-if="old_poa_res_docs !== null" @click="viewFile(old_poa_res_docs.id)" href="#!">
@@ -519,7 +519,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> POA & Res </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="current_poa_res_docs == null" @click="setDocType('POA & RES','Current Licence Holder',7)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="current_poa_res_docs == null" @click="setDocType(4,'POA & RES','Current Licence Holder',7)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="current_poa_res_docs !== null" @click="viewFile(current_poa_res_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -533,7 +533,7 @@ export default {
   <div class="px-3 d-flex mb-2 active w-10">
     
      <i v-if="old_shareholding == null" 
-     @click="setDocType('Shareholding','Old Licence Holder',10)" data-bs-toggle="modal" data-bs-target="#upload-documents"
+     @click="setDocType(4,'Shareholding','Old Licence Holder',10)" data-bs-toggle="modal" data-bs-target="#upload-documents"
      class="fa fa-upload curser-pointer h5" aria-hidden="true"></i>
      
      <a v-if="old_shareholding !== null" @click="viewFile(old_shareholding.id)" href="#!">
@@ -544,7 +544,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Shareholding </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="current_shareholding == null" @click="setDocType('Shareholding','Current Licence Holder',12)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="current_shareholding == null" @click="setDocType(4,'Shareholding','Current Licence Holder',12)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="current_shareholding !== null" @click="viewFile(current_shareholding.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -558,7 +558,7 @@ export default {
   <div class="px-3 d-flex mb-2 active w-10">
     
      <i v-if="old_cipc_certificate == null" 
-     @click="setDocType('CIPC Certificate','Old Licence Holder',11)" data-bs-toggle="modal" data-bs-target="#upload-documents"
+     @click="setDocType(4,'CIPC Certificate','Old Licence Holder',11)" data-bs-toggle="modal" data-bs-target="#upload-documents"
      class="fa fa-upload curser-pointer h5" aria-hidden="true"></i>
      
      <a v-if="old_cipc_certificate !== null" @click="viewFile(old_cipc_certificate.id)" href="#!">
@@ -569,7 +569,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> CIPC Certificate </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="current_cipc_certificate == null" @click="setDocType('CIPC Certificate','Current Licence Holder',13)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="current_cipc_certificate == null" @click="setDocType(4,'CIPC Certificate','Current Licence Holder',13)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="current_cipc_certificate !== null" @click="viewFile(current_cipc_certificate.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -586,7 +586,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Company Documents </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="company_docs == null" @click="setDocType('Company Documents','Current Licence Holder')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="company_docs == null" @click="setDocType(4,'Company Documents','Current Licence Holder')" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="company_docs !== null" @click="viewFile(company_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -604,7 +604,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> ID Documents </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="id_docs == null" @click="setDocType('ID Documents','Current Licence Holder',14)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="id_docs == null" @click="setDocType(4,'ID Documents','Current Licence Holder',14)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="id_docs !== null" @click="viewFile(id_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -622,7 +622,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Police Clearances </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="police_clearance == null" @click="setDocType('Police Clearances','Current Licence Holder',15)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="police_clearance == null" @click="setDocType(4,'Police Clearances','Current Licence Holder',15)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="police_clearance !== null" @click="viewFile(police_clearance.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -639,7 +639,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Tax Clearance </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="tax_clearance == null" @click="setDocType('Tax Clearance','Current Licence Holder',16)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="tax_clearance == null" @click="setDocType(4,'Tax Clearance','Current Licence Holder',16)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="tax_clearance !== null" @click="viewFile(tax_clearance.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -656,7 +656,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> LTA Certificate </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="lta_certificate == null" @click="setDocType('LTA Certificate','Current Licence Holder',17)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="lta_certificate == null" @click="setDocType(4,'LTA Certificate','Current Licence Holder',17)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="lta_certificate !== null" @click="viewFile(lta_certificate.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -672,7 +672,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Financial Interests </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="financial_interest == null" @click="setDocType('Financial Interests','Current Licence Holder',18)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="financial_interest == null" @click="setDocType(4,'Financial Interests','Current Licence Holder',18)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="financial_interest !== null" @click="viewFile(financial_interest.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -687,7 +687,7 @@ export default {
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Lease/Landlord Letter </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-     <i v-if="landloard_letter == null" @click="setDocType('Lease/Landlord Letter','Current Licence Holder',19)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+     <i v-if="landloard_letter == null" @click="setDocType(4,'Lease/Landlord Letter','Current Licence Holder',19)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="landloard_letter !== null" @click="viewFile(landloard_letter.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -698,7 +698,7 @@ export default {
 
 <div class="d-flex justify-content-center w-100">
   <div class="px-3 d-flex mb-2 active w-10">
-    <i v-if="representation == null" @click="setDocType('Representation','Old Licence Holder',8)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <i v-if="representation == null" @click="setDocType(4,'Representation','Old Licence Holder',8)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
      class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
      <a v-if="representation !== null" @click="viewFile(representation.id)" href="#!">
       <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
@@ -719,13 +719,13 @@ export default {
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
   
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-      <i v-if="latest_renewal == null" @click="setDocType('Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+      <i v-if="latest_renewal == null" @click="setDocType(4,'Latest Renewal','Current Licence Holder',9)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
       class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
       <a v-if="latest_renewal !== null" @click="viewFile(latest_renewal.id)" href="#!">
         <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
       </a>
 
-      <a v-else-if="original_licence !== null" @click="viewFile(original_licence.id,'LicenceDocument')" href="#!">
+      <a v-else @click="viewFile(original_licence.id,'LicenceDocument')" href="#!">
         <i class="fa fa-link float-end h5 curser-pointer"></i>
       </a>
       <i v-if="latest_renewal !== null" @click="deleteDocument(latest_renewal.id)" class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i>
@@ -734,7 +734,7 @@ export default {
 
 <div class="d-flex justify-content-center w-100">
   <div class="px-3 d-flex mb-2 active w-10">
-    <i v-if="index_page == null" @click="setDocType('Index Page','Old Licence Holder',1)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
+    <i v-if="index_page == null" @click="setDocType(4,'Index Page','Old Licence Holder',1)" data-bs-toggle="modal" data-bs-target="#upload-documents" 
         class="fa fa-upload h5 curser-pointer" aria-hidden="true"></i> 
         <a v-if="index_page !== null" @click="viewFile(index_page.id)" href="#!">
           <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>

@@ -418,7 +418,7 @@ Action
     </a>
 
     <a v-if="latest_renewal_licence_doc !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
-    @click="viewFile(latest_renewal_licence_doc.id)" href="#!">
+    @click="viewFile(latest_renewal_licence_doc.id,'LicenceDocument')" href="#!">
       <i class="fa fa-link h5" aria-hidden="true"></i>
     </a>
 

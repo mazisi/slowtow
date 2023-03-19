@@ -226,8 +226,14 @@ export default{
 
        
 
-         function viewFile(model_id) {
-              let model = 'NominationDocument';
+         function viewFile(model_id,file_model) {
+          let model = '';
+          if(file_model){
+            model = file_model;
+          }else{
+            model = 'NominationDocument';
+          }
+              
                Inertia.visit(`/view-file/${model}/${model_id}`,{
                 replace: true,
                 onStart: () => {                  

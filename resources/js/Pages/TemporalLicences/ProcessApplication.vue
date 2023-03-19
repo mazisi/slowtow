@@ -232,12 +232,12 @@
      <i v-if="company_id_document == null" @click="getDocType(4,'ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_id_document !== null" @click="deleteDocument(company_id_document.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_id_document !== null" @click="viewFile(company_id_document.id)" href="#!">
+        <a v-if="company_id_document !== null" @click="viewFile(company_id_document.id,'CompanyDocument')" href="#!">
         <i v-if="company_id_document !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
    <button type="button" class="btn btn-outline-success document-names">Representations</button>
-  <i v-if="company_representations == null" @click="getDocType('Representations','Company',8)" data-bs-toggle="modal" data-bs-target="#documents" 
+  <i v-if="company_representations == null" @click="getDocType(4,'Representations','Company',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_representations !== null" @click="deleteDocument(company_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_representations !== null" @click="viewFile(company_representations.id)" href="#!">
@@ -246,14 +246,14 @@
 
 
     <button type="button" class="btn btn-outline-success document-names">Landlord Letter</button>
-     <i v-if="company_landlord_letter == null" @click="getDocType('Landlord Letter','Company',9)" data-bs-toggle="modal" data-bs-target="#documents" 
+     <i v-if="company_landlord_letter == null" @click="getDocType(4,'Landlord Letter','Company',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_landlord_letter  !== null" @click="deleteDocument(company_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_landlord_letter !== null" @click="viewFile(company_landlord_letter.id)" href="#!">
         <i v-if="company_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
-      <i v-if="company_security_letter == null" @click="getDocType('Security Letter','Company',10)" data-bs-toggle="modal" data-bs-target="#documents" 
+      <i v-if="company_security_letter == null" @click="getDocType(4,'Security Letter','Company',10)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_security_letter  !== null" @click="deleteDocument(company_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
         <a v-if="company_security_letter !== null" @click="viewFile(company_security_letter.id)" href="#!">
@@ -261,7 +261,7 @@
 
 
       <button type="button" class="btn btn-outline-success document-names">Advert/Blurb</button>
-      <i v-if="company_advert == null" @click="getDocType('Advert/Blurb','Company',11)" 
+      <i v-if="company_advert == null" @click="getDocType(4,'Advert/Blurb','Company',11)" 
       data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_advert  !== null" @click="deleteDocument(company_advert.id)" 
@@ -271,7 +271,7 @@
 
 
     <button type="button" class="btn btn-outline-success document-names">Plan/Maps</button>
-    <i v-if="company_plan == null" @click="getDocType('Plan/Maps','Company',12)" 
+    <i v-if="company_plan == null" @click="getDocType(4,'Plan/Maps','Company',12)" 
       data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_plan  !== null" @click="deleteDocument(company_plan.id)" 

@@ -20,9 +20,11 @@ export default {
         Banner,
         Paginate
     },
+    
+    
 
     setup(props) {
-
+    
     const term = ref('')
     const form = useForm({
           term: term,
@@ -73,16 +75,15 @@ export default {
            }, { preserveState: true, replace: true });
         }, 1000));
         
-        onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
+        // onMounted(() => {
           
-            //term.value.focus();
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // },
        
-        });
 
         
 
@@ -93,7 +94,9 @@ export default {
           search,
           notify
         }
+        
     },
+
 
     
 }

@@ -42,7 +42,7 @@ class ViewFileController extends Controller
 
 
              case 'LicenceDocument':
-                    $lic_doc = LicenceDocument::whereId($model_id)->first(['document_file']);               
+                    $lic_doc = LicenceDocument::whereId($model_id)->first(['document_file']);      
                         
                     if($lic_doc){
                         if(fileExist(env('AZURE_STORAGE_URL').'/'.$lic_doc->document_file)){

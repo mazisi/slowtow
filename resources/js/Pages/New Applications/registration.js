@@ -113,7 +113,7 @@ import Layout from "../../Shared/Layout.vue";
         })
       }
   
-      function getDocType(stage=null,doc_type,num=null){
+      function getDocType(stage='',doc_type,num=null){
         this.uploadDoc.doc_type = doc_type;
         this.uploadDoc.stage = stage;
         this.uploadDoc.num = num 

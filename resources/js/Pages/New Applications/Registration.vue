@@ -238,7 +238,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="application_forms === null" 
-      @click="getDocType('Application Forms',3)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Application Forms',3)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(application_forms.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -254,7 +254,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="company_docs === null" 
-      @click="getDocType('Company Documents',4)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Company Documents',4)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(company_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -269,7 +269,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="cipc_docs === null" 
-      @click="getDocType('CIPC Documents',5)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'CIPC Documents',5)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(cipc_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -284,7 +284,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="id_docs === null" 
-      @click="getDocType('ID Documents',6)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'ID Documents',6)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(id_docs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -298,7 +298,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="police_clearance === null" 
-      @click="getDocType('Police Clearance',7)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Police Clearance',7)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(police_clearance.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -312,7 +312,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="tax_clearance === null" 
-      @click="getDocType('Tax Clearance',8)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Tax Clearance',8)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(tax_clearance.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -326,7 +326,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="lta_certificate === null" 
-      @click="getDocType('LTA Certificate',9)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'LTA Certificate',9)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(lta_certificate.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -340,7 +340,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="shareholding_info === null" 
-      @click="getDocType('Shareholding Info',10)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Shareholding Info',10)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(shareholding_info.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -354,7 +354,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="financial_interests === null" 
-      @click="getDocType('Financial Interests',11)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Financial Interests',11)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(financial_interests.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -368,7 +368,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="_500m_affidavict === null" 
-      @click="getDocType('500m Affidavit',12)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'500m Affidavit',12)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else  @click="viewFile(_500m_affidavict.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -382,7 +382,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="government_gazette === null" 
-      @click="getDocType('Government Gazette Adverts',13)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Government Gazette Adverts',13)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(government_gazette.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -396,7 +396,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="advert_affidavict === null" 
-      @click="getDocType('Advert Affidavit',14)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Advert Affidavit',14)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(advert_affidavict.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -412,7 +412,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="proof_of_occupation === null" 
-      @click="getDocType('Proof of Occupation',15)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Proof of Occupation',15)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(proof_of_occupation.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -425,7 +425,7 @@
     </div>
     <div class="col-md-1 d-flex">
       <i v-if="representations === null" 
-      @click="getDocType('Representations',16)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Representations',16)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(representations.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -439,7 +439,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="menu === null" 
-      @click="getDocType('Menu',17)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Menu',17)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(menu.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -453,7 +453,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="photographs === null" 
-      @click="getDocType('Photographs',18)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Photographs',18)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(photographs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -467,7 +467,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="consent_letter === null" 
-      @click="getDocType('Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(consent_letter.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -481,7 +481,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="zoning_certificate === null" 
-      @click="getDocType('Zoning Certificate',20)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Zoning Certificate',20)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(zoning_certificate.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -495,7 +495,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="local_authority === null" 
-      @click="getDocType('Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(local_authority.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -509,7 +509,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="mapbook_plans === null" 
-      @click="getDocType('Mapbook Plans',22)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Mapbook Plans',22)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(mapbook_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -523,7 +523,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="google_map_plans === null" 
-      @click="getDocType('Google Map Plans',23)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Google Map Plans',23)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(google_map_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -537,7 +537,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="description === null" 
-      @click="getDocType('Description',24)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Description',24)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(description.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -551,7 +551,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="site_plans === null" 
-      @click="getDocType('Site Plans',25)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Site Plans',25)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(site_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -565,7 +565,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="dimensional_plans === null" 
-      @click="getDocType('Full Dimensioned Plans',26)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Full Dimensioned Plans',26)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(dimensional_plans.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -579,7 +579,7 @@
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="advert_photographs === null" 
-      @click="getDocType('Advert Photographs',27)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Advert Photographs',27)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(advert_photographs.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
@@ -593,7 +593,7 @@
     </div>
     <div class="col-md-1 d-flex">
       <i v-if="newspaper_adverts === null" 
-      @click="getDocType('Newspaper Adverts',28)" data-bs-toggle="modal" data-bs-target="#documents" 
+      @click="getDocType(5,'Newspaper Adverts',28)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(newspaper_adverts.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
