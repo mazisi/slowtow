@@ -220,7 +220,7 @@ export default {
        
 
          function viewFile(model_id,licence_doc='') {
-          let model = '';alert(licence_doc)
+          let model = '';
           if(licence_doc){
             model = licence_doc;
           }else{

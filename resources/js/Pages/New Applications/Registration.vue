@@ -494,7 +494,7 @@
         <button type="button" class="btn btn-outline-success w-95">Local Authority Letter</button>
       </div>
       <div class="col-md-1 d-flex">
-      <i v-if="local_authority === null" 
+      <i v-if="`local_authority` === null" 
       @click="getDocType(5,'Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
       class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(local_authority.id)" href="#!">
@@ -620,7 +620,7 @@
       && representations !== null
       && payment_to_liqour_board !== null
       && photographs !== null
-      && consent_letter !== null
+      // && consent_letter !== null
       && zoning_certificate !== null
       && mapbook_plans !== null
       && google_map_plans !== null
