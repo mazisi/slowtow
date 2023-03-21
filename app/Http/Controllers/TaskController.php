@@ -27,9 +27,9 @@ class TaskController extends Controller
             'body' => $request->body
         ]);
         if($add_task){
-            return back()->with('success','Task added successfully');
+            return back()->with('success','Note added successfully');
         }
-        return back()->with('error','Error adding task!!!');
+        return back()->with('error','Error adding note!!!');
     }
 
     public function destroy($id)
@@ -38,8 +38,8 @@ class TaskController extends Controller
        $activity = 'Deleted Task: ' . $task->body;
        event(new LogUserActivity(auth()->user(), $activity));
        if($task->delete()){
-        return back()->with('success','Task deleted successfully.');
+        return back()->with('success','Note deleted successfully.');
         }
-        return back()->with('error','Error deleting task!!!');
+        return back()->with('error','Error deleting note!!!');
     }
 }

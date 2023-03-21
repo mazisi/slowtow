@@ -12,6 +12,8 @@ class LicenceRenewal extends Model
 
     protected $guarded = [];
 
+    
+
     public function licence()
     {
         return $this->belongsTo(Licence::class);
