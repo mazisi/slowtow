@@ -46,7 +46,7 @@
    @input="assignActiveValue($event,1)" :checked="licence.is_licence_active == '1'">
 </div>
 </div>
-
+<VmdInput/>
 <div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled ">
 <label class="form-label">Trading Name *</label>
@@ -391,7 +391,7 @@ Action
     </div>
   </div>
 </div>
- 
+
 </Layout>
 </template>
 
