@@ -52,6 +52,8 @@ class HandleInertiaRequests extends Middleware
             'error' => fn () => $request->session()->get('error'),
             'blob_file_path' => fn () => env('BLOB_FILE_PATH'),
             'slug' => fn () => $request->slug,//this guy handles every slug passed in url..
+
+            'message' => fn () => $request->session()->get('message'),
             
         ]);
     }

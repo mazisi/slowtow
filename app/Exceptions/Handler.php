@@ -56,15 +56,16 @@ class Handler extends ExceptionHandler
                     ->toResponse($request)
                     ->setStatusCode($response->status());
             } elseif ($response->status() === 419) {
-                return back()->with([
+                return redirect('/')->with([
                     'message' => 'The page expired, please try again.',
                 ]);
-            // } elseif ($response->status() === 500) {
-            //     $error_message = 500;
-            //     return redirect('/error',['error_message' => $error_message]);
-            // } elseif($response->status() === 404) {
-            //     $error_message = 404;
-            //     return redirect('/error',['error_message' => $error_message]);
+
+            } elseif ($response->status() === 500) {
+                return redirect('/server-error');
+            } elseif($response->status() === 404) {
+                return redirect('/file-not-found');
+            }elseif ($response->status() === 403) {
+                return redirect('/access-denied');
             }
         
             return $response;

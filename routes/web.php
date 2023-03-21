@@ -111,11 +111,19 @@ Route::group(['middleware' => ['guest']], function () {
 
 
     Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+
+
+
+
+
     //Error Pages
-    Route::get('error',function(){
-        //return Inertia::render('ErrorPages/Error');
-      });
-    Route::group(['middleware' => ['auth','role:slowtow-admin|slowtow-user']], function () {
+    Route::get('server-error',function(){return Inertia::render('ErrorPages/ServerError');});
+    Route::get('file-not-found',function(){return Inertia::render('ErrorPages/FileNotFound');});
+    Route::get('access-denied',function(){return Inertia::render('ErrorPages/AccessDenied');});
+
+
+
+    Route::group(['middleware' => ['auth', 'user_active','role:slowtow-admin|slowtow-user']], function () {
 
         
 

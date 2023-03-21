@@ -618,6 +618,7 @@ class LicenceController extends Controller
         "trading_name" => "required",
         "licence_type" => "required",
         "province" => "required",
+        "belongs_to" => "required",
         "licence_number" => "required|unique:licences,licence_number"
     ]);
        
@@ -682,6 +683,7 @@ class LicenceController extends Controller
     }
 
     public function update(Request $request,$slug){    
+       try {
         if(empty($request->change_company)){
             $company_var = $request->company_id;
         }else{
@@ -703,10 +705,14 @@ class LicenceController extends Controller
             "postal_code" => $request->postal_code,
             "company_id" => $company_var
         ]);
+        
         if($update){
             return back()->with('success','Licence updated successfully.');
         }
+        
+       } catch (\Throwable $th) {
         return back()->with('error','Error updating licence.');
+       }
     }
 
     public function destroy($slug){

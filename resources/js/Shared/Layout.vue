@@ -55,7 +55,8 @@ export default {
       "showFooter",
       "hideConfigButton"
     ])
-  }
+  },
+
   
 };
 </script>

@@ -17,7 +17,7 @@ class LoginController extends Controller
  
         if (Auth::attempt($credentials,$request->remember)) {
             if(!auth()->user()->is_active){
-                return back()->with('error','Your account is not activated.');
+                return Inertia::render('ErrorPages/AccessDenied');
             }
             $request->session()->regenerate();
             if(auth()->user()->hasRole('company-admin')){

@@ -412,7 +412,7 @@
 <div class="row">
 <div class="col-sm-12 col-lg-4"></div>
 <div class="col-sm-12 col-lg-4">
-<h6 class="text-center">Licences Linked To : {{ company.name }}</h6>
+<h6 class="text-center">Licences Linked To : {{ company.name ? company.name : '' }}</h6>
 </div>
 
 
@@ -496,7 +496,7 @@
       <div class="d-flex px-2">
     
     <div class="d-flex flex-column">
-      <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>                          
+      <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name ? person.full_name : '' }}</h6></Link>                          
     </div>
       </div>
     </td>

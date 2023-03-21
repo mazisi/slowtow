@@ -195,6 +195,8 @@
   import Multiselect from '@vueform/multiselect';
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
   import Banner from '../components/Banner.vue';
+  import { toast } from 'vue3-toastify';
+  import 'vue3-toastify/dist/index.css';
 
   export default {
    props: {
@@ -261,8 +263,9 @@
           }
           
           filterForm.get(`/create-new-app?id=${filterForm.id}`, {
-                      onSuccess: () => { 
-                          notify(props.success)
+                      onStart: () => { 
+                        let mess = filterForm.variation === 'Person' ? ' ID Number' : ' Registration Number';
+                        getchIdOrRegNumber(mess);
                       },
             preserveScroll: true,
             replace: true,
@@ -271,13 +274,14 @@
 
      }
      
-     const notify = (message) => {
-        toast(message, {
-          autoClose: 2000,
-        });
+     function getchIdOrRegNumber(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(`Fetching${message}`);
         }
       
-      return { submit, form ,options, idRegForm, selectApplicant, filterForm}
+      return { submit, form ,options, idRegForm, selectApplicant, filterForm,toast, getchIdOrRegNumber}
       
     },
     

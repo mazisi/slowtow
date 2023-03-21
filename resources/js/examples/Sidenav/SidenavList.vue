@@ -6,10 +6,9 @@
 }
 </style>
 
-<template>
+<template v-if="$page.props.auth" >
   <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
     <ul class="navbar-nav">
-      
 
        <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
        || $page.props.auth.has_slowtow_user_role">
@@ -86,7 +85,7 @@
           navText="People">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
-              >account_circle</i
+              >groups</i
             >
           </template>
         </sidenav-collapse>

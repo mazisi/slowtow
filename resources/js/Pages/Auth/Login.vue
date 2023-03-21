@@ -50,6 +50,17 @@
 </span>
  Sign In
   </button>
+
+  <div v-if="$page.message" class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">
+    <span class="alert-icon"><i class=""></i></span>
+    <span class="alert-text"> 
+      <span class="text-sm">{{ $page.message }}</span>
+    </span>
+    <button type="button" class="btn-close d-flex justify-content-center align-items-center" data-bs-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true" class="text-lg font-weight-bold">×</span>
+  </button>
+</div>
+
   </div>
 </form>
 
@@ -86,6 +97,7 @@ export default {
   name: "sign-in",
  props: {
     errors: Object,
+    message: String
   },
 
   setup () {

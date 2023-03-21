@@ -18,8 +18,13 @@ class IsUserActive
     public function handle(Request $request, Closure $next)
     {
         if (Auth::check()) {
-            if(auth()->user()->is_active !== '1'){
-                return redirect('/');
+            if(! auth()->user()->is_active){
+                Auth::logout();
+     
+                $request->session()->invalidate();
+             
+                $request->session()->regenerateToken();
+                //return redirect('/');
             }
             
         } 

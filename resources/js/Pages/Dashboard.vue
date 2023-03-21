@@ -28,7 +28,7 @@
             <mini-statistics-card
               :title="{ text: 'People', value: people }"
               :icon="{
-                name: 'person',
+                name: 'groups',
                 color: 'text-white',
                 background: 'success',
               }"
@@ -38,7 +38,7 @@
             <mini-statistics-card
               :title="{ text: 'Temporary Licences', value: temp_licences }"
               :icon="{
-                name: 'weekend',
+                name: 'schedule',
                 color: 'text-white',
                 background: 'info',
               }"
