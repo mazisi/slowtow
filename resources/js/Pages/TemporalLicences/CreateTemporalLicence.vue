@@ -2,9 +2,10 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
+import { Head } from '@inertiajs/inertia-vue3';
 
 export default {
-  name: "profile-overview",
+  name: "CreateTemporalLicence",
  props: {
     errors: Object,
     companies: Array,
@@ -43,7 +44,8 @@ export default {
   components: {
     Layout,
     Multiselect,
-    Banner
+    Banner,
+    Head
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -67,6 +69,7 @@ export default {
 
 <template>
 <Layout>
+  <Head title="Create Temporal Licence" />
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

@@ -1,5 +1,6 @@
 <template>
     <Layout>
+      <Head title="View Issue" />
     <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -119,7 +120,7 @@
     
     <script>
     import Layout from "../../Shared/Layout.vue";
-    import { Link,useForm } from '@inertiajs/inertia-vue3';
+    import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
     import Editor from '@tinymce/tinymce-vue';
     import Banner from '../components/Banner.vue';
     import { ref } from "vue";
@@ -176,6 +177,7 @@
        components: {
         Layout,
         Link,
+        Head,
         Banner,
         Editor
       },

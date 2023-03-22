@@ -1,6 +1,6 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { Link,useForm, Head } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import { toast } from 'vue3-toastify';
@@ -69,6 +69,7 @@ export default {
   components: {
     Layout,
     Link,
+    Head,
     Banner
   },
   beforeUnmount() {
@@ -89,6 +90,7 @@ export default {
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
+  <Head title="View Contact" />
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

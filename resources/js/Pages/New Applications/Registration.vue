@@ -1,6 +1,7 @@
 
   <template>
   <Layout>
+    <Head title="Process Registration" />
   <div class="container-fluid">
       <Banner/>
       <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -182,7 +183,7 @@
     
        <div class="d-flex align-items-start flex-column justify-content-center">
           <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="payment_to_liqour_board" class="mb-0 text-xs limit-file-name">{{ payment_to_liqour_board.document_name }}</p>
+          <p v-if="payment_to_liqour_board" class="mb-0 text-xs limit-file-name">{{ substringDocName(payment_to_liqour_board.document_name) }}</p>
         </div>
     
         <a v-if="payment_to_liqour_board" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

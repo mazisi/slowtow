@@ -1,5 +1,5 @@
 import Layout from "../../Shared/Layout.vue";
-import { useForm ,Link } from '@inertiajs/inertia-vue3';
+import { useForm ,Link, Head } from '@inertiajs/inertia-vue3';
 import { ref, watch, onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue'
@@ -65,6 +65,7 @@ export default {
  components: {
     Layout,
     Link,
+    Head,
     useForm,
     Banner,
     Paginate

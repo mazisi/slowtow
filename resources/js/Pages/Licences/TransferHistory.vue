@@ -1,5 +1,7 @@
 <template>
 <Layout>
+  <Head title="Transfers" />
+
   <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -107,7 +109,7 @@
 </style>
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link, Head } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import { onMounted } from 'vue';
@@ -164,6 +166,7 @@ export default {
   components: {
     Layout,
     Link,
+    Head,
     Banner,
     Paginate
     },

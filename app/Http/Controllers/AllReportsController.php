@@ -63,7 +63,7 @@ class AllReportsController extends Controller
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
                                     })
-                                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                    ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                         $query->where('alterations.status','<', 8)
                                         ->orWhere('alterations.status', 0)
                                         ->orWhereNull('alterations.status');
@@ -236,7 +236,7 @@ class AllReportsController extends Controller
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          })
 
-                         ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                             $query->where('status','<', 16)
                             ->orWhere('status', 0)
                             ->orWhereNull('status');
@@ -440,7 +440,7 @@ class AllReportsController extends Controller
                         ->when(!empty(request('selectedDates')), function ($query) {
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          })
-                         ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                             $query->where('status','<', 16)
                             ->orWhere('status', 0)
                             ->orWhereNull('status');
@@ -647,7 +647,7 @@ class AllReportsController extends Controller
                                 $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
                           })
 
-                          ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                          ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                             $query->where('nominations.status','<', 10)
                             ->orWhere('nominations.status', 0)
                             ->orWhereNull('nominations.status');
@@ -822,7 +822,7 @@ class AllReportsController extends Controller
                             ->when(request('licence_types'), function ($query)  {
                                 $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                             })
-                            ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('licence_renewals.status','<', 6)
                                 ->orWhere('licence_renewals.status', 0)
                                 ->orWhereNull('licence_renewals.status');
@@ -959,7 +959,7 @@ class AllReportsController extends Controller
                     ->when(!empty(request('applicant')), function ($query) {
                         $query->where('belongs_to',request('applicant'));
                     })
-                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                    ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                         $query->where('temporal_licences.status','<', 9)
                         ->orWhere('temporal_licences.status', 0)
                         ->orWhereNull('temporal_licences.status');
@@ -1017,7 +1017,7 @@ class AllReportsController extends Controller
                              ->when(!empty(request('applicant')), function ($query) {
                                  $query->where('belongs_to',request('applicant'));
                              })
-                             ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('temporal_licences.status','<', 9)
                                 ->orWhere('temporal_licences.status', 0)
                                 ->orWhereNull('temporal_licences.status');
@@ -1205,7 +1205,7 @@ class AllReportsController extends Controller
                                 $query->where('licence_type_id',request('licence_types'));
                             })
 
-                            ->when(request('is_licence_complete') === 'Outstanding', function ($query) {
+                            ->when(request('is_licence_complete') === 'Pending', function ($query) {
                                 $query->where('licence_transfers.status','<', 10)
                                 ->orWhere('licence_transfers.status', 0)
                                 ->orWhereNull('licence_transfers.status');

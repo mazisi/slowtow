@@ -1,7 +1,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { Link,useForm, Head } from '@inertiajs/inertia-vue3';
 import { ref,onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
@@ -269,6 +269,7 @@ export default {
     Layout,
     Multiselect,
     Link,
+    Head,
     LiquorBoardRequest,
     Banner,
     Task
@@ -311,6 +312,7 @@ export default {
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
+  <Head title="View Transfer"/>
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

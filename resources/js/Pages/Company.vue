@@ -2,7 +2,7 @@
 import Layout from "../Shared/Layout.vue";
 import { ref, watch, onMounted } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
-import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { Link, useForm, Head } from '@inertiajs/inertia-vue3';
 import Banner from './components/Banner.vue';
 import Paginate from "../Shared/Paginate.vue";
 import { toast } from 'vue3-toastify';
@@ -85,6 +85,7 @@ export default {
     Layout,
     Link,
     Banner,
+    Head,
     Paginate
 },
 };
@@ -101,6 +102,7 @@ export default {
 </style>
 <template>
 <Layout>
+  <Head title="Companies"/>
 <div class="container-fluid">
   <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">

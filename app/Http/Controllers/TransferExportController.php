@@ -66,7 +66,7 @@ public static function export($request){
                             $query->where('licence_type_id',request('licence_types'));
                         })
 
-                        ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                        ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                             $query->where('licence_transfers.status','<', 10)
                             ->orWhere('licence_transfers.status', 0)
                             ->orWhereNull('licence_transfers.status');

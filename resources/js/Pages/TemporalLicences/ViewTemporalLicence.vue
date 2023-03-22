@@ -3,7 +3,7 @@ import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
 import { Inertia } from '@inertiajs/inertia';
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, Head } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -91,7 +91,8 @@ export default {
   components: {
     Layout,
     Multiselect,
-    Banner
+    Banner,
+    Head
   },
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -115,6 +116,7 @@ export default {
 
 <template>
 <Layout>
+  <Head title="View Temporary Licence"/>
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

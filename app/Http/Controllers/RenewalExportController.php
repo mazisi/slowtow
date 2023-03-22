@@ -70,7 +70,7 @@ class RenewalExportController extends Controller
                             ->when(request('licence_types'), function ($query)  {
                                 $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                             })
-                            ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                            ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('licence_renewals.status','<', 6)
                                 ->orWhere('licence_renewals.status', 0)
                                 ->orWhereNull('licence_renewals.status');

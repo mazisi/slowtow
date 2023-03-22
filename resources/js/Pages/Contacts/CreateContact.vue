@@ -1,5 +1,6 @@
 <template>
 <Layout>
+  <Head title="Upload Contacts" />
   <div class="container-fluid">
 <Banner/>
     
@@ -52,7 +53,7 @@
 </style>
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, Head } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 
 export default {
@@ -75,6 +76,7 @@ export default {
  components: {
     Layout,
     Banner,
+    Head
 },
 }
 </script>

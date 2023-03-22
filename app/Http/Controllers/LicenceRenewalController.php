@@ -114,7 +114,7 @@ class LicenceRenewalController extends Controller
                 $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
                            
 
-            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+           
                 $fileModel = new RenewalDocument; 
                 $fileModel->document_name = $request->document->getClientOriginalName();
                 $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
@@ -128,9 +128,7 @@ class LicenceRenewalController extends Controller
                    return back()->with('success','Document uploaded successfully.');
                  }
                  
-            }else{
-                return back()->with('error','Azure storage could not be reached.Please try again.');
-            }
+            
         } catch (\Throwable $th) {
             //throw $th;
            return back()->with('error','Error uploading document.');

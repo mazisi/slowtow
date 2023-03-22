@@ -1,5 +1,6 @@
 <template>
   <Layout>
+    <Head title="Issues" />
   <div class="container-fluid">
   
   <Banner/>
@@ -125,7 +126,7 @@
   
   <script>
   import Layout from "../../Shared/Layout.vue";
-  import { Link, useForm } from '@inertiajs/inertia-vue3';
+  import { Link, useForm,Head } from '@inertiajs/inertia-vue3';
   import { reactive, ref, watch } from 'vue'
   import { Inertia } from '@inertiajs/inertia'
   import Banner from '../components/Banner.vue'
@@ -142,7 +143,8 @@
       components: {
           Layout,
           Link,
-          Banner
+          Banner,
+          Head
       },
   
       setup(props) {

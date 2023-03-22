@@ -12,14 +12,16 @@
 }
 
 .limit-file-namee{
-  width: 90px; 
+  white-space: nowrap;
   overflow: hidden;
-  height: 16px
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
+  <Head title="View Renewal" />
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

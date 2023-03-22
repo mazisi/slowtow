@@ -75,7 +75,7 @@ class ExistingLicenceExportController extends Controller
                             //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
                          })
 
-                         ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                             $query->where('status','<', 16)
                             ->orWhere('status', 0)
                             ->orWhereNull('status');

@@ -9,6 +9,8 @@
     </style>
     <template>
   <Layout>
+
+    <Head title="All Users" />
   <div class="container-fluid">
   
   <Banner/>

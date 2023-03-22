@@ -119,7 +119,7 @@ class TemporaLExportController extends Controller
                                  $query->where('belongs_to',request('applicant'));
                              })
 
-                             ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('temporal_licences.status','<', 9)
                                 ->orWhere('temporal_licences.status', 0)
                                 ->orWhereNull('temporal_licences.status');

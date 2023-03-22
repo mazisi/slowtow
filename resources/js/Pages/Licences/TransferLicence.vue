@@ -1,7 +1,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { Link,useForm, Head } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 
 
@@ -66,6 +66,7 @@ export default {
     Layout,
     Multiselect,
     Link,
+    Head,
     Banner
   },
   beforeUnmount() {
@@ -103,6 +104,7 @@ export default {
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
+  <Head title="Transfer Licence"/>
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

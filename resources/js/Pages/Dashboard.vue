@@ -1,5 +1,6 @@
 <template>
 <Layout>
+  <Head title="Dashboard" />
   <div class="py-4 container-fluid">
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
@@ -105,7 +106,7 @@ import ChartHolderCard from "./components/ChartHolderCard.vue";
 import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
 import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
 import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
-import { Link } from '@inertiajs/inertia-vue3';
+import { Link, Head } from '@inertiajs/inertia-vue3';
 
 export default {
   name: "dashboard",
@@ -140,7 +141,8 @@ export default {
     ReportsLineChart,
     MiniStatisticsCard,
     Layout,
-    Link
+    Link,
+    Head
 },
 };
 </script>

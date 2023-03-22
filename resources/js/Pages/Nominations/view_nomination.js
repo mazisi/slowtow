@@ -1,6 +1,6 @@
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
-import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { Link,useForm,Head } from '@inertiajs/inertia-vue3';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 import { Inertia } from '@inertiajs/inertia';
@@ -265,6 +265,7 @@ export default{
    components: {
     Layout,
     Link,
+    Head,
     Multiselect,
     Datepicker,
     LiquorBoardRequest,

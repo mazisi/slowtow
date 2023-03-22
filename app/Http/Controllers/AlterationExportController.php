@@ -59,7 +59,7 @@ class AlterationExportController extends Controller
                                         $query->where('belongs_to',request('applicant'));
                                     })
 
-                                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                                    ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                         $query->where('alterations.status','<', 8)
                                         ->orWhere('alterations.status', 0)
                                         ->orWhereNull('alterations.status');

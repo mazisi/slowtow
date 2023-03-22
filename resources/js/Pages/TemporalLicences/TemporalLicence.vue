@@ -1,6 +1,6 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link, useForm } from "@inertiajs/inertia-vue3";
+import { Link, useForm, Head } from "@inertiajs/inertia-vue3";
 import { ref, watch, reactive } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
@@ -53,6 +53,7 @@ export default {
   components: {
     Layout,
     Link,
+    Head,
     Inertia,
     Banner,
     Paginate
@@ -67,6 +68,7 @@ export default {
 }</style>
 <template>
 <Layout>
+  <Head title="Temporary Licences"/>
   <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

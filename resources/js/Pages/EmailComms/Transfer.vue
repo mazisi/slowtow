@@ -1,5 +1,5 @@
 <script>
-import { Link } from "@inertiajs/inertia-vue3";
+import { Link, Head } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
@@ -22,6 +22,7 @@ export default {
     Layout,
     Link,
     Banner,
+    Head,
     Paginate
 },
 methods: {
@@ -96,6 +97,7 @@ methods: {
 }</style>
 <template>
 <Layout>
+  <Head title="EmailComms - Transfers" />
   <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">

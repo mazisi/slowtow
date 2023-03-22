@@ -1,5 +1,6 @@
 <template>
 <Layout>
+  <Head title="Reports"/>
   <div class="container-fluid">
     <Banner/>
       
@@ -232,9 +233,9 @@
   <div class="col-6" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.is_license_complete" class="form-control form-control-default">
-      <option :value="''" disabled selected>Outstanding Or Complete?</option>
-      <option value="Outstanding">Outstanding</option>
-      <option value="Complete">Complete</option>
+      <option :value="''" disabled selected>Pending Or Complete?</option>
+      <option value="Pending">Pending</option>
+      <option value="Pending">Complete</option>
       </select>
       </div>
   </div>

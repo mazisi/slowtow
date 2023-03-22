@@ -60,13 +60,13 @@ name: "Alterations",
 
   },
 
-      mounted() {
-          if(this.success){
-            this.notify(this.success)
-          }else if(this.error){
-            this.notify(this.error)
-          }
-        },
+      // mounted() {
+      //     if(this.success){
+      //       this.notify(this.success)
+      //     }else if(this.error){
+      //       this.notify(this.error)
+      //     }
+      //   },
 
   beforeUnmount() {
     this.$store.state.isAbsolute = false;
@@ -84,6 +84,7 @@ name: "Alterations",
 
 <template>
 <Layout>
+  <Head title="Alterations" />
 <div class="container-fluid">
 <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">

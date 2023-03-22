@@ -14,6 +14,7 @@
 <style src="@vueform/multiselect/themes/default.css"></style>
 <template>
 <Layout>
+  <Head title="View Nomination" />
 <div class="container-fluid">
 <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">

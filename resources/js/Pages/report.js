@@ -1,5 +1,5 @@
 import Layout from "../Shared/Layout.vue";
-import { useForm, Link } from '@inertiajs/inertia-vue3';
+import { useForm, Link, Head} from '@inertiajs/inertia-vue3';
 import Multiselect from '@vueform/multiselect';
 import Datepicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -369,6 +369,7 @@ return{
  components: {
     Layout,
     Link,
+    Head,
     Multiselect,
     Datepicker,
     Banner

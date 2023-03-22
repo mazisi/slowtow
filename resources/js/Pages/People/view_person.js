@@ -1,4 +1,4 @@
-import { useForm } from '@inertiajs/inertia-vue3';
+import { useForm, Head } from '@inertiajs/inertia-vue3';
 import Layout from "../../Shared/Layout.vue";
 import { ref,onMounted } from "vue";
 import { Inertia } from '@inertiajs/inertia';
@@ -212,6 +212,7 @@ const form = useForm({
  components: {
     Layout,
     Banner,
+    Head,
     Task
   },
   

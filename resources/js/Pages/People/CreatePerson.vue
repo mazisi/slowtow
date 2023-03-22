@@ -1,5 +1,6 @@
 <template>
 <Layout>
+  <Head title="Create Person" />
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -195,7 +196,8 @@ export default {
 
   components: {
     Layout,
-    Banner
+    Banner,
+    Head
   },
   
   beforeUnmount() {

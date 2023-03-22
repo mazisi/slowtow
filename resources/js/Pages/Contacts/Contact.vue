@@ -9,6 +9,7 @@
 </style>
 <template>
 <Layout>
+  <Head title="Contacts" />
   <div class="container-fluid">
 <Banner/>
    
@@ -93,7 +94,7 @@
 </template>
 <script>
 import Layout from "../../Shared/Layout.vue";
-import { Link, useForm } from '@inertiajs/inertia-vue3';
+import { Link, Head, useForm } from '@inertiajs/inertia-vue3';
 import { ref, watch, onMounted } from 'vue'
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
@@ -141,13 +142,13 @@ export default {
           }
         }
 
-        onMounted(() => {
-          if(props.success){
-            notify(props.success)
-          }else if(props.error){
-            notify(props.error)
-          }
-        });
+        // onMounted(() => {
+        //   if(props.success){
+        //     notify(props.success)
+        //   }else if(props.error){
+        //     notify(props.error)
+        //   }
+        // });
 
     return {
       q,
@@ -160,6 +161,7 @@ export default {
  components: {
     Layout,
     Link,
+    Head,
     Banner,
     Paginate
 },

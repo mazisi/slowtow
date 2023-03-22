@@ -8,6 +8,7 @@
 </style>
 <template>
 <Layout>
+  <Head title="People" />
 <div class="container-fluid">
 <Banner/>
 

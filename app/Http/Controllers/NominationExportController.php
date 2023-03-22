@@ -75,7 +75,7 @@ class NominationExportController extends Controller
                                     $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
                               })
 
-                              ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
+                              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('nominations.status','<', 10)
                                 ->orWhere('nominations.status', 0)
                                 ->orWhereNull('nominations.status');

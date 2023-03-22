@@ -1,5 +1,6 @@
 <template>
 <Layout>
+  <Head title="Licences" />
 <div class="container-fluid">
 
 <Banner/>
