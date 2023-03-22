@@ -3,6 +3,15 @@ import { Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 
 export default {
+  setup() {
+    function goBack(){
+      return history.go(-1);
+    }
+    return{
+      goBack
+    }
+  },
+
  components: {
     Banner
 },
@@ -22,7 +31,7 @@ export default {
       <h1 class="display-1 fw-bold">Error 500</h1>
       <p class="lead">Internal Server Error. Please contact System Administrator.</p>
       
-      <a href="/" class="btn btn-primary">Go Home</a>
+      <Link @click="goBack" class="btn btn-primary">Go Back</Link>
   </div>
 </div>
 

@@ -140,7 +140,13 @@
       height: 30px
     }
 
-    
+    .modal {
+      z-index: 9999 !important;
+    }
+
+    .modal-backdrop {
+      z-index: 9989 !important;
+     }
     
    </style>
 

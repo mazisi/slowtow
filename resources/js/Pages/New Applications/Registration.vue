@@ -494,12 +494,12 @@
         <button type="button" class="btn btn-outline-success w-95">Local Authority Letter</button>
       </div>
       <div class="col-md-1 d-flex">
-      <i v-if="`local_authority` === null" 
-      @click="getDocType(5,'Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
+      <i v-if="!local_authority" 
+        @click="getDocType(5,'Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
+          class="fa fa-upload h5 upload-icon" ></i>
       <a v-else @click="viewFile(local_authority.id)" href="#!">
       <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="local_authority !== null" @click="deleteDocument(local_authority.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
+      <i v-if="local_authority" @click="deleteDocument(local_authority.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
     </div>
     </div>
 

@@ -33,7 +33,7 @@ class AllReportsController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, alterations.logded_at,licences.board_region,alterations.date,alterations.status ")
+                            licences.licence_issued_at, licences.province, alterations.logded_at,licences.board_region,alterations.date,alterations.status ")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
@@ -264,7 +264,7 @@ class AllReportsController extends Controller
                             'client_paid_at','status',
                             'is_new_app'
                             ]);
-
+            
             $existing_licences_status = '';
             $notesCollection = '';
             
@@ -374,13 +374,6 @@ class AllReportsController extends Controller
         
         
         
-
-
-
-
-
-
-
         $newApplications = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'New Apps');
         $spreadsheet->addSheet($newApplications, 2);
         $newAppsData = array(
@@ -809,7 +802,7 @@ class AllReportsController extends Controller
                             })
 
                             ->when(request('province'), function ($query)  {
-                                $query->whereIn('province',array_values(explode(",",request('province'))));
+                                $query->whereIn('licences.province',array_values(explode(",",request('province'))));
                             })
 
                             ->when(request('boardRegion'), function ($query)  {

@@ -17,7 +17,7 @@ class AlterationExportController extends Controller
                 'LICENCE NUMBER',
                 'PROVINCE/REGION',
                 'DATE LODGED',
-                'PROOF OF LODGIMENT',
+                'PROOF OF LODGEMENT',
                 'DATE GRANTED',
                 'CURRENT STATUS',
                 'COMMENT IF APPLICABLE'
@@ -136,7 +136,7 @@ class AlterationExportController extends Controller
                         $data = [
                         $arr_of_alterations[$i]->trading_name, 
                         $arr_of_alterations[$i]->licence_number, 
-                        $arr_of_alterations[$i]->province.'/'.$arr_of_alterations[$i]->board_region,
+                        $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region,
                         $arr_of_alterations[$i]->logded_at,
                         is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
                         $arr_of_alterations[$i]->certification_issued_at,

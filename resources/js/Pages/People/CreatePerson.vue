@@ -167,7 +167,7 @@ export default {
         }
 
         function getDateOfBirth(){//needs refactoring
-          if(this.form.id_or_passport.length === 11){
+          if(this.form.id_or_passport.length === 13){
             let year = this.form.id_or_passport.substring(0,2);
             let month = this.form.id_or_passport.substring(2,4);
             let day = this.form.id_or_passport.substring(4,6);
