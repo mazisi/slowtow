@@ -140,11 +140,19 @@ export default {
   
   <select class="form-control form-control-default" v-model="form.address" >
     <option :value="''" disabled selected >Event Address Region</option>
-    <option value="Ekurhuleni">Ekurhuleni</option>
-      <option value="Johannesburg">Johannesburg</option>
-      <option value="Sedibeng">Sedibeng</option>
-      <option value="Tshwane">Tshwane</option>
-      <option value="West Rand">West Rand</option>
+    <option value="Eastern Cape">Eastern Cape</option>
+      <option value="Free State">Free State</option>
+      <option value="Gauteng Ekurhuleni">Gauteng Ekurhuleni</option>
+      <option value="Gauteng Johannesburg">Gauteng Johannesburg</option>
+      <option value="Gauteng Sedibeng">Gauteng Sedibeng</option>
+      <option value="Gauteng Tshwane">Gauteng Tshwane</option>
+      <option value="Gauteng West Rand">Gauteng West Rand</option>
+      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
+      <option value="Limpopo">Limpopo</option>
+      <option value="Mpumalanga">Mpumalanga</option>
+      <option value="North West">North West</option>
+      <option value="Northern Cape">Northern Cape</option>
+      <option value="Western Cape">Western Cape</option>
   </select>
    </div>
  <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>

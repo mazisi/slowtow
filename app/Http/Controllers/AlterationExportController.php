@@ -28,8 +28,11 @@ class AlterationExportController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, alterations.logded_at,licences.board_region,alterations.date, alterations.status ")
+                            licences.licence_issued_at, alterations.logded_at,licences.board_region,alterations.date, 
+                            alterations.status, alteration_documents.doc_type")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
+                            ->join('alteration_documents', 'alterations.id', '=', 'alteration_documents.alteration_id')
+
                                 ->when(function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
                                         $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
@@ -71,20 +74,22 @@ class AlterationExportController extends Controller
 
                                 })
                                 ->whereNull('alterations.deleted_at')
-                              ->orderBy('trading_name')
-                              ->get([
-                                'certification_issued_at',
-                                'id','trading_name',
-                                'licence_number',
-                                'board_region',
-                                'province',
-                                'status',
-                                'board_region',
-                                'date',
-                                'licence_issued_at',
-                                'logded_at'
+                                ->where('alteration_documents.doc_type','=','Alterations Delivered')
+                                ->orderBy('trading_name')
+                                 ->get([
+                                    'certification_issued_at',
+                                    'id','trading_name',
+                                    'licence_number',
+                                    'board_region',
+                                    'province',
+                                    'status',
+                                    'board_region',
+                                    'doc_type',
+                                    'date',
+                                    'licence_issued_at',
+                                    'logded_at'
                             ]);
-  
+  dd($alterations);
                     $status = '';
                     $notesCollection = '';
 

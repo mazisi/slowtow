@@ -194,6 +194,7 @@ methods: {
     <thead>
       <tr>
         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
+        <th class="px-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Licence Number</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
@@ -208,6 +209,13 @@ methods: {
           </div>
         </td>
         
+
+        <td class="text-sm">
+          <Link :href="`/email-comms/get-mail-template/${transfer.slug}/transfers`">
+           <h6 class="mb-0 text-sm">{{transfer.licence.licence_number }} </h6>
+          </Link>
+        </td>
+
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${transfer.slug}/transfers`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>

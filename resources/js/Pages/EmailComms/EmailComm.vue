@@ -209,8 +209,9 @@ methods: {
   <table class="table align-items-center mb-0">
     <thead>
       <tr>
-        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+        <th class="pl-5 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Current Trading Name </th>
+        <th class="px-0 text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Licence Number</th>
+        <th class="pl-0 text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
     <tbody>
@@ -219,24 +220,22 @@ methods: {
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">
-                {{ renewal.licence ? limit(renewal.licence.trading_name) : '' }}</h6>
+              <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`">
+                <h6 class="mb-0 text-sm">
+                  {{ renewal.licence ? limit(renewal.licence.trading_name) : '' }}</h6>
+                </Link>
               <p class="text-xs mb-0"> 
               Renewal For: {{ new Date(renewal.date).getFullYear() }}/{{ this.getRenewalYear(renewal.date)  }} </p>
             </div>
           </div>
         </td>
         
-        <!-- <td class="align-middle text-center text-sm">
-        <span v-if="renewal.status == 1">Client Quoted</span>
-        <span v-if="renewal.status == 2" >Client Invoiced</span>
-        <span v-if="renewal.status == 4" >Payment To Liquor Board</span>
-        <span v-if="renewal.status == 5" >Renewal Issued</span>
-        
+        <td class="text-sm">
+          <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" >
+           <h6 class="mb-0 text-sm">{{renewal.licence.licence_number }} </h6>
+          </Link>
         </td>
-        <td class="align-middle text-center">
-        <span class="text-secondary text-xs font-weight-bold">{{ renewal.date }}</span>
-        </td> -->
+        
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>

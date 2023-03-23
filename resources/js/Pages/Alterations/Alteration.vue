@@ -135,7 +135,7 @@ name: "Alterations",
         </td>
 
         <td class="text-sm text-center">
-        <Link  :href="`/view-alteration/${alter.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
+        <Link :href="`/view-alteration/${alter.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
         
         </td>
       </tr>

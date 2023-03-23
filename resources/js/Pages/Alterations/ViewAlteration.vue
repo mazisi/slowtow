@@ -489,7 +489,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="alteration_delivered !== null">
-    <a :click="viewFile(alteration_delivered.id)" href="#!">
+    <a @click="viewFile(alteration_delivered.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>

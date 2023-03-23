@@ -90,16 +90,20 @@ class LicenceDocsController extends Controller
 
       try {
         
-        $exist =  Licence::whereId($licence_id)->first(); 
-       $merger = PDFMerger::init();           
+        $exist =  Licence::whereId($licence_id)->first(['id','merged_document']); 
+        $merger = PDFMerger::init();           
           if (! is_null($exist->merged_document)) {
             unlink(storage_path().'app/public/'.$exist->merged_document);
             $exist->update(['merged_document' => null]);
           }
                   
-         $all_docs = LicenceDocument::where('licence_id',$licence_id)->whereNotNull('num')->orWhere('document_type','Payment To The Liquor Board')->orderBy('num','ASC')->get();
-         foreach ($all_docs as $doc) {
-            $merger->addPDF(env('BLOB_FILE_PATH').$doc->document_name, 'all');
+         $all_docs = LicenceDocument::where('licence_id',$exist->id)->whereNotNull('num')->orderBy('num','ASC')
+         ->get(['id','document_file','licence_id','document_type']);
+         
+         $liquor_board_doc = LicenceDocument::where('licence_id',$exist->id)->where('document_type','Payment To The Liquor Board')->get(['id','document_file']);
+         $merged_collections = $all_docs->merge($liquor_board_doc);
+         foreach ($merged_collections as $doc) {
+            $merger->addPDF(env('BLOB_FILE_PATH').$doc->document_file, 'all');
           }
           $fileName = 'licence'.'_'.time().'.pdf';
           $merger->merge();
@@ -110,9 +114,9 @@ class LicenceDocsController extends Controller
           return back()->with('success','Documents merged successfully.');
 
       } catch (\Throwable $th) {
-        return back()->with('error','Error merging documents.');
+        throw $th;
+        //return back()->with('error','Error merging documents.');
       }
           
-
     }
 }
