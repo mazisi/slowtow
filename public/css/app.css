@@ -1090,9 +1090,6 @@ select {
 .p-1 {
   padding: 0.25rem;
 }
-.p-5 {
-  padding: 1.25rem;
-}
 .px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -1184,11 +1181,11 @@ select {
 .pt-3 {
   padding-top: 0.75rem;
 }
-.pl-0 {
-  padding-left: 0px;
-}
 .pl-5 {
   padding-left: 1.25rem;
+}
+.pl-0 {
+  padding-left: 0px;
 }
 .text-left {
   text-align: left;

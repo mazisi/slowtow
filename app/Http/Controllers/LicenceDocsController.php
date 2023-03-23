@@ -32,8 +32,12 @@ class LicenceDocsController extends Controller
               $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
   
               if($fileModel->save()){
-                 Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage]);
-              }
+                if(intval($request->stage) >= 15){
+                  Licence::whereId($fileModel->licence_id)->update(['is_new_app' => false]);
+                }
+               Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage, 'is_new_app' => false]);
+                }
+
             }else{
               return back()->with('error','Azure storage could not be reached.Please try again.');
             }

@@ -1235,7 +1235,8 @@
               </ul> 
   
   <div>
-    <div v-if="form.isDirty" class="text-xs text-danger d-flex">You have unsaved changes.</div>
+    <div v-if="form.status >= 15" class="text-xs text-danger d-flex">Please note that this licence will no longer be a 
+      new application and this action is irreversible once saved.</div>
     <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-primary ms-2" type="submit">
     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
     <span class="visually-hidden">Loading...</span> Save</button>
@@ -1264,8 +1265,14 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+          
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
+        <p v-if="uploadDoc.doc_type == 'Licence Issued'
+        || uploadDoc.doc_type == 'Licence Delivered'" class="p-2 text-danger">
+          Please note that this licence will no longer be a new application and this action 
+          is irreversible once saved.</p>
+
         <form @submit.prevent="submitDocument">
         <input type="hidden" v-model="uploadDoc.doc_type">
         <input type="hidden" v-model="uploadDoc.num">

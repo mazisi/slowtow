@@ -225,9 +225,13 @@ class NewApplicationController extends Controller
                     'year' => now()->format('Y'),
                     'slug' => sha1(now())
                 ]);
+                
             }
-            
+
+            //If stage is issued then its no longer a new app.
+            $licence->update(['is_new_app' => false]);
         }
+
         $licence->update([
             'licence_date' => $licence_date,
             'renewal_amount' => $request->renewal_amount,
@@ -245,7 +249,11 @@ class NewApplicationController extends Controller
 public function updateRegistrationDate(Request $request, $slug)
 {
     try {
-        
+        if($request->licence_issued_at){
+              //If stage is issued then its no longer a new app.
+              Licence::whereSlug($slug)->update(['is_new_app' => false, 'licence_date' => $request->licence_issued_at]);
+              
+        }
         Licence::whereSlug($slug)->update([
             'deposit_paid_at' => $request->deposit_paid_at,
             'liquor_board_at' => $request->liquor_board_at,
