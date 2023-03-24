@@ -1,8 +1,12 @@
 <template>
 <Layout>
+
   <Head title="Create Licence" />
+
 <div class="container-fluid">
+
 <Banner/>
+
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
