@@ -72,6 +72,9 @@ export default {
       default: false,
     },
   },
+  mounted() {
+    setMaterialInput();
+  },
   methods: {
     getClasses: (size) => {
       let sizeValue;
@@ -79,6 +82,19 @@ export default {
       sizeValue = size ? `form-control-${size}` : null;
 
       return sizeValue;
+    },
+    getStatus: (error, success) => {
+      let isValidValue;
+
+      if (success) {
+        isValidValue = "is-valid";
+      } else if (error) {
+        isValidValue = "is-invalid";
+      } else {
+        isValidValue = null;
+      }
+
+      return isValidValue;
     },
   },
 };

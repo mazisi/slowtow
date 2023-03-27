@@ -97,35 +97,6 @@
 </div>
 
 
-<template v-if="renewal.client_invoiced_at == null">
-  <div class="col-md-4 columns" >
-     <div class="input-group input-group-outline null is-filled ">
-     <label class="form-label">Date</label>
-     <input type="date" class="form-control form-control-default" v-model="form.client_invoiced_at">
-      </div>
-    <div v-if="errors.client_invoiced_at" class="text-danger">{{ errors.client_invoiced_at }}</div>
-    </div> 
-    
- <div class="col-md-1 columns">
-     <button :disabled="!form.client_invoiced_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
- </div>
-</template>
-
-<template v-else>
- <div class="col-md-4 columns" >
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.client_invoiced_at">
-     </div>
-   <div v-if="errors.client_invoiced_at" class="text-danger">{{ errors.client_invoiced_at }}</div>
-   </div> 
-   
-<div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-    <button :disabled="!form.client_invoiced_at" @click="updateDate"  
-    type="button" class="btn btn-sm btn-secondary">Save</button>
-</div>
-</template>
-
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
