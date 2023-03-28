@@ -321,19 +321,19 @@ const new_app_stages = {
         form.year = '';
         form.applicant = '';
         form.is_license_complete = '';
-        form.person = null;
-        form.company = null;
-        form.province = null;
-        form.selectedDates = null;
-        form.boardRegion = null;
-        form.licence_types = null;
-        form.new_app_stages = null;
-        form.renewal_stages = null;
-        form.transfer_stages = null;
-        form.nomination_stages = null;
-        form.alteration_stages = null;
-        form.temp_licence_stages = null;
-        form.temp_licence_region = null
+        form.person = [];
+        form.company = [];
+        form.province = [];
+        form.selectedDates = [];
+        form.boardRegion = [];
+        form.licence_types = [];
+        form.new_app_stages = [];
+        form.renewal_stages = [];
+        form.transfer_stages = [];
+        form.nomination_stages = [];
+        form.alteration_stages = [];
+        form.temp_licence_stages = [];
+        form.temp_licence_region = []
       }
 
 return{

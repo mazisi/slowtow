@@ -61,7 +61,7 @@ export default {
     },
   },
   mounted() {
-    setMaterialInput();
+    //
   },
   methods: {
     getStatus: (error, success) => {

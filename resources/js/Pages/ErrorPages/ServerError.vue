@@ -13,7 +13,8 @@ export default {
   },
 
  components: {
-    Banner
+    Banner,
+    Link
 },
 }
 </script>

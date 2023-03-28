@@ -73,7 +73,7 @@ export default {
     },
   },
   mounted() {
-    setMaterialInput();
+    //setMaterialInput();
   },
   methods: {
     getClasses: (size) => {
