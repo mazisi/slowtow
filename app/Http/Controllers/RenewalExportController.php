@@ -36,7 +36,7 @@ class RenewalExportController extends Controller
                     $renewals = DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, board_region,licence_number, licence_renewals.date, 
                                  licence_renewals.client_paid_at,licence_renewals.status, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
-                                 is_quote_sent")
+                                 is_quote_sent, licence_renewals.date")
 
                     ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')
 
@@ -72,12 +72,11 @@ class RenewalExportController extends Controller
                             })
                             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('licence_renewals.status','<', 6)
-                                ->orWhere('licence_renewals.status', 0)
                                 ->orWhereNull('licence_renewals.status');
                             })
 
                             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('licence_renewals.status',6);
+                                $query->where('licence_renewals.status','=', 6);
                             });
 
                             })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
@@ -88,7 +87,7 @@ class RenewalExportController extends Controller
                                 'is_licence_active',
                                 'trading_name',
                                 'licence_number',
-                                'date',
+                                'licence_renewals.date',
                                 'licence_renewals.status',
                                 'is_quote_sent',
                                 'client_paid_at',
@@ -110,26 +109,26 @@ class RenewalExportController extends Controller
     
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
+                            $notesCollection .=  $note->created_at.'   '.$note->body. '   ';
                         }
                     }
                    
-                   
+               
                 
             $data = [ 
                        $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
                        $arr_of_renewals[$i]->trading_name, 
                        $arr_of_renewals[$i]->licence_number,
                        $arr_of_renewals[$i]->date,
-                       'NULL',
-                       is_null($is_quoted) ? 'FALSE' : 'TRUE',
-                       is_null($arr_of_renewals[$i]->is_quote_sent) ? 'FALSE' : 'TRUE',
+                       '',
+                       $is_quoted ? 'FALSE' : 'TRUE',
+                       $arr_of_renewals[$i]->is_quote_sent ? 'FALSE' : 'TRUE',
                        $arr_of_renewals[$i]->client_paid_at,
-                       'NULL',
+                       '',
                        $arr_of_renewals[$i]->payment_to_liquor_board_at,
                        $arr_of_renewals[$i]->renewal_issued_at,
                        $arr_of_renewals[$i]->renewal_delivered_at,
-                       'NULL',
+                       $arr_of_renewals[$i]->renewal_delivered_at ? 'FALSE' : 'TRUE',
                        $notesCollection
                     ];
 
@@ -152,7 +151,7 @@ class RenewalExportController extends Controller
                     $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
                     
                     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                    header('Content-Disposition: attachment;filename="renewals_'.now()->format('d_m_y').'.xlsx"');
+                    header('Content-Disposition: attachment;filename="Renewals_'.now()->format('d_m_y').'.xlsx"');
                     header('Cache-Control: max-age=0');        
                     $writer = new Xlsx($spreadsheet);
                     $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');

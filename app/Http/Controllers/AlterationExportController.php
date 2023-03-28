@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-
 class AlterationExportController extends Controller
 {
     public static function export($request){
@@ -29,12 +28,11 @@ class AlterationExportController extends Controller
 
         $alterations = DB::table('alterations')
                             ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, alterations.logded_at,licences.board_region,alterations.date, 
-                            alterations.status, alteration_documents.doc_type")
+                            licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
+                            alterations.status, licence_date")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
-                            ->join('alteration_documents', 'alterations.id', '=', 'alteration_documents.alteration_id')
 
-                                ->when(function($query){
+                                ->when($request,function($query){
                                     $query->when(request('month_from') && request('month_to'), function($query){
                                         $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
                                      })
@@ -62,12 +60,21 @@ class AlterationExportController extends Controller
                                     ->when(request('applicant'), function ($query) {
                                         $query->where('belongs_to',request('applicant'));
                                     })
+                                    
+                                    ->when(request('year') && request('year') !== 'null', function ($query) {
+                                         $query->whereYear('logded_at', request('year'));
+                                     })
+                                    ->when(request('licence_types'), function ($query) {
+                                        $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                                     })
 
-                                    ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                                        $query->where('alterations.status','<', 8)
-                                        ->orWhere('alterations.status', 0)
-                                        ->orWhereNull('alterations.status');
-                                    })
+                                    
+                                    ->when(request('is_licence_complete') === 'Pending' , function ($query){
+                                            $query->where(function ($query) {
+                                                $query->where('alterations.status','<', intval(8));
+                                            });
+                                        
+                                        })
                 
                                     ->when(request('is_licence_complete') === 'Complete', function ($query)  {
                                         $query->where('alterations.status',8);
@@ -75,7 +82,6 @@ class AlterationExportController extends Controller
 
                                 })
                                 ->whereNull('alterations.deleted_at')
-                                ->where('alteration_documents.doc_type','=','Alterations Delivered')
                                 ->orderBy('trading_name')
                                  ->get([
                                     'certification_issued_at',
@@ -88,9 +94,11 @@ class AlterationExportController extends Controller
                                     'doc_type',
                                     'date',
                                     'licence_issued_at',
+                                    'licence_type_id',
+                                    'belongs_to',
                                     'logded_at'
                             ]);
-  dd($alterations);
+
                     $status = '';
                     $notesCollection = '';
 
@@ -123,7 +131,7 @@ class AlterationExportController extends Controller
                             $status = 'Alterations Delivered';
                             break;
                         default:
-                            $status = 'Null';
+                            $status = '';
                             break;
                         }
 
@@ -137,6 +145,7 @@ class AlterationExportController extends Controller
                             $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                             }
                         }
+                        
                         
                         
                         $data = [

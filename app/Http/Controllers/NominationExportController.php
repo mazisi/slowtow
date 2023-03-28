@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-// ini_set('memory_limit', '1024M');
 
 class NominationExportController extends Controller
 {
@@ -36,7 +35,7 @@ class NominationExportController extends Controller
                             ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, 
                                          nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
                                 nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
-                                nominations.status, nominations.nomination_issued_at,board_region")
+                                nominations.status, nominations.nomination_issued_at,board_region, nominations.year")
                             ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
                             ->join('people', 'people.id' , '=', 'nomination_people.people_id' )
                             ->join('licences', 'licences.id' , '=', 'nominations.licence_id' )
@@ -52,7 +51,7 @@ class NominationExportController extends Controller
                                         $query->whereNotNull('is_licence_active');
                                     })
                                     ->when(request('activeStatus') == 'Inactive', function ($query) {
-                                        $query->whereNull('is_licence_active');
+                                        //$query->whereNull('is_licence_active');
                                     })
                                     ->when(request('province'), function ($query) {
                                         $query->whereIn('province',array_values(explode(",",request('province'))));
@@ -68,8 +67,6 @@ class NominationExportController extends Controller
                                         $query->where('belongs_to',request('applicant'));
                                     });
 
-                                })->when(request('selectedDates'), function ($query) {
-                                      $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
                                 })
                                 ->when(request('nomination_stages'), function ($query) {
                                     $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
@@ -77,14 +74,18 @@ class NominationExportController extends Controller
 
                               ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('nominations.status','<', 10)
-                                ->orWhere('nominations.status', 0)
                                 ->orWhereNull('nominations.status');
                             })
         
                             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('nominations.status',10);
+                                $query->where('nominations.status','=', 10);
                             })
+                            
+                            ->when(request('year'), function ($query) {
+                                       $query->where('nominations.year', request('year'));
+                                    })
                               ->whereNull('licences.deleted_at')->whereNull('nominations.deleted_at')
+                              
                               ->orderBy('trading_name')
                                 ->get([
                                     'id',
@@ -95,9 +96,10 @@ class NominationExportController extends Controller
                                     'province',
                                     'payment_to_liquor_board_at',
                                     'nomination_lodged_at',
-                                    'nomination.status'
+                                    'year',
+                                    'nominations.status'
                                 ]);
-        
+       
                             $status = '';
                             $notesCollection = '';
                 
@@ -151,12 +153,12 @@ class NominationExportController extends Controller
                     }
                 }
 
-        $data = [ 
+       $data = [ 
                    $arr_of_nominations[$i]->trading_name, 
                    $arr_of_nominations[$i]->full_name, 
                    $arr_of_nominations[$i]->licence_number, 
-                   $arr_of_nominations[$i]->province.'/'.$arr_of_nominations[$i]->board_region,
-                   'NULL',
+                   $arr_of_nominations[$i]->board_region ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
+                   '',
                    $arr_of_nominations[$i]->payment_to_liquor_board_at,
                    $arr_of_nominations[$i]->nomination_lodged_at,
                    (is_null($arr_of_nominations[$i]->nomination_lodged_at)) ? 'FALSE' : 'TRUE',
@@ -185,7 +187,7 @@ class NominationExportController extends Controller
      $spreadsheet->getActiveSheet()->getStyle('A1:J1')->getAlignment()->setWrapText(true);
      
      header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-     header('Content-Disposition: attachment;filename="nominations_'.now()->format('d_m_y').'.xlsx"');
+     header('Content-Disposition: attachment;filename="Nominations_'.now()->format('d_m_y').'.xlsx"');
      header('Cache-Control: max-age=0');   
           
     $writer = new Xlsx($spreadsheet);

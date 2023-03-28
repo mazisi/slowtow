@@ -78,11 +78,11 @@ class ViewFileController extends Controller
                 break;
 
             case 'AlterationDocument':
-                $alteration_doc = AlterationDocument::whereId($model_id)->first(['path']);               
+                $alteration_doc = AlterationDocument::whereId($model_id)->first(['document']);               
                     
                 if($alteration_doc){
-                    //if(fileExist(env('AZURE_STORAGE_URL').'/'.$alteration_doc->path)){
-                        return Inertia::location(env('AZURE_STORAGE_URL').'/'.$alteration_doc->path);
+                    //if(fileExist(env('AZURE_STORAGE_URL').'/'.$alteration_doc->document)){
+                        return Inertia::location(env('AZURE_STORAGE_URL').'/'.$alteration_doc->document);
                     //}
                     //return Inertia::render('ErrorPages/FileNotFound');
                 }

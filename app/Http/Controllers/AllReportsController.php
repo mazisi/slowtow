@@ -30,77 +30,79 @@ class AllReportsController extends Controller
         );
         $arr_of_alterations = [];
 
+
         $alterations = DB::table('alterations')
-                ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
-                alterations.status")
-                ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
+                            ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
+                            licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
+                            alterations.status, licence_date")
+                            ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
 
-            ->when(function($query){
-                $query->when(request('month_from') && request('month_to'), function($query){
-                    $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
-                 })
-    
-                ->when(request('month_from') && !request('month_to'), function ($query)  {
-                    $query->whereMonth('alterations.logded_at', request('month_from'));
-                })
-                ->when(request('activeStatus') == 'Active', function ($query) {
-                    $query->where('is_licence_active',true);
-                })
-                ->when(request('activeStatus') == 'Inactive', function ($query) {
-                    $query->where('is_licence_active',false);
-                })
-                ->when(request('province'), function ($query) {
-                    $query->whereIn('province',array_values(explode(",",request('province'))));
-                })
-                
-                ->when(request('boardRegion'), function ($query) {
-                    $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
-                })
-                
-                 ->when(request('alteration_stages'), function ($query) {
-                        $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
-                    })
-                ->when(request('applicant'), function ($query) {
-                    $query->where('belongs_to',request('applicant'));
-                })
-                
-                ->when(request('licence_types'), function ($query) {
-                    $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
-                 })
+                                ->when($request,function($query){
+                                    $query->when(request('month_from') && request('month_to'), function($query){
+                                        $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
+                                     })
+                        
+                                    ->when(request('month_from') && !request('month_to'), function ($query)  {
+                                        $query->whereMonth('alterations.logded_at', request('month_from'));
+                                    })
+                                    ->when(request('activeStatus') == 'Active', function ($query) {
+                                        $query->where('is_licence_active',true);
+                                    })
+                                    ->when(request('activeStatus') == 'Inactive', function ($query) {
+                                        $query->where('is_licence_active',false);
+                                    })
+                                    ->when(request('province'), function ($query) {
+                                        $query->whereIn('province',array_values(explode(",",request('province'))));
+                                    })
+                                    
+                                    ->when(request('boardRegion'), function ($query) {
+                                        $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
+                                    })
+                                    
+                                     ->when(request('alteration_stages'), function ($query) {
+                                            $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
+                                        })
+                                    ->when(request('applicant'), function ($query) {
+                                        $query->where('belongs_to',request('applicant'));
+                                    })
+                                    
+                                    ->when(request('year') && request('year') !== 'null', function ($query) {
+                                         $query->whereYear('logded_at', request('year'));
+                                     })
+                                    ->when(request('licence_types'), function ($query) {
+                                        $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                                     })
 
+                                    
+                                    ->when(request('is_licence_complete') === 'Pending' , function ($query){
+                                            $query->where(function ($query) {
+                                                $query->where('alterations.status','<', intval(8));
+                                            });
+                                        
+                                        })
                 
-                ->when(request('is_licence_complete') === 'Pending' , function ($query){
-                        $query->where(function ($query) {
-                            $query->where('alterations.status','<', 8)
-                                   ->orWhere('alterations.status', 0)
-                                  ->orWhereNull('alterations.status');
-                        });
-                    
-                    })
+                                    ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                                        $query->where('alterations.status',8);
+                                    });
 
-                ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                    $query->where('alterations.status',8);
-                });
-
-            })
-            ->whereNull('alterations.deleted_at')
-            ->orderBy('trading_name')
-             ->get([
-                'certification_issued_at',
-                'id','trading_name',
-                'licence_number',
-                'board_region',
-                'province',
-                'status',
-                'board_region',
-                'doc_type',
-                'date',
-                'licence_issued_at',
-                'licence_type_id',
-                'belongs_to',
-                'logded_at'
-        ]);
+                                })
+                                ->whereNull('alterations.deleted_at')
+                                ->orderBy('trading_name')
+                                 ->get([
+                                    'certification_issued_at',
+                                    'id','trading_name',
+                                    'licence_number',
+                                    'board_region',
+                                    'province',
+                                    'status',
+                                    'board_region',
+                                    'doc_type',
+                                    'date',
+                                    'licence_issued_at',
+                                    'licence_type_id',
+                                    'belongs_to',
+                                    'logded_at'
+                            ]);
   
                     $status = '';
                     $notesCollection = '';

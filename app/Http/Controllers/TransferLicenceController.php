@@ -49,9 +49,9 @@ class TransferLicenceController extends Controller
         'transfered_from' => $request->transfered_from,
         'licence_id'=> $request->licence_id,
         'old_people_id'=> $request->transfered_from ==='Person' ? $request->old_company_id : NULL,
+         'old_company_id' => $request->transfered_from === 'Company' ? $request->old_company_id : NULL,
         'company_id'=> $request->new_company,
         'people_id'=> $request->new_person,
-        'old_company_id' => $request->transfered_from === 'Company' ? $request->old_company_id : NULL,
         'status' => last($sorted_statuses),
         'slug' => sha1(time())
        ]);

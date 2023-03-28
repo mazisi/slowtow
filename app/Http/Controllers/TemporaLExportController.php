@@ -44,31 +44,33 @@ class TemporaLExportController extends Controller
                         $query->whereIn('temporal_licences.status',array_values(explode(",",request('temp_licence_stages'))));
                     })
                     ->when(request('activeStatus') === 'Active', function ($query) {
-                        $query->where('active',true);
+                        $query->where('active',1);
                     })
                     ->when(request('activeStatus') === 'Inactive', function ($query) {
-                        $query->where('active',false);
+                        $query->where('active',0);
                      })
 
                      ->when(!empty(request('temp_licence_region')), function ($query) {
                         $query->whereIn('address',array_values(explode(",",request('temp_licence_region'))));
                     })
 
-                    ->when(!empty(request('selectedDates')), function ($query) {
-                        $query->whereIn(DB::raw('MONTH(start_date)'),array_values(explode(",",request('selectedDates'))));
-                    })
+                    // ->when(!empty(request('selectedDates')), function ($query) {
+                    //     $query->whereIn(DB::raw('MONTH(start_date)'),array_values(explode(",",request('selectedDates'))));
+                    // })
                     ->when(!empty(request('applicant')), function ($query) {
                         $query->where('belongs_to',request('applicant'));
                     })
 
                     ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
                         $query->where('temporal_licences.status','<', 9)
-                        ->orWhere('temporal_licences.status', 0)
                         ->orWhereNull('temporal_licences.status');
                     })
+                    ->when(request('year'), function ($query) {
+                                 $query->where(DB::raw('YEAR(start_date)'),request('year'));
+                            })
 
                     ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                        $query->where('temporal_licences.status',9);
+                        $query->where('temporal_licences.status','=',9);
                     });
 
                  })->whereNull('temporal_licences.deleted_at')
@@ -79,9 +81,11 @@ class TemporaLExportController extends Controller
                     'belongs_to',
                     'address',
                     'client_paid_at',
+                    'logded_at',
                     'liquor_licence_number',
                     'latest_lodgment_date',
                     'delivered_at',
+                    'issued_at',
                     'status',
                     'full_name',
                     'start_date',
@@ -121,12 +125,15 @@ class TemporaLExportController extends Controller
 
                              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('temporal_licences.status','<', 9)
-                                ->orWhere('temporal_licences.status', 0)
                                 ->orWhereNull('temporal_licences.status');
+                            })
+                            
+                            ->when(request('year'), function ($query) {
+                                 $query->where(DB::raw('YEAR(start_date)'),request('year'));
                             })
         
                             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('temporal_licences.status',9);
+                                $query->where('temporal_licences.status','=',9);
                             });
                           })
                           
@@ -140,12 +147,15 @@ class TemporaLExportController extends Controller
                              'client_paid_at',
                              'liquor_licence_number',
                              'latest_lodgment_date',
+                             'logded_at',
                              'delivered_at',
                              'start_date',
                              'end_date',
+                             'issued_at',
                              'status',
                              'name',
                          ]);
+                         
     $merged_data = $people_temp_licences->merge($company_temp_licences);
 
     $status = '';
@@ -186,7 +196,7 @@ class TemporaLExportController extends Controller
                 break;
            
             default:
-                $status = 'NULL';
+                $status = '';
                 break;
             }
 
@@ -199,33 +209,35 @@ class TemporaLExportController extends Controller
                     $applicant = $arr_of_licences[$i]->full_name;
                     break;                
                 default:
-                    $applicant = "Null";
+                    $applicant = "";
                     break;
             }
 
             $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body','created_at']);
    
-    $get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Client Invoiced')->first(['document_name']);
-    $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Licence Lodged')->first(['id']);
+    //$get_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Client Invoiced')->first(['document_name']);
+    //$licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Licence Lodged')->first(['id']);
 
             if(!is_null($notes) || !empty($notes)){
                 foreach ($notes as $note) {
-                    $notesCollection .=  $note->created_at.' '.$note->body. ' ';
+                    $notesCollection .=  $note->created_at.'  '.$note->body. '  ';
                 }
             }
+
 
        $data = [ 
 
                $arr_of_licences[$i]->event_name, 
                $applicant,
                date('d-m-Y', strtotime($arr_of_licences[$i]->start_date)). ' - '.date('d-m-Y', strtotime($arr_of_licences[$i]->end_date)),
+               ' ',
                $arr_of_licences[$i]->address,
-               is_null($get_invoice_number) ? '' : $get_invoice_number->document_name,
+               //$get_invoice_number ? '' : $get_invoice_number->document_name,
                $arr_of_licences[$i]->client_paid_at,
                $arr_of_licences[$i]->liquor_licence_number,
-               optional($arr_of_licences[$i]->latest_lodgment_date)->format('d-m-Y'),
-               is_null($licence_logded) ? 'FALSE': 'TRUE',
-               optional($arr_of_licences[$i]->delivered_at)->format('d M Y'),
+               optional($arr_of_licences[$i]->logded_at)->format('d M Y'),
+               $arr_of_licences[$i]->logded_at ? 'TRUE': 'FALSE',
+               optional($arr_of_licences[$i]->issued_at)->format('d M Y'),
                $status,
                $notesCollection
             ];
@@ -249,7 +261,7 @@ class TemporaLExportController extends Controller
         $spreadsheet->getActiveSheet()->getStyle('A1:L1')->getAlignment()->setWrapText(true);
         
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="temporary_licences_'.now()->format('d_m_y').'.xlsx"');
+        header('Content-Disposition: attachment;filename="Temporary_licences_'.now()->format('d_m_y').'.xlsx"');
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');

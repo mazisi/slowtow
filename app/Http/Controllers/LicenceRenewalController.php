@@ -142,7 +142,8 @@ class LicenceRenewalController extends Controller
                     'client_paid_at' => $request->client_paid_at,
                     'renewal_issued_at' => $request->renewal_issued_at,
                     'renewal_delivered_at' => $request->renewal_delivered_at,
-                    'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at
+                    'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
+                    'client_invoiced_at' => $request->client_invoiced_at
                     
                 ]);
             return back()->with('success','Date updated successfully.');

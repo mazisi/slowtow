@@ -31,17 +31,17 @@ public static function export($request){
                 $transfers = DB::table('licence_transfers')
                     ->selectRaw("licence_transfers.id, is_licence_active, trading_name, licence_transfers.date, 
                                  licence_transfers.lodged_at, licence_transfers.status, payment_to_liquor_board_at, 
-                                 board_region,issued_at, delivered_at,province")
+                                 board_region,issued_at, delivered_at,province, licence_number")
 
                     ->join('licences', 'licences.id' , '=', 'licence_transfers.licence_id')
 
                     ->when(function($query){
                         $query->when(request('month_from') && request('month_to'), function($query){
-                            $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                            $query->whereBetween(DB::raw('MONTH(date)'),[request('month_from'), request('month_to')]);
                         })
               
                         ->when(request('month_from') && !request('month_to'), function ($query)  {
-                            $query->whereMonth('licence_date', request('month_from'));
+                            $query->whereMonth('date', request('month_from'));
                         })
                         ->when(request('province'), function ($query)  {
                             $query->whereIn('licences.province',array_values(explode(",",request('province'))));
@@ -68,16 +68,15 @@ public static function export($request){
 
                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                             $query->where('licence_transfers.status','<', 10)
-                            ->orWhere('licence_transfers.status', 0)
-                            ->orWhereNull('licence_transfers.status');
+                                    ->orWhereNull('licence_transfers.status');
                         })
     
                         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('licence_transfers.status',10);
+                            $query->where('licence_transfers.status','=',10);
                         });
 
-                    })->when(request('selectedDates'), function ($query) {
-                          $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
+                    })->when(request('year'), function ($query) {
+                          $query->whereYear('date',request('year'));
                     })
                     ->when(request('transfer_stages'), function ($query) {
                         $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
@@ -85,6 +84,7 @@ public static function export($request){
                     ->whereNull('licences.deleted_at')->whereNull('licence_transfers.deleted_at')
                     ->orderBy('trading_name')->get([
                         'trading_name',
+                        'licence_number',
                         'province',
                         'board_region',
                         'lodged_at',
@@ -93,7 +93,6 @@ public static function export($request){
                         'status'
                     ]);
 
-                   
             $status = '';
             $notesCollection = '';
 
@@ -132,7 +131,7 @@ public static function export($request){
                         $status = 'Transfer Delivered';
                         break;
                     default:
-                        $status = 'Null';
+                        $status = '';
                         break;
                 }
 
@@ -141,19 +140,20 @@ public static function export($request){
             
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
+                            $notesCollection .=  $note->created_at.'   '.$note->body. '   ';
                         }
                     }
+        
   
             $data = [         
                        $arr_of_transfers[$i]->trading_name, 
-                       'NULL',
-                       $arr_of_transfers[$i]->province.'/'.$arr_of_transfers[$i]->board_region,
-                       'NULL',
-                       'NULL',
+                       $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
+                       $arr_of_transfers[$i]->board_region ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
+                       '',
+                       '',
                        $arr_of_transfers[$i]->lodged_at,
-                       (is_null($arr_of_transfers[$i]->lodged_at)) ? 'FALSE' : 'TRUE',
-                       'NULL',
+                       $arr_of_transfers[$i]->lodged_at ? 'FALSE' : 'TRUE',
+                       '',
                        $arr_of_transfers[$i]->payment_to_liquor_board_at,
                        $arr_of_transfers[$i]->issued_at,
                        $status,

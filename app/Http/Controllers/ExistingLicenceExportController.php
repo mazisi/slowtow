@@ -34,8 +34,8 @@ class ExistingLicenceExportController extends Controller
 
         $licences = DB::table('licences')
                  ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
-                              deposit_paid_at, application_lodged_at, activation_fee_paid_at, client_paid_at,
-                              client_paid_at,status, board_region")
+                              deposit_paid_at, application_lodged_at, activation_fee_paid_at, licence_issued_at,client_paid_at,
+                              client_paid_at,status, board_region,licence_date, is_new_app")
 
                  ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
 
@@ -49,10 +49,10 @@ class ExistingLicenceExportController extends Controller
                         })
 
                         ->when(request('activeStatus') === 'Active', function ($query) {
-                            $query->where('is_licence_active',true);
+                            $query->where('is_licence_active',1);
                         })
                         ->when(request('activeStatus') === 'Inactive', function ($query) {
-                            $query->where('is_licence_active',false);
+                            $query->where('is_licence_active',0);
                         })
 
                         ->when(request('province'), function ($query) {
@@ -70,25 +70,31 @@ class ExistingLicenceExportController extends Controller
                         ->when(request('licence_types'), function ($query) {
                             $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
                         })
-
-                        ->when(request('selectedDates'), function ($query) {
-                            //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+                        
+                        ->when(request('year') && request('year') !== 'null', function ($query) {
+                               $query->whereYear('licence_date', request('year'));
                          })
 
+                       // ->when(request('selectedDates'), function ($query) {
+                            //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+                         //})
+
                          ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                            $query->where('status','<', 16)
-                            ->orWhere('status', 0)
+                            $query->where('status','<', intval(16))
                             ->orWhereNull('status');
                         })
     
                         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('status',16);
+                            $query->where('status','=', 16);
                         });
                         
                         })
+                        
                         ->whereNull('deleted_at')
-                        ->where('is_new_app',NULL)
-                        ->orWhere('is_new_app',0)
+                        ->where(function($query){
+                            $query->whereNull('is_new_app')
+                            ->orWhere('is_new_app',0);
+                        })
                         ->orderBy('trading_name')
                         ->get([
                             'id',
@@ -98,7 +104,9 @@ class ExistingLicenceExportController extends Controller
                             'licence_type',
                             'province',
                             'board_region',
+                            'licence_date',
                             'deposit_paid_at',
+                            'licence_issued_at',
                             'application_lodged_at',
                             'activation_fee_paid_at',
                             'client_paid_at','status',
@@ -162,17 +170,15 @@ class ExistingLicenceExportController extends Controller
                         $status = 'Licence Delivered';
                         break;
                     default:
-                        $status='Null';
+                        $status='';
                         break;
                     }
 
                     $notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
-                    //check if client has been logded
-                    $is_client_logded = LicenceDocument::where('licence_id',$arr_of_licences[$i]->id)->where('document_type','Application Lodged')->first(['document_name']);
-    
+                   
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
+                            $notesCollection .=  $note->created_at.'     '.$note->body. ' ';
                         }
                     }
 
@@ -180,17 +186,17 @@ class ExistingLicenceExportController extends Controller
                        $arr_of_licences[$i]->trading_name, 
                        $arr_of_licences[$i]->licence_type,
                        $arr_of_licences[$i]->licence_number,
-                       $arr_of_licences[$i]->province,
-                       'NULL',
+                       $arr_of_licences[$i]->board_region ? $arr_of_licences[$i]->province.' - '.$arr_of_licences[$i]->board_region : $arr_of_licences[$i]->province,
+                       '',
                        is_null($arr_of_licences[$i]->deposit_paid_at) ? 'FALSE': 'TRUE',
                        optional($arr_of_licences[$i]->application_lodged_at)->format('d M Y'),
-                       is_null($is_client_logded) ? 'FALSE': 'TRUE',
+                       is_null($arr_of_licences[$i]->application_lodged_at) ? 'FALSE': 'TRUE',
                        $arr_of_licences[$i]->activation_fee_paid_at,
-                       'NULL',
+                       '',
                        optional($arr_of_licences[$i]->client_paid_at)->format('d M Y'),
-                       'NULL',
+                       optional($arr_of_licences[$i]->licence_issued_at)->format('d M Y'),
                        $status,
-                       'NULL',
+                       '',
                        $notesCollection
                     ];
 
@@ -213,7 +219,7 @@ class ExistingLicenceExportController extends Controller
                 $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getAlignment()->setWrapText(true);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="existing_licences_'.now()->format('d_m_y').'.xlsx"');
+                header('Content-Disposition: attachment;filename="Existing_licences_'.now()->format('d_m_y').'.xlsx"');
                 header('Cache-Control: max-age=0');        
                 $writer = new Xlsx($spreadsheet);
                 $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
