@@ -185,9 +185,9 @@ class NewAppExportController extends Controller
                        $arr_of_licences[$i]->licence_number,
                        $arr_of_licences[$i]->board_region ? $arr_of_licences[$i]->province.' - '.$arr_of_licences[$i]->board_region : $arr_of_licences[$i]->province,
                        '',
-                       is_null($arr_of_licences[$i]->deposit_paid_at) ? 'FALSE': 'TRUE',
+                       $arr_of_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
                        optional($arr_of_licences[$i]->application_lodged_at)->format('d M Y'),
-                       is_null($arr_of_licences[$i]->application_lodged_at) ? 'FALSE': 'TRUE',
+                       $arr_of_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
                        $arr_of_licences[$i]->activation_fee_paid_at,
                        '',
                        optional($arr_of_licences[$i]->client_paid_at)->format('d M Y'),
@@ -216,7 +216,7 @@ class NewAppExportController extends Controller
                 $spreadsheet->getActiveSheet()->getStyle('A1:O1')->getAlignment()->setWrapText(true);
                 
                 header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-                header('Content-Disposition: attachment;filename="Existing_licences_'.now()->format('d_m_y').'.xlsx"');
+                header('Content-Disposition: attachment;filename="New_Apps'.now()->format('d_m_y').'.xlsx"');
                 header('Cache-Control: max-age=0');        
                 $writer = new Xlsx($spreadsheet);
                 $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');

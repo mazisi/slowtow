@@ -32,77 +32,77 @@ class AllReportsController extends Controller
 
 
         $alterations = DB::table('alterations')
-                            ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
-                            alterations.status, licence_date")
-                            ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
+        ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
+        licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
+        alterations.status, licence_date")
+        ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
 
-                                ->when($request,function($query){
-                                    $query->when(request('month_from') && request('month_to'), function($query){
-                                        $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
-                                     })
-                        
-                                    ->when(request('month_from') && !request('month_to'), function ($query)  {
-                                        $query->whereMonth('alterations.logded_at', request('month_from'));
-                                    })
-                                    ->when(request('activeStatus') == 'Active', function ($query) {
-                                        $query->where('is_licence_active',true);
-                                    })
-                                    ->when(request('activeStatus') == 'Inactive', function ($query) {
-                                        $query->where('is_licence_active',false);
-                                    })
-                                    ->when(request('province'), function ($query) {
-                                        $query->whereIn('province',array_values(explode(",",request('province'))));
-                                    })
-                                    
-                                    ->when(request('boardRegion'), function ($query) {
-                                        $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
-                                    })
-                                    
-                                     ->when(request('alteration_stages'), function ($query) {
-                                            $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
-                                        })
-                                    ->when(request('applicant'), function ($query) {
-                                        $query->where('belongs_to',request('applicant'));
-                                    })
-                                    
-                                    ->when(request('year') && request('year') !== 'null', function ($query) {
-                                         $query->whereYear('logded_at', request('year'));
-                                     })
-                                    ->when(request('licence_types'), function ($query) {
-                                        $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
-                                     })
-
-                                    
-                                    ->when(request('is_licence_complete') === 'Pending' , function ($query){
-                                            $query->where(function ($query) {
-                                                $query->where('alterations.status','<', intval(8));
-                                            });
-                                        
-                                        })
+            ->when($request,function($query){
+                $query->when(request('month_from') && request('month_to'), function($query){
+                    $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
+                 })
+    
+                ->when(request('month_from') && !request('month_to'), function ($query)  {
+                    $query->whereMonth('alterations.logded_at', request('month_from'));
+                })
+                ->when(request('activeStatus') == 'Active', function ($query) {
+                    $query->where('is_licence_active',true);
+                })
+                ->when(request('activeStatus') == 'Inactive', function ($query) {
+                    $query->where('is_licence_active',false);
+                })
+                ->when(request('province'), function ($query) {
+                    $query->whereIn('province',array_values(explode(",",request('province'))));
+                })
                 
-                                    ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                        $query->where('alterations.status',8);
-                                    });
+                ->when(request('boardRegion'), function ($query) {
+                    $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
+                })
+                
+                 ->when(request('alteration_stages'), function ($query) {
+                        $query->whereIn('alterations.status',array_values(explode(",",request('alteration_stages'))));
+                    })
+                ->when(request('applicant'), function ($query) {
+                    $query->where('belongs_to',request('applicant'));
+                })
+                
+                ->when(request('year') && request('year') !== 'null', function ($query) {
+                     $query->whereYear('logded_at', request('year'));
+                 })
+                ->when(request('licence_types'), function ($query) {
+                    $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                 })
 
-                                })
-                                ->whereNull('alterations.deleted_at')
-                                ->orderBy('trading_name')
-                                 ->get([
-                                    'certification_issued_at',
-                                    'id','trading_name',
-                                    'licence_number',
-                                    'board_region',
-                                    'province',
-                                    'status',
-                                    'board_region',
-                                    'doc_type',
-                                    'date',
-                                    'licence_issued_at',
-                                    'licence_type_id',
-                                    'belongs_to',
-                                    'logded_at'
-                            ]);
+                
+                ->when(request('is_licence_complete') === 'Pending' , function ($query){
+                        $query->where(function ($query) {
+                            $query->where('alterations.status','<', intval(8));
+                        });
+                    
+                    })
+
+                ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                    $query->where('alterations.status',8);
+                });
+
+            })
+            ->whereNull('alterations.deleted_at')
+            ->orderBy('trading_name')
+             ->get([
+                'certification_issued_at',
+                'id','trading_name',
+                'licence_number',
+                'board_region',
+                'province',
+                'status',
+                'board_region',
+                'doc_type',
+                'date',
+                'licence_issued_at',
+                'licence_type_id',
+                'belongs_to',
+                'logded_at'
+        ]);
   
                     $status = '';
                     $notesCollection = '';
@@ -136,7 +136,7 @@ class AllReportsController extends Controller
                             $status = 'Alterations Delivered';
                             break;
                         default:
-                            $status = 'Null';
+                            $status = '';
                             break;
                         }
 
@@ -153,15 +153,15 @@ class AllReportsController extends Controller
                         
                         
                         $data = [
-                        $arr_of_alterations[$i]->trading_name, 
-                        $arr_of_alterations[$i]->licence_number, 
-                        $arr_of_alterations[$i]->province.'/'.$arr_of_alterations[$i]->board_region,
-                        $arr_of_alterations[$i]->logded_at,
-                        is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
-                        $arr_of_alterations[$i]->certification_issued_at,
-                        $status, 
-                        $notesCollection
-                        ];
+                            $arr_of_alterations[$i]->trading_name, 
+                            $arr_of_alterations[$i]->licence_number, 
+                            $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region,
+                            $arr_of_alterations[$i]->logded_at,
+                            $proof_of_logdiment ? 'FALSE' : 'TRUE',
+                            $arr_of_alterations[$i]->certification_issued_at,
+                            $status, 
+                            $notesCollection
+                            ];
 
                         $alterationData[] = $data;
 
@@ -210,76 +210,86 @@ class AllReportsController extends Controller
         $arr_of_existing_licences = [];
 
         $licences = DB::table('licences')
-                 ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
-                              deposit_paid_at, application_lodged_at, activation_fee_paid_at, client_paid_at,
-                              client_paid_at,status, board_region")
+        ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
+                     deposit_paid_at, application_lodged_at, activation_fee_paid_at, licence_issued_at,client_paid_at,
+                     client_paid_at,status, board_region,licence_date, is_new_app")
 
-                 ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
+        ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
 
-                     ->when($request,function($query){
-                        $query->when(request('month_from') && request('month_to'), function($query){
-                            $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
-                         })
+            ->when($request,function($query){
+               $query->when(request('month_from') && request('month_to'), function($query){
+                   $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                })
+      
+                ->when(request('month_from') && !request('month_to'), function ($query){
+                   $query->whereMonth('licence_date', request('month_from'));
+               })
+
+               ->when(request('activeStatus') === 'Active', function ($query) {
+                   $query->where('is_licence_active',1);
+               })
+               ->when(request('activeStatus') === 'Inactive', function ($query) {
+                   $query->where('is_licence_active',0);
+               })
+
+               ->when(request('province'), function ($query) {
+                   $query->whereIn('province',array_values(explode(",",request('province'))));
+               })
+               ->when(request('boardRegion'), function ($query) {
+                   $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
+               })
+               ->when(request('new_app_stages'), function ($query) {
+                   $query->whereIn('status', array_values(explode(",",request('new_app_stages'))));
+               })
+               ->when(request('applicant'), function ($query) {
+                   $query->where('belongs_to',request('applicant'));
+               })
+               ->when(request('licence_types'), function ($query) {
+                   $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+               })
                
-                         ->when(request('month_from') && !request('month_to'), function ($query){
-                            $query->whereMonth('licence_date', request('month_from'));
-                        })
+               ->when(request('year') && request('year') !== 'null', function ($query) {
+                      $query->whereYear('licence_date', request('year'));
+                })
 
-                        ->when(request('activeStatus') === 'Active', function ($query) {
-                            $query->where('is_licence_active',true);
-                        })
-                        ->when(request('activeStatus') === 'Inactive', function ($query) {
-                            $query->where('is_licence_active',false);
-                        })
+              // ->when(request('selectedDates'), function ($query) {
+                   //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+                //})
 
-                        ->when(request('province'), function ($query) {
-                            $query->whereIn('province',array_values(explode(",",request('province'))));
-                        })
-                        ->when(request('boardRegion'), function ($query) {
-                            $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
-                        })
-                        ->when(request('new_app_stages'), function ($query) {
-                            $query->whereIn('status', array_values(explode(",",request('new_app_stages'))));
-                        })
-                        ->when(request('applicant'), function ($query) {
-                            $query->where('belongs_to',request('applicant'));
-                        })
-                        ->when(request('licence_types'), function ($query) {
-                            $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
-                        })
+                ->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                   $query->where('status','<', intval(16))
+                   ->orWhereNull('status');
+               })
 
-                        ->when(request('selectedDates'), function ($query) {
-                            //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
-                         })
+               ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                   $query->where('status','=', 16);
+               });
+               
+               })
+               
+               ->whereNull('deleted_at')
+               ->where(function($query){
+                   $query->whereNull('is_new_app')
+                   ->orWhere('is_new_app',0);
+               })
+               ->orderBy('trading_name')
+               ->get([
+                   'id',
+                   'trading_name',
+                   'licence_number',
+                   'licence_type_id',
+                   'licence_type',
+                   'province',
+                   'board_region',
+                   'licence_date',
+                   'deposit_paid_at',
+                   'licence_issued_at',
+                   'application_lodged_at',
+                   'activation_fee_paid_at',
+                   'client_paid_at','status',
+                   'is_new_app'
+                   ]);
 
-                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                            $query->where('status','<', 16)
-                            ->orWhere('status', 0)
-                            ->orWhereNull('status');
-                        })
-    
-                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('status',16);
-                        });
-                        })
-                        ->whereNull('deleted_at')
-                        ->where('is_new_app',NULL)
-                        ->orWhere('is_new_app',0)
-                        ->orderBy('trading_name')
-                        ->get([
-                            'id',
-                            'trading_name',
-                            'licence_number',
-                            'licence_type_id',
-                            'licence_type',
-                            'province',
-                            'board_region',
-                            'deposit_paid_at',
-                            'application_lodged_at',
-                            'activation_fee_paid_at',
-                            'client_paid_at','status',
-                            'is_new_app'
-                            ]);
             
             $existing_licences_status = '';
             $notesCollection = '';
@@ -338,37 +348,37 @@ class AllReportsController extends Controller
                         $existing_licences_status = 'Licence Delivered';
                         break;
                     default:
-                        $existing_licences_status='Null';
+                        $existing_licences_status='';
                         break;
                     }
 
                     $notes = Task::where('model_id',$arr_of_existing_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
                     //check if client has been logded
-                    $is_existing_licence_client_logded = LicenceDocument::where('licence_id',$arr_of_existing_licences[$i]->id)->where('document_type','Application Lodged')->first(['document_name']);
     
                     if(!is_null($notes) || !empty($notes)){
                         foreach ($notes as $note) {
-                            $notesCollection .=  $note->created_at.' '.$note->body. ' ';
+                            $notesCollection .=  $note->created_at.'  '.$note->body. '  ';
                         }
                     }
 
-               $data = [ 
-                       $arr_of_existing_licences[$i]->trading_name, 
-                       $arr_of_existing_licences[$i]->licence_type,
-                       $arr_of_existing_licences[$i]->licence_number,
-                       $arr_of_existing_licences[$i]->province,
-                       'NULL',
-                       is_null($arr_of_existing_licences[$i]->deposit_paid_at) ? 'FALSE': 'TRUE',
-                       optional($arr_of_existing_licences[$i]->application_lodged_at)->format('d M Y'),
-                       is_null($is_existing_licence_client_logded) ? 'FALSE': 'TRUE',
-                       $arr_of_existing_licences[$i]->activation_fee_paid_at,
-                       'NULL',
-                       optional($arr_of_existing_licences[$i]->client_paid_at)->format('d M Y'),
-                       'NULL',
-                       $existing_licences_status,
-                       'NULL',
-                       $notesCollection
-                    ];
+              
+                    $data = [ 
+                        $arr_of_existing_licences[$i]->trading_name, 
+                        $arr_of_existing_licences[$i]->licence_type,
+                        $arr_of_existing_licences[$i]->licence_number,
+                        $arr_of_existing_licences[$i]->board_region ? $arr_of_existing_licences[$i]->province.' - '.$arr_of_existing_licences[$i]->board_region : $arr_of_existing_licences[$i]->province,
+                        '',
+                        $arr_of_existing_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
+                        optional($arr_of_existing_licences[$i]->application_lodged_at)->format('d M Y'),
+                        $arr_of_existing_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
+                        $arr_of_existing_licences[$i]->activation_fee_paid_at,
+                        '',
+                        optional($arr_of_existing_licences[$i]->client_paid_at)->format('d M Y'),
+                        optional($arr_of_existing_licences[$i]->licence_issued_at)->format('d M Y'),
+                        $existing_licences_status,
+                        '',
+                        $notesCollection
+                     ];
 
                 $existingLicencesData[] = $data;
 
@@ -414,75 +424,83 @@ class AllReportsController extends Controller
         );
         $arr_of_new_apps_licences = [];
 
-        $new_app_licences = DB::table('licences')
-                 ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
-                              deposit_paid_at, application_lodged_at, activation_fee_paid_at, client_paid_at,
-                              client_paid_at,status, board_region")
+        $new_app_licences =  DB::table('licences')
+        ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
+                     deposit_paid_at, application_lodged_at, activation_fee_paid_at, licence_issued_at,client_paid_at,
+                     client_paid_at,status, board_region,licence_date, is_new_app")
 
-                 ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
+        ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
 
-                     ->when($request,function($query){
-                        $query->when(request('month_from') && request('month_to'), function($query){
-                            $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
-                         })
+            ->when($request,function($query){
+               $query->when(request('month_from') && request('month_to'), function($query){
+                   $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                })
+      
+                ->when(request('month_from') && !request('month_to'), function ($query){
+                   $query->whereMonth('licence_date', request('month_from'));
+               })
+
+               ->when(request('activeStatus') === 'Active', function ($query) {
+                   $query->where('is_licence_active',1);
+               })
+               ->when(request('activeStatus') === 'Inactive', function ($query) {
+                   $query->where('is_licence_active',0);
+               })
+
+               ->when(request('province'), function ($query) {
+                   $query->whereIn('province',array_values(explode(",",request('province'))));
+               })
+               ->when(request('boardRegion'), function ($query) {
+                   $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
+               })
+               ->when(request('new_app_stages'), function ($query) {
+                   $query->whereIn('status', array_values(explode(",",request('new_app_stages'))));
+               })
+               ->when(request('applicant'), function ($query) {
+                   $query->where('belongs_to',request('applicant'));
+               })
+               ->when(request('licence_types'), function ($query) {
+                   $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+               })
                
-                         ->when(request('month_from') && !request('month_to'), function ($query)  {
-                            $query->whereMonth('licence_date', request('month_from'));
-                        })
+               ->when(request('year') && request('year') !== 'null', function ($query) {
+                      $query->whereYear('licence_date', request('year'));
+                })
 
-                        ->when(request('activeStatus') === 'Active', function ($query) {
-                            $query->where('is_licence_active',true);
-                        })
-                        ->when(request('activeStatus') === 'Inactive', function ($query) {
-                            $query->where('is_licence_active',false);
-                        })
+              // ->when(request('selectedDates'), function ($query) {
+                   //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
+                //})
 
-                        ->when(!empty(request('province')), function ($query) {
-                            $query->whereIn('province',array_values(explode(",",request('province'))));
-                        })
-                        ->when(!empty(request('boardRegion')), function ($query) {
-                            $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
-                        })
-                        ->when(request('new_app_stages'), function ($query) {
-                            $query->whereIn('status', array_values(explode(",",request('new_app_stages'))));
-                        })
-                        ->when(!empty(request('applicant')), function ($query) {
-                            $query->where('belongs_to',request('applicant'));
-                        })
-                        ->when(!empty(request('licence_types')), function ($query) {
-                            $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
-                        })
+                ->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                   $query->where('status','<', intval(16))
+                   ->orWhereNull('status');
+               })
 
-                        ->when(!empty(request('selectedDates')), function ($query) {
-                            //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
-                         })
-                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                            $query->where('status','<', 16)
-                            ->orWhere('status', 0)
-                            ->orWhereNull('status');
-                        })
-    
-                         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('status',16);
-                          });
-                        })
-                        ->whereNull('deleted_at')
-                        ->where('is_new_app',true)
-                        ->orWhere('is_new_app',1)
-                        ->orderBy('trading_name')
-                        ->get([
-                            'id',
-                            'trading_name',
-                            'licence_number',
-                            'licence_type_id',
-                            'licence_type',
-                            'board_region',
-                            'province',
-                            'deposit_paid_at',
-                             'application_lodged_at',
-                             'activation_fee_paid_at',
-                             'client_paid_at','status','is_new_app'
-                            ]);
+               ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                   $query->where('status','=', 16);
+               });
+               
+               })
+               
+               ->whereNull('deleted_at')
+               ->where('is_new_app',1)
+               ->orderBy('trading_name')
+               ->get([
+                   'id',
+                   'trading_name',
+                   'licence_number',
+                   'licence_type_id',
+                   'licence_type',
+                   'province',
+                   'board_region',
+                   'licence_date',
+                   'deposit_paid_at',
+                   'licence_issued_at',
+                   'application_lodged_at',
+                   'activation_fee_paid_at',
+                   'client_paid_at','status',
+                   'is_new_app'
+                   ]);
 
     $newAppsStatus = '';
     $newAppNotesCollection = '';
@@ -541,37 +559,37 @@ class AllReportsController extends Controller
                 $newAppsStatus = 'Licence Delivered';
                 break;
             default:
-                $newAppsStatus='Null';
+                $newAppsStatus='';
                 break;
             }
 
             $new_app_notes = Task::where('model_id',$arr_of_new_apps_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
             //check if client has been logded
-            $is_client_logded_new_app = LicenceDocument::where('licence_id',$arr_of_new_apps_licences[$i]->id)->where('document_type','Application Lodged')->first(['document_name']);
 
             if(!is_null($new_app_notes) || !empty($new_app_notes)){
-                foreach ($new_app_notes as $note) {
-                    $newAppNotesCollection .=  $note->created_at.' '.$note->body. ' ';
+                foreach ($new_app_notes as $note) { 
+                    $newAppNotesCollection .=  $note->created_at.'    '.$note->body. '   ';
                 }
             }
 
-       $data = [ 
-               $arr_of_new_apps_licences[$i]->trading_name, 
-               $arr_of_new_apps_licences[$i]->licence_type,
-               $arr_of_new_apps_licences[$i]->licence_number,
-               $arr_of_new_apps_licences[$i]->province,
-               'NULL',
-               is_null($arr_of_new_apps_licences[$i]->deposit_paid_at) ? 'FALSE': 'TRUE',
-               $arr_of_new_apps_licences[$i]->application_lodged_at,
-               is_null($is_client_logded_new_app) ? 'FALSE': 'TRUE',
-               $arr_of_new_apps_licences[$i]->activation_fee_paid_at,
-               'NULL',
-               $arr_of_new_apps_licences[$i]->client_paid_at,
-               'NULL',
-               $newAppsStatus,
-               'NULL',
-               $newAppNotesCollection
-            ];
+       
+            $data = [ 
+                $arr_of_new_apps_licences[$i]->trading_name, 
+                $arr_of_new_apps_licences[$i]->licence_type,
+                $arr_of_new_apps_licences[$i]->licence_number,
+                $arr_of_new_apps_licences[$i]->board_region ? $arr_of_new_apps_licences[$i]->province.' - '.$arr_of_new_apps_licences[$i]->board_region : $arr_of_new_apps_licences[$i]->province,
+                '',
+                $arr_of_new_apps_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
+                optional($arr_of_new_apps_licences[$i]->application_lodged_at)->format('d M Y'),
+                $arr_of_new_apps_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
+                $arr_of_new_apps_licences[$i]->activation_fee_paid_at,
+                '',
+                optional($arr_of_new_apps_licences[$i]->client_paid_at)->format('d M Y'),
+                optional($arr_of_new_apps_licences[$i]->licence_issued_at)->format('d M Y'),
+                $newAppsStatus,
+                '',
+                $newAppNotesCollection
+             ];
 
             $newAppsData[] = $data;
 
@@ -621,71 +639,73 @@ class AllReportsController extends Controller
         );
         $arr_of_nominations = [];              
             $nominations = DB::table('nominations')
-                        ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, 
-                                     nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
-                            nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
-                            nominations.status, nominations.nomination_issued_at,board_region")
-                        ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
-                        ->join('people', 'people.id' , '=', 'nomination_people.people_id' )
-                        ->join('licences', 'licences.id' , '=', 'nominations.licence_id' )
-                            ->when(function($query){
-                                $query->when(request('month_from') && request('month_to'), function($query){
-                                    $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
-                                })
-                    
-                                ->when(request('month_from') && !request('month_to'), function ($query)  {
-                                    $query->whereMonth('licence_date', request('month_from'));
-                                })
-                                ->when(request('activeStatus') == 'Active', function ($query) {
-                                    $query->whereNotNull('is_licence_active');
-                                })
-                                ->when(request('activeStatus') == 'Inactive', function ($query) {
-                                    $query->whereNull('is_licence_active');
-                                })
-                                ->when(request('province'), function ($query) {
-                                    $query->whereIn('province',array_values(explode(",",request('province'))));
-                                })
-                                ->when(request('licence_types'), function ($query)  {
-                                    $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
-                                })
+            ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, 
+                         nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
+                nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
+                nominations.status, nominations.nomination_issued_at,board_region, nominations.year")
+            ->join('nomination_people', 'nomination_people.nomination_id' , '=', 'nominations.id' )
+            ->join('people', 'people.id' , '=', 'nomination_people.people_id' )
+            ->join('licences', 'licences.id' , '=', 'nominations.licence_id' )
+                ->when($request,function($query){
+                    $query->when(request('month_from') && request('month_to'), function($query){
+                        $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
+                    })
+        
+                    ->when(request('month_from') && !request('month_to'), function ($query)  {
+                        $query->whereMonth('licence_date', request('month_from'));
+                    })
+                    ->when(request('activeStatus') == 'Active', function ($query) {
+                        $query->whereNotNull('is_licence_active');
+                    })
+                    ->when(request('activeStatus') == 'Inactive', function ($query) {
+                        //$query->whereNull('is_licence_active');
+                    })
+                    ->when(request('province'), function ($query) {
+                        $query->whereIn('province',array_values(explode(",",request('province'))));
+                    })
+                    ->when(request('licence_types'), function ($query)  {
+                        $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                    })
 
-                                ->when(request('boardRegion'), function ($query) {
-                                    $query->whereIn('board_region', array_values(explode(",",request('boardRegion'))));
-                                })
-                                ->when(request('applicant'), function ($query) {
-                                    $query->where('belongs_to',request('applicant'));
-                                });
+                    ->when(request('boardRegion'), function ($query) {
+                        $query->whereIn('board_region', array_values(explode(",",request('boardRegion'))));
+                    })
+                    ->when(request('applicant'), function ($query) {
+                        $query->where('belongs_to',request('applicant'));
+                    });
 
-                            })->when(request('selectedDates'), function ($query) {
-                                  $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
-                            })
-                            ->when(request('nomination_stages'), function ($query) {
-                                $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
-                          })
+                })
+                ->when(request('nomination_stages'), function ($query) {
+                    $query->whereIn('nominations.status',array_values(explode(",",request('nomination_stages'))));
+              })
 
-                          ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                            $query->where('nominations.status','<', 10)
-                            ->orWhere('nominations.status', 0)
-                            ->orWhereNull('nominations.status');
-                        })
-    
-                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('nominations.status',10);
-                        })
+              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                $query->where('nominations.status','<', 10)
+                ->orWhereNull('nominations.status');
+            })
 
-                          ->whereNull('licences.deleted_at')->whereNull('nominations.deleted_at')
-                          ->orderBy('trading_name')
-                            ->get([
-                                'id',
-                                'trading_name',
-                                'full_name',
-                                'licence_number',
-                                'board_region',
-                                'province',
-                                'payment_to_liquor_board_at',
-                                'nomination_lodged_at',
-                                'status'
-                            ]);
+            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                $query->where('nominations.status','=', 10);
+            })
+            
+            ->when(request('year'), function ($query) {
+                       $query->where('nominations.year', request('year'));
+                    })
+              ->whereNull('licences.deleted_at')->whereNull('nominations.deleted_at')
+              
+              ->orderBy('trading_name')
+                ->get([
+                    'id',
+                    'trading_name',
+                    'full_name',
+                    'licence_number',
+                    'board_region',
+                    'province',
+                    'payment_to_liquor_board_at',
+                    'nomination_lodged_at',
+                    'year',
+                    'nominations.status'
+                ]);
     
                         $nom_status = '';
                         $nomNotesCollection = '';
@@ -725,7 +745,7 @@ class AllReportsController extends Controller
                  $nom_status = 'Nomination Delivered';
                  break;
              default:
-                 $nom_status = 'Null';
+                 $nom_status = '';
                  break;
         }
 
@@ -740,19 +760,19 @@ class AllReportsController extends Controller
                 }
             }
 
-    $data = [ 
-               $arr_of_nominations[$i]->trading_name, 
-               $arr_of_nominations[$i]->full_name, 
-               $arr_of_nominations[$i]->licence_number, 
-               $arr_of_nominations[$i]->province.'/'.$arr_of_nominations[$i]->board_region,
-               'NULL',
-               $arr_of_nominations[$i]->payment_to_liquor_board_at,
-               $arr_of_nominations[$i]->nomination_lodged_at,
-               (is_null($arr_of_nominations[$i]->nomination_lodged_at)) ? 'FALSE' : 'TRUE',
-               $arr_of_nominations[$i]->nomination_issued_at,
-               $nom_status,
-               $nomNotesCollection
-               ];
+                  $data = [ 
+                $arr_of_nominations[$i]->trading_name, 
+                $arr_of_nominations[$i]->full_name, 
+                $arr_of_nominations[$i]->licence_number, 
+                $arr_of_nominations[$i]->board_region ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
+                '',
+                $arr_of_nominations[$i]->payment_to_liquor_board_at,
+                $arr_of_nominations[$i]->nomination_lodged_at,
+                $arr_of_nominations[$i]->nomination_lodged_at ? 'FALSE' : 'TRUE',
+                $arr_of_nominations[$i]->nomination_issued_at,
+                $nom_status,
+                $nomNotesCollection
+             ];
 
                $arrayNominationData[] = $data;
 
@@ -801,10 +821,10 @@ class AllReportsController extends Controller
             )
         );
         $arr_of_renewals = [];
-                    $renewals = DB::table('licence_renewals')
+                    $renewals =  DB::table('licence_renewals')
                     ->selectRaw("licence_renewals.id, is_licence_active, trading_name, board_region,licence_number, licence_renewals.date, 
                                  licence_renewals.client_paid_at,licence_renewals.status, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
-                                 is_quote_sent")
+                                 is_quote_sent, licence_renewals.date")
 
                     ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')
 
@@ -818,7 +838,7 @@ class AllReportsController extends Controller
                             })
 
                             ->when(request('province'), function ($query)  {
-                                $query->whereIn('licences.province',array_values(explode(",",request('province'))));
+                                $query->whereIn('province',array_values(explode(",",request('province'))));
                             })
 
                             ->when(request('boardRegion'), function ($query)  {
@@ -840,12 +860,11 @@ class AllReportsController extends Controller
                             })
                             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('licence_renewals.status','<', 6)
-                                ->orWhere('licence_renewals.status', 0)
                                 ->orWhereNull('licence_renewals.status');
                             })
 
                             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('licence_renewals.status',6);
+                                $query->where('licence_renewals.status','=', 6);
                             });
 
                             })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
@@ -856,13 +875,15 @@ class AllReportsController extends Controller
                                 'is_licence_active',
                                 'trading_name',
                                 'licence_number',
-                                'date',
+                                'licence_renewals.date',
+                                'licence_renewals.status',
                                 'is_quote_sent',
                                 'client_paid_at',
                                 'payment_to_liquor_board_at',
                                 'renewal_issued_at',
                                 'renewal_delivered_at',
                             ]);
+
 
        
             $renewalsNotesCollection = '';
@@ -883,23 +904,23 @@ class AllReportsController extends Controller
                     }
                    
                    
-                
-            $data = [ 
-                       $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
-                       $arr_of_renewals[$i]->trading_name, 
-                       $arr_of_renewals[$i]->licence_number,
-                       $arr_of_renewals[$i]->date,
-                       'NULL',
-                       is_null($is_renewal_quoted) ? 'FALSE' : 'TRUE',
-                       is_null($arr_of_renewals[$i]->is_quote_sent) ? 'FALSE' : 'TRUE',
-                       $arr_of_renewals[$i]->client_paid_at,
-                       'NULL',
-                       $arr_of_renewals[$i]->payment_to_liquor_board_at,
-                       $arr_of_renewals[$i]->renewal_issued_at,
-                       $arr_of_renewals[$i]->renewal_delivered_at,
-                       'NULL',
-                       $renewalsNotesCollection
-                    ];
+              
+                    $data = [ 
+                        $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
+                        $arr_of_renewals[$i]->trading_name, 
+                        $arr_of_renewals[$i]->licence_number,
+                        $arr_of_renewals[$i]->date,
+                        '',
+                        $is_renewal_quoted ? 'FALSE' : 'TRUE',
+                        $arr_of_renewals[$i]->is_quote_sent ? 'FALSE' : 'TRUE',
+                        $arr_of_renewals[$i]->client_paid_at,
+                        '',
+                        $arr_of_renewals[$i]->payment_to_liquor_board_at,
+                        $arr_of_renewals[$i]->renewal_issued_at,
+                        $arr_of_renewals[$i]->renewal_delivered_at,
+                        $arr_of_renewals[$i]->renewal_delivered_at ? 'FALSE' : 'TRUE',
+                        $renewalsNotesCollection
+                     ];
 
                $arrayRenewalData[] = $data;
 
@@ -959,34 +980,36 @@ class AllReportsController extends Controller
                         $query->whereIn('temporal_licences.status',array_values(explode(",",request('temp_licence_stages'))));
                     })
                     ->when(request('activeStatus') === 'Active', function ($query) {
-                        $query->where('active',true);
+                        $query->where('active',1);
                     })
                     ->when(request('activeStatus') === 'Inactive', function ($query) {
-                        $query->where('active',false);
+                        $query->where('active',0);
                      })
 
                      ->when(!empty(request('temp_licence_region')), function ($query) {
                         $query->whereIn('address',array_values(explode(",",request('temp_licence_region'))));
                     })
 
-                    ->when(!empty(request('selectedDates')), function ($query) {
-                        $query->whereIn(DB::raw('MONTH(start_date)'),array_values(explode(",",request('selectedDates'))));
-                    })
+                    // ->when(!empty(request('selectedDates')), function ($query) {
+                    //     $query->whereIn(DB::raw('MONTH(start_date)'),array_values(explode(",",request('selectedDates'))));
+                    // })
                     ->when(!empty(request('applicant')), function ($query) {
                         $query->where('belongs_to',request('applicant'));
                     })
-                    ->when(request('is_licence_complete') === 'Pending', function ($query)  {
+
+                    ->when(request('is_licence_complete') === 'Outstanding', function ($query)  {
                         $query->where('temporal_licences.status','<', 9)
-                        ->orWhere('temporal_licences.status', 0)
                         ->orWhereNull('temporal_licences.status');
                     })
+                    ->when(request('year'), function ($query) {
+                                 $query->where(DB::raw('YEAR(start_date)'),request('year'));
+                            })
 
                     ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                        $query->where('temporal_licences.status',9);
+                        $query->where('temporal_licences.status','=',9);
                     });
 
                  })->whereNull('temporal_licences.deleted_at')
-                 ->orderBy('event_name')
                  ->get(
                     [
                     'temporal_licences.id',
@@ -994,9 +1017,11 @@ class AllReportsController extends Controller
                     'belongs_to',
                     'address',
                     'client_paid_at',
+                    'logded_at',
                     'liquor_licence_number',
                     'latest_lodgment_date',
                     'delivered_at',
+                    'issued_at',
                     'status',
                     'full_name',
                     'start_date',
@@ -1033,18 +1058,24 @@ class AllReportsController extends Controller
                              ->when(!empty(request('applicant')), function ($query) {
                                  $query->where('belongs_to',request('applicant'));
                              })
+
                              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                                 $query->where('temporal_licences.status','<', 9)
-                                ->orWhere('temporal_licences.status', 0)
                                 ->orWhereNull('temporal_licences.status');
+                            })
+                            
+                            ->when(request('year'), function ($query) {
+                                 $query->where(DB::raw('YEAR(start_date)'),request('year'));
                             })
         
                             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('temporal_licences.status',9);
+                                $query->where('temporal_licences.status','=',9);
                             });
-                          })->whereNull('temporal_licences.deleted_at')
+                          })
+                          
                           ->orderBy('event_name')
-                          ->get([
+                          ->get(
+                             [
                              'temporal_licences.id',
                              'event_name',
                              'belongs_to',
@@ -1052,9 +1083,11 @@ class AllReportsController extends Controller
                              'client_paid_at',
                              'liquor_licence_number',
                              'latest_lodgment_date',
+                             'logded_at',
                              'delivered_at',
                              'start_date',
                              'end_date',
+                             'issued_at',
                              'status',
                              'name',
                          ]);
@@ -1064,11 +1097,11 @@ class AllReportsController extends Controller
     $applicant = '';
     $tempNotesCollection = '';
 
-    $arr_of_licences = $merged_data->toArray(); 
+    $arr_of_temp_licences = $merged_data->toArray(); 
 
-    for($i = 0; $i < count($arr_of_licences); $i++ ){
+    for($i = 0; $i < count($arr_of_temp_licences); $i++ ){
 
-        switch ($arr_of_licences[$i]->status) {
+        switch ($arr_of_temp_licences[$i]->status) {
             case '1':
                $temp_status = 'Client Quoted';
                 break;
@@ -1098,27 +1131,25 @@ class AllReportsController extends Controller
                 break;
            
             default:
-                $temp_status = 'NULL';
+                $temp_status = '';
                 break;
             }
 
             
-            switch ($arr_of_licences[$i]->belongs_to) {
+            switch ($arr_of_temp_licences[$i]->belongs_to) {
                 case 'Company':
-                    $applicant = $arr_of_licences[$i]->name;
+                    $applicant = $arr_of_temp_licences[$i]->name;
                     break;
                 case 'Person':
-                    $applicant = $arr_of_licences[$i]->full_name;
+                    $applicant = $arr_of_temp_licences[$i]->full_name;
                     break;                
                 default:
-                    $applicant = "Null";
+                    $applicant = "";
                     break;
             }
 
-    $temp_notes = Task::where('model_id',$arr_of_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body','created_at']);
+    $temp_notes = Task::where('model_id',$arr_of_temp_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body','created_at']);
    
-    $get_temp_invoice_number = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Client Invoiced')->first(['document_name']);
-    $temp_licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$arr_of_licences[$i]->id)->where('doc_type','Licence Lodged')->first(['id']);
 
             if(!is_null($temp_notes) || !empty($temp_notes)){
                 foreach ($temp_notes as $temp_note) {
@@ -1126,21 +1157,24 @@ class AllReportsController extends Controller
                 }
             }
 
-       $data = [ 
-               $arr_of_licences[$i]->event_name, 
-               $applicant,
-               date('d-m-Y', strtotime($arr_of_licences[$i]->start_date)). ' - '.date('d-m-Y', strtotime($arr_of_licences[$i]->end_date)),
-               'NULL',
-               $arr_of_licences[$i]->address,
-               is_null($get_temp_invoice_number) ? '' : $get_temp_invoice_number->document_name,
-               $arr_of_licences[$i]->client_paid_at,
-               $arr_of_licences[$i]->liquor_licence_number,
-               optional($arr_of_licences[$i]->latest_lodgment_date)->format('d-m-Y'),
-               is_null($temp_licence_logded) ? 'FALSE': 'TRUE',
-               optional($arr_of_licences[$i]->delivered_at)->format('d M Y'),
-               $temp_status,
-               $tempNotesCollection
-            ];
+      
+            $data = [ 
+
+                $arr_of_temp_licences[$i]->event_name, 
+                $applicant,
+                date('d-m-Y', strtotime($arr_of_temp_licences[$i]->start_date)). ' - '.date('d-m-Y', strtotime($arr_of_temp_licences[$i]->end_date)),
+                ' ',
+                $arr_of_temp_licences[$i]->address,
+                //$get_invoice_number ? '' : $get_invoice_number->document_name,
+                $arr_of_temp_licences[$i]->client_paid_at,
+                $arr_of_temp_licences[$i]->liquor_licence_number,
+                optional($arr_of_temp_licences[$i]->logded_at)->format('d M Y'),
+                $arr_of_temp_licences[$i]->logded_at ? 'TRUE': 'FALSE',
+                optional($arr_of_temp_licences[$i]->issued_at)->format('d M Y'),
+                $temp_status,
+                $tempNotesCollection
+             ];
+ 
 
     $arrayTempData[] = $data;
 
@@ -1184,69 +1218,69 @@ class AllReportsController extends Controller
                    $arr_of_transfers = [];
         
                     $transfers = DB::table('licence_transfers')
-                        ->selectRaw("licence_transfers.id, is_licence_active, trading_name, licence_transfers.date, 
-                                     licence_transfers.lodged_at, licence_transfers.status, payment_to_liquor_board_at, 
-                                     board_region,issued_at, delivered_at,province")
-    
-                        ->join('licences', 'licences.id' , '=', 'licence_transfers.licence_id')
-    
-                        ->when(function($query){
-                            $query->when(request('month_from') && request('month_to'), function($query){
-                                $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
-                            })
-                  
-                            ->when(request('month_from') && !request('month_to'), function ($query)  {
-                                $query->whereMonth('licence_date', request('month_from'));
-                            })
-                            ->when(request('province'), function ($query)  {
-                                $query->whereIn('licences.province',array_values(explode(",",request('province'))));
-                            })
-                            ->when(request('boardRegion'), function ($query)  {
-                                $query->whereIn('licences.board_region',array_values(explode(",",request('boardRegion'))));
-                            })
-                            
-                            ->when(request('applicant'), function ($query)  {
-                                $query->where('belongs_to',request('applicant'));
-                            })
-    
-                            ->when(request('activeStatus') === 'Inactive', function ($query) {
-                                $query->where('is_licence_active',false);
-                            })
-    
-                            ->when(request('activeStatus') == 'Active', function ($query) {
-                                $query->where('is_licence_active', true);
-                            })
-    
-                            ->when(request('licence_types'), function ($query)  {
-                                $query->where('licence_type_id',request('licence_types'));
-                            })
+                    ->selectRaw("licence_transfers.id, is_licence_active, trading_name, licence_transfers.date, 
+                                 licence_transfers.lodged_at, licence_transfers.status, payment_to_liquor_board_at, 
+                                 board_region,issued_at, delivered_at,province, licence_number")
 
-                            ->when(request('is_licence_complete') === 'Pending', function ($query) {
-                                $query->where('licence_transfers.status','<', 10)
-                                ->orWhere('licence_transfers.status', 0)
-                                ->orWhereNull('licence_transfers.status');
-                            })
-        
-                            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('licence_transfers.status',10);
-                            });
+                    ->join('licences', 'licences.id' , '=', 'licence_transfers.licence_id')
+
+                    ->when(function($query){
+                        $query->when(request('month_from') && request('month_to'), function($query){
+                            $query->whereBetween(DB::raw('MONTH(date)'),[request('month_from'), request('month_to')]);
+                        })
+              
+                        ->when(request('month_from') && !request('month_to'), function ($query)  {
+                            $query->whereMonth('date', request('month_from'));
+                        })
+                        ->when(request('province'), function ($query)  {
+                            $query->whereIn('licences.province',array_values(explode(",",request('province'))));
+                        })
+                        ->when(request('boardRegion'), function ($query)  {
+                            $query->whereIn('licences.board_region',array_values(explode(",",request('boardRegion'))));
+                        })
+                        
+                        ->when(request('applicant'), function ($query)  {
+                            $query->where('belongs_to',request('applicant'));
+                        })
+
+                        ->when(request('activeStatus') === 'Inactive', function ($query) {
+                            $query->where('is_licence_active',false);
+                        })
+
+                        ->when(request('activeStatus') == 'Active', function ($query) {
+                            $query->where('is_licence_active', true);
+                        })
+
+                        ->when(request('licence_types'), function ($query)  {
+                            $query->where('licence_type_id',request('licence_types'));
+                        })
+
+                        ->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                            $query->where('licence_transfers.status','<', 10)
+                                    ->orWhereNull('licence_transfers.status');
+                        })
     
-                        })->when(request('selectedDates'), function ($query) {
-                              $query->whereIn('year',array_values(explode(",",request('selectedDates'))));
-                        })
-                        ->when(request('transfer_stages'), function ($query) {
-                            $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
-                        })
-                        ->whereNull('licences.deleted_at')->whereNull('licence_transfers.deleted_at')
-                        ->orderBy('trading_name')->get([
-                            'trading_name',
-                            'province',
-                            'board_region',
-                            'lodged_at',
-                            'payment_to_liquor_board_at',
-                            'issued_at',
-                            'status'
-                        ]);
+                        ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                            $query->where('licence_transfers.status','=',10);
+                        });
+
+                    })->when(request('year'), function ($query) {
+                          $query->whereYear('date',request('year'));
+                    })
+                    ->when(request('transfer_stages'), function ($query) {
+                        $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
+                    })
+                    ->whereNull('licences.deleted_at')->whereNull('licence_transfers.deleted_at')
+                    ->orderBy('trading_name')->get([
+                        'trading_name',
+                        'licence_number',
+                        'province',
+                        'board_region',
+                        'lodged_at',
+                        'payment_to_liquor_board_at',
+                        'issued_at',
+                        'status'
+                    ]);
     
                                  
                 $transfer_status = '';
@@ -1287,7 +1321,7 @@ class AllReportsController extends Controller
                             $transfer_status = 'Transfer Delivered';
                             break;
                         default:
-                            $transfer_status = 'Null';
+                            $transfer_status = '';
                             break;
                     }
     
@@ -1300,20 +1334,21 @@ class AllReportsController extends Controller
                             }
                         }
       
-                $data = [         
-                           $arr_of_transfers[$i]->trading_name, 
-                           'NULL',
-                           $arr_of_transfers[$i]->province.'/'.$arr_of_transfers[$i]->board_region,
-                           'NULL',
-                           'NULL',
-                           $arr_of_transfers[$i]->lodged_at,
-                           (is_null($arr_of_transfers[$i]->lodged_at)) ? 'FALSE' : 'TRUE',
-                           'NULL',
-                           $arr_of_transfers[$i]->payment_to_liquor_board_at,
-                           $arr_of_transfers[$i]->issued_at,
-                           $transfer_status,
-                           $notesCollection
-                        ];
+
+                        $data = [         
+                            $arr_of_transfers[$i]->trading_name, 
+                            $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
+                            $arr_of_transfers[$i]->board_region ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
+                            '',
+                            '',
+                            $arr_of_transfers[$i]->lodged_at,
+                            $arr_of_transfers[$i]->lodged_at ? 'FALSE' : 'TRUE',
+                            '',
+                            $arr_of_transfers[$i]->payment_to_liquor_board_at,
+                            $arr_of_transfers[$i]->issued_at,
+                            $transfer_status,
+                            $transferNotesCollection
+                         ];
     
                 $arrayTransferData[] = $data;
     
@@ -1340,7 +1375,7 @@ class AllReportsController extends Controller
         header('Content-Disposition: attachment;filename="All_Apps_'.now()->format('d_m_y').'.xlsx"');
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'xlsx');
         $writer->save('php://output');
         die;
       

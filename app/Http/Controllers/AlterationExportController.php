@@ -153,7 +153,7 @@ class AlterationExportController extends Controller
                         $arr_of_alterations[$i]->licence_number, 
                         $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region,
                         $arr_of_alterations[$i]->logded_at,
-                        is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
+                        $proof_of_logdiment ? 'FALSE' : 'TRUE',
                         $arr_of_alterations[$i]->certification_issued_at,
                         $status, 
                         $notesCollection

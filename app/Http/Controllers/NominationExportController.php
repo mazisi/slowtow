@@ -138,7 +138,7 @@ class NominationExportController extends Controller
                      $status = 'Nomination Delivered';
                      break;
                  default:
-                     $status = 'Null';
+                     $status = '';
                      break;
             }
 
@@ -149,7 +149,7 @@ class NominationExportController extends Controller
         
                 if(!is_null($notes) || !empty($notes)){
                     foreach ($notes as $note) {
-                        $notesCollection .=  $note->created_at.' '.$note->body. ' ';
+                        $notesCollection .=  $note->created_at.'  '.$note->body. '  ';
                     }
                 }
 
@@ -161,7 +161,7 @@ class NominationExportController extends Controller
                    '',
                    $arr_of_nominations[$i]->payment_to_liquor_board_at,
                    $arr_of_nominations[$i]->nomination_lodged_at,
-                   (is_null($arr_of_nominations[$i]->nomination_lodged_at)) ? 'FALSE' : 'TRUE',
+                   $arr_of_nominations[$i]->nomination_lodged_at ? 'FALSE' : 'TRUE',
                    $arr_of_nominations[$i]->nomination_issued_at,
                    $status,
                    $notesCollection
