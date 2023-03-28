@@ -1375,7 +1375,7 @@ class AllReportsController extends Controller
         header('Content-Disposition: attachment;filename="All_Apps_'.now()->format('d_m_y').'.xlsx"');
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'xlsx');
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         $writer->save('php://output');
         die;
       

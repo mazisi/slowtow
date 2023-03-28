@@ -235,7 +235,7 @@
       <select v-model="form.is_license_complete" class="form-control form-control-default">
       <option :value="''" disabled selected>Pending Or Complete?</option>
       <option value="Pending">Pending</option>
-      <option value="Pending">Complete</option>
+      <option value="Complete">Complete</option>
       </select>
       </div>
   </div>
