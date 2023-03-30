@@ -94,7 +94,7 @@ class TemporalLicenceController extends Controller
         $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
 
         return Inertia::render('TemporalLicences/ViewTemporalLicence',['licence' => $licence]);
- }
+      }
 
     public function update(Request $request){
         $temp = TemporalLicence::whereSlug($request->slug)->first();        

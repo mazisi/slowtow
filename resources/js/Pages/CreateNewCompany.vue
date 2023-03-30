@@ -1,3 +1,92 @@
+
+<script>
+import Layout from "../Shared/Layout.vue";
+import Banner from './components/Banner.vue';
+import { Head} from '@inertiajs/inertia-vue3';
+import  common from './common-js/common.js';
+
+export default {
+ props: {
+    errors: Object,
+  },
+  data() {
+    return {
+       form: {
+        copy_address: '',
+        company_name: '',
+        company_type: '',
+        reg_number: '',
+        vat_number: '',
+        fax_number: '',
+        email_address_1: '',
+        email_address_2: '',
+        email_address_3: '',
+        telephone_number_1: '',
+        telephone_number_2: '',
+        website: '',
+        business_address: '',
+        business_address2: '',
+        business_address3: '',
+        business_province: '',
+        business_address_postal_code: '',
+        postal_address: '',
+        postal_address2: '',
+        postal_address3: '',
+        postal_province: '',
+        postal_code: '',
+        active: '1',
+      },
+      showMenu: false,
+    };
+  },
+    methods: {
+    submit() {
+      this.$inertia.post('/submit-company', this.form)
+        
+    },
+
+    copyBusinessAddress(){
+      if(this.form.copy_address){
+        this.form.copy_address = true;
+        this.form.postal_address = this.form.business_address;
+        this.form.postal_address2 = this.form.business_address2;
+        this.form.postal_address3 = this.form.business_address3;
+        this.form.postal_province = this.form.business_province;
+        this.form.postal_code = this.form.business_address_postal_code;
+      }else{
+        this.form.copy_address = false;
+        this.form.postal_address = ''
+        this.form.postal_address2 = '';
+        this.form.postal_address3 = '';
+        this.form.postal_province = '';
+        this.form.postal_code = '';
+        this.form.business_province = '';
+      }
+    }
+
+  },
+  components: {
+    Layout,
+    Banner,
+    Head
+  },
+
+  computed: {
+    computedProvinces() {
+      return common.getProvinces();
+    },
+
+    computedCompanyTypes() {
+      return common.getCompanyTypes();
+    }
+  },
+
+  beforeUnmount() {
+    this.$store.state.isAbsolute = false;
+  },
+};
+
+</script>
 <template>
 <Layout>
   <Head title="Create Company"/>
@@ -41,15 +130,7 @@
 <label class="form-label">Company Type </label>
 <select class="form-control form-control-default" v-model="form.company_type" >
   <option :value="''" disabled selected >Select Company Type*</option>
-<option value="Association">Association</option>
-<option value="Close Corporation CC">Close Corporation  CC</option>
-<option value="Individual">Individual</option>
-<option value="Non-profit Organization (NPO)">Non-profit Organization (NPO)</option>
-<option value="Partnership">Partnership</option>
-<option value="Private Company  (Proprietary) Limited">Private Company  (Proprietary) Limited</option>
-<option value="Public Company">Public Company</option>
-<option value="Sole Proprietor">Sole Proprietor</option>
-<option value="Trust">Trust</option>
+    <option v-for="company_type in computedCompanyTypes " :value=company_type >{{ company_type }}</option>
 </select>
 </div>
 <div v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</div>
@@ -119,7 +200,6 @@
 </div>
 
 
-
 </div>
 
 </div>
@@ -158,15 +238,7 @@
 <label class="form-label">Province</label>
 <select class="form-control form-control-default" v-model="form.business_province" >
 <option :value="''" disabled >Select Province</option>
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
+<option v-for="province in computedProvinces" :key="province" :value=province >{{ province }}</option>
 </select>
 </div>
 <div v-if="errors.business_province" class="text-danger">{{ errors.business_province }}</div>
@@ -212,24 +284,20 @@
 <div v-if="errors.postal_address3" class="text-danger">{{ errors.postal_address }}</div>
 </div> 
 
+
 <div class="col-6 columns">                  
 <div class="input-group input-group-outline null is-filled">
 <label class="form-label">Province</label>
 <select class="form-control form-control-default" v-model="form.postal_province" >
   <option :value="''" disabled selected>Select Province</option>
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
+
+<option v-for="province in computedProvinces" :key="province" :value=province >{{ province }}</option>
+
 </select>
 </div>
 <div v-if="errors.postal_province" class="text-danger">{{ errors.postal_province }}</div>
 </div>
+
 
 <div class="col-6 columns">            
 <div class="input-group input-group-outline null is-filled">
@@ -268,79 +336,5 @@
     }
 </style>
 
-<script>
-import Layout from "../Shared/Layout.vue";
-import Banner from './components/Banner.vue';
-
-export default {
- props: {
-    errors: Object,
-  },
-  data() {
-    return {
-       form: {
-        copy_address: '',
-        company_name: '',
-        company_type: '',
-        reg_number: '',
-        vat_number: '',
-        fax_number: '',
-        email_address_1: '',
-        email_address_2: '',
-        email_address_3: '',
-        telephone_number_1: '',
-        telephone_number_2: '',
-        website: '',
-        business_address: '',
-        business_address2: '',
-        business_address3: '',
-        business_province: '',
-        business_address_postal_code: '',
-        postal_address: '',
-        postal_address2: '',
-        postal_address3: '',
-        postal_province: '',
-        postal_code: '',
-        active: '1',
-      },
-      showMenu: false,
-    };
-  },
-    methods: {
-    submit() {
-      this.$inertia.post('/submit-company', this.form)
-        
-    },
-
-    copyBusinessAddress(){
-      if(this.form.copy_address){
-        this.form.copy_address = true;
-        this.form.postal_address = this.form.business_address;
-        this.form.postal_address2 = this.form.business_address2;
-        this.form.postal_address3 = this.form.business_address3;
-        this.form.postal_province = this.form.business_province;
-        this.form.postal_code = this.form.business_address_postal_code;
-      }else{
-        this.form.copy_address = false;
-        this.form.postal_address = ''
-        this.form.postal_address2 = '';
-        this.form.postal_address3 = '';
-        this.form.postal_province = '';
-        this.form.postal_code = '';
-        this.form.business_province = '';
-      }
-    }
-
-  },
-  components: {
-    Layout,
-    Banner
-  },
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
-};
-
-</script>
 
 

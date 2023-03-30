@@ -64,8 +64,7 @@ use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
-
-
+use App\Http\Controllers\PeopleDocumentController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -336,9 +335,9 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::delete('/delete-person/{slug}', [PersonController::class,'destroy'])->name('delete_person');
 
-        Route::post('/upload-person-documents', [PersonController::class,'uploadDocument']);
+        Route::post('/upload-person-documents', [PeopleDocumentController::class,'uploadDocument']);
 
-        Route::delete('/delete-person-document/{slug}', [PersonController::class,'deleteDocument']);
+        Route::delete('/delete-person-document/{slug}', [PeopleDocumentController::class,'deleteDocument']);
 
         Route::patch('/update-person-active-status/{slug}',[PersonController::class,'updateActiveStatus']);
 

@@ -67,7 +67,7 @@
      
     <Multiselect
             v-model="form.month_from"           
-               :options="months"
+               :options="computedMonths"
                :taggable="true"
                placeholder="From"
              />
@@ -77,7 +77,7 @@
      
     <Multiselect
             v-model="form.month_to"           
-               :options="months"
+               :options="computedMonths"
                :taggable="true"
                :required="true"
                placeholder="To"
@@ -87,7 +87,7 @@
   <div v-if="form.variation === 'Renewals'" class="col-6 columns" >
     <Multiselect
         v-model="form.renewal_stages"           
-        :options="renewal_stages"
+        :options="computedRenewalStages"
           mode="tags"
         :taggable="true"
         placeholder="Filter By Stage"/>
@@ -96,7 +96,7 @@
   <div v-if="form.variation === 'Transfers'" class="col-6 columns" >
     <Multiselect
         v-model="form.transfer_stages"           
-        :options="transfer_stages"
+        :options="computedTransferStages"
           mode="tags"
         :taggable="true"
         placeholder="Filter By Stage"/>
@@ -105,7 +105,7 @@
   <div v-if="form.variation === 'Nominations'" class="col-6 columns" >
     <Multiselect
         v-model="form.nomination_stages"           
-        :options="nomination_stages"
+        :options="computedNominationStages"
         mode="tags"
         :taggable="true"
         placeholder="Filter By Stage"/>
@@ -114,7 +114,7 @@
   <div v-if="form.variation === 'New Applications' || form.variation === 'All'" class="col-6 columns" >
     <Multiselect
     v-model="form.new_app_stages"           
-    :options="new_app_stages"
+    :options="computedNewAppStages"
      mode="tags"
     :taggable="true"
     placeholder="Filter By Stage"/>
@@ -123,7 +123,7 @@
   <div v-if="form.variation === 'Alterations'" class="col-6 columns" >
     <Multiselect
     v-model="form.alteration_stages"           
-    :options="alteration_stages"
+    :options="computedAlterationStages"
      mode="tags"
     :taggable="true"
     placeholder="Filter By Stage"/>
@@ -132,7 +132,7 @@
   <div v-if="form.variation === 'Temporary Licences'" class="col-6 columns">
     <Multiselect
     v-model="form.temp_licence_stages"           
-    :options="temp_licence_stages"
+    :options="computedTempLicenceStages"
      mode="tags"
     :taggable="true"
     placeholder="Filter By Stage"/>
@@ -141,31 +141,18 @@
   <div v-if="form.variation === 'Existing Licences'" class="col-6 columns">
     <Multiselect
     v-model="form.new_app_stages"           
-    :options="new_app_stages"
+    :options="computedNewAppStages"
      mode="tags"
     :taggable="true"
     placeholder="Filter By Stage"/>
   </div>
 
-
-  
-  <!-- <div :class="{ 'col-4': form.variation === 'Renewals' 
-  || form.variation === 'Transfers' 
-  || form.variation === 'Nominations'
-  || form.variation === 'Nominations'
-  || form.variation === 'New Applications'//New Apps
-  || form.variation === 'Alterations'
-  || form.variation === 'Temporary Licences'
-  || form.variation === 'Existing Licences'
-   }">
-  </div> -->
-  
  
   <div v-if="form.variation !== 'Temporary Licences'" class="col-6 columns" >
       <div class="input-group input-group-outline null is-filled" >
         <Multiselect 
           v-model="form.province"          
-          :options="provinces"
+          :options="computedProvinces"
            mode="tags"
           :taggable="true"
           @select="fetchNewAppWithStages"
@@ -176,11 +163,6 @@
 
 
 
-
-    <!-- <div v-if="form.variation !== 'Temporary Licences'" class="col-4">
-      <span v-if="form.selectedDates" v-for='(selectedDate, index) in form.selectedDates' :key="selectedDate" class="badge bg-success mx-2">
-      {{ selectedDate }} <i @click="removeDate(index)" class="fa fa-times cursor-pointer "></i></span><br>
-    </div> -->
 
       <div class="col-6 columns" >
         <Multiselect
@@ -196,7 +178,7 @@
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
-      :options="boardRegion"
+      :options="computedBoardRegions"
        mode="tags"
       :taggable="true"
       @select="fetchNewAppWithStages"
@@ -221,7 +203,7 @@
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.temp_licence_region"           
-      :options="temp_licence_regions"
+      :options="computedBoardRegions"
        mode="tags"
       :taggable="true"
       @select="fetchNewAppWithStages"
@@ -411,5 +393,6 @@
     background-color: #0d6efd!important;
   }
 </style>
-<script src="./report.js"></script>
+<script src="./reports-js/report.js"></script>
+
 <style src="@vueform/multiselect/themes/default.css"></style>

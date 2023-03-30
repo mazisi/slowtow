@@ -3,6 +3,7 @@ import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
 import { Head } from '@inertiajs/inertia-vue3';
+import common from '../common-js/common.js';
 
 export default {
   name: "CreateTemporalLicence",
@@ -41,6 +42,14 @@ export default {
           this.$inertia.post(`/submit-temp-licence`, this.form)
         }
   },
+
+  computed: {
+
+    computedBoardRegions() {
+          return common.getBoardRegions();
+        }
+  },
+
   components: {
     Layout,
     Multiselect,
@@ -140,19 +149,8 @@ export default {
   
   <select class="form-control form-control-default" v-model="form.address" >
     <option :value="''" disabled selected >Event Address Region</option>
-    <option value="Eastern Cape">Eastern Cape</option>
-      <option value="Free State">Free State</option>
-      <option value="Gauteng Ekurhuleni">Gauteng Ekurhuleni</option>
-      <option value="Gauteng Johannesburg">Gauteng Johannesburg</option>
-      <option value="Gauteng Sedibeng">Gauteng Sedibeng</option>
-      <option value="Gauteng Tshwane">Gauteng Tshwane</option>
-      <option value="Gauteng West Rand">Gauteng West Rand</option>
-      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-      <option value="Limpopo">Limpopo</option>
-      <option value="Mpumalanga">Mpumalanga</option>
-      <option value="North West">North West</option>
-      <option value="Northern Cape">Northern Cape</option>
-      <option value="Western Cape">Western Cape</option>
+    <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
+
   </select>
    </div>
  <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>

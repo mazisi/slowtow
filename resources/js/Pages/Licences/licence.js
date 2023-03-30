@@ -1,9 +1,10 @@
 import Layout from "../../Shared/Layout.vue";
 import { Link, useForm, Head } from '@inertiajs/inertia-vue3';
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch,computed } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue';
 import Paginate from "../../Shared/Paginate.vue";
+import  common from '../common-js/common.js';
 
 export default {
     props: {
@@ -75,6 +76,11 @@ export default {
             province: form.province
            }, { preserveState: true, replace: true });
         }, 1000));
+
+        const computedProvinces = computed(() => {
+          return common.getProvinces();
+        })
+
         
         // onMounted(() => {
           
@@ -84,12 +90,13 @@ export default {
         //     notify(props.error)
         //   }
         // },
-       
 
+       
         
 
         return {
           limit,
+          computedProvinces,
           form,
           term,
           search,

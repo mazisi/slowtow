@@ -140,14 +140,7 @@
 <label class="form-label">Province</label>
 <select class="form-control form-control-default" v-model="form.province" required>
 <option :value="''" disabled selected>Select Province</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
+<option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
 </select>
 </div>
 </div>
@@ -192,6 +185,8 @@ import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
+import common from '../common-js/common.js';
+import { computed } from 'vue';
 
 export default {
  props: {
@@ -243,8 +238,11 @@ export default {
 
      }
     
+     const computedProvinces = computed(() => {
+          return common.getProvinces();
+        })
 
-    return { submit,selectApplicant,company_options, people_options, form }
+    return { submit,selectApplicant,company_options, people_options, form, computedProvinces}
   },
    components: {
     Layout,

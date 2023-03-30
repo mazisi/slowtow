@@ -6,119 +6,21 @@ use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
+use App\Models\Licence;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\CompanyDocument;
+use App\Models\LicenceTransfer;
 use Illuminate\Support\Facades\DB;
+use App\Actions\CompanyFilterAction;
 use App\Http\Requests\CompanyValidateRequest;
-use App\Models\Licence;
 
 class CompanyController extends Controller
 {
     
     public function index(){
          try {
-            if(checkNetworkStatus() != 1){
-                return back()->with('error','Connection timeout');
-             }
-            $companies = Company::
-              when(request('term') 
-                && !request('active_status') 
-                && !request('company_type'), 
-                function ($query) {
-                    $query->where('name','LIKE','%'.request('term').'%')
-                    ->orWhere('reg_number','LIKE','%'.request('term').'%');  
-                
-                
-            })
-    
-            //Search and company type
-            ->when(request('term') 
-                && !request('active_status') 
-                && request('company_type'), 
-                function ($query) {
-                return $query
-                ->where(function($query){
-                    $query->where('name','LIKE','%'.request('term').'%')
-                          ->where('company_type','LIKE','%'.request('company_type').'%');   
-                  });
-                
-            })
-    //Search and company type and Active
-            ->when(request('term') 
-                && request('active_status') == 'Active'
-                && request('company_type'), 
-                function ($query) {
-                    $query->where('name','LIKE','%'.request('term').'%')
-                          ->where('company_type', 'LIKE','%'.request('company_type').'%')
-                          ->where('active','1');   
-                             
-            })
-    
-    //Search and company type and All
-            ->when(request('term') 
-                && request('active_status') == 'All'
-                && request('company_type'), 
-                function ($query) {
-                    $query->where('name','LIKE','%'.request('term').'%')
-                          ->where('company_type','LIKE','%'.request('company_type').'%');   
-                 
-                
-            })
-    
-    //Search and Inactive
-            ->when(request('term') 
-                && request('active_status') == 'Inactive'
-                && !request('company_type'), 
-                function ($query) {
-                    $query->where('name','LIKE','%'.request('term').'%')
-                          ->where('active','0');   
-                 
-                
-            })
-    
-    //Search and company type and Active
-            ->when(request('term') 
-                && request('active_status') == 'Active'
-                && !request('company_type'), 
-                function ($query) {
-                    $query->where('name','LIKE','%'.request('term').'%')
-                          ->where('active','1');   
-                  
-                
-            })
-    
-    
-    
-    
-            ->when(!request('term')  && !request('company_type') && request('active_status') == 'Inactive', 
-                function ($query){ 
-                    return $query->where('active','0');            
-                })
-    
-                ->when(!request('term')  && !request('company_type') && request('active_status') == 'Active', 
-                function ($query){ 
-                    return $query->where('active','1');            
-                })
-                    
-                    ->when(!request('term') && request('company_type') && request('active_status') == 'Inactive', 
-                    function ($query){ 
-                        $query->where('active',true)
-                              ->where('company_type','LIKE','%'.request('company_type').'%');            
-                    })
-    
-                    ->when(!request('term') && request('company_type') && request('active_status') == 'Active', 
-                    function ($query){ 
-                        $query->where('active',true)
-                              ->where('company_type','LIKE','%'.request('company_type').'%');            
-                    })
-    
-                ->when(!request('term')  && !request('active_status') && request('company_type'), 
-                    function ($query){ 
-                        $query->where('company_type','LIKE','%'.request('company_type').'%');                
-                    })
-                    ->latest()->paginate(20)->withQueryString();
-    
+            $companies = CompanyFilterAction::filterCompanies();    
             return Inertia::render('Company',['companies'=> $companies]);
          } catch (\Throwable $th) {
             return redirect('error');
@@ -130,7 +32,7 @@ class CompanyController extends Controller
     }
 
     public function store(CompanyValidateRequest $request)
-    {       
+    { 
             $company = Company::create([
                 'name' => $request->company_name,
                 'company_type' => $request->company_type,
@@ -287,6 +189,16 @@ public function updatePeople(Request $request,$pivot_id){
             $deleteLicences = Licence::where('company_id',$company->id)->get(['id']);
             foreach ($deleteLicences as $deleteLicence) {
                 $deleteLicence->delete();
+            }
+
+            //soft delete transfers belonging to this company
+            $deleteTransfers = LicenceTransfer::where(function ($query) use($company){ 
+                $query->where('company_id',$company->id)
+                      ->orWhere('old_company_id',$company->id);         
+             })->get(['id']);
+           
+            foreach ($deleteTransfers as $delete_transfer) {
+                $delete_transfer->delete();
             }
             
             if($company->delete()){

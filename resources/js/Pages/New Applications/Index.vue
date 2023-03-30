@@ -93,19 +93,8 @@
       <label class="form-label">Liquor Board Region</label>
       <select required class="form-control form-control-default" v-model="form.board_region" >
         <option :value="''" disabled selected>Select Liquor Board Region</option>
-      <option value="Eastern Cape">Eastern Cape</option>
-      <option value="Free State">Free State</option>
-      <option value="Gauteng Ekurhuleni">Gauteng Ekurhuleni</option>
-      <option value="Gauteng Johannesburg">Gauteng Johannesburg</option>
-      <option value="Gauteng Sedibeng">Gauteng Sedibeng</option>
-      <option value="Gauteng Tshwane">Gauteng Tshwane</option>
-      <option value="Gauteng West Rand">Gauteng West Rand</option>
-      <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-      <option value="Limpopo">Limpopo</option>
-      <option value="Mpumalanga">Mpumalanga</option>
-      <option value="North West">North West</option>
-      <option value="Northern Cape">Northern Cape</option>
-      <option value="Western Cape">Western Cape</option>
+        <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
+
       </select>
       </div>
       </div>
@@ -145,15 +134,7 @@
     <label class="form-label">Province</label>
     <select required class="form-control form-control-default" v-model="form.province" >
       <option :value="''" disabled selected>Select Province</option>
-    <option value="Eastern Cape">Eastern Cape</option>
-    <option value="Free State">Free State</option>
-    <option value="Gauteng">Gauteng</option>
-    <option value="KwaZulu-Natal">KwaZulu-Natal</option>
-    <option value="Limpopo">Limpopo</option>
-    <option value="Mpumalanga">Mpumalanga</option>
-    <option value="Northern Cape">Northern Cape</option>
-    <option value="North West">North West</option>
-    <option value="Western Cape">Western Cape</option>
+      <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
     </select>
     </div>
     </div>
@@ -198,6 +179,8 @@
   import Banner from '../components/Banner.vue';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
+  import common from '../common-js/common.js';
+  import { computed } from 'vue';
 
   export default {
    props: {
@@ -281,8 +264,22 @@
             }, 3000);
             toast.loading(`Fetching${message}`);
         }
-      
-      return { submit, form ,options, idRegForm, selectApplicant, filterForm,toast, getchIdOrRegNumber}
+
+
+
+        const computedProvinces = computed(() => {
+          return common.getProvinces();
+        })
+
+        const computedBoardRegions = computed(() => {
+          return common.getBoardRegions();
+        })
+
+      return { submit, form ,options, idRegForm, 
+        selectApplicant, filterForm,toast, 
+        getchIdOrRegNumber, computedProvinces,
+        computedBoardRegions
+      }
       
     },
     

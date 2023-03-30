@@ -1,12 +1,13 @@
 <script>
 import Layout from "../Shared/Layout.vue";
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch,computed, onMounted } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import { Link, useForm, Head } from '@inertiajs/inertia-vue3';
 import Banner from './components/Banner.vue';
 import Paginate from "../Shared/Paginate.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import  common from './common-js/common.js';
 
 
 export default {
@@ -71,6 +72,11 @@ export default {
         //     notify(props.error)
         //   }
         // });
+       
+
+    const computedCompanyTypes = computed(() => {
+      return common.getCompanyTypes();
+    })
 
     return {
       term,
@@ -78,7 +84,8 @@ export default {
       search,
       toast,
       limit,
-      notify
+      notify,
+      computedCompanyTypes
     }
   },
   components: {
@@ -130,16 +137,7 @@ export default {
 <div class="input-group input-group-outline null is-filled">
 <select @change="search" v-model="form.company_type" class="form-control form-control-default">
 <option :value="''" disabled selected>Company Type</option>
-<option value="Association">Association</option>
-<option value="Close Corporation CC">Close Corporation  CC</option>
-<option value="Individual">Individual</option>
-<option value="Non-profit Organization (NPO)">Non-profit Organization (NPO)</option>
-<option value="Partnership">Partnership</option>
-<option value="Private Company  (Proprietary) Limited">Private Company  (Proprietary) Limited</option>
-<option value="Public Company">Public Company</option>
-<option value="Sole Proprietor">Sole Proprietor</option>
-<option value="Sole Proprietor">Sole Proprietor</option>
-<option value="Trust">Trust</option>
+<option v-for="company_type in computedCompanyTypes " :value=company_type >{{ company_type }}</option>
 </select>
 </div>
 </div>
