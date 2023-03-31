@@ -59,9 +59,9 @@ class ReportController extends Controller
           ->when(!empty(request('selectedDates')), function ($query) use ($request) {
              // $query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
           });
-      })->where('is_new_app',true)->get();
+      })->where('is_new_app',1)->get();
       
-        return Inertia::render('Report',[
+        return Inertia::render('Reporting/Report',[
              'licenceTypes' => $licenceTypes,
              'companies' => $companies,
              'people' => $people,

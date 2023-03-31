@@ -8,6 +8,9 @@ import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import TextInputComponent from '../components/input-components/TextInputComponent.vue'
+import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
+
 
 export default {
  props: {
@@ -252,7 +255,9 @@ export default {
     Multiselect,
     Banner,
     Paginate,
-    Task
+    Task,
+    TextInputComponent,
+    LicenceTypeDropDownComponent
   },
   
 };

@@ -108,7 +108,7 @@ class LicenceController extends Controller
                                             ]);
     }
 
-    public function update(Request $request,$slug){    
+    public function update(Request $request,$slug){
        try {
         if(empty($request->change_company)){
             $company_var = $request->company_id;

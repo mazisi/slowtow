@@ -22,20 +22,28 @@
 <div class="p-3 card-body">
 
 <div class="row">
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label mb-0 text-body text-truncate">Active</label>
-<input id="active-checkbox" type="checkbox" value="1" :checked="form.is_licence_active == '1'" >
-</div>
-</div>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Trading Name *</label>
-<input type="text" required class="form-control form-control-default" v-model="form.trading_name" >
-</div>
-<div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
-</div>
+
+<CheckBoxInputComponent 
+:label="'Active'" 
+:value="'1'" 
+:isChecked="form.is_licence_active == '1'" 
+:column="'col-md-12'" 
+/>
+
+<TextInputComponent 
+  :inputType="'text'"
+  :required="true"
+  :disabled="''"
+  :label="'Trading Name *'" 
+  v-model="form.trading_name" 
+  :column="'col-md-6'" 
+  :value="form.trading_name"
+  :errors="errors.trading_name "
+  :input_id="trading_name"
+/>
+ 
+
 
 <div class="col-6 columns" >
   <div class="input-group input-group-outline null is-filled">
@@ -60,6 +68,7 @@
 <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
 </div>
 
+
 <div class="col-md-6 columns" v-if="form.belongs_to === 'Person'">
   <Multiselect
       v-model="form.person"
@@ -71,39 +80,53 @@
  <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
  </div>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Type *</label>
-<select v-model="form.licence_type" class="form-control form-control-default">
- <option :value="''">Select Licence Type</option>
-<option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
-</select>
-</div>
-<div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-</div>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Licence Number</label>
-<input type="text" required class="form-control form-control-default" v-model="form.licence_number" >
-</div>
-<div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
-</div>
+<LicenceTypeDropDownComponent 
+  :dropdownList="licence_dropdowns" 
+  :label="'Licence Type *'" 
+  :defaultDisabledText="'Select Licence Type'"
+  :column="'col-md-6'"
+  :value="form.licence_type"
+  v-model="form.licence_type"
+  :errors="errors.licence_type"
+  :input_id="licence_type"
+  :required="true"
+/>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Old Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.old_licence_number" >
-</div>
-<div v-if="errors.old_licence_number" class="text-danger">{{ errors.old_licence_number }}</div>
-</div>  
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Date</label>
-<input type="date" class="form-control form-control-default" v-model="form.licence_date">
-</div>
-<div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
-</div>
+
+
+<TextInputComponent 
+  :inputType="'text'"
+  :required="true"
+  v-model="form.licence_number" 
+  :value="form.licence_number"
+  :column="'col-md-6'" 
+  :label="'Licence Number'" 
+  :errors="errors.licence_number"
+  :input_id="licence_number"
+/>
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.old_licence_number"
+  :value="form.old_licence_number" 
+  :column="'col-md-6'" 
+  :label="'Old Licence Number'" 
+  :errors="errors.old_licence_number"
+  :input_id="old_licence_number"
+/>
+
+
+<TextInputComponent 
+  :inputType="'date'"
+  v-model="form.licence_date" 
+  :value="form.licence_date" 
+  :column="'col-md-6'" 
+  :label="'Licence Date'" 
+  :errors="errors.licence_date"
+  :input_id="licence_date"
+/>
+
 
 </div>
 
@@ -114,26 +137,38 @@
 
 <div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address Line 1</label>
-<input type="text" class="form-control form-control-default" v-model="form.address">
-</div>
-</div>
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address Line 2</label>
-<input type="text" class="form-control form-control-default" v-model="form.address2">
-</div>
-<div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
-</div> 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Address Line 3</label>
-<input type="text" class="form-control form-control-default" v-model="form.address3">
-</div>
-</div> 
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.address"
+  :value="form.address"  
+  :column="'col-12'" 
+  :label="'Address Line 1'" 
+  :errors="errors.address"
+  :input_id="address"
+/>
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.address2"
+  :value="form.address2"   
+  :column="'col-12'" 
+  :label="'Address Line 2'" 
+  :errors="errors.address2"
+  :input_id="address2"
+/>
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.address3"
+  :value="form.address3"   
+  :column="'col-12'" 
+  :label="'Address Line 3'" 
+  :errors="errors.address3"
+  :input_id="address3"
+/>
+
+
 
 <div class="col-12 columns">                  
 <div class="input-group input-group-outline null is-filled">
@@ -145,13 +180,17 @@
 </div>
 </div>
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Code</label>
-<input  type="text" class="form-control form-control-default" v-model="form.postal_code">
-</div>
 
-</div>
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.postal_code" 
+  :value="form.postal_code"  
+  :column="'col-12'" 
+  :label="'Postal Code'" 
+  :errors="errors.postal_code"
+  :input_id="postal_code"
+/>
+
 
 </div>
 <div>
@@ -187,6 +226,9 @@ import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import common from '../common-js/common.js';
 import { computed } from 'vue';
+import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
+import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
 
 export default {
  props: {
@@ -249,8 +291,11 @@ export default {
     Link,
     Head,
     Multiselect,
-    Banner
-  },
+    Banner,
+    TextInputComponent,
+    CheckBoxInputComponent,
+    LicenceTypeDropDownComponent
+},
   
 };
 </script>

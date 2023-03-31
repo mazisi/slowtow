@@ -1,3 +1,5 @@
+
+<script src="./view_licence.js"></script>
 <template>
 <Layout>
 
@@ -50,28 +52,40 @@
 </div>
 </div>
 
-<div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Trading Name *</label>
-<input type="text" required class="form-control form-control-default" v-model="form.trading_name" >
-</div>
-<div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
-</div>
 
-<div class="col-md-12 columns" v-if="licence.belongs_to === 'Company'">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label mb-4">Current Company</label>
-<input type="text" disabled class="form-control form-control-default" v-model="form.company" >
-</div>
-<div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
-</div>
-<div class="col-md-12 columns" v-else-if="licence.belongs_to === 'Person'">
-  <div class="input-group input-group-outline null is-filled">
-  <label class="form-label mb-4">Current Person</label>
-  <input type="text" disabled class="form-control form-control-default" v-model="form.person" >
-  </div>
-  <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
-  </div>
+<TextInputComponent 
+  v-model="form.trading_name" 
+  :column="'col-md-12'" 
+  :label="'Trading Name *'" 
+  :value="form.trading_name"
+  :errors="errors.trading_name"
+  :input_id="trading_name"
+/>
+
+
+
+<TextInputComponent v-if="licence.belongs_to === 'Company'"
+  :inputType="'text'"
+  :required="true"
+  :disabled="true"
+  v-model="form.company" 
+  :column="'col-md-12'" 
+  :label="'Current Company'" 
+  :value="form.company"
+  :errors="errors.company"
+  :input_id="company"
+/>
+
+<TextInputComponent v-else-if="licence.belongs_to === 'Person'"
+  v-model="form.person" 
+  :column="'col-md-12'" 
+  :label="'Current Person'" 
+  :value="form.person"
+  :errors="errors.person"
+  :input_id="person"
+  :disabled="true"
+/>
+
 
 <!-- <div class="col-md-12 columns" v-if="licence.belongs_to === 'Company'">
 <div class="input-group input-group-outline null is-filled">
@@ -95,33 +109,39 @@
   <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
   </div> -->
 
+  <LicenceTypeDropDownComponent 
+    :dropdownList="licence_dropdowns" 
+    :label="'Licence Type *'" 
+    :defaultDisabledText="'Select Licence Type'"
+    :column="'col-md-12'"
+    :value="form.licence_type"
+    v-model="form.licence_type"
+    :errors="errors.licence_type"
+    :input_id="licence_type"
+    :required="true"
+  />
 
-<div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Type *</label>
-<select v-model="form.licence_type" class="form-control form-control-default">
-  <option :value="''" disabled selected>Licence Type</option>
-<option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
-</select>
-</div>
-<div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-</div>
+  <TextInputComponent
+    v-model="form.person" 
+    :column="'col-md-12'" 
+    :label="'Licence Date'" 
+    :value="form.licence_date"
+    :errors="errors.licence_date"
+    :input_id="licence_date"
+    :inputType="'date'"
+/>
 
-<div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Licence Date</label>
-<input type="date" class="form-control form-control-default" v-model="form.licence_date">
-</div>
-<div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
-</div>
+<TextInputComponent
+    v-model="form.person" 
+    :column="'col-md-12'" 
+    :label="'Licence Number'" 
+    :value="form.licence_number"
+    :errors="errors.licence_number"
+    :input_id="licence_number"
+    :inputType="'text'"
+    :required="true"
+/>
 
-<div class="col-md-12 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Licence Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.licence_number" >
-</div>
-<div v-if="errors.licence_number" class="text-danger">{{ errors.licence_number }}</div>
-</div>
 
 <div class="col-md-12 columns">
 <div class="input-group input-group-outline null is-filled">
@@ -411,5 +431,4 @@ Action
 
 <style src="@vueform/multiselect/themes/default.css"></style>
 
-<script src="./view_licence.js"></script>
 
