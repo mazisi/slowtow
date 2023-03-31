@@ -3,13 +3,20 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue'
-import { ref,onMounted } from 'vue';
+import { ref,onMounted, computed } from 'vue';
 import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
+import  common from '../common-js/common.js';
 import 'vue3-toastify/dist/index.css';
-import TextInputComponent from '../components/input-components/TextInputComponent.vue'
-import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
+import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue';
+import ProvinceSelectDropdownComponent from '../components/input-components/ProvinceSelectDropdownComponent.vue';
+import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
+import DocumentListComponent from './licence-components/DocumentListComponent.vue';
+
+
+
 
 
 export default {
@@ -33,11 +40,7 @@ export default {
         let options = props.companies;
         let show_current_company = ref(true);
         let change_company = ref(false);
-        let show_modal = ref(true);
-        let file_name = ref(''); 
-        let file_has_apostrophe = ref();
-
-        
+                
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -60,16 +63,7 @@ export default {
 
 
 //Insert original licence 
-       const originalLicenceForm = useForm({
-          doc: null,
-          licence_id: props.licence.id,
-          doc_type: null,
-       })
- 
-      function getDocType(doc_type){
-        this.originalLicenceForm.doc_type = doc_type;
-        this.show_modal = true
-      }
+      
 
      function changeCompany(){
           this.show_current_company=false;
@@ -89,36 +83,7 @@ export default {
         })    
         }
 
-        function uploadOriginalLicenceDoc(){
-          originalLicenceForm.post(`/upload-licence-document`, {
-          preserveScroll: true,
-          onSuccess: () => { 
-          this.show_modal = false;
-          document.querySelector('.modal-backdrop').remove();
-
-                if(props.success){
-                   notify(props.success)
-                    }else if(props.error){
-                      notify(props.error)
-                    }
-          originalLicenceForm.reset();
-         },
-        })    
-        }
-
-        function deleteDocument(id){
-          if(confirm('Document will be deleted permanently!! Continue??')){
-            Inertia.delete(`/delete-licence-document/${id}`,{
-              onSuccess: () => { 
-                if(props.success){
-                   notify(props.success)
-                    }else if(props.error){
-                      notify(props.error)
-                    }
-               },
-            })
-          }
-        }
+        
 
        function deleteLicence(){
           if(confirm('Are you sure you want to delete this licence??')){
@@ -168,23 +133,6 @@ export default {
         }
 
         
-          function getFileName(e){
-            this.originalLicenceForm.doc = e.target.files[0];
-            this.file_name = e.target.files[0].name;
-            this.file_has_apostrophe = this.file_name.includes("'");
-          }
-
-  
-
-      function removeFilePath(file_name){
-        if(file_name.includes('mrnlabs')){
-          let getFileName = file_name.split('/');
-            return  getFileName[1];
-          }  
-            return file_name;
-      }
-      
-      
       const notify = (message) => {
           if(props.success){
             toast.success(message, {
@@ -198,25 +146,7 @@ export default {
           }
         }
 
-        function checkingFileProgress(message){
-          setTimeout(() => {
-              toast.remove();
-            }, 3000);
-            toast.loading(message);
-        }
-
-       
-
-         function viewFile(model_id) {
-              let model = 'LicenceDocument';
-               Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
-              },
-                
-               })
-         }
+        
 
         //  onMounted(() => {
         //   if(props.success){
@@ -225,13 +155,12 @@ export default {
         //     notify(props.error)
         //   }
         // });
+        const computedProvinces = computed(() => {
+          return common.getProvinces();
+        })
 
     return {
-      checkingFileProgress,viewFile,
-      showMenu,file_has_apostrophe,
-      file_name,getFileName,
-      removeFilePath,
-      show_modal,
+      showMenu,
       show_current_company,
       change_company,
       options,
@@ -241,10 +170,7 @@ export default {
       updateLicence,
       deleteLicence,
       assignActiveValue,
-      originalLicenceForm,
-      uploadOriginalLicenceDoc,
-      getDocType,
-      deleteDocument
+      computedProvinces
     }
   },
 
@@ -257,7 +183,11 @@ export default {
     Paginate,
     Task,
     TextInputComponent,
-    LicenceTypeDropDownComponent
+    LicenceTypeDropDownComponent,
+    ProvinceSelectDropdownComponent,
+    CheckBoxInputComponent,
+    DocumentListComponent,
+    
   },
   
 };

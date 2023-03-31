@@ -19,16 +19,14 @@ class CompanyController extends Controller
 {
     
     public function index(){
-         try {
+         
             $companies = CompanyFilterAction::filterCompanies();    
-            return Inertia::render('Company',['companies'=> $companies]);
-         } catch (\Throwable $th) {
-            return redirect('error');
-         }
+            return Inertia::render('Companies/Company',['companies'=> $companies]);
+         
     }
 
     public function create() {
-        return Inertia::render('CreateNewCompany');
+        return Inertia::render('Companies/CreateNewCompany');
     }
 
     public function store(CompanyValidateRequest $request)
@@ -78,7 +76,7 @@ class CompanyController extends Controller
         $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->latest()->first();
         $people = People::pluck('full_name','id');
         
-        return Inertia::render('ViewCompany',[
+        return Inertia::render('Companies/ViewCompany',[
             'company'=> $company,
             'people' => $people,
              'tasks' => $tasks,

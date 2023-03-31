@@ -490,18 +490,18 @@ Action
 <div class="col-md-5 columns">
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="avatar me-3" v-if="nomination_logded !== null">
+    <div class="avatar me-3" v-if="nomination_logded">
     <a @click="viewFile(nomination_logded.id)" href="#!">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Document</h6>
-       <p v-if="nomination_logded !== null" class="mb-0 text-xs limit-file-name">{{ nomination_logded.document_name }}</p>
+       <p v-if="nomination_logded" class="mb-0 text-xs limit-file-name">{{ nomination_logded.document_name }}</p>
       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-      <p v-if="nomination_logded !== null" class="mb-0 text-xs"></p>
+      <p v-if="nomination_logded" class="mb-0 text-xs"></p>
     </div>
-    <a v-if="nomination_logded !== null" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
+    <a v-if="nomination_logded" @click="deleteDocument(nomination_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a v-else @click="getDocType(8,'Nomination Lodged')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >

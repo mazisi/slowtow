@@ -83,7 +83,7 @@ export default{
               onSuccess: () => { 
                 this.show_modal = false;
                 this.show_file_name = false;
-                let dismiss = document.querySelector('.modal-backdrop').remove();
+                document.querySelector('.modal-backdrop').remove();
                 if(props.success){
                             notify(props.success)
                          }else if(props.error){

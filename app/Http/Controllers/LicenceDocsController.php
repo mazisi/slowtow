@@ -13,30 +13,34 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request){dd($request);
         $request->validate([
-            "doc"=> "required|mimes:pdf"
+            "document_file"=> "required|mimes:pdf"
             ]);
             
             
-            $removeSpace = str_replace(' ', '_',$request->doc->getClientOriginalName());
+            $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
             $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace); 
-            $request->file('doc')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+            $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
             if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
               $fileModel = new LicenceDocument;
-              $fileModel->document_name = $request->doc->getClientOriginalName();
+              $fileModel->document_name = $request->document_file->getClientOriginalName();
               $fileModel->licence_id = $request->licence_id;
               $fileModel->document_type = $request->doc_type;
               $fileModel->num = $request->num;
               $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-  
-              if($fileModel->save()){
-                if(intval($request->stage) >= 15){
+              $fileModel->save();
+
+
+                if($request->stage && intval($request->stage) >= 15){
                   Licence::whereId($fileModel->licence_id)->update(['is_new_app' => false]);
                 }
-               Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage, 'is_new_app' => false]);
-                }
+
+                if($request->stage){
+                  Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage]);
+                 }
+               
 
             }else{
               return back()->with('error','Azure storage could not be reached.Please try again.');
