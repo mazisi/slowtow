@@ -33,9 +33,9 @@
         <div class="modal-body">      
           <div class="row">
           <div class="col-md-12 columns">
-          <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
-           <input type="file" @change="getFileName"
-           hidden id="licence-doc" accept=".pdf"/>
+          <label :for="documentTitle" class="btn btn-dark w-100" href="">Click To Upload File</label>
+           <input type="file"  @change="getFileName"
+           hidden :id="documentTitle" accept=".pdf"/>
            <div v-if="errors" class="text-danger">{{ errors }}</div>
            <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
            <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
@@ -80,7 +80,6 @@ export default{
   },
 
   setup(props){
-
         let show_modal = ref(true);
         let file_name = ref(''); 
         let show_file_name = ref(false);
@@ -89,7 +88,7 @@ export default{
     const documentForm = useForm({
           document_file: null,
           licence_id: props.licence_id,
-          doc_type: null,
+          doc_type: ref(null),
        })
         
         function deleteDocument(id){
@@ -149,7 +148,9 @@ export default{
 
 
       function getDocType(doc_type){
-        this.documentForm.doc_type = doc_type;
+        console.log('Document type is' + doc_type)
+        console.log('Model is' + props.documentModel)
+        this.documentForm.doc_type = props.documentTitle;
         this.show_modal = true
       }
 

@@ -16,9 +16,6 @@ import CheckBoxInputComponent from '../components/input-components/CheckBoxInput
 import DocumentListComponent from './licence-components/DocumentListComponent.vue';
 
 
-
-
-
 export default {
  props: {
     errors: Object,
