@@ -20,7 +20,7 @@
     </button>
   </li>
 
-
+  <input type="" v-model="documentForm.doc_type">
   <div v-if="show_modal" class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
@@ -28,8 +28,8 @@
           <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <form @submit.prevent="uploadDocument">
-        <input type="" v-model="documentForm.doc_type">
+       
+        <!-- <input type="" v-model="documentForm.doc_type"> -->
         <div class="modal-body">      
           <div class="row">
           <div class="col-md-12 columns">
@@ -50,11 +50,10 @@
     
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" :disabled="documentForm.processing || file_has_apostrophe">
+          <button @click="uploadDocument" type="button" class="btn btn-primary" :disabled="documentForm.processing || file_has_apostrophe">
            <span v-if="documentForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
            Save</button>
         </div>
-        </form>
       </div>
     </div>
   </div>
@@ -85,10 +84,10 @@ export default{
         let show_file_name = ref(false);
         let file_has_apostrophe = ref();
 
-    const documentForm = useForm({
+    let documentForm = useForm({
           document_file: null,
           licence_id: props.licence_id,
-          doc_type: ref(null),
+          doc_type: '',
        })
         
         function deleteDocument(id){
@@ -148,10 +147,9 @@ export default{
 
 
       function getDocType(doc_type){
-        console.log('Document type is' + doc_type)
-        console.log('Model is' + props.documentModel)
-        this.documentForm.doc_type = props.documentTitle;
         this.show_modal = true
+        documentForm.doc_type = doc_type;
+       
       }
 
       function getFileName(e){
@@ -175,7 +173,7 @@ export default{
             }else if(props.error){
                 notify(props.error)
             }
-          documentForm.reset();
+         // documentForm.reset();
          },
         })    
         }

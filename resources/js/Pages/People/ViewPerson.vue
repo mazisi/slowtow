@@ -19,72 +19,93 @@
 <form @submit.prevent="updatePerson">
 <input type="hidden" v-model="form.slug">
 <div class="row">
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label  for="active-checkbox" class="form-check-label mb-0 text-body text-truncate">Active Person</label>
-<input type="checkbox" value="1" id="active-checkbox" @input="assignActiveValue($event,1)" :checked="person.active == '1'">
-</div>
-</div>
-
-<div class="col-md-4 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Full Name And Surname *</label>
-<input type="text" required class="form-control form-control-default" v-model="form.name" >
-</div>
-<div v-if="errors.name" class="text-danger">{{ errors.name }}</div>
-</div>
-
-<div class="col-md-4 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">ID/Passport Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.id_or_passport">
-</div>
-<div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-</div>
-<div class="col-md-4 columns">
-  <div class="input-group input-group-outline null is-filled">
- <label class="form-label">Date of Birth</label>
- <input type="date" disabled title="This field data is auto calculted." class="form-control form-control-default" v-model="form.date_of_birth" >
-  </div>
-    <div v-if="errors.date_of_birth" class="text-danger">{{ errors.date_of_birth }}</div>
-</div>
-
-<div class="col-md-4 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address</label>
-<input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
-</div>
-<div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
-</div>
+         
+                  <CheckBoxInputComponent 
+                    :label="'Active Person'" 
+                    :value="'1'" 
+                    :isChecked="person.active == '1'" 
+                    :column="'col-md-12'"
+                    @input="assignActiveValue($event,1)" 
+                  />
 
 
 
-<div class="col-md-4 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address</label>
-<input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
-</div>
-<div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
-</div>
+                    <TextInputComponent 
+                    :inputType="'text'"
+                    v-model="form.name" 
+                    :value="form.name"  
+                    :column="'col-4'" 
+                    :label="'Full Name And Surname *'" 
+                    :errors="errors.name"
+                    :input_id="name"
+                    :required="true"
+                  />
 
 
-<div class="col-md-4 columns">    
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Phone Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.cell_number" >
-</div>
-<div v-if="errors.cell_number" class="text-danger">{{ errors.cell_number }}</div>
-</div>
+                  <TextInputComponent 
+                    :inputType="'text'"
+                    v-model="form.id_or_passport"  
+                    :value="form.id_or_passport" 
+                    :column="'col-4'" 
+                    :label="'ID/Passport Number'" 
+                    :errors="errors.id_or_passport"
+                    :input_id="id_or_passport"
+                  />
+
+                  <TextInputComponent 
+                    :inputType="'text'"
+                    v-model="form.date_of_birth"  
+                    :value="form.date_of_birth" 
+                    :column="'col-4'" 
+                    :label="'Date of Birth'" 
+                    :errors="errors.date_of_birth"
+                    :input_id="date_of_birth"
+                    :disabled="true"
+                  />
+
+                  <TextInputComponent 
+                      :inputType="'email'"
+                      v-model="form.email_address_1" 
+                      :value="form.email_address_1"  
+                      :column="'col-4'" 
+                      :label="'Email Address'" 
+                      :errors="errors.email_address_1"
+                      :input_id="email_address_1"
+                   />
+
+                                
+                                
+                   <TextInputComponent 
+                      :inputType="'email'"
+                      v-model="form.email_address_2"
+                      :value="form.email_address_2"  
+                      :column="'col-4'" 
+                      :label="'Email Address'" 
+                      :errors="errors.email_address_2"
+                      :input_id="email_address_2"
+                   />
+
+                   <TextInputComponent 
+                      :inputType="'text'"
+                      v-model="form.cell_number"
+                      :value="form.cell_number"  
+                      :column="'col-4'" 
+                      :label="'Phone Number'" 
+                      :errors="errors.cell_number"
+                      :input_id="cell_number"
+                   />
+
+                   <TextInputComponent 
+                      :inputType="'tel'"
+                      v-model="form.telephone" 
+                      :value="form.telephone"
+                      :column="'col-4'" 
+                      :label="'Work Number'" 
+                      :errors="errors.telephone"
+                      :input_id="telephone"
+                   />
 
 
-
-<div class="col-md-4 columns">        
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Work Number</label>
-<input type="tel" class="form-control form-control-default" v-model="form.telephone" >
-</div>
-<div v-if="errors.telephone" class="text-danger">{{ errors.telephone }}</div>
-</div>
 
 
 <hr>

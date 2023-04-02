@@ -103,7 +103,7 @@ export default {
    <div v-if="errors.event_name" class="text-danger">{{ errors.event_name }}</div>
    </div>
  
- <div class="col-md-4 columns">
+ <div class="col-md-4 columns">pp
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Event Start Date</label>
     <input type="date" disabled class="form-control form-control-default" v-model="form.start_date" >

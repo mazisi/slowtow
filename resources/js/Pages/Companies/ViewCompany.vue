@@ -179,7 +179,7 @@ v-model="form.telephone_number_2"
 <div class="col-md-6 columns">
 <ul class="list-group">
 
-<li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+<!-- <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="lta_cert">
     <a v-if="lta_cert" @click="viewFile(lta_cert.id)" href="#!">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
@@ -245,7 +245,7 @@ v-model="form.telephone_number_2"
     <button v-else @click="getDocType('SARS-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
-  </li>
+  </li> -->
 
 </ul>
 </div>
@@ -258,56 +258,63 @@ v-model="form.telephone_number_2"
 </div>
 
 <div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
-<div class="row">
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address Line 1</label>
-<input type="text" class="form-control form-control-default" v-model="form.business_address" >
-</div>
-<div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
-</div>  
+<div class="row"> 
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address Line 2</label>
-<input type="text" class="form-control form-control-default" v-model="form.business_address2" >
-</div>
-<div v-if="errors.business_address2" class="text-danger">{{ errors.business_address2 }}</div>
-</div> 
+<TextInputComponent 
+:inputType="'text'"
+v-model="form.business_address" 
+:value="form.business_address"  
+:column="'col-12'" 
+:label="'Business Address Line 1'" 
+:errors="errors.business_address"
+:input_id="business_address"
+/>
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address Line 3</label>
-<input type="text" class="form-control form-control-default" v-model="form.business_address3" >
-</div>
-<div v-if="errors.business_address3" class="text-danger">{{ errors.business_address3 }}</div>
-</div> 
 
-<div class="col-6 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.business_province" >
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
-</select>
-</div>
-<div v-if="errors.business_province" class="text-danger">{{ errors.business_province }}</div>
-</div>
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.business_address2" 
+  :value="form.business_address2"  
+  :column="'col-12'" 
+  :label="'Business Address Line 2'" 
+  :errors="errors.business_address2"
+  :input_id="business_address2"
+/>
 
-<div class="col-6 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Code</label>
-<input  type="text" class="form-control form-control-default" v-model="form.business_address_postal_code">
-</div>
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.business_address3" 
+  :value="form.business_address3"  
+  :column="'col-12'" 
+  :label="'Business Address Line 3'" 
+  :errors="errors.business_address3"
+  :input_id="business_address3"
+/>
 
-</div>
+
+
+
+<ProvinceSelectDropdownComponent 
+  :provinceList="computedProvinces" 
+  :label="'Province'" 
+  :defaultDisabledText="'Select province..'"
+  :column="'col-6'"
+  :value="form.business_province"
+  v-model="form.business_province"
+  :errors="errors.business_province"
+/>
+
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.business_address_postal_code" 
+  :value="form.business_address_postal_code"  
+  :column="'col-12'" 
+  :label="'Postal Code'" 
+  :errors="errors.business_address_postal_code"
+  :input_id="business_address_postal_code"
+/>
+
 
 <hr>
 
@@ -323,63 +330,75 @@ v-model="form.telephone_number_2"
 <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
 </div> 
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address Line 1</label>
-<input type="text" class="form-control form-control-default" v-model="form.postal_address" >
-</div>
-<div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
-</div>  
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address Line 2</label>
-<input type="text" class="form-control form-control-default" v-model="form.postal_address2" >
-</div>
-<div v-if="errors.postal_address2" class="text-danger">{{ errors.postal_address2 }}</div>
-</div> 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address Line 3</label>
-<input type="text" class="form-control form-control-default" v-model="form.postal_address3" >
-</div>
-<div v-if="errors.postal_address3" class="text-danger">{{ errors.postal_address }}</div>
-</div> 
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.postal_address" 
+  :value="form.postal_address"  
+  :column="'col-12'" 
+  :label="'Postal Address Line 1'" 
+  :errors="errors.postal_address"
+  :input_id="postal_address"
+/>
 
-<div class="col-6 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.postal_province" >
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
-</select>
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.postal_address2" 
+  :value="form.postal_address2"  
+  :column="'col-12'" 
+  :label="'Postal Address Line 2'" 
+  :errors="errors.postal_address2"
+  :input_id="postal_address2"
+/>
+
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.postal_address3" 
+  :value="form.postal_address3"  
+  :column="'col-12'" 
+  :label="'Postal Address Line 3'" 
+  :errors="errors.postal_address3"
+  :input_id="postal_address3"
+/>
+
+
+<ProvinceSelectDropdownComponent 
+  :provinceList="computedProvinces" 
+  :label="'Province'" 
+  :defaultDisabledText="'Select province..'"
+  :column="'col-6'"
+  :value="form.postal_province"
+  v-model="form.postal_province"
+  :errors="errors.postal_province"
+/>
+
+<TextInputComponent 
+  :inputType="'text'"
+  v-model="form.postal_code" 
+  :value="form.postal_code"  
+  :column="'col-12'" 
+  :label="'Postal Code'" 
+  :errors="errors.postal_code"
+  :input_id="postal_code"
+/>
+
+
 </div>
-<div v-if="errors.postal_province" class="text-danger">{{ errors.postal_province }}</div>
 </div>
 
-<div class="col-6 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Code</label>
-<input  type="text" class="form-control form-control-default" v-model="form.postal_code">
-</div>
 
-</div>
-</div>
-</div>
 <div v-if="$page.props.auth.has_slowtow_admin_role">
 <button type="submit" class="btn btn-secondary ms-2"  :disabled="form.processing" :style="{float: 'right'}">
   <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
  Save</button>
 </div>
+
 </form>
+
 <hr>
+
 </div>
 </div>
 
@@ -509,7 +528,7 @@ v-model="form.telephone_number_2"
 </div>
 </div>
 
-<div v-if="show_modal" class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!-- <div v-if="show_modal" class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -556,10 +575,10 @@ v-model="form.telephone_number_2"
       </form>
     </div>
   </div>
-</div>
+</div> -->
 
 
-<div v-if="show_modal" class="modal" id="add-people" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal" id="add-people" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

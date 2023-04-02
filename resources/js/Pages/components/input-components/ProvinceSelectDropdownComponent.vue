@@ -17,7 +17,7 @@
 export default{
   props: {
       errors: Object,
-      required: String,
+      required: Boolean,
       provinceList: Object,
       label: String,
       col: Number,

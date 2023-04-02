@@ -27,9 +27,9 @@ props:{
     column: String,
     errors: Object,
     label: String,
-    required: String,
+    required: Boolean,
     inputType: String,
-    disabled: String
+    disabled: Boolean
 }
 }
 </script>

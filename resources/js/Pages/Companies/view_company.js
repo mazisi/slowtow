@@ -3,13 +3,15 @@ import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
-import { ref,onMounted } from 'vue';
-import Paginate from '../../Shared/Paginate.vue';
+import { ref, computed, onMounted } from 'vue';
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
+import common from '../common-js/common.js';
 import 'vue3-toastify/dist/index.css';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import ProvinceSelectDropdownComponent from '../components/input-components/ProvinceSelectDropdownComponent.vue';
+
 
 
 export default {
@@ -33,6 +35,8 @@ export default {
   setup (props) {
     let showMenu = false;
     let people_options = props.people;
+    let show_modal=ref(true)
+    
    
 
     const form = useForm({
@@ -253,34 +257,30 @@ export default {
         //   }
         // });
 
+        const computedProvinces = computed(() => {
+          return common.getProvinces();
+        })
+
     return {
+      computedProvinces,
       showMenu,
       notify,
-      file_name,
-      file_has_apostrophe,
-      getFileName,
+      // getFileName,
       submit,
       addCompanyUser,
       addCompanyUserForm,
       unlinkPerson,
       assignActiveValue,
       redirectToWebsite,
-      show_file_name,
       people_options,
-      form,toast,
-      documentsForm,
-      getDocType,
-      submitDocuments,
-      deleteDocument,
+      form,toast,show_modal,
       addPeopleForm,
       submitPeople,
       editPerson,
       getPositionValue,
       updatePerson,
-      show_modal,
       copyBusinessAddress,
-      deleteCompany,
-      viewFile,checkingFileProgress
+      deleteCompany
     }
   },
 
@@ -290,10 +290,11 @@ export default {
     Head,
     Multiselect,
     Banner,
-    Paginate,
     Task,
     CheckBoxInputComponent,
-    TextInputComponent 
+    TextInputComponent,
+    ProvinceSelectDropdownComponent,
+     
 
   },
   

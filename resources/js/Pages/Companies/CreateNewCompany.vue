@@ -4,6 +4,13 @@ import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import { Head} from '@inertiajs/inertia-vue3';
 import  common from '../common-js/common.js';
+import CompanyTypesSelectDropdownComponent from './company-components/CompanyTypesSelectDropdownComponent.vue';
+import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import ProvinceSelectDropdownComponent from '../components/input-components/ProvinceSelectDropdownComponent.vue';
+import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
+
+
+
 
 export default {
  props: {
@@ -62,13 +69,18 @@ export default {
         this.form.postal_code = '';
         this.form.business_province = '';
       }
-    }
+    },
+
 
   },
   components: {
     Layout,
     Banner,
-    Head
+    Head,
+    CompanyTypesSelectDropdownComponent,
+    TextInputComponent,
+    ProvinceSelectDropdownComponent,
+    CheckBoxInputComponent
   },
 
   computed: {
@@ -110,94 +122,120 @@ export default {
 <div class="card card-plain h-100">
 <div class="p-3 card-body">
 <div class="row">
-<div class="col-md-12 columns">
-<div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<label class="form-check-label ms-3 mb-0 text-body text-truncate">Active Company</label>
-<input id="active-checkbox" type="checkbox" value="1" :checked="form.active == '1'" >
-</div>
-</div>
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Company Name *</label>
-<input type="text" class="form-control form-control-default" v-model="form.company_name">
-</div>
-<div v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</div>
-</div>
+      <CheckBoxInputComponent 
+        :label="'Active Company'" 
+        :value="'1'" 
+        :isChecked="form.active == '1'" 
+        :column="'col-md-12'" 
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Company Type </label>
-<select class="form-control form-control-default" v-model="form.company_type" >
-  <option :value="''" disabled selected >Select Company Type*</option>
-    <option v-for="company_type in computedCompanyTypes " :value=company_type >{{ company_type }}</option>
-</select>
-</div>
-<div v-if="errors.company_type" class="text-danger">{{ errors.company_type }}</div>
-</div>
+     <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.company_name" 
+        :value="form.company_name"  
+        :column="'col-6'" 
+        :label="'Company Name *'" 
+        :errors="errors.company_name"
+        :input_id="company_name"
+        :required="true"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Registration Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.reg_number" >
-</div>
-<div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
-</div>
+      <CompanyTypesSelectDropdownComponent 
+        :dropdownList="computedCompanyTypes" 
+        :label="'Company Type *'" 
+        :defaultDisabledText="'Select Company Type'"
+        :column="'col-6'"
+        :value="form.company_type"
+        v-model="form.company_type"
+        :errors="errors.company_type"
+        :input_id="company_type"
+        :required="true"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled ">
-<label class="form-label">Vat Number</label>
-<input type="text" class="form-control form-control-default" v-model="form.vat_number" >
-</div>
-<div v-if="errors.vat_number" class="text-danger">{{ errors.vat_number }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.reg_number" 
+        :value="form.reg_number"  
+        :column="'col-6'" 
+        :label="'Registration Number'" 
+        :errors="errors.reg_number"
+        :input_id="reg_number"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address </label>
-<input type="email" class="form-control form-control-default" v-model="form.email_address_1" >
-</div>
-<div v-if="errors.email_address_1" class="text-danger">{{ errors.email_address_1 }}</div>
-</div>  
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address</label>
-<input type="email" class="form-control form-control-default" v-model="form.email_address_2" >
-</div>
-<div v-if="errors.email_address_2" class="text-danger">{{ errors.email_address_2 }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.vat_number" 
+        :value="form.vat_number"  
+        :column="'col-6'" 
+        :label="'Vat Number'" 
+        :errors="errors.vat_number"
+        :input_id="vat_number"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Email Address </label>
-<input type="email" class="form-control form-control-default" v-model="form.email_address_3" >
-</div>
-<div v-if="errors.email_address_3" class="text-danger">{{ errors.email_address_3 }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'email'"
+        v-model="form.email_address_1" 
+        :value="form.email_address_1"  
+        :column="'col-6'" 
+        :label="'Email Address'" 
+        :errors="errors.email_address_1"
+        :input_id="email_address_1"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Phone Number </label>
-<input type="text" class="form-control form-control-default" v-model="form.telephone_number_1" >
-</div>
-<div v-if="errors.telephone_number_1" class="text-danger">{{ errors.telephone_number_1 }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'email'"
+        v-model="form.email_address_2" 
+        :value="form.email_address_2"  
+        :column="'col-6'" 
+        :label="'Email Address'" 
+        :errors="errors.email_address_2"
+        :input_id="email_address_2"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Phone Number </label>
-<input type="text" class="form-control form-control-default" v-model="form.telephone_number_2" >
-</div>
-<div v-if="errors.telephone_number_2" class="text-danger">{{ errors.telephone_number_2 }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'email'"
+        v-model="form.email_address_3" 
+        :value="form.email_address_3"  
+        :column="'col-6'" 
+        :label="'Email Address'" 
+        :errors="errors.email_address_3"
+        :input_id="email_address_3"
+      />
 
-<div class="col-md-6 columns">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Website</label>
-<input type="url" class="form-control form-control-default" v-model="form.website" >
-</div>
-<div v-if="errors.website" class="text-danger">{{ errors.website }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.telephone_number_1" 
+        :value="form.telephone_number_1"  
+        :column="'col-6'" 
+        :label="'Phone Number'" 
+        :errors="errors.telephone_number_1"
+        :input_id="telephone_number_1"
+      />
+
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.telephone_number_2" 
+        :value="form.telephone_number_2"  
+        :column="'col-6'" 
+        :label="'Phone Number'" 
+        :errors="errors.telephone_number_2"
+        :input_id="telephone_number_2"
+      />
+
+      <TextInputComponent 
+        :inputType="'url'"
+        v-model="form.website" 
+        :value="form.website"  
+        :column="'col-6'" 
+        :label="'Website'" 
+        :errors="errors.website"
+        :input_id="website"
+      />
+
+      
+
+
 
 
 </div>
@@ -209,48 +247,57 @@ export default {
 
 <div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
 <div class="row">
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address Line 1</label>
-<input type="text" class="form-control form-control-default" v-model="form.business_address" >
-</div>
-<div v-if="errors.business_address" class="text-danger">{{ errors.business_address }}</div>
-</div> 
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address Line 2</label>
-<input type="text" class="form-control form-control-default" v-model="form.business_address2" >
-</div>
-<div v-if="errors.business_address2" class="text-danger">{{ errors.business_address2 }}</div>
-</div> 
 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Business Address Line 3</label>
-<input type="text" class="form-control form-control-default" v-model="form.business_address3" >
-</div>
-<div v-if="errors.business_address3" class="text-danger">{{ errors.business_address3 }}</div>
-</div> 
+<TextInputComponent 
+        :inputType="'text'"
+        v-model="form.business_address" 
+        :value="form.business_address"  
+        :column="'col-12'" 
+        :label="'Business Address Line 1'" 
+        :errors="errors.business_address"
+        :input_id="business_address"
+      />
 
-<div class="col-6 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.business_province" >
-<option :value="''" disabled >Select Province</option>
-<option v-for="province in computedProvinces" :key="province" :value=province >{{ province }}</option>
-</select>
-</div>
-<div v-if="errors.business_province" class="text-danger">{{ errors.business_province }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.business_address2" 
+        :value="form.business_address2"  
+        :column="'col-12'" 
+        :label="'Business Address Line 2'" 
+        :errors="errors.business_address2"
+        :input_id="business_address2"
+      />
 
-<div class="col-6 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Code</label>
-<input  type="text" class="form-control form-control-default" v-model="form.business_address_postal_code">
-</div>
 
-</div>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.business_address3" 
+        :value="form.business_address3"  
+        :column="'col-12'" 
+        :label="'Business Address Line 3'" 
+        :errors="errors.business_address3"
+        :input_id="business_address3"
+      />
+
+      <ProvinceSelectDropdownComponent 
+        :provinceList="computedProvinces" 
+        :label="'Province'" 
+        :defaultDisabledText="'Select province..'"
+        :column="'col-6'"
+        v-model="form.business_province"
+        :errors="errors.business_province"
+      />
+
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.business_address_postal_code" 
+        :column="'col-12'" 
+        :label="'Postal Code'" 
+        :errors="errors.business_address_postal_code"
+        :input_id="business_address_postal_code"
+      />
+
 
 <hr>
 <div class="col-12 columns">            
@@ -262,51 +309,54 @@ export default {
   <div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
   </div> 
   
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address Line 1</label>
-<input type="text" class="form-control form-control-default" v-model="form.postal_address" >
-</div>
-<div v-if="errors.postal_address" class="text-danger">{{ errors.postal_address }}</div>
-</div> 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address Line 2</label>
-<input type="text" class="form-control form-control-default" v-model="form.postal_address2" >
-</div>
-<div v-if="errors.postal_address2" class="text-danger">{{ errors.postal_address2 }}</div>
-</div> 
-<div class="col-12 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Address Line 3</label>
-<input type="text" class="form-control form-control-default" v-model="form.postal_address3" >
-</div>
-<div v-if="errors.postal_address3" class="text-danger">{{ errors.postal_address }}</div>
-</div> 
 
 
-<div class="col-6 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.postal_province" >
-  <option :value="''" disabled selected>Select Province</option>
+  <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.postal_address" 
+        :column="'col-12'" 
+        :label="'Postal Address Line 1'" 
+        :errors="errors.postal_address"
+        :input_id="postal_address"
+      />
 
-<option v-for="province in computedProvinces" :key="province" :value=province >{{ province }}</option>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.postal_address2" 
+        :column="'col-12'" 
+        :label="'Postal Address Line 2'" 
+        :errors="errors.postal_address2"
+        :input_id="postal_address2"
+      />
 
-</select>
-</div>
-<div v-if="errors.postal_province" class="text-danger">{{ errors.postal_province }}</div>
-</div>
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.postal_address3" 
+        :column="'col-12'" 
+        :label="'Postal Address Line 3'" 
+        :errors="errors.postal_address3"
+        :input_id="postal_address3"
+      />
+
+      
+      <ProvinceSelectDropdownComponent 
+        :provinceList="computedProvinces" 
+        :label="'Province'" 
+        :defaultDisabledText="'Select province..'"
+        :column="'col-6'"
+        v-model="form.postal_province"
+        :errors="errors.postal_province"
+      />
 
 
-<div class="col-6 columns">            
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Postal Code</label>
-<input  type="text" class="form-control form-control-default" v-model="form.postal_code">
-</div>
-
-</div>
-
+      <TextInputComponent 
+        :inputType="'text'"
+        v-model="form.postal_code" 
+        :column="'col-12'" 
+        :label="'Postal Code'" 
+        :errors="errors.postal_code"
+        :input_id="postal_code"
+      />
 
 
 

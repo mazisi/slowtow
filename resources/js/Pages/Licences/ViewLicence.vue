@@ -233,7 +233,7 @@
  <DocumentListComponent
     :licence_id="licence.id"
     :documentModel="original_lic"
-    :documentTitle="'Original Licence'"
+    :documentTitle="'Original-Licence'"
     :success="success"
     :error="error"
     :errors="errors.document_file"

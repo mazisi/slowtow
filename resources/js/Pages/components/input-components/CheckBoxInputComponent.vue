@@ -16,7 +16,7 @@
             column: String,
             label: String,
             isChecked: Boolean,
-            value: String
+            value: Number
         }
     }
 

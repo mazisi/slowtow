@@ -29,8 +29,7 @@ class CompanyController extends Controller
         return Inertia::render('Companies/CreateNewCompany');
     }
 
-    public function store(CompanyValidateRequest $request)
-    { 
+    public function store(CompanyValidateRequest $request) {
             $company = Company::create([
                 'name' => $request->company_name,
                 'company_type' => $request->company_type,

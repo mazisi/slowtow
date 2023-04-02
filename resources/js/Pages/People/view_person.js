@@ -6,6 +6,8 @@ import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 
 export default {
 
@@ -207,13 +209,16 @@ const form = useForm({
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
         assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
         show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,viewFile
+       
      }
 },
  components: {
     Layout,
     Banner,
     Head,
-    Task
+    Task,
+    TextInputComponent,
+    CheckBoxInputComponent
   },
   
 }

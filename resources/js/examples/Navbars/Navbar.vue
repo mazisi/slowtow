@@ -15,13 +15,6 @@
       >
 
 
-
-        <div
-          class="invisible pe-md-3 d-flex align-items-center"
-          :class="isRTL ? 'me-md-auto' : 'ms-md-auto'">
-          <vmd-input id="search" label="Search here" />
-        </div>
-
            
         <ul class="navbar-nav justify-content-end">
           <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
