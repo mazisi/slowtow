@@ -59,8 +59,16 @@
 
 <!-- ################################################ -->
 
-<div class="row" v-if="form.variation">
-  
+ <div class="row" v-if="form.variation">
+  <!--<div class="col-4 columns">
+    <div class="input-group input-group-outline null is-filled" >
+      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
+          <option :value="''" disabled selected>Active/Inactive</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+       </select>
+    </div>
+  </div> -->
 
   <h5 class="text-center">{{ form.variation }}</h5>   
   <div class="col-6 columns">

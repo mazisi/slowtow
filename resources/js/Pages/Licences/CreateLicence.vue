@@ -34,7 +34,6 @@
 <TextInputComponent 
   :inputType="'text'"
   :required="true"
-  :disabled="''"
   :label="'Trading Name *'" 
   v-model="form.trading_name" 
   :column="'col-md-6'" 
@@ -69,7 +68,7 @@
 </div>
 
 
-<div class="col-md-6 columns" v-if="form.belongs_to === 'Person'">
+<div class="col-6 columns" v-if="form.belongs_to === 'Person'">
   <Multiselect
       v-model="form.person"
          placeholder="Search Person"
@@ -85,7 +84,7 @@
   :dropdownList="licence_dropdowns" 
   :label="'Licence Type *'" 
   :defaultDisabledText="'Select Licence Type'"
-  :column="'col-md-6'"
+  :column="'col-6'"
   :value="form.licence_type"
   v-model="form.licence_type"
   :errors="errors.licence_type"
@@ -100,7 +99,7 @@
   :required="true"
   v-model="form.licence_number" 
   :value="form.licence_number"
-  :column="'col-md-6'" 
+  :column="'col-6'" 
   :label="'Licence Number'" 
   :errors="errors.licence_number"
   :input_id="licence_number"
@@ -110,7 +109,7 @@
   :inputType="'text'"
   v-model="form.old_licence_number"
   :value="form.old_licence_number" 
-  :column="'col-md-6'" 
+  :column="'col-6'" 
   :label="'Old Licence Number'" 
   :errors="errors.old_licence_number"
   :input_id="old_licence_number"
@@ -121,7 +120,7 @@
   :inputType="'date'"
   v-model="form.licence_date" 
   :value="form.licence_date" 
-  :column="'col-md-6'" 
+  :column="'col-6'" 
   :label="'Licence Date'" 
   :errors="errors.licence_date"
   :input_id="licence_date"

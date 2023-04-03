@@ -5,6 +5,7 @@
           <select @change="$emit('update:modelValue', $event.target.value)"
           :required="required"
           :id="label" class="form-control form-control-default">
+               <option :value="''" selected disabled>{{ defaultDisabledText }}</option>
                <option v-for='province in provinceList' :key="province" :value=province> {{ province }}</option>
           </select>
       </div>
@@ -20,7 +21,8 @@ export default{
       required: Boolean,
       provinceList: Object,
       label: String,
-      col: Number,
+      column: String,
+      value: String,
       defaultDisabledText: String
   }
 }

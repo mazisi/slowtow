@@ -13,7 +13,11 @@
         :class="isRTL ? 'px-0' : 'me-sm-4'"
         id="navbar"
       >
-
+      <div
+      class="invisible pe-md-3 d-flex align-items-center"
+      :class="isRTL ? 'me-md-auto' : 'ms-md-auto'">
+      
+    </div>
 
            
         <ul class="navbar-nav justify-content-end">

@@ -18,13 +18,19 @@
   <div class="p-3 card-body">
   
   <div class="row" style="margin-top: -1rem;">
-  <div class="col-12 columns">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Trading Name *</label>
-  <input type="text" required class="form-control form-control-default" v-model="form.trading_name" >
-  </div>
-  <div v-if="errors.trading_name" class="text-danger">{{ errors.trading_name }}</div>
-  </div>
+  
+
+    <TextInputComponent 
+      :inputType="'text'"
+      :required="true"
+      :label="'Trading Name *'" 
+      v-model="form.trading_name" 
+      :column="'col-12'" 
+      :value="form.trading_name"
+      :errors="errors.trading_name "
+      :input_id="trading_name"
+    />
+ 
   
   <div class="col-12 columns">
     <div class="input-group input-group-outline null is-filled">
@@ -65,39 +71,56 @@
    </div>
 
 
-   <div class="col-12 columns" v-if="form.belongs_to ==='Person'">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">ID Number</label>
-    <input readonly type="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
-    </div>
-    </div>
+   
 
-    <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
-      <div class="input-group input-group-outline null is-filled">
-      <label class="form-label">Company Registration Number</label>
-      <input readonly type="text" class="form-control form-control-default" :value="get_reg_num_or_id_number" >
-      </div>
-      </div> 
-   <div class="col-12 columns">                  
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Licence Type</label>
-    <select v-model="form.licence_type" class="form-control form-control-default" required>
-      <option :value="''" disabled selected>Licence Type</option>
-      <option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
-   </select>
-    </div>
-    </div>
+    <TextInputComponent v-if="form.belongs_to ==='Person'"
+      :inputType="'text'"
+      :required="true"
+      :disabled="true"
+      :label="'ID Number'" 
+      :column="'col-12'" 
+      :value="get_reg_num_or_id_number"
+      :errors="errors.trading_name "
+      input_id="belongs-to-company"
+    />
 
-    <div class="col-12 columns">                  
-      <div class="input-group input-group-outline null is-filled">
-      <label class="form-label">Liquor Board Region</label>
-      <select required class="form-control form-control-default" v-model="form.board_region" >
-        <option :value="''" disabled selected>Select Liquor Board Region</option>
-        <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
+    <TextInputComponent v-if="form.belongs_to ==='Company'"
+    :inputType="'text'"
+    :required="true"
+    :disabled="true"
+    :label="'Company Registration Number'" 
+    :column="'col-12'" 
+    :value="get_reg_num_or_id_number"
+    :errors="errors.trading_name "
+    input_id="belongs-to-company"
+  />
+ 
 
-      </select>
-      </div>
-      </div>
+    <LicenceTypeDropDownComponent 
+    :dropdownList="licence_dropdowns" 
+    :label="'Licence Type *'" 
+    :defaultDisabledText="'Select Licence Type'"
+    :column="'col-12'"
+    :value="form.licence_type"
+    v-model="form.licence_type"
+    :errors="errors.licence_type"
+    :input_id="licence_type"
+    :required="true"
+   />
+  
+    <LiquorBoardRegionComponent 
+      :dropdownList="computedBoardRegions" 
+      :label="'Liquor Board Region*'" 
+      :defaultDisabledText="'Select Liquor Board Region'"
+      :column="'col-12'"
+      :value="form.board_region"
+      v-model="form.board_region"
+      :errors="errors.board_region"
+      :input_id="board_region"
+      :required="true"
+     />
+
+    
   
 </div>
   
@@ -108,43 +131,57 @@
   
 
   <div class="col-6">  
-    <div class="col-12 columns">            
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Address Line 1</label>
-    <input type="text" class="form-control form-control-default" v-model="form.address">
-    </div>
-    </div>
+    <TextInputComponent 
+      :inputType="'text'"
+      :label="'Address Line 1'" 
+      v-model="form.address" 
+      :column="'col-12'" 
+      :value="form.address"
+      :errors="errors.address "
+      :input_id="address"
+    />
+
+    <TextInputComponent 
+    :inputType="'text'"
+    :label="'Address Line 2'" 
+    v-model="form.address2" 
+    :column="'col-12'" 
+    :value="form.address2"
+    :errors="errors.address2 "
+    :input_id="address2"
+  />
+
+  <TextInputComponent 
+    :inputType="'text'"
+    :label="'Address Line 3'" 
+    v-model="form.address3" 
+    :column="'col-12'" 
+    :value="form.address3"
+    :errors="errors.address3 "
+    :input_id="address3"
+  />
+   
+
+    <ProvinceSelectDropdownComponent 
+      :provinceList="computedProvinces" 
+      :required="true"
+      :label="'Province'" 
+      :defaultDisabledText="'Select province..'"
+      :column="'col-12'"
+      :value="form.province"
+      v-model="form.province"
+      :errors="errors.province"
+    />
     
-    <div class="col-12 columns">            
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Address Line 2</label>
-    <input type="text" class="form-control form-control-default" v-model="form.address2">
-    </div>
-    <div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
-    </div> 
-    <div class="col-12 columns">            
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Address Line 3</label>
-    <input type="text" class="form-control form-control-default" v-model="form.address3">
-    </div>
-    </div> 
-    
-    <div class="col-12 columns">                  
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Province</label>
-    <select required class="form-control form-control-default" v-model="form.province" >
-      <option :value="''" disabled selected>Select Province</option>
-      <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
-    </select>
-    </div>
-    </div>
-    
-    <div class="col-12 columns">            
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Postal Code</label>
-    <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
-    </div>    
-    </div>
+    <TextInputComponent 
+    :inputType="'text'"
+    :label="'Postal Code'" 
+    v-model="form.postal_code" 
+    :column="'col-12'" 
+    :value="form.postal_code"
+    :errors="errors.postal_code "
+    :input_id="postal_code"
+  />
     <div>
       <button :disabled="form.processing || filterForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
       <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -172,126 +209,6 @@
         margin-left: 3px;
       }
   </style>
-  <script>
-  import Layout from "../../Shared/Layout.vue";
-  import Multiselect from '@vueform/multiselect';
-  import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
-  import Banner from '../components/Banner.vue';
-  import { toast } from 'vue3-toastify';
-  import 'vue3-toastify/dist/index.css';
-  import common from '../common-js/common.js';
-  import { computed } from 'vue';
-
-  export default {
-   props: {
-      errors: Object,
-      licence_dropdowns: Object,
-      companies: Array,
-      persons: Array,
-      success: String,
-      error: String,
-      get_reg_num_or_id_number: String
-    },
-    
-    
-    setup (props) {
-      let options;   
-
-      const form = useForm({
-            trading_name: '',
-            licence_type: '',
-            belongs_to: '',
-            reg_number: '',
-            id_number: '',
-            address: '',
-            address2: '',
-            address3: '',
-            province: '',
-            company: '',
-            person: '',
-            board_region: ''   
-      })
-
-      const idRegForm = useForm({
-            person : '',
-            company: ''  
-      })
-
-    
-      
-      function submit() {
-        form.post('/submit-new-app', {
-          onSuccess: () => { 
-              notify(props.success)
-           },
-          preserveScroll: true,
-        })
-        
-      }
-
-      const filterForm = useForm({
-        variation: '',
-        id: null,
-        id: form.company ? form.company : form.person
-      })
-
-      function selectApplicant(){
-          if(form.belongs_to === 'Company'){
-            filterForm.variation = 'Company';
-            filterForm.id = form.company;
-            form.person='';
-          }else if(form.belongs_to === 'Person'){
-            filterForm.variation = 'Person';
-            filterForm.id = form.person;
-            form.company='';
-          }
-          
-          filterForm.get(`/create-new-app?id=${filterForm.id}`, {
-                      onStart: () => { 
-                        let mess = filterForm.variation === 'Person' ? ' ID Number' : ' Registration Number';
-                        getchIdOrRegNumber(mess);
-                      },
-            preserveScroll: true,
-            replace: true,
-            preserveState: true
-            })
-
-     }
-     
-     function getchIdOrRegNumber(message){
-          setTimeout(() => {
-              toast.remove();
-            }, 3000);
-            toast.loading(`Fetching${message}`);
-        }
-
-
-
-        const computedProvinces = computed(() => {
-          return common.getProvinces();
-        })
-
-        const computedBoardRegions = computed(() => {
-          return common.getBoardRegions();
-        })
-
-      return { submit, form ,options, idRegForm, 
-        selectApplicant, filterForm,toast, 
-        getchIdOrRegNumber, computedProvinces,
-        computedBoardRegions
-      }
-      
-    },
-    
-     components: {
-      Layout,
-      Link,
-      Head,
-      Multiselect,
-      Banner
-    }
-
-  };
-  </script>
+  <script src="./create_new_app.js"></script>
   
   
