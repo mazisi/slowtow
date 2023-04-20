@@ -74,6 +74,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       Account No:&nbsp;&nbsp;&nbsp;&nbsp;1215489382<br>Code:&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;18250500<br><br>Many thanks,</p>';
+      
   }elseif ($renewal->status == '3') {//Client Paid
       $template = 'Good Day '.$renewal->licence->trading_name.'.
       <p>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</p>
