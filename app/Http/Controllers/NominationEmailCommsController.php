@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Inertia\Inertia;
 use App\Models\Email;
 use App\Models\Nomination;
 use Illuminate\Http\Request;
@@ -11,7 +12,39 @@ use Illuminate\Support\Facades\Mail;
 
 class NominationEmailCommsController extends Controller
 {
-    public function dispatchMail(Request $request){
+
+
+    public function getNominations(Request $request){
+
+        $nominations = Nomination::with("licence")->when($request, function($query) use($request){
+            $query->when(request('month'), function($query) {                    
+                $query->whereHas('licence', function($query){
+                    $query->whereMonth('licence_date', request('month'));
+                });
+            })
+            ->when(request('province'), function ($query) use ($request) {
+                $query->whereHas('licence', function($query) use($request){
+                    $query->where('province',$request->province);
+                });
+               
+            })
+          ->when(!empty(request('stage')), function ($query) use ($request) {
+            $query->where('status',$request->stage);
+        });
+        })->where(function($query){
+            $query->where('status',1)
+            ->orWhere('status',2)
+            ->orWhere('status',4)
+            ->orWhere('status',7)
+            ->orWhere('status',8);
+        })
+        ->orderBy('status','asc')->paginate(20)->withQueryString();
+
+    return Inertia::render('EmailComms/Nomination',['nominations' => $nominations]);
+}
+
+
+    public function dispatchNominationMail(Request $request){
         try {
            
   // 1= > Client Quoted
@@ -25,69 +58,58 @@ class NominationEmailCommsController extends Controller
   // 9 => Nomination Issued
   // 10 => Nomination Delivered 
   
-            $licence = Nomination::with('licence.company')->whereSlug($request->nomination_slug)->firstOrFail();
-        switch ($licence->status) {            
+            $nomination = Nomination::with('licence.company')->whereSlug($request->nomination_slug)->firstOrFail();
+        switch ($nomination->status) {            
                 case '1':                
-                    $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Client Quoted')->first();
                     $stage='Client Quoted';
+                    $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
                 case '2':
-                    $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Client Invoiced')->first();
                     $stage='Client Invoiced';
+                    $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
                 case '3':
-                    $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Client Paid')->first();
                     $stage='Client Paid';
+                    $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
                 case '4':
-                    $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Payment To The Liquor Board')->first();
                     $stage='Payment To The Liquor Board';
+                    $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
                 case '8':
-                    $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Nomination Logded')->first();
                     $stage='Nomination Logded';
+                    $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
                 case '9':
-                    $get_doc = NominationDocument::where('nomination_id',$licence->id)->where('doc_type','Nomination Issued')->first();
                     $stage='Nomination Issued';
+                    $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
                 default:
                 return back()->with('error','An error occurred.');
                     break;
             }
             //check if licence already inserted in emails 
-            $get_email_status = Email::where('stage', $stage)->where('model_type','nominations')->where('model_id',$licence->id)->first();
+            $get_email_status = Email::where('stage', $stage)->where('model_type','nominations')->where('model_id',$nomination->id)->first();
 
              $error_message = '';
             if(is_null($get_email_status)){
                 if(is_null($get_doc)){
                     $error_message = 'Quote Document Not Uploaded';                
-                    Email::insert([
-                        'model_type' => 'nominations',
-                        'model_id' => $licence->id,
-                        'model_slug' => $licence->slug,
-                        'parent_licence_slug' => $licence->licence->slug,
-                        'trading_name' => $licence->licence->trading_name,
-                        'status' => 'Email NOT Sent',
-                        'stage' => $stage,
-                        'feedback' => $error_message,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);                   
+                    $this->insertUnsentEmails($nomination, $error_message);                
                     return back()->with('error',' Quote Document is not yet uploaded.');
                 }
             }
             
-            $email = $licence->licence->company->email;
-            $email1= $licence->licence->company->email1;
-            $email2 = $licence->licence->company->email2;
+            $email = $nomination->licence->company->email;
+            $email1= $nomination->licence->company->email1;
+            $email2 = $nomination->licence->company->email2;
 
                 if(!is_null($email)){
-                    Mail::to($email)->send(new NominationMailer($licence, $request->mail_body));   
+                    Mail::to($email)->send(new NominationMailer($nomination, $request->mail_body));   
                 }elseif(is_null($email) && !is_null($email1)){
-                    Mail::to($email1)->send(new NominationMailer($licence, $request->mail_body));
+                    Mail::to($email1)->send(new NominationMailer($nomination, $request->mail_body));
                 }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
-                    Mail::to($email2)->send(new NominationMailer($licence, $request->mail_body));
+                    Mail::to($email2)->send(new NominationMailer($nomination, $request->mail_body));
                 }else{
                     return back()->with('error','Mail NOT sent. Company does not have email addresses.');
                 }
@@ -95,21 +117,30 @@ class NominationEmailCommsController extends Controller
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {
             $error_message = 'Server Error.';
-            Email::insert([
-                'model_type' => 'nominations',
-                'model_id' => $licence->id,
-                'trading_name' => $licence->licence->trading_name,
-                'model_slug' => $licence->slug,
-                'parent_licence_slug' => $licence->licence->slug,
-                'status' => 'Email NOT Sent',
-                'stage' => $stage,
-                'feedback' => $error_message,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]); 
+            $this->insertUnsentEmails($nomination, $error_message);
             return back()->with('error','An error occured while sending email.');
         }
        
         
+    }
+
+    function getDocumentType($nomination_id, $doc_type){
+        $nomination_document = NominationDocument::where('nomination_id',$nomination_id)->where('doc_type',$doc_type)->first();
+        return $nomination_document;
+    }
+
+    function insertUnsentEmails($nomination, $error_message) : void {
+        Email::insert([
+            'model_type' => 'transfers',
+            'model_id' => $nomination->id,
+            'trading_name' => $nomination->licence->trading_name,
+            'model_slug' => $nomination->slug,
+            'parent_licence_slug' => $nomination->licence->slug,
+            'status' => 'Email NOT Sent',
+            'stage' => $stage,
+            'feedback' => $error_message,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);  
     }
 }

@@ -406,9 +406,9 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::get('/email-comms', [EmailCommsController::class,'index'])->name('email_comms');
 
-        Route::get('/email-comms/transfers', [EmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
+        Route::get('/email-comms/transfers', [TransferEmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
 
-        Route::get('/email-comms/nominations', [EmailCommsController::class,'getNominations'])->name('get_nominations');
+        Route::get('/email-comms/nominations', [NominationEmailCommsController::class,'getNominations'])->name('get_nominations');
 
         Route::get('/email-comms/get-mail-template/{slug}/{licence_variation}', [EmailCommsController::class,'getMailTemplate']);
 
@@ -424,15 +424,15 @@ Route::group(['middleware' => ['guest']], function () {
 
         //renewals mail dispatcher
 
-        Route::post('/dispatchRenewalMail', [EmailCommsController::class,'dispatchMail'])->name('dispatch_renewal_mail');
+        Route::post('/dispatchRenewalMail', [RenewalEmailTemplate::class,'dispatchRenewalMail'])->name('dispatch_renewal_mail');
 
         //transfers mail dispatcher
 
-        Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchMail'])->name('dispatch_transfer_mail');
+        Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchTransferMail'])->name('dispatch_transfer_mail');
 
         //nomination mail dispatcher
 
-        Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchMail'])->name('dispatch_nom_mail');
+        Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchNominationMail'])->name('dispatch_nom_mail');
 
 
 
