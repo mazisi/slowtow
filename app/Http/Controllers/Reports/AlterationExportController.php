@@ -71,13 +71,13 @@ class AlterationExportController extends Controller
                                     
                                     ->when(request('is_licence_complete') === 'Pending' , function ($query){
                                             $query->where(function ($query) {
-                                                $query->where('alterations.status','<', intval(8));
+                                                $query->where('alterations.status','<', 7);
                                             });
                                         
                                         })
                 
                                     ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                        $query->where('alterations.status',8);
+                                        $query->where('alterations.status', '>=', 7);
                                     });
 
                                 })

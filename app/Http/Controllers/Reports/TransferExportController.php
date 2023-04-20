@@ -67,12 +67,12 @@ public static function export($request){
                         })
 
                         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                            $query->where('licence_transfers.status','<', 10)
+                            $query->where('licence_transfers.status','<', 9)
                                     ->orWhereNull('licence_transfers.status');
                         })
     
                         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('licence_transfers.status','=',10);
+                            $query->where('licence_transfers.status','>=',9);
                         });
 
                     })->when(request('year'), function ($query) {

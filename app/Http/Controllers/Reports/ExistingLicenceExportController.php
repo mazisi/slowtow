@@ -80,12 +80,12 @@ class ExistingLicenceExportController extends Controller
                          //})
 
                          ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                            $query->where('status','<', intval(16))
+                            $query->where('status','<', 15)
                             ->orWhereNull('status');
                         })
     
                         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                            $query->where('status','=', 16);
+                            $query->where('status','>=', 15);
                         });
                         
                         })

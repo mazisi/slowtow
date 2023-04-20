@@ -73,12 +73,12 @@ class NominationExportController extends Controller
                               })
 
                               ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                                $query->where('nominations.status','<', 10)
+                                $query->where('nominations.status','<', 9)
                                 ->orWhereNull('nominations.status');
                             })
         
                             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                $query->where('nominations.status','=', 10);
+                                $query->where('nominations.status','>=', 9);
                             })
                             
                             ->when(request('year'), function ($query) {
