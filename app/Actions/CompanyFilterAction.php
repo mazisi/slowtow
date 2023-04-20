@@ -5,7 +5,7 @@ use App\Models\Company;
 
 class CompanyFilterAction{
 
-  public static function filterCompanies(){
+  public function filterCompanies(){
     
   return Company::
     when(request('term') 

@@ -3,12 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
-use Illuminate\Http\Request;
-use App\Models\LicenceDocument;
 use App\Models\RenewalDocument;
 use App\Models\AlterationDocument;
 use Illuminate\Support\Facades\DB;
-use App\Models\TemporalLicenceDocument;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -92,7 +89,6 @@ class AllReportsController extends Controller
                 'certification_issued_at',
                 'id','trading_name',
                 'licence_number',
-                'board_region',
                 'province',
                 'status',
                 'board_region',
@@ -105,7 +101,7 @@ class AllReportsController extends Controller
         ]);
   
                     $status = '';
-                    $notesCollection = '';
+                    
 
                     $arr_of_alterations = $alterations->toArray(); 
 
@@ -141,11 +137,11 @@ class AllReportsController extends Controller
                         }
 
                         $notes = Task::where('model_id',$arr_of_alterations[$i]->id)->where('model_type','Alteration')->get(['body','created_at']);
-
+                         $notesCollection = '';
                         $proof_of_logdiment = AlterationDocument::where('alteration_id',$arr_of_alterations[$i]->id)->where('doc_type','Alterations Lodged')->first(['id']);
 
 
-                        if(!is_null($notes) || !empty($notes)){
+                        if($notes){
                             foreach ($notes as $note) {
                             $notesCollection .=  $note->created_at.' '.$note->body. ' ';
                             }
@@ -155,7 +151,7 @@ class AllReportsController extends Controller
                         $data = [
                             $arr_of_alterations[$i]->trading_name, 
                             $arr_of_alterations[$i]->licence_number, 
-                            $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region,
+                            request('boardRegion') ? $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region : $arr_of_alterations[$i]->province,
                             $arr_of_alterations[$i]->logded_at,
                             $proof_of_logdiment ? 'FALSE' : 'TRUE',
                             $arr_of_alterations[$i]->certification_issued_at,
@@ -292,7 +288,7 @@ class AllReportsController extends Controller
 
             
             $existing_licences_status = '';
-            $notesCollection = '';
+            
             
             $arr_of_existing_licences = $licences->toArray(); 
 
@@ -353,9 +349,9 @@ class AllReportsController extends Controller
                     }
 
                     $notes = Task::where('model_id',$arr_of_existing_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
-                    //check if client has been logded
-    
-                    if(!is_null($notes) || !empty($notes)){
+                    
+                     $notesCollection = '';
+                    if($notes){
                         foreach ($notes as $note) {
                             $notesCollection .=  $note->created_at.'  '.$note->body. '  ';
                         }
@@ -366,15 +362,15 @@ class AllReportsController extends Controller
                         $arr_of_existing_licences[$i]->trading_name, 
                         $arr_of_existing_licences[$i]->licence_type,
                         $arr_of_existing_licences[$i]->licence_number,
-                        $arr_of_existing_licences[$i]->board_region ? $arr_of_existing_licences[$i]->province.' - '.$arr_of_existing_licences[$i]->board_region : $arr_of_existing_licences[$i]->province,
+                        request('boardRegion') ? $arr_of_existing_licences[$i]->province.' - '.$arr_of_existing_licences[$i]->board_region : $arr_of_existing_licences[$i]->province,
                         '',
                         $arr_of_existing_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
-                        optional($arr_of_existing_licences[$i]->application_lodged_at)->format('d M Y'),
+                        $arr_of_existing_licences[$i]->application_lodged_at ? date('d M Y', strtotime($arr_of_existing_licences[$i]->application_lodged_at)) : '',
                         $arr_of_existing_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
                         $arr_of_existing_licences[$i]->activation_fee_paid_at,
                         '',
-                        optional($arr_of_existing_licences[$i]->client_paid_at)->format('d M Y'),
-                        optional($arr_of_existing_licences[$i]->licence_issued_at)->format('d M Y'),
+                        $arr_of_existing_licences[$i]->client_paid_at ? date('d-m-Y', strtotime($arr_of_existing_licences[$i]->client_paid_at)) : '',
+                        $arr_of_existing_licences[$i]->licence_issued_at ? date('d-m-Y', strtotime($arr_of_existing_licences[$i]->licence_issued_at)) : '',
                         $existing_licences_status,
                         '',
                         $notesCollection
@@ -503,7 +499,7 @@ class AllReportsController extends Controller
                    ]);
 
     $newAppsStatus = '';
-    $newAppNotesCollection = '';
+    
 
     $arr_of_new_apps_licences = $new_app_licences->toArray(); 
 
@@ -565,8 +561,8 @@ class AllReportsController extends Controller
 
             $new_app_notes = Task::where('model_id',$arr_of_new_apps_licences[$i]->id)->where('model_type','Licence')->get(['body','created_at']);
             //check if client has been logded
-
-            if(!is_null($new_app_notes) || !empty($new_app_notes)){
+            $newAppNotesCollection = '';
+            if($new_app_notes){
                 foreach ($new_app_notes as $note) { 
                     $newAppNotesCollection .=  $note->created_at.'    '.$note->body. '   ';
                 }
@@ -577,15 +573,15 @@ class AllReportsController extends Controller
                 $arr_of_new_apps_licences[$i]->trading_name, 
                 $arr_of_new_apps_licences[$i]->licence_type,
                 $arr_of_new_apps_licences[$i]->licence_number,
-                $arr_of_new_apps_licences[$i]->board_region ? $arr_of_new_apps_licences[$i]->province.' - '.$arr_of_new_apps_licences[$i]->board_region : $arr_of_new_apps_licences[$i]->province,
+                request('boardRegion') ? $arr_of_new_apps_licences[$i]->province.' - '.$arr_of_new_apps_licences[$i]->board_region : $arr_of_new_apps_licences[$i]->province,
                 '',
                 $arr_of_new_apps_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
-                optional($arr_of_new_apps_licences[$i]->application_lodged_at)->format('d M Y'),
+                $arr_of_new_apps_licences[$i]->application_lodged_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->application_lodged_at)) : '',
                 $arr_of_new_apps_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
                 $arr_of_new_apps_licences[$i]->activation_fee_paid_at,
                 '',
-                optional($arr_of_new_apps_licences[$i]->client_paid_at)->format('d M Y'),
-                optional($arr_of_new_apps_licences[$i]->licence_issued_at)->format('d M Y'),
+                $arr_of_new_apps_licences[$i]->client_paid_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->client_paid_at)) : '',
+                $arr_of_new_apps_licences[$i]->licence_issued_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->licence_issued_at)) : '',
                 $newAppsStatus,
                 '',
                 $newAppNotesCollection
@@ -708,7 +704,7 @@ class AllReportsController extends Controller
                 ]);
     
                         $nom_status = '';
-                        $nomNotesCollection = '';
+                       
             
                         $arr_of_nominations = $nominations->toArray(); 
     
@@ -753,8 +749,8 @@ class AllReportsController extends Controller
 
         // $is_client_paid = NominationDocument::where('nomination_id',$arr_of_nominations[$i]->id)->where('doc_type','Payment To The Liquor Board')->first();
 
-    
-            if(!is_null($nomNotes) || !empty($nomNotes)){
+       $nomNotesCollection = '';
+            if($nomNotes){
                 foreach ($nomNotes as $nomNote) {
                     $nomNotesCollection .=  $nomNote->created_at.' '.$nomNote->body. ' ';
                 }
@@ -764,7 +760,7 @@ class AllReportsController extends Controller
                 $arr_of_nominations[$i]->trading_name, 
                 $arr_of_nominations[$i]->full_name, 
                 $arr_of_nominations[$i]->licence_number, 
-                $arr_of_nominations[$i]->board_region ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
+                request('boardRegion') ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
                 '',
                 $arr_of_nominations[$i]->payment_to_liquor_board_at,
                 $arr_of_nominations[$i]->nomination_lodged_at,
@@ -886,18 +882,18 @@ class AllReportsController extends Controller
 
 
        
-            $renewalsNotesCollection = '';
+            
             
             $arr_of_renewals = $renewals->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 
-                $renewalNotes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body','created_at']);
-
                 //check if client has been quoted
              $is_renewal_quoted = RenewalDocument::where('licence_renewal_id',$arr_of_renewals[$i]->id)->where('doc_type','Client Quoted')->first(['id']);
-    
-                    if(!is_null($renewalNotes) || !empty($renewalNotes)){
+             $renewalNotes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body','created_at']);
+             
+             $renewalsNotesCollection = '';
+                    if($renewalNotes){
                         foreach ($renewalNotes as $nominationNote) {
                             $renewalsNotesCollection .=  $nominationNote->created_at.' '.$nominationNote->body. ' ';
                         }
@@ -1095,7 +1091,7 @@ class AllReportsController extends Controller
 
     $temp_status = '';
     $applicant = '';
-    $tempNotesCollection = '';
+   
 
     $arr_of_temp_licences = $merged_data->toArray(); 
 
@@ -1148,10 +1144,10 @@ class AllReportsController extends Controller
                     break;
             }
 
-    $temp_notes = Task::where('model_id',$arr_of_temp_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body','created_at']);
-   
+              $temp_notes = Task::where('model_id',$arr_of_temp_licences[$i]->id)->where('model_type','Temporal Licence')->get(['body','created_at']);
+                 $tempNotesCollection = '';
 
-            if(!is_null($temp_notes) || !empty($temp_notes)){
+            if($temp_notes){
                 foreach ($temp_notes as $temp_note) {
                     $tempNotesCollection .=  $temp_note->created_at.' '.$temp_note->body. ' ';
                 }
@@ -1168,9 +1164,9 @@ class AllReportsController extends Controller
                 //$get_invoice_number ? '' : $get_invoice_number->document_name,
                 $arr_of_temp_licences[$i]->client_paid_at,
                 $arr_of_temp_licences[$i]->liquor_licence_number,
-                optional($arr_of_temp_licences[$i]->logded_at)->format('d M Y'),
+                $arr_of_temp_licences[$i]->logded_at ? date('d M Y', strtotime($arr_of_temp_licences[$i]->logded_at)) : '',
                 $arr_of_temp_licences[$i]->logded_at ? 'TRUE': 'FALSE',
-                optional($arr_of_temp_licences[$i]->issued_at)->format('d M Y'),
+                $arr_of_temp_licences[$i]->issued_at ? date('d M Y', strtotime($arr_of_temp_licences[$i]->issued_at)) : '',
                 $temp_status,
                 $tempNotesCollection
              ];
@@ -1284,8 +1280,6 @@ class AllReportsController extends Controller
     
                                  
                 $transfer_status = '';
-                $transferNotesCollection = '';
-    
                 $arr_of_transfers = $transfers->toArray(); 
     
                 for($i = 0; $i < count($arr_of_transfers); $i++ ){
@@ -1326,9 +1320,9 @@ class AllReportsController extends Controller
                     }
     
                     $transfer_notes = Task::where('model_id',$arr_of_transfers[$i]->id)->where('model_type','Transfer')->get(['body','created_at']);
-    
+                    $transferNotesCollection = '';
                 
-                        if(!is_null($transfer_notes) || !empty($transfer_notes)){
+                        if($transfer_notes){
                             foreach ($transfer_notes as $transfer_note) {
                                 $transferNotesCollection .=  $transfer_note->created_at.' '.$transfer_note->body. ' ';
                             }
@@ -1338,7 +1332,7 @@ class AllReportsController extends Controller
                         $data = [         
                             $arr_of_transfers[$i]->trading_name, 
                             $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
-                            $arr_of_transfers[$i]->board_region ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
+                            request('boardRegion') ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
                             '',
                             '',
                             $arr_of_transfers[$i]->lodged_at,

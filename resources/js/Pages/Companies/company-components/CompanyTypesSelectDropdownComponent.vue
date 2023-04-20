@@ -7,7 +7,7 @@
           :required="required"
           :id="label" class="form-control form-control-default">
           <option :value="''" disabled selected >{{ defaultDisabledText }}</option>
-               <option v-for='companyType in companyTypes' :key="companyType" :value=companyType> {{ companyType }}</option>
+               <option v-for='companyType in dropdownList' :key="companyType" :value=companyType> {{ companyType }}</option>
           </select>
       </div>
 <div v-if="errors" class="text-danger">{{ errors }}</div>
@@ -19,9 +19,9 @@
 export default{
   props: {
       errors: Object,
-      companyTypes: Object,
+      dropdownList: Object,
       label: String,
-      col: Number,
+      column: Number,
       required: Boolean,
       defaultDisabledText: String
   }

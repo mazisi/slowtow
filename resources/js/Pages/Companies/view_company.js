@@ -3,16 +3,13 @@ import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia';
 import Multiselect from '@vueform/multiselect';
 import Banner from '../components/Banner.vue';
-import { ref, computed, onMounted } from 'vue';
+import { ref,onMounted } from 'vue';
+import Paginate from '../../Shared/Paginate.vue';
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
-import common from '../common-js/common.js';
 import 'vue3-toastify/dist/index.css';
-import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
-import TextInputComponent from '../components/input-components/TextInputComponent.vue';
-import ProvinceSelectDropdownComponent from '../components/input-components/ProvinceSelectDropdownComponent.vue';
-
-
+import common from '../common-js/common.js';
+import TextInputComponent from '../components/input-components/TextInputComponent.vue'
 
 export default {
  props: {
@@ -31,13 +28,19 @@ export default {
     message: String,
     linked_licences: Object
  },  
+
+ computed: {
+  computedProvinces() {
+    return common.getProvinces();
+  }
+},
   
   setup (props) {
     let showMenu = false;
     let people_options = props.people;
-    let show_modal=ref(true)
-    
-   
+    let show_modal = ref(true); 
+    let show_file_name = ref(false);
+    let file_name = ref(''); 
 
     const form = useForm({
             company_name: props.company.name,
@@ -79,7 +82,12 @@ export default {
 
 
 
-      
+      const documentsForm = useForm({
+            document: null,
+            expiry_date: null,
+            doc_type: null,
+            company_id: props.company.id,
+      })
 
 
       const addPeopleForm = useForm({
@@ -142,7 +150,45 @@ export default {
           })  
         }
 
-      
+      function submitDocuments(){
+          documentsForm.post(`/submit-company-documents`, {
+          preserveScroll: true,
+          onSuccess: () => {
+            this.documentsForm.reset();
+            this.show_modal = false;
+            this.show_file_name = false;
+            document.querySelector('.modal-backdrop').remove()
+            if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+           
+          },
+          onError: () => { 
+              error()
+            },
+        })    
+        }
+
+      function getDocType(doc_type){
+        this.documentsForm.doc_type = doc_type;
+        this.show_modal = true
+      }
+
+      function deleteDocument(id){
+          if(confirm('Document will be deleted permanently!! Continue??')){
+            Inertia.delete(`/delete-company-document/${id}`,{
+              onSuccess: () => { 
+               if(props.success){
+                   notify(props.success)
+                    }else if(props.error){
+                      notify(props.error)
+                    }
+             }
+            })
+          }
+        }
 
         function deleteCompany(company_name){
           if(confirm(company_name + ' will be deleted.. Continue??')){
@@ -247,7 +293,25 @@ export default {
           }
         }
 
-        
+        function checkingFileProgress(message){
+          setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading(message);
+        }
+
+       
+
+         function viewFile(model_id) {
+              let model = 'CompanyDocument';
+               Inertia.visit(`/view-file/${model}/${model_id}`,{
+                replace: true,
+                onStart: () => {                  
+                  checkingFileProgress('Checking file availability...')                
+              },
+                
+               })
+         }
 
         //  onMounted(() => {
         //   if(props.success){
@@ -257,30 +321,35 @@ export default {
         //   }
         // });
 
-        const computedProvinces = computed(() => {
-          return common.getProvinces();
-        })
-
     return {
-      computedProvinces,
       showMenu,
       notify,
-      // getFileName,
+      common,
+      file_name,
+      file_has_apostrophe,
+      getFileName,
       submit,
       addCompanyUser,
       addCompanyUserForm,
       unlinkPerson,
       assignActiveValue,
       redirectToWebsite,
+      show_file_name,
       people_options,
-      form,toast,show_modal,
+      form,toast,
+      documentsForm,
+      getDocType,
+      submitDocuments,
+      deleteDocument,
       addPeopleForm,
       submitPeople,
       editPerson,
       getPositionValue,
       updatePerson,
+      show_modal,
       copyBusinessAddress,
-      deleteCompany
+      deleteCompany,
+      viewFile,checkingFileProgress
     }
   },
 
@@ -290,12 +359,9 @@ export default {
     Head,
     Multiselect,
     Banner,
+    Paginate,
     Task,
-    CheckBoxInputComponent,
-    TextInputComponent,
-    ProvinceSelectDropdownComponent,
-     
-
+    TextInputComponent
   },
   
 };

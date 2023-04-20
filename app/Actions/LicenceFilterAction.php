@@ -5,7 +5,8 @@ namespace App\Actions;
 use App\Models\Licence;
 
 class LicenceFilterAction{
-  public static function filterLicence(){
+    
+  public function filterLicence(){
     return Licence::with(["company","people","licence_type"])
 //Search Only
             

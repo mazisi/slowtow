@@ -9,7 +9,7 @@ use App\Http\Controllers\IssueController;
 
 use App\Http\Controllers\PersonController;
 
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\Reports\ReportController;
 
 use App\Http\Controllers\CompanyController;
 
@@ -52,8 +52,6 @@ use App\Http\Controllers\TransferLicenceController;
 use App\Http\Controllers\AlterationDocumentController;
 
 use App\Http\Controllers\Auth\PasswordResetController;
-
-use App\Http\Controllers\LiquorBoardRequestController;
 
 use App\Http\Controllers\Slowtowdmin\AdminsController;
 
@@ -214,13 +212,6 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::post('/merge-licence-docs/{id}',[LicenceDocsController::class,'merge']);
 
-
-
-        //board request
-
-        Route::post('/submit-board-request',[LiquorBoardRequestController::class,'store']);
-
-        Route::patch('/update-board-request',[LiquorBoardRequestController::class,'update']);
 
 
 

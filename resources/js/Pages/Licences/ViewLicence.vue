@@ -109,17 +109,16 @@
   <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
   </div> -->
 
-  <LicenceTypeDropDownComponent 
-    :dropdownList="licence_dropdowns" 
-    :label="'Licence Type *'" 
-    :defaultDisabledText="'Select Licence Type'"
-    :column="'col-md-12'"
-    :value="form.licence_type"
-    v-model="form.licence_type"
-    :errors="errors.licence_type"
-    :input_id="licence_type"
-    :required="true"
-  />
+  <div class="col-md-12 columns">
+    <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Licence Type *</label>
+    <select v-model="form.licence_type" class="form-control form-control-default">
+      <option :value="''" disabled selected>Licence Type</option>
+    <option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+    </select>
+    </div>
+    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+    </div>
 
   <TextInputComponent
     v-model="form.licence_date" 
@@ -202,16 +201,16 @@
     :inputType="'text'"
 />
 
-<ProvinceSelectDropdownComponent 
-  :provinceList="computedProvinces" 
-  :label="'Province'" 
-  :defaultDisabledText="'Select province..'"
-  :column="'col-12'"
-  :value="form.province"
-  v-model="form.province"
-  :errors="errors.province"
-  :required="true"
-/>
+<div class="col-12 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Province</label>
+<select class="form-control form-control-default" v-model="form.province" >
+<option :value="''" disabled selected >Select Province</option>
+<option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+</select>
+</div>
+<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
+</div>
 
 <TextInputComponent
     v-model="form.postal_code" 
@@ -229,50 +228,98 @@
 <div class="row">
 <div class="col-md-6 columns">
 <ul class="list-group">
- 
- <DocumentListComponent
-    :licence_id="licence.id"
-    :documentModel="original_lic"
-    :documentTitle="'Original-Licence'"
-    :success="success"
-    :error="error"
-    :errors="errors.document_file"
- />
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="original_lic">
+    <a v-if="original_lic" @click="viewFile(original_lic.id)" href="#!">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence</h6>
+      <p v-if="original_lic" class="mb-0 text-xs">
+        {{ original_lic.document_name ? removeFilePath(original_lic.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="original_lic" @click="deleteDocument(original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
 
- <DocumentListComponent
-    :licence_id="licence.id"
-    :documentModel="duplicate_original_lic"
-    :documentTitle="'Duplicate-Licence'"
-    :success="success"
-    :error="error"
-    :errors="errors.document_file"
- />
+    <button v-else @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
 
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="duplicate_original_lic">
+    <a v-if="duplicate_original_lic" @click="viewFile(duplicate_original_lic.id)" href="#!">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Duplicate Original</h6>
+      <p v-if="duplicate_original_lic" class="mb-0 text-xs">
+        {{ duplicate_original_lic.document_name ? removeFilePath(duplicate_original_lic.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="duplicate_original_lic" @click="deleteDocument(duplicate_original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Duplicate-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
 </ul>
 <hr class="vertical dark" />
 </div>
 
 <div class="col-md-6 columns">
 <ul class="list-group">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="original_lic_delivered">
+    <a v-if="original_lic_delivered" @click="viewFile(original_lic_delivered.id)" href="#!" >
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
 
-  <DocumentListComponent
-  :licence_id="licence.id"
-  :documentModel="original_lic_delivered"
-  :documentTitle="'Original-Licence-Delivered'"
-  :success="success"
-  :error="error"
-  :errors="errors.document_file"
-/>
-  
-<DocumentListComponent
-:licence_id="licence.id"
-:documentModel="duplicate_original_lic_delivered"
-:documentTitle="'Duplicate-Original-Licence-Delivered'"
-:success="success"
-:error="error"
-:errors="errors.document_file"
-/>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
+      <p v-if="original_lic_delivered" class="mb-0 text-xs">{{ original_lic_delivered.document_name ? removeFilePath(original_lic_delivered.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
 
+    <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+
+
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="duplicate_original_lic_delivered">
+    <a v-if="duplicate_original_lic_delivered" @click="viewFile(duplicate_original_lic_delivered.id)" href="#!" >
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
+       <p v-if="duplicate_original_lic_delivered" class="mb-0 text-xs">
+        {{ duplicate_original_lic_delivered.document_name ? removeFilePath(duplicate_original_lic_delivered.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="duplicate_original_lic_delivered" @click="deleteDocument(duplicate_original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+
+    <button v-else @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
 </ul>
 </div>
 </div>
@@ -340,7 +387,56 @@ Action
 </div>
 
 
-<!-- upload doc -->
+<div v-if="show_modal" class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form @submit.prevent="uploadOriginalLicenceDoc">
+      <input type="hidden" v-model="originalLicenceForm.doc_type">
+      <div class="modal-body">      
+        <div class="row">
+        <div class="col-md-12 columns">
+        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
+         <input type="file" @change="getFileName"
+         hidden id="licence-doc" accept=".pdf"/>
+         <div v-if="errors.document_file" class="text-danger">{{ errors.document_file }}</div>
+         <div v-if="file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
+       </div>
+       
+<!-- 
+       <file-pond
+            name="test"
+            ref="pond"
+            class-name="my-pond"
+            label-idle="Drop files here..."
+            allow-multiple="true"
+            accepted-file-types="image/jpeg, image/png"
+            server="/upload-licence-document?licence=msebele"
+        /> -->
+
+        
+       <div class="col-md-12">
+          <progress v-if="originalLicenceForm.progress" :value="originalLicenceForm.progress.percentage" max="100">
+         {{ originalLicenceForm.progress.percentage }}%
+         </progress>
+         </div>
+         </div>
+      </div>
+  
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" :disabled="originalLicenceForm.processing || file_has_apostrophe">
+         <span v-if="originalLicenceForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+         Save</button>
+      </div>
+      </form>
+    </div>
+  </div>
+</div>
 
 </Layout>
 </template>

@@ -53,6 +53,14 @@ class RenewalExportController extends Controller
                                 $query->whereIn('province',array_values(explode(",",request('province'))));
                             })
 
+                            ->when(request('activeStatus') === 'Inactive', function ($query) {
+                                $query->where('is_licence_active',false);
+                            })
+    
+                            ->when(request('activeStatus') == 'Active', function ($query) {
+                                $query->where('is_licence_active', 1);
+                            })
+
                             ->when(request('boardRegion'), function ($query)  {
                                 // $query->whereIn(DB::raw('licences.board_region'),array_values(explode(",",request('boardRegion'))));
                                 $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
@@ -96,18 +104,18 @@ class RenewalExportController extends Controller
                                 'renewal_delivered_at',
                             ]);
 
-            $notesCollection = ' ';
+            
             
             $arr_of_renewals = $renewals->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 
                 $notes = Task::where('model_id',$arr_of_renewals[$i]->id)->where('model_type','Licence Renewal')->get(['body','created_at']);
-
+                $notesCollection = ' ';
                 //check if client has been quoted
                        $is_quoted = RenewalDocument::where('licence_renewal_id',$arr_of_renewals[$i]->id)->where('doc_type','Client Quoted')->first(['id']);
     
-                    if(!is_null($notes) || !empty($notes)){
+                    if($notes){
                         foreach ($notes as $note) {
                             $notesCollection .=  $note->created_at.'   '.$note->body. '   ';
                         }

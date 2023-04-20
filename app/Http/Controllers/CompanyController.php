@@ -18,9 +18,8 @@ use App\Http\Requests\CompanyValidateRequest;
 class CompanyController extends Controller
 {
     
-    public function index(){
-         
-            $companies = CompanyFilterAction::filterCompanies();    
+    public function index(){         
+            $companies = (new CompanyFilterAction)->filterCompanies();    
             return Inertia::render('Companies/Company',['companies'=> $companies]);
          
     }

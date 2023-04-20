@@ -348,9 +348,9 @@ class EmailCommsController extends Controller
                 }
             }
             
-            $email = $licence->licence->company->email;
-            $email1= $licence->licence->company->email1;
-            $email2 = $licence->licence->company->email2;
+                $email = $licence->licence->company->email;
+                $email1= $licence->licence->company->email1;
+                $email2 = $licence->licence->company->email2;
 
                 if(!is_null($email)){
                     Mail::to($email)->send(new RenewalMailer($licence, $request->mail_body));   

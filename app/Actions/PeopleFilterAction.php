@@ -6,7 +6,8 @@ use App\Models\People;
 class PeopleFilterAction{
 
 
-  public static function filterPeople(){
+  public function filterPeople(){
+    
     return People::when(request('term') && request('active_status') === 'Active', 
     function ($query){
         $query->where('active','1')

@@ -50,7 +50,8 @@
                               <img v-if="user.picture" :src="`${$page.props.blob_file_path}${user.picture}`" 
                               class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
 
-                              <img v-else :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" 
+                              <img v-else loading="lazy"
+                               :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" 
                               class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
 
                             </div>

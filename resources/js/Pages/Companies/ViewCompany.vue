@@ -167,19 +167,78 @@ v-model="form.telephone_number_2"
 <h6 class="text-center mt-5">Company Documents</h6>
 
 
-<CompanyFileUploadComponent
-  :company_id="company.id"
-  :documentModel="company_doc"
-  :documentTitle="'Company-Document'"
-  :success="success"
-  :error="error"
-  :errors="errors.company_doc"
-/>
+<div class="col-md-6 columns">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+      <div class="me-3" v-if="company_doc !== ''">
+      <a v-if="company_doc" @click="viewFile(company_doc.id)" href="#!">
+       <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+      </a>    
+      </div>
+  
+      <div class="d-flex align-items-start flex-column" style="margin-left: -1rem;">
+        <h6 class="mb-0 text-sm" >Company Documents</h6>
+        <p v-if="company_doc" class="mb-0 text-xs">Name: {{ company_doc.document_name }}</p>
+        <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+      </div>
+  
+      <button  v-if="company_doc" @click="deleteDocument(company_doc.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+      </button>
+  
+      <button v-else @click="getDocType('Company-Document')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+      </button>
+    </li>
+  
+      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+      <div class="me-3" v-if="cipc_cert">
+      <a v-if="cipc_cert" @click="viewFile(cipc_cert.id)" href="#!">
+      <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+      </a>    
+      </div>
+  
+      <div class="d-flex align-items-start flex-column justify-content-center">
+        <h6 class="mb-0 text-sm">CIPC Certificate</h6>
+         <p v-if="cipc_cert" class="mb-0 text-xs">Name: {{ cipc_cert.document_name }}</p>
+         <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+      </div>
+      <button  v-if="cipc_cert" @click="deleteDocument(cipc_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+      </button>
+  
+      <button v-else @click="getDocType('CIPC-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+      </button>
+    </li>
+  
+      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+      <div class="me-3" v-if="bee_cert">
+      <a v-if="bee_cert" @click="viewFile(bee_cert.id)" href="#!">
+      <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+      </a>    
+      </div>
+      <div class="d-flex align-items-start flex-column justify-content-center">
+        <h6 class="mb-0 text-sm">BEE Certificate</h6>
+        <p v-if="bee_cert" class="mb-0 text-xs">Name: {{ bee_cert.document_name }}</p>
+        <p v-if="bee_cert" class="mb-0 text-xs fst-italic">Expiry Date: {{ new Date(bee_cert.expiry_date).toLocaleString().split(',')[0] }}</p>
+        <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+      </div>
+  
+      <button  v-if="bee_cert" @click="deleteDocument(bee_cert.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+      </button>
+     
+      <button v-else @click="getDocType('BEE-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+      </button>
+    </li>
+    
+    </div>
 
 <div class="col-md-6 columns">
 <ul class="list-group">
 
-<!-- <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+ <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="lta_cert">
     <a v-if="lta_cert" @click="viewFile(lta_cert.id)" href="#!">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
@@ -245,7 +304,7 @@ v-model="form.telephone_number_2"
     <button v-else @click="getDocType('SARS-Certificate')" type="button" data-bs-toggle="modal" data-bs-target="#company-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
-  </li> -->
+  </li>
 
 </ul>
 </div>
@@ -257,7 +316,7 @@ v-model="form.telephone_number_2"
 <hr class="vertical dark" />
 </div>
 
-<div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
+<div class="col-4 col-md-4 col-xl-4" style="margin-top: 1rem;">
 <div class="row"> 
 
 <TextInputComponent 
@@ -294,22 +353,22 @@ v-model="form.business_address"
 
 
 
-<ProvinceSelectDropdownComponent 
-  :provinceList="computedProvinces" 
-  :label="'Province'" 
-  :defaultDisabledText="'Select province..'"
-  :column="'col-6'"
-  :value="form.business_province"
-  v-model="form.business_province"
-  :errors="errors.business_province"
-/>
-
+<div class="col-6 columns">                  
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Province</label>
+  <select class="form-control form-control-default" v-model="form.postal_province" >
+    <option :value="''" disabled selected >Select Province</option>
+    <option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+  </select>
+  </div>
+  <div v-if="errors.postal_province" class="text-danger">{{ errors.postal_province }}</div>
+  </div>
 
 <TextInputComponent 
   :inputType="'text'"
   v-model="form.business_address_postal_code" 
   :value="form.business_address_postal_code"  
-  :column="'col-12'" 
+  :column="'col-6'" 
   :label="'Postal Code'" 
   :errors="errors.business_address_postal_code"
   :input_id="business_address_postal_code"
@@ -364,21 +423,23 @@ v-model="form.business_address"
 />
 
 
-<ProvinceSelectDropdownComponent 
-  :provinceList="computedProvinces" 
-  :label="'Province'" 
-  :defaultDisabledText="'Select province..'"
-  :column="'col-6'"
-  :value="form.postal_province"
-  v-model="form.postal_province"
-  :errors="errors.postal_province"
-/>
+<div class="col-6 columns">                  
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Province</label>
+  <select class="form-control form-control-default" v-model="form.business_province" >
+    <option :value="''" disabled selected >Select Province</option>
+    <option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+  </select>
+  </div>
+  <div v-if="errors.business_province" class="text-danger">{{ errors.business_province }}</div>
+  </div>
+  
 
 <TextInputComponent 
   :inputType="'text'"
   v-model="form.postal_code" 
   :value="form.postal_code"  
-  :column="'col-12'" 
+  :column="'col-6'" 
   :label="'Postal Code'" 
   :errors="errors.postal_code"
   :input_id="postal_code"
@@ -528,7 +589,7 @@ v-model="form.business_address"
 </div>
 </div>
 
-<!-- <div v-if="show_modal" class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div v-if="show_modal" class="modal" id="company-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -575,7 +636,7 @@ v-model="form.business_address"
       </form>
     </div>
   </div>
-</div> -->
+</div>
 
 
 <div class="modal" id="add-people" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">

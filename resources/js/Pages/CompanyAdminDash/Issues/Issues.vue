@@ -55,7 +55,9 @@
        <td>
           <div class="d-flex px-2 py-1">
              <Link :href="`/view-issue/${issue.slug}`">
-              <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${issue.user.name}`" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+              <img 
+              loading="lazy"
+              :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${issue.user.name}`" class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
             </Link>
              <Link :href="`/view-issue/${issue.slug}`" class="d-flex flex-column justify-content-center">
                 <h6 class="mb-0 text-sm">{{ issue.user.name }}</h6>

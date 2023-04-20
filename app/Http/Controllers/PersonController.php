@@ -15,7 +15,7 @@ use App\Models\PeopleDocument;
 class PersonController extends Controller
 {
     public function index(){
-        $people = PeopleFilterAction::filterPeople();
+        $people = (new PeopleFilterAction)->filterPeople();
 
         return Inertia::render('People/Person',['people' => $people]);
     }

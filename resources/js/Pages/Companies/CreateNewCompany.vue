@@ -6,7 +6,6 @@ import { Head} from '@inertiajs/inertia-vue3';
 import  common from '../common-js/common.js';
 import CompanyTypesSelectDropdownComponent from './company-components/CompanyTypesSelectDropdownComponent.vue';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
-import ProvinceSelectDropdownComponent from '../components/input-components/ProvinceSelectDropdownComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 
 
@@ -79,7 +78,6 @@ export default {
     Head,
     CompanyTypesSelectDropdownComponent,
     TextInputComponent,
-    ProvinceSelectDropdownComponent,
     CheckBoxInputComponent
   },
 
@@ -280,19 +278,22 @@ export default {
         :input_id="business_address3"
       />
 
-      <ProvinceSelectDropdownComponent 
-        :provinceList="computedProvinces" 
-        :label="'Province'" 
-        :defaultDisabledText="'Select province..'"
-        :column="'col-6'"
-        v-model="form.business_province"
-        :errors="errors.business_province"
-      />
+    
+      <div class="col-6 columns">                  
+        <div class="input-group input-group-outline null is-filled">
+        <label class="form-label">Province</label>
+        <select class="form-control form-control-default" v-model="form.business_province" >
+          <option :value="''" disabled selected >Select Province</option>
+          <option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+        </select>
+        </div>
+        <div v-if="errors.business_province" class="text-danger">{{ errors.business_province }}</div>
+        </div>
 
       <TextInputComponent 
         :inputType="'text'"
         v-model="form.business_address_postal_code" 
-        :column="'col-12'" 
+        :column="'col-6'" 
         :label="'Postal Code'" 
         :errors="errors.business_address_postal_code"
         :input_id="business_address_postal_code"
@@ -338,21 +339,24 @@ export default {
         :input_id="postal_address3"
       />
 
-      
-      <ProvinceSelectDropdownComponent 
-        :provinceList="computedProvinces" 
-        :label="'Province'" 
-        :defaultDisabledText="'Select province..'"
-        :column="'col-6'"
-        v-model="form.postal_province"
-        :errors="errors.postal_province"
-      />
+    
+
+      <div class="col-6 columns">                  
+        <div class="input-group input-group-outline null is-filled">
+        <label class="form-label">Province</label>
+        <select class="form-control form-control-default" v-model="form.postal_province" >
+          <option :value="''" disabled selected >Select Province</option>
+          <option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+        </select>
+        </div>
+        <div v-if="errors.postal_province" class="text-danger">{{ errors.postal_province }}</div>
+        </div>
 
 
       <TextInputComponent 
         :inputType="'text'"
         v-model="form.postal_code" 
-        :column="'col-12'" 
+        :column="'col-6'" 
         :label="'Postal Code'" 
         :errors="errors.postal_code"
         :input_id="postal_code"

@@ -101,7 +101,7 @@ class NominationExportController extends Controller
                                 ]);
        
                             $status = '';
-                            $notesCollection = '';
+                           
                 
                             $arr_of_nominations = $nominations->toArray(); 
         
@@ -145,9 +145,9 @@ class NominationExportController extends Controller
             $notes = Task::where('model_id',$arr_of_nominations[$i]->id)->where('model_type','Nomination')->get(['body','created_at']);
 
             // $is_client_paid = NominationDocument::where('nomination_id',$arr_of_nominations[$i]->id)->where('doc_type','Payment To The Liquor Board')->first();
-
+             $notesCollection = '';
         
-                if(!is_null($notes) || !empty($notes)){
+                if($notes){
                     foreach ($notes as $note) {
                         $notesCollection .=  $note->created_at.'  '.$note->body. '  ';
                     }
@@ -157,7 +157,7 @@ class NominationExportController extends Controller
                    $arr_of_nominations[$i]->trading_name, 
                    $arr_of_nominations[$i]->full_name, 
                    $arr_of_nominations[$i]->licence_number, 
-                   $arr_of_nominations[$i]->board_region ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
+                   request('boardRegion') ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
                    '',
                    $arr_of_nominations[$i]->payment_to_liquor_board_at,
                    $arr_of_nominations[$i]->nomination_lodged_at,

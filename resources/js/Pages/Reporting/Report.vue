@@ -60,17 +60,20 @@
 <!-- ################################################ -->
 
  <div class="row" v-if="form.variation">
-  <!--<div class="col-4 columns">
+  
+
+  <h5 class="text-center">{{ form.variation }}</h5>   
+
+  <div class="col-6 columns ">
     <div class="input-group input-group-outline null is-filled" >
-      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="form-control form-control-default">
+      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="input-have-green-color form-control form-control-default">
           <option :value="''" disabled selected>Active/Inactive</option>
           <option value="Active">Active</option>
           <option value="Inactive">Inactive</option>
        </select>
     </div>
-  </div> -->
+  </div>
 
-  <h5 class="text-center">{{ form.variation }}</h5>   
   <div class="col-6 columns">
      
     <Multiselect
@@ -220,7 +223,7 @@
   </div>
   <!-- :class="{'mt-3' : form.variation == 'All'}"
 :class="{'mt-3' : form.variation == 'All'}" -->
-  <div class="col-6" >
+  <div class="col-6" :class="{'mt-3' : form.variation !== 'Temporary Licences'}"  >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.is_license_complete" class="form-control form-control-default">
       <option :value="''" disabled selected>Pending Or Complete?</option>
@@ -230,7 +233,7 @@
       </div>
   </div>
 
-  <div class="col-6" >
+  <div class="col-6" :class="{'mt-3' : form.variation !== 'Temporary Licences'}">
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Select Applicant</option>
@@ -391,15 +394,6 @@
   margin-bottom: 1rem;
 }
 
-  .btnSecondary{
-    background-color: #6c757d!important;
-  }
-  .btnSuccess{
-    background-color: #4caf50;
-  }
-  .btnPrimary{
-    background-color: #0d6efd!important;
-  }
 </style>
 <script src="./reports-js/report.js"></script>
 

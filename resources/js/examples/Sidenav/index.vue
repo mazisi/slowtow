@@ -13,7 +13,7 @@
         id="iconSidenav"
       ></i>
       <inertia-link class="m-0 navbar-brand" href="/dashboard">
-        <img
+        <img loading="lazy"
           src="https://slotowstorage.blob.core.windows.net/images/white_logo3.png"
           class="navbar-brand-img"
           alt="Slotow Logo"
