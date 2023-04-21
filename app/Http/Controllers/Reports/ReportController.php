@@ -13,14 +13,14 @@ use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\AllReportsController;
-use App\Http\Controllers\NewAppExportController;
-use App\Http\Controllers\RenewalExportController;
-use App\Http\Controllers\TemporaLExportController;
-use App\Http\Controllers\TransferExportController;
-use App\Http\Controllers\AlterationExportController;
-use App\Http\Controllers\NominationExportController;
-use App\Http\Controllers\ExistingLicenceExportController;
+use App\Http\Controllers\Reports\AllReportsController;
+use App\Http\Controllers\Reports\NewAppExportController;
+use App\Http\Controllers\Reports\RenewalExportController;
+use App\Http\Controllers\Reports\TemporaLExportController;
+use App\Http\Controllers\Reports\TransferExportController;
+use App\Http\Controllers\Reports\AlterationExportController;
+use App\Http\Controllers\Reports\NominationExportController;
+use App\Http\Controllers\Reports\ExistingLicenceExportController;
 
 class ReportController extends Controller
 {
