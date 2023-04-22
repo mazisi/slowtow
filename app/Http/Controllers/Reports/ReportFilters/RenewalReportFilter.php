@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Reports\ReportFilters;
 
 use Illuminate\Support\Facades\DB;
 
-class RenewaReportFilter {
+class RenewalReportFilter {
 
   function filter($request){
    return DB::table('licence_renewals')

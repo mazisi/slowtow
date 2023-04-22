@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Reports;
 
-use App\Models\Task;
 use App\Actions\ExportNotes;
 use App\Models\RenewalDocument;
 use App\Actions\ExportToSpreadsheet;
@@ -46,14 +45,14 @@ class RenewalExportController extends Controller
                             $arr_of_renewals[$i]->licence_number,
                             $arr_of_renewals[$i]->date,
                             '',
-                            (new RenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'FALSE' : 'TRUE',
-                            $arr_of_renewals[$i]->is_quote_sent ? 'FALSE' : 'TRUE',
+                            (new RenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'TRUE' : 'FALSE',
+                            $arr_of_renewals[$i]->is_quote_sent ? 'TRUE' : 'FALSE',
                             $arr_of_renewals[$i]->client_paid_at,
                             '',
                             $arr_of_renewals[$i]->payment_to_liquor_board_at,
                             $arr_of_renewals[$i]->renewal_issued_at,
                             $arr_of_renewals[$i]->renewal_delivered_at,
-                            $arr_of_renewals[$i]->renewal_delivered_at ? 'FALSE' : 'TRUE',
+                            $arr_of_renewals[$i]->renewal_delivered_at ? 'TRUE' : 'FALSE',
                             $notes
                             ];
 

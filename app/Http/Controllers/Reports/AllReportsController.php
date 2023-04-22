@@ -8,15 +8,16 @@ use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Http\Controllers\Reports\LicenceStatus;
+use App\Http\Controllers\Reports\RenewalExportController;
 use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
 use App\Http\Controllers\Reports\ReportFilters\AlterationFilter;
 use App\Http\Controllers\Reports\ReportFilters\NewAppReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\NominationReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\RenewaReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\TemporalExportReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\TransferReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\NominationReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\TemporalExportReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 
 class AllReportsController extends Controller
 {
@@ -63,9 +64,9 @@ class AllReportsController extends Controller
                 $spreadsheet = new Spreadsheet();
                 $spreadsheet->getActiveSheet()->setTitle("Alterations")
                 ->fromArray(
-                $alterationData,   // The data to set
-                NULL,        // Array values with this value will not be set
-                'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
+                $alterationData,
+                NULL,
+                'A1'  
                 );
 
         foreach ($spreadsheet->getActiveSheet()->getColumnIterator() as $column) {
@@ -304,7 +305,7 @@ class AllReportsController extends Controller
             )
         );
         
-            $arr_of_renewals = (new RenewaReportFilter)->filter($request)->toArray(); 
+            $arr_of_renewals = (new RenewalReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 

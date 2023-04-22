@@ -12,7 +12,6 @@ use App\Http\Controllers\Reports\ReportFilters\NominationReportFilter;
 class NominationExportController extends Controller implements ReportShouldHaveStatusInterface
 {
     public static function export($request){
-
           
             $arrayData = array(
                 array(
@@ -53,7 +52,7 @@ class NominationExportController extends Controller implements ReportShouldHaveS
         $arrayData[] = $data;
 
             }
-            (new ExportToSpreadsheet)->exportToExcel('A1:J1', 'Nominations_', $arrayData);
+            (new ExportToSpreadsheet)->exportToExcel('A1:K1', 'Nominations_', $arrayData);
 
         
 }
