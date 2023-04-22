@@ -2,11 +2,8 @@
 
 namespace App\Http\Controllers\Reports;
 
-use App\Models\Task;
+
 use App\Actions\ExportNotes;
-use App\Models\RenewalDocument;
-use App\Models\NominationDocument;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
