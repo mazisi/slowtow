@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Actions\ExportNotes;
 use App\Models\RenewalDocument;
 use App\Actions\ExportToSpreadsheet;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Reports\ReportFilters\RenewaReportFilter;
 
 

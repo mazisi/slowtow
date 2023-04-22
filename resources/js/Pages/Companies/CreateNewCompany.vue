@@ -293,6 +293,7 @@ export default {
       <TextInputComponent 
         :inputType="'text'"
         v-model="form.business_address_postal_code" 
+        :value="form.business_address_postal_code" 
         :column="'col-6'" 
         :label="'Postal Code'" 
         :errors="errors.business_address_postal_code"
@@ -315,6 +316,7 @@ export default {
   <TextInputComponent 
         :inputType="'text'"
         v-model="form.postal_address" 
+        :value="form.postal_address" 
         :column="'col-12'" 
         :label="'Postal Address Line 1'" 
         :errors="errors.postal_address"
@@ -324,6 +326,7 @@ export default {
       <TextInputComponent 
         :inputType="'text'"
         v-model="form.postal_address2" 
+        :value="form.postal_address2" 
         :column="'col-12'" 
         :label="'Postal Address Line 2'" 
         :errors="errors.postal_address2"
@@ -333,6 +336,7 @@ export default {
       <TextInputComponent 
         :inputType="'text'"
         v-model="form.postal_address3" 
+        :value="form.postal_address3" 
         :column="'col-12'" 
         :label="'Postal Address Line 3'" 
         :errors="errors.postal_address3"
@@ -356,6 +360,7 @@ export default {
       <TextInputComponent 
         :inputType="'text'"
         v-model="form.postal_code" 
+        :value="form.postal_code" 
         :column="'col-6'" 
         :label="'Postal Code'" 
         :errors="errors.postal_code"

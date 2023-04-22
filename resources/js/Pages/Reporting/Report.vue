@@ -64,15 +64,7 @@
 
   <h5 class="text-center">{{ form.variation }}</h5>   
 
-  <div class="col-6 columns ">
-    <div class="input-group input-group-outline null is-filled" >
-      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="input-have-green-color form-control form-control-default">
-          <option :value="''" disabled selected>Active/Inactive</option>
-          <option value="Active">Active</option>
-          <option value="Inactive">Inactive</option>
-       </select>
-    </div>
-  </div>
+ 
 
   <div class="col-6 columns">
      
@@ -223,7 +215,7 @@
   </div>
   <!-- :class="{'mt-3' : form.variation == 'All'}"
 :class="{'mt-3' : form.variation == 'All'}" -->
-  <div class="col-6" :class="{'mt-3' : form.variation !== 'Temporary Licences'}"  >
+  <div class="col-6" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.is_license_complete" class="form-control form-control-default">
       <option :value="''" disabled selected>Pending Or Complete?</option>
@@ -232,8 +224,8 @@
       </select>
       </div>
   </div>
-
-  <div class="col-6" :class="{'mt-3' : form.variation !== 'Temporary Licences'}">
+  <!-- :class="{'mt-3' : form.variation !== 'Temporary Licences'}"  -->
+  <div class="col-6" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Select Applicant</option>
@@ -242,6 +234,16 @@
       </select>
       </div>
   </div>
+  <div class="col-6 columns ">
+    <div class="input-group input-group-outline null is-filled" >
+      <select v-model="form.activeStatus" @change="fetchNewAppWithStages" class="input-have-green-color form-control form-control-default">
+          <option :value="''" disabled selected>Active/Inactive</option>
+          <option value="Active">Active</option>
+          <option value="Inactive">Inactive</option>
+       </select>
+    </div>
+  </div>
+  
 
 <div class="d-flex mt-4" style="justify-content: space-between">
   

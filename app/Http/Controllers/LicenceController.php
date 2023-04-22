@@ -56,10 +56,12 @@ class LicenceController extends Controller
        
    try {
     $licence = Licence::create([
+        'is_licence_active' => $request->is_licence_active,
         "trading_name" => $request->trading_name,
         'belongs_to' => $request->belongs_to,
         "licence_type_id" => $request->licence_type,
         "licence_date" => $request->licence_date,
+        'licence_issued_at' => $request->licence_date,
         "company_id"   => $request->company,
         "people_id"   => $request->person,
         "licence_number" => $request->licence_number,
@@ -122,6 +124,7 @@ class LicenceController extends Controller
             "trading_name" => $request->trading_name,
             "licence_type_id" => $request->licence_type,
             "licence_date" => $request->licence_date,
+            'licence_issued_at' => $request->licence_date,
             "licence_number" => $request->licence_number,
             "old_licence_number" => $request->old_licence_number,
             "address" => $request->address,

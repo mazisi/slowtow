@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Reports;
 
-use App\Models\Task;
 use App\Actions\ExportNotes;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;

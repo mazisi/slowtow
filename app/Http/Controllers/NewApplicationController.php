@@ -100,6 +100,7 @@ class NewApplicationController extends Controller
                 'client_number' => $request->client_number,
                 'latest_renewal' => $request->latest_renewal,
                 'licence_date' => $request->licence_date,
+                'licence_issued_at' => $request->licence_date,
                 'postal_code' => $request->postal_code,
                ]);
                if($licence){
