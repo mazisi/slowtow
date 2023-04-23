@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Reports;
 
 use App\Actions\ExportNotes;
-use Illuminate\Support\Facades\DB;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
@@ -28,7 +27,7 @@ public static function export($request){
             'COMMENTS'
         )
     );
-    $arr_of_transfers = [];
+            $arr_of_transfers = [];
     
             $arr_of_transfers = (new TransferReportFilter)->filter($request)->toArray(); 
 

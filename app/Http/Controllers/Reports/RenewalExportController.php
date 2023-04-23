@@ -6,7 +6,7 @@ use App\Actions\ExportNotes;
 use App\Models\RenewalDocument;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Reports\ReportFilters\RenewaReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
 
 
 class RenewalExportController extends Controller
@@ -34,7 +34,7 @@ class RenewalExportController extends Controller
         );
         $arr_of_renewals = [];
                     
-            $arr_of_renewals = (new RenewaReportFilter)->filter($request)->toArray(); 
+            $arr_of_renewals = (new RenewalReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
                  $notes = (new ExportNotes)->getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal');              
