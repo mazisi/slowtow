@@ -74,8 +74,8 @@
 <div class="table-responsive p-0">
   <table class="table table-striped table-hover" style="font-size:85%">
 <thead>
-<tr>
-<th>Active</th>
+<tr class="text" style="font-size: 15px">
+<th>Act</th>
 <th class="ps-2">Trading Name</th>
 <th class="ps-2">Licence Number</th>
 <th class="ps-2">Licence Date</th>

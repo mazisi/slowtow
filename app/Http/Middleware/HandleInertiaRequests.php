@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Licence;
 use Inertia\Middleware;
 use Tightenco\Ziggy\Ziggy;
 use Illuminate\Http\Request;
@@ -47,6 +48,8 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => function () {
                 return (new Ziggy)->toArray();
             },
+            //This is for hiding options in navbar if stage is less than issued.
+            'viewed_licence' => Licence::whereSlug(request('slug'))->first(['id','status','trading_name']),
             'currentRoute' => fn () => Route::currentRouteName(),
             'success' => fn () => $request->session()->get('success'),
             'error' => fn () => $request->session()->get('error'),

@@ -213,26 +213,23 @@
           </template>
         </sidenav-collapse>
       </li>
-
       
-      
-
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<===============Licence variations Starts ==============>>>>>>>>>>>>>>>> -->
 
       <li v-if="$page.props.currentRoute == 'view_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
-         :class="{ active:  $page.props.currentRoute == 'registration'}"
-         :href="`/registration?slug=${$page.props.slug}`">
+         :class="{ active:  $page.props.currentRoute == 'new-application'}"
+         :href="`/new-application?slug=${$page.props.slug}`">
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">app_registration</i>
         </div>
-        <span class="nav-link-text ms-1">Registration</span>
+        <span class="nav-link-text ms-1">New Application</span>
         
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'renew_licence'}"
@@ -245,7 +242,7 @@
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_history'}"
@@ -258,7 +255,7 @@
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'transfer_history'"
+      <li v-if="$page.props.currentRoute == 'transfer_history' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
@@ -271,7 +268,7 @@
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
@@ -284,7 +281,7 @@
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'nominations'"
+      <li v-if="$page.props.currentRoute == 'nominations' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'nominate'}"
@@ -297,7 +294,7 @@
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'alterations'}"
@@ -310,7 +307,7 @@
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'alterations'"
+      <li v-if="$page.props.currentRoute == 'alterations' && $page.props.viewed_licence.status >= 15"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
@@ -375,16 +372,8 @@
       <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>  
       
 
-      <li class="nav-item">
-  <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
-    <div class="text-center d-flex align-items-center justify-content-center me-2">
-    <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>
-    <span class="nav-link-text ms-1">Back</span>
-  </a>
-  <div class="collapse"></div>
-</li>
-<hr v-if="$page.props.auth.has_slowtow_admin_role
-"/>
+   
+<hr v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role"/>
 
 
  <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
@@ -438,6 +427,15 @@
             
           </template>
         </sidenav-collapse>
+      </li>
+      
+      <li class="nav-item">
+        <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
+          <div class="text-center d-flex align-items-center justify-content-center me-2">
+          <i class="material-icons-round opacity-10 fs-5">arrow_back</i></div>
+          <span class="nav-link-text ms-1">Back</span>
+        </a>
+        <div class="collapse"></div>
       </li>
 
       <li class="nav-item d-none" >

@@ -9,12 +9,12 @@
   <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
-<div class="col-lg-9 col-9">
-<h6 class="mb-1">Licence Info: {{ licence.trading_name ? licence.trading_name : '' }}</h6>
+<div class="col-lg-11 col-11">
+<h5 class="mb-1 text-center">Licence Info: {{ licence.trading_name ? licence.trading_name : '' }}</h5>
 </div>
 
 
-<div class="col-lg-3 col-3 my-auto text-end">
+<div class="col-lg-1 col-1 my-auto text-end">
 <div class="dropdown float-lg-end pe-4">
 <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
@@ -63,51 +63,65 @@
 />
 
 
-
-<TextInputComponent v-if="licence.belongs_to === 'Company'"
-  :inputType="'text'"
-  :required="true"
-  :disabled="true"
-  v-model="form.company" 
-  :column="'col-md-12'" 
-  :label="'Current Company'" 
-  :value="form.company"
-  :errors="errors.company"
-  :input_id="company"
-/>
-
-<TextInputComponent v-else-if="licence.belongs_to === 'Person'"
-  v-model="form.person" 
-  :column="'col-md-12'" 
-  :label="'Current Person'" 
-  :value="form.person"
-  :errors="errors.person"
-  :input_id="person"
-  :disabled="true"
-/>
-
-
-<!-- <div class="col-md-12 columns" v-if="licence.belongs_to === 'Company'">
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label mb-4">Current Company</label>
-<input type="text" @focus="changeCompany" class="form-control form-control-default" v-model="form.company" >
-</div>
-
-<div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-</div>
-
-<div class="col-md-12 columns" v-if="licence.belongs_to === 'Person'">
-  <Multiselect
-  v-model="form.change_company"
-  :options="options"
-  :searchable="true"
-   placeholder="Search Company..."
-   class="form-label"
-   :disabled="true"
-  />
-  
+<div class="col-12 columns" v-if="$page.props.auth.has_slowtow_admin_role">
+  <div class="input-group input-group-outline null is-filled">
+  <label class="form-label">Applicant *</label>
+  <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
+  <option :value="''" disabled selected>Select Applicant</option>
+  <option value="Company">Company</option>
+  <option value="Person">Person</option>
+  </select>
+  </div>
   <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-  </div> -->
+  </div>
+
+
+  
+        <div class="col-12 columns" v-if="form.belongs_to === 'Company' && $page.props.auth.has_slowtow_admin_role">
+          <Multiselect
+            v-model="form.company_id"
+            :options="companyOptions"
+            :searchable="true"
+            placeholder="Search Company..."
+            class="form-label"
+            />              
+        </div>
+
+        <div class="col-12 columns" v-else-if="form.belongs_to === 'Person' && $page.props.auth.has_slowtow_admin_role">
+          <Multiselect
+            :options="peopleOptions"
+            v-model="form.person_id"
+            :searchable="true"
+            placeholder="Search Person..."
+            class="form-label"
+          />
+      </div>
+     
+
+      
+            <div class="col-12 columns" v-if="form.belongs_to === 'Company' && $page.props.auth.has_slowtow_user_role">
+              <Multiselect
+                  v-model="form.company_id"
+                  :options="companyOptions"
+                  :searchable="true"
+                  :disabled="true"
+                  placeholder="Search Company..."
+                  class="form-label"
+                  />   
+          </div>
+
+          <div class="col-12 columns" v-else-if="form.belongs_to === 'Person' && $page.props.auth.has_slowtow_user_role">
+            <Multiselect
+              :options="peopleOptions"
+              v-model="form.person_id"
+              :searchable="true"
+              :disabled="true"
+              placeholder="Search Person..."
+              class="form-label"
+            />
+        </div> 
+
+
 
   <div class="col-md-12 columns">
     <div class="input-group input-group-outline null is-filled">
@@ -221,6 +235,42 @@
     :input_id="postal_code"
     :inputType="'text'"
 />
+
+<div class="col-12 columns">
+  <div class="input-group input-group-outline null is-filled ">
+    <label class="form-label">Liquor Board Region</label>
+<select class="form-control form-control-default" v-model="form.board_region" >
+  <option :value="''" disabled selected >Select Board Region</option>
+  <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
+
+</select>
+ </div>
+<div v-if="errors.board_region" class="text-danger">{{ errors.board_region }}</div>
+</div>
+
+
+<TextInputComponent
+    v-model="form.latest_renewal" 
+    :column="'col-12'" 
+    :label="'Latest Renewal'" 
+    :value="form.latest_renewal"
+    :errors="errors.latest_renewal"
+    :input_id="latest_renewal"
+    :inputType="'text'"
+/>
+
+<TextInputComponent
+    v-model="form.renewal_amount" 
+    :column="'col-12'" 
+    :label="'Renewal Amount'" 
+    :value="form.renewal_amount"
+    :errors="errors.renewal_amount"
+    :input_id="renewal_amount"
+    :inputType="'number'"
+/>
+
+
+
 
 </div>
 

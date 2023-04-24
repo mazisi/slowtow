@@ -6,7 +6,7 @@
       <div class="card card-body mx-3 mx-md-4 mt-n6">
         <div class="row">
     <div class="col-lg-12 col-12">
-     <h6>Process Registration for: <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">
+     <h6>New Application for: <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">
       {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
      <p class="text-sm mb-0">Current Stage: 
       <span class="font-weight-bold ms-1" v-if="licence.status === '1'">Client Quoted</span>

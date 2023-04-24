@@ -196,7 +196,7 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::patch('/update-new-app/{slug}',[NewApplicationController::class,'update'])->name('update_new_app');
 
-        Route::get('/registration',[NewApplicationController::class,'view_registration'])->name('view_registration');
+        Route::get('/new-application',[NewApplicationController::class,'view_registration'])->name('view_registration');
 
 
 
@@ -404,7 +404,7 @@ Route::group(['middleware' => ['guest']], function () {
 
 
 
-        Route::get('/email-comms', [EmailCommsController::class,'index'])->name('email_comms');
+        Route::get('/email-comms', [EmailCommsController::class,'registration'])->name('email_comms');
 
         Route::get('/email-comms/transfers', [TransferEmailCommsController::class,'getLicenceTransfers'])->name('get_licence_transfers');
 

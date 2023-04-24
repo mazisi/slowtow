@@ -25,6 +25,7 @@ export default {
     error: String,
     tasks: Object,
     companies: Object,
+    people: Object,
     original_lic: Object,
     duplicate_original_lic: Object,
     original_lic_delivered: Object,
@@ -34,7 +35,8 @@ export default {
   
   setup (props) {
         let showMenu = false;
-        let options = props.companies;
+        let companyOptions = props.companies;
+        let peopleOptions = props.people;
         let show_current_company = ref(true);
         let change_company = ref(false);
         let show_modal = ref(true);
@@ -46,6 +48,7 @@ export default {
     const form = useForm({
          trading_name: props.licence.trading_name,
          licence_type: props.licence.licence_type_id,
+         belongs_to: props.licence.belongs_to,
          is_licence_active: props.licence.is_licence_active,
          licence_number: props.licence.licence_number,
          old_licence_number: props.licence.old_licence_number,
@@ -55,6 +58,9 @@ export default {
          address2: props.licence.address2,
          address3: props.licence.address3,
          province: props.licence.province,
+         board_region: props.licence.board_region,
+         renewal_amount: props.licence.renewal_amount,
+         latest_renewal: props.licence.latest_renewal,
          company: props.licence.belongs_to === 'Company' ? props.licence.company.name : '',
          person: props.licence.belongs_to === 'Person' ? props.licence.people.full_name : '',
          company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
@@ -240,7 +246,7 @@ export default {
       show_modal,
       show_current_company,
       change_company,
-      options,
+      companyOptions,peopleOptions,
       form,toast,notify,
       limit,common,
       changeCompany,
@@ -258,6 +264,10 @@ export default {
   computed: {
     computedProvinces() {
       return common.getProvinces();
+    },
+    
+    computedBoardRegions() {
+      return common.getBoardRegions();
     }
   },
 

@@ -29,7 +29,7 @@ class NewApplicationController extends Controller
 
         $persons = People::pluck('full_name','id');
         $companies = Company::pluck('name','id');
-        $licence_dropdowns = LicenceType::get();
+        $licence_dropdowns = LicenceType::orderBy('licence_type','ASC')->get();
 
         return Inertia::render('New Applications/Index',[
             'persons' => $persons,
@@ -70,7 +70,7 @@ class NewApplicationController extends Controller
                 'slug' => sha1(now())
                ]);
                if($licence){
-                return to_route('view_licence',['slug' => $licence->slug])->with('success','New App created successfully.');
+                return to_route('view_registration',['slug' => $licence->slug])->with('success','New App created successfully.');
                }
                
         } catch (\Throwable $th) {
@@ -81,6 +81,8 @@ class NewApplicationController extends Controller
     }
 
     public function update(Request $request,$slug){
+        
+      
         try {
             $request->validate([
                 'trading_name' => 'required'
@@ -91,6 +93,7 @@ class NewApplicationController extends Controller
                 'licence_type_id' => $request->licence_type,
                 'belongs_to' => $request->belongs_to,
                 'company_id' => $request->company_id,
+                'people_id' => $request->person_id,
                 'board_region' => $request->board_region,
                 'address' => $request->address,
                 'address2' => $request->address2,
@@ -259,6 +262,7 @@ public function updateRegistrationDate(Request $request, $slug)
             'deposit_paid_at' => $request->deposit_paid_at,
             'liquor_board_at' => $request->liquor_board_at,
             'application_lodged_at' => $request->application_lodged_at,
+            'renewal_amount' => $request->renewal_amount,
             'initial_inspection_at' => $request->initial_inspection_at,
             'final_inspection_at' => $request->final_inspection_at,
             'activation_fee_requested_at' =>$request->activation_fee_requested_at,

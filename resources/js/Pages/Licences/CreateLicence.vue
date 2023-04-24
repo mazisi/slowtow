@@ -191,6 +191,18 @@
 />
 
 
+
+<LiquorBoardRegionComponent 
+      :dropdownList="computedBoardRegions" 
+      :label="'Liquor Board Region*'" 
+      :defaultDisabledText="'Select Liquor Board Region'"
+      :column="'col-12'"
+      :value="form.board_region"
+      v-model="form.board_region"
+      :errors="errors.board_region"
+      :input_id="board_region"
+     />
+
 </div>
 <div>
   <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
@@ -228,6 +240,7 @@ import { computed } from 'vue';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
+import LiquorBoardRegionComponent from '../components/input-components/LiquorBoardRegionComponent.vue'
 
 export default {
  props: {
@@ -255,6 +268,7 @@ export default {
           address2: '',
           address3: '',
           province: '',
+          board_region: '',
           company: '',//company id
           person: '', //person id
           postal_code: '',
@@ -283,7 +297,11 @@ export default {
           return common.getProvinces();
         })
 
-    return { submit,selectApplicant,company_options, people_options, form, computedProvinces}
+        const computedBoardRegions = computed(() => {
+          return common.getBoardRegions();
+        })
+
+    return { submit,selectApplicant,company_options, people_options, form, computedProvinces,computedBoardRegions}
   },
    components: {
     Layout,
@@ -293,7 +311,8 @@ export default {
     Banner,
     TextInputComponent,
     CheckBoxInputComponent,
-    LicenceTypeDropDownComponent
+    LicenceTypeDropDownComponent,
+    LiquorBoardRegionComponent
 },
   
 };

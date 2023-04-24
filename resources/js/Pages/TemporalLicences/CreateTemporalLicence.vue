@@ -173,10 +173,10 @@ export default {
  <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
  </div>
 
-<ApplicationType 
-  v-model="form.application_type" 
-  :errors="errors.application_type"
-   />
+      <ApplicationType 
+        v-model="form.application_type" 
+        :errors="errors.application_type"
+        />
 
 <div class="col-md-4 columns">
 <div class="input-group input-group-outline null is-filled">

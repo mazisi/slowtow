@@ -6,7 +6,10 @@
   <div class="card card-body mx-3 mx-md-4 mt-n6">
   <div class="row">
   <div class="col-lg-9 col-9">
-  <h6 class="mb-1">View New Application: <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
+  <h6 class="mb-1">
+    <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}
+    
+    </Link> - {{ licence.licence_number }}</h6>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
@@ -64,10 +67,10 @@
       </div>
       </div>
   
-  <div class="col-4 columns">
+  <div class="col-4 columns" v-if="$page.props.auth.has_slowtow_admin_role">
     <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Applicant</label>
-    <select disabled v-model="form.belongs_to" class="form-control form-control-default" required>
+    <label class="form-label">Applicant *</label>
+    <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
     <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
     <option value="Person">Person</option>
@@ -75,6 +78,53 @@
     </div>
     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
     </div>
+
+
+    
+          <div class="col-4 columns" v-if="form.belongs_to === 'Company' && $page.props.auth.has_slowtow_admin_role">
+            <Multiselect
+              v-model="form.company_id"
+              :options="companyOptions"
+              :searchable="true"
+              placeholder="Search Company..."
+              class="form-label"
+              />              
+          </div>
+
+          <div class="col-4 columns" v-else-if="form.belongs_to === 'Person' ">
+            <Multiselect
+              :options="peopleOptions"
+              v-model="form.person_id"
+              :searchable="true"
+              placeholder="Search Person..."
+              class="form-label"
+            />
+        </div>
+       
+
+        
+        <div class="col-4 columns" v-if="form.belongs_to === 'Company' && $page.props.auth.has_slowtow_user_role">
+          <Multiselect
+              v-model="form.company_id"
+              :options="companyOptions"
+              :searchable="true"
+              :disabled="true"
+              placeholder="Search Company..."
+              class="form-label"
+              />   
+      </div>
+
+      <div class="col-4 columns" v-else-if="form.belongs_to === 'Person' && $page.props.auth.has_slowtow_user_role">
+        <Multiselect
+          :options="peopleOptions"
+          v-model="form.person_id"
+          :searchable="true"
+          :disabled="true"
+          placeholder="Search Person..."
+          class="form-label"
+        />
+    </div> 
+ 
 
 
     <div class="col-4 columns">
@@ -94,17 +144,17 @@
       <div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
     </div> 
 
-    <div class="col-4 columns" v-if="form.belongs_to ==='Person'">
+    <div class="col-4 columns" v-if="licence.belongs_to ==='Person'">
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">ID Number</label>
-      <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" :value="licence.people.id_or_passport" >
+      <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" v-model="form.id_or_passport" >
       </div>
     </div>
 
-      <div class="col-4 columns" v-if="form.belongs_to === 'Company'">
+      <div class="col-4 columns" v-if="licence.belongs_to === 'Company'">
         <div class="input-group input-group-outline null is-filled">
         <label class="form-label">Reg Number</label>
-        <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" :value="licence.company.reg_number" >
+        <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" v-model="reg_number" >
         </div>
       </div>
 
@@ -113,7 +163,7 @@
   
 
 
-   <div class="col-4 columns">            
+   <div class="col-4 columns" v-if="licence.status >= 15">            
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Latest Renewal</label>
     <input type="text" class="form-control form-control-default" v-model="form.latest_renewal">
@@ -143,7 +193,7 @@
     <div class="col-4 columns">            
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">Renewal Amount</label>
-      <input type="text" class="form-control form-control-default" v-model="form.renewal_amount">
+      <input type="number" class="form-control form-control-default" v-model="form.renewal_amount">
       </div>
       <div v-if="errors.renewal_amount" class="text-danger">{{ errors.renewal_amount }}</div>
     </div> 
@@ -188,7 +238,7 @@
   <div>
     <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    <span class="visually-hidden">Loading...</span> Update</button>
+    <span class="visually-hidden">Loading...</span> Save</button>
   </div>
   </div>
   </div>  
@@ -197,7 +247,10 @@
   </form>
   
   </div>
-  
+ 
+
+  <Task :tasks="tasks" :model_id="licence.id" :success="success" :error="error" :errors="errors" :model_type="'Licence'"/>
+
   </div>
   </div>
   </div>
@@ -224,6 +277,7 @@
   import 'vue3-toastify/dist/index.css';
   import common from '../common-js/common.js';
   import { computed } from 'vue';
+  import Task from "../Tasks/Task.vue";
   
   export default {
    props: {
@@ -231,15 +285,17 @@
       licence_dropdowns: Object,
       companies: Object,
       licence: Object,
-      persons: Object,
+      tasks: Object,
+      people: Object,
       success: String,
       error: String,
     },
     
     
     setup (props) {
-      let options;     
-  
+      let companyOptions = props.companies;
+      let peopleOptions = props.people;
+
       const form = useForm({
             trading_name: props.licence.trading_name,
             licence_type: props.licence.licence_type_id,
@@ -256,7 +312,10 @@
             licence_date: props.licence.licence_date,
             renewal_amount: props.licence.renewal_amount,
             postal_code: props.licence.postal_code,
-            company_id: props.licence.company !== null ? props.licence.company.id :'',
+            id_number: props.licence.people ? props.licence.people.id_or_passport : '',
+            reg_number: props.licence.company ? props.licence.company.reg_number : '',
+            company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
+            person_id: props.licence.belongs_to === 'Person' ? props.licence.people.id : '',
              
       })
 
@@ -289,6 +348,17 @@
           }
         }
 
+        function selectApplicant(event){
+            if(form.belongs_to === 'Company'){
+              form.belongs_to = event.target.value;
+              form.person_id='';
+            }else{
+              form.belongs_to = event.target.value;
+              form.company_id='';
+            }
+
+     }
+
         // onMounted(() => {
         //   if(props.success){
         //     notify(props.success)
@@ -304,8 +374,14 @@
         const computedBoardRegions = computed(() => {
           return common.getBoardRegions();
         })
-      return { submit, form ,options, deleteLicence, notify,
-        computedProvinces, computedBoardRegions }
+      return { submit, form , toast,
+                companyOptions,
+                peopleOptions,
+                deleteLicence, notify,
+                computedProvinces, 
+                computedBoardRegions,
+                selectApplicant
+      }
     },
      components: {
       Layout,
@@ -313,6 +389,7 @@
       Head,
       Multiselect,
       Banner,
+      Task,
       toast
     },
     

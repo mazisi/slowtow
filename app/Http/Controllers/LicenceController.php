@@ -70,6 +70,7 @@ class LicenceController extends Controller
         "address2" => $request->address2,
         "address3" => $request->address3,
         "province" => $request->province,
+        "board_region" => $request->board_region,
         "postal_code" => $request->postal_code,
         'slug' => sha1(time()),
     ]);
@@ -91,7 +92,8 @@ class LicenceController extends Controller
         $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->latest()->first();
         $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->latest()->first();
         $companies = Company::pluck('name','id');
-        $licence_dropdowns = LicenceType::get();
+        $people = People::pluck('full_name','id');
+        $licence_dropdowns = LicenceType::orderBy('licence_type')->get();
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->latest()->paginate(4)->withQueryString();
 
 
@@ -103,6 +105,7 @@ class LicenceController extends Controller
                                             'licence_dropdowns' => $licence_dropdowns,
                                              'tasks' => $tasks,
                                              'companies' => $companies,
+                                             'people' => $people,
                                              'original_lic' => $original_lic,
                                              'duplicate_original_lic' => $duplicate_original_lic,
                                              'original_lic_delivered' => $original_lic_delivered,
@@ -125,14 +128,20 @@ class LicenceController extends Controller
             "licence_type_id" => $request->licence_type,
             "licence_date" => $request->licence_date,
             'licence_issued_at' => $request->licence_date,
+            'belongs_to' => $request->belongs_to,
+            'company_id' => $request->company_id,
+            'people_id' => $request->person_id,
             "licence_number" => $request->licence_number,
             "old_licence_number" => $request->old_licence_number,
             "address" => $request->address,
             "address2" => $request->address2,
             "address3" => $request->address3,
             "province" => $request->province,
+            "board_region" => $request->board_region,
             "postal_code" => $request->postal_code,
-            "company_id" => $company_var
+            "company_id" => $company_var,
+            'renewal_amount' => $request->renewal_amount,
+            'latest_renewal'  => $request->latest_renewal
         ]);
         
         if($update){
