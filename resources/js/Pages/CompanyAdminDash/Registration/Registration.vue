@@ -11,7 +11,7 @@
      <p class="text-sm mb-0">Current Stage: 
       <span class="font-weight-bold ms-1" v-if="licence.status === '1'">Client Quoted</span>
      <span v-else-if="licence.status === '2'" class="font-weight-bold ms-1">Deposit Paid</span>
-     <span v-else-if="licence.status === '3'" class="font-weight-bold ms-1">Deposit Invoiced</span>
+     <span v-else-if="licence.status === '3'" class="font-weight-bold ms-1">Deposit Invoice</span>
      <span v-else-if="licence.status === '5'" class="font-weight-bold ms-1">Prepare New Application</span>
      <span v-else-if="licence.status === '4'" class="font-weight-bold ms-1">Payment to the Liquor Board</span>
      <span v-else-if="licence.status === '6'" class="font-weight-bold ms-1">Scanned Application</span>
@@ -54,7 +54,7 @@
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="client-invoiced" type="checkbox" disabled  
     :checked="licence.status >= 2">
-    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoiced</label>
+    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoice</label>
     </div>
     </div>
     <ul class="list-group">
@@ -1179,11 +1179,11 @@
         <div class="modal-body">      
           <div class="row">    
           <div class="col-md-12 columns">
-          <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
+          <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
            <input type="file" @change="getFileName"
            hidden id="licence-doc" accept=".pdf"/>
            <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
-           <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+           <div v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
              <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
            </div>
          <div class="col-md-12">
@@ -1473,7 +1473,7 @@
   };
   //The following are status keys
   // 1. Client Quoted
-  // 2. Deposit Invoiced
+  // 2. Deposit Invoice
   // 3. Deposit Paid
   // 4. Payment to the Liquor Board
   // 5. Prepare New Application

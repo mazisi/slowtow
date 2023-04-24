@@ -119,6 +119,7 @@ class NewApplicationController extends Controller
 
     public function view_registration(Request $request){
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
+        $client_quoted = LicenceDocument::where('document_type','Client Quoted')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence')->where('model_id',$licence->id)->get();
 
         $gba_application_form = LicenceDocument::where('document_type','GLB Application Forms')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
@@ -156,7 +157,6 @@ class NewApplicationController extends Controller
         $application_logded  = LicenceDocument::where('document_type','Application Lodged')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $initial_inspection_doc  = LicenceDocument::where('document_type','Initial Inspection')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $final_inspection_doc  = LicenceDocument::where('document_type','Final Inspection')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
-        $activation_fee_requested_doc  = LicenceDocument::where('document_type','Activation Fee Requested')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $client_finalisation  = LicenceDocument::where('document_type','Client Finalisation Invoiced')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $activation_fee_paid  = LicenceDocument::where('document_type','Activation Fee Paid')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $licence_issued_doc  = LicenceDocument::where('document_type','Licence Issued')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
@@ -166,6 +166,7 @@ class NewApplicationController extends Controller
         
         return Inertia::render('New Applications/Registration',[
             'licence' => $licence,
+            'client_quoted' => $client_quoted,
              'gba_application_form' => $gba_application_form,
              'client_invoiced' => $client_invoiced,
             'application_forms' => $application_forms,
@@ -199,7 +200,6 @@ class NewApplicationController extends Controller
             'application_logded' => $application_logded,
             'initial_inspection_doc' => $initial_inspection_doc,
              'final_inspection_doc' => $final_inspection_doc,
-            'activation_fee_requested_doc' => $activation_fee_requested_doc,
             'client_finalisation' => $client_finalisation,
             'activation_fee_paid' => $activation_fee_paid,
             'licence_issued_doc' => $licence_issued_doc,

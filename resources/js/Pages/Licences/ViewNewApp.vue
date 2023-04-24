@@ -6,10 +6,10 @@
   <div class="card card-body mx-3 mx-md-4 mt-n6">
   <div class="row">
   <div class="col-lg-9 col-9">
-  <h6 class="mb-1">
+  <h5 class="mb-1">
     <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}
-    
-    </Link> - {{ licence.licence_number }}</h6>
+      
+    </Link> - New Application - {{ licence.licence_number }}</h5>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
@@ -247,9 +247,16 @@
   </form>
   
   </div>
- 
 
-  <Task :tasks="tasks" :model_id="licence.id" :success="success" :error="error" :errors="errors" :model_type="'Licence'"/>
+  <Task 
+  v-if="licence.status < 15"
+  :tasks="tasks" 
+  :model_id="licence.id" 
+  :success="success" 
+  :error="error" 
+  :errors="errors" 
+  :model_type="'Licence'"
+  />
 
   </div>
   </div>

@@ -15,6 +15,7 @@ import Layout from "../../Shared/Layout.vue";
       licence: Object,
       success: String,
       error: String,
+      client_quoted: Object,
       gba_application_form: Object,//doc
       client_invoiced: Object,//doc
       application_forms: Object,//doc
@@ -48,7 +49,6 @@ import Layout from "../../Shared/Layout.vue";
       application_logded: Object,
       initial_inspection_doc: Object,
       final_inspection_doc: Object,
-      activation_fee_requested_doc: Object,
       client_finalisation: Object,
       client_paid: Object,
       activation_fee_paid: Object,
@@ -317,7 +317,7 @@ import Layout from "../../Shared/Layout.vue";
   };
   //The following are status keys
   // 1. Client Quoted
-  // 2. Deposit Invoiced
+  // 2. Deposit Invoice
   // 3. Deposit Paid
   // 4. Payment to the Liquor Board
   // 5. Prepare New Application

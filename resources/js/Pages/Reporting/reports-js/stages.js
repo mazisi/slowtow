@@ -60,7 +60,7 @@ const RENEWAL_STAGES = {
   const NEW_APP_STAGES = {
 
     "1" : "Client Quoted",
-    "2" : "Deposit Invoiced",
+    "2" : "Deposit Invoice",
     "3": "Deposit Paid",
     "4": "Payment to the Liquor Board",
     "5": "Prepare New Application",

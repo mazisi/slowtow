@@ -11,7 +11,7 @@
       {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
      <p class="text-sm mb-0">Current Stage: 
       <span class="font-weight-bold ms-1" v-if="licence.status === '1'">Client Quoted</span>
-     <span v-else-if="licence.status === '2'" class="font-weight-bold ms-1">Deposit Invoiced</span>
+     <span v-else-if="licence.status === '2'" class="font-weight-bold ms-1">Deposit Invoice</span>
      <span v-else-if="licence.status === '3'" class="font-weight-bold ms-1">Deposit Paid</span>
      <span v-else-if="licence.status === '5'" class="font-weight-bold ms-1">Prepare New Application</span>
      <span v-else-if="licence.status === '4'" class="font-weight-bold ms-1">Payment to the Liquor Board</span>
@@ -22,7 +22,7 @@
      <span v-else-if="licence.status === '10'" class="font-weight-bold ms-1">Final Inspection</span>
      <span v-else-if="licence.status === '11'" class="font-weight-bold ms-1">Activation Fee Requested</span>
      <span v-else-if="licence.status === '12'" class="font-weight-bold ms-1">Client Finalisation Invoice</span>
-     <span v-else-if="licence.status === '13'" class="font-weight-bold ms-1">Client Paid</span>
+     <span v-else-if="licence.status === '13'" class="font-weight-bold ms-1">Finalisation Paid</span>
      <span v-else-if="licence.status === '14'" class="font-weight-bold ms-1">Activation Fee Paid</span>
      <span v-else-if="licence.status === '15'" class="font-weight-bold ms-1">Licence Issued</span>
      <span v-else-if="licence.status === '16'" class="font-weight-bold ms-1">Licence Delivered</span>
@@ -49,17 +49,40 @@
   @input="pushData($event,1)" value="1">
   <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
   </div>
-  </div>   
+  </div>  
+  
+  <ul class="list-group">
+      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+        <div class="avatar me-3" v-if="client_quoted">
+        <a @click="viewFile(client_quoted.id)" href="#!">
+        <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+        </a>
+        </div>
+    
+       <div class="d-flex align-items-start flex-column justify-content-center">
+          <h6 class="mb-0 text-sm">Document</h6>
+          <p v-if="client_quoted" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
+        </div>
+    
+        <a v-if="client_quoted" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+        </a>
+        <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
+        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+        <i class="fa fa-upload h5" aria-hidden="true"></i>
+        </a>
+      </li>
+    </ul>
   <hr>
   
-
+  
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="client-invoiced" type="checkbox"
     @input="pushData($event,2)" 
     :checked="licence.status >= 2"
     value="2">
-    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoiced</label>
+    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoice</label>
     </div>
     </div>
     <ul class="list-group">
@@ -932,35 +955,13 @@
       </div>
      </template>  
 
-    <ul class="list-group">
-      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-        <div class="avatar me-3" v-if="activation_fee_requested_doc !== null">
-        <a @click="viewFile(activation_fee_requested_doc.id)" href="#!">
-        <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-        </a>
-        </div>
-    
-       <div class="d-flex align-items-start flex-column justify-content-center">
-          <h6 class="mb-0 text-sm">Document</h6>
-          <p v-if="activation_fee_requested_doc !== null" class="mb-0 text-xs limit-file-name">{{ activation_fee_requested_doc.document_name }}</p>
-        </div>
-    
-        <a v-if="activation_fee_requested_doc !== null" @click="deleteDocument(activation_fee_requested_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-        </a>
-        <a v-else @click="getDocType(11,'Activation Fee Requested')" data-bs-toggle="modal" data-bs-target="#documents" 
-        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-upload h5" aria-hidden="true"></i>
-        </a>
-      </li>
-    </ul>
     <hr/> 
 
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
       <input class="active-checkbox" id="finat" type="checkbox"
       @input="pushData($event,12)" :checked="licence.status >= 12" value="12">
-      <label for="finat" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoiced </label>
+      <label for="finat" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoice </label>
       </div>
       </div>
             
@@ -992,7 +993,8 @@
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
         <input class="active-checkbox" id="client-paid" type="checkbox"
         @input="pushData($event,13)" :checked="licence.status >= 13" value="13">
-        <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Client Paid </label>
+        this was previouly client paid
+        <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Finalisation Paid </label>
         </div>
         </div>
         
@@ -1090,7 +1092,7 @@
               </a>
               <a v-else @click="getDocType(14,'Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
               class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-              <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+              <i class="fa fa-upload h5" aria-hidden="true"></i>
               </a>
             </li>
           </ul>
@@ -1253,7 +1255,14 @@
   </div>
   <hr>
  
-  <Task :tasks="tasks" :model_id="licence.id" :success="success" :error="error" :errors="errors" :model_type="'Licence'"/>
+  <Task 
+  v-if="licence.status >= 15"
+  :tasks="tasks" 
+  :model_id="licence.id" 
+  :success="success" 
+  :error="error" 
+  :errors="errors" 
+  :model_type="'Licence'"/>
 
 
 
@@ -1279,11 +1288,11 @@
         <div class="modal-body">      
           <div class="row">    
           <div class="col-md-12 columns">
-          <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Select File</label>
+          <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
            <input type="file" @change="getFileName"
            hidden id="licence-doc" accept=".pdf"/>
            <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
-           <div v-if="file_name && show_file_name">File uploaded: <span class="text-success" v-text="file_name"></span></div>
+           <div v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
              <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
            </div>
          <div class="col-md-12">
