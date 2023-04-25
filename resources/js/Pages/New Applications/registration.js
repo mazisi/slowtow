@@ -92,7 +92,7 @@ import Layout from "../../Shared/Layout.vue";
       })
 
       const uploadDoc = useForm({
-        doc: null,
+        document_file: null,
         doc_type: null ,
         num: null,
         stage: null,
@@ -248,7 +248,7 @@ import Layout from "../../Shared/Layout.vue";
       function getFileName(e){
         this.file_size = e.target.files[0].size;
         this.show_file_name = true;
-        this.uploadDoc.doc = e.target.files[0];
+        this.uploadDoc.document_file = e.target.files[0];
         this.file_name = e.target.files[0].name;
         this.file_has_apostrophe = this.file_name.includes("'");
       }

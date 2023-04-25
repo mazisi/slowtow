@@ -51,13 +51,13 @@ class LicenceDocsController extends Controller
             $updateLicence = Licence::find($request->licence_id);
             switch ($request->doc_type) {
               case 'Client Quoted':
-                $updateLicence->update(['is_client_invoiced' => $fileModel->document_name]);
+                $updateLicence->update(['is_client_invoiced' => true]);
                 break;
               case 'Application Lodged':
                 $updateLicence->update(['is_application_logded_doc_uploaded' => true]);
                 break;
               case 'Client Finalisation Invoiced':
-                $updateLicence->update(['is_finalisation_doc_uploaded' => $fileModel->document_name]);
+                $updateLicence->update(['is_finalisation_doc_uploaded' => true]);
                 break;                
               default:
                 # code...

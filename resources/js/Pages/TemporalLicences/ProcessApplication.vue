@@ -66,15 +66,14 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a @click="viewFile(client_quoted.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+      <h6 v-if="!client_quoted" class="mb-0 text-sm">Document</h6>
+      <h6 v-else-if="client_quoted" class="mb-0 text-sm limit-file-name">{{ client_quoted.document_name }}</h6>
     </div>
 
     <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -82,7 +81,7 @@
     </a>
     <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5" aria-hidden="true"></i>
     </a>
   </li>
 </ul>    
@@ -100,15 +99,15 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a @click="viewFile(client_invoiced.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="client_invoiced !== null" class="mb-0 text-xs limit-file-name">{{ client_invoiced.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+      
+      <h6 v-if="!client_invoiced" class="mb-0 text-sm">Document</h6>
+      <h6 v-else-if="client_invoiced" class="mb-0 text-sm limit-file-name">{{ client_invoiced.document_name }}</h6>
     </div>
 
     <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -116,7 +115,7 @@
     </a>
     <a v-else @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5 " aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -182,13 +181,13 @@
       @click="getDocType(4,'Application Form','Company',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_application_form !== null" @click="deleteDocument(company_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="company_application_form !== null" @click="viewFile(company_application_form.id)" href="#!">
+     <a v-if="company_application_form !== null" :href="`${$page.props.blob_file_path}${company_application_form.document}`" target="_blank">
      <i v-if="company_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <a v-if="liqour_board !== null" @click="viewFile(liqour_board.id)" href="#!">
+      <a v-if="liqour_board !== null" :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
     <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
     </a>
     
@@ -200,14 +199,14 @@
        <i v-if="company_poa == null" @click="getDocType(4,'POA And RES','Company',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 curser-pointer mx-2"></i>
          <i v-if="company_poa !== null" @click="deleteDocument(company_poa.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="company_poa !== null" @click="viewFile(company_poa.id)" href="#!">
+     <a v-if="company_poa !== null" :href="`${$page.props.blob_file_path}${company_poa.document}`" target="_blank">
      <i v-if="company_poa !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
         <i v-if="company_annexure_b == null" @click="getDocType(4,'Annexure B','Company',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_annexure_b !== null" @click="deleteDocument(company_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_annexure_b !== null" @click="viewFile(company_annexure_b.id)" href="#!">
+        <a v-if="company_annexure_b !== null" :href="`${$page.props.blob_file_path}${company_annexure_b.document}`" target="_blank">
         <i v-if="company_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
@@ -222,7 +221,7 @@
          <i v-if="company_cipc == null" @click="getDocType(4,'CIPC Certificate','Company',6)" data-bs-toggle="modal" data-bs-target="#documents"
          class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="company_cipc !== null" @click="deleteDocument(company_cipc.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_cipc !== null" @click="viewFile(company_cipc.id)" href="#!">
+        <a v-if="company_cipc !== null" :href="`${$page.props.blob_file_path}${company_cipc.document}`" target="_blank">
         <i v-if="company_cipc !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br> 
     <div class="col-sm-1"> </div>
@@ -233,7 +232,8 @@
      <i v-if="company_id_document == null" @click="getDocType(4,'ID Document','Company',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_id_document !== null" @click="deleteDocument(company_id_document.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_id_document !== null" @click="viewFile(company_id_document.id,'CompanyDocument')" href="#!">
+        <a v-if="company_id_document !== null" 
+        :href="`${$page.props.blob_file_path}${company_id_document.document_file}`" target="_blank">
         <i v-if="company_id_document !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
@@ -241,7 +241,7 @@
   <i v-if="company_representations == null" @click="getDocType(4,'Representations','Company',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_representations !== null" @click="deleteDocument(company_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_representations !== null" @click="viewFile(company_representations.id)" href="#!">
+        <a v-if="company_representations !== null" :href="`${$page.props.blob_file_path}${company_representations.document}`" target="_blank">
         <i v-if="company_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br>  
 
@@ -250,14 +250,14 @@
      <i v-if="company_landlord_letter == null" @click="getDocType(4,'Landlord Letter','Company',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_landlord_letter  !== null" @click="deleteDocument(company_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_landlord_letter !== null" @click="viewFile(company_landlord_letter.id)" href="#!">
+        <a v-if="company_landlord_letter !== null" :href="`${$page.props.blob_file_path}${company_landlord_letter.document}`" target="_blank">
         <i v-if="company_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
       <i v-if="company_security_letter == null" @click="getDocType(4,'Security Letter','Company',10)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="company_security_letter  !== null" @click="deleteDocument(company_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_security_letter !== null" @click="viewFile(company_security_letter.id)" href="#!">
+        <a v-if="company_security_letter !== null" :href="`${$page.props.blob_file_path}${company_security_letter.document}`" target="_blank">
         <i v-if="company_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -267,7 +267,7 @@
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_advert  !== null" @click="deleteDocument(company_advert.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_advert !== null" @click="viewFile(company_advert.id)" href="#!">
+        <a v-if="company_advert !== null" :href="`${$page.props.blob_file_path}${company_advert.document}`" target="_blank">
         <i v-if="company_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -277,7 +277,7 @@
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="company_plan  !== null" @click="deleteDocument(company_plan.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="company_plan !== null" @click="viewFile(company_plan.id)" href="#!">
+        <a v-if="company_plan !== null" :href="`${$page.props.blob_file_path}${company_plan.document}`" target="_blank">
         <i v-if="company_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
@@ -321,13 +321,13 @@
       @click="getDocType(4,'Application Form','Individual',1)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_application_form !== null" @click="deleteDocument(individual_application_form.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="individual_application_form !== null" @click="viewFile(individual_application_form.id)" href="#!">
+     <a v-if="individual_application_form !== null" :href="`${$page.props.blob_file_path}${individual_application_form.document}`" target="_blank">
      <i v-if="individual_application_form !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
 
 
 
      <button type="button" class="btn btn-outline-success document-names">Proof Of Payment</button>
-      <a v-if="liqour_board !== null" @click="viewFile(liqour_board.id)" href="#!">
+      <a v-if="liqour_board !== null" :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
     <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
     </a>
     
@@ -339,14 +339,14 @@
        <i v-if="power_of_attorney == null" @click="getDocType(4,'Power Of Attorney','Individual',3)" data-bs-toggle="modal" data-bs-target="#documents" 
          class="fa fa-upload h5 curser-pointer mx-2"></i>
          <i v-if="power_of_attorney !== null" @click="deleteDocument(power_of_attorney.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-     <a v-if="power_of_attorney !== null" @click="viewFile(power_of_attorney.id)" href="#!">
+     <a v-if="power_of_attorney !== null" :href="`${$page.props.blob_file_path}${power_of_attorney.document}`" target="_blank">
      <i v-if="power_of_attorney !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> 
 
        <button type="button" class="btn btn-outline-success document-names">Annexure B & C</button>
         <i v-if="individual_annexure_b == null" @click="getDocType(4,'Annexure B','Individual',4)" data-bs-toggle="modal" data-bs-target="#documents" 
         class="fa fa-upload h5 mx-2 curser-pointer"></i>
          <i v-if="individual_annexure_b !== null" @click="deleteDocument(individual_annexure_b.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_annexure_b !== null" @click="viewFile(individual_annexure_b.id)" href="#!">
+        <a v-if="individual_annexure_b !== null" :href="`${$page.props.blob_file_path}${individual_annexure_b.document}`" target="_blank">
         <i v-if="individual_annexure_b !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br> 
 
@@ -359,7 +359,8 @@
 
 <div v-if="licence.company_id == null">
   <button type="button" class="btn btn-outline-success document-names">ID Document </button>
-     <a v-if="get_person_id_document !== null" @click="viewFile(get_person_id_document.id,'PeopleDocument')" href="#!">
+     <a v-if="get_person_id_document !== null" 
+     :href="`${$page.props.blob_file_path}${get_person_id_document.path}`" target="_blank">
         <i  class="fa fa-link h5 mx-2" ></i></a>
     <a v-else :href="`#!`">
         <i  class="fa fa-link h5 mx-2"></i></a> <br> 
@@ -374,7 +375,7 @@
   <i v-if="individual_representations == null" @click="getDocType(4,'Representations','Individual',7)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_representations !== null" @click="deleteDocument(individual_representations.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_representations !== null" @click="viewFile(individual_representations.id)" href="#!">
+        <a v-if="individual_representations !== null" :href="`${$page.props.blob_file_path}${individual_representations.document}`" target="_blank">
         <i v-if="individual_representations !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
      <br>  
 
@@ -383,14 +384,14 @@
      <i v-if="individual_landlord_letter == null" @click="getDocType(4,'Landlord Letter','Individual',8)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_landlord_letter  !== null" @click="deleteDocument(individual_landlord_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_landlord_letter !== null" @click="viewFile(individual_landlord_letter.id)" href="#!">
+        <a v-if="individual_landlord_letter !== null" :href="`${$page.props.blob_file_path}${individual_landlord_letter.document}`" target="_blank">
         <i v-if="individual_landlord_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a>
         <br>
      <button type="button" class="btn btn-outline-success document-names">Security Letter</button>
       <i v-if="individual_security_letter == null" @click="getDocType(4,'Security Letter','Individual',9)" data-bs-toggle="modal" data-bs-target="#documents" 
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
      <i v-if="individual_security_letter  !== null" @click="deleteDocument(individual_security_letter.id)" class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_security_letter !== null" @click="viewFile(individual_security_letter.id)" href="#!">
+        <a v-if="individual_security_letter !== null" :href="`${$page.props.blob_file_path}${individual_security_letter.document}`" target="_blank">
         <i v-if="individual_security_letter !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -400,7 +401,7 @@
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_advert  !== null" @click="deleteDocument(individual_advert.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_advert !== null" @click="viewFile(individual_advert.id)" href="#!">
+        <a v-if="individual_advert !== null" :href="`${$page.props.blob_file_path}${individual_advert.document}`" target="_blank">
         <i v-if="individual_advert !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br>
 
 
@@ -410,7 +411,7 @@
      class="fa fa-upload h5 mx-2 curser-pointer"></i> 
     <i v-if="individual_plan  !== null" @click="deleteDocument(individual_plan.id)" 
     class="fa fa-trash-alt h5 curser-pointer mx-2 text-danger"></i> 
-        <a v-if="individual_plan !== null" @click="viewFile(individual_plan.id)" href="#!">
+        <a v-if="individual_plan !== null" :href="`${$page.props.blob_file_path}${individual_plan.document}`" target="_blank">
         <i v-if="individual_plan !== null" class="fa fa-file-pdf h4 text-danger"></i></a> <br> 
   <div class="col-sm-1"> </div>
  
@@ -483,15 +484,14 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a @click="viewFile(liqour_board.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="liqour_board !== null" class="mb-0 text-xs limit-file-name">{{ liqour_board.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    <h6 v-if="!liqour_board" class="mb-0 text-sm">Document</h6>
+    <h6 v-else-if="liqour_board" class="mb-0 text-sm limit-file-name">{{ liqour_board.document_name }}</h6>
     </div>
 
     <a v-if="liqour_board !== null" @click="deleteDocument(liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -499,7 +499,7 @@
     </a>
     <a v-else @click="getDocType(5,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -518,21 +518,20 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="scanned_app !== null">
-    <a @click="viewFile(scanned_app.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${scanned_app.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="scanned_app !== null" class="mb-0 text-xs limit-file-name">{{ scanned_app.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+      <h6 v-if="!scanned_app" class="mb-0 text-sm">Document</h6>
+    <h6 v-else-if="scanned_app" class="mb-0 text-sm limit-file-name">{{ scanned_app.document_name }}</h6>
     </div>
     <a v-if="scanned_app !== null" @click="deleteDocument(scanned_app.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a @click="getDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -577,21 +576,20 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_logded !== null">
-    <a @click="viewFile(licence_logded.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${licence_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_logded !== null" class="mb-0 text-xs limit-file-name">{{ licence_logded.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+      <h6 v-if="!licence_logded" class="mb-0 text-sm">Document</h6>
+    <h6 v-else-if="licence_logded" class="mb-0 text-sm limit-file-name">{{ licence_logded.document_name }}</h6>
     </div>
     <a v-if="licence_logded !== null" @click="deleteDocument(licence_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
     <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
     </a>
     <a @click="getDocType(7,'Licence Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" v-else>
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5" aria-hidden="true"></i>
     </a>
   </li>
 </ul>
@@ -638,15 +636,14 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_issued !== null">
-    <a @click="viewFile(licence_issued.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${licence_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_issued !== null" class="mb-0 text-xs limit-file-name">{{ licence_issued.document_name }}</p>
-      <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    <h6 v-if="!licence_issued" class="mb-0 text-sm">Document</h6>
+    <h6 v-else-if="licence_issued" class="mb-0 text-sm limit-file-name">{{ licence_issued.document_name }}</h6>
     </div>
 
     <a v-if="licence_issued !== null" @click="deleteDocument(licence_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -654,7 +651,7 @@
     </a>
     <a v-else @click="getDocType(8,'Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5" aria-hidden="true"></i>
     </a>
   </li>
 </ul>  
@@ -702,15 +699,14 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="licence_delivered !== null">
-    <a @click="viewFile(licence_delivered.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${licence_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
 
    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Document</h6>
-      <p v-if="licence_delivered !== null" class="mb-0 text-xs limit-file-name">{{ licence_delivered.document_name }}</p>
-       <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+    <h6 v-if="!licence_delivered" class="mb-0 text-sm">Document</h6>
+    <h6 v-else-if="licence_delivered" class="mb-0 text-sm limit-file-name">{{ licence_delivered.document_name }}</h6>
     </div>
 
     <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
@@ -718,7 +714,7 @@
     </a>
     <a v-else @click="getDocType(9,'Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
     class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-    <i class="fa fa-upload h5 text-secondary" aria-hidden="true"></i>
+    <i class="fa fa-upload h5" aria-hidden="true"></i>
     </a>
   </li>
 </ul>  

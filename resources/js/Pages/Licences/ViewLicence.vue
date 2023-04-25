@@ -278,9 +278,10 @@
 <div class="row">
 <div class="col-md-6 columns">
 <ul class="list-group">
+  <template v-if="original_lic">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic">
-    <a v-if="original_lic" @click="viewFile(original_lic.id)" href="#!">
+    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -298,11 +299,29 @@
     <i class="fa fa-upload" aria-hidden="true"></i>
     </button>
   </li>
+</template>
 
+<template v-else-if="licence_issued">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="licence_issued">
+    <a :href="`${$page.props.blob_file_path}${licence_issued.document_file}`" 
+    target="_blank" >
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence</h6>
+      <p v-if="licence_issued" class="mb-0 text-xs">
+        {{ licence_issued.document_name ? removeFilePath(licence_issued.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+  </li>
+</template>
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="duplicate_original_lic">
-    <a v-if="duplicate_original_lic" @click="viewFile(duplicate_original_lic.id)" href="#!">
+    <a v-if="duplicate_original_lic" :href="`${$page.props.blob_file_path}${duplicate_original_lic.document_file}`" target="_blank">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -327,49 +346,74 @@
 
 <div class="col-md-6 columns">
 <ul class="list-group">
+  <template v-if="original_lic_delivered">
+    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+      <div class="me-3" v-if="original_lic_delivered">
+      <a v-if="original_lic_delivered" :href="`${$page.props.blob_file_path}${original_lic_delivered.document_file}`" target="_blank" >
+      <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+      </a>    
+      </div>
+
+      <div class="d-flex align-items-start flex-column justify-content-center">
+        <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
+        <p v-if="original_lic_delivered" class="mb-0 text-xs">{{ original_lic_delivered.document_name ? removeFilePath(original_lic_delivered.document_name) : '' }}</p>
+        <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+      </div>
+
+      <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+      </button>
+
+      <button v-else @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+      </button>
+    </li>
+</template>
+
+<template v-else-if="licence_delivered">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="original_lic_delivered">
-    <a v-if="original_lic_delivered" @click="viewFile(original_lic_delivered.id)" href="#!" >
+    <div class="me-3" v-if="licence_delivered">
+    <a v-if="licence_delivered" :href="`${$page.props.blob_file_path}${licence_delivered.document_file}`" 
+    target="_blank" >
+
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
-
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
-      <p v-if="original_lic_delivered" class="mb-0 text-xs">{{ original_lic_delivered.document_name ? removeFilePath(original_lic_delivered.document_name) : '' }}</p>
+      <p v-if="licence_delivered" class="mb-0 text-xs">
+        {{ licence_delivered.document_name ? removeFilePath(licence_delivered.document_name) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
     </div>
-
-    <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-    </button>
-
-    <button v-else @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-upload" aria-hidden="true"></i>
-    </button>
   </li>
+</template>
 
 
-  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-    <div class="me-3" v-if="duplicate_original_lic_delivered">
-    <a v-if="duplicate_original_lic_delivered" @click="viewFile(duplicate_original_lic_delivered.id)" href="#!" >
-    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-    </a>    
-    </div>
-    <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
-       <p v-if="duplicate_original_lic_delivered" class="mb-0 text-xs">
-        {{ duplicate_original_lic_delivered.document_name ? removeFilePath(duplicate_original_lic_delivered.document_name) : '' }}</p>
-      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-    </div>
-    <button  v-if="duplicate_original_lic_delivered" @click="deleteDocument(duplicate_original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-    </button>
+    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+      <div class="me-3" v-if="duplicate_original_lic_delivered">
+      <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.document_file}`" 
+      target="_blank" >
 
-    <button v-else @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-    <i class="fa fa-upload" aria-hidden="true"></i>
-    </button>
-  </li>
+      <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+      </a>    
+      </div>
+      <div class="d-flex align-items-start flex-column justify-content-center">
+        <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
+        <p v-if="duplicate_original_lic_delivered" class="mb-0 text-xs">
+          {{ duplicate_original_lic_delivered.document_name ? removeFilePath(duplicate_original_lic_delivered.document_name) : '' }}</p>
+        <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+      </div>
+      <button  v-if="duplicate_original_lic_delivered" @click="deleteDocument(duplicate_original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+      </button>
+
+      <button v-else @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <i class="fa fa-upload" aria-hidden="true"></i>
+      </button>
+    </li>
+
+
+
 </ul>
 </div>
 </div>
@@ -449,7 +493,7 @@ Action
       <div class="modal-body">      
         <div class="row">
         <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="">Click To Upload File</label>
+        <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document_file" class="text-danger">{{ errors.document_file }}</div>

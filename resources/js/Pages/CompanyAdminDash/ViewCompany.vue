@@ -504,7 +504,7 @@
         </div>
 
         <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="#!">Click To Upload File</label>
+        <label for="licence-doc" class="btn btn-dark w-100" href="#!">Select File</label>
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>

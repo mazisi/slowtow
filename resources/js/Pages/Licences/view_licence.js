@@ -27,8 +27,10 @@ export default {
     companies: Object,
     people: Object,
     original_lic: Object,
+    licence_issued: Object,
     duplicate_original_lic: Object,
     original_lic_delivered: Object,
+    licence_delivered: Object,
     duplicate_original_lic_delivered: Object
   },
   
@@ -228,6 +230,7 @@ export default {
                })
          }
 
+       
          
 
         //  onMounted(() => {

@@ -87,9 +87,15 @@ class LicenceController extends Controller
     public function show(Request $request){
         $view = '';
         $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
+
         $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->latest()->first();
+        $licence_issued = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Licence Issued')->latest()->first();
+
         $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->latest()->first();
+
         $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->latest()->first();
+        $licence_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Licence Delivered')->latest()->first();
+
         $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->latest()->first();
         $companies = Company::pluck('name','id');
         $people = People::pluck('full_name','id');
@@ -101,14 +107,16 @@ class LicenceController extends Controller
        
       
         return Inertia::render('Licences/'.$view,[
-                                            'licence' => $licence,
-                                            'licence_dropdowns' => $licence_dropdowns,
+                                             'licence' => $licence,
+                                             'licence_dropdowns' => $licence_dropdowns,
                                              'tasks' => $tasks,
                                              'companies' => $companies,
                                              'people' => $people,
                                              'original_lic' => $original_lic,
+                                             'licence_issued' => $licence_issued,
                                              'duplicate_original_lic' => $duplicate_original_lic,
                                              'original_lic_delivered' => $original_lic_delivered,
+                                             'licence_delivered' => $licence_delivered,
                                              'duplicate_original_lic_delivered' => $duplicate_original_lic_delivered,
                                             ]);
     }

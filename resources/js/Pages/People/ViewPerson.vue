@@ -116,7 +116,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="id_document">
-    <a @click="viewFile(id_document.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${id_document.path}`" target="_blank">
     <i v-if="id_document.path.includes('.pdf')" class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     
@@ -145,7 +145,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance">
-    <a @click="viewFile(police_clearance.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${police_clearance.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -170,7 +170,7 @@
   <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="passport_doc">
-    <a @click="viewFile(passport_doc.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${passport_doc.path}`" target="_blank">
     <i v-if="passport_doc.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     </a>
@@ -200,7 +200,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="work_permit_doc">
-    <a @click="viewFile(work_permit_doc.id)" target="#!">
+    <a :href="`${$page.props.blob_file_path}${work_permit_doc.path}`" target="_blank">
     <i v-if="work_permit_doc.path.includes('.pdf')" class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     <i v-else class="fa fa-picture-o text-lg text-danger" aria-hidden="true"></i>
     </a>
@@ -229,7 +229,7 @@
   <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="fingerprints !== null">
-    <a @click="viewFile(fingerprints.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${fingerprints.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>

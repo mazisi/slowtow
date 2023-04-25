@@ -51,7 +51,7 @@
     <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="client_quoted !== null">
-        <a @click="viewFile(client_quoted.id)" href="#!">
+        <a :href="`${$page.props.blob_file_path}${client_quoted.path}`" target="_blank" >
         <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -82,7 +82,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a @click="viewFile(client_invoiced.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_invoiced.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -158,7 +158,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="application_form !== ''">
-    <a v-if="application_form" @click="viewFile(application_form.id)" href="#!">
+    <a v-if="application_form" :href="`${$page.props.blob_file_path}${application_form.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -180,7 +180,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="dimensional_plans !== ''">
-    <a v-if="dimensional_plans" @click="viewFile(dimensional_plans.id)" href="#!">
+    <a v-if="dimensional_plans" :href="`${$page.props.blob_file_path}${dimensional_plans.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -202,7 +202,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="payment_to_liquor_board !== ''">
-    <a v-if="payment_to_liquor_board" @click="viewFile(payment_to_liquor_board.id)" href="#!">
+    <a v-if="payment_to_liquor_board" :href="`${$page.props.blob_file_path}${payment_to_liquor_board.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -228,7 +228,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="poa_res">
-    <a v-if="poa_res.path" @click="viewFile(poa_res.id)" href="#!">
+    <a v-if="poa_res.path" :href="`${$page.props.blob_file_path}${poa_res.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -251,7 +251,7 @@
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="smoking_affidavict !== ''">
-    <a v-if="smoking_affidavict" @click="viewFile(smoking_affidavict.id)" href="#!">
+    <a v-if="smoking_affidavict" :href="`${$page.props.blob_file_path}${smoking_affidavict.path}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -297,7 +297,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a @click="viewFile(liqour_board.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${liqour_board.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -361,7 +361,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="alteration_logded !== null">
-    <a @click="viewFile(alteration_logded.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${alteration_logded.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -425,7 +425,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certification_issued !== null">
-    <a @click="viewFile(certification_issued.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${certification_issued.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -489,7 +489,7 @@ v-if="application_form !== null
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="alteration_delivered !== null">
-    <a @click="viewFile(alteration_delivered.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${alteration_delivered.path}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>

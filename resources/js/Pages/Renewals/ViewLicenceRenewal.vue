@@ -64,7 +64,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a @click="viewFile(client_quoted.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -100,7 +100,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a @click="viewFile(client_invoiced.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -202,7 +202,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liqour_board !== null">
-    <a @click="viewFile(liqour_board.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${liqour_board.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -271,7 +271,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_issued !== null">
-    <a @click="viewFile(renewal_issued.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${renewal_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -337,7 +337,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="renewal_doc !== null">
-    <a @click="viewFile(renewal_doc.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
     </a>
     </div>

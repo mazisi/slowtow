@@ -170,7 +170,7 @@ v-model="form.telephone_number_2"
 <div class="col-md-6 columns">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="me-3" v-if="company_doc !== ''">
-      <a v-if="company_doc" @click="viewFile(company_doc.id)" href="#!">
+      <a v-if="company_doc" :href="`${$page.props.blob_file_path}${company_doc.document_file}`" target="_blank">
        <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
       </a>    
       </div>
@@ -192,7 +192,7 @@ v-model="form.telephone_number_2"
   
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="me-3" v-if="cipc_cert">
-      <a v-if="cipc_cert" @click="viewFile(cipc_cert.id)" href="#!">
+      <a v-if="cipc_cert" :href="`${$page.props.blob_file_path}${cipc_cert.document_file}`" target="_blank">
       <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
       </a>    
       </div>
@@ -213,7 +213,7 @@ v-model="form.telephone_number_2"
   
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
       <div class="me-3" v-if="bee_cert">
-      <a v-if="bee_cert" @click="viewFile(bee_cert.id)" href="#!">
+      <a v-if="bee_cert" :href="`${$page.props.blob_file_path}${bee_cert.document_file}`" target="_blank">
       <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
       </a>    
       </div>
@@ -240,7 +240,7 @@ v-model="form.telephone_number_2"
 
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="lta_cert">
-    <a v-if="lta_cert" @click="viewFile(lta_cert.id)" href="#!">
+    <a v-if="lta_cert" :href="`${$page.props.blob_file_path}${lta_cert.document_file}`" target="_blank">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -261,7 +261,7 @@ v-model="form.telephone_number_2"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="contrib_cert">
-    <a v-if="contrib_cert" @click="viewFile(contrib_cert.id)" href="#!">
+    <a v-if="contrib_cert" :href="`${$page.props.blob_file_path}${contrib_cert.document_file}`" target="_blank">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -285,7 +285,7 @@ v-model="form.telephone_number_2"
 
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="sars_cert">
-    <a v-if="sars_cert" @click="viewFile(sars_cert.id)" href="#!">
+    <a v-if="sars_cert" :href="`${$page.props.blob_file_path}${sars_cert.document_file}`" target="_blank">
     <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>
@@ -612,7 +612,7 @@ v-model="form.business_address"
         </div>
 
         <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="#!">Click To Upload File</label>
+        <label for="licence-doc" class="btn btn-dark w-100" href="#!">Select File</label>
          <input type="file" @change="getFileName"
          hidden id="licence-doc" accept=".pdf"/>
          <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>

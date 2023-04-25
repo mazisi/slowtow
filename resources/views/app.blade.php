@@ -135,9 +135,9 @@
     }
 
     .limit-file-name{
-      width: 90px; 
+      width: 130px; 
       overflow: hidden; 
-      height: 30px
+      height: 40px
     }
 
     .modal {

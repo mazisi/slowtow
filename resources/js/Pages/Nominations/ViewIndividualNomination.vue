@@ -63,7 +63,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_quoted !== null">
-    <a @click="viewFile(client_quoted.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_quoted.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -94,7 +94,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="client_invoiced !== null">
-    <a @click="viewFile(client_invoiced.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${client_invoiced.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -201,7 +201,7 @@
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="liquor_board !== null">
-    <a @click="viewFile(liquor_board.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${liquor_board.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -299,7 +299,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_forms !== null">
-    <a @click="viewFile(nomination_forms.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${nomination_forms.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -325,7 +325,8 @@ Action
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Proof Of Payment</h6>
     </div>
-    <a v-if="liquor_board !== null" @click="viewFile(liquor_board.id)" href="#!" class="mb-0 btn btn-link ms-auto" >
+    <a v-if="liquor_board !== null" 
+    :href="`${$page.props.blob_file_path}${liquor_board.document}`" target="_blank" class="mb-0 btn btn-link ms-auto" >
     <i class="fa fa-link h5 " aria-hidden="true"></i></a>
     <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" >
       <i class="fa fa-link h5" aria-hidden="true"></i></a>
@@ -338,7 +339,7 @@ Action
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="attorney_doc !== null">
-    <a @click="viewFile(attorney_doc.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${attorney_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -360,7 +361,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="certified_id_doc !== null">
-    <a @click="viewFile(certified_id_doc.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${certified_id_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -382,7 +383,7 @@ Action
 <ul class="list-group">
    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="police_clearance_doc !== null">
-    <a @click="viewFile(police_clearance_doc.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${police_clearance_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -404,7 +405,8 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="latest_renewal_doc !== null">
-    <a v-if="latest_renewal_doc !== null" @click="viewFile(latest_renewal_doc.id)" href="#!">
+    <a v-if="latest_renewal_doc !== null" 
+    :href="`${$page.props.blob_file_path}${latest_renewal_doc.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     
@@ -419,7 +421,7 @@ Action
     </a>
 
     <a v-if="latest_renewal_licence_doc !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
-    @click="viewFile(latest_renewal_licence_doc.id,'LicenceDocument')" href="#!">
+    :href="`${$page.props.blob_file_path}${latest_renewal_licence_doc.document_file}`" target="_blank">
       <i class="fa fa-link h5" aria-hidden="true"></i>
     </a>
 
@@ -458,7 +460,7 @@ Action
     <ul class="list-group">
      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="scanned_app !== null">
-        <a @click="viewFile(scanned_app.id)" href="#!">
+        <a :href="`${$page.props.blob_file_path}${scanned_app.document}`" target="_blank">
         <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
         </a>
         </div>
@@ -491,7 +493,7 @@ Action
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_logded">
-    <a @click="viewFile(nomination_logded.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${nomination_logded.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -557,7 +559,7 @@ Action
 <ul class="list-group">
   <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_issued !== null">
-    <a @click="viewFile(nomination_issued.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${nomination_issued.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
@@ -625,7 +627,7 @@ Action
 <ul class="list-group">
  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="avatar me-3" v-if="nomination_delivered !== null">
-    <a @click="viewFile(nomination_delivered.id)" href="#!">
+    <a :href="`${$page.props.blob_file_path}${nomination_delivered.document}`" target="_blank">
     <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
     </a>
     </div>
