@@ -42,7 +42,7 @@ public static function export($request){
                        '',
                        '',
                        $arr_of_transfers[$i]->lodged_at,
-                       $arr_of_transfers[$i]->lodged_at ? 'FALSE' : 'TRUE',
+                       $arr_of_transfers[$i]->lodged_at ? 'TRUE' : 'FALSE',
                        '',
                        $arr_of_transfers[$i]->payment_to_liquor_board_at,
                        $arr_of_transfers[$i]->issued_at,

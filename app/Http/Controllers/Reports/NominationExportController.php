@@ -43,7 +43,7 @@ class NominationExportController extends Controller implements ReportShouldHaveS
                    '',
                    $arr_of_nominations[$i]->payment_to_liquor_board_at,
                    $arr_of_nominations[$i]->nomination_lodged_at,
-                   $arr_of_nominations[$i]->nomination_lodged_at ? 'FALSE' : 'TRUE',
+                   $arr_of_nominations[$i]->nomination_lodged_at ? 'TRUE' : 'FALSE',
                    $arr_of_nominations[$i]->nomination_issued_at,
                    (new NominationExportController)->getStatus($arr_of_nominations[$i]->status),
                    $notes

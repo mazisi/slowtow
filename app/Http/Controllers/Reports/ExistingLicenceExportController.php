@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Reports;
 use App\Actions\ExportNotes;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
-use App\Actions\Reports\LicenceStatus;
+use App\Actions\LicenceStatus;
 use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 
 class ExistingLicenceExportController extends Controller

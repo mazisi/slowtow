@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Reports;
 
 
 use App\Actions\ExportNotes;
+use App\Actions\LicenceStatus;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\Http\Controllers\Reports\LicenceStatus;
 use App\Http\Controllers\Reports\RenewalExportController;
 use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
