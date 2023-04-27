@@ -993,7 +993,7 @@
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
         <input class="active-checkbox" id="client-paid" type="checkbox"
         @input="pushData($event,13)" :checked="licence.status >= 13" value="13">
-        this was previouly client paid
+        <!-- this was previouly client paid -->
         <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Finalisation Paid </label>
         </div>
         </div>
@@ -1117,7 +1117,7 @@
               <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
                 </div>
               <div v-if="errors.licence_issued_at" class="text-danger">{{ errors.licence_issued_at }}</div>
-          </div>
+             </div>
 
             <div class="col-md-1 columns">
               <button v-if="licence.licence_issued_at == null" 

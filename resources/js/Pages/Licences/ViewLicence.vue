@@ -135,7 +135,8 @@
     </div>
 
   <TextInputComponent
-    v-model="form.licence_date" 
+    v-model="form.licence_date"
+    :disabled="true" 
     :column="'col-md-12'" 
     :label="'Licence Date'" 
     :value="form.licence_date"
