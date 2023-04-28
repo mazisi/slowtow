@@ -7,6 +7,7 @@ use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
 use App\Http\Controllers\Reports\ReportFilters\TransferReportFilter;
+use App\Models\TransferDocument;
 
 class TransferExportController extends Controller implements ReportShouldHaveStatusInterface
 {
@@ -42,7 +43,7 @@ public static function export($request){
                        '',
                        '',
                        $arr_of_transfers[$i]->lodged_at,
-                       $arr_of_transfers[$i]->lodged_at ? 'TRUE' : 'FALSE',
+                       (new TransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
                        '',
                        $arr_of_transfers[$i]->payment_to_liquor_board_at,
                        $arr_of_transfers[$i]->issued_at,
@@ -102,5 +103,12 @@ function getStatus($number) : string {
     return $status;
 }         
 
+
+function getProofOfLodgiment($licence_transfer_id){
+    $proof_of_lodgiment = TransferDocument::where('licence_transfer_id',$licence_transfer_id)
+                                            ->where('doc_type','Transfer Logded')->first(['id']);
+    return $proof_of_lodgiment;
+
+}
 
 }

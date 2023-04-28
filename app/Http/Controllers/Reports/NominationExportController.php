@@ -7,7 +7,7 @@ use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
 use App\Http\Controllers\Reports\ReportFilters\NominationReportFilter;
-
+use App\Models\NominationDocument;
 
 class NominationExportController extends Controller implements ReportShouldHaveStatusInterface
 {
@@ -43,7 +43,7 @@ class NominationExportController extends Controller implements ReportShouldHaveS
                    '',
                    $arr_of_nominations[$i]->payment_to_liquor_board_at,
                    $arr_of_nominations[$i]->nomination_lodged_at,
-                   $arr_of_nominations[$i]->nomination_lodged_at ? 'TRUE' : 'FALSE',
+                   (new NominationExportController)->getProofOfLodgiment($arr_of_nominations[$i]->id) ? 'TRUE' : 'FALSE',
                    $arr_of_nominations[$i]->nomination_issued_at,
                    (new NominationExportController)->getStatus($arr_of_nominations[$i]->status),
                    $notes
@@ -55,6 +55,13 @@ class NominationExportController extends Controller implements ReportShouldHaveS
             (new ExportToSpreadsheet)->exportToExcel('A1:K1', 'Nominations_', $arrayData);
 
         
+}
+
+function getProofOfLodgiment($nomination_id){
+    $proof_of_lodgiment = NominationDocument::where('nomination_id',$nomination_id)
+                                            ->where('doc_type','Nomination Lodged')->first(['id']);
+    return $proof_of_lodgiment;
+
 }
 
 function getStatus($num_status) : string {

@@ -7,6 +7,7 @@ use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\LicenceStatus;
 use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
+use App\Models\LicenceDocument;
 
 class ExistingLicenceExportController extends Controller
 {
@@ -44,7 +45,7 @@ class ExistingLicenceExportController extends Controller
                                 '',
                                 $arr_of_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
                                 $arr_of_licences[$i]->application_lodged_at ? date('d M Y', strtotime($arr_of_licences[$i]->application_lodged_at)) : '',
-                                $arr_of_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
+                                (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_licences[$i]->id) ? 'FALSE': 'TRUE',
                                 $arr_of_licences[$i]->activation_fee_paid_at,
                                 '',
                                 $arr_of_licences[$i]->client_paid_at ? date('d M Y', strtotime($arr_of_licences[$i]->client_paid_at)) : '',
@@ -62,5 +63,10 @@ class ExistingLicenceExportController extends Controller
 
 }
 
+function getProofOfLodgiment($licence_id){
+    $proof_of_lodgiment = LicenceDocument::where('licence_id',$licence_id)
+                                            ->where('document_type','Application Lodged')->first(['id']);
+    return $proof_of_lodgiment;
 
+}
 }

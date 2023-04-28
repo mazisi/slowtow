@@ -9,9 +9,11 @@ use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Http\Controllers\Reports\RenewalExportController;
+use App\Http\Controllers\Reports\TransferExportController;
 use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
 use App\Http\Controllers\Reports\ReportFilters\AlterationFilter;
+use App\Http\Controllers\Reports\ExistingLicenceExportController;
 use App\Http\Controllers\Reports\ReportFilters\NewAppReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\TransferReportFilter;
@@ -115,7 +117,7 @@ class AllReportsController extends Controller
                         '',
                         $arr_of_existing_licences[$i]->deposit_paid_at ? 'TRUE': 'FALSE',
                         $arr_of_existing_licences[$i]->application_lodged_at ? date('d M Y', strtotime($arr_of_existing_licences[$i]->application_lodged_at)) : '',
-                        $arr_of_existing_licences[$i]->application_lodged_at ? 'TRUE': 'FALSE',
+                        (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_existing_licences[$i]->id) ? 'TRUE': 'FALSE',
                         $arr_of_existing_licences[$i]->activation_fee_paid_at,
                         '',
                         $arr_of_existing_licences[$i]->client_paid_at ? date('d-m-Y', strtotime($arr_of_existing_licences[$i]->client_paid_at)) : '',
@@ -181,7 +183,7 @@ class AllReportsController extends Controller
                 '',
                 $arr_of_new_apps_licences[$i]->deposit_paid_at ? 'TRUE': 'FALSE',
                 $arr_of_new_apps_licences[$i]->application_lodged_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->application_lodged_at)) : '',
-                $arr_of_new_apps_licences[$i]->application_lodged_at ? 'TRUE': 'FALSE',
+                (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_new_apps_licences[$i]->id) ? 'TRUE': 'FALSE',
                 $arr_of_new_apps_licences[$i]->activation_fee_paid_at,
                 '',
                 $arr_of_new_apps_licences[$i]->client_paid_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->client_paid_at)) : '',
@@ -252,7 +254,7 @@ class AllReportsController extends Controller
                 '',
                 $arr_of_nominations[$i]->payment_to_liquor_board_at,
                 $arr_of_nominations[$i]->nomination_lodged_at,
-                $arr_of_nominations[$i]->nomination_lodged_at ? 'TRUE' : 'FALSE',
+                (new NominationExportController)->getProofOfLodgiment($arr_of_nominations[$i]->id) ? 'TRUE' : 'FALSE',
                 $arr_of_nominations[$i]->nomination_issued_at,
                 (new NominationExportController)->getStatus($arr_of_nominations[$i]->status),
                 (new ExportNotes)->getNoteExports($arr_of_nominations[$i]->id, 'Nomination') 
@@ -351,7 +353,6 @@ class AllReportsController extends Controller
         $temporary_apps = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Temporary Apps');
         $spreadsheet->addSheet($temporary_apps, 5);
 
-        $arr_of_licences = [];
         $arrayTempData = array(
             array(
             'EVENT NAME',
@@ -442,7 +443,7 @@ class AllReportsController extends Controller
                             '',
                             '',
                             $arr_of_transfers[$i]->lodged_at,
-                            $arr_of_transfers[$i]->lodged_at ? 'TRUE' : 'FALSE',
+                            (new TransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
                             '',
                             $arr_of_transfers[$i]->payment_to_liquor_board_at,
                             $arr_of_transfers[$i]->issued_at,
