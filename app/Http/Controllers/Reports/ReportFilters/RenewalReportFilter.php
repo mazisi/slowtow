@@ -8,7 +8,7 @@ class RenewalReportFilter {
 
   function filter($request){
    return DB::table('licence_renewals')
-   ->selectRaw("licence_renewals.id, is_licence_active, trading_name, board_region,licence_number, licence_renewals.date, 
+   ->selectRaw("licence_renewals.id, is_licence_active, trading_name, board_region,licence_number, licences.licence_date, 
                 licence_renewals.client_paid_at,licence_renewals.status, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
                 is_quote_sent, licence_renewals.date")
 
@@ -43,7 +43,7 @@ class RenewalReportFilter {
                $query->where('belongs_to',request('applicant'));
            })
            ->when(request('year'), function ($query) {
-               $query->whereIn('date',array_values(explode(",",request('year'))));
+              $query->whereYear('licence_date',request('year'));
            })
 
            ->when(request('renewal_stages'), function ($query) {
@@ -68,6 +68,7 @@ class RenewalReportFilter {
                'board_region',
                'is_licence_active',
                'trading_name',
+               'licence_date',
                'licence_number',
                'licence_renewals.date',
                'licence_renewals.status',
