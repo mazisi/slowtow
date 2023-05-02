@@ -154,6 +154,12 @@ import Layout from "../../Shared/Layout.vue";
       function updateRegistration() {//handles dates updates
         form.patch(`/update-new-registration/${props.licence.slug}`, {
           preserveScroll: true,
+          onStart: () => { 
+            setTimeout(() => {
+              toast.remove();
+            }, 3000);
+            toast.loading('Updating stage...');
+          },
           onSuccess: () => { 
                         if(props.success){
                             notify(props.success)
@@ -174,6 +180,8 @@ import Layout from "../../Shared/Layout.vue";
               this.form.unChecked = true
               this.form.status[0] = e.target.value;
             }
+            updateRegistration();
+            
         }
         function mergeDocs(){
           Inertia.post(`/merge-licence-docs/${props.licence.id}`, {

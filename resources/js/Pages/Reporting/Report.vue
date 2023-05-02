@@ -53,6 +53,10 @@
           <div class="col-4">
             <button @click="getType($event,'Transfers')" type="button" class=" btn btn-success w-50">Transfers</button>
           </div>
+
+          <div class="col-4">
+            <button @click="getType($event,'Upcoming Renewals')" type="button" class=" btn btn-success w-50">Upcoming Renewals</button>
+          </div>
           
         </div>
 <hr/>
@@ -215,7 +219,7 @@
   </div>
   <!-- :class="{'mt-3' : form.variation == 'All'}"
 :class="{'mt-3' : form.variation == 'All'}" -->
-  <div class="col-6" >
+  <div class="col-6" :class="{'mt-3' : form.variation == 'Upcoming Renewals'}" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.is_license_complete" class="form-control form-control-default">
       <option :value="''" disabled selected>Pending Or Complete?</option>
@@ -225,7 +229,7 @@
       </div>
   </div>
   <!-- :class="{'mt-3' : form.variation !== 'Temporary Licences'}"  -->
-  <div class="col-6" >
+  <div class="col-6" :class="{'mt-3' : form.variation == 'Upcoming Renewals'}" >
     <div class="input-group columns input-group-outline null is-filled">
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Select Applicant</option>

@@ -62,6 +62,12 @@ export default {
 
     function update() {
           form.patch(`/update-alteration`,{
+            onStart: () => { 
+              setTimeout(() => {
+                toast.remove();
+              }, 3000);
+              toast.loading('Updating stage...');
+            },
             onSuccess: () => { 
                if(props.success){
                   notify(props.success)
@@ -80,7 +86,7 @@ export default {
             this.form.unChecked = true
             this.form.status[0] = e.target.value;
           }
-      
+          update();''
     }
 
     let file_has_apostrophe = ref();

@@ -37,9 +37,7 @@ class AllReportsController extends Controller
                 'COMMENT IF APPLICABLE'
             )
         );
-        $arr_of_alterations = [];
-
-  
+      
                $arr_of_alterations = (new AlterationFilter)->filter($request)->toArray(); 
 
                 for($i = 0; $i < count($arr_of_alterations); $i++ ){
@@ -103,7 +101,6 @@ class AllReportsController extends Controller
             'COMMENTS'
             )
         );
-           $arr_of_existing_licences = [];
             
             $arr_of_existing_licences = (new ExistingLicenceReportFilter)->filter($request)->toArray(); 
 

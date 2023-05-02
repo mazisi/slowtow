@@ -1239,9 +1239,6 @@
   <div>
     <div v-if="form.status >= 15" class="text-xs text-danger d-flex">Please note that this licence will no longer be a 
       new application and this action is irreversible once saved.</div>
-    <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-primary ms-2" type="submit">
-    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    <span class="visually-hidden">Loading...</span> Save</button>
   </div>
   </div>
   </form>

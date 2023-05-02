@@ -56,9 +56,8 @@ class ExistingLicenceExportController extends Controller
                                 ];
 
              $arrayData[] = $data;          
-            (new ExportToSpreadsheet)->exportToExcel('A1:O1', 'Existing_licences_', $arrayData);
-   
-}
+          }
+          (new ExportToSpreadsheet)->exportToExcel('A1:O1', 'Existing_licences_', $arrayData);
 
 
 }

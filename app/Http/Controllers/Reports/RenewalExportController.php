@@ -6,6 +6,7 @@ use App\Actions\ExportNotes;
 use App\Models\RenewalDocument;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
 
 
@@ -59,11 +60,37 @@ class RenewalExportController extends Controller
                     $arrayData[] = $data;
 
                 }
+
+                // for($i = 0; $i < count($arr_of_renewals); $i++ ){         
+                //         if(in_array($arr_of_renewals[$i]->id,$arr_of_renewals)){
+                //             continue;
+                //         }
+                //     $data = [ 
+                //             $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
+                //             $arr_of_renewals[$i]->trading_name, 
+                //             $arr_of_renewals[$i]->licence_number,
+                //             $arr_of_renewals[$i]->licence_date,
+                //             '',
+                //             'FALSE',
+                //             'FALSE',
+                //             '',
+                //             '',
+                //             '',
+                //             '',
+                //             '',
+                //             'FALSE',
+                //            '',
+                //             ];
+                //     $arrayData[] = $data;
+
+                // }
+   
         (new ExportToSpreadsheet)->exportToExcel('A1:L1', 'Renewals_', $arrayData);          
     
            
     }
 
+  
    function is_client_quoted($renewal_id){
     return RenewalDocument::where('licence_renewal_id',$renewal_id)->where('doc_type','Client Quoted')->first(['id']);
    }

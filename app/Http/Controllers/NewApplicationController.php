@@ -212,7 +212,6 @@ class NewApplicationController extends Controller
        try {
         $licence = Licence::whereSlug($slug)->first();
         $status = '';
-        $licence_date = null;
         if($request->status){
             if($request->unChecked){
                 $status = intval($request->status[0]) - 1;
@@ -223,7 +222,6 @@ class NewApplicationController extends Controller
         if($status >= 15){
             $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
             if(is_null($nom)){
-                $licence_date = now();
                 Nomination::create([//begin nomination
                     'licence_id' => $licence->id,
                     'year' => now()->format('Y'),
@@ -237,7 +235,6 @@ class NewApplicationController extends Controller
         }
 
         $licence->update([
-            'licence_date' => $licence_date,
             'renewal_amount' => $request->renewal_amount,
             'status' => $status <= 0 ? NULL : $status,
            ]);

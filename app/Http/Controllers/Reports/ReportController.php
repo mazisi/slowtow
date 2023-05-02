@@ -103,7 +103,10 @@ class ReportController extends Controller
   
             case 'Alterations':
               AlterationExportController::export($request);          
-              break;         
+              break;     
+          case 'Upcoming Renewals':
+            RenewalExportController::export($request);          
+            break;         
           
           default:
             return back()->with('error','Invalid selection');
