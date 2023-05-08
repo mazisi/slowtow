@@ -61,29 +61,7 @@ class RenewalExportController extends Controller
 
                 }
 
-                // for($i = 0; $i < count($arr_of_renewals); $i++ ){         
-                //         if(in_array($arr_of_renewals[$i]->id,$arr_of_renewals)){
-                //             continue;
-                //         }
-                //     $data = [ 
-                //             $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
-                //             $arr_of_renewals[$i]->trading_name, 
-                //             $arr_of_renewals[$i]->licence_number,
-                //             $arr_of_renewals[$i]->licence_date,
-                //             '',
-                //             'FALSE',
-                //             'FALSE',
-                //             '',
-                //             '',
-                //             '',
-                //             '',
-                //             '',
-                //             'FALSE',
-                //            '',
-                //             ];
-                //     $arrayData[] = $data;
-
-                // }
+           
    
         (new ExportToSpreadsheet)->exportToExcel('A1:L1', 'Renewals_', $arrayData);          
     

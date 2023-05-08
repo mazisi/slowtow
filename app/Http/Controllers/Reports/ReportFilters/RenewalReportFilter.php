@@ -43,7 +43,7 @@ class RenewalReportFilter {
                $query->where('belongs_to',request('applicant'));
            })
            ->when(request('year'), function ($query) {
-              $query->whereYear('licence_date',request('year'));
+              $query->where('date',request('year'));
            })
 
            ->when(request('renewal_stages'), function ($query) {

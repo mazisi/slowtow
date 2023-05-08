@@ -53,7 +53,7 @@ class NominationReportFilter {
 
             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
               $query->where('nominations.status','<', 9)
-              ->orWhereNull('nominations.status');
+                    ->orWhereNull('nominations.status');
           })
 
           ->when(request('is_licence_complete') === 'Complete', function ($query)  {
