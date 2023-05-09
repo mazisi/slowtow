@@ -44,7 +44,7 @@ class AllReportsController extends Controller
                                             
                         $proof_of_lodgiment = (new AlterationExportController)->getProofOfLodgiment($arr_of_alterations[$i]->id);
                         //get alteration notes
-                        $notes = (new ExportNotes)->getNoteExports($arr_of_alterations[$i]->id, 'Alteration');                         
+                                                 
                         
                         $data = [
                             $arr_of_alterations[$i]->trading_name, 
@@ -54,7 +54,7 @@ class AllReportsController extends Controller
                             $proof_of_lodgiment ? 'TRUE' : 'FALSE',
                             $arr_of_alterations[$i]->certification_issued_at,
                             (new AlterationExportController)->getStatus($arr_of_alterations[$i]->status), 
-                            $notes
+                            ExportNotes::getNoteExports($arr_of_alterations[$i]->id, 'Alteration')
                             ];
 
                         $alterationData[] = $data;
@@ -121,7 +121,7 @@ class AllReportsController extends Controller
                         $arr_of_existing_licences[$i]->licence_issued_at ? date('d-m-Y', strtotime($arr_of_existing_licences[$i]->licence_issued_at)) : '',
                         LicenceStatus::getLicenceStatus($arr_of_existing_licences[$i]->status),
                         '',
-                        (new ExportNotes)->getNoteExports($arr_of_existing_licences[$i]->id, 'Licence')
+                        ExportNotes::getNoteExports($arr_of_existing_licences[$i]->id, 'Licence')
                      ];
 
                 $existingLicencesData[] = $data;
@@ -187,7 +187,7 @@ class AllReportsController extends Controller
                 $arr_of_new_apps_licences[$i]->licence_issued_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->licence_issued_at)) : '',
                 LicenceStatus::getLicenceStatus($arr_of_new_apps_licences[$i]->status),
                 '',
-                (new ExportNotes)->getNoteExports($arr_of_new_apps_licences[$i]->id, 'Licence')
+                ExportNotes::getNoteExports($arr_of_new_apps_licences[$i]->id, 'Licence')
              ];
 
             $newAppsData[] = $data;
@@ -254,7 +254,7 @@ class AllReportsController extends Controller
                 (new NominationExportController)->getProofOfLodgiment($arr_of_nominations[$i]->id) ? 'TRUE' : 'FALSE',
                 $arr_of_nominations[$i]->nomination_issued_at,
                 (new NominationExportController)->getStatus($arr_of_nominations[$i]->status),
-                (new ExportNotes)->getNoteExports($arr_of_nominations[$i]->id, 'Nomination') 
+                ExportNotes::getNoteExports($arr_of_nominations[$i]->id, 'Nomination') 
              ];
 
                $arrayNominationData[] = $data;
@@ -322,7 +322,7 @@ class AllReportsController extends Controller
                         $arr_of_renewals[$i]->renewal_issued_at,
                         $arr_of_renewals[$i]->renewal_delivered_at,
                         $arr_of_renewals[$i]->renewal_delivered_at ? 'TRUE' : 'FALSE',
-                        (new ExportNotes)->getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal') 
+                        ExportNotes::getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal') 
                      ];
 
                $arrayRenewalData[] = $data;
@@ -385,7 +385,7 @@ class AllReportsController extends Controller
                 (new TemporalExportController)->getProofOfLodgiment($arr_of_temp_licences[$i]->id) ? 'TRUE': 'FALSE',
                 $arr_of_temp_licences[$i]->issued_at ? date('d M Y', strtotime($arr_of_temp_licences[$i]->issued_at)) : '',
                 (new TemporaLExportController)->getStatus($arr_of_temp_licences[$i]->status),
-                (new ExportNotes)->getNoteExports($arr_of_temp_licences[$i]->id, 'Temporal Licence')
+                ExportNotes::getNoteExports($arr_of_temp_licences[$i]->id, 'Temporal Licence')
              ];
  
 
@@ -445,7 +445,7 @@ class AllReportsController extends Controller
                             $arr_of_transfers[$i]->payment_to_liquor_board_at,
                             $arr_of_transfers[$i]->issued_at,
                             (new TransferExportController)->getStatus($arr_of_transfers[$i]->status),
-                            (new ExportNotes)->getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
+                            ExportNotes::getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
                          ];
     
                 $arrayTransferData[] = $data;

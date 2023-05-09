@@ -38,7 +38,7 @@ class RenewalExportController extends Controller
             $arr_of_renewals = (new RenewalReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
-                 $notes = (new ExportNotes)->getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal');              
+                             
                 
                     $data = [ 
                             $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
@@ -54,7 +54,7 @@ class RenewalExportController extends Controller
                             $arr_of_renewals[$i]->renewal_issued_at,
                             $arr_of_renewals[$i]->renewal_delivered_at,
                             $arr_of_renewals[$i]->renewal_delivered_at ? 'TRUE' : 'FALSE',
-                            $notes
+                            ExportNotes::getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal')
                             ];
 
                     $arrayData[] = $data;

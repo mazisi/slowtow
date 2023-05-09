@@ -7,7 +7,7 @@ use App\Models\Task;
 class ExportNotes{
 
 
-  function getNoteExports($model_id, $model)
+  static function getNoteExports($model_id, $model)
   {
     $notes = Task::where('model_id',$model_id)->where('model_type',$model)->get(['body','created_at']);
     $notesCollection = '';

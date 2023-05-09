@@ -34,7 +34,7 @@ public static function export($request){
 
             for($i = 0; $i < count($arr_of_transfers); $i++ ){
                 $status = (new TransferExportController)->getStatus($arr_of_transfers[$i]->status);
-                $notes = (new ExportNotes)->getNoteExports($arr_of_transfers[$i]->id, 'Transfer');        
+                       
   
              $data = [         
                        $arr_of_transfers[$i]->trading_name, 
@@ -48,7 +48,7 @@ public static function export($request){
                        $arr_of_transfers[$i]->payment_to_liquor_board_at,
                        $arr_of_transfers[$i]->issued_at,
                        $status,
-                       $notes
+                       ExportNotes::getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
                     ];
 
             $arrayData[] = $data;

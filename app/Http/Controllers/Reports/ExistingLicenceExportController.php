@@ -36,7 +36,7 @@ class ExistingLicenceExportController extends Controller
 
             for($i = 0; $i < count($arr_of_licences); $i++ ){
 
-                    $notes = (new ExportNotes)->getNoteExports($arr_of_licences[$i]->id, 'Licence');   
+                       
                         $data = [ 
                                 $arr_of_licences[$i]->trading_name, 
                                 $arr_of_licences[$i]->licence_type,
@@ -52,7 +52,7 @@ class ExistingLicenceExportController extends Controller
                                 $arr_of_licences[$i]->licence_issued_at ? date('d M Y', strtotime($arr_of_licences[$i]->licence_issued_at)) : '',
                                 LicenceStatus::getLicenceStatus($arr_of_licences[$i]->status),
                                 '',
-                                $notes
+                                ExportNotes::getNoteExports($arr_of_licences[$i]->id, 'Licence')
                                 ];
 
              $arrayData[] = $data;          

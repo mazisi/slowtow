@@ -33,7 +33,7 @@ class NominationExportController extends Controller implements ReportShouldHaveS
         $arr_of_nominations = (new NominationReportFilter)->filter($request)->toArray(); 
         
         for($i = 0; $i < count($arr_of_nominations); $i++ ){           // $is_client_paid = NominationDocument::where('nomination_id',$arr_of_nominations[$i]->id)->where('doc_type','Payment To The Liquor Board')->first();
-            $notes = (new ExportNotes)->getNoteExports($arr_of_nominations[$i]->id, 'Nomination');  
+            $notes = ExportNotes::getNoteExports($arr_of_nominations[$i]->id, 'Nomination');  
 
        $data = [ 
                    $arr_of_nominations[$i]->trading_name, 

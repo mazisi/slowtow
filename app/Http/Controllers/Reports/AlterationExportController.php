@@ -30,7 +30,7 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
                     $status = (new AlterationExportController)->getStatus($arr_of_alterations[$i]->status);
                     $proof_of_lodgiment = (new AlterationExportController)->getProofOfLodgiment($arr_of_alterations[$i]->id);
 
-                    $notes = (new ExportNotes)->getNoteExports($arr_of_alterations[$i]->id, 'Alteration');                      
+                              
                         
                         $data = [
                         $arr_of_alterations[$i]->trading_name, 
@@ -40,7 +40,7 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
                         $proof_of_lodgiment ? 'TRUE' : 'FALSE',
                         $arr_of_alterations[$i]->certification_issued_at,
                         $status, 
-                        $notes
+                        ExportNotes::getNoteExports($arr_of_alterations[$i]->id, 'Alteration'),
                         ];
                         $arrayData[] = $data;
 

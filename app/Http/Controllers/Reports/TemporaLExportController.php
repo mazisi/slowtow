@@ -42,7 +42,7 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
             $status = (new TemporalExportController)->getStatus($arr_of_licences[$i]->status);
             $proof_of_lodgiment = (new TemporalExportController)->getProofOfLodgiment($arr_of_licences[$i]->id);
 
-            $notes = (new ExportNotes)->getNoteExports($arr_of_licences[$i]->id, 'Temporal Licence');   
+             
            
              
        $data = [ 
