@@ -94,7 +94,7 @@ class AlterLicenceController extends Controller
         'status' => $status <= 0 ? NULL : $status,
        ]);
       
-        return back()->with('success','Alteration updated succesfully.');
+        return back()->with('success','Alteration stage succesfully.');
        
       } catch (\Throwable $th) {
         return back()->with('error','Error updating alteration.');

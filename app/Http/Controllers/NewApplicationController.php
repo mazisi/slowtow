@@ -219,6 +219,7 @@ class NewApplicationController extends Controller
                 $status = $request->status[0];
             }
         }
+        //Start new nomination
         if($status >= 15){
             $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
             if(is_null($nom)){

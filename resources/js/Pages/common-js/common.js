@@ -17,14 +17,14 @@ const BOARD_REGIONS  = ['Eastern Cape',
                         'Gauteng - Johannesburg',
                         'Gauteng - Sedibeng',
                         'Gauteng - Tshwane',
+                        'Gauteng - West Rand',
                         'KwaZulu-Natal',
                         'Limpopo',
                         'Mpumalanga',
-                        'Gauteng - West Rand',
+                        'National Liquor Authority',
                         'Northern Cape',
                         'North West',
-                        'Western Cape'
-                        
+                        'Western Cape',
                       ];
 
   const COMPANY_TYPES = [

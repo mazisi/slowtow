@@ -140,7 +140,7 @@
      </div> 
      
   <div class="col-md-1 columns">
-      <button :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
@@ -154,7 +154,7 @@
     </div> 
     
  <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-     <button :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     <button @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
 </template>
 
@@ -180,7 +180,7 @@
       </div> 
       
    <div class="col-md-1 columns">
-       <button :disabled="!form.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+       <button @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -194,7 +194,7 @@
      </div> 
      
   <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-      <button :disabled="!form.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
  </template>
 
@@ -244,7 +244,7 @@
       </div> 
       
    <div class="col-md-1 columns">
-       <button :disabled="!form.renewal_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+       <button type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -258,7 +258,7 @@
      </div> 
      
   <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-      <button :disabled="!form.renewal_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
  </template>
 
@@ -314,7 +314,7 @@
       </div> 
       
    <div class="col-md-1 columns">
-       <button :disabled="!form.renewal_delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+       <button @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -328,7 +328,7 @@
      </div> 
      
   <div class="col-md-1 columns" v-if="$page.props.auth.has_slowtow_admin_role">
-      <button :disabled="!form.renewal_delivered_at" @click="updateDate"  
+      <button @click="updateDate"  
       type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
  </template>
@@ -358,12 +358,7 @@
   </li>
 </ul>  
 
-<div class="text-danger">
-  <div v-if="form.isDirty" class="text-xs d-flex">You have unsaved changes.</div>
-  <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-primary ms-2" type="submit">
-  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Save</button>
-</div>
+
 </div>
 </form>
   </div>

@@ -150,8 +150,9 @@ export default {
             this.form.unChecked = false;
           }else if(!e.target.checked){
             this.form.unChecked = true
-            this.form.status[0] = e.target.value;
+            this.form.status[0] = status_value;
           }
+          submit();
       }
 
       function deleteDocument(id){
@@ -824,7 +825,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.payment_to_liquor_board_at == null" 
-     :disabled="!form.payment_to_liquor_board_at" @click="updateDate"
+      @click="updateDate"
       type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
@@ -841,7 +842,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     :disabled="!form.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 
@@ -924,7 +925,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.lodged_at == null" 
-     :disabled="!form.lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
   
@@ -940,7 +941,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     :disabled="!form.lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 
@@ -992,7 +993,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.activation_fee_paid_at == null" 
-     :disabled="!form.activation_fee_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
   
@@ -1008,7 +1009,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     :disabled="!form.activation_fee_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 
@@ -1059,7 +1060,7 @@ export default {
  <div class="col-md-1"></div>
   <div class="col-md-1 columns">
    <button v-if="form.issued_at == null" 
-   :disabled="!form.issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+    @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
@@ -1075,7 +1076,7 @@ export default {
  <div class="col-md-1"></div>
   <div class="col-md-1 columns">
    <button v-if="$page.props.auth.has_slowtow_admin_role" 
-   :disabled="!form.issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+    @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
@@ -1126,7 +1127,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="form.delivered_at == null" 
-     :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
  </template>
  
@@ -1142,7 +1143,7 @@ export default {
    <div class="col-md-1"></div>
     <div class="col-md-1 columns">
      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-     :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
  </template>
 
@@ -1172,10 +1173,7 @@ export default {
 
 
 <div>
-<div v-if="form.isDirty" class="text-danger">You have unsaved changes.</div>
-  <button :style="{float: 'right'}" type="submit" class="btn btn-secondary ms-2" :disabled="form.processing">
-  <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-         Save</button>
+
 </div>
             </div>
             </form>

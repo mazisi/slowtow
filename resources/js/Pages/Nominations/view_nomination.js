@@ -178,8 +178,9 @@ export default{
             this.updateForm.unChecked = false;
           }else if(!e.target.checked){
             this.updateForm.unChecked = true
-            this.updateForm.status[0] = e.target.value;
+            this.updateForm.status[0] = status_value;
           }
+          updateNomination();
       }
 
       function updateDate(){

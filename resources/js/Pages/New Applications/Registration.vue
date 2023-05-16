@@ -130,7 +130,6 @@
 
    <div class="col-md-1 columns">
      <button v-if="licence.deposit_paid_at == null" @click="updateRegistrationDate" 
-     :disabled="!form.deposit_paid_at" 
      type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
    </template>
@@ -146,7 +145,7 @@
   
      <div class="col-md-1 columns">
        <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistrationDate" 
-       :disabled="!form.deposit_paid_at" type="button" 
+       type="button" 
        class="btn btn-sm btn-secondary">Save</button>
       </div>
    </template>
@@ -174,7 +173,7 @@
          </div> 
          <div class="col-md-1 columns">
           <button v-if="licence.liquor_board_at == null" 
-          :disabled="!form.liquor_board_at" 
+          
           @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
          </template>
@@ -189,7 +188,7 @@
             </div> 
             <div class="col-md-1 columns">
               <button v-if="$page.props.auth.has_slowtow_admin_role" 
-              @click="updateRegistrationDate" :disabled="!form.liquor_board_at" 
+              @click="updateRegistrationDate" 
                type="button" class="btn btn-sm btn-secondary">Save</button>
             </div>        
            
@@ -720,7 +719,7 @@
 
       <div class="col-md-1 columns">
         <button v-if="licence.application_lodged_at == null" 
-        :disabled="!form.application_lodged_at"  
+        
         @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
       </div>
        </template>
@@ -736,7 +735,7 @@
   
         <div class="col-md-1 columns">
           <button v-if="$page.props.auth.has_slowtow_admin_role" 
-          :disabled="!form.application_lodged_at"   
+           
           @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
         </div>      
          
@@ -787,7 +786,7 @@
         </div>
         <div class="col-md-1 columns">
           <button v-if="licence.initial_inspection_at == null" 
-          :disabled="!form.initial_inspection_at" 
+         
           @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
          </template>
@@ -802,7 +801,7 @@
           </div>
           <div class="col-md-1 columns">
             <button v-if="$page.props.auth.has_slowtow_admin_role" 
-            :disabled="!form.initial_inspection_at"  
+            
             @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
            </div>    
           </template>  
@@ -858,7 +857,7 @@
 </div>
 <div class="col-md-1 columns">
   <button v-if="licence.final_inspection_at == null" 
-  @click="updateRegistrationDate" :disabled="!form.final_inspection_at" 
+  @click="updateRegistrationDate" 
    type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
    
@@ -875,7 +874,7 @@
 <div class="col-md-1 columns">
   <button v-if="$page.props.auth.has_slowtow_admin_role" 
   @click="updateRegistrationDate" 
-  :disabled="!form.final_inspection_at"  
+   
   type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
 
@@ -933,7 +932,7 @@
     </div>
     <div class="col-md-1 columns">
     <button v-if="licence.activation_fee_requested_at == null" 
-    @click="updateRegistrationDate" :disabled="!form.activation_fee_requested_at"  
+    @click="updateRegistrationDate" 
     type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
  </template>
@@ -950,7 +949,7 @@
    
       <div class="col-md-1 columns">
       <button v-if="$page.props.auth.has_slowtow_admin_role" 
-      @click="updateRegistrationDate" :disabled="!form.activation_fee_requested_at"  
+      @click="updateRegistrationDate" 
       type="button" class="btn btn-sm btn-secondary">Save</button>
       </div>
      </template>  
@@ -1009,7 +1008,7 @@
    </div>
    <div class="col-md-1 columns">
     <button v-if="licence.client_paid_at == null" 
-    :disabled="!form.client_paid_at"   
+    
     @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>   
 </template>
@@ -1024,7 +1023,7 @@
    </div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    :disabled="!form.client_paid_at"   
+    
      @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>  
  </template>  
@@ -1052,7 +1051,7 @@
       </div>
           <div class="col-md-1 columns">
             <button @click="updateRegistrationDate" 
-            :disabled="!form.activation_fee_paid_at"   
+            
             type="button" class="btn btn-sm btn-secondary">Save</button>
            </div>  
           </template>
@@ -1067,7 +1066,7 @@
              </div>
           <div class="col-md-1 columns">
             <button v-if="$page.props.auth.has_slowtow_admin_role" 
-            :disabled="!form.activation_fee_paid_at" 
+            
              @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
            </div>  
        </template> 
@@ -1121,7 +1120,7 @@
 
             <div class="col-md-1 columns">
               <button v-if="licence.licence_issued_at == null" 
-              :disabled="!form.licence_issued_at" 
+             
               @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
              </div>
           </template>
@@ -1137,7 +1136,7 @@
 
           <div class="col-md-1 columns">
             <button v-if="$page.props.auth.has_slowtow_admin_role" 
-            :disabled="!form.licence_issued_at"  
+            
             @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
            </div>
        </template> 
@@ -1191,7 +1190,7 @@
 
               <div class="col-md-1 columns">
                 <button @click="updateRegistrationDate" 
-                :disabled="!form.licence_delivered_at" 
+                 
                 type="button" class="btn btn-sm btn-secondary">Save</button>
                </div>
             </template>
@@ -1207,7 +1206,7 @@
 
               <div class="col-md-1 columns">
                 <button  v-if="$page.props.auth.has_slowtow_admin_role" 
-                :disabled="!form.licence_delivered_at" 
+                 
                 @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
                </div>
          </template> 

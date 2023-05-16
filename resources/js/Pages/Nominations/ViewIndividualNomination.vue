@@ -134,7 +134,7 @@
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.client_paid_date == null" 
-    :disabled="!updateForm.client_paid_date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -151,7 +151,7 @@
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!updateForm.client_paid_date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr>
@@ -177,7 +177,7 @@
   <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.payment_to_liquor_board_at == null" 
-    :disabled="!updateForm.payment_to_liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -193,7 +193,7 @@
   <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    :disabled="!updateForm.payment_to_liquor_board_at" @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
  
@@ -525,7 +525,7 @@ Action
  <div class="col-md-1"></div>
  <div class="col-md-1 columns">
   <button v-if="nomination.nomination_lodged_at == null" 
-  :disabled="!updateForm.nomination_lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+   @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
 </template>
 
@@ -541,7 +541,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    :disabled="!updateForm.nomination_lodged_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr>
@@ -591,7 +591,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.nomination_issued_at == null" 
-    :disabled="!updateForm.nomination_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -607,7 +607,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!updateForm.nomination_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
 <hr>
@@ -659,7 +659,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="nomination.nomination_delivered_at == null" 
-    :disabled="!updateForm.nomination_delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
  
@@ -676,7 +676,7 @@ Action
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    :disabled="!updateForm.nomination_delivered_at" @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
    </div>
  </template>
 <hr>

@@ -178,7 +178,7 @@ import Layout from "../../Shared/Layout.vue";
               this.form.unChecked = false;
             }else if(!e.target.checked){
               this.form.unChecked = true
-              this.form.status[0] = e.target.value;
+              this.form.status[0] = status_value;
             }
             updateRegistration();
             

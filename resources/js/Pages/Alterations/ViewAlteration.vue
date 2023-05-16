@@ -123,7 +123,7 @@
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="alteration.client_paid_at == null" 
-    :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -140,7 +140,7 @@
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!form.client_paid_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+    @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr>
@@ -329,7 +329,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="alteration.liquor_board_at == null" 
-    :disabled="!form.liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -346,7 +346,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!form.liquor_board_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr/>
@@ -393,7 +393,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="alteration.date == null" 
-    :disabled="!form.date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -410,7 +410,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!form.date" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -457,7 +457,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="alteration.certification_issued_at == null" 
-    :disabled="!form.certification_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -474,7 +474,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!form.certification_issued_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr/>
@@ -521,7 +521,7 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="alteration.delivered_at == null" 
-    :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 
@@ -538,14 +538,11 @@ v-if="application_form !== null
    <div class="col-md-1"></div>
    <div class="col-md-1 columns">
     <button v-if="$page.props.auth.has_slowtow_admin_role"
-    :disabled="!form.delivered_at" @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+     @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>
 </template>
 <hr/>
 
-
-<div>
-  <button type="submit" class="btn btn-primary ms-2" :style="{float: 'right'}">Save</button></div>
             </div>
             </form>
               </div>

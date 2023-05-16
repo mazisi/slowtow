@@ -126,7 +126,14 @@
     </div> 
  
 
-
+    <div class="col-4 columns">            
+      <div class="input-group input-group-outline null is-filled">
+      <label class="form-label">Address Line 2</label>
+      <input type="text" class="form-control form-control-default" v-model="form.address2">
+      </div>
+      <div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
+    </div> 
+  
     <div class="col-4 columns">
       <div class="input-group input-group-outline null is-filled ">
       <label class="form-label">Licence Number</label>
@@ -136,13 +143,7 @@
     </div>
 
 
-    <div class="col-4 columns">            
-      <div class="input-group input-group-outline null is-filled">
-      <label class="form-label">Address Line 2</label>
-      <input type="text" class="form-control form-control-default" v-model="form.address2">
-      </div>
-      <div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
-    </div> 
+   
 
     <div class="col-4 columns" v-if="licence.belongs_to ==='Person'">
       <div class="input-group input-group-outline null is-filled">
@@ -171,8 +172,7 @@
     <div v-if="errors.latest_renewal" class="text-danger">{{ errors.latest_renewal }}</div>
   </div> 
 
-  
-
+ 
 
   <div class="col-4 columns">            
     <div class="input-group input-group-outline null is-filled">

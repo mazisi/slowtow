@@ -78,16 +78,7 @@ export default {
           })
         }
 
-    function pushData(e,status_value){
-      if (e.target.checked) {
-            this.form.status[0] = status_value;
-            this.form.unChecked = false;
-          }else if(!e.target.checked){
-            this.form.unChecked = true
-            this.form.status[0] = e.target.value;
-          }
-          update();''
-    }
+   
 
     let file_has_apostrophe = ref();
       function getFileName(e){
@@ -187,6 +178,17 @@ export default {
             toast.loading(message);
         }
 
+
+        function pushData(e,status_value){
+          if (e.target.checked) {
+                this.form.status[0] = status_value;
+                this.form.unChecked = false;
+              }else if(!e.target.checked){
+                this.form.unChecked = true
+                this.form.status[0] = e.target.value;
+              }
+              update();
+        }
        
 
          function viewFile(model_id) {
