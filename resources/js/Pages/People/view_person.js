@@ -120,7 +120,7 @@ const form = useForm({
              updateStatusForm.unChecked = false;
            }else if(!e.target.checked){
              updateStatusForm.unChecked = true
-             updateStatusForm.status = e.target.value;
+             updateStatusForm.status = status_value;
            }
            updateStatusForm.patch(`/update-person-active-status/${props.person.slug}`,{
             onSuccess: () => { 
