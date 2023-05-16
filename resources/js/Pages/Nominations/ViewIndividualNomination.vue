@@ -681,17 +681,13 @@ Action
  </template>
 <hr>
 
-<!-- <div class="col-md-6 columns">
-<label class="form-label">Nomination Year </label>
-<Datepicker v-model="updateForm.nomination_year" yearPicker />
-<p v-if="errors.nomination_year" class="text-danger">{{ errors.nomination_year }}</p>
-</div> -->
 
-<div>
+
+<!-- <div>
 <button type="submit" :style="{float: 'right'}" class="btn btn-primary" :disabled="updateForm.processing">
 <span v-if="updateForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
 Save</button>
-</div>
+</div> -->
 </div>
 </form>
 </div>
@@ -700,11 +696,7 @@ Save</button>
 </div>
 
 </div>
-      <!-- <LiquorBoardRequest 
-      :model_type='`Nomination`'
-      :model_id="nomination.id" 
-      :liqour_board_requests="liqour_board_requests"
-      /> -->
+      
       <Task :tasks="tasks" :model_id="nomination.id" :success="success" :error="error" :errors="errors" :model_type="'Nomination'"/>
 </div>
 </div>
