@@ -267,6 +267,7 @@ public function updateRegistrationDate(Request $request, $slug)
             'client_paid_at' => $request->client_paid_at,
             'activation_fee_paid_at' => $request->activation_fee_paid_at,
             'licence_issued_at' => $request->licence_issued_at,
+            'licence_date' => $request->licence_issued_at,
             'licence_delivered_at' => $request->licence_delivered_at,
            ]);
        return back()->with('success','Date updated successfully.');
