@@ -25,7 +25,7 @@ class SendMailCredentials extends Mailable
      */
     public function build()
     {
-        return $this->from('info@goverify.co.za')
+        return $this->from(env("MAIL_FROM_ADDRESS"))
         ->subject('Login credentials')
         ->markdown('emails.sendMailCredentials')
         ->with([

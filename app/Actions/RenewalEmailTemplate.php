@@ -40,15 +40,12 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
 
     if($renewal->status == '1'){//quoted
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
-      Please note that your Liquor Licence is due for renewal.<br><br>
-      In aid of contributing towards an affiliation against alcohol abuse, would you like to include a donation to SANCA for an additional R1 800.
-      You will receive a Section 18A certificate for the donation which will be delivered with your renewal, which you can display along with the required liquor 
-      licence documents. Should you wish to participate in this campaign, please add R1,800 (or more) to your payment, 
-      and specify this in your response to us.<br><br>                    
-      PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:<br><br>
-      Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEON SLOTOW ASSOCIATES<br><br>
-      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEDBANK CENTRAL GAUTENG BRANCH<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;1215489382<br>
+      Please note that your Liquor Licence is due for renewal on the '.$renewal->licence->licence_date->format('d/M').'.<br><br>
+      Please ensure that payment is made before this to avoid penalties being implemented by the Liquor Board.<br><br>                    
+      See our banking details below:<br><br>
+      Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br><br>
+      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
+      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br>
                          
       Many thanks,
       '; 
@@ -56,9 +53,9 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>
       Please note that your renewal is due.<br><br>
       <u>PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:</u><br><br>                    
-      Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEON SLOTOW ASSOCIATES<br>
-      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEDBANK CENTRAL GAUTENG BRANCH<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;1215489382<br>
+      Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
+      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
+      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br>
       Code:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18250500<br><br>Many thanks,
       ';
 
@@ -68,12 +65,10 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       <p><br>Please note that your renewal is due.<br><br><u>
       PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:
       </u><br><br>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LEON SLOTOW ASSOCIATES<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
       Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NEDBANK CENTRAL GAUTENG BRANCH<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;1215489382<br>Code:&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;18250500<br><br>Many thanks,</p>';
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
+      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>Many thanks,</p>';
       
   }elseif ($renewal->status == '3') {//Client Paid
       $template = 'Good Day '.$renewal->licence->trading_name.'.
@@ -106,6 +101,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
         $stage = '';
         $renewal_stage = '';  
 
+        
         switch ($renewal->status) {            
             case '1':
                 $stage = '1';

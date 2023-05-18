@@ -10,6 +10,7 @@
     <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}
       
     </Link> - New Application - {{ licence.licence_number }}</h5>
+    
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">

@@ -72,15 +72,15 @@
 
 <div class="px-0 pb-2">
 <div class="table-responsive p-0">
-  <table class="table table-striped table-hover" style="font-size:85%">
+  <table class="table table-striped table-hover" style="font-size:85%; width: 100%">
 <thead>
-<tr class="text" style="font-size: 15px">
-<th>Act</th>
-<th class="ps-2">Trading Name</th>
-<th class="ps-2">Licence Number</th>
-<th class="ps-2">Licence Date</th>
-<th class="ps-2">Licence Type</th>
-<th class="ps-2">Company</th>
+<tr class="text" style="font-size: 16px">
+<th class="">Act</th>
+<th class="ps-2 text-center">Trading Name</th>
+<th class="ps-2 text-center">Licence Number</th>
+<th class="ps-2 text-center">Licence Date</th>
+<th class="ps-2 text-center">Licence Type</th>
+<th class="ps-2 text-center">Company</th>
 </tr>
 </thead>
 <tbody>
@@ -113,7 +113,7 @@
 </Layout>
 </template>
 
-<style>
+<style scoped>
 .filters{
  margin-top: 10px;
 }
@@ -124,6 +124,9 @@
   #with-thrashed{
     margin-top: 3px;
     margin-left: 3px;
+  }
+  .text-center{
+    text-align: center;
   }
 </style>
 

@@ -56,9 +56,9 @@ class NominationMailer extends Mailable
                  break;
             }
             
-                 return $this->from('info@goverify.co.za')
+                 return $this->from(env("MAIL_FROM_ADDRESS"))
                 ->markdown('emails.ecomms.nominationMailer')
-                ->cc('info@slotow.co.za')
+                ->cc(env("MAIL_FROM_ADDRESS"))
                 ->subject($this->nomination->licence->trading_name.' Appointment Of Managers ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                 ->with([
