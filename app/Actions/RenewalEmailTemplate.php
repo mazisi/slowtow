@@ -17,7 +17,8 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
         return LicenceRenewal::with('licence')->where(function($query) use($request){
             $query->when($request->month, function($query) {                    
                 $query->whereHas('licence', function($query) {
-                    $query->whereMonth('licence_date', request('month'));
+                    $query->whereMonth('licence_date', request('month'))
+                    ->whereNull('deleted_at');
                 });
             })
             ->when(request('province'), function ($query) use ($request) {
@@ -34,7 +35,8 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
             ->orWhere('status',2)
             ->orWhere('status',4)
             ->orWhere('status',5);
-        })->paginate(20)->withQueryString();
+        })
+        ->whereNull('deleted_at')->paginate(20)->withQueryString();
     }
  
   function getMailTemplate($renewal){

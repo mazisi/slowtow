@@ -20,6 +20,8 @@ class Licence extends Model
 
     protected $cascadeDeletes = ['nominations','licence_renewals','alterations','transfers'];
 
+  
+
     public function company()
     {
        return $this->belongsTo(Company::class);

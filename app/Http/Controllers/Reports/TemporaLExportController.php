@@ -29,36 +29,26 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
             'COMMENTS'
             )
         );
-
-  
-    $status = '';
-    $applicant = '';
    
 
     $arr_of_licences = (new TemporalExportReportFilter)->filter($request)->toArray(); 
 
     for($i = 0; $i < count($arr_of_licences); $i++ ){
-            $applicant = (new TemporalExportController)->getApplicant($arr_of_licences[$i]->belongs_to, $arr_of_licences[$i]);
-            $status = (new TemporalExportController)->getStatus($arr_of_licences[$i]->status);
-            $proof_of_lodgiment = (new TemporalExportController)->getProofOfLodgiment($arr_of_licences[$i]->id);
-
-             
-           
              
        $data = [ 
 
                $arr_of_licences[$i]->event_name, 
-               $applicant,
+               self::getApplicant($arr_of_licences[$i]->belongs_to, $arr_of_licences[$i]),
                date('d-m-Y', strtotime($arr_of_licences[$i]->start_date)). ' - '.date('d-m-Y', strtotime($arr_of_licences[$i]->end_date)),
                ' ',
                $arr_of_licences[$i]->address,
                $arr_of_licences[$i]->client_paid_at,
                $arr_of_licences[$i]->liquor_licence_number,
                $arr_of_licences[$i]->logded_at ? date('d M Y', strtotime($arr_of_licences[$i]->logded_at)) : '',
-               $proof_of_lodgiment ? 'TRUE': 'FALSE',
+               self::getProofOfLodgiment($arr_of_licences[$i]->id) ? 'TRUE': 'FALSE',
                $arr_of_licences[$i]->issued_at ? date('d M Y', strtotime($arr_of_licences[$i]->issued_at)) : '',
-               $status,
-               $notes
+               self::getStatus($arr_of_licences[$i]->status),
+               ExportNotes::getNoteExports($arr_of_licences[$i]->id, 'Temporal Licence')
             ];
 
               $arrayData[] = $data;

@@ -19,7 +19,8 @@ class NominationEmailCommsController extends Controller
         $nominations = Nomination::with("licence")->when($request, function($query) use($request){
             $query->when(request('month'), function($query) {                    
                 $query->whereHas('licence', function($query){
-                    $query->whereMonth('licence_date', request('month'));
+                    $query->whereMonth('licence_date', request('month'))
+                    ->whereNull('deleted_at');
                 });
             })
             ->when(request('province'), function ($query) use ($request) {
@@ -37,7 +38,7 @@ class NominationEmailCommsController extends Controller
             ->orWhere('status',4)
             ->orWhere('status',7)
             ->orWhere('status',8);
-        })
+        })->whereNull('deleted_at')
         ->orderBy('status','asc')->paginate(20)->withQueryString();
 
     return Inertia::render('EmailComms/Nomination',['nominations' => $nominations]);
@@ -117,7 +118,7 @@ class NominationEmailCommsController extends Controller
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {
             $error_message = 'Server Error.';
-            $this->insertUnsentEmails($nomination, $error_message);
+            $this->insertUnsentEmails($nomination, $error_message, $stage);
             return back()->with('error','An error occured while sending email.');
         }
        
@@ -129,7 +130,7 @@ class NominationEmailCommsController extends Controller
         return $nomination_document;
     }
 
-    function insertUnsentEmails($nomination, $error_message) : void {
+    function insertUnsentEmails($nomination, $error_message,$stage='') : void {
         Email::insert([
             'model_type' => 'transfers',
             'model_id' => $nomination->id,
