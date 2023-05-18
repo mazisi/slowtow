@@ -13,6 +13,10 @@ class Licence extends Model
     use HasFactory, SoftDeletes, CascadeSoftDeletes;
 
     protected $guarded = [];
+    
+    protected $casts = [
+      'licence_date' => 'date',
+  ];
 
     protected $cascadeDeletes = ['nominations','licence_renewals','alterations','transfers'];
 

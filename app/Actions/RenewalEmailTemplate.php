@@ -5,9 +5,10 @@ namespace App\Actions;
 use Throwable;
 use App\Models\Email;
 use App\Mail\RenewalMailer;
+use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\RenewalDocument;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class RenewalEmailTemplate implements HasEmailTemplateInterface  {
 
@@ -155,17 +156,17 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
 
        return back()->with('success','Mail sent successfully.');
 
-    } catch (Throwable $th) {//throw $th;
+    } catch (Throwable $th) {throw $th;
         $error_message = 'Server Error.';
-       $this->insertUnsentEmails($renewal, $error_message);  
-      return back()->with('error','An error occured while sending email.');
+       $this->insertUnsentEmails($renewal, $error_message, $renewal_stage);  
+      //return back()->with('error','An error occured while sending email.');
     }
    
     
 }
 
 
-function insertUnsentEmails($renewal, $error_message) : void {
+function insertUnsentEmails($renewal, $error_message, $renewal_stage='') : void {
     Email::insert([
         'model_type' => 'renewals',
         'model_id' => $renewal->id,

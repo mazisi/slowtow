@@ -1,6 +1,8 @@
 <?php
 
 use Inertia\Inertia;
+use App\Actions\RenewalEmailTemplate;
+
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TaskController;
@@ -8,8 +10,6 @@ use App\Http\Controllers\TaskController;
 use App\Http\Controllers\IssueController;
 
 use App\Http\Controllers\PersonController;
-
-use App\Http\Controllers\Reports\ReportController;
 
 use App\Http\Controllers\CompanyController;
 
@@ -43,6 +43,10 @@ use App\Http\Controllers\LicenceRenewalController;
 
 use App\Http\Controllers\NewApplicationController;
 
+use App\Http\Controllers\PeopleDocumentController;
+
+use App\Http\Controllers\Reports\ReportController;
+
 use App\Http\Controllers\SlotowDashboardController;
 
 use App\Http\Controllers\TemporalLicenceController;
@@ -58,11 +62,8 @@ use App\Http\Controllers\Slowtowdmin\AdminsController;
 use App\Http\Controllers\TemporalLicenceDocsController;
 
 use App\Http\Controllers\NominationEmailCommsController;
-
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
-
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
-use App\Http\Controllers\PeopleDocumentController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -439,7 +440,9 @@ Route::group(['middleware' => ['guest']], function () {
        
     });
 
-
+    Route::get('email-template',function(){
+        return view('emails.mail-template');
+    });
 
     Route::group(['middleware' => ['auth']], function () {
 

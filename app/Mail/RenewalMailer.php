@@ -49,18 +49,22 @@ class RenewalMailer extends Mailable
                     break;
             }
           
-        } catch (\Throwable $th) {
-            return to_route('get_licence_transfers')->with('error','Error sending mail.');
-        }
+            if(! $get_doc){
+                return back()->with('error','Could not locate document.');
+            }
         
         return $this->from(env("MAIL_FROM_ADDRESS"))
                     ->cc(env("MAIL_FROM_ADDRESS"))
                     ->subject('RENEWAL '. $this->renewal->date.'. – TRADING NAME – LICENCE NUMBER')
                     ->subject('Renewal for '.$this->renewal->licence->trading_name.' AND '.$this->renewal->date)
-                    ->markdown('emails.ecomms.renewalMailer')
-                    ->attach(env('BLOB_FILE_PATH').$get_doc->document)
+                    ->view('emails.mail-template')
+                   ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                     ->with([
                         'message_body' => $this->template
                     ]);
+
+                } catch (\Throwable $th) {
+                    return to_route('get_licence_transfers')->with('error','Error sending mail.');
+                }
     }
 }

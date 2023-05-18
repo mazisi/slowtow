@@ -56,10 +56,13 @@ class TransferMailer extends Mailable
                 return back()->with('error','Could not send email.');
                     break;
             }
+            if(! $get_doc){
+                return back()->with('error','Could not locate document.');
+            }
             
             if($this->transfer->status == 'Client Quoted'){
                 return $this->from(env("MAIL_FROM_ADDRESS"))
-                ->markdown('emails.ecomms.transferMailer')
+                ->view('emails.mail-template')
                 ->cc(env("MAIL_FROM_ADDRESS"))
                 ->subject($this->transfer->licence->trading_name.' Transfer')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document)
@@ -70,7 +73,7 @@ class TransferMailer extends Mailable
 
             }else{
                 return $this->from(env("MAIL_FROM_ADDRESS"))
-                ->markdown('emails.ecomms.transferMailer')
+                ->view('emails.mail-template')
                 ->cc(env("MAIL_FROM_ADDRESS"))
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document)
