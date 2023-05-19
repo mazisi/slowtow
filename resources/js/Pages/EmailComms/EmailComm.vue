@@ -7,7 +7,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
 export default {
-  name: "emmail-comms",
+  name: "Emmail-Comms",
   props: {
     renewals: Object,
     success: String,

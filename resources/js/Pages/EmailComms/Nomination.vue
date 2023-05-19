@@ -224,7 +224,7 @@ methods: {
           <p class="text-xs font-weight-bold mb-0">{{ nomination.licence.licence_number }}</p>
         </td>
         <td class="align-middle font-weight-bold text-center text-sm">
-          <span>{{ nomination.licence.licence_date }}</span>
+          <span>{{ new Date(nomination.licence.licence_date).toISOString().split('T')[0] }}</span>
         </td>
          <td class="align-middle text-center">
           <span class="font-weight-bold text-sm" v-if="nomination.status == '1'">Client Quoted</span>

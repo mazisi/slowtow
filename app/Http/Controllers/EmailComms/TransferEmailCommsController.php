@@ -19,7 +19,8 @@ class TransferEmailCommsController extends Controller
         $transfers = LicenceTransfer::with("licence")->when($request, function($query) use($request){
             $query->when(request('month'), function($query) {                    
                 $query->whereHas('licence', function($query) {
-                    $query->whereMonth('licence_date', request('month'));
+                    $query->whereMonth('licence_date', request('month'))
+                    ->whereNull('deleted_at');
                 });
             })
             ->when(request('province'), function ($query) use ($request) {
@@ -38,7 +39,9 @@ class TransferEmailCommsController extends Controller
             ->orWhere('status',6)
             ->orWhere('status',7)
             ->orWhere('status',8);
-        })->orderBy('status','asc')->paginate(20)->withQueryString();
+        })->whereNull('deleted_at')
+        ->orderBy('status','asc')
+           ->paginate(20)->withQueryString();
 
 
     return Inertia::render('EmailComms/Transfer',['transfers' => $transfers]);
@@ -65,40 +68,40 @@ class TransferEmailCommsController extends Controller
         switch ($transfer->status) {            
                 case '1':                
                     $stage = 'Client Quoted';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '2':
                     $stage = 'Client Invoiced';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '3':
                     $stage = 'Client Paid';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '5':
                     $stage = 'Payment To The Liquor Board';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
 
                 case '6':
                     $stage = 'Scanned Application';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '7':
                     $stage = 'Transfer Logded';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '8':
                     $stage = 'Activation Fee Paid';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '9':
                     $stage = 'Transfer Issued';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 case '10':
                     $stage = 'Transfer Delivered';
-                    $get_doc = getDocumentType($transfer,$stage);
+                    $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
                 default:
                    return back()->with('error','Could not send email.');
@@ -139,7 +142,7 @@ class TransferEmailCommsController extends Controller
 
         } catch (\Throwable $th) {
             $error_message = '500....Server Error.';
-            $this->insertUnsentEmails($transfer, $error_message);  
+            $this->insertUnsentEmails($transfer, $error_message, $stage);  
             return back()->with('error','An error occured while sending email.');
         }
        
@@ -151,7 +154,7 @@ class TransferEmailCommsController extends Controller
         return $tranfer_document;
     }
 
-    function insertUnsentEmails($transfer, $error_message) : void {
+    function insertUnsentEmails($transfer, $error_message, $stage='') : void {
         Email::insert([
             'model_type' => 'transfers',
             'model_id' => $transfer->id,
