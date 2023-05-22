@@ -181,7 +181,7 @@ public function updatePeople(Request $request,$pivot_id){
      */
     public function destroy($slug){
         try {
-            $company = Company::whereSlug($slug)->first();
+            $company = Company::whereSlug($slug)->first(['id']);
             $deleteLicences = Licence::where('company_id',$company->id)->get(['id']);
             foreach ($deleteLicences as $deleteLicence) {
                 $deleteLicence->delete();
