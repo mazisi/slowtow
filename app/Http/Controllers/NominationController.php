@@ -34,17 +34,18 @@ class NominationController extends Controller
             "year" => "required",
             "licence_id" => "required|exists:licences,id"
         ]);
-        $exist = Nomination::where('licence_id',$request->licence_id)
-                                    ->where('year',$request->year)->first();
-        if (!is_null($exist)) {
-           return back()->with('error', 'Sorry...Nomination for '.$request->year.' already exist.');
-        }
+        // $exist = Nomination::where('licence_id',$request->licence_id)
+        //                             ->where('year',$request->year)->first();
+        // if (!is_null($exist)) {
+        //    return back()->with('error', 'Sorry...Nomination for '.$request->year.' already exist.');
+        // }
 
         $nom = Nomination::create([
             "year" => $request->year,
             "licence_id" => $request->licence_id,
             "slug" => sha1(time())
         ]);
+        
         if($nom){ 
            return to_route('view_nomination',['slug' => $nom->slug])->with('success','Nomination created successfully.');
          }

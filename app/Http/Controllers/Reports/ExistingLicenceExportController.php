@@ -44,7 +44,7 @@ class ExistingLicenceExportController extends Controller
                                 request('boardRegion') ? $arr_of_licences[$i]->province.' - '.$arr_of_licences[$i]->board_region : $arr_of_licences[$i]->province,
                                 '',
                                 $arr_of_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
-                                $arr_of_licences[$i]->application_lodged_at ? date('d M Y', strtotime($arr_of_licences[$i]->application_lodged_at)) : '',
+                                $arr_of_licences[$i]->application_lodged_at ? date('PNew', strtotime($arr_of_licences[$i]->application_lodged_at)) : '',
                                 (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_licences[$i]->id) ? 'FALSE': 'TRUE',
                                 $arr_of_licences[$i]->activation_fee_paid_at,
                                 '',
