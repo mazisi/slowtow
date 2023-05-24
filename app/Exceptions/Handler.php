@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
                     'message' => 'The page expired, please try again.',
                 ]);
 
-            } elseif ($response->status() === 5000) {
+            } elseif ($response->status() === 500) {
                 return redirect('/server-error');
             } elseif($response->status() === 404) {
                 return redirect('/file-not-found');

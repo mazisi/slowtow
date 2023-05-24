@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use Throwable;
+use Carbon\Carbon;
 use App\Models\Email;
 use App\Mail\RenewalMailer;
 use Illuminate\Http\Request;
@@ -40,10 +41,11 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
     }
  
   function getMailTemplate($renewal){
+    $template = '';
 
     if($renewal->status == '1'){//quoted
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
-      Please note that your Liquor Licence is due for renewal on the '.$renewal->licence->licence_date->format('d/M').'.<br><br>
+      Please note that your Liquor Licence is due for renewal on the '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'.<br><br>
       Please ensure that payment is made before this to avoid penalties being implemented by the Liquor Board.<br><br>                    
       See our banking details below:<br><br>
       Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
@@ -64,7 +66,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
 
       $template = '<p>Good Day '.$renewal->licence->trading_name.'.</p>
       <p>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</p>
-      <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$renewal->licence->licence_date.'</p>
+      <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</p>
       <p><br>Please note that your renewal is due.<br><br><u>
       PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:
       </u><br><br>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -76,7 +78,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
   }elseif ($renewal->status == '3') {//Client Paid
       $template = 'Good Day '.$renewal->licence->trading_name.'.
       <p>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</p>
-      <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$renewal->licence->licence_date.'</p>
+      <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</p>
       <p>Please see attached proof of payment to the Liquor Board. Note that we have not as yet received the renewal certificate from the Board.</p>
       <p>Please ensure that the attached document in on display in the interim. We will advise as soon 
       as the renewal has been issued.</p>
@@ -87,7 +89,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
      
       $template = '<div><div>Good Day '.$renewal->licence->trading_name.',<br>
       <div>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</div>
-      <div>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.$renewal->licence->licence_date.'</div>
+      <div>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</div>
       </div><br><div>Please see attached copy of the latest renewal certificate.</div>
       <br><div>The original will be delivered in due course.</div><br><div>Many thanks,</div></div>';
       
