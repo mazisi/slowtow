@@ -13,7 +13,7 @@
   <main class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden">    
     <div class="container-fluid py-4">
       <div class="row">
-        <div class="col-md-8 mx-auto">
+        <div class="col-10 mx-auto">
           <div class="card mt-4">
             <div class="card-header p-3 bg-secondary">
               <h5 class="mb-0 text-center">Leon Slotow Associates</h5>
@@ -23,7 +23,7 @@
               {!! $message_body !!}
 
               <div class="w-100 mt-3">
-                <img src="https://slotowstorage.blob.core.windows.net/mrnlabs/mail_sig.jpg" />
+                <img src="https://slotowstorage.blob.core.windows.net/mrnlabs/slotow_mail_signature.jpeg" />
                 </div>
             </div>
           </div>
