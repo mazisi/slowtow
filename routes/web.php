@@ -444,6 +444,10 @@ Route::group(['middleware' => ['guest']], function () {
         return view('emails.mail-template');
     });
 
+    Route::get('maintenance-mode',function(){
+        return view('maintanence');
+    });
+
     Route::group(['middleware' => ['auth']], function () {
 
 
