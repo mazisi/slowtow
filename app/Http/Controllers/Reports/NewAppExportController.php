@@ -47,7 +47,7 @@ class NewAppExportController extends Controller
                        request('boardRegion') ? $arr_of_licences[$i]->province.' - '.$arr_of_licences[$i]->board_region : $arr_of_licences[$i]->province,
                        '',
                        $arr_of_licences[$i]->deposit_paid_at ? 'FALSE': 'TRUE',
-                       $arr_of_licences[$i]->application_lodged_at ? date('YY/mm/dd', strtotime($arr_of_licences[$i]->application_lodged_at)) : '',
+                       $arr_of_licences[$i]->application_lodged_at ? date('Y/m/d', strtotime($arr_of_licences[$i]->application_lodged_at)) : '',
                        $arr_of_licences[$i]->application_lodged_at ? 'FALSE': 'TRUE',
                        $arr_of_licences[$i]->activation_fee_paid_at,
                        '',
