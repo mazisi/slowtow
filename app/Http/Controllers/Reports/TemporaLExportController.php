@@ -44,7 +44,7 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
                $arr_of_licences[$i]->address,
                $arr_of_licences[$i]->client_paid_at,
                $arr_of_licences[$i]->liquor_licence_number,
-               $arr_of_licences[$i]->logded_at ? date('d M Y', strtotime($arr_of_licences[$i]->logded_at)) : '',
+               $arr_of_licences[$i]->logded_at ? date('Y/m/d', strtotime($arr_of_licences[$i]->logded_at)) : '',
                self::getProofOfLodgiment($arr_of_licences[$i]->id) ? 'TRUE': 'FALSE',
                $arr_of_licences[$i]->issued_at ? date('d M Y', strtotime($arr_of_licences[$i]->issued_at)) : '',
                self::getStatus($arr_of_licences[$i]->status),
