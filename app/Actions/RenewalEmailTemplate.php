@@ -50,7 +50,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       See our banking details below:<br><br>
       Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
       Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br><br>
+      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>
                          
       Many thanks,
       '; 
@@ -61,7 +61,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
       Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
       Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br>
-      Code:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18250500<br><br><br>Many thanks,
+      Code:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18250500<br><br>Many thanks,
       ';
 
       $template = '<p>Good Day '.$renewal->licence->trading_name.'.</p>
@@ -73,7 +73,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
       Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br><br>Many thanks,</p>';
+      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>Many thanks,</p>';
       
   }elseif ($renewal->status == '3') {//Client Paid
       $template = 'Good Day '.$renewal->licence->trading_name.'.
@@ -82,7 +82,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       <p>Please see attached proof of payment to the Liquor Board. Note that we have not as yet received the renewal certificate from the Board.</p>
       <p>Please ensure that the attached document in on display in the interim. We will advise as soon 
       as the renewal has been issued.</p>
-      <br><br><br>Many thanks,';
+      <br><br>Many thanks,';
 
       
   }elseif ($renewal->status == '5') {//issued
@@ -91,7 +91,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       <div>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</div>
       <div>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</div>
       </div><br><div>Please see attached copy of the latest renewal certificate.</div>
-      <br><div>The original will be delivered in due course.</div><br><br><br><div>Many thanks,</div></div>';
+      <br><div>The original will be delivered in due course.</div><br><br><div>Many thanks,</div></div>';
       
   }else{
       return back()->with('error','An unknown error ocurred');
