@@ -9,7 +9,7 @@
   <h5 class="mb-1">
     <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}
       
-    </Link> - New Application - {{ licence.licence_number }}</h5>
+    </Link> - New Application - {{ licence.licence_number ? licence.licence_number : '' }}</h5>
     
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">

@@ -63,7 +63,8 @@ class TransferMailer extends Mailable
             if($this->transfer->status == 'Client Quoted'){
                 return $this->from(env("MAIL_FROM_ADDRESS"))
                 ->view('emails.mail-template')
-                ->cc(env("MAIL_FROM_ADDRESS"))
+                ->cc('info@slotow.co.za')
+                ->cc('sales@slotow.co.za')
                 ->subject($this->transfer->licence->trading_name.' Transfer')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                 ->attach(storage_path('app/public/GoVerify.pdf'))

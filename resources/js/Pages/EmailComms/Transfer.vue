@@ -212,7 +212,7 @@ methods: {
 
         <td class="text-sm">
           <Link :href="`/email-comms/get-mail-template/${transfer.slug}/transfers`">
-           <h6 class="mb-0 text-sm">{{transfer.licence.licence_number }} </h6>
+           <h6 class="mb-0 text-sm">{{ transfer.licence.licence_number ? transfer.licence.licence_number : '' }} </h6>
           </Link>
         </td>
 

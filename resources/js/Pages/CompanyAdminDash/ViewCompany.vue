@@ -402,7 +402,7 @@
     </div>
       </div>
     </td>
-    <td class="text-center">{{ licence.licence_number }}</td>
+    <td class="text-center">{{ licence.licence_number ? licence.licence_number : ''}}</td>
     <td class="text-center">{{ licence.licence_date }}</td>
     <td class="text-center">
     <Link :href="`/company/view-my-licences/${licence.slug }`" class="mx-2 ms-2 justify-content-center">

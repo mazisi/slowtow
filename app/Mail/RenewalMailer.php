@@ -54,9 +54,9 @@ class RenewalMailer extends Mailable
             }
         
         return $this->from(env("MAIL_FROM_ADDRESS"))
-                    ->cc(env("MAIL_FROM_ADDRESS"))
-                    ->subject('RENEWAL '. $this->renewal->date.'. – TRADING NAME – LICENCE NUMBER')
-                    ->subject('Renewal for '.$this->renewal->licence->trading_name.' AND '.$this->renewal->date)
+                    ->cc('info@slotow.co.za')
+                    ->cc('sales@slotow.co.za')
+                    ->subject('RENEWAL '. $this->renewal->date.'–'.strtoupper($this->renewal->licence->trading_name).' – '.strtoupper($this->renewal->licence->licence_number))
                     ->view('emails.mail-template')
                    ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                     ->with([

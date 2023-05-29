@@ -499,7 +499,7 @@ v-model="form.business_address"
     </div>
       </div>
     </td>
-    <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_number }}</Link></td>
+    <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_number ? licence.licence_number : '' }}</Link></td>
     <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_date }}</Link></td>
     <td class="text-center">
     <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 ms-2 justify-content-center">

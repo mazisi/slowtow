@@ -286,7 +286,7 @@
               <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.licence_type.licence_type }}</p>
             </td>
             <td class="align-left text-center text-sm">
-              <p class="text-xs font-weight-bold mb-0">{{ new_application.licence_number }}</p>
+              <p class="text-xs font-weight-bold mb-0">{{ new_application.licence_number ? new_application.licence_number : '' }}</p>
             </td>
             <td class="align-left align-left text-center">
               <p class="align-left text-xs font-weight-bold mb-0">{{ new_application.board_region }}</p>

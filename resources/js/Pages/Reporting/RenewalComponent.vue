@@ -31,7 +31,7 @@
               
             </td>
             <td class="text-center text-sm">{{ limit(renewal.licence.trading_name) }}</td>
-            <td class="text-center text-sm">{{ renewal.licence.licence_number }}</td>
+            <td class="text-center text-sm">{{ renewal.licence.licence_number ? renewal.licence.licence_number : '' }}</td>
             <td class="text-center text-sm">{{ renewal.date }}</td>
             <td v-if="renewal.renewal_documents[0] != null" class="text-center text-sm">True</td>
             <td v-else class="text-center text-sm">False</td>                  </tr>

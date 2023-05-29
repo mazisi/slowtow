@@ -7,6 +7,16 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Leon Slotow Associates</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  .logo{
+    max-height: 20rem !important;
+    width: 260px;
+    height: 11rem;
+  }
+  .card-body{
+    padding: 0;
+  }
+</style>
 </head>
 
 <body class="bg-gray-200">
@@ -15,15 +25,12 @@
       <div class="row">
         <div class="col-10 mx-auto">
           <div class="card mt-4">
-            <div class="card-header p-3 bg-secondary">
-              <h5 class="mb-0 text-center">Leon Slotow Associates</h5>
-            </div>
-            <div class="card-body p-3 pb-0">
+            <div class="card-body pb-0">
 
               {!! $message_body !!}
 
-              <div class="w-100 mt-3">
-                <img src="https://slotowstorage.blob.core.windows.net/mrnlabs/slotow_mail_signature.jpeg" />
+              <div class="mt-3 bg-secondary">
+                <img src="https://slotowstorage.blob.core.windows.net/images/white_logo3.png" class="logo" />
                 </div>
             </div>
           </div>

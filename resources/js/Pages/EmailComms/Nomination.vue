@@ -221,7 +221,7 @@ methods: {
           </div>
         </td>
         <td>
-          <p class="text-xs font-weight-bold mb-0">{{ nomination.licence.licence_number }}</p>
+          <p class="text-xs font-weight-bold mb-0">{{ nomination.licence.licence_number ? nomination.licence.licence_number : '' }}</p>
         </td>
         <td class="align-middle font-weight-bold text-center text-sm">
           <span>{{ new Date(nomination.licence.licence_date).toISOString().split('T')[0] }}</span>
