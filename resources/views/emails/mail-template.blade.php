@@ -16,6 +16,11 @@
   .card-body{
     padding: 0;
   }
+  .bg-secondary{
+      color: #000;
+      background-color: #7b809a;
+      border-color: #7b809a;
+  }
 </style>
 </head>
 
@@ -29,8 +34,8 @@
 
               {!! $message_body !!}
 
-              <div class="mt-3 bg-secondary">
-                <img src="https://slotowstorage.blob.core.windows.net/images/white_logo3.png" class="logo" />
+              <div class="mt-3 bg-secondary" >
+                <img src="https://goverify.co.za/public/logo.png" class="logo" />
                 </div>
             </div>
           </div>

@@ -106,11 +106,22 @@ class NominationEmailCommsController extends Controller
             $email2 = $nomination->licence->company->email2;
 
                 if(!is_null($email)){
-                    Mail::to($email)->send(new NominationMailer($nomination, $request->mail_body));   
+                    Mail::to($email)
+                    ->cc(env('MAIL_FROM_ADDRESS'))
+                    ->bcc(env('BCC_EMAIL_ADDRESS'))
+                    ->send(new NominationMailer($nomination, $request->mail_body));   
+
                 }elseif(is_null($email) && !is_null($email1)){
-                    Mail::to($email1)->send(new NominationMailer($nomination, $request->mail_body));
+                    Mail::to($email1)->cc(env('MAIL_FROM_ADDRESS'))
+                                        ->bcc(env('BCC_EMAIL_ADDRESS'))
+                                        ->send(new NominationMailer($nomination, $request->mail_body)); 
+
                 }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
-                    Mail::to($email2)->send(new NominationMailer($nomination, $request->mail_body));
+
+                    Mail::to($email2)->cc(env('MAIL_FROM_ADDRESS'))
+                    ->bcc(env('BCC_EMAIL_ADDRESS'))
+                    ->send(new NominationMailer($nomination, $request->mail_body)); 
+
                 }else{
                     return back()->with('error','Mail NOT sent. Company does not have email addresses.');
                 }

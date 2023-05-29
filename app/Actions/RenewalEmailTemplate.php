@@ -146,11 +146,22 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
             $email2 = $renewal->licence->company->email2;
 
             if(!is_null($email)){
-                Mail::to($email)->send(new RenewalMailer($renewal, $request->mail_body));   
+                Mail::to($email)
+                               ->cc(env('MAIL_FROM_ADDRESS'))
+                                ->bcc(env('BCC_EMAIL_ADDRESS'))
+                                ->send(new RenewalMailer($renewal, $request->mail_body)); 
+
             }elseif(is_null($email) && !is_null($email1)){
-                Mail::to($email1)->send(new RenewalMailer($renewal, $request->mail_body));
+                Mail::to($email1)
+                ->cc(env('MAIL_FROM_ADDRESS'))
+                                ->bcc(env('BCC_EMAIL_ADDRESS'))
+                                ->send(new RenewalMailer($renewal, $request->mail_body));
+
             }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
-                Mail::to($email2)->send(new RenewalMailer($renewal, $request->mail_body));
+                          Mail::to($email2)
+                                ->cc(env('MAIL_FROM_ADDRESS'))
+                                ->bcc(env('BCC_EMAIL_ADDRESS')) 
+                                ->send(new RenewalMailer($renewal, $request->mail_body));
             }else{
                 return back()->with('error','Mail NOT sent. Company does not have email addresses.');
             }

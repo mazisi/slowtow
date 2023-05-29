@@ -18,7 +18,12 @@
       }"
       v-model="mailForm.mail_body"
     />
-<div class="mt-3 float-end"><button type="submit" class="btn btn-secondary float-end">Send</button></div>
+<div class="mt-3 float-end">
+
+  <button type="submit" class="btn btn-secondary float-end" :disabled="mailForm.processing || file_has_apostrophe">
+    <span v-if="mailForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+    Send</button>
+  </div>
 </form>
 
 </div>
