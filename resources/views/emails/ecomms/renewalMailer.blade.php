@@ -1,11 +1,13 @@
-@component('mail::message')
+{!! $template !!}
 
-{!! $message_body !!}
+
 <br>
 <style>
-  .logo{
-   width:100%;
-   
+  .logo-slotow {
+    max-height: 10rem !important;
+    width: 300px;
+    height: 12rem;
+      
   }
   .bg-secondary{
       color: #000;
@@ -13,11 +15,7 @@
       border-color: #7b809a;
   }
 </style>
-<div class="mt-3 bg-secondary" >
-       <img src="{{ asset('logo.png') }}" alt="Slotow Logo" class="logo">
+<div class="bg-secondary" >
+       <img src="{{ asset('public/logo.png') }}" alt="Slotow Logo" class="logo-slotow">
  </div>
 
-
-<br>
-
-@endcomponent
