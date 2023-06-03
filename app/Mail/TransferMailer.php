@@ -77,10 +77,7 @@ class TransferMailer extends Mailable
                 ->view('emails.mail-template')
                 ->cc(env("MAIL_FROM_ADDRESS"))
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
-                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
-                ->with([
-                    'message_body' => $this->template
-                ]);
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 
             }
             

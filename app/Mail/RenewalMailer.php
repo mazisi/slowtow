@@ -56,11 +56,7 @@ class RenewalMailer extends Mailable
                     ->cc('sales@slotow.co.za')
                     ->subject('RENEWAL '. $this->renewal->date.'–'.strtoupper($this->renewal->licence->trading_name).' – '.strtoupper($this->renewal->licence->licence_number))
                     ->markdown('emails.ecomms.renewalMailer')
-                   ->attach(env('BLOB_FILE_PATH').$get_doc->document)
-                    ->with([
-                        'message_body' => $this->template
-                    ]);
-
+                   ->attach(env('BLOB_FILE_PATH').$get_doc->document);
                 } catch (\Throwable $th) {
                     return to_route('get_licence_transfers')->with('error','Error sending mail.');
                 }

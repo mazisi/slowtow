@@ -55,18 +55,13 @@ class NominationMailer extends Mailable
                 return back()->with('error','Could not locate document.');
                  break;
             }
-            if(! $get_doc){
-                return back()->with('error','Could not locate document.');
-            }
+            
                  return $this->from(env("MAIL_FROM_ADDRESS"))
                  ->view('emails.mail-template')
                  ->cc('info@slotow.co.za')
                  ->cc('sales@slotow.co.za')
                 ->subject($this->nomination->licence->trading_name.' Appointment Of Managers ')
-                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
-                ->with([
-                    'message_body' => $this->template
-                ]);
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 
             
         } catch (\Throwable $th) {
