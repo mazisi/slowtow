@@ -232,7 +232,7 @@ methods: {
         
         <td class="text-sm">
           <Link :href="`/email-comms/get-mail-template/${renewal.slug}/renewals`" >
-           <h6 class="mb-0 text-sm">{{ renewal.licence.licence_number ? renewal.licence.licence_number : ''}} </h6>
+           <h6 class="mb-0 text-sm">{{ renewal.licence ? renewal.licence.licence_number : ''}} </h6>
           </Link>
         </td>
         
