@@ -5,10 +5,7 @@ namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use App\Models\TransferDocument;
-use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 class TransferMailer extends Mailable
@@ -21,88 +18,77 @@ class TransferMailer extends Mailable
      * @return void
      */
     public $transfer,$template;
-
     public function __construct($licence,$template){
        $this->transfer = $licence;
        $this->template = $template;
     }
-
     /**
-     * Get the message envelope.
+     * Build the message.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return $this
      */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Transfer Mailer',
-        );
-    }
+    public function build(){
+        try {
+            
+            switch ($this->transfer->status) {      
+                case '1':                
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Client Quoted')->first();
+                    break;
+                case '2':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Client Invoiced')->first();
+                    break;
+                case '3':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Client Paid')->first();
+                    break;
+                case '5':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Payment To The Liquor Board')->first();
+                    break;
+                case '6':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Transfer Logded')->first();
+                    break;
+                case '7':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Activation Fee Paid')->first();
+                    break;
+                case '8':
+                    $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->first();
+                    break;
+                default:
+                return back()->with('error','Could not send email.');
+                    break;
+            }
+            if(! $get_doc){
+                return back()->with('error','Could not locate document.');
+            }
+            
+            if($this->transfer->status == 'Client Quoted'){
+                return $this->from(env("MAIL_FROM_ADDRESS"))
+                ->view('emails.mail-template')
+                ->cc('info@slotow.co.za')
+                ->cc('sales@slotow.co.za')
+                ->subject($this->transfer->licence->trading_name.' Transfer')
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
+                ->attach(storage_path('app/public/GoVerify.pdf'))
+                ->with([
+                    'message_body' => $this->template
+                ]);
 
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            view: 'emails.mail-template',
-            with: ['message_body' => $this->template],
-        );
-    }
+            }else{
+                return $this->from(env("MAIL_FROM_ADDRESS"))
+                ->view('emails.mail-template')
+                ->cc(env("MAIL_FROM_ADDRESS"))
+                ->subject($this->transfer->licence->trading_name.' Transfer ')
+                ->attach(env('BLOB_FILE_PATH').$get_doc->document)
+                ->with([
+                    'message_body' => $this->template
+                ]);
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-
-        switch ($this->transfer->status) {      
-            case '1':                
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Client Quoted')->first();
-                break;
-            case '2':
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Client Invoiced')->first();
-                break;
-            case '3':
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Client Paid')->first();
-                break;
-            case '5':
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Payment To The Liquor Board')->first();
-                break;
-            case '6':
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Transfer Logded')->first();
-                break;
-            case '7':
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->where('doc_type','Activation Fee Paid')->first();
-                break;
-            case '8':
-                $get_doc = TransferDocument::where('licence_transfer_id',$this->transfer->id)->first();
-                break;
-            default:
-            return back()->with('error','Could not send email.');
-                break;
-        }
-        
-        if($this->transfer->status == 'Client Quoted'){
-           
-            return [
-                Attachment::fromStorageDisk(env('FILESYSTEM_DISK'), env('BLOB_FILE_PATH').$get_doc->document)
-                            ->withMime('application/pdf'),
-                // Attachment::fromStorageDisk(env('FILESYSTEM_DISK'), env('BLOB_FILE_PATH').'GoVerify_Attached_FIle.pdf')
-                // ->withMime('application/pdf')
-            ];
-
-        }else{
-            return [
-                Attachment::fromStorageDisk(env('FILESYSTEM_DISK'), env('BLOB_FILE_PATH').$get_doc->document)
-                            ->withMime('application/pdf'),
-            ];
-
+            }
+            
+        } catch (\Throwable $th) {
+            return to_route('get_licence_transfers')->with('error','Error!! Please contact support.');
         }
         
     }
+
+  
 }
