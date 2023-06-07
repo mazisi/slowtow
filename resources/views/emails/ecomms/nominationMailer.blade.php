@@ -1,4 +1,4 @@
-{!! $template !!}
+<div style="color: #000;">{!! $template !!}</div>
 
 
 <br>

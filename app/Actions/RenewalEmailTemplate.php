@@ -6,6 +6,7 @@ use Throwable;
 use Carbon\Carbon;
 use App\Models\Email;
 use App\Mail\RenewalMailer;
+use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\RenewalDocument;
@@ -47,7 +48,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
       Please note that your Liquor Licence is due for renewal on the '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'.<br><br>
       Please ensure that payment is made before this to avoid penalties being implemented by the Liquor Board.<br><br>                    
-      See our banking details below:<br><br>
+      See our banking details below:
       Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
       Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
       Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>
@@ -133,39 +134,33 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
         $get_email_status = Email::where('stage', $stage)->where('model_type','renewals')->where('model_id',$renewal->id)->first();
 
          $error_message = '';
-        // if(is_null($get_email_status)){
-        //     if(is_null($get_doc)){
-        //         $error_message = 'Quote Document Not Uploaded';                
-        //         $this->insertUnsentEmails($renewal, $error_message);               
-        //         return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
-        //     }
-        // }
+        if(is_null($get_email_status)){
+            if(is_null($get_doc)){
+                $error_message = 'Quote Document Not Uploaded';                
+                $this->insertUnsentEmails($renewal, $error_message);               
+                return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+            }
+        }
+         
         
             $email = $renewal->licence->company->email;
-            $email1= $renewal->licence->company->email1;
+            $email1 = $renewal->licence->company->email1;
             $email2 = $renewal->licence->company->email2;
-            Mail::to('mazisimsebele18@gmail.com')->send(new RenewalMailer($renewal, $request->mail_body));
 
-            // if(!is_null($email)){
-            //     Mail::to($email)
-            //                    ->cc(env('MAIL_FROM_ADDRESS'))
-            //                     ->bcc(env('BCC_EMAIL_ADDRESS'))
-            //                     ->send(new RenewalMailer($renewal, $request->mail_body)); 
-
-            // }elseif(is_null($email) && !is_null($email1)){
-            //     Mail::to($email1)
-            //     ->cc(env('MAIL_FROM_ADDRESS'))
-            //                     ->bcc(env('BCC_EMAIL_ADDRESS'))
-            //                     ->send(new RenewalMailer($renewal, $request->mail_body));
-
-            // }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
-            //               Mail::to($email2)
-            //                     ->cc(env('MAIL_FROM_ADDRESS'))
-            //                     ->bcc(env('BCC_EMAIL_ADDRESS')) 
-            //                     ->send(new RenewalMailer($renewal, $request->mail_body));
-            // }else{
-            //     return back()->with('error','Mail NOT sent. Company does not have email addresses.');
-            // }
+            
+            if(! is_null($email) || ! empty($email)){
+                Mail::to($email)->send(new RenewalMailer($renewal, $request->mail_body)); 
+            }
+            
+            if(! is_null($email1) || ! empty($email1)){
+                Mail::to($email1)->send(new RenewalMailer($renewal, $request->mail_body));
+            }
+            
+            if(! is_null($email2) || ! empty($emai2)){
+                    Mail::to($email2)->send(new RenewalMailer($renewal, $request->mail_body));
+            }else{
+                return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+            }
         
         //if mail sent then update is quote sent for reporting purposes
         $renewal->update(['is_quote_sent' => 'true']);

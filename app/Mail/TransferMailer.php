@@ -73,9 +73,10 @@ class TransferMailer extends Mailable
                 ]);
 
             }else{
-                return $this->from(env("MAIL_FROM_ADDRESS"))
-                ->view('emails.mail-template')
-                ->cc(env("MAIL_FROM_ADDRESS"))
+                return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
+                ->markdown('emails.ecomms.renewalMailer')
+                ->cc('info@slotow.co.za')
+                ->bcc('sales@slotow.co.za')
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 

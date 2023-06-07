@@ -56,10 +56,10 @@ class NominationMailer extends Mailable
                  break;
             }
             
-                 return $this->from(env("MAIL_FROM_ADDRESS"))
-                 ->view('emails.mail-template')
+                 return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
+                 ->markdown('emails.ecomms.renewalMailer')
                  ->cc('info@slotow.co.za')
-                 ->cc('sales@slotow.co.za')
+                 ->bcc('sales@slotow.co.za')
                 ->subject($this->nomination->licence->trading_name.' Appointment Of Managers ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 

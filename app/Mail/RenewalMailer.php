@@ -51,9 +51,9 @@ class RenewalMailer extends Mailable
           
          
         
-        return $this->from(env("MAIL_FROM_ADDRESS"))
+        return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
                     ->cc('info@slotow.co.za')
-                    ->cc('sales@slotow.co.za')
+                    ->bcc('sales@slotow.co.za')
                     ->subject('RENEWAL '. $this->renewal->date.'–'.strtoupper($this->renewal->licence->trading_name).' – '.strtoupper($this->renewal->licence->licence_number))
                     ->markdown('emails.ecomms.renewalMailer')
                    ->attach(env('BLOB_FILE_PATH').$get_doc->document);
