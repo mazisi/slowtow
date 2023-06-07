@@ -6,7 +6,6 @@ use Throwable;
 use Carbon\Carbon;
 use App\Models\Email;
 use App\Mail\RenewalMailer;
-use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\RenewalDocument;
