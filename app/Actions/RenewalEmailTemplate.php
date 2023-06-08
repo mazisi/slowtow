@@ -43,14 +43,16 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
   function getMailTemplate($renewal){
     $template = '';
 
-    if($renewal->status == '1'){//quoted
+     if($renewal->status == '1'){//quoted
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
-      Please note that your Liquor Licence is due for renewal on the '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'.<br><br>
+      Please note that your Liquor Licence is due for renewal on the '.Carbon::parse($renewal->licence->licence_date)->format('jS').' of '.Carbon::parse($renewal->licence->licence_date)->format('F Y').'-
+      attached please find a quote for us to attend to this renewal on your behalf.<br><br>
       Please ensure that payment is made before this to avoid penalties being implemented by the Liquor Board.<br><br>                    
-      See our banking details below:
+      See our banking details below:<br>
       Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
       Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
       Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>
+      We thank you for your continued support and look forward to assisting you with this process.<br><br>
                          
       Many thanks,
       '; 
