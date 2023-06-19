@@ -20,6 +20,7 @@
         "psr/simple-cache": "^2.0",
         "setasign/fpdf": "^1.8",
         "setasign/fpdi": "^2.3",
+        "spatie/laravel-backup": "^8.1",
         "spatie/laravel-permission": "^5.5",
         "tightenco/ziggy": "^1.0",
         "webklex/laravel-pdfmerger": "^1.3"
