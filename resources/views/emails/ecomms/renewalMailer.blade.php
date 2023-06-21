@@ -4,9 +4,9 @@
 <br>
 <style>
   .logo-slotow {
-    max-height: 10rem !important;
-    width: 300px;
-    height: 12rem;
+    /*max-height: 10rem !important;*/
+    /*width: 300px;*/
+    /*height: 12rem;*/
       
   }
   .bg-secondary{
@@ -16,6 +16,7 @@
   }
 </style>
 <div class="bg-secondary" >
-       <img src="{{ asset('public/logo.png') }}" alt="Slotow Logo" class="logo-slotow">
+       <img src="{{ asset('public/logo.jpg') }}" alt="Slotow Logo" class="logo-slotow">
  </div>
+
 

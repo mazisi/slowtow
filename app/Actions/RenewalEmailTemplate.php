@@ -170,6 +170,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
 
     } catch (Throwable $th) {throw $th;
         $error_message = 'Server Error.';
+        echo $error_message;
        $this->insertUnsentEmails($renewal, $error_message, $renewal_stage);  
       //return back()->with('error','An error occured while sending email.');
     }
