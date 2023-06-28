@@ -731,7 +731,7 @@ export default {
         <i class="fa fa-file-pdf h5 text-danger curser-pointer"></i>
       </a>
 
-      <a v-else 
+      <a v-else-if="original_licence"
       :href="`${$page.props.blob_file_path}${original_licence.document_file}`" target="_blank"
       >
         <i class="fa fa-link float-end h5 curser-pointer"></i>
