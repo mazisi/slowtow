@@ -1,7 +1,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link, useForm, Head } from "@inertiajs/inertia-vue3";
-import { ref, watch, reactive } from 'vue';
+import { ref, watch } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
@@ -15,7 +15,8 @@ export default {
   },
 
   setup(props) {
-    const term = ref('');
+    const term = getUrlParam() ? getUrlParam() : ref('');
+    
 
     const form = useForm({
           term: term,
@@ -27,6 +28,8 @@ export default {
         replace: true,
         preserveState: true
      })     
+     
+
    }
    
         function limit(string='', limit=25){
@@ -39,6 +42,11 @@ export default {
           
         }
 
+       function getUrlParam(){
+          const urlParams = new URLSearchParams(window.location.search);
+          return urlParams.get('term');
+        }
+
    watch(term, _.debounce(function (value) {
           Inertia.get('/temp-licences', { term: value }, { preserveState: true, replace: true });
         }, 2000));
@@ -47,7 +55,8 @@ export default {
      term,
      form,
      search,
-     limit
+     limit,
+     getUrlParam
     }
   },
   components: {

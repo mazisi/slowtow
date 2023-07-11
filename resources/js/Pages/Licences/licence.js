@@ -1,6 +1,6 @@
 import Layout from "../../Shared/Layout.vue";
 import { Link, useForm, Head } from '@inertiajs/inertia-vue3';
-import { onMounted, ref, watch,computed } from 'vue'
+import { ref, watch,computed } from 'vue'
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue';
 import Paginate from "../../Shared/Paginate.vue";
@@ -26,15 +26,17 @@ export default {
     
 
     setup(props) {
+      const [search_query, status, licence_type, licence_date, province] = getUrlParam();
     
-    const term = ref('')
-    const form = useForm({
-          term: term,
-          active_status: '',
-          licence_type: '',
-          licence_date: '',
-          province: ''
-        })
+        const term = search_query ? search_query : ref('')
+
+        const form = useForm({
+              term: term,
+              active_status: status ? status : '',
+              licence_type: licence_type ? licence_type : '',
+              licence_date: licence_date ? licence_date : '',
+              province: province ? province : ''
+            })
 
        function limit(string='', limit = 25) {
         if(string !== ''){
@@ -82,14 +84,21 @@ export default {
         })
 
         
-        // onMounted(() => {
-          
-        //   if(props.success){
-        //     notify(props.success)
-        //   }else if(props.error){
-        //     notify(props.error)
-        //   }
-        // },
+        function getUrlParam(){
+          const urlParams = new URLSearchParams(window.location.search);
+          const search_query = urlParams.get('term')
+          const status = urlParams.get('active_status')
+          const licence_type = urlParams.get('licence_type');
+          const licence_date = urlParams.get('licence_date');
+          const province = urlParams.get('province');
+          return [
+            search_query,
+            status,
+            licence_type,
+            licence_date,
+            province
+          ];
+        }
 
        
         
@@ -100,7 +109,8 @@ export default {
           form,
           term,
           search,
-          notify
+          notify,
+          getUrlParam
         }
         
     },

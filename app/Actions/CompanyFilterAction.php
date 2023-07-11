@@ -13,8 +13,7 @@ class CompanyFilterAction{
       && !request('company_type'), 
       function ($query) {
           $query->where('name','LIKE','%'.request('term').'%')
-          ->orWhere('reg_number','LIKE','%'.request('term').'%');  
-      
+          ->orWhere('reg_number','LIKE','%'.request('term').'%');      
       
   })
 
@@ -25,9 +24,9 @@ class CompanyFilterAction{
       function ($query) {
       return $query
       ->where(function($query){
-          $query->where('name','LIKE','%'.request('term').'%')
-                ->where('company_type','LIKE','%'.request('company_type').'%');   
-        });
+          $query->where('name','LIKE','%'.request('term').'%');                   
+        })
+        ->where('company_type','LIKE','%'.request('company_type').'%');
       
   })
 //Search and company type and Active
@@ -78,29 +77,29 @@ class CompanyFilterAction{
 
 
   ->when(!request('term')  && !request('company_type') && request('active_status') == 'Inactive', 
-      function ($query){ 
+      function ($query){
           return $query->where('active','0');            
       })
 
       ->when(!request('term')  && !request('company_type') && request('active_status') == 'Active', 
-      function ($query){ 
+      function ($query){
           return $query->where('active','1');            
       })
           
           ->when(!request('term') && request('company_type') && request('active_status') == 'Inactive', 
-          function ($query){ 
+          function ($query){
               $query->where('active',true)
                     ->where('company_type','LIKE','%'.request('company_type').'%');            
           })
 
           ->when(!request('term') && request('company_type') && request('active_status') == 'Active', 
-          function ($query){ 
+          function ($query){
               $query->where('active',true)
                     ->where('company_type','LIKE','%'.request('company_type').'%');            
           })
 
       ->when(!request('term')  && !request('active_status') && request('company_type'), 
-          function ($query){ 
+          function ($query){
               $query->where('company_type','LIKE','%'.request('company_type').'%');                
           })
           ->latest()->paginate(20)->withQueryString();

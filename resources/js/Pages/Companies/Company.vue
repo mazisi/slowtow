@@ -20,12 +20,13 @@ export default {
   },
 
   setup(props) {
+    const [search_query, status, company_type] = getUrlParam();
 
-    const term = ref('');
+    const term = search_query ? search_query : ref('');
     const form = useForm({
           term: term,
-          active_status: '',
-          company_type: '',
+          active_status: status ? status : '',
+          company_type: company_type ? company_type : '',
         })
 
     function search(){
@@ -65,13 +66,17 @@ export default {
           }
         }
 
-        // onMounted(() => {
-        //   if(props.success){
-        //     notify(props.success)
-        //   }else if(props.error){
-        //     notify(props.error)
-        //   }
-        // });
+        function getUrlParam(){
+          const urlParams = new URLSearchParams(window.location.search);
+          const search_query = urlParams.get('term');
+          const status = urlParams.get('active_status');
+          const company_type = urlParams.get('company_type');
+          return [
+            search_query,
+            status,
+            company_type
+          ];
+        }
        
 
     const computedCompanyTypes = computed(() => {
@@ -85,7 +90,8 @@ export default {
       toast,
       limit,
       notify,
-      computedCompanyTypes
+      computedCompanyTypes,
+      getUrlParam
     }
   },
   components: {
