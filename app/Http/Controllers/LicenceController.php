@@ -103,7 +103,7 @@ class LicenceController extends Controller
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->latest()->paginate(4)->withQueryString();
 
 
-        $licence->is_new_app ? $view = 'ViewNewApp' : $view = 'ViewLicence';
+        $view = $licence->is_new_app ? 'ViewNewApp' : 'ViewLicence';
        
       
         return Inertia::render('Licences/'.$view,[

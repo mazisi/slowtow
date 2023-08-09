@@ -147,6 +147,15 @@
     .modal-backdrop {
       z-index: 9989 !important;
      }
+
+     .centered-select {
+    width: 200px; /* Adjust the width as needed */
+    margin: 0 auto;
+  }
+
+   .centered-select option {
+    text-align: center;
+  }
     
    </style>
 

@@ -77,6 +77,7 @@
     import Editor from '@tinymce/tinymce-vue';
     import Banner from '../components/Banner.vue';
     import { ref,computed } from "vue";
+    import { usePage } from '@inertiajs/vue3';
     
     export default {
      props: {

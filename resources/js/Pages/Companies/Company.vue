@@ -124,13 +124,13 @@ export default {
 <div  class="col-md-12 col-xl-12 col-lg-12">
 <div class="input-group input-group-outline null is-filled">
 <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
-<input v-model="term" placeholder="Search Company" type="text" class="form-control form-control-default">
+<input v-model="term" placeholder="Search Company" type="text" class="form-control form-control-default centered-select">
 </div>
 </div>
 
 <div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="form.active_status" class="form-control form-control-default">
+<select @change="search" v-model="form.active_status" class="form-control form-control-default centered-select">
 <option :value="''" disabled selected>Active/Inactive Status</option>
 <option value="All">All</option>
 <option value="Active">Active</option>
@@ -141,7 +141,7 @@ export default {
 
 <div class="col-6 filters">
 <div class="input-group input-group-outline null is-filled">
-<select @change="search" v-model="form.company_type" class="form-control form-control-default">
+<select @change="search" v-model="form.company_type" class="form-control form-control-default centered-select">
 <option :value="''" disabled selected>Company Type</option>
 <option v-for="company_type in computedCompanyTypes " :value=company_type >{{ company_type }}</option>
 </select>

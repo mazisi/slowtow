@@ -153,7 +153,6 @@
     :errors="errors.licence_number"
     :input_id="licence_number"
     :inputType="'text'"
-    :required="true"
 />
 
 <TextInputComponent
@@ -251,6 +250,7 @@
 
 
 <TextInputComponent
+    v-if="licence.status >= 8"
     v-model="form.latest_renewal" 
     :column="'col-12'" 
     :label="'Latest Renewal'" 
@@ -260,7 +260,12 @@
     :inputType="'text'"
 />
 
-<TextInputComponent
+<div class="input-group-custom mb-2">
+  <div class="add-on">R</div>
+  <input type="number" class="input-field form-control-default" v-model="form.renewal_amount" placeholder="Renewal amount">
+</div>
+
+<!-- <TextInputComponent
     v-model="form.renewal_amount" 
     :column="'col-12'" 
     :label="'Renewal Amount'" 
@@ -268,7 +273,7 @@
     :errors="errors.renewal_amount"
     :input_id="renewal_amount"
     :inputType="'number'"
-/>
+/> -->
 
 
 
@@ -537,6 +542,33 @@ Action
 </template>
 
 <style scoped>
+  .input-group-custom {
+    display: flex;
+    
+  }
+
+  .add-on {
+    background-color: #f0f0f0;
+    border: 2px solid #4caf50;
+    padding: 5px 10px;
+    border-right: none;
+  }
+
+
+ 
+  .input-field {
+    flex: 1;
+    border-color: #4caf50 !important;
+    background: none;
+    border: 2px solid #d2d6da;
+    padding: 5px 10px;
+  }
+
+  .input-field:focus {
+    outline: none;
+    border-color: #4caf50;
+    box-shadow: none;
+  }
     .columns{
       margin-bottom: 1rem;
     }

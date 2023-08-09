@@ -361,6 +361,9 @@ import SidenavCollapse from "./SidenavCollapse.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 import CompanyAdminVue from "./CompanyAdmin.vue";
 import LicenceActions from "./LicenceActions.vue";
+import { usePage } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia'
+import { computed} from 'vue';
 
 export default {
   name: "SidenavList",
@@ -382,7 +385,8 @@ export default {
   },
   methods: {
     goBack(){
-      history.go(-1)
+      history.back()
+      
     }
   }
 };

@@ -458,7 +458,7 @@
 
     <div class="row">
       <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Menu(If Applicable)</button>
+        <button type="button" class="btn btn-outline-success w-95">Menu-If applicable</button>
       </div>
       <div class="col-md-1 d-flex">
       <i v-if="menu === null" 
