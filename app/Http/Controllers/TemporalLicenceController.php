@@ -83,9 +83,9 @@ class TemporalLicenceController extends Controller
            }
            
            if($temp){
-              return to_route('view_temp_licence',['slug' => $temp->slug])->with('success','Temporal Licence issued successfully.');
+              return to_route('view_temp_licence',['slug' => $temp->slug])->with('success','Temporary Licence issued successfully.');
            }
-           return back()->with('error','AN unknown error occured while creating Temporal Licence.');
+           return back()->with('error','AN unknown error occured while creating Temporary Licence.');
     }
 
     
@@ -109,9 +109,9 @@ class TemporalLicenceController extends Controller
     
               
             if($temp){
-               return back()->with('success','Temporal Licence updated successfully.');
+               return back()->with('success','Temporary Licence updated successfully.');
             }
-            return back()->with('error','An unknown error occured while updating temporal Licence.');
+            return back()->with('error','An unknown error occured while updating Temporary Licence.');
      }
 
     public function processApplication(Request $request){
@@ -235,11 +235,11 @@ class TemporalLicenceController extends Controller
     
             TemporalLicence::whereSlug($slug)->update(["status" => $status <= 0 ? NULL : $status]);   
                
-            return back()->with('success','Temporal Licence updated successfully.');
+            return back()->with('success','Temporary Licence updated successfully.');
          
         } catch (\Throwable $th) {
             //throw $th;
-            return back()->with('error','An unknown error occured while updating temporal Licence.');
+            return back()->with('error','An unknown error occured while updating Temporary Licence.');
         }
         
             
@@ -266,11 +266,11 @@ class TemporalLicenceController extends Controller
             $activity = 'Deleted Temporal Licence: ' . $licence->event_name;
             event(new LogUserActivity(auth()->user(), $activity));
             if($licence->delete()){
-               return to_route('temp_licences')->with('success','Temporal Licence deleted successfully.');
+               return to_route('temp_licences')->with('success','Temporary Licence deleted successfully.');
             }
             
         } catch (\Throwable $th) {
-            return to_route('temp_licences')->with('error','AN unknown error occured while deleteing temporal Licence.');
+            return to_route('temp_licences')->with('error','AN unknown error occured while deleteing Temporary Licence.');
         }
 
      }
