@@ -47,7 +47,7 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
                $arr_of_licences[$i]->logded_at ? date('Y/m/d', strtotime($arr_of_licences[$i]->logded_at)) : '',
                self::getProofOfLodgiment($arr_of_licences[$i]->id) ? 'TRUE': 'FALSE',
                $arr_of_licences[$i]->issued_at ? date('d M Y', strtotime($arr_of_licences[$i]->issued_at)) : '',
-               self::getStatus($arr_of_licences[$i]->status),
+               (new TemporaLExportController)->getStatus($arr_of_licences[$i]->status),
                ExportNotes::getNoteExports($arr_of_licences[$i]->id, 'Temporal Licence')
             ];
 
@@ -60,7 +60,7 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
    
 }
 
-    function getProofOfLodgiment($licence_id){
+    static function getProofOfLodgiment($licence_id){
         $licence_logded = TemporalLicenceDocument::where('temporal_licence_id',$licence_id)
                                                 ->where('doc_type','Licence Lodged')->first(['id']);
 
@@ -68,7 +68,7 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
 
     }
 
-    function getApplicant($belongs_to, $model){
+    static function getApplicant($belongs_to, $model){
         switch ($belongs_to) {
             case 'Company':
                 $applicant = $model->name;
