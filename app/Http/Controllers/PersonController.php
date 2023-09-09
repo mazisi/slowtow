@@ -59,11 +59,13 @@ class PersonController extends Controller
         $work_permit_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Work Permit')->first();
         $fingerprints = PeopleDocument::where('people_id',$person->id)->where('doc_type','Fingerprints')->first();
         $tasks = Task::where('model_type','Person')->where('model_id',$person->id)->latest()->paginate(4)->withQueryString();
-        
+        $linked_licences = Licence::where('people_id',$person->id)->paginate(10);
+             
         return Inertia::render('People/ViewPerson',[
             'person' => $person,
             'tasks' => $tasks,
             'id_document' => $id_document,
+            'linked_licences' => $linked_licences,
             'police_clearance' => $police_clearance,
             'passport_doc' => $passport_doc,
             'work_permit_doc' => $work_permit_doc,

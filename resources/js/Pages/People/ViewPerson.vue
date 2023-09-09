@@ -273,6 +273,64 @@
 
 </div>
 
+<div class="row">
+  <div class="col-sm-12 col-lg-4"></div>
+  <div class="col-sm-12 col-lg-12">
+  <h6 class="text-center">Licences Linked To : {{ person.full_name ? person.full_name : '' }}</h6>
+  </div>
+  
+  
+  <div class="table-responsive p-0">
+  <table class="table align-items-center mb-0">
+  <thead>
+    <tr>
+      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+      Trading Name
+      </th>
+      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+      Licence Number
+      </th>
+      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+      Licence Date
+      </th>
+  
+      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+      View
+      </th>
+      
+    </tr>
+  </thead>
+  <tbody>
+    
+    <tr v-for="licence in linked_licences.data" :key="licence.id">
+      <td>
+        <div class="d-flex px-2">    
+      <div class="d-flex flex-column">
+        <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name : ''  }}</h6></Link>                          
+      </div>
+        </div>
+      </td>
+      <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_number ? licence.licence_number : '' }}</Link></td>
+      <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_date }}</Link></td>
+      <td class="text-center">
+      <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 ms-2 justify-content-center">
+      <i class="fa fa-eye"></i></Link>
+      </td>
+      
+    </tr>
+    
+    
+  </tbody>
+  </table>
+  </div>
+  <Paginate
+    :modelName="linked_licences"
+    :modelType="ViewPerson"
+    />
+  <hr>
+  </div>
+  
+
 <Task :tasks="tasks" :model_id="person.id" :errors="errors" :success="success" :error="error" :model_type="'Person'"/>
 
 

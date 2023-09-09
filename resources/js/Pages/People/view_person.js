@@ -1,4 +1,4 @@
-import { useForm, Head } from '@inertiajs/inertia-vue3';
+import { useForm,Link, Head } from '@inertiajs/inertia-vue3';
 import Layout from "../../Shared/Layout.vue";
 import { ref,onMounted } from "vue";
 import { Inertia } from '@inertiajs/inertia';
@@ -6,6 +6,7 @@ import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import Paginate from "../../Shared/Paginate.vue";
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 
@@ -22,7 +23,8 @@ props:{
       police_clearance: Object,
       passport_doc: Object,
       work_permit_doc: Object,
-      fingerprints: Object
+      fingerprints: Object,
+      linked_licences: Object
 },
 
 setup (props) {
@@ -216,6 +218,8 @@ const form = useForm({
     Layout,
     Banner,
     Head,
+    Link,
+    Paginate,
     Task,
     TextInputComponent,
     CheckBoxInputComponent
