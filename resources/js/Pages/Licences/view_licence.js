@@ -14,7 +14,7 @@ import 'vue3-toastify/dist/index.css';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
-
+ 
 // const FilePond = new vueFilePond();
 export default {
  props: {
@@ -87,7 +87,29 @@ export default {
           this.show_current_company=false;
           this.change_company=true;
       }
+      
+      Inertia.on('navigate', (event) => {
+        if (event.detail.page.url.includes("view-licence")) {
+          
+          notify("Checking file updates", {
+            autoClose: 2000,
+          });
 
+          Inertia.visit(`${event.detail.page.url}`,{
+            // onSuccess: () => { 
+            //   if(props.success){
+            //      notify(props.success)
+            //       }else if(props.error){
+            //         notify(props.error)
+            //       }
+            //  },
+          })
+
+        } else {
+          console.log("The URL does not contain 'view-licence'");
+        }
+        // console.log(`Navigated to ${event.detail.page.url}`)
+      })
       function updateLicence() {
          form.patch(`/update-licence/${props.licence.slug}`, {
           preserveScroll: true,
@@ -231,8 +253,7 @@ export default {
          }
 
        
-         
-
+       
         //  onMounted(() => {
         //   if(props.success){
         //     notify(props.success)

@@ -3,6 +3,7 @@ require('./bootstrap');
 import { createApp, h } from 'vue';
 import store from "./store";
 import "./assets/css/nucleo-icons.css";
+import { createPinia } from 'pinia'
 import "./assets/css/nucleo-svg.css";
 import MaterialDashboard from "./material-dashboard";
 import { createInertiaApp } from '@inertiajs/inertia-vue3';
@@ -27,6 +28,7 @@ createInertiaApp({
                 autoClose: 3000
               })
             .use(MaterialDashboard)
+            .use(createPinia)
             .component('InertiaLink', Link)
             .component('Datepicker', Datepicker)
             .mixin({ methods: { route } })
