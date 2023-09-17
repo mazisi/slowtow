@@ -56,15 +56,13 @@ class TransferMailer extends Mailable
                 return back()->with('error','Could not send email.');
                     break;
             }
-            if(! $get_doc){
-                return back()->with('error','Could not locate document.');
-            }
+            // if(! $get_doc){
+            //     return back()->with('error','Could not locate document.');
+            // }
             
-            if($this->transfer->status == 'Client Quoted'){
+            if($this->transfer->status == '1'){
                 return $this->from(env("MAIL_FROM_ADDRESS"))
-                ->view('emails.mail-template')
-                ->cc('info@slotow.co.za')
-                ->cc('sales@slotow.co.za')
+                ->markdown('emails.ecomms.renewalMailer')
                 ->subject($this->transfer->licence->trading_name.' Transfer')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                 ->attach(storage_path('app/public/GoVerify.pdf'))
@@ -75,15 +73,13 @@ class TransferMailer extends Mailable
             }else{
                 return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
                 ->markdown('emails.ecomms.renewalMailer')
-                ->cc('info@slotow.co.za')
-                ->bcc('sales@slotow.co.za')
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 
             }
             
         } catch (\Throwable $th) {
-            return to_route('get_licence_transfers')->with('error','Error!! Please contact support.');
+            // return to_route('get_licence_transfers')->with('error','Error!! Please contact support.');
         }
         
     }

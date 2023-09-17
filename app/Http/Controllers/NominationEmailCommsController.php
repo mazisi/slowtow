@@ -105,26 +105,24 @@ class NominationEmailCommsController extends Controller
             $email1= $nomination->licence->company->email1;
             $email2 = $nomination->licence->company->email2;
 
-                if(!is_null($email)){
-                    Mail::to($email)
-                    ->cc(env('MAIL_FROM_ADDRESS'))
-                    ->bcc(env('BCC_EMAIL_ADDRESS'))
-                    ->send(new NominationMailer($nomination, $request->mail_body));   
+            //  Mail::to('mazisimsebele18@gmail.com')
+            //     ->cc(['mazisi@mrnlabs.com', 'test@gmail.com'])->send(new NominationMailer($nomination, $request->mail_body));
 
-                }elseif(is_null($email) && !is_null($email1)){
-                    Mail::to($email1)->cc(env('MAIL_FROM_ADDRESS'))
-                                        ->bcc(env('BCC_EMAIL_ADDRESS'))
-                                        ->send(new NominationMailer($nomination, $request->mail_body)); 
 
-                }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
-
-                    Mail::to($email2)->cc(env('MAIL_FROM_ADDRESS'))
-                    ->bcc(env('BCC_EMAIL_ADDRESS'))
-                    ->send(new NominationMailer($nomination, $request->mail_body)); 
-
-                }else{
-                    return back()->with('error','Mail NOT sent. Company does not have email addresses.');
-                }
+                 if(! is_null($email) || ! empty($email)){
+                Mail::to($email)
+                ->cc([$email1,'info@slotow.co.za'])
+                ->bcc([$email2,'sales@slotow.co.za'])->send(new NominationMailer($nomination, $request->mail_body)); 
+            }
+            elseif((is_null($email) || empty($email))){
+                Mail::to($email1)->cc([$email2, 'info@slotow.co.za'])->bcc('sales@slotow.co.za')->send(new NominationMailer($nomination, $request->mail_body));
+            }
+            
+            elseif(!$email && !$email1 && (! is_null($email2) || !empty($email2))){
+                    Mail::to($email2)->cc('info@slotow.co.za')->bcc('sales@slotow.co.za')->send(new NominationMailer($nomination, $request->mail_body));
+            }else{
+                return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+            }
              
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {

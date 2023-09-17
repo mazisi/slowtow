@@ -12,15 +12,30 @@ export default {
     success: String,
     error: String,
     people: Object,
+    linked_companies: Object,
     links: Array,
   },
   setup(props){
-    const term = ref('');
+
+    const [search_query, active_status] = getUrlParam();
+
+    function getUrlParam(){
+      const urlParams = new URLSearchParams(window.location.search);
+      const search_query = urlParams.get('term')
+      const status = urlParams.get('active_status')
+      return [search_query,status];
+    }
+
+    const term = search_query ? search_query : ref('');
 
     const form = useForm({
           term: term,
           active_status: ''
         })
+
+    Inertia.on('navigate', (event) => {
+      Inertia.visit(`${event.detail.page.url}`, { preserveState: true, preserveScroll: true });
+    })
 
     function search(){
       form.get(`/people`, {
@@ -55,6 +70,7 @@ export default {
         });
 
     return{
+      getUrlParam,
       term,
       search,
       form,

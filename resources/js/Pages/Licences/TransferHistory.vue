@@ -113,6 +113,7 @@ import { Link, Head } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import { onMounted } from 'vue';
+import { Inertia } from '@inertiajs/inertia'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 
@@ -126,6 +127,10 @@ export default {
     errors: Object
   },
   setup(props){
+
+    Inertia.on('navigate', (event) => {
+          Inertia.visit(`${event.detail.page.url}`, { preserveState: true, preserveScroll: true });
+        })
 
     function limit(string='', limit=25){
           if(string.length >= limit){

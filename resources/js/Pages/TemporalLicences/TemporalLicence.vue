@@ -17,6 +17,9 @@ export default {
   setup(props) {
     const term = getUrlParam() ? getUrlParam() : ref('');
     
+    Inertia.on('navigate', (event) => {
+      Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true });
+    })
 
     const form = useForm({
           term: term,

@@ -52,8 +52,6 @@ class RenewalMailer extends Mailable
          
         
         return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
-                    ->cc('info@slotow.co.za')
-                    ->bcc('sales@slotow.co.za')
                     ->replyTo('info@slotow.co.za')
                     ->subject('Liquor Licence Renewal '. $this->renewal->date.' - '.strtoupper($this->renewal->licence->trading_name).' – '.strtoupper($this->renewal->licence->licence_number))
                     ->markdown('emails.ecomms.renewalMailer')

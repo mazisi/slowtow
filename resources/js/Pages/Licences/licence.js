@@ -83,6 +83,10 @@ export default {
           return common.getProvinces();
         })
 
+        Inertia.on('navigate', (event) => {
+          Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true });
+        })
+
         
         function getUrlParam(){
           const urlParams = new URLSearchParams(window.location.search);

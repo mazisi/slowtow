@@ -112,42 +112,60 @@ class TransferEmailCommsController extends Controller
             $get_email_status = Email::where('stage', $stage)->where('model_type','transfers')->where('model_id',$transfer->id)->first();
 
              $error_message = '';
-            if(is_null($get_email_status)){
-                if(is_null($get_doc)){
-                    $error_message = 'Quote Document Not Uploaded';                
-                    $this->insertUnsentEmails($transfer, $error_message);                   
-                    return back()->with('error','Quote Document not yet uploaded.');
-                }
-            }
+            // if(is_null($get_email_status)){
+            //     if(is_null($get_doc)){
+            //         $error_message = 'Quote Document Not Uploaded';                
+            //         $this->insertUnsentEmails($transfer, $error_message);                   
+            //         return back()->with('error','Quote Document not yet uploaded.');
+            //     }
+            // }
 
-            if(is_null($get_doc)){                             
-                return back()->with('error','Quote Document not yet uploaded.');
-            }
+            // if(is_null($get_doc)){                             
+            //     return back()->with('error','Quote Document not yet uploaded.');
+            // }
             
             $email = $transfer->licence->company->email;
             $email1= $transfer->licence->company->email1;
             $email2 = $transfer->licence->company->email2;
 
-                if(!is_null($email)){
-                    Mail::to($email)
-                    ->cc(env('MAIL_FROM_ADDRESS'))
-                    ->bcc(env('BCC_EMAIL_ADDRESS'))
-                    ->send(new TransferMailer($transfer, $request->mail_body));
+            //  Mail::to('mazisimsebele18@gmail.com')
+                // ->cc(['mazisi@mrnlabs.com', 'test@gmail.com'])->send(new TransferMailer($transfer, $request->mail_body));
+            
+                if(! is_null($email) || ! empty($email)){
+                Mail::to($email)
+                ->cc([$email1,'info@slotow.co.za'])
+                ->bcc([$email2,'sales@slotow.co.za'])->send(new TransferMailer($transfer, $request->mail_body)); 
+            }
+            elseif((is_null($email) || empty($email))){
+                Mail::to($email1)->cc([$email2, 'info@slotow.co.za'])->bcc('sales@slotow.co.za')->send(new TransferMailer($transfer, $request->mail_body));
+            }
+            
+            elseif(!$email && !$email1 && (!is_null($email2) || !empty($email2))){
+                    Mail::to($email2)->cc('info@slotow.co.za')->bcc('sales@slotow.co.za')->send(new TransferMailer($transfer, $request->mail_body));
+            }else{
+                return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+            }
+
+                // if(!is_null($email)){
+                //     Mail::to($email)
+                //     ->cc(env('MAIL_FROM_ADDRESS'))
+                //     ->bcc(env('BCC_EMAIL_ADDRESS'))
+                //     ->send(new TransferMailer($transfer, $request->mail_body));
                     
                        
-                }elseif(is_null($email) && !is_null($email1)){
-                    Mail::to($email1)->cc(env('MAIL_FROM_ADDRESS'))
-                    ->bcc(env('BCC_EMAIL_ADDRESS'))
-                    ->send(new TransferMailer($transfer, $request->mail_body));
+                // }elseif(is_null($email) && !is_null($email1)){
+                //     Mail::to($email1)->cc(env('MAIL_FROM_ADDRESS'))
+                //     ->bcc(env('BCC_EMAIL_ADDRESS'))
+                //     ->send(new TransferMailer($transfer, $request->mail_body));
                     
-                }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
-                    Mail::to($email2)->cc(env('MAIL_FROM_ADDRESS'))
-                    ->bcc(env('BCC_EMAIL_ADDRESS'))
-                    ->send(new TransferMailer($transfer, $request->mail_body));
+                // }elseif(is_null($email) && is_null($email1) && !is_null($email2)){
+                //     Mail::to($email2)->cc(env('MAIL_FROM_ADDRESS'))
+                //     ->bcc(env('BCC_EMAIL_ADDRESS'))
+                //     ->send(new TransferMailer($transfer, $request->mail_body));
                     
-                }else{
-                    return back()->with('error','Mail NOT sent. Company does not have email addresses.');
-                }
+                // }else{
+                //     return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+                // }
 
 
         //if email is resent successfully delete model from emails table
@@ -156,10 +174,10 @@ class TransferEmailCommsController extends Controller
          return back()->with('success','Mail sent successfully.');
 
 
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {throw $th;
             $error_message = '500....Server Error.';
-            $this->insertUnsentEmails($transfer, $error_message, $stage);  
-            return back()->with('error','An error occured while sending email.');
+            //$this->insertUnsentEmails($transfer, $error_message, $stage);  
+            //return back()->with('error','An error occured while sending email.');
         }
        
         

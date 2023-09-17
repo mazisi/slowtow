@@ -126,10 +126,10 @@ methods: {
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
   </li>
 
-  <li class="nav-item" role="presentation">
+  <!-- <li class="nav-item" role="presentation">
     <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="emails" data-bs-toggle="pill" data-bs-target="#emails" 
     type="button" role="tab" aria-controls="emails" aria-selected="false">Emails</button>
-  </li>
+  </li> -->
 </ul>
 <div class="tab-content" id="pills-tabContent">
 

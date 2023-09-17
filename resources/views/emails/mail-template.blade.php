@@ -35,7 +35,7 @@
               {!! $message_body !!}
 
               <div class="mt-3 bg-secondary" >
-                <img src="https://goverify.co.za/public/logo.png" class="logo" />
+                <img src="https://goverify.co.za/public/logo.png" class="logo" alt="Slotow Signature" />
                 </div>
             </div>
           </div>

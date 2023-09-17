@@ -78,6 +78,9 @@ export default {
           ];
         }
        
+        Inertia.on('navigate', (event) => {
+          Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true });
+        })
 
     const computedCompanyTypes = computed(() => {
       return common.getCompanyTypes();

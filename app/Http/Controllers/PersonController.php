@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\People;
 use Illuminate\Http\Request;
 use App\Http\Requests\ValidatePeople;
+use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceTransfer;
 use App\Models\PeopleDocument;
@@ -52,15 +53,15 @@ class PersonController extends Controller
     }
 
     public function show($slug){
-        $person = People::with('nominations','people_documents')->whereSlug($slug)->first();
+        $person = People::with('nominations','people_documents','company')->whereSlug($slug)->first();
         $id_document = PeopleDocument::where('people_id',$person->id)->where('doc_type','ID Document')->first();
         $police_clearance = PeopleDocument::where('people_id',$person->id)->where('doc_type','Police Clearance')->first();
         $passport_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Passport')->first();
         $work_permit_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Work Permit')->first();
         $fingerprints = PeopleDocument::where('people_id',$person->id)->where('doc_type','Fingerprints')->first();
         $tasks = Task::where('model_type','Person')->where('model_id',$person->id)->latest()->paginate(4)->withQueryString();
-        $linked_licences = Licence::where('people_id',$person->id)->paginate(10);
-             
+        $linked_licences = Licence::with('company')->where('people_id',$person->id)->paginate(10);
+
         return Inertia::render('People/ViewPerson',[
             'person' => $person,
             'tasks' => $tasks,

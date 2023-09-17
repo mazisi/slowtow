@@ -135,30 +135,32 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
         $get_email_status = Email::where('stage', $stage)->where('model_type','renewals')->where('model_id',$renewal->id)->first();
 
          $error_message = '';
-        if(is_null($get_email_status)){
-            if(is_null($get_doc)){
-                $error_message = 'Quote Document Not Uploaded';                
-                $this->insertUnsentEmails($renewal, $error_message);               
-                return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
-            }
-        }
-         
+        // if(is_null($get_email_status)){
+        //     if(is_null($get_doc)){
+        //         $error_message = 'Quote Document Not Uploaded';                
+        //         $this->insertUnsentEmails($renewal, $error_message);               
+        //         return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+        //     }
+        // }         
         
-            $email = $renewal->licence->company->email;
+            $email = $renewal->licence->company->email; //primary email
             $email1 = $renewal->licence->company->email1;
-            $email2 = $renewal->licence->company->email2;
+            $email2 = $renewal->licence->company->email2;;
 
-            
+            //  Mail::to('mazisimsebele18@gmail.com')
+            // ->cc(['mazisi@mrnlabs.com', 'info@slotow.co.za',
+            // 'sales@slotow.co.za'])->send(new RenewalMailer($renewal, $request->mail_body));
             if(! is_null($email) || ! empty($email)){
-                Mail::to($email)->send(new RenewalMailer($renewal, $request->mail_body)); 
+                Mail::to($email)
+                ->cc([$email1,'info@slotow.co.za'])
+                ->bcc([$email2,'sales@slotow.co.za'])->send(new RenewalMailer($renewal, $request->mail_body)); 
+            }
+            elseif((is_null($email) || empty($email))){
+                Mail::to($email1)->cc([$email2, 'info@slotow.co.za'])->bcc('sales@slotow.co.za')->send(new RenewalMailer($renewal, $request->mail_body));
             }
             
-            if(! is_null($email1) || ! empty($email1)){
-                Mail::to($email1)->send(new RenewalMailer($renewal, $request->mail_body));
-            }
-            
-            if(! is_null($email2) || ! empty($emai2)){
-                    Mail::to($email2)->send(new RenewalMailer($renewal, $request->mail_body));
+            elseif(!$email && !$email1 && (! is_null($email2) || !empty($email2))){
+                    Mail::to($email2)->cc('info@slotow.co.za')->bcc('sales@slotow.co.za')->send(new RenewalMailer($renewal, $request->mail_body));
             }else{
                 return back()->with('error','Mail NOT sent. Company does not have email addresses.');
             }

@@ -14,8 +14,9 @@
 
 <editor
       :init="{
-        plugins: 'lists link image table code help wordcount'
+        plugins: 'Loading...'
       }"
+      
       v-model="mailForm.mail_body"
     />
 <div class="mt-3 float-end">
@@ -64,7 +65,6 @@ export default {
   
   
   setup (props) {   
-
     const mailForm = useForm({
       mail_body: props.template,
       renewal_slug: props.licence.slug,
@@ -96,6 +96,8 @@ export default {
           });
           }
         }
+
+    
 
     return {
       sendMail,

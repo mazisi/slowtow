@@ -90,23 +90,11 @@ export default {
       
       Inertia.on('navigate', (event) => {
         if (event.detail.page.url.includes("view-licence")) {
-          
-          notify("Checking file updates", {
-            autoClose: 2000,
-          });
-
-          Inertia.visit(`${event.detail.page.url}`,{
-            // onSuccess: () => { 
-            //   if(props.success){
-            //      notify(props.success)
-            //       }else if(props.error){
-            //         notify(props.error)
-            //       }
-            //  },
-          })
+       
+          Inertia.visit(`${event.detail.page.url}`,{preserveScroll: true,preserveState: true})
 
         } else {
-          console.log("The URL does not contain 'view-licence'");
+          //console.log("The URL does not contain 'view-licence'");
         }
         // console.log(`Navigated to ${event.detail.page.url}`)
       })

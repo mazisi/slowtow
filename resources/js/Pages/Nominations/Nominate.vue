@@ -119,6 +119,7 @@ import Layout from "../../Shared/Layout.vue";
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from '../components/Banner.vue';
+import { Inertia } from '@inertiajs/inertia';
 import Paginate from "../../Shared/Paginate.vue";
 import Multiselect from '@vueform/multiselect';
 import { toast } from 'vue3-toastify';
@@ -145,6 +146,10 @@ export default {
     const form = useForm({
       year: null,
       licence_id: props.licence.id
+    })
+
+    Inertia.on('navigate', (event) => {
+          Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true})
     })
 
     function submit() {
