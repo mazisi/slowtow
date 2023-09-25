@@ -25,7 +25,7 @@ class People extends Model
     }
 
     public function company(){
-       return $this->belongsToMany(Company::class);
+       return $this->belongsToMany(Company::class)->withPivot('position');
     }
 
     public function people_documents()

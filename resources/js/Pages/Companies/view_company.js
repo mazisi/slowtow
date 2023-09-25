@@ -134,7 +134,7 @@ export default {
         function submitPeople(){
           addPeopleForm.post(`/add-people-to-company/${props.company.id}`, {
            preserveScroll: true,
-           onSuccess: (page) => { 
+           onSuccess: (page) => { console.log(page)
             this.show_modal = false;
             document.querySelector('.modal-backdrop').remove();
             if(props.success){
@@ -266,7 +266,7 @@ export default {
         if(url.includes('https://') || url.includes('http://')){
           window.open(url, "_blank");
         }else{
-          window.open('https://' + url, "_blank");
+          window.open(`https://${url}`, "_blank");
         }
         
       }

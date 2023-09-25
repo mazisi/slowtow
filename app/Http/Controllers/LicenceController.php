@@ -134,7 +134,6 @@ class LicenceController extends Controller
         $update = Licence::whereSlug($slug)->update([
             "trading_name" => $request->trading_name,
             "licence_type_id" => $request->licence_type,
-            "licence_date" => $request->licence_date,
             'licence_issued_at' => $request->licence_date,
             'belongs_to' => $request->belongs_to,
             'company_id' => $request->company_id,

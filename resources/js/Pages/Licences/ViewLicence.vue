@@ -135,11 +135,11 @@
     </div>
 
   <TextInputComponent
-    v-model="form.licence_date"
+    v-model="licence.licence_date"
     :disabled="true" 
     :column="'col-md-12'" 
     :label="'Licence Date'" 
-    :value="form.licence_date"
+    :value="licence.licence_date"
     :errors="errors.licence_date"
     :input_id="licence_date"
     :inputType="'date'"

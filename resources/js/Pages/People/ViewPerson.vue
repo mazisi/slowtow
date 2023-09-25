@@ -152,7 +152,8 @@
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Police Clearance</h6>
       <p v-if="police_clearance" class="mb-0 text-xs">{{ police_clearance.document_name }}</p>
-      <p v-if="police_clearance" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(police_clearance.expiry_date) }}</p>
+      <p v-if="police_clearance" class="mb-0 text-xs text-dark">
+        Expiry:{{ computeExpiryDate(police_clearance.expiry_date) ? computeExpiryDate(police_clearance.expiry_date) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger">Police Clearance Not Uploaded</p>
     </div>
     <button v-if="police_clearance" @click="deleteDocument('Police Clearance',police_clearance.slug)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -179,7 +180,8 @@
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Passport</h6>
       <p v-if="passport_doc" class="mb-0 text-xs">{{ passport_doc.document_name }}</p>
-      <p v-if="passport_doc" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(passport_doc.expiry_date) }}</p>
+      <p v-if="passport_doc" class="mb-0 text-xs text-dark">
+        Expiry:{{ computeExpiryDate(passport_doc.expiry_date) ? computeExpiryDate(passport_doc.expiry_date) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger">Passport Not Uploaded</p>
     </div>
 
@@ -209,7 +211,8 @@
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Work Permit</h6>
       <p v-if="work_permit_doc" class="mb-0 text-xs">{{ work_permit_doc.document_name }}</p>
-      <p v-if="work_permit_doc" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(work_permit_doc.expiry_date) }}</p>
+      <p v-if="work_permit_doc" class="mb-0 text-xs text-dark">
+        Expiry:{{ computeExpiryDate(work_permit_doc.expiry_date) ? computeExpiryDate(work_permit_doc.expiry_date) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger">Work Permit Not Uploaded</p>
     </div>
 
@@ -237,7 +240,8 @@
     <div class="d-flex align-items-start flex-column justify-content-center">
       <h6 class="mb-0 text-sm">Valid Fingerprints</h6>
       <p v-if="fingerprints !== null" class="mb-0 text-xs">{{ fingerprints.document_name }}</p>
-      <p v-if="fingerprints !== null" class="mb-0 text-xs text-dark">Expiry:{{ computeExpiryDate(fingerprints.expiry_date) }}</p>
+      <p v-if="fingerprints !== null" class="mb-0 text-xs text-dark">
+        Expiry:{{ computeExpiryDate(fingerprints.expiry_date) ? computeExpiryDate(fingerprints.expiry_date) : '' }}</p>
       <p v-else class="mb-0 text-xs text-danger">Fingerprints Not Uploaded</p>
     </div>
 
@@ -272,6 +276,56 @@
 </div>
 
 </div>
+
+<div class="row">
+  <h6 class="text-center mb-2 ">Companies Linked To : {{ person.full_name ? person.full_name : '' }}</h6>
+  <div class="table-responsive p-0">
+  <table class="table align-items-center mb-0">
+  <thead>
+  <tr>
+  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+  Active
+  </th>
+  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+  Company Name
+  </th>
+
+  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+    Position
+    </th>
+  
+  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+  Action
+  </th>
+  
+  </tr>
+  </thead>
+  <tbody>
+    
+  <tr v-for="linked_company in person.company">
+  <td v-if="linked_company ==1 && linked_company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
+  <td v-else class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
+  <td class="align-left text-sm">
+  <Link :href="`/view-company/${linked_company.slug}`" class="text-sm text-center align-left">
+    <h6 class="mb-0 ">{{ linked_company.name }}</h6>
+  </Link>
+  </td>
+
+  <td class="align-middle text-sm">
+    <Link :href="`/view-company/${linked_company.slug}`" class="text-sm text-center align-middle">
+      <h6 class="mb-0 ">{{ linked_company.pivot.position }}</h6>
+    </Link>
+    </td>
+
+  <td class="text-center">
+  <Link :href="`/view-company/${linked_company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
+  </td>
+  </tr>
+  </tbody>
+  </table>
+  </div>
+  <hr>
+  </div>
 
 <div class="row">
   <div class="col-sm-12 col-lg-4"></div>
@@ -330,44 +384,7 @@
   <hr>
   </div>
  
-  <div class="row">
-    <h6 class="text-center mb-2 ">Companies Linked To : {{ person.full_name ? person.full_name : '' }}</h6>
-    <div class="table-responsive p-0">
-    <table class="table align-items-center mb-0">
-    <thead>
-    <tr>
-    <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-    Active
-    </th>
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-    Company Name
-    </th>
-    
-    <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-    Action
-    </th>
-    
-    </tr>
-    </thead>
-    <tbody>
-      {{ linked_licences.company }}
-    <tr v-for="linked_company in person.company">
-    <td v-if="linked_company ==1 && linked_company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
-    <td v-else class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
-    <td class="align-middle text-sm">
-    <Link :href="`/view-company/${linked_company.slug}`" class="text-sm text-center align-middle">
-      <h6 class="mb-0 ">{{ linked_company.name }}</h6>
-    </Link>
-    </td>
-    <td class="text-center">
-    <Link :href="`/view-company/${linked_company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
-    </td>
-    </tr>
-    </tbody>
-    </table>
-    </div>
-    <hr>
-    </div>
+  
 
 <Task :tasks="tasks" :model_id="person.id" :errors="errors" :success="success" :error="error" :model_type="'Person'"/>
 

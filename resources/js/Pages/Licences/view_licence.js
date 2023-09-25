@@ -54,7 +54,7 @@ export default {
          is_licence_active: props.licence.is_licence_active,
          licence_number: props.licence.licence_number,
          old_licence_number: props.licence.old_licence_number,
-         licence_date: props.licence.licence_date,
+        //  licence_date: props.licence.licence_date,
          postal_code: props.licence.postal_code,
          address: props.licence.address,
          address2: props.licence.address2,
