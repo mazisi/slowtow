@@ -3,39 +3,17 @@
 namespace App\Http\Controllers\EmailComms;
 
 use Inertia\Inertia;
-use Illuminate\Http\Request;
+use App\Models\LicenceType;
+use App\Actions\NewAppsFilterAction;
 use App\Http\Controllers\Controller;
-use App\Models\Licence;
 
 class NewAppEmailCommsController extends Controller{
 
-  function getNewAppTemplate(Request $request) {
+  function getNewAppTemplate() {
+    $licences = (new NewAppsFilterAction)->filterLicence();
+    $all_licence_types = LicenceType::get();
 
-    $temp_licences = Licence::when(request(), 
-        function ($query) use($request) {           
-            // $query->whereHas('company', function($query){
-            //     $query->where('name', 'like', '%'.request('term').'%');
-
-            // })->orWhereHas('people', function($query){
-            //     $query->where('full_name', 'like', '%'.request('term').'%');                                      
-            // })
-
-            $query->when(request('month'), function($query) {                    
-                $query->whereMonth('start_date', request('month'));
-              })
-        
-          ->when(request('province'), function ($query) use ($request) {
-              $query->where('address',$request->province);
-          })
-
-          ->when(request('stage'), function ($query) use ($request) {
-            $query->where('status',$request->stage);
-        });
-        
-        })->latest()->paginate(20)->withQueryString();
-
-
-return Inertia::render('EmailComms/NewApps',['new_apps' => $new_apps]);
+    return Inertia::render('EmailComms/NewApps',['all_licence_types' => $all_licence_types,'licences' => $licences]);
     
   }
 

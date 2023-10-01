@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
+use App\Models\Licence;
 use App\Models\Alteration;
 use App\Models\Nomination;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceTransfer;
 use App\Models\TemporalLicence;
+use App\Actions\NewAppsMailTemplate;
 use App\Actions\RenewalEmailTemplate;
 use App\Actions\TransferMailTemplate;
 use App\Actions\NominationMailTemplate;
@@ -57,8 +59,10 @@ class EmailCommsController extends Controller
                 $template = (new NominationMailTemplate)->getMailTemplate($nomination);             
                 return Inertia::render('EmailComms/NominationTemplate',['licence' => $nomination,'template' => $template]);
                 break;
-            case 'new-app':
-                $this->newAppMailer($slug);
+            case 'new-apps':
+                $new_app = Licence::whereSlug($slug)->firstOrFail();   
+                $template = (new NewAppsMailTemplate)->getMailTemplate($new_app);             
+                return Inertia::render('EmailComms/NewAppsMailTemplate',['licence' => $new_app,'template' => $template]);
                 break;
     
             default:
