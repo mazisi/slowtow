@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Actions\RenewalEmailTemplate;
-use App\Actions\TransferMailTemplate;
+use App\Models\Alteration;
 use App\Models\Nomination;
-use App\Actions\NominationMailTemplate;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceTransfer;
+use App\Actions\RenewalEmailTemplate;
+use App\Actions\TransferMailTemplate;
+use App\Actions\NominationMailTemplate;
+use App\Actions\AlterationEmailTemplate;
 
 class EmailCommsController extends Controller
 {
@@ -31,7 +33,9 @@ class EmailCommsController extends Controller
                 break;
 
             case 'alterations':
-                $this->alterationMailer($slug);
+                $licence = Alteration::with('licence')->whereSlug($slug)->firstOrFail();   
+                $template = (new AlterationEmailTemplate)->getMailTemplate($licence); 
+                return Inertia::render('EmailComms/AlterationTemplate',['licence' => $licence,'template' => $template]);
                 break;
 
             case 'transfers':

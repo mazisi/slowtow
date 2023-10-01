@@ -61,7 +61,14 @@ methods: {
     getNominations(){
       this.$inertia.get('/email-comms/nominations');
     },
-     alertTempo(){alert('Waiting for data')},
+     
+    getTemporaryLicences(){
+      this.$inertia.get('/email-comms/temp-licences');
+    },
+
+    getAlterations(){
+      this.$inertia.get('/email-comms/alterations');
+    },
 
      getEmmails(){
       this.$inertia.get('/emails-report');
@@ -118,11 +125,11 @@ methods: {
   </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
   <li class="nav-item" role="presentation">
-    <button @click="alertTempo" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    <button @click="getAlterations" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
   </li>
   <li class="nav-item" role="presentation">
-    <button @click="alertTempo" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+    <button @click="getTemporaryLicences" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
   </li>
 

@@ -1,7 +1,6 @@
 <?php
 
 use Inertia\Inertia;
-use App\Actions\RenewalEmailTemplate;
 
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +52,8 @@ use App\Http\Controllers\TemporalLicenceController;
 
 use App\Http\Controllers\TransferLicenceController;
 
+use App\Actions\EmmailCommsHandlers\HandleRenewalMail;
+
 use App\Http\Controllers\AlterationDocumentController;
 
 use App\Http\Controllers\Auth\PasswordResetController;
@@ -60,10 +61,11 @@ use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\Slowtowdmin\AdminsController;
 
 use App\Http\Controllers\TemporalLicenceDocsController;
-
 use App\Http\Controllers\NominationEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
+use App\Http\Controllers\EmailComms\AlterationEmailCommsController;
+use App\Http\Controllers\EmailComms\TemporaryLicenceEmailCommsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
@@ -411,10 +413,12 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::get('/email-comms/nominations', [NominationEmailCommsController::class,'getNominations'])->name('get_nominations');
 
+        Route::get('/email-comms/alterations', [AlterationEmailCommsController::class,'getAlterationTemplate'])->name('get_alterations');
+
         Route::get('/email-comms/get-mail-template/{slug}/{licence_variation}', [EmailCommsController::class,'getMailTemplate']);
 
+        Route::get('/email-comms/temp-licences', [TemporaryLicenceEmailCommsController::class,'getTemporaryLicenceTemplate'])->name('get_temp_licences');
  
-
         Route::post('email-comms/filter-by-month', [EmailCommsController::class,'index']);
 
         
@@ -423,9 +427,11 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::get('emails-report', [EmailReportController::class,'index']);
 
+        Route::post('/dispatch-alteration-mail', [HandleAlterationMail::class,'dispatchAlterationMail'])->name('dispatch_alteration_mail');
+
         //renewals mail dispatcher
 
-        Route::post('/dispatchRenewalMail', [RenewalEmailTemplate::class,'dispatchRenewalMail'])->name('dispatch_renewal_mail');
+        Route::post('/dispatchRenewalMail', [HandleRenewalMail::class,'dispatchRenewalMail'])->name('dispatch_renewal_mail');
 
         //transfers mail dispatcher
 
