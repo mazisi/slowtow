@@ -62,6 +62,8 @@ use App\Http\Controllers\Slowtowdmin\AdminsController;
 
 use App\Http\Controllers\TemporalLicenceDocsController;
 use App\Http\Controllers\NominationEmailCommsController;
+use App\Actions\EmmailCommsHandlers\HandleAlterationMail;
+use App\Actions\EmmailCommsHandlers\HandleTemporalLicenceMail;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 use App\Http\Controllers\EmailComms\AlterationEmailCommsController;
@@ -421,6 +423,8 @@ Route::group(['middleware' => ['guest']], function () {
  
         Route::post('email-comms/filter-by-month', [EmailCommsController::class,'index']);
 
+        Route::get('/email-comms/new-apps', [NewAppEmailCommsController::class,'getNewAppTemplate'])->name('get_new_app_template');
+
         
 
         //Emmails Not sent 
@@ -428,6 +432,8 @@ Route::group(['middleware' => ['guest']], function () {
         Route::get('emails-report', [EmailReportController::class,'index']);
 
         Route::post('/dispatch-alteration-mail', [HandleAlterationMail::class,'dispatchAlterationMail'])->name('dispatch_alteration_mail');
+
+        Route::post('/dispatch-temporal-licence-mail', [HandleTemporalLicenceMail::class,'dispatchTemporalMail'])->name('dispatch_temporal_mail');
 
         //renewals mail dispatcher
 

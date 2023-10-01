@@ -288,7 +288,7 @@ methods: {
           </td>
 
           <td class="align-middle text-center">
-            <Link :href="`/email-comms/get-mail-template/${licence.slug}`" class="text-secondary text-center font-weight-bold text-xs"> 
+            <Link :href="`/email-comms/get-mail-template/${licence.slug}/temporary-licences`" class="text-secondary text-center font-weight-bold text-xs"> 
             <i class="fa fa-envelope"></i> Send </Link>
     
             

@@ -5,9 +5,8 @@ namespace App\Actions\EmmailCommsHandlers;
 use Throwable;
 use App\Models\Email;
 use App\Models\Alteration;
+use Illuminate\Http\Request;
 use App\Mail\AlterationMailer;
-use App\Models\LicenceRenewal;
-use App\Models\RenewalDocument;
 use App\Models\AlterationDocument;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,6 +29,7 @@ class HandleAlterationMail {
         $stage = '';
         $alteration_stage = '';  
 
+        return back()->with('error','Waiting for templates.');
         
         switch ($alteration->status) {            
             case '1':

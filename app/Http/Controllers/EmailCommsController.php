@@ -8,10 +8,12 @@ use App\Models\Nomination;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceTransfer;
+use App\Models\TemporalLicence;
 use App\Actions\RenewalEmailTemplate;
 use App\Actions\TransferMailTemplate;
 use App\Actions\NominationMailTemplate;
 use App\Actions\AlterationEmailTemplate;
+use App\Actions\TemporalLicenceEmailTemplate;
 
 class EmailCommsController extends Controller
 {
@@ -36,6 +38,12 @@ class EmailCommsController extends Controller
                 $licence = Alteration::with('licence')->whereSlug($slug)->firstOrFail();   
                 $template = (new AlterationEmailTemplate)->getMailTemplate($licence); 
                 return Inertia::render('EmailComms/AlterationTemplate',['licence' => $licence,'template' => $template]);
+                break;
+
+            case 'temporary-licences':
+                $licence = TemporalLicence::whereSlug($slug)->firstOrFail();   
+                $template = (new TemporalLicenceEmailTemplate)->getMailTemplate($licence); 
+                return Inertia::render('EmailComms/TemporalLicenceTemplate',['licence' => $licence,'template' => $template]);
                 break;
 
             case 'transfers':
