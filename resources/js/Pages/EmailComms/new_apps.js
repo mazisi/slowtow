@@ -104,9 +104,24 @@ export default {
           ];
         }
 
-           
+        function getLicenceRenewals(){
+          this.$inertia.get('/email-comms');
+        }
+    
+        //On navigation click get transfer data
+        function getLicenceTransfers(){
+          this.$inertia.get('/email-comms/transfers');
+        }
+        function getNominations(){
+          this.$inertia.get('/email-comms/nominations');
+        }
+    
+        function getAlterations(){
+          this.$inertia.get('/email-comms/alterations');
+        }
 
         return {
+          getLicenceRenewals,getLicenceTransfers,getNominations,getAlterations,
           limit,
           computedProvinces,
           form,

@@ -52,6 +52,8 @@ use App\Http\Controllers\TemporalLicenceController;
 
 use App\Http\Controllers\TransferLicenceController;
 
+use App\Actions\EmmailCommsHandlers\HandleNewAppMail;
+
 use App\Actions\EmmailCommsHandlers\HandleRenewalMail;
 
 use App\Http\Controllers\AlterationDocumentController;
@@ -59,7 +61,6 @@ use App\Http\Controllers\AlterationDocumentController;
 use App\Http\Controllers\Auth\PasswordResetController;
 
 use App\Http\Controllers\Slowtowdmin\AdminsController;
-
 use App\Http\Controllers\TemporalLicenceDocsController;
 use App\Http\Controllers\NominationEmailCommsController;
 use App\Actions\EmmailCommsHandlers\HandleAlterationMail;

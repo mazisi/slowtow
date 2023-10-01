@@ -2,13 +2,12 @@
 
 namespace App\Actions\EmmailCommsHandlers;
 
+use App\Mail\NewAppsMailer;
 use Throwable;
 use Illuminate\Http\Request;
-use App\Mail\TemporalLicenceMailer;
 use App\Models\Licence;
 use App\Models\LicenceDocument;
 use Illuminate\Support\Facades\Mail;
-use App\Models\TemporalLicenceDocument;
 
 
 class HandleNewAppMail {
@@ -34,6 +33,7 @@ class HandleNewAppMail {
   public function dispatchNewAppMail(Request $request){
     try {
         $licence = Licence::whereSlug($request->licence_slug)->firstOrFail();
+        
         $stage = '';
         $licence_stage = '';  
 
@@ -60,7 +60,7 @@ class HandleNewAppMail {
             return back()->with('error','Could not send email.');
                 break;
         }
-        $get_doc = LicenceDocument::where('licence_id',$licence->id)->where('doc_type',$licence_stage)->first();
+        $get_doc = LicenceDocument::where('alteration_id',$licence->id)->where('doc_type',$licence_stage)->first();
         //check if licence already inserted in emails 
         //$get_email_status = Email::where('stage', $stage)->where('model_type','alterations')->where('model_id',$licence->id)->first();
 
@@ -105,21 +105,21 @@ class HandleNewAppMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za'])->send(new TemporalLicenceMailer($licence, $request->mail_body)); 
+        ->bcc([$email2,'sales@slotow.co.za'])->send(new NewAppsMailer($licence, $request->mail_body)); 
     }
 
     elseif($email && $email1 && !$email2){
         Mail::to($email)
         ->cc([$email1, 'info@slotow.co.za'])
         ->bcc('sales@slotow.co.za')
-        ->send(new TemporalLicenceMailer($licence, $request->mail_body));
+        ->send(new NewAppsMailer($licence, $request->mail_body));
     }
     
     elseif($email && !$email1 && !$email2){
             Mail::to($email)
             ->cc('info@slotow.co.za')
             ->bcc('sales@slotow.co.za')
-            ->send(new TemporalLicenceMailer($licence, $request->mail_body));
+            ->send(new NewAppsMailer($licence, $request->mail_body));
     }else{
         return back()->with('error','Mail NOT sent. Company does not have email addresses.');
     }

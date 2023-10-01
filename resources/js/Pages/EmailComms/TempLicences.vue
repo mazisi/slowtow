@@ -94,6 +94,10 @@ methods: {
     getEmmails(){
       this.$inertia.get('/emails-report');
     },
+
+    getNewApps(){
+      this.$inertia.get('/email-comms/new-apps');
+    },
      
 
       notify(message){
@@ -110,6 +114,8 @@ methods: {
         }
 
     },
+
+    
 
     mounted(){ 
           if(this.success){
@@ -160,6 +166,11 @@ methods: {
   <li class="nav-item" role="presentation">
     <button @click="getAlterations" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
+  </li>
+
+  <li class="nav-item" role="presentation">
+    <button @click="getNewApps" class="nav-link btn btn-secondary text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
+    type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
   </li>
 
   <li class="nav-item" role="presentation">

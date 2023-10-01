@@ -69,7 +69,7 @@ export default {
 
     const mailForm = useForm({
       mail_body: props.template,
-      licence_stage: props.licence.slug,
+      licence_slug: props.licence.slug,
     })
 
     
