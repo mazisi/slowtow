@@ -56,16 +56,13 @@ class HandleTemporalLicenceMail {
         //check if licence already inserted in emails 
         //$get_email_status = Email::where('stage', $stage)->where('model_type','alterations')->where('model_id',$temporal_licence->id)->first();
 
-        //  $error_message = '';
-        // if(is_null($get_email_status)){
-        //     if(is_null($get_doc)){
-        //         $error_message = 'Quote Document Not Uploaded';                
-        //         //$this->insertUnsentEmails($temporal_licence, $error_message);               
-        //         return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
-        //     }
-        // }         
+        if(is_null($get_doc)){
+                    $error_message = 'Quote Document Not Uploaded';                
+            //         //$this->insertUnsentEmails($temporal_licence, $error_message);               
+                    return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+                }        
         
-
+        $this->handleRenewalEmail($temporal_licence);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
@@ -78,7 +75,7 @@ class HandleTemporalLicenceMail {
     
 }
 
-  function handleRenewalEmail() {
+  function handleRenewalEmail($temporal_licence) {
     $email = $temporal_licence->licence->company->email; //primary email
     $email1 = $temporal_licence->licence->company->email1;
     $email2 = $temporal_licence->licence->company->email2;;

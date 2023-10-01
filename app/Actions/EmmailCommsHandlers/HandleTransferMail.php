@@ -69,9 +69,9 @@ class HandleTransferMail {
             //     }
             // }
 
-            // if(is_null($get_doc)){                             
-            //     return back()->with('error','Quote Document not yet uploaded.');
-            // }
+            if(is_null($get_doc)){                             
+                return back()->with('error','Quote Document not yet uploaded.');
+            }
             
             $email = $transfer->licence->company->email;
             $email1= $transfer->licence->company->email1;

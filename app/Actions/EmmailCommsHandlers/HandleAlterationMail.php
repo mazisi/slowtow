@@ -57,15 +57,13 @@ class HandleAlterationMail {
         //$get_email_status = Email::where('stage', $stage)->where('model_type','alterations')->where('model_id',$alteration->id)->first();
 
         //  $error_message = '';
-        // if(is_null($get_email_status)){
-        //     if(is_null($get_doc)){
-        //         $error_message = 'Quote Document Not Uploaded';                
-        //         //$this->insertUnsentEmails($alteration, $error_message);               
-        //         return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
-        //     }
-        // }         
+        if(is_null($get_doc)){
+                    $error_message = 'Quote Document Not Uploaded';                
+            //         //$this->insertUnsentEmails($alteration, $error_message);               
+                    return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+         }        
         
-
+         $this->handleRenewalEmail($alteration);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
@@ -78,7 +76,7 @@ class HandleAlterationMail {
     
 }
 
-  function handleRenewalEmail() {
+  function handleRenewalEmail($alteration) {
     $email = $alteration->licence->company->email; //primary email
     $email1 = $alteration->licence->company->email1;
     $email2 = $alteration->licence->company->email2;;
@@ -117,18 +115,5 @@ class HandleAlterationMail {
     }
   }
 
-//   function insertUnsentEmails($alteration, $error_message, $alteration_stage='') : void {
-//     Email::insert([
-//         'model_type' => 'alterations',
-//         'model_id' => $alteration->id,
-//         'trading_name' => $alteration->licence->trading_name,
-//         'model_slug' => $alteration->slug,
-//         'parent_licence_slug' => $alteration->licence->slug,
-//         'status' => 'Email NOT Sent',
-//         'stage' => $alteration_stage,
-//         'feedback' => $error_message,
-//         'created_at' => now(),
-//         'updated_at' => now()
-//     ]);
-// }
+
 }

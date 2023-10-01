@@ -5,6 +5,7 @@ namespace App\Actions\EmmailCommsHandlers;
 use Throwable;
 use App\Models\Email;
 use App\Mail\RenewalMailer;
+use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\RenewalDocument;
 use Illuminate\Support\Facades\Mail;
@@ -51,7 +52,9 @@ class HandleRenewalMail {
         //         //$this->insertUnsentEmails($renewal, $error_message);               
         //         return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
         //     }
-        // }         
+        // }    
+        
+        $this->handleRenewalEmail($renewal);
         
         //if mail sent then update is quote sent for reporting purposes
         $renewal->update(['is_quote_sent' => 'true']);
@@ -68,7 +71,7 @@ class HandleRenewalMail {
     
 }
 
-  function handleRenewalEmail() {
+  function handleRenewalEmail($renewal) {
     $email = $renewal->licence->company->email; //primary email
     $email1 = $renewal->licence->company->email1;
     $email2 = $renewal->licence->company->email2;;
@@ -87,21 +90,21 @@ class HandleRenewalMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za'])->send(new RenewalMailer($renewal, $request->mail_body)); 
+        ->bcc([$email2,'sales@slotow.co.za'])->send(new RenewalMailer($renewal, request('mail_body')));
     }
 
     elseif($email && $email1 && !$email2){
         Mail::to($email)
         ->cc([$email1, 'info@slotow.co.za'])
         ->bcc('sales@slotow.co.za')
-        ->send(new RenewalMailer($renewal, $request->mail_body));
+        ->send(new RenewalMailer($renewal, request('mail_body')));
     }
     
     elseif($email && !$email1 && !$email2){
             Mail::to($email)
             ->cc('info@slotow.co.za')
             ->bcc('sales@slotow.co.za')
-            ->send(new RenewalMailer($renewal, $request->mail_body));
+            ->send(new RenewalMailer($renewal, request('mail_body')));
     }else{
         return back()->with('error','Mail NOT sent. Company does not have email addresses.');
     }

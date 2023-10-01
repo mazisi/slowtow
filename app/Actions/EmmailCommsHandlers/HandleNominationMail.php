@@ -59,13 +59,19 @@ class HandleNominationMail {
             $get_email_status = Email::where('stage', $stage)->where('model_type','nominations')->where('model_id',$nomination->id)->first();
 
              $error_message = '';
-            if(is_null($get_email_status)){
-                if(is_null($get_doc)){
+            // if(is_null($get_email_status)){
+            //     if(is_null($get_doc)){
+            //         $error_message = 'Quote Document Not Uploaded';                
+            //         $this->insertUnsentEmails($nomination, $error_message);                
+            //         return back()->with('error',' Quote Document is not yet uploaded.');
+            //     }
+            // }
+            
+            if(is_null($get_doc)){
                     $error_message = 'Quote Document Not Uploaded';                
-                    $this->insertUnsentEmails($nomination, $error_message);                
+                    //$this->insertUnsentEmails($nomination, $error_message);                
                     return back()->with('error',' Quote Document is not yet uploaded.');
                 }
-            }
 
 
             
@@ -107,7 +113,7 @@ class HandleNominationMail {
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {
             $error_message = 'Server Error.';
-            $this->insertUnsentEmails($nomination, $error_message, $stage);
+            //$this->insertUnsentEmails($nomination, $error_message, $stage);
             return back()->with('error','An error occured while sending email.');
         }
        
