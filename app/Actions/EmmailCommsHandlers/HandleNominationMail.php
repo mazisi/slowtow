@@ -55,24 +55,10 @@ class HandleNominationMail {
                 return back()->with('error','An error occurred.');
                     break;
             }
-            //check if licence already inserted in emails 
-            $get_email_status = Email::where('stage', $stage)->where('model_type','nominations')->where('model_id',$nomination->id)->first();
-
-             $error_message = '';
-            // if(is_null($get_email_status)){
-            //     if(is_null($get_doc)){
-            //         $error_message = 'Quote Document Not Uploaded';                
-            //         $this->insertUnsentEmails($nomination, $error_message);                
-            //         return back()->with('error',' Quote Document is not yet uploaded.');
-            //     }
-            // }
             
-            if(is_null($get_doc)){
-                    $error_message = 'Quote Document Not Uploaded';                
-                    //$this->insertUnsentEmails($nomination, $error_message);                
-                    return back()->with('error',' Quote Document is not yet uploaded.');
-                }
-
+            if(is_null($get_doc)){               
+                return back()->with('error',' Document is not yet uploaded.');
+            }
 
             
             $email = $nomination->licence->company->email;
@@ -88,24 +74,26 @@ class HandleNominationMail {
             //     ->cc(['mazisi@mrnlabs.com', 'test@gmail.com'])->send(new NominationMailer($nomination, $request->mail_body));
 
 
+            $full_document_path = env('BLOB_FILE_PATH').$get_doc->document;
+
             if(! is_null($email) && $email1 && $email2){
                 Mail::to($email)
                 ->cc([$email1,'info@slotow.co.za'])
-                ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new NominationMailer($nomination, $request->mail_body)); 
+                ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new NominationMailer($nomination, $request->mail_body,$full_document_path)); 
             }
         
             elseif($email && $email1 && !$email2){
                 Mail::to($email)
                 ->cc([$email1, 'info@slotow.co.za'])
                 ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                ->send(new NominationMailer($nomination, $request->mail_body));
+                ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
             }
             
             elseif($email && !$email1 && !$email2){
                     Mail::to($email)
                     ->cc('info@slotow.co.za')
                     ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                    ->send(new NominationMailer($nomination, $request->mail_body));
+                    ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
             }else{
                 return back()->with('error','Mail NOT sent. Company does not have email addresses.');
             }
@@ -126,18 +114,4 @@ class HandleNominationMail {
     return $nomination_document;
 }
 
-// function insertUnsentEmails($nomination, $error_message,$stage='') : void {
-//     Email::insert([
-//         'model_type' => 'transfers',
-//         'model_id' => $nomination->id,
-//         'trading_name' => $nomination->licence->trading_name,
-//         'model_slug' => $nomination->slug,
-//         'parent_licence_slug' => $nomination->licence->slug,
-//         'status' => 'Email NOT Sent',
-//         'stage' => $stage,
-//         'feedback' => $error_message,
-//         'created_at' => now(),
-//         'updated_at' => now()
-//     ]);  
-// }
 }

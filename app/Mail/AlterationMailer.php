@@ -42,8 +42,8 @@ class AlterationMailer extends Mailable
         return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
                     ->replyTo('info@slotow.co.za')
                     ->subject('ALTERATIONS - '.$this->alteration->licence->trading_name)
-                    ->markdown('emails.ecomms.mail_base_template');
-                  // ->attach($this->doc_path);
+                    ->markdown('emails.ecomms.mail_base_template')
+                  ->attach($this->doc_path);
                
     }
 

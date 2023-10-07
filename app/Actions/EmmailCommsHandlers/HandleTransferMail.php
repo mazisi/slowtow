@@ -14,7 +14,8 @@ class HandleTransferMail {
     public function dispatchTransferMail(Request $request){
         try {            
             $transfer = LicenceTransfer::with('licence.company')->whereSlug($request->transfer_slug)->firstOrFail();
-        switch ($transfer->status) {            
+        
+            switch ($transfer->status) {            
                 case '1':                
                     $stage = 'Client Quoted';
                     $get_doc = $this->getDocumentType($transfer,$stage);
@@ -56,21 +57,11 @@ class HandleTransferMail {
                    return back()->with('error','Could not send email.');
                
             }
-           
-            //check if licence already inserted in emails 
-            //$get_email_status = Email::where('stage', $stage)->where('model_type','transfers')->where('model_id',$transfer->id)->first();
-
-             $error_message = '';
-            // if(is_null($get_email_status)){
-            //     if(is_null($get_doc)){
-            //         $error_message = 'Quote Document Not Uploaded';                
-            //         $this->insertUnsentEmails($transfer, $error_message);                   
-            //         return back()->with('error','Quote Document not yet uploaded.');
-            //     }
-            // }
+          
+            
 
             if(is_null($get_doc)){                             
-                return back()->with('error','Quote Document not yet uploaded.');
+                return back()->with('error','Document not yet uploaded.');
             }
             
             $email = $transfer->licence->company->email;
@@ -84,33 +75,34 @@ class HandleTransferMail {
                     return back()->with('error','Mail NOT sent. Primary email not found.');
                 }
                 
+
+                $document_full_path = env('BLOB_FILE_PATH').$get_doc->document;
+
                 if(! is_null($email) && $email1 && $email2){
                     Mail::to($email)
                     ->cc([$email1,'info@slotow.co.za'])
                     ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])
-                    ->send(new TransferMailer($transfer, $request->mail_body)); 
+                    ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path)); 
                 }
             
                 elseif($email && $email1 && !$email2){
                     Mail::to($email)
                     ->cc([$email1, 'info@slotow.co.za'])
                     ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                    ->send(new TransferMailer($transfer, $request->mail_body));
+                    ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
                 }
                 
                 elseif($email && !$email1 && !$email2){
                         Mail::to($email)
                         ->cc('info@slotow.co.za')
                         ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                        ->send(new TransferMailer($transfer, $request->mail_body));
+                        ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
                 }else{
                     return back()->with('error','Mail NOT sent. Company does not have email addresses.');
                 }
                
 
-        //if email is resent successfully delete model from emails table
-        // $is_email_resent = Email::where('stage', $stage)->where('model_type','transfers')->where('model_id',$transfer->id)->first();
-        // (is_null($is_email_resent)) ? '' : $is_email_resent->delete() ;
+ 
          return back()->with('success','Mail sent successfully.');
 
 
@@ -126,22 +118,8 @@ class HandleTransferMail {
     
    
     function getDocumentType($transfer, $doc_type){
-        $tranfer_document = TransferDocument::where('licence_transfer_id',$transfer->id)->where('doc_type',$doc_type)->first();
-        return $tranfer_document;
+        $transfer_document = TransferDocument::where('licence_transfer_id',$transfer->id)->where('doc_type',$doc_type)->first();
+        return $transfer_document;
     }
 
-    function insertUnsentEmails($transfer, $error_message, $stage='') : void {
-        Email::insert([
-            'model_type' => 'transfers',
-            'model_id' => $transfer->id,
-            'trading_name' => $transfer->licence->trading_name,
-            'model_slug' => $transfer->slug,
-            'parent_licence_slug' => $transfer->licence->slug,
-            'status' => 'Email NOT Sent',
-            'stage' => $stage,
-            'feedback' => $error_message,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);  
-    }
 }

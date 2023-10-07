@@ -57,7 +57,7 @@ class HandleAlterationMail {
             // return back()->with('error','Mail NOT SENT!. Document no uploaded.');
          }        
         
-         $this->handleRenewalEmail($alteration, $get_doc->document);
+         $this->handleRenewalEmail($alteration, $get_doc->path);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;

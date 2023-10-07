@@ -44,16 +44,11 @@ class HandleRenewalMail {
         //check if licence already inserted in emails 
         //$get_email_status = Email::where('stage', $stage)->where('model_type','renewals')->where('model_id',$renewal->id)->first();
 
-        //  $error_message = '';
-        // if(is_null($get_email_status)){
-        //     if(is_null($get_doc)){
-        //         $error_message = 'Quote Document Not Uploaded';                
-        //         //$this->insertUnsentEmails($renewal, $error_message);               
-        //         return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
-        //     }
-        // }    
+        if(is_null($get_doc)){              
+            return back()->with('error','Mail NOT SENT!.Document is not uploaded.');
+        }   
         
-        $this->handleRenewalEmail($renewal, $get_doc->doc_type);
+        $this->handleRenewalEmail($renewal, $get_doc->document);
         
         //if mail sent then update is quote sent for reporting purposes
         $renewal->update(['is_quote_sent' => 'true']);
@@ -64,13 +59,16 @@ class HandleRenewalMail {
         $error_message = 'Server Error.';
         echo $error_message;
       // $this->insertUnsentEmails($renewal, $error_message, $renewal_stage);  
-      //return back()->with('error','An error occured while sending email.');
+      return back()->with('error','An error occured while sending email.');
     }
    
     
 }
 
-  function handleRenewalEmail($renewal,$doc_type) {
+  function handleRenewalEmail($renewal,$document) {
+
+    $document_full_path = env('BLOB_FILE_PATH').$document;
+
     $email = $renewal->licence->company->email; //primary email
     $email1 = $renewal->licence->company->email1;
     $email2 = $renewal->licence->company->email2;;
@@ -89,21 +87,21 @@ class HandleRenewalMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new RenewalMailer($renewal, request('mail_body'),$doc_type));
+        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new RenewalMailer($renewal, request('mail_body'),$document_full_path));
     }
 
     elseif($email && $email1 && !$email2){
         Mail::to($email)
         ->cc([$email1, 'info@slotow.co.za'])
         ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-        ->send(new RenewalMailer($renewal, request('mail_body'),$doc_type));
+        ->send(new RenewalMailer($renewal, request('mail_body'),$document_full_path));
     }
     
     elseif($email && !$email1 && !$email2){
             Mail::to($email)
             ->cc('info@slotow.co.za')
             ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-            ->send(new RenewalMailer($renewal, request('mail_body'),$doc_type));
+            ->send(new RenewalMailer($renewal, request('mail_body'),$document_full_path));
     }else{
         return back()->with('error','Mail NOT sent. Company does not have email addresses.');
     }

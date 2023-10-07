@@ -52,7 +52,7 @@ class HandleTemporalLicenceMail {
             return back()->with('error','Mail NOT SENT!.Could not locate document.');
         }        
         
-        $this->handleTemporalLicenceEmail($temporal_licence, $get_doc->document);
+        $this->handle($temporal_licence, $get_doc->document);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
@@ -65,9 +65,9 @@ class HandleTemporalLicenceMail {
     
 }
 
-  function handleTemporalLicenceEmail($temporal_licence, $doc_path) {
+  function handle($temporal_licence, $doc_path) {
     
-    $document_full_path=$doc_path;
+    $document_full_path= env('BLOB_FILE_PATH').$doc_path;
 
     if($temporal_licence->belongs_to == 'Company'){
         $email = $temporal_licence->company->email; //primary email for company
