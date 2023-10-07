@@ -5,6 +5,8 @@ namespace App\Actions\EmmailCommsHandlers;
 use Throwable;
 use App\Models\Email;
 use App\Mail\TransferMailer;
+use Illuminate\Http\Request;
+use App\Models\LicenceTransfer;
 use App\Models\TransferDocument;
 use Illuminate\Support\Facades\Mail;
 
@@ -60,8 +62,8 @@ class HandleTransferMail {
           
             
 
-            if(is_null($get_doc)){                             
-                return back()->with('error','Document not yet uploaded.');
+            if(is_null($get_doc)){                        
+                return back()->with('error','Please upload required document.');
             }
             
             $email = $transfer->licence->company->email;
@@ -109,7 +111,7 @@ class HandleTransferMail {
         } catch (\Throwable $th) {throw $th;
             $error_message = '500....Server Error.';
             //$this->insertUnsentEmails($transfer, $error_message, $stage);  
-            //return back()->with('error','An error occured while sending email.');
+            return back()->with('error','An error occured while sending email.');
         }
        
         

@@ -73,7 +73,7 @@ export default {
                   }else if(props.error){
                   notify(props.error)
                  }
-                  form.reset()
+                  mailForm.reset()
                 } 
         })
     }

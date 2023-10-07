@@ -61,9 +61,11 @@ use App\Http\Controllers\AlterationDocumentController;
 use App\Http\Controllers\Auth\PasswordResetController;
 
 use App\Http\Controllers\Slowtowdmin\AdminsController;
+use App\Actions\EmmailCommsHandlers\HandleTransferMail;
 use App\Http\Controllers\TemporalLicenceDocsController;
 use App\Http\Controllers\NominationEmailCommsController;
 use App\Actions\EmmailCommsHandlers\HandleAlterationMail;
+use App\Actions\EmmailCommsHandlers\HandleNominationMail;
 use App\Actions\EmmailCommsHandlers\HandleTemporalLicenceMail;
 use App\Http\Controllers\EmailComms\NewAppEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
@@ -445,11 +447,11 @@ Route::group(['middleware' => ['guest']], function () {
 
         //transfers mail dispatcher
 
-        Route::post('/dispatchTransferMail', [TransferEmailCommsController::class,'dispatchTransferMail'])->name('dispatch_transfer_mail');
+        Route::post('/dispatchTransferMail', [HandleTransferMail::class,'dispatchTransferMail'])->name('dispatch_transfer_mail');
 
         //nomination mail dispatcher
 
-        Route::post('/dispatchNominationMail', [NominationEmailCommsController::class,'dispatchNominationMail'])->name('dispatch_nom_mail');
+        Route::post('/dispatchNominationMail', [HandleNominationMail::class,'dispatchNominationMail'])->name('dispatch_nom_mail');
 
 
 
