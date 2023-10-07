@@ -26,44 +26,38 @@ class HandleAlterationMail {
   public function dispatchAlterationMail(Request $request){
     try {
         $alteration = Alteration::with('licence.company')->whereSlug($request->alteration_slug)->firstOrFail();
-        $stage = '';
-        $alteration_stage = '';  
-
-        return back()->with('error','Waiting for templates.');
-        
-        switch ($alteration->status) {            
-            case '1':
-                $stage = '1';
-                $alteration_stage = 'Client Quoted';                
-                break;
+    
+        switch ($alteration->status) {      
+            case '1':                
+                $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Quoted')->first();
+               break;
             case '2':
-                $stage = '2';
-                $alteration_stage = 'Client Invoiced';
+                $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
                 break;
-            case '3':
-                $stage = '3';
-                $alteration_stage = 'Client Paid';
+            case '4':
+                $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Payment To The Liquor Board')->first();
                 break;
             case '5':
-                $stage = '5';
-                $alteration_stage = 'Renewal Issued';
+                $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Payment to the Liquor Board-2')->first();
+                break;
+            case '6':
+                $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Lodged')->first();
+                break;
+            case '7':
+                $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Certificate Issued')->first();
                 break;
             default:
-            return back()->with('error','Could not send email.');
-                break;
+               return to_route('get_alterations')->with('error','Could not locate stage.');
+            //   return 'Could not locate document.';
+            break;
         }
-        $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type',$alteration_stage)->first();
-        //check if licence already inserted in emails 
-        //$get_email_status = Email::where('stage', $stage)->where('model_type','alterations')->where('model_id',$alteration->id)->first();
 
-        //  $error_message = '';
+  
         if(is_null($get_doc)){
-                    $error_message = 'Quote Document Not Uploaded';                
-            //         //$this->insertUnsentEmails($alteration, $error_message);               
-                    return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+            // return back()->with('error','Mail NOT SENT!. Document no uploaded.');
          }        
         
-         $this->handleRenewalEmail($alteration);
+         $this->handleRenewalEmail($alteration, $get_doc->document);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
@@ -76,14 +70,13 @@ class HandleAlterationMail {
     
 }
 
-  function handleRenewalEmail($alteration) {
+  function handleRenewalEmail($alteration, $document) {
+
+    $full_document_path = env('BLOB_FILE_PATH').$document;
+    
     $email = $alteration->licence->company->email; //primary email
     $email1 = $alteration->licence->company->email1;
     $email2 = $alteration->licence->company->email2;;
-
-    //  Mail::to('mazisimsebele18@gmail.com')
-    // ->cc(['mazisi@mrnlabs.com', 'info@slotow.co.za',
-    // 'sales@slotow.co.za'])->send(new AlterationMailer($alteration, $request->mail_body));
     
 
     //If there is no primary email
@@ -95,21 +88,22 @@ class HandleAlterationMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za'])->send(new AlterationMailer($alteration, $request->mail_body)); 
+        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])
+        ->send(new AlterationMailer($alteration, request('mail_body'),$full_document_path)); 
     }
 
     elseif($email && $email1 && !$email2){
         Mail::to($email)
         ->cc([$email1, 'info@slotow.co.za'])
-        ->bcc('sales@slotow.co.za')
-        ->send(new AlterationMailer($alteration, $request->mail_body));
+        ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+        ->send(new AlterationMailer($alteration, request('mail_body'), $full_document_path));
     }
     
     elseif($email && !$email1 && !$email2){
             Mail::to($email)
             ->cc('info@slotow.co.za')
-            ->bcc('sales@slotow.co.za')
-            ->send(new AlterationMailer($alteration, $request->mail_body));
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new AlterationMailer($alteration, request('mail_body'),$full_document_path));
     }else{
         return back()->with('error','Mail NOT sent. Company does not have email addresses.');
     }

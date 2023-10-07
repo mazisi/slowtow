@@ -57,7 +57,7 @@ class NominationMailer extends Mailable
             }
             
                  return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
-                 ->markdown('emails.ecomms.renewalMailer')
+                 ->markdown('emails.ecomms.mailBaseTemplate')
                 ->subject($this->nomination->licence->trading_name.' Appointment Of Managers ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 

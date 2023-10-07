@@ -62,7 +62,7 @@ class TransferMailer extends Mailable
             
             if($this->transfer->status == '1'){
                 return $this->from(env("MAIL_FROM_ADDRESS"))
-                ->markdown('emails.ecomms.renewalMailer')
+                ->markdown('emails.ecomms.mailBaseTemplate')
                 ->subject($this->transfer->licence->trading_name.' Transfer')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document)
                 ->attach(storage_path('app/public/GoVerify.pdf'))
@@ -72,7 +72,7 @@ class TransferMailer extends Mailable
 
             }else{
                 return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
-                ->markdown('emails.ecomms.renewalMailer')
+                ->markdown('emails.ecomms.mailBaseTemplate')
                 ->subject($this->transfer->licence->trading_name.' Transfer ')
                 ->attach(env('BLOB_FILE_PATH').$get_doc->document);
 

@@ -3,11 +3,9 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Content;
-use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
 class AlterationMailer extends Mailable
 {
@@ -18,42 +16,36 @@ class AlterationMailer extends Mailable
      *
      * @return void
      */
-    public function __construct()
-    {
-        //
+    public $alteration,$template, $doc_path;
+    public function __construct($alteration,$template, $doc_path){
+       $this->alteration = $alteration;
+       $this->doc_path=$doc_path;
+       $this->template = $template;
     }
 
     /**
-     * Get the message envelope.
+     * Build the message.
      *
-     * @return \Illuminate\Mail\Mailables\Envelope
+     * @return $this
      */
-    public function envelope()
-    {
-        return new Envelope(
-            subject: 'Alteration Mailer',
-        );
+    public function build(){
+        //Status keys:
+        // 1. Client Quoted
+        //2 => Client Invoiced
+        //3 => Client Paid
+        //4 => Prepare Alterations Application
+        //5 => Payment to the Liquor Board
+        //6 => Alterations Lodged
+        //7 => Alterations Certificate Issued
+        //8 => Alterations Delivered
+              
+        return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
+                    ->replyTo('info@slotow.co.za')
+                    ->subject('ALTERATIONS - '.$this->alteration->licence->trading_name)
+                    ->markdown('emails.ecomms.mail_base_template');
+                  // ->attach($this->doc_path);
+               
     }
 
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            view: 'view.name',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [];
-    }
+    
 }

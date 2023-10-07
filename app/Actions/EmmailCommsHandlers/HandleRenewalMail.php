@@ -3,7 +3,6 @@
 namespace App\Actions\EmmailCommsHandlers;
 
 use Throwable;
-use App\Models\Email;
 use App\Mail\RenewalMailer;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
@@ -54,7 +53,7 @@ class HandleRenewalMail {
         //     }
         // }    
         
-        $this->handleRenewalEmail($renewal);
+        $this->handleRenewalEmail($renewal, $get_doc->doc_type);
         
         //if mail sent then update is quote sent for reporting purposes
         $renewal->update(['is_quote_sent' => 'true']);
@@ -71,7 +70,7 @@ class HandleRenewalMail {
     
 }
 
-  function handleRenewalEmail($renewal) {
+  function handleRenewalEmail($renewal,$doc_type) {
     $email = $renewal->licence->company->email; //primary email
     $email1 = $renewal->licence->company->email1;
     $email2 = $renewal->licence->company->email2;;
@@ -90,38 +89,24 @@ class HandleRenewalMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za'])->send(new RenewalMailer($renewal, request('mail_body')));
+        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new RenewalMailer($renewal, request('mail_body'),$doc_type));
     }
 
     elseif($email && $email1 && !$email2){
         Mail::to($email)
         ->cc([$email1, 'info@slotow.co.za'])
-        ->bcc('sales@slotow.co.za')
-        ->send(new RenewalMailer($renewal, request('mail_body')));
+        ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+        ->send(new RenewalMailer($renewal, request('mail_body'),$doc_type));
     }
     
     elseif($email && !$email1 && !$email2){
             Mail::to($email)
             ->cc('info@slotow.co.za')
-            ->bcc('sales@slotow.co.za')
-            ->send(new RenewalMailer($renewal, request('mail_body')));
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new RenewalMailer($renewal, request('mail_body'),$doc_type));
     }else{
         return back()->with('error','Mail NOT sent. Company does not have email addresses.');
     }
   }
 
-//   function insertUnsentEmails($renewal, $error_message, $renewal_stage='') : void {
-//     Email::insert([
-//         'model_type' => 'renewals',
-//         'model_id' => $renewal->id,
-//         'trading_name' => $renewal->licence->trading_name,
-//         'model_slug' => $renewal->slug,
-//         'parent_licence_slug' => $renewal->licence->slug,
-//         'status' => 'Email NOT Sent',
-//         'stage' => $renewal_stage,
-//         'feedback' => $error_message,
-//         'created_at' => now(),
-//         'updated_at' => now()
-//     ]);
-// }
 }

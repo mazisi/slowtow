@@ -87,20 +87,21 @@ class HandleTransferMail {
                 if(! is_null($email) && $email1 && $email2){
                     Mail::to($email)
                     ->cc([$email1,'info@slotow.co.za'])
-                    ->bcc([$email2,'sales@slotow.co.za'])->send(new TransferMailer($transfer, $request->mail_body)); 
+                    ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])
+                    ->send(new TransferMailer($transfer, $request->mail_body)); 
                 }
             
                 elseif($email && $email1 && !$email2){
                     Mail::to($email)
                     ->cc([$email1, 'info@slotow.co.za'])
-                    ->bcc('sales@slotow.co.za')
+                    ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
                     ->send(new TransferMailer($transfer, $request->mail_body));
                 }
                 
                 elseif($email && !$email1 && !$email2){
                         Mail::to($email)
                         ->cc('info@slotow.co.za')
-                        ->bcc('sales@slotow.co.za')
+                        ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
                         ->send(new TransferMailer($transfer, $request->mail_body));
                 }else{
                     return back()->with('error','Mail NOT sent. Company does not have email addresses.');

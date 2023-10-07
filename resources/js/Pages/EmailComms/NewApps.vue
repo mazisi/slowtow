@@ -34,7 +34,7 @@
       </li>
     
       <li class="nav-item" role="presentation">
-        <button @click="getTemporaryLicences" class="nav-link btn btn-secondary text-white mx-2" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+        <button @click="getTemporayLicences" class="nav-link btn btn-secondary text-white mx-2" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
         type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
       </li>
     

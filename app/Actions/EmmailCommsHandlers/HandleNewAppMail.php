@@ -64,16 +64,13 @@ class HandleNewAppMail {
         $get_doc = LicenceDocument::where('alteration_id',$licence->id)->where('doc_type',$licence_stage)->first();
         
         
-        $this->handleRenewalEmail($licence);
-        
-        
         if(is_null($get_doc)){
                     $error_message = 'Quote Document Not Uploaded';                
                     //$this->insertUnsentEmails($licence, $error_message);               
                     return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
         }
         
-
+        $this->handleRenewalEmail($licence, $get_doc->document_file);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
@@ -86,14 +83,17 @@ class HandleNewAppMail {
     
 }
 
-  function handleRenewalEmail($licence) {
+  function handleRenewalEmail($licence, $doc_type) {
+
+    $full_document_path = env('BLOB_FILE_PATH').$doc_type;
+
     $email = $licence->company->email; //primary email
     $email1 = $licence->company->email1;
     $email2 = $licence->company->email2;;
 
     //  Mail::to('mazisimsebele18@gmail.com')
     // ->cc(['mazisi@mrnlabs.com', 'info@slotow.co.za',
-    // 'sales@slotow.co.za'])->send(new AlterationMailer($licence, request('mail_body')));
+    // 'sales@slotow.co.za'])->send(new AlterationMailer($licence, request('mail_body'), $doc_type));
     
 
     //If there is no primary email
@@ -105,21 +105,21 @@ class HandleNewAppMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za'])->send(new NewAppsMailer($licence, request('mail_body'))); 
+        ->bcc([$email2,'sales@slotow.co.za'])->send(new NewAppsMailer($licence, request('mail_body'), $full_document_path)); 
     }
 
     elseif($email && $email1 && !$email2){
         Mail::to($email)
         ->cc([$email1, 'info@slotow.co.za'])
         ->bcc('sales@slotow.co.za')
-        ->send(new NewAppsMailer($licence, request('mail_body')));
+        ->send(new NewAppsMailer($licence, request('mail_body'), $full_document_path));
     }
     
     elseif($email && !$email1 && !$email2){
             Mail::to($email)
             ->cc('info@slotow.co.za')
             ->bcc('sales@slotow.co.za')
-            ->send(new NewAppsMailer($licence, request('mail_body')));
+            ->send(new NewAppsMailer($licence, request('mail_body'), $full_document_path));
     }else{
         return back()->with('error','Mail NOT sent. Company does not have email addresses.');
     }

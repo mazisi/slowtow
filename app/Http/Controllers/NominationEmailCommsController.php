@@ -6,8 +6,6 @@ use Inertia\Inertia;
 use App\Models\Email;
 use App\Models\Nomination;
 use Illuminate\Http\Request;
-use App\Mail\NominationMailer;
-use App\Models\NominationDocument;
 use Illuminate\Support\Facades\Mail;
 
 class NominationEmailCommsController extends Controller

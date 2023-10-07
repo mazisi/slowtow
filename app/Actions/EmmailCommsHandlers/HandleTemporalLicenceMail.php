@@ -26,43 +26,33 @@ class HandleTemporalLicenceMail {
   public function dispatchTemporalMail(Request $request){
     try {
         $temporal_licence = TemporalLicence::whereSlug($request->temp_licence_slug)->firstOrFail();
-        $stage = '';
-        $temp_licence_stage = '';  
-
-        return back()->with('error','Waiting for templates.');
-        
-        switch ($temporal_licence->status) {            
-            case '1':
-                $stage = '1';
-                $temp_licence_stage = 'Client Quoted';                
-                break;
+       
+        switch ($temporal_licence->status) {      
+            case '1':                
+                $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Client Quoted')->first(['document']);
+               break;
             case '2':
-                $stage = '2';
-                $temp_licence_stage = 'Client Invoiced';
-                break;
-            case '3':
-                $stage = '3';
-                $temp_licence_stage = 'Client Paid';
+                $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Client Invoiced')->first(['document']);
                 break;
             case '5':
-                $stage = '5';
-                $temp_licence_stage = 'Renewal Issued';
+                $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Payment To The Liquor Board')->first(['document']);
+                break;
+            case '7':
+                $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Licence Lodged')->first(['document']);
+                break;
+            case '8':
+                $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Licence Issued')->first(['document']);
                 break;
             default:
-            return back()->with('error','Could not send email.');
-                break;
+               return to_route('get_temp_licences')->with('error','Licence stage out of emmail comms range.');
+            //   return 'Could not locate document.';
+            break;
         }
-        $get_doc = TemporalLicenceDocument::where('alteration_id',$temporal_licence->id)->where('doc_type',$temp_licence_stage)->first();
-        //check if licence already inserted in emails 
-        //$get_email_status = Email::where('stage', $stage)->where('model_type','alterations')->where('model_id',$temporal_licence->id)->first();
-
-        if(is_null($get_doc)){
-                    $error_message = 'Quote Document Not Uploaded';                
-            //         //$this->insertUnsentEmails($temporal_licence, $error_message);               
-                    return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
-                }        
+        if(is_null($get_doc)){            
+            return back()->with('error','Mail NOT SENT!.Could not locate document.');
+        }        
         
-        $this->handleRenewalEmail($temporal_licence);
+        $this->handleTemporalLicenceEmail($temporal_licence, $get_doc->document);
        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
@@ -75,57 +65,75 @@ class HandleTemporalLicenceMail {
     
 }
 
-  function handleRenewalEmail($temporal_licence) {
-    $email = $temporal_licence->licence->company->email; //primary email
-    $email1 = $temporal_licence->licence->company->email1;
-    $email2 = $temporal_licence->licence->company->email2;;
-
-    //  Mail::to('mazisimsebele18@gmail.com')
-    // ->cc(['mazisi@mrnlabs.com', 'info@slotow.co.za',
-    // 'sales@slotow.co.za'])->send(new AlterationMailer($temporal_licence, $request->mail_body));
+  function handleTemporalLicenceEmail($temporal_licence, $doc_path) {
     
+    $document_full_path=$doc_path;
 
+    if($temporal_licence->belongs_to == 'Company'){
+        $email = $temporal_licence->company->email; //primary email for company
+        $email1 = $temporal_licence->company->email1;
+        $email2 = $temporal_licence->company->email2;
+        $this->checkCompanyEmailAddresses($email, $email1, $email2, $temporal_licence, $document_full_path);
+
+    }else{
+        $email = $temporal_licence->people->email_address_1; //primary email for a person
+        $email1 = $temporal_licence->people->email_address_2;
+        $this->checkPersonEmailAddresses($email, $email1, $temporal_licence, $document_full_path);
+    }
+    
     //If there is no primary email
     if(! $email){
         return back()->with('error','Mail NOT sent. Primary email not found.');
     }
 
-
-    if(! is_null($email) && $email1 && $email2){
-        Mail::to($email)
-        ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za'])->send(new TemporalLicenceMailer($temporal_licence, $request->mail_body)); 
-    }
-
-    elseif($email && $email1 && !$email2){
-        Mail::to($email)
-        ->cc([$email1, 'info@slotow.co.za'])
-        ->bcc('sales@slotow.co.za')
-        ->send(new TemporalLicenceMailer($temporal_licence, $request->mail_body));
-    }
-    
-    elseif($email && !$email1 && !$email2){
-            Mail::to($email)
-            ->cc('info@slotow.co.za')
-            ->bcc('sales@slotow.co.za')
-            ->send(new TemporalLicenceMailer($temporal_licence, $request->mail_body));
-    }else{
-        return back()->with('error','Mail NOT sent. Company does not have email addresses.');
-    }
   }
 
-//   function insertUnsentEmails($temporal_licence, $error_message, $temp_licence_stage='') : void {
-//     Email::insert([
-//         'model_type' => 'alterations',
-//         'model_id' => $temporal_licence->id,
-//         'trading_name' => $temporal_licence->licence->trading_name,
-//         'model_slug' => $temporal_licence->slug,
-//         'parent_licence_slug' => $temporal_licence->licence->slug,
-//         'status' => 'Email NOT Sent',
-//         'stage' => $temp_licence_stage,
-//         'feedback' => $error_message,
-//         'created_at' => now(),
-//         'updated_at' => now()
-//     ]);
-// }
+  function checkCompanyEmailAddresses($primaryEmail=null, $secondaryEmail=null,$thirdEmail=null, $temporal_licence,$document_full_path) {
+    
+            if(! is_null($primaryEmail) && $secondaryEmail && $thirdEmail){
+                Mail::to($primaryEmail)
+                ->cc([$secondaryEmail,'info@slotow.co.za'])
+                ->bcc([$thirdEmail,'sales@slotow.co.za','info@goverify.co.za'])
+                ->send(new TemporalLicenceMailer($temporal_licence, request('mail_body'), $document_full_path)); 
+            }
+
+            elseif($primaryEmail && $secondaryEmail && !$thirdEmail){
+                Mail::to($primaryEmail)
+                ->cc([$secondaryEmail, 'info@slotow.co.za'])
+                ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+                ->send(new TemporalLicenceMailer($temporal_licence, request('mail_body'), $document_full_path));
+            }
+            
+            elseif($primaryEmail && !$secondaryEmail && !$thirdEmail){
+                    Mail::to($primaryEmail)
+                    ->cc('info@slotow.co.za')
+                    ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+                    ->send(new TemporalLicenceMailer($temporal_licence, request('mail_body'), $document_full_path));
+            }else{
+                return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+            }
+ }
+
+
+  function checkPersonEmailAddresses($primaryEmail=null, $secondaryEmail=null, $temporal_licence, $document_full_path) {
+    
+        if(! is_null($primaryEmail) && $secondaryEmail){
+            Mail::to($primaryEmail)
+            ->cc([$secondaryEmail,'info@slotow.co.za'])
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new TemporalLicenceMailer($temporal_licence, request('mail_body'),$document_full_path)); 
+        }
+
+        elseif($primaryEmail && !$secondaryEmail){
+            Mail::to($primaryEmail)
+            ->cc('info@slotow.co.za')
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new TemporalLicenceMailer($temporal_licence, request('mail_body'),$document_full_path));
+
+        }else{
+            return back()->with('error','Mail NOT sent. This does not have email addresses.');
+        }
+  }
+
+
 }

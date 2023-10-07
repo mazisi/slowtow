@@ -29,7 +29,16 @@ class AlterationEmailCommsController extends Controller
           ->when(!empty(request('stage')), function ($query) use ($request) {
             $query->where('status',$request->stage);
         });
-        })->whereNull('deleted_at')
+        })
+        ->where(function($query){
+            $query->where('status','1')
+                    ->orWhere('status','2')
+                    ->orWhere('status','4')
+                    ->orWhere('status','5')
+                    ->orWhere('status','6')
+                    ->orWhere('status','7');   
+                     })
+    ->whereNull('deleted_at')
         ->orderBy('status','asc')
            ->paginate(20)->withQueryString();
 

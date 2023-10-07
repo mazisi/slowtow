@@ -20,60 +20,50 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
     $template = '';
 
      if($renewal->status == '1'){//quoted
-      $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
-      WAITING FOR ACTUAL TEMPLATES!!! '.Carbon::parse($renewal->licence->licence_date)->format('jS').' of '.Carbon::parse($renewal->licence->licence_date)->format('F Y').'-
-      attached please find a quote for us to attend to this renewal on your behalf.<br><br>
-      Please ensure that payment is made before this to avoid penalties being implemented by the Liquor Board.<br><br>                    
-      See our banking details below:<br>
-      Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
-      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>
-      We thank you for your continued support and look forward to assisting you with this process.<br><br>
-                         
-      Many thanks,
-      '; 
+      $template = '<p>Good day,</p>
+      <p>I hope you are well.</p>
+      <p>Please see attached quotation and below basic requirements for an&nbsp;alteration&rsquo;s application:</p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;- Fully dimensioned plans of the alterations to the premises</p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;- Photographs of the premises</p>
+      <p>&nbsp; &nbsp; &nbsp; &nbsp;- A brief description depicting what alterations are being made.</p>
+      <p>Note that the Liquor Board is currently running at a massive delay due to and applications may take anywhere from 8 to 16 months to be approved.</p>
+      <p>Once the application has been lodged, we will furnish you with the necessary documents to have on display in the interim to avoid any problems with inspectors.</p>
+      <p><br>Many thanks,</p>'; 
+
   }elseif ($renewal->status == '2') {//Client Invoiced
-      $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>
-      WAITING FOR ACTUAL TEMPLATES!!!.<br><br>
-      <u>PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:</u><br><br>                    
-      Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
-      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br>
-      Code:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;18250500<br><br>Many thanks,
-      ';
-
-      $template = '<p>Good Day '.$renewal->licence->trading_name.'.</p>
-      <p>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</p>
-      <p>WAITING FOR ACTUAL TEMPLATES!!!:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</p>
-      <p><br>Please note that your renewal is due.<br><br><u>
-      PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:
-      </u><br><br>Name:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_ACCOUNT_HOLDER').'<br>
-      Bank:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
-      Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>Many thanks,</p>';
+      $template = '<p>Good day,</p>
+      <p>I hope you are well.</p>
+      <p>Please see attached invoice in respect of the alteration’s application.</p>
+      <p><br>Many thanks,</p>,';
       
-  }elseif ($renewal->status == '3') {//Client Paid
-      $template = 'Good Day '.$renewal->licence->trading_name.'.
-      <p>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</p>
-      <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</p>
-      <p>WAITING FOR ACTUAL TEMPLATES!!!Please see attached proof of payment to the Liquor Board. Note that we have not as yet received the renewal certificate from the Board.</p>
-      <p>Please ensure that the attached document in on display in the interim. We will advise as soon 
-      as the renewal has been issued.</p>
-      <br><br>Many thanks,';
+  }elseif ($renewal->status == '5') {//Payment To the liquour board
+      $template = '<p>Good day,</p>
+      <p>I hope you are well.</p>
+      <p>Please see attached proof of payment to the Liquor Board in respect of the alteration’s application. Please ensure that this document is on display until
+       you are furnished with the proof of lodgement.</p>
+      <p><br>Many thanks,</p>';
 
       
-  }elseif ($renewal->status == '5') {//issued
+  }elseif ($renewal->status == '6') {//Lodged
      
-      $template = '<div><div>Good Day '.$renewal->licence->trading_name.',<br>
-      <div>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</div>
-      <div>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</div>
-      </div><br><div>WAITING FOR ACTUAL TEMPLATES!!!Please see attached copy of the latest renewal certificate.</div>
-      <br><div>The original will be delivered in due course.</div><br><br><div>Many thanks,</div></div>';
-      
+      $template = '<p>Good day,</p>
+      <p>I hope you are well.</p>
+      <p>Please see attached proof of lodgement in respect of the alteration’s application. Please ensure that this is on display until the certificate has been
+       issued.</p>
+      <p><br>Many thanks,</p>';
+
+    }elseif ($renewal->status == '7') {//Issued
+     
+      $template = '<p>Good day,</p>
+      <p>I hope you are well.</p>
+      <p>We are happy to advise you that the alteration’s application has been
+      approved! Please see attached copy of the alteration’s certificate.</p>
+      <p>The original will be delivered in due course. Please ensure you have this
+      certificate on display once received.</p>
+      <p>Many thanks,</p>'; 
+
   }else{
-    $template = 'Waiting for templates';
-      //return back()->with('error','An unknown error ocurred');
+    return back()->with('error','No template found for this stage.');      
   }  
 
   return $template;

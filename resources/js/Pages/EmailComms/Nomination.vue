@@ -85,6 +85,9 @@ methods: {
       this.$inertia.get('/email-comms/new-apps');
     },
 
+    getTemporayLicences(){
+      this.$inertia.get('/email-comms/temp-licences');
+    },
 
       notify(message){
           if(this.success){
@@ -143,14 +146,16 @@ methods: {
   </li>
 
   <li class="nav-item" role="presentation">
+    <button @click="getNewApps" class="nav-link btn btn-secondary text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
+    type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
+  </li>
+  
+  <li class="nav-item" role="presentation">
     <button @click="getTemporayLicences" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
   </li>
 
-  <li class="nav-item" role="presentation">
-    <button @click="getNewApps" class="nav-link btn btn-secondary text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
-    type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
-  </li>
+  
   <!-- <li class="nav-item" role="presentation">
     <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
     type="button" role="tab" aria-controls="alterations" aria-selected="false">Emails</button>

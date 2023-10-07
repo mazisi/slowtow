@@ -120,8 +120,12 @@ export default {
           this.$inertia.get('/email-comms/alterations');
         }
 
+        function getTemporayLicences(){
+          this.$inertia.get('/email-comms/temp-licences');
+        }
+
         return {
-          getLicenceRenewals,getLicenceTransfers,getNominations,getAlterations,
+          getLicenceRenewals,getLicenceTransfers,getNominations,getAlterations,getTemporayLicences,
           limit,
           computedProvinces,
           form,
