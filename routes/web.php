@@ -75,7 +75,9 @@ use App\Http\Controllers\EmailComms\TemporaryLicenceEmailCommsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
-
+Route::get('/test',function(){
+    return view('emails.ecomms.mail_base_template');
+});
 
 Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
 Route::get('/insert-years',[InsertTypesController::class,'insert_years']);

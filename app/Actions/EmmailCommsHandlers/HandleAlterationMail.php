@@ -26,7 +26,10 @@ class HandleAlterationMail {
   public function dispatchAlterationMail(Request $request){
     try {
         $alteration = Alteration::with('licence.company')->whereSlug($request->alteration_slug)->firstOrFail();
-    
+        
+        if(is_null($alteration->licence->company->email)){
+            return back()->with('error','Mail NOT sent. Primary email address not found.');
+        }
         switch ($alteration->status) {      
             case '1':                
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Quoted')->first();

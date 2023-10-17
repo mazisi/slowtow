@@ -13,8 +13,15 @@ use Illuminate\Support\Facades\Mail;
 class HandleRenewalMail {
 
   public function dispatchRenewalMail(Request $request){
+      
+      
     try {
         $renewal = LicenceRenewal::with('licence.company')->whereSlug($request->renewal_slug)->firstOrFail();
+        
+        if(is_null($renewal->licence->company->email)){
+            return back()->with('error','Mail NOT sent. Primary email not found.');
+        }
+        
         $stage = '';
         $renewal_stage = '';  
 
@@ -48,6 +55,7 @@ class HandleRenewalMail {
             return back()->with('error','Mail NOT SENT!.Document is not uploaded.');
         }   
         
+        
         $this->handleRenewalEmail($renewal, $get_doc->document);
         
         //if mail sent then update is quote sent for reporting purposes
@@ -76,13 +84,7 @@ class HandleRenewalMail {
     //  Mail::to('mazisimsebele18@gmail.com')
     // ->cc(['mazisi@mrnlabs.com', 'info@slotow.co.za',
     // 'sales@slotow.co.za'])->send(new RenewalMailer($renewal, $request->mail_body));
-    
-
-    //If there is no primary email
-    if(! $email){
-        return back()->with('error','Mail NOT sent. Primary email not found.');
-    }
-
+ 
 
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)

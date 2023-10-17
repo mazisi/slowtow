@@ -33,7 +33,10 @@ class HandleNewAppMail {
   public function dispatchNewAppMail(Request $request){
     try {
         $licence = Licence::whereSlug($request->licence_slug)->firstOrFail();
-        
+
+        if(is_null($licence->company->email)){
+            return back()->with('error','Mail NOT sent. Primary email address not found.');
+        }
         $stage = '';
         $licence_stage = '';  
 

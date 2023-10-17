@@ -27,7 +27,12 @@ class HandleNominationMail {
   // 9 => Nomination Issued
   // 10 => Nomination Delivered 
   
-            $nomination = Nomination::with('licence.company')->whereSlug($request->nomination_slug)->firstOrFail();
+        $nomination = Nomination::with('licence.company')->whereSlug($request->nomination_slug)->firstOrFail();
+
+        if(is_null($nomination->licence->company->email)){
+            return back()->with('error','Mail NOT sent. Primary email address not found.');
+        }
+
         switch ($nomination->status) {            
                 case '1':                
                     $stage='Client Quoted';

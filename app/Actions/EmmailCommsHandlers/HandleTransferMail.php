@@ -14,9 +14,13 @@ use Illuminate\Support\Facades\Mail;
 class HandleTransferMail { 
 
     public function dispatchTransferMail(Request $request){
-        try {            
+        try {    
+
             $transfer = LicenceTransfer::with('licence.company')->whereSlug($request->transfer_slug)->firstOrFail();
-        
+            
+            if(is_null($transfer->licence->company->email)){
+                return back()->with('error','Mail NOT sent. Primary email address not found.');
+            }
             switch ($transfer->status) {            
                 case '1':                
                     $stage = 'Client Quoted';
@@ -70,13 +74,6 @@ class HandleTransferMail {
             $email1= $transfer->licence->company->email1;
             $email2 = $transfer->licence->company->email2;
 
-            //  Mail::to('mazisimsebele18@gmail.com')
-                // ->cc(['mazisi@mrnlabs.com', 'test@gmail.com'])->send(new TransferMailer($transfer, $request->mail_body));
-            
-                if(! $email){
-                    return back()->with('error','Mail NOT sent. Primary email not found.');
-                }
-                
 
                 $document_full_path = env('BLOB_FILE_PATH').$get_doc->document;
 

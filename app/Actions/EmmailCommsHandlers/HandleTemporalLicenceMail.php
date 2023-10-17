@@ -26,7 +26,11 @@ class HandleTemporalLicenceMail {
   public function dispatchTemporalMail(Request $request){
     try {
         $temporal_licence = TemporalLicence::whereSlug($request->temp_licence_slug)->firstOrFail();
-       
+ 
+        if(is_null($temporal_licence->company->email)){
+            return back()->with('error','Mail NOT sent. Primary email not found.');
+        }
+        
         switch ($temporal_licence->status) {      
             case '1':                
                 $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Client Quoted')->first(['document']);
@@ -131,7 +135,7 @@ class HandleTemporalLicenceMail {
             ->send(new TemporalLicenceMailer($temporal_licence, request('mail_body'),$document_full_path));
 
         }else{
-            return back()->with('error','Mail NOT sent. This does not have email addresses.');
+            return back()->with('error','Mail NOT sent. This company does not have email addresses.');
         }
   }
 
