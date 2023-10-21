@@ -31,9 +31,9 @@ class NewAppsMailer extends Mailable
     public function build(){
         return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
                     ->replyTo('info@slotow.co.za')
-                    ->subject('ALTERATIONS - '.$this->licence->trading_name)
-                    ->markdown('emails.ecomms.mail_base_template');
-                  // ->attach($this->doc_path);
+                    ->subject('NEW APPLICATION - '.$this->licence->trading_name)
+                    ->markdown('emails.ecomms.mail_base_template')
+                    ->attach($this->doc_path);
                
     }
 

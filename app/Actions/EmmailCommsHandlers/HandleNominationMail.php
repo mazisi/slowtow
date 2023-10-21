@@ -29,6 +29,18 @@ class HandleNominationMail {
   
         $nomination = Nomination::with('licence.company')->whereSlug($request->nomination_slug)->firstOrFail();
 
+        if($nomination->licence->belongs_to == 'Company'){
+
+            if(is_null($nomination->licence->company->email)){
+              return back()->with('error','Mail not sent. This company does not have primary email.');
+             }
+ 
+         }else{
+            if(is_null($nomination->licence->people->email_address_1)){
+                return back()->with('error','Mail not sent. This person does not have primary email.');
+            }
+         }
+
         if(is_null($nomination->licence->company->email)){
             return back()->with('error','Mail NOT sent. Primary email address not found.');
         }
@@ -67,43 +79,7 @@ class HandleNominationMail {
                 return back()->with('error',' Document is not yet uploaded.');
             }
 
-            
-            $email = $nomination->licence->company->email;
-            $email1= $nomination->licence->company->email1;
-            $email2 = $nomination->licence->company->email2;
-
-
-            //If there is no primary email
-                if(! $email){
-                    return back()->with('error','Mail NOT sent. Primary email not found.');
-                }
-            //  Mail::to('mazisimsebele18@gmail.com')
-            //     ->cc(['mazisi@mrnlabs.com', 'test@gmail.com'])->send(new NominationMailer($nomination, $request->mail_body));
-
-
-            $full_document_path = env('BLOB_FILE_PATH').$get_doc->document;
-
-            if(! is_null($email) && $email1 && $email2){
-                Mail::to($email)
-                ->cc([$email1,'info@slotow.co.za'])
-                ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new NominationMailer($nomination, $request->mail_body,$full_document_path)); 
-            }
-        
-            elseif($email && $email1 && !$email2){
-                Mail::to($email)
-                ->cc([$email1, 'info@slotow.co.za'])
-                ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
-            }
-            
-            elseif($email && !$email1 && !$email2){
-                    Mail::to($email)
-                    ->cc('info@slotow.co.za')
-                    ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                    ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
-            }else{
-                return back()->with('error','Mail NOT sent. Company does not have email addresses.');
-            }
+           $this->handle($nomination,$get_doc->document);
              
             return back()->with('success','Mail sent successfully.');
         } catch (\Throwable $th) {
@@ -115,6 +91,73 @@ class HandleNominationMail {
         
     }
 
+    function handle($nomination, $document) {
+
+        $full_document_path = env('BLOB_FILE_PATH').$document;        
+    
+        if($nomination->licence->belongs_to == 'Company'){
+            $this->emailCompany($nomination, $full_document_path);
+        }else{
+            $this->emailPerson($nomination, $full_document_path);
+        }
+        
+       
+      }
+
+
+      function emailPerson($nomination, $full_document_path) {
+        $email = $nomination->licence->people->email_address_1; //primary email
+        $email1 = $nomination->licence->people->email_address_2;
+     
+    
+        if(! is_null($email) && $email1){
+            Mail::to($email)
+            ->cc([$email1,'info@slotow.co.za'])
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new NominationMailer($alteration, request('mail_body'), $full_document_path)); 
+        }
+    
+        elseif($email && !$email1){
+                Mail::to($email)
+                ->cc('info@slotow.co.za')
+                ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+                ->send(new NominationMailer($alteration, request('mail_body'), $full_document_path));
+        }else{
+            return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+        }
+    
+        
+    }
+
+    function emailCompany($nomination, $full_document_path) {
+
+        $email = $nomination->licence->company->email;
+        $email1= $nomination->licence->company->email1;
+        $email2 = $nomination->licence->company->email2;
+
+        if(! is_null($email) && $email1 && $email2){
+            Mail::to($email)
+            ->cc([$email1,'info@slotow.co.za'])
+            ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new NominationMailer($nomination, $request->mail_body,$full_document_path)); 
+        }
+    
+        elseif($email && $email1 && !$email2){
+            Mail::to($email)
+            ->cc([$email1, 'info@slotow.co.za'])
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
+        }
+        
+        elseif($email && !$email1 && !$email2){
+                Mail::to($email)
+                ->cc('info@slotow.co.za')
+                ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+                ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
+        }else{
+            return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+        }
+        
+    }
  
   function getDocumentType($nomination_id, $doc_type){
     $nomination_document = NominationDocument::where('nomination_id',$nomination_id)->where('doc_type',$doc_type)->first();

@@ -70,35 +70,7 @@ class HandleTransferMail {
                 return back()->with('error','Please upload required document.');
             }
             
-            $email = $transfer->licence->company->email;
-            $email1= $transfer->licence->company->email1;
-            $email2 = $transfer->licence->company->email2;
-
-
-                $document_full_path = env('BLOB_FILE_PATH').$get_doc->document;
-
-                if(! is_null($email) && $email1 && $email2){
-                    Mail::to($email)
-                    ->cc([$email1,'info@slotow.co.za'])
-                    ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])
-                    ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path)); 
-                }
-            
-                elseif($email && $email1 && !$email2){
-                    Mail::to($email)
-                    ->cc([$email1, 'info@slotow.co.za'])
-                    ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                    ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
-                }
-                
-                elseif($email && !$email1 && !$email2){
-                        Mail::to($email)
-                        ->cc('info@slotow.co.za')
-                        ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                        ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
-                }else{
-                    return back()->with('error','Mail NOT sent. Company does not have email addresses.');
-                }
+            $this->handle($transfer, $get_doc);
                
 
  
@@ -114,8 +86,74 @@ class HandleTransferMail {
         
     }
 
+    function handle($transfer, $get_doc){
+
+        $document_full_path = env('BLOB_FILE_PATH').$get_doc->document;
+
+        if($transfer->licence->belongs_to == 'Company'){
+            $this->emailCompany($transfer, $document_full_path);
+        }else{
+            $this->emailPerson($transfer, $document_full_path);
+        }
+
+        
+    }
+
+
+
+    function emailPerson($transfer, $document_full_path) {
+        $email = $transfer->licence->people->email_address_1; //primary email
+        $email1 = $transfer->licence->people->email_address_2;
+       
+        
+        if(! is_null($email) && $email1){
+            Mail::to($email)
+            ->cc([$email1,'info@slotow.co.za'])
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path)); 
+        }
     
-   
+        elseif($email && !$email1){
+                Mail::to($email)
+                ->cc('info@slotow.co.za')
+                ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+                ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
+        }else{
+            return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+        }
+    
+        
+    }
+    
+   function emailCompany($transfer, $document_full_path) {
+    
+    $email = $transfer->licence->company->email;
+    $email1= $transfer->licence->company->email1;
+    $email2 = $transfer->licence->company->email2;
+
+    if(! is_null($email) && $email1 && $email2){
+        Mail::to($email)
+        ->cc([$email1,'info@slotow.co.za'])
+        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])
+        ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path)); 
+    }
+
+    elseif($email && $email1 && !$email2){
+        Mail::to($email)
+        ->cc([$email1, 'info@slotow.co.za'])
+        ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+        ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
+    }
+    
+    elseif($email && !$email1 && !$email2){
+            Mail::to($email)
+            ->cc('info@slotow.co.za')
+            ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
+            ->send(new TransferMailer($transfer, request('mail_body'), $document_full_path));
+    }else{
+        return back()->with('error','Mail NOT sent. Company does not have email addresses.');
+    }
+   }
     function getDocumentType($transfer, $doc_type){
         $transfer_document = TransferDocument::where('licence_transfer_id',$transfer->id)->where('doc_type',$doc_type)->first();
         return $transfer_document;

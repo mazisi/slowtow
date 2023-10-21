@@ -34,7 +34,7 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached invoice in respect of the alteration’s application.</p>
-      <p><br>Many thanks,</p>,';
+      <p><br>Many thanks,</p>';
       
   }elseif ($renewal->status == '5') {//Payment To the liquour board
       $template = '<p>Good day,</p>

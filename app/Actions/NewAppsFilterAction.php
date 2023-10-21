@@ -577,8 +577,21 @@ class NewAppsFilterAction {
                       && !request('province')
                       && !request('licence_type')
                       && request('active_status') =='Inactive', 
-                function ($query){
-                    return $query->where('is_licence_active',0);                
+                    function ($query){
+                        return $query->where('is_licence_active',0);                
+                    })
+                    
+                    
+                    ->where(function ($query){ 
+                        $query->where('status','1')
+                            ->orWhere('status','2')
+                            ->orWhere('status','4')
+                            ->orWhere('status','7')
+                            ->orWhere('status','8')
+                            ->orWhere('status','10')
+                            ->orWhere('status','12')
+                            ->orWhere('status','14')
+                            ->orWhere('status','15');               
                 })
                 ->where('is_new_app',1)
                 ->orderBy('trading_name')->paginate(20)->withQueryString();
