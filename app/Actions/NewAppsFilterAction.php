@@ -13,7 +13,7 @@ class NewAppsFilterAction {
         ->when(request('term') 
             && !request('licence_date') 
             && !request('licence_type') 
-            && !request('active_status') 
+            && !request('status') 
             && !request('province'), 
             function ($query) {
               $query->where(function($query){
@@ -31,7 +31,7 @@ class NewAppsFilterAction {
         ->when(request('term') 
             && request('licence_date') 
             && !request('licence_type') 
-            && !request('active_status') 
+            && !request('status') 
             && !request('province'), 
             function ($query){
                 $query->whereMonth('licence_date',request('licence_date'))
@@ -46,7 +46,7 @@ class NewAppsFilterAction {
             //Search and province and licence date
                 ->when(request('term') 
                     && request('province') 
-                    && !request('active_status')
+                    && !request('status')
                     && !request('licence_type') 
                     && request('licence_date'),
                     function ($query){
@@ -64,7 +64,7 @@ class NewAppsFilterAction {
             ->when(request('term') 
                 && request('licence_date') 
                 && request('licence_type') 
-                && !request('active_status') 
+                && !request('status') 
                 && !request('province'),
                 function ($query){
                     $query->where('licence_type_id',request('licence_type'))
@@ -79,14 +79,14 @@ class NewAppsFilterAction {
                     //  });               
                 })
 
-// search and licence date and licence_type and activeStatus == Active
+// search and licence date and licence_type and activeStatus
             ->when(request('term') 
                 && request('licence_date') 
                 && request('licence_type') 
-                && request('active_status') == 'Active'
+                && request('status')
                 && !request('province'),
                 function ($query){
-                    $query->where('is_licence_active',true)
+                    $query->where('status',request('status'))
                           ->where('licence_type_id',request('licence_type'))
                           ->whereMonth('licence_date',request('licence_date'))
                           ->where(function ($query) {
@@ -97,34 +97,15 @@ class NewAppsFilterAction {
                 })
 
 
-
-//search and licence date and licence_type and activeStatus == Inactive
+// search and province and licence date and licence_type and activeStatus
                 ->when(request('term') 
                     && request('licence_date') 
                     && request('licence_type') 
-                    && request('active_status') == 'Inactive'
-                    && !request('province'),
-                    function ($query){
-                        $query->where('licence_type_id',request('licence_type'))
-                        ->whereMonth('licence_date',request('licence_date'))
-                        ->where('is_licence_active',0)
-                        ->where(function ($query) {
-                            $query->where('trading_name','LIKE','%'.request('term').'%')
-                            ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                            ->orWhere('licence_number','LIKE','%'.request('term').'%');
-                        });
-                                              
-                })
-
-// search and province and licence date and licence_type and activeStatus == Active
-                ->when(request('term') 
-                    && request('licence_date') 
-                    && request('licence_type') 
-                    && request('active_status') == 'Active'
+                    && request('status') 
                     && request('province'),
                     function ($query){ 
                         $query->where('province',request('province'))
-                              ->where('is_licence_active',1)
+                              ->where('status',request('status'))
                               ->where('licence_type_id',request('licence_type'))
                               ->whereMonth('licence_date',request('licence_date'))
                               ->where(function ($query) {
@@ -134,49 +115,17 @@ class NewAppsFilterAction {
                             });
                 })
 
-// search and licence date and licence_type and activeStatus == Inactive plus province
-                ->when(request('term') 
-                    && request('licence_date') 
-                    && request('licence_type') 
-                    && request('active_status') == 'Inactive'
-                    && request('province'),
-                    function ($query){ 
-                        $query->where('province', 'LIKE','%'.request('province').'%')
-                              ->where('is_licence_active',0)
-                              ->where('licence_type_id',request('licence_type'))
-                              ->whereMonth('licence_date',request('licence_date'))
-                              ->where(function ($query) {
-                                $query->where('trading_name','LIKE','%'.request('term').'%')
-                                ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                                ->orWhere('licence_number','LIKE','%'.request('term').'%');
-                            });
-                })
 
- // search and licence date and activeStatus == Inactive plus province-----------------------------------------------------------------
-                        ->when(request('term') 
-                            && request('licence_date') 
-                            && !request('licence_type') 
-                            && request('active_status') == 'Inactive'
-                            && request('province'),
-                        function ($query){
-                            $query->where('province',request('province'))
-                                ->where('is_licence_active',0)
-                                ->whereMonth('licence_date',request('licence_date'))
-                                ->where(function ($query) {
-                                    $query->where('trading_name','LIKE','%'.request('term').'%')
-                                    ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                                    ->orWhere('licence_number','LIKE','%'.request('term').'%');
-                                });
-                        })
+
 // search and province and licence_type and activeStatus == Active
                 ->when(request('term') 
                     && !request('licence_date') 
                     && request('licence_type') 
-                    && request('active_status') == 'Active'
+                    && request('status')
                     && request('province'),
                     function ($query){ 
                         $query->where('province',request('province'))
-                              ->where('is_licence_active',1)
+                              ->where('status',request('status'))
                               ->where('licence_type_id',request('licence_type'))
                               ->where(function ($query) {
                                 $query->where('trading_name','LIKE','%'.request('term').'%')
@@ -190,7 +139,7 @@ class NewAppsFilterAction {
                      ->when(request('term') 
                          && request('licence_date') 
                          && request('licence_type') 
-                         && !request('active_status')
+                         && !request('status')
                          && request('province'),
                      function ($query){
                          $query->whereMonth('licence_date',request('licence_date'))
@@ -203,14 +152,14 @@ class NewAppsFilterAction {
                             });
                      })
 
-// search and licence date and activeStatus == Inactive plus province
+// search and licence date and Status == Inactive plus province
                      ->when(request('term') 
                      && request('licence_date') 
                      && !request('licence_type') 
-                     && request('active_status') == 'Inactive'
+                     && request('status')
                      && !request('province'),
                  function ($query){
-                     $query->where('is_licence_active',0)
+                     $query->where('status',request('status'))
                          ->whereMonth('licence_date',request('licence_date'))
                          ->where(function ($query) {
                             $query->where('trading_name','LIKE','%'.request('term').'%')
@@ -224,11 +173,11 @@ class NewAppsFilterAction {
                          ->when(request('term') 
                                 && !request('licence_date') 
                                 && request('licence_type') 
-                                && request('active_status') == 'Inactive'
+                                && request('status')
                                 && !request('province'),
                      function ($query){
                          $query->where('licence_type_id',request('licence_type'))
-                             ->where('is_licence_active',0)
+                             ->where('status',request('status'))
                              ->where(function ($query) {
                                 $query->where('trading_name','LIKE','%'.request('term').'%')
                                 ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
@@ -239,7 +188,7 @@ class NewAppsFilterAction {
                 ->when(request('term') 
                     && request('province') 
                     && !request('licence_type') 
-                    && !request('active_status')
+                    && !request('status')
                     && !request('licence_date'),
                     function ($query){
                         $query->where('province', 'LIKE','%'.request('province').'%')
@@ -255,7 +204,7 @@ class NewAppsFilterAction {
                 ->when(request('term') 
                     && request('licence_type') 
                     && !request('province') 
-                    && !request('active_status')
+                    && !request('status')
                     && !request('licence_date'),
                     function ($query){ 
                         $query->where('licence_type_id',request('licence_type'))
@@ -265,14 +214,14 @@ class NewAppsFilterAction {
                                     ->orWhere('licence_number','LIKE','%'.request('term').'%');
                                 });            
                 })
-// search and activeStatus == Active 
+// search and activeStatus 
                  ->when(request('term') 
                     && !request('licence_date') 
                     && !request('licence_type') 
-                    && request('active_status') == 'Active'
+                    && request('status')
                     && !request('province'),
                     function ($query){
-                        $query->where('is_licence_active',true)
+                        $query->where('status',request('status'))
                                 ->where(function ($query) {
                                     $query->where('trading_name','LIKE','%'.request('term').'%')
                                     ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
@@ -280,33 +229,18 @@ class NewAppsFilterAction {
                                 });       
                 })
 
- // search and activeStatus == Inactive 
-                ->when(request('term') 
-                    && !request('licence_date') 
-                    && !request('licence_type') 
-                    && request('active_status') == 'Inactive'
-                    && !request('province'),
-                    function ($query){ 
-                        $query->where('is_licence_active',0)
-                        ->where(function ($query) {
-                            $query->where('trading_name','LIKE','%'.request('term').'%')
-                            ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                            ->orWhere('licence_number','LIKE','%'.request('term').'%');
-                        });         
-                })
-
 
           
           
-//Search and province and Active
+//Search and province and status
                 ->when(request('term') 
                     && request('province') 
                     && !request('licence_type') 
-                    && request('active_status') == 'Active'
+                    && request('status')
                     && !request('licence_date'),
                     function ($query){
                         $query->where('province', request('province'))
-                              ->where('is_licence_active', true)
+                              ->where('status', request('status'))
                               ->where(function ($query) {
                                 $query->where('trading_name','LIKE','%'.request('term').'%')
                                 ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
@@ -314,30 +248,14 @@ class NewAppsFilterAction {
                             });         
                 })
 
-//Search and province and Inactive
-                ->when(request('term') 
-                    && request('province') 
-                    && request('active_status') == 'Inactive'
-                    && !request('licence_type') 
-                    && !request('licence_date'),
-                    function ($query){
-                        $query->where('province',request('province'))
-                               ->where('is_licence_active', 0)
-                               ->where(function ($query) {
-                                $query->where('trading_name','LIKE','%'.request('term').'%')
-                                ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
-                                ->orWhere('licence_number','LIKE','%'.request('term').'%');
-                            });
-                })
-
   // search and licencetype and activeStatus == Active 
                 ->when(request('term') 
                         && !request('licence_date') 
                         && request('licence_type') 
-                        && request('active_status') === 'Active'
+                        && request('status')
                         && !request('province'),
                     function ($query){
-                        $query->where('is_licence_active',1)
+                        $query->where('status',request('status'))
                               ->where('licence_type_id',request('licence_type'))
                               ->where(function ($query) {
                                     $query->where('trading_name','LIKE','%'.request('term').'%')
@@ -352,19 +270,9 @@ class NewAppsFilterAction {
                     && !request('province')
                     && !request('licence_date') 
                     && request('licence_type') 
-                    && request('active_status') == 'Active',
-                    function ($query){ 
-                        $query->where('is_licence_active',true)
-                              ->where('licence_type_id',request('licence_type'));         
-                })
-//Inactive and licence_type
-                ->when(!request('term') 
-                    && !request('province')
-                    && !request('licence_date') 
-                    && request('licence_type') 
-                    && request('active_status') == 'Inactive',
-                    function ($query){ 
-                        $query->where('is_licence_active',0)
+                    && request('status'),
+                    function ($query){
+                        $query->where('status',request('status'))
                               ->where('licence_type_id',request('licence_type'));         
                 })
 
@@ -373,64 +281,38 @@ class NewAppsFilterAction {
             ->when(!request('term') 
             && request('licence_date') 
             && request('licence_type') 
-            && request('active_status') == 'Active'
+            && request('status')
             && !request('province'),
             function ($query){
-                $query->where('is_licence_active',1)
+                $query->where('status',request('status'))
                       ->where('licence_type_id',request('licence_type'))
                       ->whereMonth('licence_date',request('licence_date'));
             })
 
-// licence date and licence_type and activeStatus == Inactive
-        ->when(!request('term') 
-        && request('licence_date') 
-        && request('licence_type') 
-        && request('active_status') == 'Active'
-        && !request('province'),
-        function ($query){
-            $query->where('is_licence_active',0)
-                ->where('licence_type_id',request('licence_type'))
-                ->whereMonth('licence_date',request('licence_date'));
-        })
+
 //Inactive and licence_date
                 ->when(!request('term') && !request('licence_type') && !request('province')
                         && request('licence_date') 
-                        && request('active_status') == 'Inactive',
-                    function ($query){ 
+                        && request('status'),
+                    function ($query){
                         $query->whereMonth('licence_date',request('licence_date'))
-                              ->where('is_licence_active',0);
+                              ->where('status',request('status'));
                               
                 })
-//Active and licence_date
-                ->when(!request('term') && !request('licence_type') && !request('province')
-                    && request('licence_date') 
-                    && request('active_status') == 'Active',
-                    function ($query){ 
-                        $query->whereMonth('licence_date',request('licence_date'))
-                              ->where('is_licence_active',true);                              
-                })
 
-//Active and province
-                ->when(!request('term') && !request('licence_date') && !request('licence_type') && request('active_status') == 'Active'
-                       && request('province'),
-                    function ($query){ 
-                        $query->where('province', 'LIKE','%'.request('province').'%')
-                              ->where('is_licence_active',true);                              
-                })
 
-//Inactive and province
-                ->when(!request('term') && !request('licence_date') && !request('licence_type') 
-                       && request('active_status') == 'Inactive'
+//Status and province
+                ->when(!request('term') && !request('licence_date') && !request('licence_type') && request('status')
                        && request('province'),
                     function ($query){
                         $query->where('province', 'LIKE','%'.request('province').'%')
-                              ->where('is_licence_active',0);
-                              
+                              ->where('status',request('status'));                              
                 })
+
                 
 
 //Licence date and licence_type
-                ->when(!request('term') && !request('province') && !request('active_status') && request('licence_date') 
+                ->when(!request('term') && !request('province') && !request('status') && request('licence_date') 
                     && request('licence_type') ,
                     function ($query){
                         $query->where('licence_type_id',request('licence_type'))
@@ -438,7 +320,7 @@ class NewAppsFilterAction {
                 })
 
 //Licence date and province
-            ->when(!request('term') && request('province') && !request('active_status') && request('licence_date') 
+            ->when(!request('term') && request('province') && !request('status') && request('licence_date') 
             && !request('licence_type') ,
             function ($query){
                 $query->where('province',request('province'))
@@ -446,7 +328,7 @@ class NewAppsFilterAction {
             })
 
 //Licence type and province
-            ->when(!request('term') && request('province') && !request('active_status') && !request('licence_date') 
+            ->when(!request('term') && request('province') && !request('status') && !request('licence_date') 
             && request('licence_type') ,
             function ($query){
                 $query->where('province',request('province'))
@@ -456,20 +338,20 @@ class NewAppsFilterAction {
 //Licence date and licence_type and inactive and province
                 ->when(!request('term') 
                       && request('licence_date') 
-                      && request('active_status') == 'Inactive'
+                      && request('status')
                       && request('licence_type') 
                       && request('province'),
                     function ($query){
                         $query->whereMonth('licence_date',request('licence_date'))
                               ->where('licence_type_id',request('licence_type'))
                               ->where('province',request('province'))
-                              ->where('is_licence_active',0);         
+                              ->where('status',request('status'));         
                 })
 
 //Licence date and licence_type and province
                 ->when(!request('term') 
                       && request('licence_date') 
-                      && !request('active_status')
+                      && !request('status')
                       && request('licence_type') 
                       && request('province'),
                     function ($query){
@@ -477,48 +359,35 @@ class NewAppsFilterAction {
                               ->where('licence_type_id',request('licence_type'))
                               ->where('province',request('province'));         
                 })
-//Licence date and licence_type and Active and province
-                ->when(!request('term') 
-                && request('licence_date') 
-                && request('active_status') == 'Active'
-                && request('licence_type') 
-                && request('province'),
-                function ($query){
-                $query->whereMonth('licence_date',request('licence_date'))
-                        ->where('licence_type_id',request('licence_type'))
-                        ->where('province',request('province'))
-                        ->where('is_licence_active',1);         
-                })
-
 
 
  //Licence date and Active and province
         ->when(!request('term') 
         && request('licence_date') 
-        && request('active_status') == 'Active'
+        && request('status')
         && !request('licence_type') 
         && request('province'),
         function ($query){
         $query->whereMonth('licence_date',request('licence_date'))
                 ->where('province',request('province'))
-                ->where('is_licence_active',1);         
+                ->where('status',request('status'));         
         })
 
                 ->when(
                         !request('term') 
                         && !request('licence_date')
                         && !request('province')
-                        && request('active_status') == 'Active' 
+                        && request('status') 
                         && request('licence_type'), 
                         function ($query){ 
-                            return $query->where('is_licence_active',true)
+                            return $query->where('status',request('status'))
                             ->where('licence_type_id',request('licence_type'));               
                 })
 
                 ->when(!request('term') 
                         && !request('licence_date')
                         && !request('province')
-                        && !request('active_status')
+                        && !request('status')
                         && request('licence_type'), 
                     function ($query){ 
                         return $query->where('licence_type_id',request('licence_type'));                
@@ -527,34 +396,34 @@ class NewAppsFilterAction {
                     ->when(!request('term') 
                           && !request('licence_date')
                           && !request('province')
-                          && request('active_status') == 'Active' 
+                          && request('status') 
                           && request('licence_type'), 
-                    function ($query){ 
-                        return $query->where('is_licence_active',true)
+                    function ($query){
+                        return $query->where('status',request('status'))
                         ->where('licence_type_id',request('licence_type'));               
                 })
 
 
             ->when(!request('term') && request('licence_date') 
-            && request('active_status') =='Inactive' && request('licence_type'), 
+            && request('status') && request('licence_type'), 
                 function ($query){ 
                     return $query->whereMonth('licence_date',request('licence_date'))
                     ->where('licence_type_id',request('licence_type'))
-                    ->where('is_licence_active',0);                
+                    ->where('status',request('status'));                
                 })
 
-            ->when(request('active_status') =='Active'
+            ->when(request('status')
                         && !request('licence_date')
                         && !request('licence_type')
                         && !request('province')
                         && !request('term'), 
-                function ($query){ 
-                    return $query->where('is_licence_active',true);                
+                function ($query){
+                    $query->where('status',request('status'));                
                 })
             
             ->when(request('province')
                         && !request('term')
-                        && !request('active_status')
+                        && !request('status')
                         && !request('licence_date')
                         && !request('licence_type'), 
                 function ($query){ 
@@ -565,22 +434,14 @@ class NewAppsFilterAction {
 
             ->when(request('licence_date')
                         && !request('term')
-                        && !request('active_status')
+                        && !request('status')
                         && !request('province')
                         && !request('licence_type'), 
                 function ($query){
                     return $query->whereMonth('licence_date',request('licence_date'));                
                 })
 
-                ->when(!request('term') 
-                      && !request('licence_date')
-                      && !request('province')
-                      && !request('licence_type')
-                      && request('active_status') =='Inactive', 
-                    function ($query){
-                        return $query->where('is_licence_active',0);                
-                    })
-                    
+               
                     
                     ->where(function ($query){ 
                         $query->where('status','1')
@@ -593,6 +454,7 @@ class NewAppsFilterAction {
                             ->orWhere('status','14')
                             ->orWhere('status','15');               
                 })
+                ->whereNull('deleted_at')
                 ->where('is_new_app',1)
                 ->orderBy('trading_name')->paginate(20)->withQueryString();
   }

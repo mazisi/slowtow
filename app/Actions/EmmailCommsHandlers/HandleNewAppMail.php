@@ -47,7 +47,7 @@ class HandleNewAppMail {
             }
         }
         
-        $stage = '';
+      
         $licence_stage = '';  
         
         switch ($licence->status) {            
@@ -87,12 +87,12 @@ class HandleNewAppMail {
         
         
         if(is_null($get_doc)){
-                    $error_message = 'Quote Document Not Uploaded';                     
-                    return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+            $error_message = 'Quote Document Not Uploaded';                     
+            return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
         }
         
         $this->handle($licence, $get_doc->document_file);
-       return back()->with('success','Mail sent successfully.');
+        return back()->with('success','Mail sent successfully.');
 
     } catch (Throwable $th) {throw $th;
         $error_message = 'Server Error.';

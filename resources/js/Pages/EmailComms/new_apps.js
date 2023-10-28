@@ -26,13 +26,13 @@ export default {
     
 
     setup(props) {
-      const [search_query, status, licence_type, licence_date, province] = getUrlParam();
+      const [search_query, status_query, licence_type, licence_date, province] = getUrlParam();
     
         const term = search_query ? search_query : ref('')
 
         const form = useForm({
               term: term,
-              active_status: status ? status : '',
+              status: status_query ? status_query : '',
               licence_type: licence_type ? licence_type : '',
               licence_date: licence_date ? licence_date : '',
               province: province ? province : ''
@@ -72,7 +72,7 @@ export default {
         watch(term, _.debounce(function (value) {
           Inertia.get(route('get_new_app_template'), { 
             term: value, 
-            active_status: form.active_status,
+            status: form.status,
             licence_type: form.licence_type,
             licence_date: form.licence_date,
             province: form.province
@@ -91,7 +91,7 @@ export default {
         function getUrlParam(){
           const urlParams = new URLSearchParams(window.location.search);
           const search_query = urlParams.get('term')
-          const status = urlParams.get('active_status')
+          const status = urlParams.get('status_query')
           const licence_type = urlParams.get('licence_type');
           const licence_date = urlParams.get('licence_date');
           const province = urlParams.get('province');
@@ -124,9 +124,18 @@ export default {
           this.$inertia.get('/email-comms/temp-licences');
         }
 
+        
+      function resetFilter(){
+        form.status = '';
+        form.term = '';
+        form.licence_type = '';
+        form.licence_date = '';
+        form.province = '';
+      }
+
         return {
           getLicenceRenewals,getLicenceTransfers,getNominations,getAlterations,getTemporayLicences,
-          limit,
+          limit,resetFilter,
           computedProvinces,
           form,
           term,

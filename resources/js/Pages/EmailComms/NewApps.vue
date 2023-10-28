@@ -38,28 +38,35 @@
         type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
       </li>
     
-      <!-- <li class="nav-item" role="presentation">
-        <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-        type="button" role="tab" aria-controls="alterations" aria-selected="false"> Emails</button>
-      </li> -->
+      <li class="nav-item" role="presentation">
+        <button @click="resetFilter" class="nav-link btn btn-danger text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
+        type="button" role="tab" aria-controls="alterations" aria-selected="false"> Reset</button>
+      </li>
       
     </ul>
   <div class="col-12">
   <div class="row">
   <div  class="col-md-12 col-xl-12 col-lg-12">
   <div class="input-group input-group-outline null is-filled">
-  <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
+    <i class="fa fa-search h4"></i>&nbsp;&nbsp;&nbsp;
   <input v-model="term" placeholder="Search New Apps" type="text" class="form-control form-control-default" :autofocus="true">
   </div>
   </div>
   
   <div class="col-md-3 col-xl-3 col-lg-3 filters">
   <div class="input-group input-group-outline null is-filled">
-  <select @change="search" v-model="form.active_status" class="form-control form-control-default centered-select">
-  <option :value="''" disabled selected>Active/Inactive Status</option>
-  <option value="All">All</option>
-  <option value="Active">Active</option>
-  <option value="Inactive">Inactive</option>
+  <select @change="search" v-model="form.status" class="form-control form-control-default centered-select">
+  <option :value="''" disabled selected>Filter By Stage</option>
+  <option value="1">Client Quoted</option>
+  <option value="2">Client Invoiced</option>
+  <option value="4">Payment to the Liquor Board</option>
+  <option value="7">Application Lodged</option>
+  <option value="8">Initial Inspection</option>
+  <option value="10">Final Inspection</option>
+  <option value="12">Client Finalisation Invoice</option>
+  <option value="14">Activation Fee Paid</option>
+  <option value="15">Licence Issued</option>
+
   </select>
   
   </div>

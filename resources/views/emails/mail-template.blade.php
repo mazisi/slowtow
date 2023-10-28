@@ -8,19 +8,7 @@
 <title>Leon Slotow Associates</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-  .logo{
-    max-height: 20rem !important;
-    width: 260px;
-    height: 11rem;
-  }
-  .card-body{
-    padding: 0;
-  }
-  .bg-secondary{
-      color: #000;
-      background-color: #7b809a;
-      border-color: #7b809a;
-  }
+  
 </style>
 </head>
 
@@ -31,8 +19,6 @@
         <div class="col-10 mx-auto">
           <div class="card mt-4">
             <div class="card-body pb-0">
-
-              {!! $message_body !!}
 
               <div class="mt-3 bg-secondary" >
                 <img src="https://goverify.co.za/public/logo.png" class="logo" alt="Slotow Signature" />

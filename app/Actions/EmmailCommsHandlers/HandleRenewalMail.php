@@ -121,7 +121,8 @@ class HandleRenewalMail {
     if(! is_null($email) && $email1 && $email2){
         Mail::to($email)
         ->cc([$email1,'info@slotow.co.za'])
-        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new RenewalMailer($renewal, request('mail_body'),$full_document_path));
+        ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])
+        ->send(new RenewalMailer($renewal, request('mail_body'),$full_document_path));
     }
 
     elseif($email && $email1 && !$email2){
