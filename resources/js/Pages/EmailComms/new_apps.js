@@ -131,6 +131,8 @@ export default {
         form.licence_type = '';
         form.licence_date = '';
         form.province = '';
+        Inertia.get(route('get_new_app_template'));
+      
       }
 
         return {
