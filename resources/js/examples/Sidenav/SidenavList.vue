@@ -130,20 +130,6 @@
       " class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
 
 
-      <li v-if="$page.props.currentRoute == 'issues'" class="nav-item">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          collapseRef="/create-issue"
-          navText="Add New Issue"
-        >
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">control_point_duplicate</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-
       <li v-if="$page.props.currentRoute == 'companies' 
       || $page.props.currentRoute == 'view_company'
       && $page.props.auth.has_slowtow_admin_role 
@@ -182,14 +168,18 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences' && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
+      <li v-if="$page.props.currentRoute == 'licences' 
+              && ($page.props.auth.has_slowtow_admin_role 
+              || $page.props.auth.has_slowtow_user_role)
+
       " class="nav-item">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_licence'}"
-          collapseRef="/create-licence"
+          @click="showModal"
+          data-bs-toggle="modal" data-bs-target="#select-licence-type"
           navText="Existing licence"
         >
           <template v-slot:icon>
@@ -336,22 +326,9 @@
         <div class="collapse"></div>
       </li>
 
-      <li class="nav-item d-none" >
-        <sidenav-collapse 
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active: $page.props.currentRoute === 'issues'
-          || $page.props.currentRoute == 'create_issue'
-          || $page.props.currentRoute == 'view_issue'}"
-          collapseRef="/issues"
-          navText="Issues">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">bug_report</i>            
-          </template>
-        </sidenav-collapse>
-      </li>
+
       <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
+      <RetailWholesaleModal/>
 
     </ul>
   </div>
@@ -361,9 +338,8 @@ import SidenavCollapse from "./SidenavCollapse.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 import CompanyAdminVue from "./CompanyAdmin.vue";
 import LicenceActions from "./LicenceActions.vue";
-import { usePage } from '@inertiajs/inertia-vue3';
+import RetailWholesaleModal from "./RetailWholesaleModal.vue";
 import { Inertia } from '@inertiajs/inertia'
-import { computed} from 'vue';
 
 export default {
   name: "SidenavList",
@@ -372,6 +348,7 @@ export default {
   },
   data() {
     return {
+      showModal: false,
       title: "NavBar",
       controls: "dashboardsExamples",
       isActive: "active"
@@ -381,9 +358,15 @@ export default {
     SidenavCollapse,
     Link,
     CompanyAdminVue,
-    LicenceActions
+    LicenceActions,
+    RetailWholesaleModal
   },
   methods: {
+
+    showModal(){
+      this.showModal=true;
+      alert('cool')
+    },
     goBack(){
       history.back()
       
