@@ -134,6 +134,8 @@
       </div>
       <div v-if="errors.address2" class="text-danger">{{ errors.address2 }}</div>
     </div> 
+
+     
   
     <div class="col-4 columns">
       <div class="input-group input-group-outline null is-filled ">
@@ -146,20 +148,27 @@
 
    
 
-    <div class="col-4 columns" v-if="licence.belongs_to ==='Individual'">
-      <div class="input-group input-group-outline null is-filled">
-      <label class="form-label">ID Number</label>
-      <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" v-model="form.id_or_passport" >
-      </div>
-    </div>
+    <TextInputComponent v-if="form.belongs_to ==='Individual'"
+    :inputType="'text'"
+    :required="true"
+    :disabled="true"
+    :label="'ID Number'" 
+    :column="'col-4'" 
+    :value="licence.people.id_or_passport"
+    :errors="errors.trading_name "
+    input_id="belongs-to-company"
+  />
 
-      <div class="col-4 columns" v-if="licence.belongs_to === 'Company'">
-        <div class="input-group input-group-outline null is-filled">
-        <label class="form-label">Reg Number</label>
-        <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" v-model="reg_number" >
-        </div>
-      </div>
-
+  <TextInputComponent v-if="form.belongs_to ==='Company'"
+  :inputType="'text'"
+  :required="true"
+  :disabled="true"
+  :label="'Company Registration Number'" 
+  :column="'col-4'" 
+  :value="licence.company.reg_number"
+  :errors="errors.trading_name "
+  input_id="belongs-to-company"
+/>
       
 
   
@@ -286,6 +295,7 @@
   import common from '../common-js/common.js';
   import { computed } from 'vue';
   import Task from "../Tasks/Task.vue";
+  import TextInputComponent from '../components/input-components/TextInputComponent.vue';
   
   export default {
    props: {
@@ -322,11 +332,11 @@
             postal_code: props.licence.postal_code,
             id_number: props.licence.people ? props.licence.people.id_or_passport : '',
             reg_number: props.licence.company ? props.licence.company.reg_number : '',
-            company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
-            person_id: props.licence.belongs_to === 'Individual' ? props.licence.people.id : '',
+            company_id: props.licence.belongs_to == 'Company' ? props.licence.company.id : '',
+            person_id: props.licence.belongs_to == 'Individual' ? props.licence.people.id : '',
              
       })
-
+console.log(form)
       function submit() {
         form.patch(`/update-new-app/${props.licence.slug}`, {
           onSuccess: () => { 
@@ -395,6 +405,7 @@
       Layout,
       Link,
       Head,
+      TextInputComponent,
       Multiselect,
       Banner,
       Task,

@@ -134,6 +134,7 @@ import Layout from "../../Shared/Layout.vue";
           }
         }
   
+        
       function submitDocument(){
         uploadDoc.post('/upload-licence-document', {
           preserveScroll: true,
@@ -294,9 +295,67 @@ import Layout from "../../Shared/Layout.vue";
                })
          }
 
+         function getStatus(status_param) {
+          let status;
+          switch (status_param) {
+            case '10':
+              status = 'Client Quoted'
+              break;
+              case '20':
+              status = 'Deposit Invoice'
+              break;
+              case '30':
+              status = 'Deposit Paid'
+              break;
+              case '40':
+              status = 'Payment to the Liquor Board'
+              break;
+              case '50':
+              status = 'Prepare New Application'
+              break;
+              case '60':
+              status = 'Prepare New Application'
+              break;
+              case '70':
+              status = 'Application Lodged'
+              break;
+              case '80':
+              status = 'Additional Documents/Information'
+              break;  
+              case '90':
+              status = 'Initial Inspection'
+              break;
+              case '100':
+              status = 'Final Inspection'
+              break;
+              case '110':
+              status = 'Activation Fee Requested'
+              break;
+              case '120':
+              status = 'Client Finalisation Invoice'
+              break; 
+              case '130':
+              status = 'Finalisation Paid'
+              break;
+              case '140':
+              status = 'Activation Fee Paid'
+              break;
+              case '150':
+              status = 'Licence Issued'
+              break;
+            case '160':
+              status = 'Licence Delivered'
+              break;
+            default:
+              status='Not Set';
+              break;
+          }
+          return status;
+        }
+
       return { 
         viewFile,checkingFileProgress,notify,
-        form,show_modal,file_size,
+        form,show_modal,file_size,getStatus,
         file_name,getFileName,updateRegistrationDate,
         editBoardRequestForm,
         file_has_apostrophe,
