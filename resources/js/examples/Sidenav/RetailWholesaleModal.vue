@@ -13,10 +13,10 @@
           
             <div class="text-center w-100">
               <h6 class="mt-3">Select Licence Type!</h6>
-              <a href="/create-licence?type='wholesale'" class="mb-0 btn btn-dark me-2" as="button">
+              <a @click="redirect('wholesale')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
                 <i class="fab fa-twitter me-1" aria-hidden="true"></i> 
                 Retail Liquor Licence </a>
-                <a href="/create-licence?type='retail'" class="mb-0 btn btn-dark me-2" as="button">
+                <a @click="redirect('retail')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
                   <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> 
                   Wholesale Liquor Licence
                 </a>
@@ -34,3 +34,13 @@
     </div>
   </div>
 </template>
+
+<script>
+export default {
+  methods: {
+    redirect(type) {
+      this.$emit('redirect-with-type', type);
+    },
+  },
+};
+</script>

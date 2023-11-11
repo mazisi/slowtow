@@ -328,7 +328,7 @@
 
 
       <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
-      <RetailWholesaleModal/>
+      <RetailWholesaleModal @redirect-with-type="redirectToCreateLicence"/>
 
     </ul>
   </div>
@@ -362,6 +362,11 @@ export default {
     RetailWholesaleModal
   },
   methods: {
+
+    redirectToCreateLicence(value) {
+      console.log('Value received from child component:', value);
+      Inertia
+    },
 
     showModal(){
       this.showModal=true;
