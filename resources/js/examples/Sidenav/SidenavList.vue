@@ -160,7 +160,7 @@
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_person'}"
           collapseRef="/create-person"
-          navText="New Person"
+          navText="New Individual"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">add_ic_call</i>
@@ -363,9 +363,8 @@ export default {
   },
   methods: {
 
-    redirectToCreateLicence(value) {
-      console.log('Value received from child component:', value);
-      Inertia
+    redirectToCreateLicence(type) {
+      Inertia.get(`/create-licence?type=${type}`)
     },
 
     showModal(){

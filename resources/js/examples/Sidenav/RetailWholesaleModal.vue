@@ -1,5 +1,5 @@
 <template>
-  <div  class="modal fade" id="select-licence-type" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div v-if="show_modal" class="modal fade" id="select-licence-type" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -13,10 +13,10 @@
           
             <div class="text-center w-100">
               <h6 class="mt-3">Select Licence Type!</h6>
-              <a @click="redirect('wholesale')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
+              <a @click="redirect('retail')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
                 <i class="fab fa-twitter me-1" aria-hidden="true"></i> 
                 Retail Liquor Licence </a>
-                <a @click="redirect('retail')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
+                <a @click="redirect('wholesale')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
                   <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> 
                   Wholesale Liquor Licence
                 </a>
@@ -26,7 +26,7 @@
         </div>
       </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
           
         </div>
       
@@ -37,8 +37,16 @@
 
 <script>
 export default {
+  data(){
+    return{
+      show_modal : true
+    }
+    
+  },
   methods: {
     redirect(type) {
+      this.show_modal= false
+      document.querySelector('.modal-backdrop').remove();
       this.$emit('redirect-with-type', type);
     },
   },

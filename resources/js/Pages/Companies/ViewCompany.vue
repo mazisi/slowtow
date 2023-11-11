@@ -689,7 +689,7 @@ v-model="form.business_address"
           <div class="input-group input-group-outline null is-filled">
             <Multiselect
                 v-model="addCompanyUserForm.person_id"
-                placeholder="Search Person...."
+                placeholder="Search Individual...."
                 :options="people_options"
                 :searchable="true"
               />

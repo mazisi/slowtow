@@ -74,7 +74,7 @@
     <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
     <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
-    <option value="Person">Person</option>
+    <option value="Individual">Individual</option>
     </select>
     </div>
     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
@@ -92,12 +92,12 @@
               />              
           </div>
 
-          <div class="col-4 columns" v-else-if="form.belongs_to === 'Person' ">
+          <div class="col-4 columns" v-else-if="form.belongs_to === 'Individual' ">
             <Multiselect
               :options="peopleOptions"
               v-model="form.person_id"
               :searchable="true"
-              placeholder="Search Person..."
+              placeholder="Search Individual..."
               class="form-label"
             />
         </div>
@@ -115,13 +115,13 @@
               />   
       </div>
 
-      <div class="col-4 columns" v-else-if="form.belongs_to === 'Person' && $page.props.auth.has_slowtow_user_role">
+      <div class="col-4 columns" v-else-if="form.belongs_to === 'Individual' && $page.props.auth.has_slowtow_user_role">
         <Multiselect
           :options="peopleOptions"
           v-model="form.person_id"
           :searchable="true"
           :disabled="true"
-          placeholder="Search Person..."
+          placeholder="Search Individual..."
           class="form-label"
         />
     </div> 
@@ -146,7 +146,7 @@
 
    
 
-    <div class="col-4 columns" v-if="licence.belongs_to ==='Person'">
+    <div class="col-4 columns" v-if="licence.belongs_to ==='Individual'">
       <div class="input-group input-group-outline null is-filled">
       <label class="form-label">ID Number</label>
       <input title="You can`t edit this field" readonly type="text" class="form-control form-control-default" v-model="form.id_or_passport" >
@@ -323,7 +323,7 @@
             id_number: props.licence.people ? props.licence.people.id_or_passport : '',
             reg_number: props.licence.company ? props.licence.company.reg_number : '',
             company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
-            person_id: props.licence.belongs_to === 'Person' ? props.licence.people.id : '',
+            person_id: props.licence.belongs_to === 'Individual' ? props.licence.people.id : '',
              
       })
 

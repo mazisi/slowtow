@@ -223,7 +223,7 @@
       <select v-model="form.applicant" class="form-control form-control-default">
       <option :value="''" disabled selected>Select Applicant</option>
       <option value="Company">Company</option>
-      <option value="Person">Person</option>
+      <option value="Individual">Individual</option>
       </select>
       </div>
   </div>

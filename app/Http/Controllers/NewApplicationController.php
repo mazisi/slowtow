@@ -22,7 +22,7 @@ class NewApplicationController extends Controller
         if(request('variation') && request('variation') == 'Company'){
             $comp = Company::whereId(request('id'))->first(['reg_number']);
             $this->get_reg_num_or_id_number = $comp->reg_number;
-          }elseif(request('variation') && request('variation') == 'Person'){
+          }elseif(request('variation') && request('variation') == 'Individual'){
            $person = People::whereId(request('id'))->first(['id_or_passport']);
            $this->get_reg_num_or_id_number = $person->id_or_passport;
           }
@@ -44,7 +44,7 @@ class NewApplicationController extends Controller
             $request->validate([
                 'trading_name' => 'required',
                 'licence_type' => 'required|exists:licence_types,id',
-                'belongs_to' => 'required|in:Company,Person',
+                'belongs_to' => 'required|in:Company,Individual',
                 'board_region' => 'required' 
                ]);
         
@@ -59,7 +59,7 @@ class NewApplicationController extends Controller
                 'licence_type_id' => $request->licence_type,
                 'belongs_to' => $request->belongs_to,
                 'company_id' => $request->belongs_to === 'Company' ? $request->company : NULL,
-                'people_id' => $request->belongs_to === 'Person' ? $request->person: NULL,
+                'people_id' => $request->belongs_to === 'Individual' ? $request->person: NULL,
                 'board_region' => $request->board_region,
                 'is_new_app' => true,
                 'board_region' => $request->board_region,

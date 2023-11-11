@@ -38,7 +38,7 @@
     <select v-model="form.belongs_to" class="form-control form-control-default" required>
     <option :value="''" disabled selected>Select Applicant</option>
     <option value="Company">Company</option>
-    <option value="Person">Person</option>
+    <option value="Individual">Individual</option>
     </select>
     </div>
     <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
@@ -58,10 +58,10 @@
   <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
   </div>
 
-  <div class="col-12 columns" v-if="form.belongs_to ==='Person'">
+  <div class="col-12 columns" v-if="form.belongs_to ==='Individual'">
     <Multiselect
         v-model="form.person"
-           placeholder="Search Person"
+           placeholder="Search Individual"
            :options="persons"
            :searchable="true"
            @select="selectApplicant"
@@ -73,7 +73,7 @@
 
    
 
-    <TextInputComponent v-if="form.belongs_to ==='Person'"
+    <TextInputComponent v-if="form.belongs_to ==='Individual'"
       :inputType="'text'"
       :required="true"
       :disabled="true"

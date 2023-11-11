@@ -64,9 +64,9 @@ export default {
          renewal_amount: props.licence.renewal_amount,
          latest_renewal: props.licence.latest_renewal,
          company: props.licence.belongs_to === 'Company' ? props.licence.company.name : '',
-         person: props.licence.belongs_to === 'Person' ? props.licence.people.full_name : '',
+         person: props.licence.belongs_to === 'Individual' ? props.licence.people.full_name : '',
          company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
-         person_id: props.licence.belongs_to === 'Person' ? props.licence.people.id : '',
+         person_id: props.licence.belongs_to === 'Individual' ? props.licence.people.id : '',
          change_company: '',  
     })
 

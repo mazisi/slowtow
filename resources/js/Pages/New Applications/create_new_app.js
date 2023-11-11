@@ -70,15 +70,15 @@
             filterForm.variation = 'Company';
             filterForm.id = form.company;
             form.person='';
-          }else if(form.belongs_to === 'Person'){
-            filterForm.variation = 'Person';
+          }else if(form.belongs_to === 'Individual'){
+            filterForm.variation = 'Individual';
             filterForm.id = form.person;
             form.company='';
           }
           
           filterForm.get(`/create-new-app?id=${filterForm.id}`, {
                       onStart: () => { 
-                        let mess = filterForm.variation === 'Person' ? ' ID Number' : ' Registration Number';
+                        let mess = filterForm.variation === 'Individual' ? ' ID Number' : ' Registration Number';
                         getchIdOrRegNumber(mess);
                       },
             preserveScroll: true,

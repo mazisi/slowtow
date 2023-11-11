@@ -172,9 +172,9 @@ export default {
    <div v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</div>
    </div>
 
-   <div v-if="form.belongs_to =='Person'" class="col-md-4 columns">
+   <div v-if="form.belongs_to =='Individual'" class="col-md-4 columns">
     <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Person Name</label>
+    <label class="form-label">Individual Name</label>
     <input type="text" disabled class="form-control form-control-default" v-model="form.person" >
      </div>
    <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
