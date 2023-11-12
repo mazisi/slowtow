@@ -314,7 +314,7 @@ Route::group(['middleware' => ['guest']], function () {
         Route::post('/submit-contacts',[ContactController::class,'store'])->name('submit_contacts');
 
         Route::delete('/delete-contact/{id}',[ContactController::class,'destroy'])->name('delete_contact');
-
+        Route::get('/test',[ContactController::class,'test'])->name('test');
 
 
         //Reports
