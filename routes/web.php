@@ -67,6 +67,7 @@ use App\Http\Controllers\NominationEmailCommsController;
 use App\Actions\EmmailCommsHandlers\HandleAlterationMail;
 use App\Actions\EmmailCommsHandlers\HandleNominationMail;
 use App\Actions\EmmailCommsHandlers\HandleTemporalLicenceMail;
+use App\Http\Controllers\AdditionalDocsController;
 use App\Http\Controllers\EmailComms\NewAppEmailCommsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 use App\Http\Controllers\EmailComms\TransferEmailCommsController;
@@ -196,6 +197,9 @@ Route::group(['middleware' => ['guest']], function () {
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
         Route::patch('/update-licence-active-status/{slug}',[LicenceController::class,'updateActiveStatus']);
+
+        //Additional Docs Stage
+        Route::post('/store-additional-docs',[AdditionalDocsController::class,'store'])->name('submit_additional_doc');
 
 
 

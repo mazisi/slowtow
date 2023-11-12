@@ -755,13 +755,17 @@
 
 <div class="col-md-6 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="application-logded" type="checkbox" 
+  <input class="active-checkbox" id="additional-docs" type="checkbox" 
   @input="pushData($event,80)" :checked="licence.status >= 80" value="80">
-  <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Additional Documents/Information  </label>
+  <label for="additional-docs" class="form-check-label text-body text-truncate status-heading"> Additional Documents/Information  </label>
   </div>
   </div>
     
-  <AdditionalDocsTableComponent/>
+  <AdditionalDocsComponent 
+  :licence_id="licence.id" 
+  :success="success" 
+  :error="error" 
+  :errors="errors"/>
 
 <hr/>
 
@@ -1364,22 +1368,7 @@
     margin-top: -1.4rem;
   }
 
-  .table thead th {
-    padding: 0;
-    font-weight: 400;
-    }
-    .upload-btn{
-      float: right!important;
-    }
-    #has-header{
-  margin-left: 3px;
-}
-#labelDescription {
-            border: none;
-            border: 1px solid #ced4da; 
-            border-radius: 0;
-            resize: none;
-        }
+  
   </style>
 
   <script src="./registration.js"></script>
