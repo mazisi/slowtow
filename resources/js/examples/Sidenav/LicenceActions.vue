@@ -26,7 +26,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'renew_licence'}"
@@ -39,7 +39,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_history'}"
@@ -52,7 +52,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'transfer_history' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'transfer_history' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
@@ -65,7 +65,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
@@ -78,7 +78,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'nominations' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'nominations' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'nominate'}"
@@ -91,7 +91,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'alterations'}"
@@ -104,7 +104,7 @@ export default {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'alterations' && $page.props.viewed_licence.status >= 15"
+      <li v-if="$page.props.currentRoute == 'alterations' && $page.props.viewed_licence.status >= 150"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"

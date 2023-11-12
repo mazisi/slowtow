@@ -214,13 +214,14 @@ class NewApplicationController extends Controller
         $status = '';
         if($request->status){
             if($request->unChecked){
-                $status = intval($request->status[0]) - 1;
+                $status = intval($request->status[0]) - 10;
             }else{
                 $status = $request->status[0];
             }
         }
+        
         //Start new nomination
-        if($status >= 15){
+        if($status >= 150){
             $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
             if(is_null($nom)){
                 Nomination::create([//begin nomination

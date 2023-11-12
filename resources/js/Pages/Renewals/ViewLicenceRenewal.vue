@@ -30,13 +30,8 @@
    <h6>Process Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
     <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
-       <span class="font-weight-bold ms-1" v-if="renewal.status == '1'">Client Quoted</span>
-      <span v-if="renewal.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
-      <span v-if="renewal.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
-      <span v-if="renewal.status == '4'" class="font-weight-bold ms-1">Payment To The Liquor Board</span>
-      <span v-if="renewal.status == '5'" class="font-weight-bold ms-1">Renewal Issued</span>
-      <span v-if="renewal.status == '6'" class="font-weight-bold ms-1">Renewal Delivered</span>
-      <span v-else class="font-weight-bold ms-1"></span>
+       
+      <span class="font-weight-bold ms-1">{{ getStatus(renewal.status)}}</span>
     </p>
    
   </div>
@@ -56,8 +51,8 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-quoted" class="active-checkbox" type="checkbox" 
-:checked="renewal.status >= '1'"
-@input="pushData($event,1)" value="1">
+:checked="renewal.status >= '10'"
+@input="pushData($event,10)" value="10">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div> 
@@ -89,9 +84,9 @@
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="client-invoiced"  type="checkbox" value="2"
-@input="pushData($event,2)" 
-:checked="renewal.status >= '2'">
+<input class="active-checkbox" id="client-invoiced"  type="checkbox" value="20"
+@input="pushData($event,20)" 
+:checked="renewal.status >= '20'">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
@@ -125,7 +120,7 @@
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid" type="checkbox" 
-@input="pushData($event,3)" value="3" :checked="renewal.status >= '3'">
+@input="pushData($event,30)" value="30" :checked="renewal.status >= '30'">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -162,8 +157,8 @@
 
 <div class="col-md-5 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,4)" value="4"
-:checked="renewal.status >= '4'">
+<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,40)" value="40"
+:checked="renewal.status >= '40'">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
@@ -227,7 +222,7 @@
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox" 
-@input="pushData($event,5)" value="5" :checked="renewal.status >= 5">
+@input="pushData($event,50)" value="50" :checked="renewal.status >= 50">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Renewal Issued</label>
 </div>
 </div> 
@@ -298,8 +293,8 @@
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="delivered" type="checkbox" value="6"
-@input="pushData($event,6)" :checked="renewal.status == '6'">
+<input class="active-checkbox" id="delivered" type="checkbox" value="60"
+@input="pushData($event,60)" :checked="renewal.status == '60'">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Renewal Delivered</label>
 </div>
 </div>

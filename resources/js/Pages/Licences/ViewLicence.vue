@@ -135,6 +135,7 @@
     </div>
 
   <TextInputComponent
+  v-if="licence.status >= 150"
     v-model="licence.licence_date"
     :disabled="true" 
     :column="'col-md-12'" 
@@ -250,7 +251,7 @@
 
 
 <TextInputComponent
-    v-if="licence.status >= 8"
+    v-if="licence.status >= 150"
     v-model="form.latest_renewal" 
     :column="'col-12'" 
     :label="'Latest Renewal'" 
@@ -260,7 +261,7 @@
     :inputType="'text'"
 />
 
-<div class="input-group-custom mb-2">
+<div class="input-group-custom mb-2" v-if="licence.status >= 150">
   <div class="add-on">R</div>
   <input type="number" class="input-field form-control-default" v-model="form.renewal_amount" placeholder="Renewal amount">
 </div>

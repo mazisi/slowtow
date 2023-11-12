@@ -7,6 +7,7 @@ import Layout from "../../Shared/Layout.vue";
   import Banner from '../components/Banner.vue';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
+  import AdditionalDocsTableComponent from './AdditionalDocsTableComponent.vue';
   
   export default {
     props: {
@@ -358,7 +359,7 @@ import Layout from "../../Shared/Layout.vue";
         form,show_modal,file_size,getStatus,
         file_name,getFileName,updateRegistrationDate,
         editBoardRequestForm,
-        file_has_apostrophe,
+        file_has_apostrophe,AdditionalDocsTableComponent,
         editBoardRequest,
         updateBoardRequest,
         updateRegistration,

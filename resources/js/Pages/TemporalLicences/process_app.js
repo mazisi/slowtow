@@ -222,6 +222,44 @@ export default {
             toast.loading(message);
         }
 
+
+        function getStatus(status_param) {
+          let status;
+
+          switch (status_param) {
+            case '10':
+              status = 'Client Quoted'
+              break;
+              case '20':
+              status = 'Client Invoiced'
+              break;
+              case '30':
+              status = 'Client Paid'
+              break;
+              case '40':
+              status = 'Collate Temporary Licence Documents'
+              break;
+              case '50':
+              status = 'Payment To The Liquor Board'
+              break;
+              case '60':
+              status = 'Scanned Application'
+              break; 
+              case '70':
+              status = 'Temporary Licence Lodged'
+              break; 
+              case '80':
+              status = 'Temporary Licence Issued'
+              break; 
+              case '90':
+              status = 'Temporary Licence Delivered'
+              break;              
+            default:
+              status='Not Set';
+              break;
+          }
+          return status;
+        }
        
 
          function viewFile(model_id, alt_model='') {
@@ -243,7 +281,7 @@ export default {
 
     return { year,form,show_modal,
      updateLicence,file_name,show_file_name,getFileName,
-     getRenewalYear, pushData,uploadDoc,
+     getRenewalYear, pushData,uploadDoc,getStatus,
      getDocType, submitDocument,file_has_apostrophe,
      computeDocumentDate,deleteDocument,
      updateDate,

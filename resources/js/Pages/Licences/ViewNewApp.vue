@@ -174,7 +174,7 @@
   
 
 
-   <div class="col-4 columns" v-if="licence.status >= 15">            
+   <div class="col-4 columns" v-if="licence.status >= 150">            
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Latest Renewal</label>
     <input type="text" class="form-control form-control-default" v-model="form.latest_renewal">

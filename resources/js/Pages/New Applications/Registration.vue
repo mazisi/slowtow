@@ -761,39 +761,7 @@
   </div>
   </div>
     
-  
-   <template v-if="licence.application_lodged_at">   
-    <div class="col-md-4 columns mb-4">
-      <div class="input-group input-group-outline null is-filled ">
-      <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
-       </div>
-     <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
-  </div>
-
-    <div class="col-md-1 columns">
-      <button v-if="licence.application_lodged_at" 
-      
-      @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-    </div>
-     </template>
-     
-     <template v-else>
-      <div class="col-md-4 columns mb-4">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Date</label>
-        <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
-         </div>
-       <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
-    </div>
-
-      <div class="col-md-1 columns">
-        <button v-if="$page.props.auth.has_slowtow_admin_role" 
-         
-        @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-      </div>      
-       
-     </template> 
+  <AdditionalDocsTableComponent/>
 
 <hr/>
 
@@ -1396,7 +1364,22 @@
     margin-top: -1.4rem;
   }
 
-  
+  .table thead th {
+    padding: 0;
+    font-weight: 400;
+    }
+    .upload-btn{
+      float: right!important;
+    }
+    #has-header{
+  margin-left: 3px;
+}
+#labelDescription {
+            border: none;
+            border: 1px solid #ced4da; 
+            border-radius: 0;
+            resize: none;
+        }
   </style>
 
   <script src="./registration.js"></script>
