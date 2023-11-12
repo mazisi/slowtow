@@ -116,7 +116,10 @@ class ContactController extends Controller{
        }
        return redirect(route('contacts'))->with('error','Error deleting contact.');
     }
-
+function test() {
+    return Inertia::render('Test');
+    
+}
 
 
 }

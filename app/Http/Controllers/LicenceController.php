@@ -43,7 +43,7 @@ class LicenceController extends Controller
     public function store(Request $request){
        if($request->belongs_to === 'Company'){
           $request->validate(["company" => "required|exists:companies,id"]);
-       }elseif($request->belongs_to === 'Person'){
+       }elseif($request->belongs_to === 'Individual'){
            $request->validate([ "person" => "required|exists:people,id"]);
        }
        $request->validate([

@@ -50,7 +50,7 @@
   <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
   <option :value="''" disabled selected>Select Applicant</option>
   <option value="Company">Company</option>
-  <option value="Person">Person</option>
+  <option value="Individual">Individual</option>
   </select>
   </div>
   <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
@@ -68,10 +68,10 @@
 </div>
 
 
-<div class="col-6 columns" v-if="form.belongs_to === 'Person'">
+<div class="col-6 columns" v-if="form.belongs_to === 'Individual'">
   <Multiselect
       v-model="form.person"
-         placeholder="Search Person"
+         placeholder="Search Individual"
          :options="people_options"
          :searchable="true"
          style="margin:top: 1rem;"

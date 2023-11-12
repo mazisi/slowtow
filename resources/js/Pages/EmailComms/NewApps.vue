@@ -138,7 +138,7 @@
     <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_number ? licence.licence_number : '' ">{{ licence.licence_number ? licence.licence_number : ''}}</Link></td>
     <!-- <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_date">{{ licence.licence_date }}</Link></td> -->
     <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_type.licence_type">{{ licence.licence_type ? licence.licence_type.licence_type : '' }}</Link></td>
-    <!-- <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.belongs_to == 'Person' ? licence.people.full_name :licence.company.name }}</Link></td> -->
+    <!-- <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.belongs_to == 'Individual' ? licence.people.full_name :licence.company.name }}</Link></td> -->
   
     <td class="align-middle text-center">
       <Link :href="`/email-comms/get-mail-template/${licence.slug}/new-apps`" class="text-secondary text-center font-weight-bold text-xs"> 

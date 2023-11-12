@@ -28,17 +28,17 @@ class TransferLicenceController extends Controller
     }
 
     public function store(Request $request,$slug){
-      if($request->belongs_to === 'Person'){
+      if($request->belongs_to === 'Individual'){
           $request->validate([
             "new_person" => "required|exists:people,id",
-            "belongs_to" => "required|in:Person,Company",
-            "transfered_from" => "required|in:Person,Company"
+            "belongs_to" => "required|in:Individual,Company",
+            "transfered_from" => "required|in:Individual,Company"
         ]);
       }else{
             $request->validate([
               "new_company" => "required|exists:companies,id",
-              "belongs_to" => "required|in:Person,Company",
-              "transfered_from" => "required|in:Person,Company"
+              "belongs_to" => "required|in:Individual,Company",
+              "transfered_from" => "required|in:Individual,Company"
           ]);
       }
        
@@ -48,7 +48,7 @@ class TransferLicenceController extends Controller
         'transfered_to' => $request->belongs_to,
         'transfered_from' => $request->transfered_from,
         'licence_id'=> $request->licence_id,
-        'old_people_id'=> $request->transfered_from ==='Person' ? $request->old_company_id : NULL,
+        'old_people_id'=> $request->transfered_from ==='Individual' ? $request->old_company_id : NULL,
          'old_company_id' => $request->transfered_from === 'Company' ? $request->old_company_id : NULL,
         'company_id'=> $request->new_company,
         'people_id'=> $request->new_person,
@@ -67,7 +67,7 @@ class TransferLicenceController extends Controller
                   Licence::whereId($transfer->licence_id)->update([
                     'people_id' => $transfer->people_id,
                     'company_id' => NULL,
-                    'belongs_to' => 'Person'
+                    'belongs_to' => 'Individual'
                   ]);
                 }
          

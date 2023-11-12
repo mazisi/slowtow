@@ -156,7 +156,9 @@
    .centered-select option {
     text-align: center;
   }
-    
+  .badge {
+    border-radius: 0.2rem !important;
+}
    </style>
 
     </head>

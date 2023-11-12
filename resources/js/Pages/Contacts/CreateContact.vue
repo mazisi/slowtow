@@ -30,7 +30,17 @@
 <button type="submit" class="btn btn-sm btn-secondary upload-btn">Upload</button>
 </form>
 
+
+
+
+
+
+
+
+
+
           </div>
+          
         </div>
       </div>
     </div>
@@ -39,17 +49,9 @@
   </Layout>
 </template>
 
-<style>
+<style scoped>
  
-  .table thead th {
-    padding: 0;
-    }
-    .upload-btn{
-      float: right!important;
-    }
-    #has-header{
-  margin-left: 3px;
-}
+  
 </style>
 <script>
 import Layout from "../../Shared/Layout.vue";

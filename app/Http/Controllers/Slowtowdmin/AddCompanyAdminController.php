@@ -34,7 +34,7 @@ $exist = DB::table('company_user')->where('company_id',$request->company_id)->wh
             }elseif (!is_null( $get_person_data->email_address_3) && is_null($get_person_data->email_address_2)) {
               $email = $get_person_data->email_address_3;
             }else{
-              return back()->with('error','This selected person does not have email address.');
+              return back()->with('error','This selected individual does not have email address.');
             }
             
           $user = User::create([
@@ -61,6 +61,6 @@ $exist = DB::table('company_user')->where('company_id',$request->company_id)->wh
           
 
        }
-    return back()->with('error','Ooops!!! This person is already selected as company admin.');
+    return back()->with('error','Ooops!!! This individual is already selected as company admin.');
 }
 }

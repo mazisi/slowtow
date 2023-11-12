@@ -29,15 +29,7 @@
   </h6>
     <h6 v-else>Temporary Licence For: <Link :href="`/view-person/${licence.people.slug}`" class="text-success">{{ licence.people.full_name }}</Link></h6>
     <p class="text-sm mb-0">Current Stage: 
-      <span class="font-weight-bold ms-1" v-if="licence.status == '1'">Client Quoted</span>
-     <span v-if="licence.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
-     <span v-if="licence.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
-     <span v-if="licence.status == '4'" class="font-weight-bold ms-1">Collate Temporary Licence Documents </span>
-     <span v-if="licence.status == '5'" class="font-weight-bold ms-1">Payment To The Liquor Board</span>
-     <span v-if="licence.status == '6'" class="font-weight-bold ms-1">Scanned Application</span>
-     <span v-if="licence.status == '7'" class="font-weight-bold ms-1">Temporary Licence Lodged</span>
-     <span v-if="licence.status == '8'" class="font-weight-bold ms-1">Temporary Licence Issued</span>
-     <span v-if="licence.status == '9'" class="font-weight-bold ms-1">Temporary Licence Delivered</span>
+      <span class="font-weight-bold ms-1">{{ getStatus(licence.status)}}</span>
    </p>
 
   </div>
@@ -58,8 +50,8 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="client-quoted" class="active-checkbox" type="checkbox" 
-:checked="licence.status >= 1"
-@input="pushData($event,1)" value="1">
+:checked="licence.status >= 10"
+@input="pushData($event,10)" value="10">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div> 
@@ -91,8 +83,8 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-invoiced"  type="checkbox"
-@input="pushData($event,2)" 
-:checked="licence.status >= 2" value="2">
+@input="pushData($event,20)" 
+:checked="licence.status >= 20" value="20">
 <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div> 
@@ -124,8 +116,8 @@
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="client-paid"  type="checkbox"
-@input="pushData($event,3)" 
-:checked="licence.status >= 3" value="3">
+@input="pushData($event,30)" 
+:checked="licence.status >= 30" value="30">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div> 
@@ -163,7 +155,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="prepare" type="checkbox" 
-@input="pushData($event,4)" :checked="licence.status >= 4" value="4">
+@input="pushData($event,40)" :checked="licence.status >= 40" value="40">
 <label for="prepare" class="form-check-label text-body text-truncate status-heading">Prepare Temporary Application </label>
 </div>
 </div> 
@@ -447,8 +439,8 @@
 
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,5)"
-:checked="licence.status >= 5" value="5">
+<input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,50)"
+:checked="licence.status >= 50" value="50">
 <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div> 
@@ -508,7 +500,7 @@
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="scanned-application" type="checkbox" 
-@input="pushData($event,6)" value="6" :checked="licence.status >= 6">
+@input="pushData($event,60)" value="60" :checked="licence.status >= 60">
 <label for="scanned-application" class="form-check-label text-body text-truncate status-heading"> Scanned Application </label>
 </div>
 </div> 
@@ -540,7 +532,7 @@
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="logded" type="checkbox" 
-@input="pushData($event,7)" :checked="licence.status >= 7" value="7">
+@input="pushData($event,70)" :checked="licence.status >= 70" value="70">
 <label for="logded" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Lodged </label>
 </div>
 </div> 
@@ -602,7 +594,7 @@
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="issued" type="checkbox"
-@input="pushData($event,8)" :checked="licence.status >= 8" value="8">
+@input="pushData($event,80)" :checked="licence.status >= 80" value="80">
 <label for="issued" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Issued</label>
 </div>
 </div>
@@ -664,7 +656,7 @@
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input class="active-checkbox" id="delivered" type="checkbox"
-@input="pushData($event,9)" :checked="licence.status == 9" value="9">
+@input="pushData($event,90)" :checked="licence.status == 90" value="90">
 <label for="delivered" class="form-check-label text-body text-truncate status-heading"> Temporary Licence Delivered</label>
 </div>
 </div>

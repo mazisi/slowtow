@@ -56,22 +56,49 @@ name: "Alterations",
         }  
           return string.substring(0, limit)
         }
-        }
+        },
+
+        getStatus(status_param) {
+                    let status='Not Set';
+                    switch (status_param) {
+                      case '1':
+                        status = '<span class="badge bg-dark text-default">Client Quoted</span>'
+                        break;
+                        case '2':
+                        status = '<span class="badge bg-info text-default">Client Invoiced</span>'
+                        break;
+                        case '3':
+                        status = '<span class="badge bg-light text-dark">Client Paid</span>'
+                        break;
+                        case '4':
+                        status = '<span class="badge bg-warning text-default">Prepare Alterations Application</span>'
+                        break;
+                        case '5':
+                        status = ' <span class="badge bg-secondary text-default">Payment to the Liquor Board</span>'
+                        break;
+                        case '6':
+                        status = '<span class="badge bg-secondary text-default">Alterations Lodged</span>'
+                        break;
+                        case '7':
+                        status = '<span class="badge bg-secondary text-default">Alterations Certificate Issued</span>'
+                        break;
+                        case '8':
+                        status = '<span class="badge bg-success text-default">Alterations Delivered</span>'
+                        break;                    
+                      default:
+                        break;
+                    }
+                    return status;
+                  },
 
   },
 
-      // mounted() {
-      //     if(this.success){
-      //       this.notify(this.success)
-      //     }else if(this.error){
-      //       this.notify(this.error)
-      //     }
-      //   },
+            
 
-  beforeUnmount() {
-    this.$store.state.isAbsolute = false;
-  },
-};
+            beforeUnmount() {
+              this.$store.state.isAbsolute = false;
+            },
+          };
 </script>
 <style>
 #active-checkbox{
@@ -114,7 +141,7 @@ name: "Alterations",
     <thead>
       <tr>
         <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alteration Date</th>
-        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Complete</th>
+        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stage</th>
         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
       </tr>
     </thead>
@@ -129,8 +156,9 @@ name: "Alterations",
         
         <td class="text-sm text-center">
           <Link :href="`/view-alteration/${alter.slug}`">
-          <i v-if="alter.status == '8'" class="fa fa-check text-success" aria-hidden="true"></i>
-           <i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
+
+           <div v-html="getStatus(alter.status)"></div>
+           
       </Link>
         </td>
 

@@ -33,7 +33,7 @@ class LicenceDocsController extends Controller
               $fileModel->save();
 
 
-                if($request->stage && intval($request->stage) >= 15){
+                if($request->stage && intval($request->stage) >= 150){
                   Licence::whereId($fileModel->licence_id)->update(['is_new_app' => false]);
                 }
 

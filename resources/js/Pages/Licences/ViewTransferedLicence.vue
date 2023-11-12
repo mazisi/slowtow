@@ -434,7 +434,7 @@ export default {
       :value="view_transfer.old_company.name" >
      </div>
 
-     <div v-else-if="view_transfer.transfered_from === 'Person'" class="input-group input-group-outline null is-filled ">
+     <div v-else-if="view_transfer.transfered_from === 'Individual'" class="input-group input-group-outline null is-filled ">
       <label class="form-label">Previous Licence Holder</label>
       <input type="text" required readonly title="You can`t change this field." class="form-control form-control-default" 
         :value="view_transfer.old_person.full_name" >
@@ -464,7 +464,7 @@ export default {
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>
 
-<div v-else-if="view_transfer.transfered_to === 'Person'" class="col-4 columns">
+<div v-else-if="view_transfer.transfered_to === 'Individual'" class="col-4 columns">
   <div class="input-group input-group-outline null is-filled">
     <label class="form-label">Current Licence Holder</label>
     <input :value="view_transfer.new_person.full_name" type="text" required readonly title="You can`t change this field." class="form-control form-control-default">

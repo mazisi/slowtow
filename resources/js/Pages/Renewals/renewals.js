@@ -197,17 +197,38 @@ export default {
                })
          }
 
-        //  onMounted(() => {
-        //   if(props.success){
-        //     notify(props.success)
-        //   }else if(props.error){
-        //     notify(props.error)
-        //   }
-        // });
+         function getStatus(status_param) {
+          let status;
+
+          switch (status_param) {
+            case '10':
+              status = 'Client Quoted'
+              break;
+              case '20':
+              status = 'Client Invoiced'
+              break;
+              case '30':
+              status = 'Client Paid'
+              break;
+              case '40':
+              status = 'Payment To The Liquor Board'
+              break;
+              case '50':
+              status = 'Renewal Issued'
+              break;
+              case '60':
+              status = 'Renewal Delivered'
+              break;              
+            default:
+              status='Not Set';
+              break;
+          }
+          return status;
+        }
 
     return { year,form,show_modal,getFileName, notify,
       file_name,show_file_name,file_has_apostrophe,
-     updateRenewal,updateDate,
+     updateRenewal,updateDate,getStatus,
      getRenewalYear, pushData,uploadDoc,
      getDocType, submitDocument,
      deleteDocument,
