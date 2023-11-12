@@ -69,7 +69,7 @@
   <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
   <option :value="''" disabled selected>Select Applicant</option>
   <option value="Company">Company</option>
-  <option value="Person">Person</option>
+  <option value="Individual">Individual</option>
   </select>
   </div>
   <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
@@ -87,12 +87,12 @@
             />              
         </div>
 
-        <div class="col-12 columns" v-else-if="form.belongs_to === 'Person' && $page.props.auth.has_slowtow_admin_role">
+        <div class="col-12 columns" v-else-if="form.belongs_to === 'Individual' && $page.props.auth.has_slowtow_admin_role">
           <Multiselect
             :options="peopleOptions"
             v-model="form.person_id"
             :searchable="true"
-            placeholder="Search Person..."
+            placeholder="Search Individual..."
             class="form-label"
           />
       </div>
@@ -110,13 +110,13 @@
                   />   
           </div>
 
-          <div class="col-12 columns" v-else-if="form.belongs_to === 'Person' && $page.props.auth.has_slowtow_user_role">
+          <div class="col-12 columns" v-else-if="form.belongs_to === 'Individual' && $page.props.auth.has_slowtow_user_role">
             <Multiselect
               :options="peopleOptions"
               v-model="form.person_id"
               :searchable="true"
               :disabled="true"
-              placeholder="Search Person..."
+              placeholder="Search Individual..."
               class="form-label"
             />
         </div> 
@@ -451,17 +451,17 @@ Action
 <tbody>
 <tr>
 <td v-if="licence.belongs_to ==='Company' && licence.company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
-<td v-else-if="licence.belongs_to ==='Person' && licence.people.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
+<td v-else-if="licence.belongs_to ==='Individual' && licence.people.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
 <td v-else class=" text-sm text-danger"><i class="fa fa-times"></i></td>
 <td class="align-middle text-sm">
 <Link v-if="licence.belongs_to ==='Company'" :href="`/view-company/${licence.company.slug}`" class="text-sm text-center align-middle">
   <h6 class="mb-0 ">{{ limit(licence.company.name) }}</h6></Link>
-  <Link v-else-if="licence.belongs_to ==='Person'" :href="`/view-person/${licence.people.slug}`" class="text-sm text-center align-middle">
+  <Link v-else-if="licence.belongs_to ==='Individual'" :href="`/view-person/${licence.people.slug}`" class="text-sm text-center align-middle">
     <h6 class="mb-0 ">{{ limit(licence.people.full_name) }}</h6></Link>
 </td>
 <td class="text-center">
 <Link v-if="licence.belongs_to ==='Company'" :href="`/view-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
-<Link v-else-if="licence.belongs_to ==='Person'" :href="`/view-person/${licence.people.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
+<Link v-else-if="licence.belongs_to ==='Individual'" :href="`/view-person/${licence.people.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
 </td>
 </tr>
 </tbody>

@@ -47,7 +47,7 @@
                            </h6>    
                         </Link> 
 
-                        <Link class="ml-1" v-if="transfer.transfered_from === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
+                        <Link class="ml-1" v-if="transfer.transfered_from === 'Individual'" :href="`/view-transfered-licence/${transfer.slug}`">
                           <h6 class="mb-0 text-sm">
                           {{ limit(transfer.old_person.full_name) }}
                            </h6>    
@@ -61,7 +61,7 @@
                         {{ limit(transfer.new_company.name) }}
                       </h6>    
                         </Link>  
-                        <Link class="ml-1" v-if="transfer.transfered_to === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
+                        <Link class="ml-1" v-if="transfer.transfered_to === 'Individual'" :href="`/view-transfered-licence/${transfer.slug}`">
                           <h6 class="text-sm">
                           {{ limit(transfer.new_person.full_name) }}
                         </h6>    

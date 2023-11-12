@@ -29,7 +29,7 @@ export default {
           new_person: null,
           licence_id: props.licence.id,
           belongs_to: '',
-          transfered_from: props.licence.company ?  'Company' : 'Person',
+          transfered_from: props.licence.company ?  'Company' : 'Individual',
           status: [],
     })
         function submit(){
@@ -168,7 +168,7 @@ export default {
         <select @change="changeApplicant($event)" class="form-control form-control-default" required>
         <option :value="''" disabled selected>Select Applicant</option>
         <option value="Company">Company</option>
-        <option value="Person">Person</option>
+        <option value="Individual">Individual</option>
         </select>
        </div>
      </div>
@@ -186,7 +186,7 @@ export default {
  <div v-if="errors.new_company" class="text-danger">{{ errors.new_company }}</div>
 </div>
 
-<div class="col-md-4 columns" v-else-if="form.belongs_to === 'Person'">
+<div class="col-md-4 columns" v-else-if="form.belongs_to === 'Individual'">
   <div class="input-group input-group-outline null is-filled">
      <Multiselect
      v-model="form.new_person"

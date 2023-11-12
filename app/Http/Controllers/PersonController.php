@@ -44,11 +44,11 @@ class PersonController extends Controller
             ]);
             
             if($person){
-               return to_route('view_person',['slug' => $person->slug])->with('success','Person created succesfully.');
+               return to_route('view_person',['slug' => $person->slug])->with('success','Individual created succesfully.');
             }
-            return back()->with('error','Error creating person.');
+            return back()->with('error','Error creating individual.');
        } catch (\Throwable $th) {
-         return back()->with('error','Error creating person.');
+         return back()->with('error','Error creating individual.');
        }
     }
 
@@ -59,7 +59,7 @@ class PersonController extends Controller
         $passport_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Passport')->first();
         $work_permit_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Work Permit')->first();
         $fingerprints = PeopleDocument::where('people_id',$person->id)->where('doc_type','Fingerprints')->first();
-        $tasks = Task::where('model_type','Person')->where('model_id',$person->id)->latest()->paginate(4)->withQueryString();
+        $tasks = Task::where('model_type','Individual')->where('model_id',$person->id)->latest()->paginate(4)->withQueryString();
         $linked_licences = Licence::with('company')->where('people_id',$person->id)->paginate(10);
 
         return Inertia::render('People/ViewPerson',[
@@ -88,11 +88,11 @@ class PersonController extends Controller
             'passport_valid_until' => $request->passport_valid_until,
             ]);
             if($person){
-               return back()->with('success','Person updated succesfully.');
+               return back()->with('success','Individual updated succesfully.');
             }
-            return back()->with('error','Error updating person.');
+            return back()->with('error','Error updating individual.');
        } catch (\Throwable $th) {
-         return back()->with('error','Error updating person.');
+         return back()->with('error','Error updating individual.');
        }
     }
 
@@ -113,9 +113,9 @@ class PersonController extends Controller
             foreach ($deleteTransfers as $delete_transfer) {
                 $delete_transfer->delete();
             }
-            return to_route('people')->with('success','Person deleted succesfully.');
+            return to_route('people')->with('success','Individual deleted succesfully.');
         }
-        return to_route('people')->with('error','Error updated person.');
+        return to_route('people')->with('error','Error updating individual.');
     }
 
 

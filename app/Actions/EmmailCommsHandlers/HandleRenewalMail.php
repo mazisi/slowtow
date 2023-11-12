@@ -26,7 +26,7 @@ class HandleRenewalMail {
  
          }else{
             if(is_null($renewal->licence->people->email_address_1)){
-                return back()->with('error','Mail not sent. This person does not have primary email.');
+                return back()->with('error','Mail not sent. This individual does not have primary email.');
             }
          }
 

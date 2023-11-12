@@ -167,7 +167,7 @@ public function updatePeople(Request $request,$pivot_id){
        try {
         $unlink = DB::table('company_people')->where('id',$id)->delete();
        if($unlink){
-        return back()->with('success','Person removed successfully.');            
+        return back()->with('success','Individual removed successfully.');            
         }
         
        } catch (\Throwable $th) {

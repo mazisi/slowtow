@@ -115,9 +115,9 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         ->update(['terminated_at' => now()]);
 
         if($person){
-            return to_route('view-nomination',['slug' => $slug])->with('success','Person updated succesfully.');
+            return to_route('view-nomination',['slug' => $slug])->with('success','Individual updated succesfully.');
         }
-         return back()->with('error','Error updating person.');
+         return back()->with('error','Error updating Individual.');
     }
 
     public function update(Request $request){
@@ -178,9 +178,9 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         try {
             $nom = Nomination::find($nomination_id);
             $nom->people()->detach($nominee_id);
-        return back()->with('success','Person removed successfully.');
+        return back()->with('success','Individual removed successfully.');
         } catch (\Throwable $th) {
-            return back()->with('error','Error removing person.');
+            return back()->with('error','Error removing individual.');
         }
     }
     

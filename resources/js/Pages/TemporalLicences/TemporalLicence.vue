@@ -15,25 +15,26 @@ export default {
   },
 
   setup(props) {
-    const term = getUrlParam() ? getUrlParam() : ref('');
-    
-    Inertia.on('navigate', (event) => {
-      Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true });
-    })
 
-    const form = useForm({
-          term: term,
-          active_status: ''
-    })
+            const term = getUrlParam() ? getUrlParam() : ref('');
+            
+            Inertia.on('navigate', (event) => {
+              Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true });
+            })
 
-    function search(){
-      form.get(`/temp-licences`, {
-        replace: true,
-        preserveState: true
-     })     
-     
+            const form = useForm({
+                  term: term,
+                  active_status: ''
+            })
 
-   }
+            function search(){
+              form.get(`/temp-licences`, {
+                replace: true,
+                preserveState: true
+            })     
+            
+
+          }
    
         function limit(string='', limit=25){
           if(string){
@@ -137,7 +138,7 @@ export default {
                     <td class="text-sm" >
                       <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
                     <Link :href="`/view-temp-licence/${licence.slug}`">
-                    {{ limit(licence.event_name) }}
+                    {{ licence.event_name }}
                     </Link>
                   </h6>
                       
@@ -146,7 +147,7 @@ export default {
              
                           <h6  v-if="licence.people === null" class="mb-0 text-sm">               
                           <Link :href="`/view-temp-licence/${licence.slug}`"
-                            class="px-0 ">{{ limit(licence.company.name) }}
+                            class="px-0 ">{{ licence.company.name }}
                           </Link>
                            </h6>
                            <h6 v-if="licence.company === null" class="mb-0 text-sm">

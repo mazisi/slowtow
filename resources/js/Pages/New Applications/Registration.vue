@@ -10,22 +10,7 @@
      <h6>Process New Application for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
       {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
      <p class="text-sm mb-0">Current Stage: 
-      <span class="font-weight-bold ms-1" v-if="licence.status === '1'">Client Quoted</span>
-     <span v-else-if="licence.status === '2'" class="font-weight-bold ms-1">Deposit Invoice</span>
-     <span v-else-if="licence.status === '3'" class="font-weight-bold ms-1">Deposit Paid</span>
-     <span v-else-if="licence.status === '5'" class="font-weight-bold ms-1">Prepare New Application</span>
-     <span v-else-if="licence.status === '4'" class="font-weight-bold ms-1">Payment to the Liquor Board</span>
-     <span v-else-if="licence.status === '6'" class="font-weight-bold ms-1">Scanned Application</span>
-     <span v-else-if="licence.status === '7'" class="font-weight-bold ms-1">Application Lodged</span>
-     <span v-else-if="licence.status === '8'" class="font-weight-bold ms-1">Initial Inspection</span>
-     <span v-else-if="licence.status === '9'" class="font-weight-bold ms-1">Liquor Board Requests</span>
-     <span v-else-if="licence.status === '10'" class="font-weight-bold ms-1">Final Inspection</span>
-     <span v-else-if="licence.status === '11'" class="font-weight-bold ms-1">Activation Fee Requested</span>
-     <span v-else-if="licence.status === '12'" class="font-weight-bold ms-1">Client Finalisation Invoice</span>
-     <span v-else-if="licence.status === '13'" class="font-weight-bold ms-1">Finalisation Paid</span>
-     <span v-else-if="licence.status === '14'" class="font-weight-bold ms-1">Activation Fee Paid</span>
-     <span v-else-if="licence.status === '15'" class="font-weight-bold ms-1">Licence Issued</span>
-     <span v-else-if="licence.status === '16'" class="font-weight-bold ms-1">Licence Delivered</span>
+      <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
    </p>
   </div>
     <div class="col-lg-6 col-5 my-auto text-end">
@@ -45,8 +30,8 @@
   <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input id="client-quoted" class="active-checkbox" type="checkbox" 
-  :checked="licence.status >= '1'"
-  @input="pushData($event,1)" value="1">
+  :checked="licence.status >= '10'"
+  @input="pushData($event,10)" value="10">
   <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
   </div>
   </div>  
@@ -79,9 +64,9 @@
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="client-invoiced" type="checkbox"
-    @input="pushData($event,2)" 
-    :checked="licence.status >= 2"
-    value="2">
+    @input="pushData($event,20)" 
+    :checked="licence.status >= 20"
+    value="20">
     <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoice</label>
     </div>
     </div>
@@ -102,7 +87,7 @@
         href="javascript:;">
         <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
         </a>
-        <a v-if="client_invoiced == null" @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
+        <a v-if="client_invoiced" @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
         class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
         <i class="fa fa-upload h5 upload-icon" aria-hidden="true"></i>
         </a>
@@ -112,14 +97,14 @@
   <div class="col-md-5 columns">
   <div class="form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="deposit-paid"  type="checkbox"
-  @input="pushData($event,3)" value="3"
-  :checked="licence.status >= 3">
+  @input="pushData($event,30)" value="30"
+  :checked="licence.status >= 30">
   <label for="deposit-paid" class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
   </div>
   </div>
   <div class="col-md-1 columns"></div>
   
-  <template v-if="licence.deposit_paid_at == null">   
+  <template v-if="licence.deposit_paid_at">   
   <div class="col-md-4 columns mb-4">
     <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Date</label>
@@ -129,7 +114,7 @@
    </div> 
 
    <div class="col-md-1 columns">
-     <button v-if="licence.deposit_paid_at == null" @click="updateRegistrationDate" 
+     <button v-if="licence.deposit_paid_at" @click="updateRegistrationDate" 
      type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
    </template>
@@ -155,15 +140,15 @@
 
   <div class="col-md-5 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,4)"
-    :checked="licence.status >= 4" value="4">
+    <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,40)"
+    :checked="licence.status >= 40" value="40">
     <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
     </div>
     </div> 
     
     <div class="col-md-1 columns"></div>
      
-       <template v-if="licence.liquor_board_at == null">   
+       <template v-if="licence.liquor_board_at">   
         <div class="col-md-4 columns mb-4">
           <div class="input-group input-group-outline null is-filled ">
           <label class="form-label">Date</label>
@@ -172,7 +157,7 @@
          <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
          </div> 
          <div class="col-md-1 columns">
-          <button v-if="licence.liquor_board_at == null" 
+          <button v-if="licence.liquor_board_at" 
           
           @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
@@ -222,9 +207,9 @@
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
       <input class="active-checkbox" id="prepare-new-app"  type="checkbox"
-      @input="pushData($event,5)" 
-      :checked="licence.status >= 5"
-      value="5">
+      @input="pushData($event,50)" 
+      :checked="licence.status >= 50"
+      value="50">
       <label for="prepare-new-app" class="form-check-label text-body text-truncate status-heading">Prepare New Application</label>
       </div>
       </div>
@@ -666,7 +651,7 @@
   <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="issued" type="checkbox" 
-  @input="pushData($event,6)" :checked="licence.status >= 6" value="6">
+  @input="pushData($event,60)" :checked="licence.status >= 60" value="60">
   <label for="issued" class="form-check-label text-body text-truncate status-heading"> Scanned Application  </label>
   </div>
   </div> 
@@ -702,13 +687,13 @@
   <div class="col-md-6 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="application-logded" type="checkbox" 
-    @input="pushData($event,7)" :checked="licence.status >= 7" value="7">
+    @input="pushData($event,70)" :checked="licence.status >= 70" value="70">
     <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Application Lodged (Proof of Lodgement)  </label>
     </div>
     </div>
       
     
-     <template v-if="licence.application_lodged_at == null">   
+     <template v-if="licence.application_lodged_at">   
       <div class="col-md-4 columns mb-4">
         <div class="input-group input-group-outline null is-filled ">
         <label class="form-label">Date</label>
@@ -718,7 +703,7 @@
     </div>
 
       <div class="col-md-1 columns">
-        <button v-if="licence.application_lodged_at == null" 
+        <button v-if="licence.application_lodged_at" 
         
         @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
       </div>
@@ -766,17 +751,63 @@
       </ul> 
 <hr/>
 
+
+
+<div class="col-md-6 columns">
+  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+  <input class="active-checkbox" id="application-logded" type="checkbox" 
+  @input="pushData($event,80)" :checked="licence.status >= 80" value="80">
+  <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Additional Documents/Information  </label>
+  </div>
+  </div>
+    
+  
+   <template v-if="licence.application_lodged_at">   
+    <div class="col-md-4 columns mb-4">
+      <div class="input-group input-group-outline null is-filled ">
+      <label class="form-label">Date</label>
+      <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
+       </div>
+     <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
+  </div>
+
+    <div class="col-md-1 columns">
+      <button v-if="licence.application_lodged_at" 
+      
+      @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+    </div>
+     </template>
+     
+     <template v-else>
+      <div class="col-md-4 columns mb-4">
+        <div class="input-group input-group-outline null is-filled ">
+        <label class="form-label">Date</label>
+        <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
+         </div>
+       <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
+    </div>
+
+      <div class="col-md-1 columns">
+        <button v-if="$page.props.auth.has_slowtow_admin_role" 
+         
+        @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+      </div>      
+       
+     </template> 
+
+<hr/>
+
        <div class="col-md-6 columns">
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
         <input class="active-checkbox" id="initial" type="checkbox"
-        @input="pushData($event,8)" :checked="licence.status >= 8" value="8">
+        @input="pushData($event,90)" :checked="licence.status >= 90" value="90">
         <label for="initial" class="form-check-label text-body text-truncate status-heading"> Initial Inspection</label>
         </div>  
         </div>
   
         
         
-         <template v-if="licence.initial_inspection_at == null">   
+         <template v-if="licence.initial_inspection_at">   
           <div class="col-md-4 columns mb-4">
             <div class="input-group input-group-outline null is-filled ">
             <label class="form-label">Date</label>
@@ -785,7 +816,7 @@
           <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
         </div>
         <div class="col-md-1 columns">
-          <button v-if="licence.initial_inspection_at == null" 
+          <button v-if="licence.initial_inspection_at" 
          
           @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
          </div>
@@ -841,12 +872,12 @@
   <div class="col-md-6 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="final-inspection" type="checkbox"
-  @input="pushData($event,10)" :checked="licence.status >= 10" value="10">
+  @input="pushData($event,100)" :checked="licence.status >= 100" value="100">
   <label for="final-inspection" class="form-check-label text-body text-truncate status-heading"> Final Inspection</label>
   </div>
   </div>
 
-  <template v-if="licence.final_inspection_at == null"> 
+  <template v-if="licence.final_inspection_at"> 
        
   <div class="col-md-4 columns mb-4">
     <div class="input-group input-group-outline null is-filled ">
@@ -856,7 +887,7 @@
    <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
 </div>
 <div class="col-md-1 columns">
-  <button v-if="licence.final_inspection_at == null" 
+  <button v-if="licence.final_inspection_at" 
   @click="updateRegistrationDate" 
    type="button" class="btn btn-sm btn-secondary">Save</button>
  </div>
@@ -912,7 +943,7 @@
   <div class="col-md-6 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox" id="activation-fee" type="checkbox"
-    @input="pushData($event,11)" :checked="licence.status >= 11" value="11">
+    @input="pushData($event,110)" :checked="licence.status >= 110" value="110">
     <label for="activation-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Requested </label>
     </div>
     </div>
@@ -920,7 +951,7 @@
   
     
 
-    <template v-if="licence.activation_fee_requested_at == null"> 
+    <template v-if="licence.activation_fee_requested_at"> 
        
       <div class="col-md-4 columns mb-4">
         <div class="input-group input-group-outline null is-filled ">
@@ -931,7 +962,7 @@
       {{ errors.activation_fee_requested_at }}</div>
     </div>
     <div class="col-md-1 columns">
-    <button v-if="licence.activation_fee_requested_at == null" 
+    <button v-if="licence.activation_fee_requested_at" 
     @click="updateRegistrationDate" 
     type="button" class="btn btn-sm btn-secondary">Save</button>
     </div>
@@ -959,7 +990,7 @@
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
       <input class="active-checkbox" id="finat" type="checkbox"
-      @input="pushData($event,12)" :checked="licence.status >= 12" value="12">
+      @input="pushData($event,120)" :checked="licence.status >= 120" value="120">
       <label for="finat" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoice </label>
       </div>
       </div>
@@ -991,13 +1022,13 @@
       <div class="col-md-6 columns">
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
         <input class="active-checkbox" id="client-paid" type="checkbox"
-        @input="pushData($event,13)" :checked="licence.status >= 13" value="13">
+        @input="pushData($event,130)" :checked="licence.status >= 130" value="130">
         <!-- this was previouly client paid -->
         <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Finalisation Paid </label>
         </div>
         </div>
         
- <template v-if="licence.client_paid_at == null"> 
+ <template v-if="licence.client_paid_at"> 
        
   <div class="col-md-4 columns mb-4">
     <div class="input-group input-group-outline null is-filled ">
@@ -1007,7 +1038,7 @@
    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
    </div>
    <div class="col-md-1 columns">
-    <button v-if="licence.client_paid_at == null" 
+    <button v-if="licence.client_paid_at" 
     
     @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
    </div>   
@@ -1032,7 +1063,7 @@
         <div class="col-md-6 columns">
           <div class=" form-switch d-flex ps-0 ms-0  is-filled">
           <input class="active-checkbox" id="activ-fee" type="checkbox" 
-          @input="pushData($event,14)" :checked="licence.status >= 14" value="14">
+          @input="pushData($event,140)" :checked="licence.status >= 140" value="140">
           <label for="activ-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Paid </label>
           </div>
           </div>
@@ -1040,7 +1071,7 @@
           
 
 
-           <template v-if="licence.activation_fee_paid_at == null"> 
+           <template v-if="licence.activation_fee_paid_at"> 
        
             <div class="col-md-4 columns">
               <div class="input-group input-group-outline null is-filled ">
@@ -1100,7 +1131,7 @@
           <div class="col-md-6 columns">
             <div class=" form-switch d-flex ps-0 ms-0  is-filled">
             <input class="active-checkbox" id="licence-issued" type="checkbox"
-            @input="pushData($event,15)" :checked="licence.status >= 15" value="15">
+            @input="pushData($event,150)" :checked="licence.status >= 150" value="150">
             <label for="licence-issued" class="form-check-label text-body text-truncate status-heading"> Licence Issued </label>
             </div>
             </div>
@@ -1108,7 +1139,7 @@
            
    
              
-             <template v-if="licence.licence_issued_at == null"> 
+             <template v-if="licence.licence_issued_at"> 
        
               <div class="col-md-4 columns">
                 <div class="input-group input-group-outline null is-filled ">
@@ -1119,7 +1150,7 @@
              </div>
 
             <div class="col-md-1 columns">
-              <button v-if="licence.licence_issued_at == null" 
+              <button v-if="licence.licence_issued_at" 
              
               @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
              </div>
@@ -1172,13 +1203,13 @@
             <div class="col-md-6 columns mb-4">
               <div class=" form-switch d-flex ps-0 ms-0  is-filled">
               <input class="active-checkbox" id="licence-delivered" type="checkbox" 
-              @input="pushData($event,16)" :checked="licence.status >= 16">
+              @input="pushData($event,160)" :checked="licence.status >= 160">
               <label for="licence-delivered" class="form-check-label text-body text-truncate status-heading"> Licence Delivered </label>
               </div>
               </div>
               
               
-               <template v-if="licence.licence_delivered_at == null"> 
+               <template v-if="licence.licence_delivered_at"> 
        
                 <div class="col-md-4 columns">
                   <div class="input-group input-group-outline null is-filled ">
@@ -1236,7 +1267,7 @@
               </ul> 
   
   <div>
-    <div v-if="form.status >= 15" class="text-xs text-danger d-flex">Please note that this licence will no longer be a 
+    <div v-if="form.status >= 150" class="text-xs text-danger d-flex">Please note that this licence will no longer be a 
       new application and this action is irreversible once saved.</div>
   </div>
   </div>
@@ -1252,7 +1283,7 @@
   <hr>
  
   <Task 
-  v-if="licence.status >= 15"
+  v-if="licence.status >= 150"
   :tasks="tasks" 
   :model_id="licence.id" 
   :success="success" 

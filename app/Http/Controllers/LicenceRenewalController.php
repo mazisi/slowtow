@@ -19,7 +19,7 @@ class LicenceRenewalController extends Controller
     public function renewLicence(Request $request){
         $licence = Licence::with('company')->whereSlug($request->slug)->first();
         $renewals = LicenceRenewal::with('licence')->where('licence_id',$licence->id)->orderByDesc('date')->paginate(10)->withQueryString();
-         $years = DB::table('years')->get()->pluck('year');
+         $years = DB::table('years')->orderBy('year', 'desc')->get()->pluck('year');
         return Inertia::render('Renewals/Renewals',[
         'licence' => $licence,
         'renewals' => $renewals,

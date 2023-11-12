@@ -50,7 +50,7 @@ class TemporalLicenceController extends Controller
            'start_date' => 'required|date',
            'end_date' => 'required|date',
            'latest_lodgment_date'=> 'required',
-           'belongs_to' => 'required|in:Person,Company'
+           'belongs_to' => 'required|in:Individual,Company'
            ]);
            if(is_null($request->person)){
             $request->validate(['company' => 'required|exists:companies,id']);

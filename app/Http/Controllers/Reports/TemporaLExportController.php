@@ -73,7 +73,7 @@ class TemporaLExportController extends Controller implements ReportShouldHaveSta
             case 'Company':
                 $applicant = $model->name;
                 break;
-            case 'Person':
+            case 'Individual':
                 $applicant = $model->full_name;
                 break;                
             default:
