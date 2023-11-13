@@ -200,6 +200,7 @@ Route::group(['middleware' => ['guest']], function () {
 
         //Additional Docs Stage
         Route::post('/store-additional-docs',[AdditionalDocsController::class,'store'])->name('submit_additional_doc');
+        Route::delete('/delete-additional-doc/{id}',[AdditionalDocsController::class,'destroy'])->name('delete_additional_doc');
 
 
 

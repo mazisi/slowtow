@@ -751,9 +751,9 @@
       </ul> 
 <hr/>
 
-
-
-<div class="col-md-6 columns">
+<!-- this stage must appear once licnce lodged is ticked -->
+<template v-if="licence.status >= 70">
+<div class="col-md-6 columns" >
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input class="active-checkbox" id="additional-docs" type="checkbox" 
   @input="pushData($event,80)" :checked="licence.status >= 80" value="80">
@@ -763,10 +763,11 @@
     
   <AdditionalDocsComponent 
   :licence_id="licence.id" 
+  :additional_docs="additional_docs"
   :success="success" 
   :error="error" 
   :errors="errors"/>
-
+</template>
 <hr/>
 
        <div class="col-md-6 columns">

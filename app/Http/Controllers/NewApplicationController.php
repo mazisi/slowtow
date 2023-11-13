@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AdditionalDoc;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
@@ -163,9 +164,10 @@ class NewApplicationController extends Controller
         $licence_delivered  = LicenceDocument::where('document_type','Licence Delivered')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->latest()->paginate(4)->withQueryString();
         
-        
+        $additional_docs = AdditionalDoc::get();
         return Inertia::render('New Applications/Registration',[
             'licence' => $licence,
+            'additional_docs' => $additional_docs,
             'client_quoted' => $client_quoted,
              'gba_application_form' => $gba_application_form,
              'client_invoiced' => $client_invoiced,

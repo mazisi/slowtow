@@ -55,7 +55,8 @@ import Layout from "../../Shared/Layout.vue";
       activation_fee_paid: Object,
       licence_issued_doc: Object,
       licence_delivered: Object,
-      liqour_board_requests: Object
+      liqour_board_requests: Object,
+      additional_docs: Object
     },
   
     setup (props) {
