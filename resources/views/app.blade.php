@@ -38,6 +38,8 @@
         @inertiaHead
 
         <style>
+
+          
   .multiselect{
     margin:top: 1rem; border-color: #4caf50 !important;box-shadow: inset 1px 0 #4caf50
   }
@@ -159,6 +161,9 @@
   .badge {
     border-radius: 0.2rem !important;
 }
+          .btn{
+            border-radius: 0.2rem !important;
+          }
    </style>
 
     </head>

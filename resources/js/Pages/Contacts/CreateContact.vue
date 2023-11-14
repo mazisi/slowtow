@@ -49,10 +49,6 @@
   </Layout>
 </template>
 
-<style scoped>
- 
-  
-</style>
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { useForm, Head } from '@inertiajs/inertia-vue3';
