@@ -123,17 +123,6 @@
 
 
 
-  <div class="col-md-12 columns">
-    <div class="input-group input-group-outline null is-filled">
-    <label class="form-label">Licence Type *</label>
-    <select v-model="form.licence_type" class="form-control form-control-default">
-      <option :value="''" disabled selected>Licence Type</option>
-    <option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
-    </select>
-    </div>
-    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-    </div>
-
   <TextInputComponent
   v-if="licence.status >= 150"
     v-model="licence.licence_date"
@@ -216,17 +205,6 @@
     :inputType="'text'"
 />
 
-<div class="col-12 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.province" >
-<option :value="''" disabled selected >Select Province</option>
-<option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
-</select>
-</div>
-<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
-</div>
-
 <TextInputComponent
     v-model="form.postal_code" 
     :column="'col-12'" 
@@ -237,7 +215,33 @@
     :inputType="'text'"
 />
 
-<div class="col-12 columns">
+<div class="col-12 columns">                  
+<div class="input-group input-group-outline null is-filled">
+<label class="form-label">Province</label>
+<select class="form-control form-control-default" v-model="form.province" @change="selectedProvince()" >
+<option :value="''" disabled selected >Select Province</option>
+<option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+</select>
+</div>
+<div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
+</div>
+
+
+
+  <div  class="col-md-12 columns">
+    <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Licence Type *     </label>
+    <select v-model="form.licence_type" class="form-control form-control-default">
+      <option :value="''" disabled selected>Licence Type</option>
+    <option v-for='licence_dropdown in all_licences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+    </select>
+    </div>
+    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+    </div>
+
+
+
+<div v-if="form.province == 'Gauteng'" class="col-12 columns">
   <div class="input-group input-group-outline null is-filled ">
     <label class="form-label">Liquor Board Region</label>
 <select class="form-control form-control-default" v-model="form.board_region" >

@@ -44,7 +44,10 @@ export default {
         let show_modal = ref(true);
         let file_name = ref(''); 
         let file_has_apostrophe = ref();
-
+        let all_licences = ref([]);
+        
+      
+        
         
 
     const form = useForm({
@@ -69,6 +72,24 @@ export default {
          person_id: props.licence.belongs_to === 'Individual' ? props.licence.people.id : '',
          change_company: '',  
     })
+
+    //assign licences based on province
+    all_licences.value =  props.licence_dropdowns
+    .filter(obj => obj.province === form.province); 
+
+
+    
+    //list licence types based on province selected
+     function  selectedProvince(){ 
+      const filteredLicenses = props.licence_dropdowns
+      .filter(obj => obj.province === form.province); 
+      console.log(filteredLicenses);
+      all_licences.value = filteredLicenses; 
+      console.log(all_licences.value);
+                    
+    }
+
+    
 
 
 //Insert original licence 
@@ -240,15 +261,7 @@ export default {
                })
          }
 
-       
-       
-        //  onMounted(() => {
-        //   if(props.success){
-        //     notify(props.success)
-        //   }else if(props.error){
-        //     notify(props.error)
-        //   }
-        // });
+      
 
     return {
       checkingFileProgress,viewFile,
@@ -268,9 +281,14 @@ export default {
       originalLicenceForm,
       uploadOriginalLicenceDoc,
       getDocType,
-      deleteDocument
+      deleteDocument,
+      selectedProvince,
+      all_licences,
     }
   },
+
+
+  
 
 
   computed: {
