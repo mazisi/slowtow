@@ -80,8 +80,20 @@
  </div>
 
 
+ <!-- Province Trigger Licence Type+ -->
+ <div class="col-6 columns">                  
+  <div class="input-group input-group-outline null is-filled">
+    <label class="form-label">Province</label>
+      <select class="form-control form-control-default" v-model="form.province" required @change="selectedProvince()">
+      <option :value="''" disabled selected>Select Province</option>
+      <option v-for="province in distictProvinces" :key="province" :value=province>{{ province }}</option>
+    </select>
+  </div>
+</div>
+
+ <!-- end Province Trigger Licence Type+ -->
 <LicenceTypeDropDownComponent 
-  :dropdownList="licence_dropdowns" 
+  :dropdownList="licence_types" 
   :label="'Licence Type *'" 
   :defaultDisabledText="'Select Licence Type'"
   :column="'col-6'"
@@ -90,7 +102,20 @@
   :errors="errors.licence_type"
   :input_id="licence_type"
   :required="true"
+  v-if="form.province !== ''"
 />
+
+<LiquorBoardRegionComponent 
+      :dropdownList="computedBoardRegions" 
+      :label="'Liquor Board Region*'" 
+      :defaultDisabledText="'Select Liquor Board Region'"
+      :column="'col-12'"
+      :value="form.board_region"
+      v-model="form.board_region"
+      :errors="errors.board_region"
+      :input_id="board_region"
+      v-if="form.province !== '' && form.province == 'Gauteng'"
+     />
 
 
 
@@ -169,16 +194,6 @@
 
 
 
-<div class="col-12 columns">                  
-<div class="input-group input-group-outline null is-filled">
-<label class="form-label">Province</label>
-<select class="form-control form-control-default" v-model="form.province" required>
-<option :value="''" disabled selected>Select Province</option>
-<option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
-</select>
-</div>
-</div>
-
 
 <TextInputComponent 
   :inputType="'text'"
@@ -192,16 +207,7 @@
 
 
 
-<LiquorBoardRegionComponent 
-      :dropdownList="computedBoardRegions" 
-      :label="'Liquor Board Region*'" 
-      :defaultDisabledText="'Select Liquor Board Region'"
-      :column="'col-12'"
-      :value="form.board_region"
-      v-model="form.board_region"
-      :errors="errors.board_region"
-      :input_id="board_region"
-     />
+
 
 </div>
 <div>
@@ -236,7 +242,7 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import common from '../common-js/common.js';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
@@ -275,6 +281,15 @@ export default {
           belongs_to: ''   
     })
 
+  let licence_types = ref(null);
+    //list licence types based on province selected
+     function  selectedProvince(){
+      
+      const filteredLicenses = props.licence_dropdowns
+      .filter(obj => obj.province === form.province); 
+       this.licence_types = filteredLicenses;              
+    }
+    
     function submit() {
       form.post('/submit-licence', {
         preserveScroll: true,
@@ -292,16 +307,18 @@ export default {
       }
 
      }
+    //return Unique provinces from licence_dropdowns
     
-     const computedProvinces = computed(() => {
-          return common.getProvinces();
-        })
-
+    
         const computedBoardRegions = computed(() => {
           return common.getBoardRegions();
         })
 
-    return { submit,selectApplicant,company_options, people_options, form, computedProvinces,computedBoardRegions}
+        let distictProvinces = computed(
+          () => [...new Set(props.licence_dropdowns.map((province) => province.province))]
+        );
+
+    return { submit,selectApplicant,company_options, people_options, form,computedBoardRegions, distictProvinces , selectedProvince, licence_types}
   },
    components: {
     Layout,
