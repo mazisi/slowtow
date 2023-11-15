@@ -27,15 +27,18 @@
                 <div class="p-3 card-body">
   <form @submit.prevent="updateRegistration">
   <div class="row">
-  <div class="col-md-12 columns">
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input id="client-quoted" class="active-checkbox" type="checkbox" 
-  :checked="licence.status >= '10'"
-  @input="pushData($event,10)" value="10">
-  <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
-  </div>
-  </div>  
-  
+    
+      <StageComponent
+      :column=12
+      :dbStatus="licence.status"
+      :errors="errors"
+      :stageValue=100
+      :licence_id="licence.slug"
+      :stageTitle="'Client Quoted'"
+      :success="success"
+      @stage-value-changed="pushData"
+    />
+    <hr/>
   <ul class="list-group">
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="client_quoted">
@@ -60,16 +63,17 @@
     </ul>
   <hr>
   
-  
-  <div class="col-md-12 columns">
-    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox" id="client-invoiced" type="checkbox"
-    @input="pushData($event,20)" 
-    :checked="licence.status >= 20"
-    value="20">
-    <label for="client-invoiced" class="form-check-label text-body text-truncate status-heading">Deposit Invoice</label>
-    </div>
-    </div>
+   <StageComponent
+      :column=12
+      :dbStatus="licence.status"
+      :errors="errors"
+      :stageValue=200
+      :licence_id="licence.slug"
+      :stageTitle="'Deposit Invoice'"
+      :success="success"
+      @stage-value-changed="pushData"
+    />
+
     <ul class="list-group">
       <li class="px-0 border-0 list-group-item d-flex align-items-center">
         <div class="avatar me-3" v-if="client_invoiced !== null">
@@ -94,14 +98,18 @@
       </li>
     </ul>
     <hr>
-  <div class="col-md-5 columns">
-  <div class="form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="deposit-paid"  type="checkbox"
-  @input="pushData($event,30)" value="30"
-  :checked="licence.status >= 30">
-  <label for="deposit-paid" class="form-check-label text-body text-truncate status-heading">Deposit Paid</label>
-  </div>
-  </div>
+  
+
+  <StageComponent
+  :column=5
+  :dbStatus="licence.status"
+  :errors="errors"
+  :stageValue=300
+  :licence_id="licence.slug"
+  :stageTitle="'Deposit Paid'"
+  :success="success"
+  @stage-value-changed="pushData"
+/>
   <div class="col-md-1 columns"></div>
   
   <template v-if="licence.deposit_paid_at">   
@@ -137,14 +145,17 @@
   
   <hr>
 
-
-  <div class="col-md-5 columns">
-    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox" id="payment" type="checkbox" @input="pushData($event,40)"
-    :checked="licence.status >= 40" value="40">
-    <label for="payment" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
-    </div>
-    </div> 
+    
+    <StageComponent
+    :column=5
+    :dbStatus="licence.status"
+    :errors="errors"
+    :stageValue=400
+    :licence_id="licence.slug"
+    :stageTitle="'Payment To The Liquor Board'"
+    :success="success"
+    @stage-value-changed="pushData"
+  />
     
     <div class="col-md-1 columns"></div>
      
@@ -204,15 +215,17 @@
     </ul>
     <hr>
 
-    <div class="col-md-12 columns">
-      <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-      <input class="active-checkbox" id="prepare-new-app"  type="checkbox"
-      @input="pushData($event,50)" 
-      :checked="licence.status >= 50"
-      value="50">
-      <label for="prepare-new-app" class="form-check-label text-body text-truncate status-heading">Prepare New Application</label>
-      </div>
-      </div>
+
+      <StageComponent
+      :column=12
+      :dbStatus="licence.status"
+      :errors="errors"
+      :stageValue=500
+      :licence_id="licence.slug"
+      :stageTitle="'Prepare New Application'"
+      :success="success"
+      @stage-value-changed="pushData"
+    />
 
   <div class="col-md-6">
     <div class="row">
@@ -647,119 +660,240 @@
 </div> 
       <hr>
   
-  
-  <div class="col-md-12 columns">
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="issued" type="checkbox" 
-  @input="pushData($event,60)" :checked="licence.status >= 60" value="60">
-  <label for="issued" class="form-check-label text-body text-truncate status-heading"> Scanned Application  </label>
-  </div>
-  </div> 
-  
-  
- 
+  <StageComponent
+  :column=12
+  :dbStatus="licence.status"
+  :errors="errors"
+  :stageValue=600
+  :licence_id="licence.slug"
+  :stageTitle="'Scanned Application'"
+  :success="success"
+  @stage-value-changed="pushData"
+/>
+
   <div class="col-md-6">
-  <ul class="list-group">
-    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar " v-if="scanned_application !== null">
-      <a :href="`${$page.props.blob_file_path}${scanned_application.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf text-lg text-danger h5" aria-hidden="true"></i>
-      </a>
-      </div>
-      <div class="d-flex align-items-start flex-column justify-content-center">
-        <h6 v-if="!scanned_application" class="mb-0 text-sm">Document</h6>
-        <h6 v-else-if="scanned_application" class="mb-0 text-sm limit-file-name">{{ scanned_application.document_name }}</h6>
-      </div>
-      <a v-if="scanned_application !== null" @click="deleteDocument(scanned_application.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-      </a>
-      <a v-else @click="getDocType(6,'Scanned Application')" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;" >
-      <i class="fa fa-upload h5" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul>
+    <DocComponent
+    :documentModel="scanned_application"
+    :errors="errors"
+    :orderByNumber=600
+    :docType="'Scanned Application'"
+    :success="success"
+/>
+ 
   </div>
   <hr>
+
+
   
+ <!-- When its Mpumalanga province ============================================== -->
+ <StageComponent
+    :dbStatus="licence.status"
+    :errors="errors"
+    :stageValue=700
+    :licence_id="licence.slug"
+    :stageTitle="'Lodged with Municipality'"
+    :success="success"
+    @stage-value-changed="pushData"
+ />
+
+ <div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :errors="errors"
+  :orderByNumber=700
+  :docType="'Lodged with Municipality'"
+  :success="success"
+/>
+</div>
+<hr/> 
+
+<!-- When its Mpumalanga province ============================================== -->
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=800
+:licence_id="licence.slug"
+:stageTitle="'Municipal Comments'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
+<div class="col-md-6">
+<DocComponent
+:documentModel="licence"
+:errors="errors"
+:orderByNumber=800
+:docType="'Municipal Comments'"
+:success="success"
+/>
+</div>
+<hr/> 
+<!-- //Mpumalanga================= -->
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=900
+:licence_id="licence.slug"
+:stageTitle="'Completed Application Scanned'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
+<div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :errors="errors"
+  :orderByNumber=900
+  :docType="'Completed Application Scanned'"
+  :success="success"
+  />
+  </div>
+<hr>
+
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=1000
+:licence_id="licence.slug"
+:stageTitle="'Lodged with MER'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
+<div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :errors="errors"
+  :orderByNumber=1000
+  :docType="'Lodged with MER'"
+  :success="success"
+  />
+  </div>
+<hr>
+
+<!-- Limpopo and Northwest ====================== -->
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=1100
+:licence_id="licence.slug"
+:stageTitle="'Lodged with Magistrate'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
+<div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :errors="errors"
+  :orderByNumber=1100
+  :docType="'Lodged with Magistrate'"
+  :success="success"
+  />
+  </div>
+<hr>
+
+<!-- Limpopo and Northwest ====================== -->
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=1200
+:licence_id="licence.slug"
+:stageTitle="'Lodged with DPO'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
+<div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :errors="errors"
+  :orderByNumber=1200
+  :docType="'Lodged with DPO'"
+  :success="success"
+  />
+  </div>
+<hr>
+
+<!-- Limpopo and Northwest ====================== -->
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=1300
+:licence_id="licence.slug"
+:stageTitle="'Police Report'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
+<div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :errors="errors"
+  :orderByNumber=1300
+  :docType="'Police Report'"
+  :success="success"
+  />
+  </div>
+<hr>
 
 
-  <div class="col-md-6 columns">
-    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox" id="application-logded" type="checkbox" 
-    @input="pushData($event,70)" :checked="licence.status >= 70" value="70">
-    <label for="application-logded" class="form-check-label text-body text-truncate status-heading"> Application Lodged (Proof of Lodgement)  </label>
-    </div>
-    </div>
-      
+
+
+
+    <StageComponent
+    :dbStatus="licence.status"
+    :errors="errors"
+    :stageValue=1400
+    :licence_id="licence.slug"
+    :stageTitle="'Application Lodged (Proof of Lodgement)'"
+    :success="success"
+    @stage-value-changed="pushData"
+    />   
     
      <template v-if="licence.application_lodged_at">   
-      <div class="col-md-4 columns mb-4">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Date</label>
-        <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
-         </div>
-       <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
-    </div>
-
-      <div class="col-md-1 columns">
-        <button v-if="licence.application_lodged_at" 
-        
-        @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-      </div>
+      <DateComponent
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="'Pass the stage date here'"
+      :success="success"
+      />      
        </template>
        
        <template v-else>
-        <div class="col-md-4 columns mb-4">
-          <div class="input-group input-group-outline null is-filled ">
-          <label class="form-label">Date</label>
-          <input type="date" class="form-control form-control-default" v-model="form.application_lodged_at">
-           </div>
-         <div v-if="errors.application_lodged_at" class="text-danger">{{ errors.application_lodged_at }}</div>
-      </div>
-  
-        <div class="col-md-1 columns">
-          <button v-if="$page.props.auth.has_slowtow_admin_role" 
-           
-          @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-        </div>      
-         
+        
+        <DateComponent
+        :canSave="$page.props.auth.has_slowtow_admin_role"
+        :errors="errors"
+        :column=5
+        :dated_at="'Pass the stage date here'"
+        :success="success"
+      />   
        </template> 
 
-
-      <ul class="list-group">
-        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-          <div class="avatar me-3" v-if="application_logded !== null">
-          <a :href="`${$page.props.blob_file_path}${application_logded.document_file}`" target="_blank">
-          <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-          </a>
-          </div>
-      
-         <div class=" d-flex align-items-start flex-column justify-content-center">
-          <h6 v-if="!application_logded" class="mb-0 text-sm">Document</h6>
-          <h6 v-else-if="application_logded" class="mb-0 text-sm limit-file-name">{{ application_logded.document_name }}</h6>
-          </div>
-      
-          <a v-if="application_logded !== null" @click="deleteDocument(application_logded.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-          </a>
-          <a v-else @click="getDocType(7,'Application Lodged')" data-bs-toggle="modal" data-bs-target="#documents" 
-          class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-upload h5 " aria-hidden="true"></i>
-          </a>
-        </li>
-      </ul> 
+       <DocComponent
+        :documentModel="application_logded"
+        :errors="errors"
+        :orderByNumber=1500
+        :docType="'Application Lodged'"
+        :success="success"
+       />
 <hr/>
 
 <!-- this stage must appear once licnce lodged is ticked -->
-<template v-if="licence.status >= 70">
-<div class="col-md-6 columns" >
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="additional-docs" type="checkbox" 
-  @input="pushData($event,80)" :checked="licence.status >= 80" value="80">
-  <label for="additional-docs" class="form-check-label text-body text-truncate status-heading"> Additional Documents/Information  </label>
-  </div>
-  </div>
+<template v-if="licence.status >= 1500">
+
+<StageComponent
+:dbStatus="licence.status"
+:errors="errors"
+:stageValue=1600
+:licence_id="licence.slug"
+:stageTitle="'Additional Documents/Information'"
+:success="success"
+@stage-value-changed="pushData"
+/>
+
     
   <AdditionalDocsComponent 
   :licence_id="licence.id" 
@@ -770,85 +904,59 @@
 </template>
 <hr/>
 
-       <div class="col-md-6 columns">
-        <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-        <input class="active-checkbox" id="initial" type="checkbox"
-        @input="pushData($event,90)" :checked="licence.status >= 90" value="90">
-        <label for="initial" class="form-check-label text-body text-truncate status-heading"> Initial Inspection</label>
-        </div>  
-        </div>
+  <StageComponent
+    :dbStatus="licence.status"
+    :errors="errors"
+    :stageValue=1700
+    :licence_id="licence.slug"
+    :stageTitle="'Initial Inspection'"
+    :success="success"
+    @stage-value-changed="pushData"
+    />
+        
+        
+        
+  <template v-if="licence.initial_inspection_at">   
   
-        
-        
-         <template v-if="licence.initial_inspection_at">   
-          <div class="col-md-4 columns mb-4">
-            <div class="input-group input-group-outline null is-filled ">
-            <label class="form-label">Date</label>
-          <input type="date" class="form-control form-control-default" v-model="form.initial_inspection_at">
-            </div>
-          <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
-        </div>
-        <div class="col-md-1 columns">
-          <button v-if="licence.initial_inspection_at" 
-         
-          @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-         </div>
-         </template>
-           
-           <template v-else>
-            <div class="col-md-4 columns mb-4">
-              <div class="input-group input-group-outline null is-filled ">
-              <label class="form-label">Date</label>
-            <input type="date" class="form-control form-control-default" v-model="form.initial_inspection_at">
-              </div>
-            <div v-if="errors.initial_inspection_at" class="text-danger">{{ errors.initial_inspection_at }}</div>
-          </div>
-          <div class="col-md-1 columns">
-            <button v-if="$page.props.auth.has_slowtow_admin_role" 
-            
-            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-           </div>    
-          </template>  
+  <DateComponent
+        :canSave="$page.props.auth.has_slowtow_admin_role"
+        :errors="errors"
+        :column=4
+        :dated_at="'Pass the Inspection stage date here'"
+        :success="success"
+      />   
+  </template>
+    
+    <template v-else>
+      <DateComponent
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=4
+      :dated_at="'Pass the Inspection stage date here'"
+      :success="success"
+    />    
+  </template>  
 
-        <ul class="list-group">
-          <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-            
-            <div class="avatar me-3" v-if="initial_inspection_doc !== null">
-            <a :href="`${$page.props.blob_file_path}${initial_inspection_doc.document_file}`" target="_blank">
-            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-            </a>
-            </div>
-        
-           <div class="d-flex align-items-start flex-column justify-content-center">
-              <h6 class="mb-0 text-sm">Document</h6>
-              
-                <p v-if="initial_inspection_doc !== null" class="mb-0 text-xs limit-file-name">
-                  {{ initial_inspection_doc.document_name }}
-                </p>
-           
-              
-            </div>
-        
-            <a v-if="initial_inspection_doc !== null" @click="deleteDocument(initial_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-            <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-            </a>
-            <a v-else @click="getDocType(8,'Initial Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
-            class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-            <i class="fa fa-upload h5" aria-hidden="true"></i>
-            </a>
-          </li>
-        </ul>  
-
-          <hr/>
+  <DocComponent
+  :documentModel="application_logded"
+  :errors="errors"
+  :orderByNumber=1700
+  :docType="'Initial Inspection'"
+  :success="success"
+  />
+<hr/>
 
   
-  <div class="col-md-6 columns">
-  <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input class="active-checkbox" id="final-inspection" type="checkbox"
-  @input="pushData($event,100)" :checked="licence.status >= 100" value="100">
-  <label for="final-inspection" class="form-check-label text-body text-truncate status-heading"> Final Inspection</label>
-  </div>
-  </div>
+
+    <StageComponent
+    :dbStatus="licence.status"
+    :errors="errors"
+    :stageValue=1800
+    :licence_id="licence.slug"
+    :stageTitle="'Final Inspection'"
+    :success="success"
+    @stage-value-changed="pushData"
+    />
 
   <template v-if="licence.final_inspection_at"> 
        
@@ -1268,6 +1376,7 @@
 
   </div>
   </div>
+
   
   <div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -1315,39 +1424,6 @@
     </div>
   </div>
 
-  <div v-if="show_modal" class="modal" id="edit-board-request" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Edit Board Request</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <form @submit.prevent="updateBoardRequest">
-        <div class="modal-body">      
-          <div class="row">
-          <div class="col-md-12 columns">
-            <div class="col-md-12 columns">
-              <div class="input-group input-group-outline null is-filled ">
-              <textarea required class="form-control form-control-default" 
-               v-model="editBoardRequestForm.body"></textarea>
-              </div>
-              <div v-if="errors.body" class="text-danger">{{ errors.body }}</div>
-          </div>
-          
-          </div>
-           </div>   
-        </div>
-    
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" :disabled="editBoardRequestForm.processing">
-           <span v-if="editBoardRequestForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-           Save</button>
-        </div>
-        </form>
-      </div>
-    </div>
-  </div>
     </Layout>
   </template>
     <style src="@vueform/multiselect/themes/default.css"></style>

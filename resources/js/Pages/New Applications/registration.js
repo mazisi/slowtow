@@ -7,7 +7,9 @@ import Layout from "../../Shared/Layout.vue";
   import Banner from '../components/Banner.vue';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
-  import AdditionalDocsComponent from './AdditionalDocsComponent.vue';
+  import AdditionalDocsComponent from './components/AdditionalDocsComponent.vue';
+  import StageComponent from './components/StageComponent.vue';
+  import DocComponent from './components/DocComponent.vue';
   
   export default {
     props: {
@@ -55,7 +57,7 @@ import Layout from "../../Shared/Layout.vue";
       activation_fee_paid: Object,
       licence_issued_doc: Object,
       licence_delivered: Object,
-      liqour_board_requests: Object,
+      lodged_with_municipality: Object,
       additional_docs: Object
     },
   
@@ -175,17 +177,17 @@ import Layout from "../../Shared/Layout.vue";
  
 
       function pushData(e,status_value){
-
            if (e.target.checked) {
-              this.form.status[0] = status_value;
-              this.form.unChecked = false;
+              form.status[0] = status_value;
+              form.unChecked = false;
             }else if(!e.target.checked){
-              this.form.unChecked = true
-              this.form.status[0] = status_value;
+              form.unChecked = true
+              form.status[0] = status_value;
             }
             updateRegistration();
             
         }
+
         function mergeDocs(){
           Inertia.post(`/merge-licence-docs/${props.licence.id}`, {
           preserveScroll: true,
@@ -300,26 +302,26 @@ import Layout from "../../Shared/Layout.vue";
          function getStatus(status_param) {
           let status;
           switch (status_param) {
-            case '10':
+            case '100':
               status = 'Client Quoted'
               break;
-              case '20':
+              case '200':
               status = 'Deposit Invoice'
               break;
-              case '30':
+              case '300':
               status = 'Deposit Paid'
               break;
-              case '40':
+              case '400':
               status = 'Payment to the Liquor Board'
               break;
-              case '50':
+              case '500':
               status = 'Prepare New Application'
               break;
-              case '60':
-              status = 'Prepare New Application'
+              case '600':
+              status = 'Scanned Application'
               break;
-              case '70':
-              status = 'Application Lodged'
+              case '700':
+              status = 'Lodged with Municipality'
               break;
               case '80':
               status = 'Additional Documents/Information'
@@ -381,6 +383,8 @@ import Layout from "../../Shared/Layout.vue";
       Head,
       Task,
       AdditionalDocsComponent,
+      StageComponent,
+      DocComponent,
       Banner
     },
     
