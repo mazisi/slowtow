@@ -292,7 +292,8 @@
   <MergeDocumentComponent
   :column=6
   :model_id="licence"
-  :docTitle="Government Gazette Adverts"
+  :docTitle="'Government Gazette Adverts'"
+  :docType="'Government Gazette Adverts'"
   :docModel="'government_gazette'"
   :stage=500
   :mergeNum=13
