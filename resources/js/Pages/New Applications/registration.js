@@ -10,6 +10,8 @@ import Layout from "../../Shared/Layout.vue";
   import AdditionalDocsComponent from './components/AdditionalDocsComponent.vue';
   import StageComponent from './components/StageComponent.vue';
   import DocComponent from './components/DocComponent.vue';
+  import DocComponent from './components/DocComponent.vue';
+  import MergeDocumentComponent from './components/MergeDocumentComponent.vue';  
   
   export default {
     props: {
@@ -385,6 +387,8 @@ import Layout from "../../Shared/Layout.vue";
       AdditionalDocsComponent,
       StageComponent,
       DocComponent,
+      DocComponent,
+      MergeDocumentComponent,
       Banner
     },
     
