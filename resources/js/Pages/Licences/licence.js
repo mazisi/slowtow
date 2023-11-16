@@ -22,13 +22,14 @@ export default {
         Banner,
         Paginate
     },
-    
-    
+
+
 
     setup(props) {
       const [search_query, status, licence_type, licence_date, province] = getUrlParam();
-    
+
         const term = search_query ? search_query : ref('')
+        let licenceByProvince = ref([]);
 
         const form = useForm({
               term: term,
@@ -42,18 +43,28 @@ export default {
         if(string !== ''){
           if(string.length >= limit){
           return string.substring(0, limit) + '...'
-        }  
+        }
           return string.substring(0, limit)
         }
         }
 
        function search(){
+
           form.get(`/licences`, {
             replace: true,
             preserveState: true,
             onSuccess: () => {},
-            
+
         })
+        }
+
+        //filter licences on province search
+        function filterLicenceTypes(){
+            console.log(form.province);
+            licenceByProvince.value = props.all_licence_types
+                .filter(obj => obj.province === form.province);
+
+            console.log(licenceByProvince);
         }
 
         const notify = (message) => {
@@ -61,7 +72,7 @@ export default {
             toast.success(message, {
             autoClose: 2000,
           });
-          
+
           }else if(props.error){
             toast.error(message, {
             autoClose: 2000,
@@ -69,9 +80,11 @@ export default {
           }
         }
 
+
+
         watch(term, _.debounce(function (value) {
-          Inertia.get('/licences', { 
-            term: value, 
+          Inertia.get('/licences', {
+            term: value,
             active_status: form.active_status,
             licence_type: form.licence_type,
             licence_date: form.licence_date,
@@ -87,7 +100,7 @@ export default {
           Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true });
         })
 
-        
+
         function getUrlParam(){
           const urlParams = new URLSearchParams(window.location.search);
           const search_query = urlParams.get('term')
@@ -104,8 +117,8 @@ export default {
           ];
         }
 
-       
-        
+
+
 
         return {
           limit,
@@ -114,11 +127,13 @@ export default {
           term,
           search,
           notify,
-          getUrlParam
+          getUrlParam,
+            filterLicenceTypes,
+            licenceByProvince,
         }
-        
+
     },
 
 
-    
+
 }
