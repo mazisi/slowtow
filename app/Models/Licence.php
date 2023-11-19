@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\LicenceDate;
 use Illuminate\Database\Eloquent\Model;
-use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Dyrynda\Database\Support\CascadeSoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
@@ -67,6 +68,8 @@ class Licence extends Model
     }
 
 
-
+    public function licence_stage_dates(){
+      return $this->hasMany(LicenceDate::class, 'licence_id');
+    }
     
 }

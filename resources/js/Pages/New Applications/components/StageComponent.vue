@@ -19,12 +19,13 @@ export default{
   
   props: {
     dbStatus: Object,
-    column: String,
+    column: Number,
     errors: Object,
+    error: String,
     model_id: Number,
     stageValue: Number,
     stageTitle: String,
-    success: Object
+    success: String
   },
   setup(props, context){
     function emitValue(event) {

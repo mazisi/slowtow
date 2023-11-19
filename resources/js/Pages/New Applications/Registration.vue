@@ -42,7 +42,7 @@
     />
     <hr/>
     <DocComponent
-       :documentModel="client_quoted"
+       :documentModel="licence"
        :errors="errors"
        :orderByNumber=100
        :docType="'Client Quoted'"
@@ -62,7 +62,7 @@
       @stage-value-changed="pushData"
     />
     <DocComponent
-    :documentModel="client_invoiced"
+    :documentModel="licence"
     :errors="errors"
     :orderByNumber=200
     :docType="'Client Invoiced'"
@@ -83,26 +83,31 @@
   @stage-value-changed="pushData"
 />
   <div class="col-md-1 columns"></div>
+  <!-- v-if="getLicenceDate(licence.id, 'Deposit Paid') == 'Deposit Paid'" -->
   
-  <template v-if="licence.deposit_paid_at">
     <DateComponent
+        :stage="'Deposit Paid'"
+        :licence="licence"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
         :column=4
-        :dated_at="'Pass the Deposit paid stage date here'"
+        :dated_at="getLicenceDate(licence.id, 'Deposit Paid')"
         :success="success"
       />  
-   </template>
    
+   
+<!--    
    <template v-else>
     <DateComponent
+        :licence="licence"
+        :stage="'Deposit Paid'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
         :column=4
         :dated_at="'Pass the Deposit paid stage date here'"
         :success="success"
       />  
-   </template>
+   </template> -->
   
   <hr>
 
@@ -120,27 +125,18 @@
     
     <div class="col-md-1 columns"></div>
      
-       <template v-if="licence.liquor_board_at">   
+        
         <DateComponent
+        :stage="'Payment To The Liquor Board'"
+        :licence="licence"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
         :column=4
-        :dated_at="'Pass the Liquor Board stage date here'"
+        :dated_at="getLicenceDate(licence.id, 'Payment To The Liquor Board')"
         :success="success"
       />   
        
-         </template>
-         
-         <template v-else>
-          <DateComponent
-          :canSave="$page.props.auth.has_slowtow_admin_role"
-          :errors="errors"
-          :column=4
-          :dated_at="'Pass the Liquor Board stage date here'"
-          :success="success"
-        />       
-           
-         </template> 
+       
     
 
          <DocComponent
@@ -308,7 +304,8 @@
   :stage=500
   :mergeNum=14
   />
-
+</div>
+<div class="col-6">
   <MergeDocumentComponent
   :column=6
   :model_id="licence"
@@ -497,14 +494,23 @@
 
   <div class="col-md-6">
     <DocComponent
-    :documentModel="scanned_application"
+    :documentModel="licence"
     :errors="errors"
-    orderByNumber=600
+    :orderByNumber=600
     :docType="'Scanned Application'"
     :success="success"
 />
  
   </div>
+  <DateComponent
+      :licence="licence"
+      :stage="'Scanned Application'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Scanned Application')"
+      :success="success"
+      />
   <hr>
 
 
@@ -529,6 +535,15 @@
   :success="success"
 />
 </div>
+<DateComponent
+      :licence="licence"
+      :stage="'Lodged with Municipality'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Lodged with Municipality')"
+      :success="success"
+      />
 <hr/> 
 
 <!-- When its Mpumalanga province ============================================== -->
@@ -551,6 +566,16 @@
 :success="success"
 />
 </div>
+
+<DateComponent
+      :licence="licence"
+      :stage="'Municipal Comments'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Municipal Comments')"
+      :success="success"
+      />
 <hr/> 
 <!-- //Mpumalanga================= -->
 <StageComponent
@@ -593,6 +618,15 @@
   :success="success"
   />
   </div>
+  <DateComponent
+      :licence="licence"
+      :stage="'Lodged with MER'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Lodged with MER')"
+      :success="success"
+      /> 
 <hr>
 
 <!-- Limpopo and Northwest ====================== -->
@@ -615,6 +649,15 @@
   :success="success"
   />
   </div>
+  <DateComponent
+      :licence="licence"
+      :stage="'Lodged with Magistrate'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Lodged with Magistrate')"
+      :success="success"
+      /> 
 <hr>
 
 <!-- Limpopo and Northwest ====================== -->
@@ -637,6 +680,15 @@
   :success="success"
   />
   </div>
+  <DateComponent
+      :licence="licence"
+      :stage="'Lodged with DPO'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Lodged with DPO')"
+      :success="success"
+      /> 
 <hr>
 
 <!-- Limpopo and Northwest ====================== -->
@@ -659,6 +711,15 @@
   :success="success"
   />
   </div>
+  <DateComponent
+      :licence="licence"
+      :stage="'Police Report'"
+      :canSave="$page.props.auth.has_slowtow_admin_role"
+      :errors="errors"
+      :column=5
+      :dated_at="getLicenceDate(licence.id, 'Police Report')"
+      :success="success"
+      />   
 <hr>
 
 
@@ -670,37 +731,27 @@
     :errors="errors"
     :stageValue=1400
     :licence_id="licence.slug"
-    :stageTitle="'Lodged With Liqour Board(renamed)'"
+    :stageTitle="'Lodged With Liqour Board'"
     :success="success"
     @stage-value-changed="pushData"
     />   
     
-     <template v-if="licence.application_lodged_at">   
+     
       <DateComponent
+      :licence="licence"
+      :stage="'Lodged With Liqour Board'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
       :column=5
-      :dated_at="'Pass the stage date here'"
+      :dated_at="getLicenceDate(licence.id, 'Lodged With Liquor Board')"
       :success="success"
       />      
-       </template>
        
-       <template v-else>
-        
-        <DateComponent
-        :canSave="$page.props.auth.has_slowtow_admin_role"
-        :errors="errors"
-        :column=5
-        :dated_at="'Pass the stage date here'"
-        :success="success"
-      />   
-       </template> 
-
        <DocComponent
-        :documentModel="application_logded"
+        :documentModel="licence"
         :errors="errors"
         :orderByNumber=1400
-        :docType="'Application Lodged'"
+        :docType="'Lodged With Liquor Board'"
         :success="success"
        />
 <hr/>
@@ -716,29 +767,21 @@
 @stage-value-changed="pushData"
 />   
 
- <template v-if="licence.application_lodged_at">   
+
   <DateComponent
+  :licence="licence"
+  :stage="'Application Lodged (Proof of Lodgement)'"
   :canSave="$page.props.auth.has_slowtow_admin_role"
   :errors="errors"
   :column=5
-  :dated_at="'Pass the stage date here'"
+  :dated_at="getLicenceDate(licence.id, 'Application Lodged (Proof of Lodgement)')"
   :success="success"
   />      
-   </template>
+ 
    
-   <template v-else>
-    
-    <DateComponent
-    :canSave="$page.props.auth.has_slowtow_admin_role"
-    :errors="errors"
-    :column=5
-    :dated_at="'Pass the stage date here'"
-    :success="success"
-  />   
-   </template> 
 
    <DocComponent
-    :documentModel="application_logded"
+    :documentModel="licence"
     :errors="errors"
     :orderByNumber=1500
     :docType="'Application Lodged'"
@@ -780,30 +823,21 @@
     />
         
         
-        
-  <template v-if="licence.initial_inspection_at">   
+      
   
   <DateComponent
+        :licence="licence"
+        :stage="'Initial Inspection'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
         :column=4
-        :dated_at="'Pass the Inspection stage date here'"
+        :dated_at="getLicenceDate(licence.id, 'Initial Inspection')"
         :success="success"
       />   
-  </template>
-    
-    <template v-else>
-      <DateComponent
-      :canSave="$page.props.auth.has_slowtow_admin_role"
-      :errors="errors"
-      :column=4
-      :dated_at="'Pass the Inspection stage date here'"
-      :success="success"
-    />    
-  </template>  
+ 
 
   <DocComponent
-  :documentModel="application_logded"
+  :documentModel="licence"
   :errors="errors"
   :orderByNumber=1700
   :docType="'Initial Inspection'"
@@ -823,31 +857,20 @@
     @stage-value-changed="pushData"
     />
 
-  <template v-if="licence.final_inspection_at"> 
-       
+ 
   <DateComponent
+      :licence="licence"
+      :stage="'Final Inspection'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
       :column=4
-      :dated_at="'Pass the Final Inspection stage date here'"
+      :dated_at="getLicenceDate(licence.id, 'Final Inspection')"
       :success="success"
     />  
-   </template>
-           
-  <template v-else>      
-    <DateComponent
-    :canSave="$page.props.auth.has_slowtow_admin_role"
-    :errors="errors"
-    :column=4
-    :dated_at="'Pass the Final Inspection stage date here'"
-    :success="success"
-  />  
-
-   
- </template>  
+ 
 
  <DocComponent
- :documentModel="final_inspection_doc"
+ :documentModel="licence"
  :errors="errors"
  :orderByNumber=1800
  :docType="'Final Inspection'"
@@ -868,27 +891,16 @@
     />
     
 
-    <template v-if="licence.activation_fee_requested_at"> 
-       
     <DateComponent
+    :licence="licence"
+    :stage="'Activation Fee Requested'"
     :canSave="$page.props.auth.has_slowtow_admin_role"
     :errors="errors"
     :column=4
-    :dated_at="'Pass the Activation Fee Requested stage date here'"
+    :dated_at="getLicenceDate(licence.id, 'Activation Fee Requested')"
     :success="success"
   />  
 
- </template>
-               
- <template v-else>      
-  <DateComponent
-  :canSave="$page.props.auth.has_slowtow_admin_role"
-  :errors="errors"
-  :column=4
-  :dated_at="'Pass the Activation Fee Requested stage date here'"
-  :success="success"
-/>  
-     </template>  
 
     <hr/> 
 
@@ -905,7 +917,7 @@
       />
            
       <DocComponent
-      :documentModel="final_inspection_doc"
+      :documentModel="licence"
       :errors="errors"
       :orderByNumber=2000
       :docType="'Client Finalisation Invoiced'"
@@ -926,28 +938,17 @@
       @stage-value-changed="pushData"
       />
 
-        
- <template v-if="licence.client_paid_at"> 
-
+      
   <DateComponent
+  :licence="licence"
+  :stage="'Finalisation Paid'"
   :canSave="$page.props.auth.has_slowtow_admin_role"
   :errors="errors"
   :column=4
-  :dated_at="'Pass the Finalisation Paid date here'"
+  :dated_at="getLicenceDate(licence.id, 'Finalisation Paid')"
   :success="success"
 /> 
-  
-</template>
-                     
-<template v-else>      
-  <DateComponent
-  :canSave="$page.props.auth.has_slowtow_admin_role"
-  :errors="errors"
-  :column=4
-  :dated_at="'Pass the Finalisation Paid date here'"
-  :success="success"
-/>  
- </template>  
+
         <hr/>
 
       
@@ -964,29 +965,21 @@
           
 
 
-           <template v-if="licence.activation_fee_paid_at"> 
+         
             <DateComponent
+            :licence="licence"
+            :stage="'Activation Fee Paid'"
             :canSave="$page.props.auth.has_slowtow_admin_role"
             :errors="errors"
             :column=4
-            :dated_at="'Pass the Activation Fee Paid date here'"
+            :dated_at="getLicenceDate(licence.id, 'Activation Fee Paid')"
             :success="success"
           />  
-          </template>
-                               
-          <template v-if="licence.activation_fee_paid_at"> 
-            <DateComponent
-            :canSave="$page.props.auth.has_slowtow_admin_role"
-            :errors="errors"
-            :column=4
-            :dated_at="'Pass the Activation Fee Paid Else date here'"
-            :success="success"
-          />  
-       </template> 
+        
 
 
        <DocComponent
-       :documentModel="final_inspection_doc"
+       :documentModel="licence"
        :errors="errors"
        :orderByNumber=2200
        :docType="'Activation Fee Paid'"
@@ -1007,30 +1000,21 @@
           />
            
    
-             
-             <template v-if="licence.licence_issued_at"> 
+          
               <DateComponent
+              :licence="licence"
+              :stage="'Licence Issued'"
               :canSave="$page.props.auth.has_slowtow_admin_role"
               :errors="errors"
               :column=4
-              :dated_at="'Pass the Licence Issued date here'"
+              :dated_at="getLicenceDate(licence.id, 'Licence Issued')"
               :success="success"
             />  
               
-          </template>
-                               
-          <template v-else>      
-            <DateComponent
-            :canSave="$page.props.auth.has_slowtow_admin_role"
-            :errors="errors"
-            :column=4
-            :dated_at="'Pass the Licence Issued date here'"
-            :success="success"
-          />  
-       </template> 
+         
 
        <DocComponent
-       :documentModel="final_inspection_doc"
+       :documentModel="licence"
        :errors="errors"
        :orderByNumber=2300
        :docType="'Licence Issued '"
@@ -1048,29 +1032,19 @@
                 :success="success"
                 @stage-value-changed="pushData"
                 />
-               <template v-if="licence.licence_delivered_at"> 
+          
                 <DateComponent
+                :licence="licence"
+                :stage="'Licence Delivered'"
                 :canSave="$page.props.auth.has_slowtow_admin_role"
                 :errors="errors"
                 :column=4
-                :dated_at="'Pass the Licence Delivered date here'"
+                :dated_at="getLicenceDate(licence.id, 'Licence Delivered')"
                 :success="success"
               /> 
-                
-            </template>
-                                 
-            <template v-else>      
-              <DateComponent
-              :canSave="$page.props.auth.has_slowtow_admin_role"
-              :errors="errors"
-              :column=4
-              :dated_at="'Pass the Licence Delivered date here'"
-              :success="success"
-            /> 
-         </template> 
-
+         
          <DocComponent
-         :documentModel="final_inspection_doc"
+         :documentModel="licence"
          :errors="errors"
          :orderByNumber=2400
          :docType="'Licence Delivered '"
@@ -1110,7 +1084,7 @@
   </div>
 
   
-  <!-- <div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+ <div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
@@ -1154,7 +1128,7 @@
         
       </div>
     </div>
-  </div> -->
+  </div>
 
     </Layout>
   </template>

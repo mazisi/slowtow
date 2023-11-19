@@ -3,7 +3,6 @@ import Layout from "../../Shared/Layout.vue";
   import { Inertia } from '@inertiajs/inertia';
   import '@vuepic/vue-datepicker/dist/main.css';
   import Task from "../Tasks/Task.vue";
-  import { ref } from 'vue';
   import Banner from '../components/Banner.vue';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
@@ -11,12 +10,16 @@ import Layout from "../../Shared/Layout.vue";
   import StageComponent from './components/StageComponent.vue';
   import DocComponent from './components/DocComponent.vue';
   import MergeDocumentComponent from './components/MergeDocumentComponent.vue';  
+  import DateComponent from './components/DateComponent.vue';  
+  // import MergeButtonComponent from './components/MergeButtonComponent.vue';  
+  import licence from "../Licences/licence";
   
   export default {
     props: {
       tasks: Object,
       errors: Object,
       licence: Object,
+      licence_stage_dates: Object,
       success: String,
       error: String,
       client_quoted: Object,
@@ -59,16 +62,10 @@ import Layout from "../../Shared/Layout.vue";
       licence_issued_doc: Object,
       licence_delivered: Object,
       lodged_with_municipality: Object,
-      additional_docs: Object
+      additional_docs: Object,
     },
   
-    setup (props) {
-      let show_modal = ref(true);  
-      let show_file_name = ref(false);
-      let file_name = ref('');
-      let file_size = ref(null);
-      let file_has_apostrophe = ref();
-      
+    setup (props) {      
 
       const form = useForm({
         deposit_paid_at: props.licence.deposit_paid_at,
@@ -85,45 +82,7 @@ import Layout from "../../Shared/Layout.vue";
         unChecked: false
        })
   
-      const boardRequests = useForm({
-        body: null,
-        model_id: props.licence.id,
-        model_type: 'Licence'
-      })
-
-      const editBoardRequestForm = useForm({
-        body: null,
-        id: null,
-      })
-
-      const uploadDoc = useForm({
-        document_file: null,
-        doc_type: null ,
-        num: null,
-        stage: null,
-        licence_id: props.licence.id
-      })
-  
-      function submitBoardRequests(){
-        boardRequests.post('/submit-board-request', {
-          preserveScroll: true,
-          onSuccess: () => { 
-            if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-            boardRequests.body = '';
-          },
-        })
-      }
-  
-      function getDocType(stage='',doc_type,num=null){
-        this.uploadDoc.doc_type = doc_type;
-        this.uploadDoc.stage = stage;
-        this.uploadDoc.num = num 
-        this.show_modal =true   
-      }
+    
   
       function deleteDocument(id){
           if(confirm('Document will be deleted...Continue ??')){
@@ -140,22 +99,6 @@ import Layout from "../../Shared/Layout.vue";
         }
   
         
-      function submitDocument(){
-        uploadDoc.post('/upload-licence-document', {
-          preserveScroll: true,
-          onSuccess: () => { 
-            this.show_modal = false;
-            this.show_file_name = false;
-            document.querySelector('.modal-backdrop').classList.remove('modal-backdrop');
-                        if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-            this.uploadDoc.reset();
-           },
-        })
-      }
   
       function updateRegistration() {//handles dates updates
         form.patch(`/update-new-registration/${props.licence.slug}`, {
@@ -210,40 +153,6 @@ import Layout from "../../Shared/Layout.vue";
       }
   
      
-     function editBoardRequest(body, request_id){
-      this.show_modal = true     
-      this.editBoardRequestForm.body = body,
-      this.editBoardRequestForm.id = request_id      
-      }
-
-      function updateRegistrationDate(){
-        form.patch(`/update-registration-date/${props.licence.slug}`, {
-          preserveScroll: true,
-          onSuccess: () => { 
-                    if(props.success){
-                        notify(props.success)
-                      }else if(props.error){
-                        notify(props.error)
-                      }
-                      },
-        })     
-      }
-
-
-     function updateBoardRequest(){
-      editBoardRequestForm.patch('/update-board-request', {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.show_modal = false;
-            document.querySelector('.modal-backdrop').remove();
-            if(props.success){
-                     notify(props.success)
-             }else if(props.error){
-                      notify(props.error)
-             } 
-            }
-        })
-     }
 
 
         function deleteRegistration(){
@@ -259,13 +168,7 @@ import Layout from "../../Shared/Layout.vue";
         })   
         }
        
-      function getFileName(e){
-        this.file_size = e.target.files[0].size;
-        this.show_file_name = true;
-        this.uploadDoc.document_file = e.target.files[0];
-        this.file_name = e.target.files[0].name;
-        this.file_has_apostrophe = this.file_name.includes("'");
-      }
+      
 
       const notify = (message) => {
           if(props.success){
@@ -287,18 +190,24 @@ import Layout from "../../Shared/Layout.vue";
             toast.loading(message);
         }
 
-       
 
-         function viewFile(model_id) {
-              let model = 'LicenceDocument';
-               Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
-              },
-                
-               })
-         }
+        function getLicenceDate(licence_id, stage){
+          // console.log('licence_stage_dates',props.licence.licence_stage_dates)
+          if(! props.licence.licence_stage_dates){
+            return ''
+          }else{
+            let licence_dates = props.licence.licence_stage_dates;//object with all licence stages
+            for (let i = 0; i < licence_dates.length; i++) {
+              if (licence_dates[i].licence_id === licence_id && licence_dates[i].stage === stage) {
+                console.log('stage',licence_dates[i].stage)
+                return licence_dates[i].dated_at;
+              }
+            }
+            return '';
+          }
+         
+
+        }
 
          function getStatus(status_param) {
           let status;
@@ -359,21 +268,13 @@ import Layout from "../../Shared/Layout.vue";
         }
 
       return { 
-        viewFile,checkingFileProgress,notify,
-        form,show_modal,file_size,getStatus,
-        file_name,getFileName,updateRegistrationDate,
-        editBoardRequestForm,
-        file_has_apostrophe,
-        editBoardRequest,
-        updateBoardRequest,
+        notify,
+        form,getStatus,
         updateRegistration,
-        pushData,uploadDoc,
-        getDocType, submitDocument,
+        pushData,
         deleteDocument,
-        boardRequests,
-        submitBoardRequests,
-        mergeDocs,show_file_name,
-        computeBoardRequestDate,
+        getLicenceDate,
+        mergeDocs,
         deleteRegistration,
         toast
        }
@@ -387,6 +288,7 @@ import Layout from "../../Shared/Layout.vue";
       StageComponent,
       DocComponent,
       DocComponent,
+      DateComponent,
       MergeDocumentComponent,
       Banner
     },

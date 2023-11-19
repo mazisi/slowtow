@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Models\LicenceDate;
 use App\Models\Nomination;
 use App\Models\LicenceType;
 use Illuminate\Http\Request;
@@ -119,7 +120,8 @@ class NewApplicationController extends Controller
     }
 
     public function view_registration(Request $request){
-        $licence = Licence::with('company')->whereSlug($request->slug)->first();
+        $licence = Licence::with('company','licence_stage_dates')->whereSlug($request->slug)->first();
+       //dd($licence);
         $client_quoted = LicenceDocument::where('document_type','Client Quoted')->where('licence_id',$licence->id)->first(['id','document_name', 'document_file']);
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence')->where('model_id',$licence->id)->get();
 
@@ -254,27 +256,26 @@ class NewApplicationController extends Controller
 public function updateRegistrationDate(Request $request, $slug)
 {
     try {
-        if($request->licence_issued_at){
+        //Validate
+        $request->validate([
+            'dated_at' => 'required',
+            'stage'  => 'stage',
+            'licence_id' => 'required|exists:licences,id'
+        ]);
+        
+        if($request->stage == 'Licence Issued'){
               //If stage is issued then its no longer a new app.
-              Licence::whereSlug($slug)->update(['is_new_app' => false, 'licence_date' => $request->licence_issued_at]);
+              Licence::whereSlug($slug)->update(['is_new_app' => false, 'licence_date' => $request->dated_at]);
               
         }
-        Licence::whereSlug($slug)->update([
-            'deposit_paid_at' => $request->deposit_paid_at,
-            'liquor_board_at' => $request->liquor_board_at,
-            'application_lodged_at' => $request->application_lodged_at,
-            'renewal_amount' => $request->renewal_amount,
-            'initial_inspection_at' => $request->initial_inspection_at,
-            'final_inspection_at' => $request->final_inspection_at,
-            'activation_fee_requested_at' =>$request->activation_fee_requested_at,
-            'client_paid_at' => $request->client_paid_at,
-            'activation_fee_paid_at' => $request->activation_fee_paid_at,
-            'licence_issued_at' => $request->licence_issued_at,
-            'licence_date' => $request->licence_issued_at,
-            'licence_delivered_at' => $request->licence_delivered_at,
+        LicenceDate::create([
+            'dated_at' => $request->dated_at,
+            'licence_id' => $request->licence_id,
+            'stage' => $request->stage,
            ]);
        return back()->with('success','Date updated successfully.');
     } catch (\Throwable $th) {
+        // throw $th;
         return back()->with('error','Error updating date.');
     }
 }
