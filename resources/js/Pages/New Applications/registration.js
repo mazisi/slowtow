@@ -11,95 +11,28 @@ import Layout from "../../Shared/Layout.vue";
   import DocComponent from './components/DocComponent.vue';
   import MergeDocumentComponent from './components/MergeDocumentComponent.vue';  
   import DateComponent from './components/DateComponent.vue';  
-  // import MergeButtonComponent from './components/MergeButtonComponent.vue';  
-  import licence from "../Licences/licence";
+  import MergeButtonComponent from './components/MergeButtonComponent.vue';  
+  // import licence from "../Licences/licence";
   
   export default {
     props: {
       tasks: Object,
       errors: Object,
       licence: Object,
-      licence_stage_dates: Object,
       success: String,
       error: String,
-      client_quoted: Object,
-      gba_application_form: Object,//doc
-      client_invoiced: Object,//doc
-      application_forms: Object,//doc
-      company_docs: Object,
-      cipc_docs: Object,
-      id_docs: Object,
-      police_clearance: Object,
-      tax_clearance: Object,
-      lta_certificate: Object,
-      shareholding_info: Object,
-      financial_interests: Object,
-      _500m_affidavict: Object,
-      government_gazette: Object,
-      advert_affidavict: Object,
-      proof_of_occupation: Object,
-      representations: Object,
-      menu: Object,
-      photographs: Object,
-      consent_letter: Object,
-      zoning_certificate: Object,
-      local_authority: Object,
-      mapbook_plans: Object,
-      google_map_plans: Object,
-      description: Object,
-      site_plans: Object,
-      dimensional_plans: Object,
-      advert_photographs: Object,
-      newspaper_adverts: Object,
-      payment_to_liqour_board: Object,
-      scanned_application: Object,
-      application_logded: Object,
-      initial_inspection_doc: Object,
-      final_inspection_doc: Object,
-      client_finalisation: Object,
-      client_paid: Object,
-      activation_fee_paid: Object,
-      licence_issued_doc: Object,
-      licence_delivered: Object,
-      lodged_with_municipality: Object,
       additional_docs: Object,
     },
   
     setup (props) {      
 
       const form = useForm({
-        deposit_paid_at: props.licence.deposit_paid_at,
-        liquor_board_at: props.licence.liquor_board_at,
-        application_lodged_at: props.licence.application_lodged_at,
-        initial_inspection_at: props.licence.initial_inspection_at,
-        final_inspection_at: props.licence.final_inspection_at,
-        activation_fee_requested_at	: props.licence.activation_fee_requested_at,
-        client_paid_at: props.licence.client_paid_at,
-        activation_fee_paid_at: props.licence.activation_fee_paid_at,
-        licence_issued_at: props.licence.licence_issued_at,
-        licence_delivered_at: props.licence.licence_delivered_at,
         status: [],
-        unChecked: false
+        unChecked: false,
+        prevStage: ''
        })
   
     
-  
-      function deleteDocument(id){
-          if(confirm('Document will be deleted...Continue ??')){
-            Inertia.delete(`/delete-licence-document/${id}`, {
-              onSuccess: () => { 
-                        if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-                      },
-            })
-          }
-        }
-  
-        
-  
       function updateRegistration() {//handles dates updates
         form.patch(`/update-new-registration/${props.licence.slug}`, {
           preserveScroll: true,
@@ -120,7 +53,7 @@ import Layout from "../../Shared/Layout.vue";
       }
  
 
-      function pushData(e,status_value){
+      function pushData(e,status_value, prevStage){
            if (e.target.checked) {
               form.status[0] = status_value;
               form.unChecked = false;
@@ -128,6 +61,7 @@ import Layout from "../../Shared/Layout.vue";
               form.unChecked = true
               form.status[0] = status_value;
             }
+            form.prevStage = prevStage;
             updateRegistration();
             
         }
@@ -147,12 +81,6 @@ import Layout from "../../Shared/Layout.vue";
                       },
         })
         }
-
-      function computeBoardRequestDate(datetime){
-        return new Date(datetime).toLocaleString()
-      }
-  
-     
 
 
         function deleteRegistration(){
@@ -199,7 +127,6 @@ import Layout from "../../Shared/Layout.vue";
             let licence_dates = props.licence.licence_stage_dates;//object with all licence stages
             for (let i = 0; i < licence_dates.length; i++) {
               if (licence_dates[i].licence_id === licence_id && licence_dates[i].stage === stage) {
-                console.log('stage',licence_dates[i].stage)
                 return licence_dates[i].dated_at;
               }
             }
@@ -209,6 +136,26 @@ import Layout from "../../Shared/Layout.vue";
 
         }
 
+        function hasFile(doc_type){          
+          if(! props.licence.documents){
+            return ''
+          }else{
+            let licence_documents = props.licence.documents;//object with all licence docs
+            for (let i = 0; i < licence_documents.length; i++) {
+              if (licence_documents[i].licence_id === props.licence.id && licence_documents[i].document_type === doc_type) {
+                return {
+                  fileName: licence_documents[i].document_name,
+                  docPath: licence_documents[i].document_file,
+                  id: licence_documents[i].id
+                };
+              }
+            }
+            return '';
+          }        
+
+        }
+
+        
          function getStatus(status_param) {
           let status;
           switch (status_param) {
@@ -268,11 +215,10 @@ import Layout from "../../Shared/Layout.vue";
         }
 
       return { 
-        notify,
+        notify,hasFile,
         form,getStatus,
         updateRegistration,
         pushData,
-        deleteDocument,
         getLicenceDate,
         mergeDocs,
         deleteRegistration,
@@ -290,6 +236,7 @@ import Layout from "../../Shared/Layout.vue";
       DocComponent,
       DateComponent,
       MergeDocumentComponent,
+      MergeButtonComponent,
       Banner
     },
     

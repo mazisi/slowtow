@@ -34,7 +34,9 @@
       :column=12
       :dbStatus="licence.status"
       :errors="errors"
+      :error="error"
       :stageValue=100
+      :prevStage=null
       :licence_id="licence.slug"
       :stageTitle="'Client Quoted'"
       :success="success"
@@ -43,7 +45,9 @@
     <hr/>
     <DocComponent
        :documentModel="licence"
+       :hasFile="hasFile('Client Quoted')"
        :errors="errors"
+       :error="error"
        :orderByNumber=100
        :docType="'Client Quoted'"
        :success="success"
@@ -55,7 +59,9 @@
       :column=12
       :dbStatus="licence.status"
       :errors="errors"
+      :error="error"
       :stageValue=200
+      prevStage=100
       :licence_id="licence.slug"
       :stageTitle="'Deposit Invoice'"
       :success="success"
@@ -63,7 +69,9 @@
     />
     <DocComponent
     :documentModel="licence"
+    :hasFile="hasFile('Client Invoiced')"
     :errors="errors"
+    :error="error"
     :orderByNumber=200
     :docType="'Client Invoiced'"
     :success="success"
@@ -76,7 +84,9 @@
   :column=5
   :dbStatus="licence.status"
   :errors="errors"
+  :error="error"
   :stageValue=300
+  prevStage=200
   :licence_id="licence.slug"
   :stageTitle="'Deposit Paid'"
   :success="success"
@@ -90,24 +100,12 @@
         :licence="licence"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
+        :error="error"
         :column=4
         :dated_at="getLicenceDate(licence.id, 'Deposit Paid')"
         :success="success"
       />  
    
-   
-<!--    
-   <template v-else>
-    <DateComponent
-        :licence="licence"
-        :stage="'Deposit Paid'"
-        :canSave="$page.props.auth.has_slowtow_admin_role"
-        :errors="errors"
-        :column=4
-        :dated_at="'Pass the Deposit paid stage date here'"
-        :success="success"
-      />  
-   </template> -->
   
   <hr>
 
@@ -116,7 +114,9 @@
     :column=5
     :dbStatus="licence.status"
     :errors="errors"
+    :error="error"
     :stageValue=400
+    prevStage=300
     :licence_id="licence.slug"
     :stageTitle="'Payment To The Liquor Board'"
     :success="success"
@@ -131,6 +131,7 @@
         :licence="licence"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
+        :error="error"
         :column=4
         :dated_at="getLicenceDate(licence.id, 'Payment To The Liquor Board')"
         :success="success"
@@ -141,7 +142,9 @@
 
          <DocComponent
           :documentModel="licence"
+          :hasFile="hasFile('Payment To The Liquor Board')"
           :errors="errors"
+          :error="error"
           :orderByNumber=400
           :docType="'Payment To The Liquor Board'"
           :success="success"
@@ -154,7 +157,9 @@
       :column=12
       :dbStatus="licence.status"
       :errors="errors"
+      :error="error"
       :stageValue=500
+      prevStage=400
       :licence_id="licence.slug"
       :stageTitle="'Prepare New Application'"
       :success="success"
@@ -165,307 +170,400 @@
     
   <div class="col-md-6">
     <MergeDocumentComponent
+    :success="success"
+    :error="error"
+    :errors="errors"
     :column=6
-    :model_id="licence"
     :docTitle="'GLB Application Forms'"
     :docType="'GLB Application Forms'"
-    :docModel="'gba_application_form'"
+    :docModel="licence"
     :stage=500
-    :mergeNum=1
+    :mergeNum="1"
+    :hasFile="hasFile('GLB Application Forms')"
     />
     
 
 
-    <div class="row"><div class="col-md-7" >
-      <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
-    </div>
-    <a v-if="payment_to_liqour_board !== null" :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank" class="col-md-1">
-      <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
-    </a>
-  </div>
+  <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
+  :column=6
+  :model_id="licence"
+  :docTitle="'Payment To The Liquor Board'"
+  :docType="'Payment To The Liquor Board'"
+  :docModel="licence"
+  :stage=500
+  :mergeNum="2"
+  :hasFile="hasFile('Payment To The Liquor Board')"
+  />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Application Forms'"
   :docType="'Application Forms'"
-  :docModel="'application_forms'"
+  :docModel="licence"
   :stage=500
   :mergeNum=3
+  :hasFile="hasFile('Application Forms')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Company Documents'"
   :docType="'Company Documents'"
-  :docModel="'company_docs'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=4
+  :mergeNum="4"
+  :hasFile="hasFile('Company Documents')"
   />
   
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'CIPC Documents'"
   :docType="'CIPC Documents'"
-  :docModel="'cipc_docs'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=5
+  :mergeNum="5"
+  :hasFile="hasFile('CIPC Documents')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'ID Documents'"
   :docType="'ID Documents'"
-  :docModel="'id_docs'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=6
+  :mergeNum="6"
+  :hasFile="hasFile('ID Documents')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Police Clearance'"
   :docType="'Police Clearance'"
-  :docModel="'id_docs'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=7
+  :hasFile="hasFile('Police Clearance')"
+  :mergeNum="7"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Tax Clearance'"
   :docType="'Tax Clearance'"
-  :docModel="'tax_clearance'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=8
+  :mergeNum="8"
+  :hasFile="hasFile('Tax Clearance')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'LTA Certificate'"
   :docType="'LTA Certificate'"
-  :docModel="'lta_certificate'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=9
+  :mergeNum="9"
+  :hasFile="hasFile('LTA Certificate')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Shareholding Info'"
   :docType="'Shareholding Info'"
-  :docModel="'shareholding_info'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=10
+  :mergeNum="10"
+  :hasFile="hasFile('Shareholding Info')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Financial Interests'"
   :docType="'Financial Interests'"
-  :docModel="'financial_interests'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=11
+  :mergeNum="11"
+  :hasFile="hasFile('Financial Interests')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'500m Affidavit'"
   :docType="'500m Affidavit'"
-  :docModel="'_500m_affidavict'"
-  :stage=500
-  :mergeNum=12
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="12"
+  :hasFile="hasFile('500m Affidavit')"
   />
 
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Government Gazette Adverts'"
   :docType="'Government Gazette Adverts'"
-  :docModel="'government_gazette'"
-  :stage=500
-  :mergeNum=13
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="13"
+  :hasFile="hasFile('Government Gazette Adverts')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Advert Affidavit'"
   :docType="'Advert Affidavit'"
-  :docModel="'advert_affidavict'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=14
+  :mergeNum="14"
+  :hasFile="hasFile('Advert Affidavit')"
   />
 </div>
 <div class="col-6">
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Proof of Occupation'"
-  :docModel="'proof_of_occupation'"
-  :stage=500
-  :mergeNum=15
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="15"
+  :hasFile="hasFile('Proof of Occupation')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Representations'"
   :docType="'Representations'"
-  :docModel="'representations'"
-  :stage=500
-  :mergeNum=16
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="16"
+  :hasFile="hasFile('Representations')"
   />
 
 
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Menu-If applicable'"
   :docType="'Menu'"
-  :docModel="'representations'"
-  :stage=500
-  :mergeNum=17
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="17"
+  :hasFile="hasFile('Menu')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Photographs'"
   :docType="'Photographs'"
-  :docModel="'photographs'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=17
+  :mergeNum="17"
+  :hasFile="hasFile('Photographs')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   v-if="licence.province === 'Mpumalanga'"
   :column=6
   :model_id="licence"
   :docTitle="'Municipal Consent Ltr'"
   :docType="'Municipal Consent Ltr'"
-  :docModel="'consent_letter'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=19
+  :mergeNum="19"
+  :hasFile="hasFile('Municipal Consent Ltr')"
   />
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Zoning Certificate'"
   :docType="'Zoning Certificate'"
-  :docModel="'zoning_certificate'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=20
+  :mergeNum="20"
+  :hasFile="hasFile('Zoning Certificate')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Local Authority Letter'"
   :docType="'Local Authority Letter'"
-  :docModel="'local_authority'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=21
+  :mergeNum="21"
+  :hasFile="hasFile('Local Authority Letter')"
   />
 
-  <MergeDocumentComponent
-  :column=6
-  :model_id="licence"
-  :docTitle="'Local Authority Letter'"
-  :docType="'Local Authority Letter'"
-  :docModel="'local_authority'"
-  :stage=500
-  :mergeNum=21
-  />
-    
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Mapbook Plans'"
   :docType="'Mapbook Plans'"
-  :docModel="'mapbook_plans'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=22
+  :mergeNum="22"
+  :hasFile="hasFile('Mapbook Plans')"
   />
 
    <MergeDocumentComponent
-  :column=6
+   :success="success"
+  :error="error"
+  :errors="errors"
+  :column="6"
   :model_id="licence"
   :docTitle="'Google Map Plans'"
   :docType="'Google Map Plans'"
-  :docModel="'google_map_plans'"
-  :stage=500
-  :mergeNum=23
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="23"
+  :hasFile="hasFile('Google Map Plans')"
   />
 
   <MergeDocumentComponent
-  :column=6
-  :model_id="licence"
-  :docTitle="'Google Map Plans'"
-  :docType="'Google Map Plans'"
-  :docModel="'google_map_plans'"
-  :stage=500
-  :mergeNum=23
-  />
-
-  <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Description'"
   :docType="'Description'"
-  :docModel="'description'"
-  :stage=500
-  :mergeNum=24
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="24"
+  :hasFile="hasFile('Description')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Site Plans'"
   :docType="'Site Plans'"
-  :docModel="'site_plans'"
-  :stage=500
-  :mergeNum=25
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="25"
+  :hasFile="hasFile('Site Plans')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Fully Dimensioned Plans'"
   :docType="'Full Dimensioned Plans'"
-  :docModel="'dimensional_plans'"
-  :stage=500
-  :mergeNum=26
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="26"
+  :hasFile="hasFile('Full Dimensioned Plans')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Advert Photographs'"
   :docType="'Advert Photographs'"
-  :docModel="'advert_photographs'"
-  :stage=500
-  :mergeNum=27
+  :docModel="licence"
+  :stage="500"
+  :mergeNum="27"
+  :hasFile="hasFile('Advert Photographs')"
   />
 
   <MergeDocumentComponent
+  :success="success"
+  :error="error"
+  :errors="errors"
   :column=6
   :model_id="licence"
   :docTitle="'Newspaper Adverts'"
   :docType="'Newspaper Adverts'"
-  :docModel="'newspaper_adverts'"
+  :docModel="licence"
   :stage=500
-  :mergeNum=28
+  :mergeNum="28"
+  :hasFile="hasFile('Newspaper Adverts')"
   />
 
   <br><br>
@@ -473,7 +571,7 @@
    <div class="d-flex ">
     <MergeButtonComponent
     :title="'Compile Application'"
-    :isLecenceMerged="licence.merged_document"
+    :licence="licence"
     />
     <!-- remember to bind disbaled this btn when all required files are not uploaded -->
     </div>
@@ -485,8 +583,10 @@
   :column=12
   :dbStatus="licence.status"
   :errors="errors"
+  :error="error"
   :stageValue=600
-  :licence_id="licence.slug"
+  prevStage=500
+  licence_id="licence.slug"
   :stageTitle="'Scanned Application'"
   :success="success"
   @stage-value-changed="pushData"
@@ -495,7 +595,9 @@
   <div class="col-md-6">
     <DocComponent
     :documentModel="licence"
+    :hasFile="hasFile('Scanned Application')"
     :errors="errors"
+    :error="error"
     :orderByNumber=600
     :docType="'Scanned Application'"
     :success="success"
@@ -507,6 +609,7 @@
       :stage="'Scanned Application'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Scanned Application')"
       :success="success"
@@ -519,7 +622,9 @@
  <StageComponent
     :dbStatus="licence.status"
     :errors="errors"
+    :error="error"
     :stageValue=700
+    prevStage=600
     :licence_id="licence.slug"
     :stageTitle="'Lodged with Municipality'"
     :success="success"
@@ -529,7 +634,9 @@
  <div class="col-md-6">
   <DocComponent
   :documentModel="licence"
+  :hasFile="hasFile('Lodged with Municipality')"
   :errors="errors"
+  :error="error"
   :orderByNumber=700
   :docType="'Lodged with Municipality'"
   :success="success"
@@ -540,6 +647,7 @@
       :stage="'Lodged with Municipality'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Lodged with Municipality')"
       :success="success"
@@ -550,7 +658,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=800
+prevStage=700
 :licence_id="licence.slug"
 :stageTitle="'Municipal Comments'"
 :success="success"
@@ -560,7 +670,9 @@
 <div class="col-md-6">
 <DocComponent
 :documentModel="licence"
+:hasFile="hasFile('Municipal Comments')"
 :errors="errors"
+:error="error"
 :orderByNumber=800
 :docType="'Municipal Comments'"
 :success="success"
@@ -572,6 +684,7 @@
       :stage="'Municipal Comments'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Municipal Comments')"
       :success="success"
@@ -581,7 +694,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=900
+prevStage=800
 :licence_id="licence.slug"
 :stageTitle="'Completed Application Scanned'"
 :success="success"
@@ -591,7 +706,9 @@
 <div class="col-md-6">
   <DocComponent
   :documentModel="licence"
+  :hasFile="hasFile('Completed Application Scanned')"
   :errors="errors"
+  :error="error"
   :orderByNumber=900
   :docType="'Completed Application Scanned'"
   :success="success"
@@ -602,7 +719,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=1000
+prevStage=900
 :licence_id="licence.slug"
 :stageTitle="'Lodged with MER'"
 :success="success"
@@ -612,7 +731,9 @@
 <div class="col-md-6">
   <DocComponent
   :documentModel="licence"
+  :hasFile="hasFile('Lodged with MER')"
   :errors="errors"
+  :error="error"
   :orderByNumber=1000
   :docType="'Lodged with MER'"
   :success="success"
@@ -623,6 +744,7 @@
       :stage="'Lodged with MER'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Lodged with MER')"
       :success="success"
@@ -633,7 +755,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=1100
+prevStage=1000
 :licence_id="licence.slug"
 :stageTitle="'Lodged with Magistrate'"
 :success="success"
@@ -643,7 +767,9 @@
 <div class="col-md-6">
   <DocComponent
   :documentModel="licence"
+  :hasFile="hasFile('Lodged with Magistrate')"
   :errors="errors"
+  :error="error"
   :orderByNumber=1100
   :docType="'Lodged with Magistrate'"
   :success="success"
@@ -654,6 +780,7 @@
       :stage="'Lodged with Magistrate'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Lodged with Magistrate')"
       :success="success"
@@ -664,7 +791,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=1200
+prevStage=1100
 :licence_id="licence.slug"
 :stageTitle="'Lodged with DPO'"
 :success="success"
@@ -674,7 +803,9 @@
 <div class="col-md-6">
   <DocComponent
   :documentModel="licence"
+  :hasFile="hasFile('Lodged with DPO')"
   :errors="errors"
+  :error="error"
   :orderByNumber=1200
   :docType="'Lodged with DPO'"
   :success="success"
@@ -685,6 +816,7 @@
       :stage="'Lodged with DPO'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Lodged with DPO')"
       :success="success"
@@ -695,7 +827,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=1300
+prevStage=1200
 :licence_id="licence.slug"
 :stageTitle="'Police Report'"
 :success="success"
@@ -705,7 +839,9 @@
 <div class="col-md-6">
   <DocComponent
   :documentModel="licence"
+  :hasFile="hasFile('Police Report')"
   :errors="errors"
+  :error="error"
   :orderByNumber=1300
   :docType="'Police Report'"
   :success="success"
@@ -716,6 +852,7 @@
       :stage="'Police Report'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Police Report')"
       :success="success"
@@ -729,12 +866,26 @@
     <StageComponent
     :dbStatus="licence.status"
     :errors="errors"
+    :error="error"
     :stageValue=1400
+    prevStage=1300
     :licence_id="licence.slug"
-    :stageTitle="'Lodged With Liqour Board'"
+    :stageTitle="'Lodged With Liquor Board'"
     :success="success"
     @stage-value-changed="pushData"
     />   
+    <div class="col-md-6">
+    <DocComponent
+    :documentModel="licence"
+    :hasFile="hasFile('Lodged With Liquor Board')"
+    :errors="errors"
+    :error="error"
+    :orderByNumber=1400
+    :docType="'Lodged With Liquor Board'"
+    :success="success"
+    />
+    </div>
+   
     
      
       <DateComponent
@@ -742,37 +893,45 @@
       :stage="'Lodged With Liqour Board'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
+      :error="error"
       :column=5
       :dated_at="getLicenceDate(licence.id, 'Lodged With Liquor Board')"
       :success="success"
       />      
        
-       <DocComponent
-        :documentModel="licence"
-        :errors="errors"
-        :orderByNumber=1400
-        :docType="'Lodged With Liquor Board'"
-        :success="success"
-       />
+      
 <hr/>
 
 <!-- If its other provinces keep this stage-->
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=1500
+prevStage=1400
 :licence_id="licence.slug"
 :stageTitle="'Application Lodged (Proof of Lodgement)'"
 :success="success"
 @stage-value-changed="pushData"
 />   
 
-
+<div class="col-md-6">
+  <DocComponent
+  :documentModel="licence"
+  :hasFile="hasFile('Application Lodged')"
+  :errors="errors"
+  :error="error"
+  :orderByNumber=1500
+  :docType="'Application Lodged'"
+  :success="success"
+ />
+</div>
   <DateComponent
   :licence="licence"
   :stage="'Application Lodged (Proof of Lodgement)'"
   :canSave="$page.props.auth.has_slowtow_admin_role"
   :errors="errors"
+  :error="error"
   :column=5
   :dated_at="getLicenceDate(licence.id, 'Application Lodged (Proof of Lodgement)')"
   :success="success"
@@ -780,13 +939,7 @@
  
    
 
-   <DocComponent
-    :documentModel="licence"
-    :errors="errors"
-    :orderByNumber=1500
-    :docType="'Application Lodged'"
-    :success="success"
-   />
+  
 <hr/>
 
 <!-- this stage must appear once licence lodged is ticked -->
@@ -795,7 +948,9 @@
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
+:error="error"
 :stageValue=1600
+prevStage=1500
 :licence_id="licence.slug"
 :stageTitle="'Additional Documents/Information'"
 :success="success"
@@ -807,22 +962,34 @@
   :licence_id="licence.id" 
   :additional_docs="additional_docs"
   :success="success" 
-  :error="error" 
-  :errors="errors"/>
+  :errors="errors"
+  :error="error"/>
 </template>
 <hr/>
 
   <StageComponent
     :dbStatus="licence.status"
     :errors="errors"
+    :error="error"
     :stageValue=1700
+    prevStage=1600
     :licence_id="licence.slug"
     :stageTitle="'Initial Inspection'"
     :success="success"
     @stage-value-changed="pushData"
     />
         
-        
+        <div class="col-md-6">
+          <DocComponent
+          :documentModel="licence"
+          :hasFile="hasFile('Initial Inspection')"
+          :errors="errors"
+          :error="error"
+          :orderByNumber=1700
+          :docType="'Initial Inspection'"
+          :success="success"
+          />
+        </div>
       
   
   <DateComponent
@@ -830,19 +997,12 @@
         :stage="'Initial Inspection'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
-        :column=4
+        :error="error"
+        :column=5
         :dated_at="getLicenceDate(licence.id, 'Initial Inspection')"
         :success="success"
       />   
  
-
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=1700
-  :docType="'Initial Inspection'"
-  :success="success"
-  />
 <hr/>
 
   
@@ -850,53 +1010,65 @@
     <StageComponent
     :dbStatus="licence.status"
     :errors="errors"
+    :error="error"
     :stageValue=1800
+    prevStage=1700
     :licence_id="licence.slug"
     :stageTitle="'Final Inspection'"
     :success="success"
     @stage-value-changed="pushData"
     />
 
+    <div class="col-md-6">
+      <DocComponent
+      :documentModel="licence"
+      :hasFile="hasFile('Final Inspection')"
+      :errors="errors"
+      :error="error"
+      :orderByNumber=1800
+      :docType="'Final Inspection'"
+      :success="success"
+      />
+    </div>
  
   <DateComponent
       :licence="licence"
       :stage="'Final Inspection'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
       :errors="errors"
-      :column=4
+      :error="error"
+      :column=5
       :dated_at="getLicenceDate(licence.id, 'Final Inspection')"
       :success="success"
     />  
  
 
- <DocComponent
- :documentModel="licence"
- :errors="errors"
- :orderByNumber=1800
- :docType="'Final Inspection'"
- :success="success"
- />
+ 
 
   <hr/>
 
     
     <StageComponent
+    :column="5"
     :dbStatus="licence.status"
     :errors="errors"
+    :error="error"
     :stageValue=1900
+    prevStage=1800
     :licence_id="licence.slug"
     :stageTitle="'Activation Fee Requested'"
     :success="success"
     @stage-value-changed="pushData"
     />
     
-
+    <div class="col-md-1 columns"></div>
     <DateComponent
     :licence="licence"
     :stage="'Activation Fee Requested'"
     :canSave="$page.props.auth.has_slowtow_admin_role"
     :errors="errors"
-    :column=4
+    :error="error"
+    :column=5
     :dated_at="getLicenceDate(licence.id, 'Activation Fee Requested')"
     :success="success"
   />  
@@ -908,8 +1080,10 @@
       <StageComponent
       :dbStatus="licence.status"
       :errors="errors"
+      :error="error"
       :column=12
       :stageValue=2000
+      prevStage=1900
       :licence_id="licence.slug"
       :stageTitle="'Client Finalisation Invoice'"
       :success="success"
@@ -918,7 +1092,9 @@
            
       <DocComponent
       :documentModel="licence"
+      :hasFile="hasFile('Client Finalisation Invoiced')"
       :errors="errors"
+      :error="error"
       :orderByNumber=2000
       :docType="'Client Finalisation Invoiced'"
       :success="success"
@@ -930,8 +1106,10 @@
       <StageComponent
       :dbStatus="licence.status"
       :errors="errors"
+      :error="error"
       :column=6
       :stageValue=2100
+      prevStage=2000
       :licence_id="licence.slug"
       :stageTitle="'Finalisation Paid'"
       :success="success"
@@ -944,6 +1122,7 @@
   :stage="'Finalisation Paid'"
   :canSave="$page.props.auth.has_slowtow_admin_role"
   :errors="errors"
+  :error="error"
   :column=4
   :dated_at="getLicenceDate(licence.id, 'Finalisation Paid')"
   :success="success"
@@ -955,8 +1134,10 @@
           <StageComponent
           :dbStatus="licence.status"
           :errors="errors"
+          :error="error"
           :column=6
           :stageValue=2200
+          prevStage=2100
           :licence_id="licence.slug"
           :stageTitle="'Activation Fee Paid'"
           :success="success"
@@ -971,6 +1152,7 @@
             :stage="'Activation Fee Paid'"
             :canSave="$page.props.auth.has_slowtow_admin_role"
             :errors="errors"
+            :error="error"
             :column=4
             :dated_at="getLicenceDate(licence.id, 'Activation Fee Paid')"
             :success="success"
@@ -980,7 +1162,9 @@
 
        <DocComponent
        :documentModel="licence"
+       :hasFile="hasFile('Activation Fee Paid')"
        :errors="errors"
+       :error="error"
        :orderByNumber=2200
        :docType="'Activation Fee Paid'"
        :success="success"
@@ -991,8 +1175,10 @@
           <StageComponent
           :dbStatus="licence.status"
           :errors="errors"
+          :error="error"
           :column=6
           :stageValue=2300
+          prevStage=2200
           :licence_id="licence.slug"
           :stageTitle="'Licence Issued'"
           :success="success"
@@ -1006,6 +1192,7 @@
               :stage="'Licence Issued'"
               :canSave="$page.props.auth.has_slowtow_admin_role"
               :errors="errors"
+              :error="error"
               :column=4
               :dated_at="getLicenceDate(licence.id, 'Licence Issued')"
               :success="success"
@@ -1015,9 +1202,11 @@
 
        <DocComponent
        :documentModel="licence"
+       :hasFile="hasFile('Licence Issued')"
        :errors="errors"
+       :error="error"
        :orderByNumber=2300
-       :docType="'Licence Issued '"
+       :docType="'Licence Issued'"
        :success="success"
        />
          <hr/>
@@ -1025,8 +1214,10 @@
               <StageComponent
                 :dbStatus="licence.status"
                 :errors="errors"
+                :error="error"
                 :column=6
                 :stageValue=2400
+                prevStage=2300
                 :licence_id="licence.slug"
                 :stageTitle="'Licence Delivered'"
                 :success="success"
@@ -1038,6 +1229,7 @@
                 :stage="'Licence Delivered'"
                 :canSave="$page.props.auth.has_slowtow_admin_role"
                 :errors="errors"
+                :error="error"
                 :column=4
                 :dated_at="getLicenceDate(licence.id, 'Licence Delivered')"
                 :success="success"
@@ -1045,9 +1237,11 @@
          
          <DocComponent
          :documentModel="licence"
+         :hasFile="hasFile('Licence Delivered')"
          :errors="errors"
+         :error="error"
          :orderByNumber=2400
-         :docType="'Licence Delivered '"
+         :docType="'Licence Delivered'"
          :success="success"
          />
            
@@ -1075,7 +1269,7 @@
   :model_id="licence.id" 
   :success="success" 
   :error="error" 
-  :errors="errors" 
+  :errors="errors"
   :model_type="'Licence'"/>
 
 
@@ -1084,56 +1278,11 @@
   </div>
 
   
- <div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
-          
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <p v-if="uploadDoc.doc_type == 'Licence Issued'
-        || uploadDoc.doc_type == 'Licence Delivered'" class="p-2 text-danger">
-          Please note that this licence will no longer be a new application and this action 
-          is irreversible once saved.</p>
-
-        <form @submit.prevent="submitDocument">
-        <input type="hidden" v-model="uploadDoc.doc_type">
-        <input type="hidden" v-model="uploadDoc.num">
-        <div class="modal-body">      
-          <div class="row">    
-          <div class="col-md-12 columns">
-          <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
-           <input type="file" @change="getFileName"
-           hidden id="licence-doc" accept=".pdf"/>
-           <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
-           <div v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
-             <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
-           </div>
-         <div class="col-md-12">
-            <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
-           {{ uploadDoc.progress.percentage }}%
-           </progress>
-           </div>
-           </div> 
-        </div>
-    
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
-           <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-           Save</button>
-           </div>
-        </form>
-        
-      </div>
-    </div>
-  </div>
 
     </Layout>
   </template>
     <style src="@vueform/multiselect/themes/default.css"></style>
-  <style scoped>
+  <style >
   .columns{
     margin-bottom: 1rem;
   }

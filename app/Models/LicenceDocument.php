@@ -25,4 +25,6 @@ class LicenceDocument extends Model
 
         return "docs/".$value;
     }
+
+ 
 }

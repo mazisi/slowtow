@@ -71,5 +71,10 @@ class Licence extends Model
     public function licence_stage_dates(){
       return $this->hasMany(LicenceDate::class, 'licence_id');
     }
+
+    public function documents(){
+      return $this->hasMany(LicenceDocument::class, 'licence_id');
+    }
+    
     
 }
