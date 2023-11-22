@@ -8,8 +8,8 @@
       </div>
  
      <div class=" d-flex align-items-start flex-column justify-content-center">
-      <h6 v-if="!hasFile" class="mb-0 text-sm">Document</h6>
-      <h6 v-else-if="hasFile" class="mb-0 text-sm limit-file-name">{{ hasFile.fileName }}</h6>
+      <!-- <h6 v-if="!hasFile" class="mb-0 text-sm">Document</h6> -->
+      <h6 v-if="hasFile" class="mb-0 text-sm limit-file-name">{{ hasFile.fileName }}</h6>
       </div>
   
        <a v-if="hasFile" @click="deleteDocument(hasFile.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">

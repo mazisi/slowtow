@@ -101,7 +101,7 @@
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
         :error="error"
-        :column=4
+        :column=5
         :dated_at="getLicenceDate(licence.id, 'Deposit Paid')"
         :success="success"
       />  
@@ -132,7 +132,7 @@
         :canSave="$page.props.auth.has_slowtow_admin_role"
         :errors="errors"
         :error="error"
-        :column=4
+        :column=5
         :dated_at="getLicenceDate(licence.id, 'Payment To The Liquor Board')"
         :success="success"
       />   
@@ -620,6 +620,7 @@
   
  <!-- When its Mpumalanga province ============================================== -->
  <StageComponent
+     v-if="licence.province == 'Mpumalanga'"
     :dbStatus="licence.status"
     :errors="errors"
     :error="error"
@@ -631,7 +632,7 @@
     @stage-value-changed="pushData"
  />
 
- <div class="col-md-6">
+ <div class="col-md-6" v-if="licence.province == 'Mpumalanga'">
   <DocComponent
   :documentModel="licence"
   :hasFile="hasFile('Lodged with Municipality')"
@@ -642,7 +643,7 @@
   :success="success"
 />
 </div>
-<DateComponent
+<DateComponent v-if="licence.province == 'Mpumalanga'"
       :licence="licence"
       :stage="'Lodged with Municipality'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -656,6 +657,7 @@
 
 <!-- When its Mpumalanga province ============================================== -->
 <StageComponent
+v-if="licence.province == 'Mpumalanga'"
 :dbStatus="licence.status"
 :errors="errors"
 :error="error"
@@ -667,7 +669,7 @@ prevStage=700
 @stage-value-changed="pushData"
 />
 
-<div class="col-md-6">
+<div class="col-md-6" v-if="licence.province == 'Mpumalanga'">
 <DocComponent
 :documentModel="licence"
 :hasFile="hasFile('Municipal Comments')"
@@ -679,7 +681,7 @@ prevStage=700
 />
 </div>
 
-<DateComponent
+<DateComponent v-if="licence.province == 'Mpumalanga'"
       :licence="licence"
       :stage="'Municipal Comments'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -692,6 +694,7 @@ prevStage=700
 <hr/> 
 <!-- //Mpumalanga================= -->
 <StageComponent
+v-if="licence.province == 'Mpumalanga'"
 :dbStatus="licence.status"
 :errors="errors"
 :error="error"
@@ -703,7 +706,7 @@ prevStage=800
 @stage-value-changed="pushData"
 />
 
-<div class="col-md-6">
+<div class="col-md-6" v-if="licence.province == 'Mpumalanga'">
   <DocComponent
   :documentModel="licence"
   :hasFile="hasFile('Completed Application Scanned')"
@@ -716,7 +719,7 @@ prevStage=800
   </div>
 <hr>
 
-<StageComponent
+<StageComponent v-if="licence.province == 'Mpumalanga'"
 :dbStatus="licence.status"
 :errors="errors"
 :error="error"
@@ -728,7 +731,7 @@ prevStage=900
 @stage-value-changed="pushData"
 />
 
-<div class="col-md-6">
+<div class="col-md-6" v-if="licence.province == 'Mpumalanga'">
   <DocComponent
   :documentModel="licence"
   :hasFile="hasFile('Lodged with MER')"
@@ -739,7 +742,7 @@ prevStage=900
   :success="success"
   />
   </div>
-  <DateComponent
+  <DateComponent v-if="licence.province == 'Mpumalanga'"
       :licence="licence"
       :stage="'Lodged with MER'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -752,7 +755,7 @@ prevStage=900
 <hr>
 
 <!-- Limpopo and Northwest ====================== -->
-<StageComponent
+<StageComponent v-if="licence.province == 'Limpopo' || licence.province == 'North West'"
 :dbStatus="licence.status"
 :errors="errors"
 :error="error"
@@ -788,12 +791,12 @@ prevStage=1000
 <hr>
 
 <!-- Limpopo and Northwest ====================== -->
-<StageComponent
+<StageComponent v-if="licence.province == 'Limpopo' || licence.province == 'North West'"
 :dbStatus="licence.status"
 :errors="errors"
 :error="error"
 :stageValue=1200
-prevStage=1100
+ prevStage=1100
 :licence_id="licence.slug"
 :stageTitle="'Lodged with DPO'"
 :success="success"
@@ -824,7 +827,7 @@ prevStage=1100
 <hr>
 
 <!-- Limpopo and Northwest ====================== -->
-<StageComponent
+<StageComponent v-if="licence.province == 'Limpopo' || licence.province == 'North West'"
 :dbStatus="licence.status"
 :errors="errors"
 :error="error"
@@ -836,7 +839,7 @@ prevStage=1200
 @stage-value-changed="pushData"
 />
 
-<div class="col-md-6">
+<div class="col-md-6" v-if="licence.province == 'Limpopo' || licence.province == 'North West'">
   <DocComponent
   :documentModel="licence"
   :hasFile="hasFile('Police Report')"
@@ -847,7 +850,7 @@ prevStage=1200
   :success="success"
   />
   </div>
-  <DateComponent
+  <DateComponent v-if="licence.province == 'Limpopo' || licence.province == 'North West'"
       :licence="licence"
       :stage="'Police Report'"
       :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -863,7 +866,9 @@ prevStage=1200
 
 
 <!-- If its Mpumalanga , renamed this stage-->
-    <StageComponent
+<template v-if="licence.province == 'Mpumalanga' || licence.province == 'North West' || licence.province == 'Limpopo'">
+
+    <StageComponent 
     :dbStatus="licence.status"
     :errors="errors"
     :error="error"
@@ -874,7 +879,7 @@ prevStage=1200
     :success="success"
     @stage-value-changed="pushData"
     />   
-    <div class="col-md-6">
+    <div class="col-md-6" >
     <DocComponent
     :documentModel="licence"
     :hasFile="hasFile('Lodged With Liquor Board')"
@@ -901,8 +906,11 @@ prevStage=1200
        
       
 <hr/>
+  
+</template>
 
 <!-- If its other provinces keep this stage-->
+<template v-if="licence.province !== 'Mpumalanga' || licence.province !== 'North West' || licence.province !== 'Limpopo'">
 <StageComponent
 :dbStatus="licence.status"
 :errors="errors"
@@ -936,10 +944,7 @@ prevStage=1400
   :dated_at="getLicenceDate(licence.id, 'Application Lodged (Proof of Lodgement)')"
   :success="success"
   />      
- 
-   
-
-  
+</template>
 <hr/>
 
 <!-- this stage must appear once licence lodged is ticked -->
@@ -1123,7 +1128,7 @@ prevStage=1500
   :canSave="$page.props.auth.has_slowtow_admin_role"
   :errors="errors"
   :error="error"
-  :column=4
+  :column=5
   :dated_at="getLicenceDate(licence.id, 'Finalisation Paid')"
   :success="success"
 /> 
@@ -1153,7 +1158,7 @@ prevStage=1500
             :canSave="$page.props.auth.has_slowtow_admin_role"
             :errors="errors"
             :error="error"
-            :column=4
+            :column=5
             :dated_at="getLicenceDate(licence.id, 'Activation Fee Paid')"
             :success="success"
           />  
@@ -1193,7 +1198,7 @@ prevStage=1500
               :canSave="$page.props.auth.has_slowtow_admin_role"
               :errors="errors"
               :error="error"
-              :column=4
+              :column=5
               :dated_at="getLicenceDate(licence.id, 'Licence Issued')"
               :success="success"
             />  
@@ -1230,7 +1235,7 @@ prevStage=1500
                 :canSave="$page.props.auth.has_slowtow_admin_role"
                 :errors="errors"
                 :error="error"
-                :column=4
+                :column=5
                 :dated_at="getLicenceDate(licence.id, 'Licence Delivered')"
                 :success="success"
               /> 

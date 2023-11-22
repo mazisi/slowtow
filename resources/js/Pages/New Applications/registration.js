@@ -180,33 +180,57 @@ import Layout from "../../Shared/Layout.vue";
               case '700':
               status = 'Lodged with Municipality'
               break;
-              case '80':
-              status = 'Additional Documents/Information'
+              case '800':
+              status = 'Municipal Comments'
               break;  
-              case '90':
+              case '900':
+              status = 'Completed Application Scanned'
+              break;
+              case '1000':
+              status = 'Lodged with MER'
+              break;
+              case '1100':
+              status = 'Lodged with Magistrate'
+              break;
+              case '1200':
+              status = 'Lodged with DPO'
+              break; 
+              case '1300':
+              status = 'Police Report'
+              break;
+              case '1400':
+              status = 'Lodged With Liquor Board'
+              break;
+              case '1500':
+              status = 'Application Lodged'
+              break;
+            case '1600':
+              status = 'Additional Documents/Information'
+              break;
+            case '1700':
               status = 'Initial Inspection'
               break;
-              case '100':
+            case '1800':
               status = 'Final Inspection'
               break;
-              case '110':
-              status = 'Activation Fee Requested'
+            case '1900':
+            status = 'Activation Fee Requested'
               break;
-              case '120':
-              status = 'Client Finalisation Invoice'
-              break; 
-              case '130':
-              status = 'Finalisation Paid'
+            case '2000':
+            status = 'Client Finalisation Invoice'
               break;
-              case '140':
+            case '2100':
+            status = 'Finalisation Paid'
+            break;
+            case '2200':
               status = 'Activation Fee Paid'
               break;
-              case '150':
-              status = 'Licence Issued'
-              break;
-            case '160':
-              status = 'Licence Delivered'
-              break;
+              case '2300':
+            status = 'Licence Issued'
+            break;
+            case '2400':
+            status = 'Licence Delivered'
+            break;
             default:
               status='Not Set';
               break;
