@@ -14,10 +14,10 @@
             <div class="text-center w-100">
               <h6 class="mt-3">Select Licence Type!</h6>
               <a @click="redirect('retail')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
-                <i class="fab fa-twitter me-1" aria-hidden="true"></i> 
+                
                 Retail Liquor Licence </a>
-                <a @click="redirect('wholesale')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
-                  <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> 
+                <a @click="redirect('wholesale')" href="#!" class="mb-0 btn btn-success me-2" as="button">
+                  
                   Wholesale Liquor Licence
                 </a>
            </div>

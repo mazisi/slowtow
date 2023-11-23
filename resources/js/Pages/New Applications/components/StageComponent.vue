@@ -2,13 +2,13 @@
   <div :class="'col-md-' + column" class="columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input class="active-checkbox"     
-    :id="stageTitle" type="checkbox" 
-    @input="emitValue($event,stageValue)" 
+    :id="stageValue" type="checkbox" 
+    @input="emitValue($event,stageValue,prevStage)" 
     :checked="dbStatus >= stageValue" 
     :value="stageValue"
     />
-    <label :for="stageTitle" 
-    class="form-check-label text-body text-truncate status-heading">{{ stageTitle }} + {{stageValue}}</label>
+    <label :for="stageValue" 
+    class="form-check-label text-body text-truncate status-heading">{{ stageTitle }}</label>
     </div>
   </div> 
 </template>
@@ -19,16 +19,18 @@ export default{
   
   props: {
     dbStatus: Object,
-    column: String,
+    column: Number,
     errors: Object,
+    error: String,
     model_id: Number,
     stageValue: Number,
+    prevStage: Number,
     stageTitle: String,
-    success: Object
+    success: String
   },
   setup(props, context){
     function emitValue(event) {
-      context.emit('stage-value-changed', event, props.stageValue);
+      context.emit('stage-value-changed', event, props.stageValue, props.prevStage);
     }
 
     return {
