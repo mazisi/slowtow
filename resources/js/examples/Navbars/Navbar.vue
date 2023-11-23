@@ -1,5 +1,5 @@
 <template>
-  <nav
+  <!-- <nav
     class="shadow-none navbar navbar-main navbar-expand-lg border-radius-xl"
     v-bind="$attrs"
     id="navbarBlur"
@@ -107,7 +107,7 @@
         </form>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 <style scoped>
 .columns{

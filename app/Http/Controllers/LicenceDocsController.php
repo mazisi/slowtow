@@ -18,7 +18,7 @@ class LicenceDocsController extends Controller
             "document_file"=> "required|mimes:pdf",
             "doc_type"=> "required"
             ]);
-           
+         
             $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
             $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace); 
             $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));

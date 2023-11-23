@@ -98,8 +98,6 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import ChartHolderCard from "./../components/ChartHolderCard.vue";
-import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
-import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
 import MiniStatisticsCard from "./../components/MiniStatisticsCard.vue";
 import { Link } from '@inertiajs/inertia-vue3';
 
@@ -117,8 +115,6 @@ export default {
   },
   components: {
     ChartHolderCard,
-    ReportsBarChart,
-    ReportsLineChart,
     MiniStatisticsCard,
     Layout,
     Link

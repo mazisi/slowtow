@@ -5,6 +5,7 @@
  </div>
   <div class="col-md-1 d-flex">
     <label v-if="!hasFile" :for="uploadDoc.doc_type">
+      <i v-if="isLiquorBoard()" class="cursor-pointer fa fa-link h5" aria-hidden="true"></i>
       <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
       <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
     </label>
@@ -29,7 +30,6 @@ export default{
   
   props: {
     errors: Object,
-    model_id: Number,
     success: String,
     error: String,
     errors: Object,
@@ -106,8 +106,12 @@ export default{
           }
         }
 
+      const isLiquorBoard = () => {
+          return props.docType == 'Payment To The Liquor Board2'
+      }
     return {
-      upload,submitDocument,notify,uploadDoc, file_has_apostrophe,toast,deleteDocument
+      upload,submitDocument,notify,uploadDoc, file_has_apostrophe,toast,deleteDocument,
+      isLiquorBoard
     }
   }
 }

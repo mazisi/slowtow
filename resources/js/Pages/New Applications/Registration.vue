@@ -191,11 +191,11 @@
   :column=6
   :model_id="licence"
   :docTitle="'Payment To The Liquor Board'"
-  :docType="'Payment To The Liquor Board'"
+  :docType="'Payment To The Liquor Board2'"
   :docModel="licence"
   :stage=500
   :mergeNum="2"
-  :hasFile="hasFile('Payment To The Liquor Board')"
+  :hasFile="hasFile('Payment To The Liquor Board2')"
   />
 
   <MergeDocumentComponent
@@ -358,7 +358,6 @@
   :error="error"
   :errors="errors"
   :column=6
-  :model_id="licence"
   :docTitle="'Advert Affidavit'"
   :docType="'Advert Affidavit'"
   :docModel="licence"
@@ -373,8 +372,8 @@
   :error="error"
   :errors="errors"
   :column=6
-  :model_id="licence"
   :docTitle="'Proof of Occupation'"
+  :docType="'Proof of Occupation'"
   :docModel="licence"
   :stage="500"
   :mergeNum="15"

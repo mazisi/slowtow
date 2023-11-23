@@ -25,36 +25,6 @@
         </sidenav-collapse>
       </li>
 
-      <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'company_admin_licences'}"
-          :collapseRef="route('company_admin_licences')"
-          navText="Licences">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">receipt_long</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-
-
-
-      <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'my_companies'}"
-          collapseRef="/company/my-companies"
-          navText="Companies">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5">table_view</i>
-          </template>
-        </sidenav-collapse>
-      </li>
-
       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
       || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
@@ -86,22 +56,6 @@
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5"
               >groups</i
-            >
-          </template>
-        </sidenav-collapse>
-  </li>
-
-   <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
-        <sidenav-collapse
-          url="#"
-          :aria-controls="''"
-          v-bind:collapse="false"
-          :class="{ active:  $page.props.currentRoute == 'my_temp_licences'}"
-          collapseRef="/company/my-temp-licences"
-          navText="Temporary Licences">
-          <template v-slot:icon>
-            <i class="material-icons-round opacity-10 fs-5"
-              >schedule</i
             >
           </template>
         </sidenav-collapse>
@@ -195,7 +149,8 @@
           :aria-controls="''"
           v-bind:collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_new_app'}"
-          collapseRef="/create-new-app"
+          @click="showModal"
+          data-bs-toggle="modal" data-bs-target="#select-licence-type"
           navText="New Application"
         >
           <template v-slot:icon>
@@ -257,7 +212,7 @@
 
 
 
-      <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>  
+      <!-- <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>   -->
       
 
    
@@ -364,12 +319,12 @@ export default {
   methods: {
 
     redirectToCreateLicence(type) {
-      Inertia.get(`/create-licence?type=${type}`)
+      let url = type == 'retail' ? 'create-licence' : 'create-new-app'; 
+      Inertia.get(`/${url}?type=${type}`)
     },
 
     showModal(){
       this.showModal=true;
-      alert('cool')
     },
     goBack(){
       history.back()
