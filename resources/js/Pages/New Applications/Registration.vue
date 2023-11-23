@@ -613,8 +613,7 @@
       :dated_at="getLicenceDate(licence.id, 'Scanned Application')"
       :success="success"
       />
-  <hr>
-
+ 
 
   
  <!-- When its Mpumalanga province ============================================== -->

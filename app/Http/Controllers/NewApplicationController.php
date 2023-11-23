@@ -162,10 +162,10 @@ class NewApplicationController extends Controller
             $licence->update(['is_new_app' => false]);
         }
 
-        // $licence->update([
-        //     'renewal_amount' => $request->renewal_amount,
-        //     'status' => $status <= 0 ? NULL : $status,
-        //    ]);
+        $licence->update([
+            //'renewal_amount' => $request->renewal_amount,
+            'status' => $status <= 0 ? NULL : $status,
+           ]);
            
            return back()->with('success','Status Updated successfully');
        } catch (\Throwable $th) {

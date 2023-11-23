@@ -50,7 +50,7 @@ class LicenceController extends Controller
         "trading_name" => "required",
         "licence_type" => "required",
         "province" => "required",
-        "belongs_to" => "required",
+        "belongs_to" => "required|in:Company,Individual",
         "licence_number" => "required|unique:licences,licence_number"
     ]);
        
@@ -60,8 +60,6 @@ class LicenceController extends Controller
         "trading_name" => $request->trading_name,
         'belongs_to' => $request->belongs_to,
         "licence_type_id" => $request->licence_type,
-        "licence_date" => $request->licence_date,
-        'licence_issued_at' => $request->licence_date,
         "company_id"   => $request->company,
         "people_id"   => $request->person,
         "licence_number" => $request->licence_number,
@@ -76,7 +74,7 @@ class LicenceController extends Controller
     ]);
     $activity = 'Licence created By: ' . $licence->trading_name.', '.$licence->licence_number;
     event(new LogUserActivity(auth()->user(), $activity));
-    return redirect(route('licences'))->with('success','Licence created successfully.');
+    return to_route('view_licence',['slug' => $licence->slug ])->with('success','Licence created successfully.');
     
         } catch (\Throwable $th) {
             return back()->with('error','Error creating Licence');

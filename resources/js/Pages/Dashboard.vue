@@ -1,7 +1,7 @@
 <template>
 <Layout>
   <Head title="Dashboard" />
-  <div class="py-4 container-fluid">
+  <div class="py-5 container-fluid">
     <div class="row mb-4">
       <div class="col-lg-12 position-relative z-index-2">
         <div class="row">

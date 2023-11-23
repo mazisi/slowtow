@@ -155,7 +155,6 @@
                                                                 :label="'ID Number'"
                                                                 :column="'col-4'"
                                                                 :value="licence.people.id_or_passport"
-                                                                :errors="errors.trading_name "
                                                                 input_id="belongs-to-company"
                                             />
 
@@ -166,7 +165,6 @@
                                                                 :label="'Company Registration Number'"
                                                                 :column="'col-4'"
                                                                 :value="licence.company.reg_number"
-                                                                :errors="errors.trading_name "
                                                                 input_id="belongs-to-company"
                                             />
 

@@ -109,7 +109,7 @@
                                                 :dropdownList="computedBoardRegions"
                                                 :label="'Liquor Board Region*'"
                                                 :defaultDisabledText="'Select Liquor Board Region'"
-                                                :column="'col-12'"
+                                                :column="'col-6'"
                                                 :value="form.board_region"
                                                 v-model="form.board_region"
                                                 :errors="errors.board_region"
@@ -141,7 +141,7 @@
                                             />
 
 
-                                            <TextInputComponent
+                                            <!-- <TextInputComponent
                                                 :inputType="'date'"
                                                 v-model="form.licence_date"
                                                 :value="form.licence_date"
@@ -149,7 +149,7 @@
                                                 :label="'Licence Date'"
                                                 :errors="errors.licence_date"
                                                 :input_id="licence_date"
-                                            />
+                                            /> -->
 
 
                                         </div>

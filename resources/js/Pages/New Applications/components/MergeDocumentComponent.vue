@@ -6,7 +6,7 @@
   <div class="col-md-1 d-flex">
     <label v-if="!hasFile" :for="uploadDoc.doc_type">
       <i v-if="isLiquorBoard()" class="cursor-pointer fa fa-link h5" aria-hidden="true"></i>
-      <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
+      <i v-else class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
       <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
     </label>
     
@@ -107,7 +107,7 @@ export default{
         }
 
       const isLiquorBoard = () => {
-          return props.docType == 'Payment To The Liquor Board2'
+          return props.docType == 'Payment To The Liquor Board2' 
       }
     return {
       upload,submitDocument,notify,uploadDoc, file_has_apostrophe,toast,deleteDocument,

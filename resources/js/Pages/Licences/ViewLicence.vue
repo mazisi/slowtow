@@ -155,6 +155,26 @@
                                                 :inputType="'text'"
                                             />
 
+                                            <TextInputComponent v-if="form.belongs_to ==='Individual'"
+                                                                :inputType="'text'"
+                                                                :required="true"
+                                                                :disabled="true"
+                                                                :label="'ID Number'"
+                                                                :column="'col-12'"
+                                                                :value="licence.people.id_or_passport"
+                                                                input_id="belongs-to-company"
+                                            />
+
+                                            <TextInputComponent v-if="form.belongs_to ==='Company'"
+                                                                :inputType="'text'"
+                                                                :required="true"
+                                                                :disabled="true"
+                                                                :label="'Company Registration Number'"
+                                                                :column="'col-12'"
+                                                                :value="licence.company.reg_number"
+                                                                input_id="belongs-to-company"
+                                            />
+
 
                                         </div>
 
@@ -255,7 +275,7 @@
 
 
                                 <TextInputComponent
-                                    v-if="licence.status >= 150"
+                                    v-if="licence.status >= 2300"
                                     v-model="form.latest_renewal"
                                     :column="'col-12'"
                                     :label="'Latest Renewal'"
@@ -265,7 +285,7 @@
                                     :inputType="'text'"
                                 />
 
-                                <div class="input-group-custom mb-2" v-if="licence.status >= 150">
+                                <div class="input-group-custom mb-2" v-if="licence.status >= 2300">
                                     <div class="add-on">R</div>
                                     <input type="number" class="input-field form-control-default" v-model="form.renewal_amount" placeholder="Renewal amount">
                                 </div>
@@ -285,7 +305,7 @@
 
                             </div>
 
-                            <h6 class="text-center">Documents</h6>
+                            <h6 class="text-center mt-4">Documents</h6>
                             <div class="row">
                                 <div class="col-md-6 columns">
                                     <ul class="list-group">
