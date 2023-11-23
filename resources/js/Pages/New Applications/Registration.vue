@@ -1289,24 +1289,23 @@ prevStage=1500
   <style >
   .columns{
     margin-bottom: 1rem;
-  }
-  .upload-icon{
+}
+.upload-icon{
     cursor: pointer;
-  }
-  .active-checkbox{
+}
+.active-checkbox{
     margin-top: -10px;
     margin-left: 3px;
-  }
-  .status-heading{
+}
+.status-heading{
     font-weight: 700;
-  }
-  .list-group{
+}
+.list-group{
     margin-top: -1.4rem;
-  }
+}
 
-  
-  </style>
 
-  <script src="./registration.js"></script>
-  
-  
+</style>
+
+<script src="./registration.js"></script>
+
