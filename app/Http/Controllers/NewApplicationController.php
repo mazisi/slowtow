@@ -146,7 +146,7 @@ class NewApplicationController extends Controller
             }
         }
         
-        //Start new nomination
+        //Start new nomination if its licence Issued stage
         if($status >= 2300){
             $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
             if(is_null($nom)){

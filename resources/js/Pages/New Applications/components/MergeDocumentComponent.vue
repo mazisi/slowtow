@@ -107,7 +107,7 @@ export default{
         }
 
       const isLiquorBoard = () => {
-          return props.docType == 'Payment To The Liquor Board2' 
+          return props.docType === 'Payment To The Liquor Board2' 
       }
     return {
       upload,submitDocument,notify,uploadDoc, file_has_apostrophe,toast,deleteDocument,
