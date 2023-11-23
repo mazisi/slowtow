@@ -6,12 +6,12 @@
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
   import common from '../common-js/common.js';
-  import { computed } from 'vue';
+  import {computed, ref} from 'vue';
   import LiquorBoardRegionComponent from '../components/input-components/LiquorBoardRegionComponent.vue'
   import TextInputComponent from '../components/input-components/TextInputComponent.vue';
   import ProvinceSelectDropdownComponent from '../components/input-components/ProvinceSelectDropdownComponent.vue'
   import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
-  
+
   export default {
    props: {
       errors: Object,
@@ -22,10 +22,12 @@
       error: String,
       get_reg_num_or_id_number: String
     },
-    
-    
+
+
     setup (props) {
-      let options;   
+      let options;
+
+        let licenceByProvince = ref([]);
 
       const form = useForm({
             trading_name: '',
@@ -39,29 +41,36 @@
             province: '',
             company: '',
             person: '',
-            board_region: ''   
+            board_region: ''
       })
 
       const idRegForm = useForm({
             person : '',
-            company: ''  
+            company: ''
       })
 
-    
-      
+
+
       function submit() {
         form.post('/submit-new-app', {
-          onSuccess: () => { 
+          onSuccess: () => {
               notify(props.success)
            },
           preserveScroll: true,
         })
-        
+
       }
+
+        function filterLicenceTypes(){
+            console.log(form.province);
+            licenceByProvince.value = props.licence_dropdowns
+                .filter(obj => obj.province === form.province);
+
+            console.log(licenceByProvince);
+        }
 
       const filterForm = useForm({
         variation: '',
-        id: null,
         id: form.company ? form.company : form.person
       })
 
@@ -75,9 +84,9 @@
             filterForm.id = form.person;
             form.company='';
           }
-          
+
           filterForm.get(`/create-new-app?id=${filterForm.id}`, {
-                      onStart: () => { 
+                      onStart: () => {
                         let mess = filterForm.variation === 'Individual' ? ' ID Number' : ' Registration Number';
                         getchIdOrRegNumber(mess);
                       },
@@ -87,7 +96,7 @@
             })
 
      }
-     
+
      function getchIdOrRegNumber(message){
           setTimeout(() => {
               toast.remove();
@@ -105,21 +114,20 @@
           return common.getBoardRegions();
         })
 
-      return { submit, form ,options, idRegForm, 
-        selectApplicant, filterForm,toast, 
+      return { submit, form ,options, idRegForm,
+        selectApplicant, filterForm,toast,
         getchIdOrRegNumber, computedProvinces,
-        computedBoardRegions
+        computedBoardRegions, licenceByProvince, filterLicenceTypes
       }
-      
+
     },
-    
+
      components: {
       Layout,
       Link,
       Head,
       Multiselect,
       Banner,
-      LiquorBoardRegionComponent,
       TextInputComponent,
       ProvinceSelectDropdownComponent,
       LiquorBoardRegionComponent,

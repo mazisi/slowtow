@@ -1,629 +1,629 @@
 
-  <template>
-  <Layout>
-    <Head title="Process New Application" />
-  <div class="container-fluid">
-      <Banner/>
-      <div class="card card-body mx-3 mx-md-4 mt-n6">
-        <div class="row">
-    <div class="col-lg-12 col-12">
-     <h6>Process New Application for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
-      {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
-     <p class="text-sm mb-0">Current Stage: 
-      <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
-   </p>
-  </div>
-    <div class="col-lg-6 col-5 my-auto text-end">
-      <!-- <button v-if="$page.props.auth.has_slowtow_admin_role"
-       @click="deleteRegistration" class="dropdown-item border-radius-md text-danger" >
-       <i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</button>     -->
-    </div>
-  </div>
-  
-  <div class="row">
-          <div class="mt-3 row">
-            <div class="col-12 col-md-12 col-xl-12 position-relative">
-              <div class="card card-plain h-100">
-                <div class="p-3 card-body">
-  <form @submit.prevent="updateRegistration">
-  <div class="row">
-    
-      <StageComponent
-      :column=12
-      :dbStatus="licence.status"
-      :errors="errors"
-      :stageValue=100
-      :licence_id="licence.slug"
-      :stageTitle="'Client Quoted'"
-      :success="success"
-      @stage-value-changed="pushData"
-    />
-    <hr/>
-  <ul class="list-group">
-      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-        <div class="avatar me-3" v-if="client_quoted">
-        <a :href="`${$page.props.blob_file_path}${client_quoted.document_file}`" target="_blank">
-        <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-        </a>
-        </div>
-    
-       <div class="d-flex align-items-start flex-column justify-content-center">
-          <h6 v-if="!client_quoted" class="mb-0 text-sm">Document</h6>
-          <h6 v-else-if="client_quoted" class="mb-0 text-sm limit-file-name">{{ client_quoted.document_name }}</h6>
-        </div>
-    
-        <a v-if="client_quoted" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-        </a>
-        <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents" 
-        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-upload h5" aria-hidden="true"></i>
-        </a>
-      </li>
-    </ul>
-  <hr>
-  
-   <StageComponent
-      :column=12
-      :dbStatus="licence.status"
-      :errors="errors"
-      :stageValue=200
-      :licence_id="licence.slug"
-      :stageTitle="'Deposit Invoice'"
-      :success="success"
-      @stage-value-changed="pushData"
-    />
+<template>
+    <Layout>
+        <Head title="Process New Application" />
+        <div class="container-fluid">
+            <Banner/>
+            <div class="card card-body mx-3 mx-md-4 mt-n6">
+                <div class="row">
+                    <div class="col-lg-12 col-12">
+                        <h6>Process New Application for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
+                            {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
+                        <p class="text-sm mb-0">Current Stage:
+                            <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
+                        </p>
+                    </div>
+                    <div class="col-lg-6 col-5 my-auto text-end">
+                        <!-- <button v-if="$page.props.auth.has_slowtow_admin_role"
+                         @click="deleteRegistration" class="dropdown-item border-radius-md text-danger" >
+                         <i class="fa fa-trash-o cursor-pointer" aria-hidden="true"></i> Delete</button>     -->
+                    </div>
+                </div>
 
-    <ul class="list-group">
-      <li class="px-0 border-0 list-group-item d-flex align-items-center">
-        <div class="avatar me-3" v-if="client_invoiced !== null">
-        <a :href="`${$page.props.blob_file_path}${client_invoiced.document_file}`" target="_blank">
-        <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-        </a>
-        </div>
-    
-       <div class="d-flex align-items-start flex-column justify-content-center">
-        <h6 v-if="!client_invoiced" class="mb-0 text-sm">Document</h6>
-          <h6 v-else-if="client_invoiced" class="mb-0 text-sm limit-file-name">{{ client_invoiced.document_name }}</h6>
-        </div>
-    
-        <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" 
-        href="javascript:;">
-        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-        </a>
-        <a v-if="client_invoiced" @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
-        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-upload h5 upload-icon" aria-hidden="true"></i>
-        </a>
-      </li>
-    </ul>
-    <hr>
-  
+                <div class="row">
+                    <div class="mt-3 row">
+                        <div class="col-12 col-md-12 col-xl-12 position-relative">
+                            <div class="card card-plain h-100">
+                                <div class="p-3 card-body">
+                                    <form @submit.prevent="updateRegistration">
+                                        <div class="row">
 
-  <StageComponent
-  :column=5
-  :dbStatus="licence.status"
-  :errors="errors"
-  :stageValue=300
-  :licence_id="licence.slug"
-  :stageTitle="'Deposit Paid'"
-  :success="success"
-  @stage-value-changed="pushData"
-/>
-  <div class="col-md-1 columns"></div>
-  
-  <template v-if="licence.deposit_paid_at">   
-  <div class="col-md-4 columns mb-4">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
-     </div>
-   <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
-   </div> 
+                                            <StageComponent
+                                                :column=12
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=100
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Client Quoted'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
+                                            <hr/>
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="client_quoted">
+                                                        <a :href="`${$page.props.blob_file_path}${client_quoted.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
 
-   <div class="col-md-1 columns">
-     <button v-if="licence.deposit_paid_at" @click="updateRegistrationDate" 
-     type="button" class="btn btn-sm btn-secondary">Save</button>
-    </div>
-   </template>
-   
-   <template v-else>
-    <div class="col-md-4 columns mb-4">
-      <div class="input-group input-group-outline null is-filled ">
-      <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
-       </div>
-     <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
-     </div> 
-  
-     <div class="col-md-1 columns">
-       <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistrationDate" 
-       type="button" 
-       class="btn btn-sm btn-secondary">Save</button>
-      </div>
-   </template>
-  
-  <hr>
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!client_quoted" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="client_quoted" class="mb-0 text-sm limit-file-name">{{ client_quoted.document_name }}</h6>
+                                                    </div>
 
-    
-    <StageComponent
-    :column=5
-    :dbStatus="licence.status"
-    :errors="errors"
-    :stageValue=400
-    :licence_id="licence.slug"
-    :stageTitle="'Payment To The Liquor Board'"
-    :success="success"
-    @stage-value-changed="pushData"
-  />
-    
-    <div class="col-md-1 columns"></div>
-     
-       <template v-if="licence.liquor_board_at">   
-        <div class="col-md-4 columns mb-4">
-          <div class="input-group input-group-outline null is-filled ">
-          <label class="form-label">Date</label>
-          <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
-           </div>
-         <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
-         </div> 
-         <div class="col-md-1 columns">
-          <button v-if="licence.liquor_board_at" 
-          
-          @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-         </div>
-         </template>
-         
-         <template v-else>
-            <div class="col-md-4 columns mb-4">
-              <div class="input-group input-group-outline null is-filled ">
-              <label class="form-label">Date</label>
-              <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
-              </div>
-            <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
-            </div> 
-            <div class="col-md-1 columns">
-              <button v-if="$page.props.auth.has_slowtow_admin_role" 
-              @click="updateRegistrationDate" 
-               type="button" class="btn btn-sm btn-secondary">Save</button>
-            </div>        
-           
-         </template> 
-    
-    
-    <ul class="list-group">
-      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-        <div class="avatar me-3" v-if="payment_to_liqour_board">
-        <a :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank">
-        <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-        </a>
-        </div>
-    
-       <div class="d-flex align-items-start flex-column justify-content-center">
-        <h6 v-if="!payment_to_liqour_board" class="mb-0 text-sm">Document</h6>
-        <h6 v-else-if="payment_to_liqour_board" class="mb-0 text-sm limit-file-name">{{ payment_to_liqour_board.document_name }}</h6>
-        </div>
-    
-        <a v-if="payment_to_liqour_board" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-        </a>
-        <a v-else @click="getDocType(4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents" 
-        class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-upload h5" aria-hidden="true"></i>
-        </a>
-      </li>
-    </ul>
-    <hr>
+                                                    <a v-if="client_quoted" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr>
+
+                                            <StageComponent
+                                                :column=12
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=200
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Deposit Invoice'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
+
+                                            <ul class="list-group">
+                                                <li class="px-0 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="client_invoiced !== null">
+                                                        <a :href="`${$page.props.blob_file_path}${client_invoiced.document_file}`" target="_blank">
+                                                            <i class="fas fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!client_invoiced" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="client_invoiced" class="mb-0 text-sm limit-file-name">{{ client_invoiced.document_name }}</h6>
+                                                    </div>
+
+                                                    <a v-if="client_invoiced !== null" @click="deleteDocument(client_invoiced.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4"
+                                                       href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-if="client_invoiced" @click="getDocType(2,'Client Invoiced')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5 upload-icon" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr>
 
 
-      <StageComponent
-      :column=12
-      :dbStatus="licence.status"
-      :errors="errors"
-      :stageValue=500
-      :licence_id="licence.slug"
-      :stageTitle="'Prepare New Application'"
-      :success="success"
-      @stage-value-changed="pushData"
-    />
+                                            <StageComponent
+                                                :column=5
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=300
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Deposit Paid'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
+                                            <div class="col-md-1 columns"></div>
 
-  <div class="col-md-6">
-    <div class="row">
-      <div class="col-md-7" >
-    <button type="button" class="btn btn-outline-success w-95"> GLB Application Forms</button>
-   </div>
-    <div class="col-md-1 d-flex">
-      <i v-if="gba_application_form === null" 
-      @click="getDocType(5,'GLB Application Forms',1)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${gba_application_form.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="gba_application_form !== null" @click="deleteDocument(gba_application_form.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
-      
-    </div>
-  </div>
+                                            <template v-if="licence.deposit_paid_at">
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
+                                                    </div>
+                                                    <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
+                                                </div>
 
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="licence.deposit_paid_at" @click="updateRegistrationDate"
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
 
-    <div class="row"><div class="col-md-7" >
-      <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
-    </div>
-    <a v-if="payment_to_liqour_board !== null" :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank" class="col-md-1">
-      <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
-    </a>
-  </div>
+                                            <template v-else>
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.deposit_paid_at">
+                                                    </div>
+                                                    <div v-if="errors.deposit_paid_at" class="text-danger">{{ errors.deposit_paid_at }}</div>
+                                                </div>
 
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role" @click="updateRegistrationDate"
+                                                            type="button"
+                                                            class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
 
-    <div class="row">
-      <div class="col-md-7">
-        <button type="button" class="btn btn-outline-success w-95">Application Forms</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="application_forms === null" 
-      @click="getDocType(5,'Application Forms',3)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${application_forms.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="application_forms !== null" @click="deleteDocument(application_forms.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
-      
-    </div>
-    </div>
+                                            <hr>
 
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Company Documents</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="company_docs === null" 
-      @click="getDocType(5,'Company Documents',4)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${company_docs.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="company_docs !== null" @click="deleteDocument(company_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
-      
-    </div>
-    </div>
+                                            <StageComponent
+                                                :column=5
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=400
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Payment To The Liquor Board'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">CIPC Documents</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="cipc_docs === null" 
-      @click="getDocType(5,'CIPC Documents',5)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${cipc_docs.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="cipc_docs !== null" @click="deleteDocument(cipc_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
-      
-    </div>
-    </div>
+                                            <div class="col-md-1 columns"></div>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">ID Documents</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="id_docs === null" 
-      @click="getDocType(5,'ID Documents',6)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${id_docs.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="id_docs !== null" @click="deleteDocument(id_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                            <template v-if="licence.liquor_board_at">
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+                                                    </div>
+                                                    <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="licence.liquor_board_at"
 
-     <div class="row">
-      <div class="col-md-7">
-        <button type="button" class="btn btn-outline-success w-95">Police Clearance</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="!police_clearance" 
-      @click="getDocType(5,'Police Clearance',7)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${police_clearance.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="police_clearance !== null" @click="deleteDocument(police_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Tax Clearance</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="tax_clearance === null" 
-      @click="getDocType(5,'Tax Clearance',8)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${tax_clearance.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="tax_clearance !== null" @click="deleteDocument(tax_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                            <template v-else>
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.liquor_board_at">
+                                                    </div>
+                                                    <div v-if="errors.liquor_board_at" class="text-danger">{{ errors.liquor_board_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
+                                                            @click="updateRegistrationDate"
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">LTA Certificate</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="lta_certificate === null" 
-      @click="getDocType(5,'LTA Certificate',9)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${lta_certificate.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="lta_certificate !== null" @click="deleteDocument(lta_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                            </template>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Shareholding Info</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="shareholding_info === null" 
-      @click="getDocType(5,'Shareholding Info',10)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${shareholding_info.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="shareholding_info !== null" @click="deleteDocument(shareholding_info.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Financial Interests</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="financial_interests === null" 
-      @click="getDocType(5,'Financial Interests',11)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${financial_interests.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="financial_interests !== null" @click="deleteDocument(financial_interests.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="payment_to_liqour_board">
+                                                        <a :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">500m Affidavit</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="_500m_affidavict === null" 
-      @click="getDocType(5,'500m Affidavit',12)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else  :href="`${$page.props.blob_file_path}${_500m_affidavict.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="_500m_affidavict !== null" @click="deleteDocument(_500m_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!payment_to_liqour_board" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="payment_to_liqour_board" class="mb-0 text-sm limit-file-name">{{ payment_to_liqour_board.document_name }}</h6>
+                                                    </div>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Government Gazette Adverts</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="government_gazette === null" 
-      @click="getDocType(5,'Government Gazette Adverts',13)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else  :href="`${$page.props.blob_file_path}${government_gazette.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="government_gazette !== null" @click="deleteDocument(government_gazette.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                    <a v-if="payment_to_liqour_board" @click="deleteDocument(payment_to_liqour_board.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(4,'Payment To The Liquor Board')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr>
 
-     <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Advert Affidavit</button>      
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="advert_affidavict === null" 
-      @click="getDocType(5,'Advert Affidavit',14)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${advert_affidavict.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="advert_affidavict !== null" @click="deleteDocument(advert_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
-  </div>
 
-  <div class="col-md-6">
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Proof of Occupation</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="proof_of_occupation === null" 
-      @click="getDocType(5,'Proof of Occupation',15)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${proof_of_occupation.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="proof_of_occupation !== null" @click="deleteDocument(proof_of_occupation.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                            <StageComponent
+                                                :column=12
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=500
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Prepare New Application'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-    <div class="row"><div class="col-md-7" >
-      <button type="button" class="btn btn-outline-success w-95">Representations</button>
-    </div>
-    <div class="col-md-1 d-flex">
-      <i v-if="representations === null" 
-      @click="getDocType(5,'Representations',16)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${representations.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="representations !== null" @click="deleteDocument(representations.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-  </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95"> GLB Application Forms</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="gba_application_form === null"
+                                                           @click="getDocType(5,'GLB Application Forms',1)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${gba_application_form.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="gba_application_form !== null" @click="deleteDocument(gba_application_form.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Menu-If applicable</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="menu === null" 
-      @click="getDocType(5,'Menu',17)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${menu.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="menu !== null" @click="deleteDocument(menu.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                    </div>
+                                                </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Photographs</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="photographs === null" 
-      @click="getDocType(5,'Photographs',18)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${photographs.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="photographs !== null" @click="deleteDocument(photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
 
-    <div class="row" v-if="licence.province === 'Mpumalanga'">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Municipal Consent Ltr</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="consent_letter === null" 
-      @click="getDocType(5,'Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${consent_letter.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="consent_letter !== null" @click="deleteDocument(consent_letter.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                <div class="row"><div class="col-md-7" >
+                                                    <button type="button" class="btn btn-outline-success w-95">Proof of Payment</button>
+                                                </div>
+                                                    <a v-if="payment_to_liqour_board !== null" :href="`${$page.props.blob_file_path}${payment_to_liqour_board.document_file}`" target="_blank" class="col-md-1">
+                                                        <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
+                                                    </a>
+                                                </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Zoning Certificate</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="zoning_certificate === null" 
-      @click="getDocType(5,'Zoning Certificate',20)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${zoning_certificate.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="zoning_certificate !== null" @click="deleteDocument(zoning_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Local Authority Letter</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="!local_authority" 
-        @click="getDocType(5,'Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents" 
-          class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${local_authority.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="local_authority" @click="deleteDocument(local_authority.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <button type="button" class="btn btn-outline-success w-95">Application Forms</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="application_forms === null"
+                                                           @click="getDocType(5,'Application Forms',3)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${application_forms.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="application_forms !== null" @click="deleteDocument(application_forms.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Mapbook Plans</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="mapbook_plans === null" 
-      @click="getDocType(5,'Mapbook Plans',22)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${mapbook_plans.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="mapbook_plans !== null" @click="deleteDocument(mapbook_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                    </div>
+                                                </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Google Map Plans</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="google_map_plans === null" 
-      @click="getDocType(5,'Google Map Plans',23)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${google_map_plans.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="google_map_plans !== null" @click="deleteDocument(google_map_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Description</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="description === null" 
-      @click="getDocType(5,'Description',24)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${description.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="description !== null" @click="deleteDocument(description.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Company Documents</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="company_docs === null"
+                                                           @click="getDocType(5,'Company Documents',4)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${company_docs.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="company_docs !== null" @click="deleteDocument(company_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Site Plans</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="site_plans === null" 
-      @click="getDocType(5,'Site Plans',25)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${site_plans.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="site_plans !== null" @click="deleteDocument(site_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                    </div>
+                                                </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Fully Dimensioned Plans</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="dimensional_plans === null" 
-      @click="getDocType(5,'Full Dimensioned Plans',26)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${dimensional_plans.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="dimensional_plans !== null" @click="deleteDocument(dimensional_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">CIPC Documents</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="cipc_docs === null"
+                                                           @click="getDocType(5,'CIPC Documents',5)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${cipc_docs.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="cipc_docs !== null" @click="deleteDocument(cipc_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
 
-    <div class="row">
-      <div class="col-md-7" >
-        <button type="button" class="btn btn-outline-success w-95">Advert Photographs</button>
-      </div>
-      <div class="col-md-1 d-flex">
-      <i v-if="advert_photographs === null" 
-      @click="getDocType(5,'Advert Photographs',27)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${advert_photographs.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="advert_photographs !== null" @click="deleteDocument(advert_photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-    </div>
+                                                    </div>
+                                                </div>
 
-    <div class="row">
-      <div class="col-md-7" >
-      <button type="button" class="btn btn-outline-success w-95">Newspaper Adverts</button>
-    </div>
-    <div class="col-md-1 d-flex">
-      <i v-if="newspaper_adverts === null" 
-      @click="getDocType(5,'Newspaper Adverts',28)" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="fa fa-upload h5 upload-icon" ></i>
-      <a v-else :href="`${$page.props.blob_file_path}${newspaper_adverts.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf h5 upload-icon"></i></a>
-      <i v-if="newspaper_adverts !== null" @click="deleteDocument(newspaper_adverts.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>      
-    </div>
-  </div> 
-  <br><br>
-   <div class="d-flex ">
-    <button v-if="gba_application_form !== null      
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">ID Documents</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="id_docs === null"
+                                                           @click="getDocType(5,'ID Documents',6)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${id_docs.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="id_docs !== null" @click="deleteDocument(id_docs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7">
+                                                        <button type="button" class="btn btn-outline-success w-95">Police Clearance</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="!police_clearance"
+                                                           @click="getDocType(5,'Police Clearance',7)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${police_clearance.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="police_clearance !== null" @click="deleteDocument(police_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Tax Clearance</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="tax_clearance === null"
+                                                           @click="getDocType(5,'Tax Clearance',8)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${tax_clearance.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="tax_clearance !== null" @click="deleteDocument(tax_clearance.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">LTA Certificate</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="lta_certificate === null"
+                                                           @click="getDocType(5,'LTA Certificate',9)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${lta_certificate.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="lta_certificate !== null" @click="deleteDocument(lta_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Shareholding Info</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="shareholding_info === null"
+                                                           @click="getDocType(5,'Shareholding Info',10)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${shareholding_info.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="shareholding_info !== null" @click="deleteDocument(shareholding_info.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Financial Interests</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="financial_interests === null"
+                                                           @click="getDocType(5,'Financial Interests',11)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${financial_interests.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="financial_interests !== null" @click="deleteDocument(financial_interests.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">500m Affidavit</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="_500m_affidavict === null"
+                                                           @click="getDocType(5,'500m Affidavit',12)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else  :href="`${$page.props.blob_file_path}${_500m_affidavict.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="_500m_affidavict !== null" @click="deleteDocument(_500m_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Government Gazette Adverts</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="government_gazette === null"
+                                                           @click="getDocType(5,'Government Gazette Adverts',13)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else  :href="`${$page.props.blob_file_path}${government_gazette.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="government_gazette !== null" @click="deleteDocument(government_gazette.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Advert Affidavit</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="advert_affidavict === null"
+                                                           @click="getDocType(5,'Advert Affidavit',14)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${advert_affidavict.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="advert_affidavict !== null" @click="deleteDocument(advert_affidavict.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Proof of Occupation</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="proof_of_occupation === null"
+                                                           @click="getDocType(5,'Proof of Occupation',15)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${proof_of_occupation.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="proof_of_occupation !== null" @click="deleteDocument(proof_of_occupation.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row"><div class="col-md-7" >
+                                                    <button type="button" class="btn btn-outline-success w-95">Representations</button>
+                                                </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="representations === null"
+                                                           @click="getDocType(5,'Representations',16)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${representations.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="representations !== null" @click="deleteDocument(representations.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Menu-If applicable</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="menu === null"
+                                                           @click="getDocType(5,'Menu',17)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${menu.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="menu !== null" @click="deleteDocument(menu.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Photographs</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="photographs === null"
+                                                           @click="getDocType(5,'Photographs',18)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${photographs.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="photographs !== null" @click="deleteDocument(photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" v-if="licence.province === 'Mpumalanga'">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Municipal Consent Ltr</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="consent_letter === null"
+                                                           @click="getDocType(5,'Municipal Consent Ltr',19)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${consent_letter.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="consent_letter !== null" @click="deleteDocument(consent_letter.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Zoning Certificate</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="zoning_certificate === null"
+                                                           @click="getDocType(5,'Zoning Certificate',20)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${zoning_certificate.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="zoning_certificate !== null" @click="deleteDocument(zoning_certificate.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Local Authority Letter</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="!local_authority"
+                                                           @click="getDocType(5,'Local Authority Letter',21)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${local_authority.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="local_authority" @click="deleteDocument(local_authority.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Mapbook Plans</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="mapbook_plans === null"
+                                                           @click="getDocType(5,'Mapbook Plans',22)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${mapbook_plans.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="mapbook_plans !== null" @click="deleteDocument(mapbook_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Google Map Plans</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="google_map_plans === null"
+                                                           @click="getDocType(5,'Google Map Plans',23)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${google_map_plans.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="google_map_plans !== null" @click="deleteDocument(google_map_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Description</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="description === null"
+                                                           @click="getDocType(5,'Description',24)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${description.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="description !== null" @click="deleteDocument(description.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Site Plans</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="site_plans === null"
+                                                           @click="getDocType(5,'Site Plans',25)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${site_plans.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="site_plans !== null" @click="deleteDocument(site_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Fully Dimensioned Plans</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="dimensional_plans === null"
+                                                           @click="getDocType(5,'Full Dimensioned Plans',26)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${dimensional_plans.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="dimensional_plans !== null" @click="deleteDocument(dimensional_plans.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Advert Photographs</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="advert_photographs === null"
+                                                           @click="getDocType(5,'Advert Photographs',27)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${advert_photographs.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="advert_photographs !== null" @click="deleteDocument(advert_photographs.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-7" >
+                                                        <button type="button" class="btn btn-outline-success w-95">Newspaper Adverts</button>
+                                                    </div>
+                                                    <div class="col-md-1 d-flex">
+                                                        <i v-if="newspaper_adverts === null"
+                                                           @click="getDocType(5,'Newspaper Adverts',28)" data-bs-toggle="modal" data-bs-target="#documents"
+                                                           class="fa fa-upload h5 upload-icon" ></i>
+                                                        <a v-else :href="`${$page.props.blob_file_path}${newspaper_adverts.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf h5 upload-icon"></i></a>
+                                                        <i v-if="newspaper_adverts !== null" @click="deleteDocument(newspaper_adverts.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+                                                    </div>
+                                                </div>
+                                                <br><br>
+                                                <div class="d-flex ">
+                                                    <button v-if="gba_application_form !== null
       && application_forms !== null
       && company_docs !== null
       && cipc_docs !== null
@@ -650,804 +650,803 @@
       && dimensional_plans !== null
       && advert_photographs !== null
       && newspaper_adverts !== null"
-      @click="mergeDocs"
-       type="button" class="btn btn-success w-65">Compile Application</button>
-       <button v-else type="button" class="btn btn-success w-65" disabled>Compile Application</button>
-       <a v-if="licence.merged_document !== null" :href="`/storage/app/public/${licence.merged_document}`" target="_blank" class="btn btn-success w-20 mx-2" >View</a>  
+                                                            @click="mergeDocs"
+                                                            type="button" class="btn btn-success w-65">Compile Application</button>
+                                                    <button v-else type="button" class="btn btn-success w-65" disabled>Compile Application</button>
+                                                    <a v-if="licence.merged_document !== null" :href="`/storage/app/public/${licence.merged_document}`" target="_blank" class="btn btn-success w-20 mx-2" >View</a>
 
-      </div>
+                                                </div>
 
-</div> 
-      <hr>
-  
-  <StageComponent
-  :column=12
-  :dbStatus="licence.status"
-  :errors="errors"
-  :stageValue=600
-  :licence_id="licence.slug"
-  :stageTitle="'Scanned Application'"
-  :success="success"
-  @stage-value-changed="pushData"
-/>
+                                            </div>
+                                            <hr>
 
-  <div class="col-md-6">
-    <DocComponent
-    :documentModel="scanned_application"
-    :errors="errors"
-    :orderByNumber=600
-    :docType="'Scanned Application'"
-    :success="success"
-/>
- 
-  </div>
-  <hr>
+                                            <StageComponent
+                                                :column=12
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=600
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Scanned Application'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="scanned_application"
+                                                    :errors="errors"
+                                                    :orderByNumber=600
+                                                    :docType="'Scanned Application'"
+                                                    :success="success"
+                                                />
 
-  
- <!-- When its Mpumalanga province ============================================== -->
- <StageComponent
-    :dbStatus="licence.status"
-    :errors="errors"
-    :stageValue=700
-    :licence_id="licence.slug"
-    :stageTitle="'Lodged with Municipality'"
-    :success="success"
-    @stage-value-changed="pushData"
- />
-
- <div class="col-md-6">
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=700
-  :docType="'Lodged with Municipality'"
-  :success="success"
-/>
-</div>
-<hr/> 
-
-<!-- When its Mpumalanga province ============================================== -->
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=800
-:licence_id="licence.slug"
-:stageTitle="'Municipal Comments'"
-:success="success"
-@stage-value-changed="pushData"
-/>
-
-<div class="col-md-6">
-<DocComponent
-:documentModel="licence"
-:errors="errors"
-:orderByNumber=800
-:docType="'Municipal Comments'"
-:success="success"
-/>
-</div>
-<hr/> 
-<!-- //Mpumalanga================= -->
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=900
-:licence_id="licence.slug"
-:stageTitle="'Completed Application Scanned'"
-:success="success"
-@stage-value-changed="pushData"
-/>
-
-<div class="col-md-6">
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=900
-  :docType="'Completed Application Scanned'"
-  :success="success"
-  />
-  </div>
-<hr>
-
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=1000
-:licence_id="licence.slug"
-:stageTitle="'Lodged with MER'"
-:success="success"
-@stage-value-changed="pushData"
-/>
-
-<div class="col-md-6">
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=1000
-  :docType="'Lodged with MER'"
-  :success="success"
-  />
-  </div>
-<hr>
-
-<!-- Limpopo and Northwest ====================== -->
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=1100
-:licence_id="licence.slug"
-:stageTitle="'Lodged with Magistrate'"
-:success="success"
-@stage-value-changed="pushData"
-/>
-
-<div class="col-md-6">
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=1100
-  :docType="'Lodged with Magistrate'"
-  :success="success"
-  />
-  </div>
-<hr>
-
-<!-- Limpopo and Northwest ====================== -->
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=1200
-:licence_id="licence.slug"
-:stageTitle="'Lodged with DPO'"
-:success="success"
-@stage-value-changed="pushData"
-/>
-
-<div class="col-md-6">
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=1200
-  :docType="'Lodged with DPO'"
-  :success="success"
-  />
-  </div>
-<hr>
-
-<!-- Limpopo and Northwest ====================== -->
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=1300
-:licence_id="licence.slug"
-:stageTitle="'Police Report'"
-:success="success"
-@stage-value-changed="pushData"
-/>
-
-<div class="col-md-6">
-  <DocComponent
-  :documentModel="licence"
-  :errors="errors"
-  :orderByNumber=1300
-  :docType="'Police Report'"
-  :success="success"
-  />
-  </div>
-<hr>
+                                            </div>
+                                            <hr>
 
 
 
+                                            <!-- When its Mpumalanga province ============================================== -->
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=700
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Lodged with Municipality'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=700
+                                                    :docType="'Lodged with Municipality'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr/>
 
-    <StageComponent
-    :dbStatus="licence.status"
-    :errors="errors"
-    :stageValue=1400
-    :licence_id="licence.slug"
-    :stageTitle="'Application Lodged (Proof of Lodgement)'"
-    :success="success"
-    @stage-value-changed="pushData"
-    />   
-    
-     <template v-if="licence.application_lodged_at">   
-      <DateComponent
-      :canSave="$page.props.auth.has_slowtow_admin_role"
-      :errors="errors"
-      :column=5
-      :dated_at="'Pass the stage date here'"
-      :success="success"
-      />      
-       </template>
-       
-       <template v-else>
-        
-        <DateComponent
-        :canSave="$page.props.auth.has_slowtow_admin_role"
-        :errors="errors"
-        :column=5
-        :dated_at="'Pass the stage date here'"
-        :success="success"
-      />   
-       </template> 
+                                            <!-- When its Mpumalanga province ============================================== -->
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=800
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Municipal Comments'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-       <DocComponent
-        :documentModel="application_logded"
-        :errors="errors"
-        :orderByNumber=1500
-        :docType="'Application Lodged'"
-        :success="success"
-       />
-<hr/>
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=800
+                                                    :docType="'Municipal Comments'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr/>
+                                            <!-- //Mpumalanga================= -->
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=900
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Completed Application Scanned'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-<!-- this stage must appear once licnce lodged is ticked -->
-<template v-if="licence.status >= 1500">
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=900
+                                                    :docType="'Completed Application Scanned'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr>
 
-<StageComponent
-:dbStatus="licence.status"
-:errors="errors"
-:stageValue=1600
-:licence_id="licence.slug"
-:stageTitle="'Additional Documents/Information'"
-:success="success"
-@stage-value-changed="pushData"
-/>
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1000
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Lodged with MER'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-    
-  <AdditionalDocsComponent 
-  :licence_id="licence.id" 
-  :additional_docs="additional_docs"
-  :success="success" 
-  :error="error" 
-  :errors="errors"/>
-</template>
-<hr/>
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=1000
+                                                    :docType="'Lodged with MER'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr>
 
-  <StageComponent
-    :dbStatus="licence.status"
-    :errors="errors"
-    :stageValue=1700
-    :licence_id="licence.slug"
-    :stageTitle="'Initial Inspection'"
-    :success="success"
-    @stage-value-changed="pushData"
-    />
-        
-        
-        
-  <template v-if="licence.initial_inspection_at">   
-  
-  <DateComponent
-        :canSave="$page.props.auth.has_slowtow_admin_role"
-        :errors="errors"
-        :column=4
-        :dated_at="'Pass the Inspection stage date here'"
-        :success="success"
-      />   
-  </template>
-    
-    <template v-else>
-      <DateComponent
-      :canSave="$page.props.auth.has_slowtow_admin_role"
-      :errors="errors"
-      :column=4
-      :dated_at="'Pass the Inspection stage date here'"
-      :success="success"
-    />    
-  </template>  
+                                            <!-- Limpopo and Northwest ====================== -->
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1100
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Lodged with Magistrate'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-  <DocComponent
-  :documentModel="application_logded"
-  :errors="errors"
-  :orderByNumber=1700
-  :docType="'Initial Inspection'"
-  :success="success"
-  />
-<hr/>
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=1100
+                                                    :docType="'Lodged with Magistrate'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr>
 
-  
+                                            <!-- Limpopo and Northwest ====================== -->
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1200
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Lodged with DPO'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-    <StageComponent
-    :dbStatus="licence.status"
-    :errors="errors"
-    :stageValue=1800
-    :licence_id="licence.slug"
-    :stageTitle="'Final Inspection'"
-    :success="success"
-    @stage-value-changed="pushData"
-    />
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=1200
+                                                    :docType="'Lodged with DPO'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr>
 
-  <template v-if="licence.final_inspection_at"> 
-       
-  <div class="col-md-4 columns mb-4">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
-     </div>
-   <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
-</div>
-<div class="col-md-1 columns">
-  <button v-if="licence.final_inspection_at" 
-  @click="updateRegistrationDate" 
-   type="button" class="btn btn-sm btn-secondary">Save</button>
- </div>
-   
-   </template>
-           
-  <template v-else>      
-  <div class="col-md-4 columns mb-4">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
-     </div>
-   <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
-</div>
-<div class="col-md-1 columns">
-  <button v-if="$page.props.auth.has_slowtow_admin_role" 
-  @click="updateRegistrationDate" 
-   
-  type="button" class="btn btn-sm btn-secondary">Save</button>
- </div>
+                                            <!-- Limpopo and Northwest ====================== -->
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1300
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Police Report'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-   
- </template>  
-
-
-  <ul class="list-group">
-    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-      <div class="avatar me-3" v-if="final_inspection_doc !== null">
-      <a :href="`${$page.props.blob_file_path}${final_inspection_doc.document_file}`" target="_blank">
-      <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-      </a>
-      </div>
-  
-     <div class="d-flex align-items-start flex-column justify-content-center">
-      <h6 v-if="!final_inspection_doc" class="mb-0 text-sm">Document</h6>
-      <h6 v-else-if="final_inspection_doc" class="mb-0 text-sm limit-file-name">{{ final_inspection_doc.document_name }}</h6>
-      </div>
-  
-      <a v-if="final_inspection_doc !== null" @click="deleteDocument(final_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-      </a>
-      <a v-else @click="getDocType(10,'Final Inspection')" data-bs-toggle="modal" data-bs-target="#documents" 
-      class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-upload h5" aria-hidden="true"></i>
-      </a>
-    </li>
-  </ul> 
-  <hr/>
+                                            <div class="col-md-6">
+                                                <DocComponent
+                                                    :documentModel="licence"
+                                                    :errors="errors"
+                                                    :orderByNumber=1300
+                                                    :docType="'Police Report'"
+                                                    :success="success"
+                                                />
+                                            </div>
+                                            <hr>
 
 
 
 
-  <div class="col-md-6 columns">
-    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox" id="activation-fee" type="checkbox"
-    @input="pushData($event,110)" :checked="licence.status >= 110" value="110">
-    <label for="activation-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Requested </label>
-    </div>
-    </div>
-    
-  
-    
 
-    <template v-if="licence.activation_fee_requested_at"> 
-       
-      <div class="col-md-4 columns mb-4">
-        <div class="input-group input-group-outline null is-filled ">
-        <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
-      </div>
-    <div v-if="errors.activation_fee_requested_at" class="text-danger">
-      {{ errors.activation_fee_requested_at }}</div>
-    </div>
-    <div class="col-md-1 columns">
-    <button v-if="licence.activation_fee_requested_at" 
-    @click="updateRegistrationDate" 
-    type="button" class="btn btn-sm btn-secondary">Save</button>
-    </div>
- </template>
-               
- <template v-else>      
-        <div class="col-md-4 columns mb-4">
-          <div class="input-group input-group-outline null is-filled ">
-          <label class="form-label">Date</label>
-      <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
-        </div>
-      <div v-if="errors.activation_fee_requested_at" class="text-danger">
-        {{ errors.activation_fee_requested_at }}</div>
-      </div>
-   
-      <div class="col-md-1 columns">
-      <button v-if="$page.props.auth.has_slowtow_admin_role" 
-      @click="updateRegistrationDate" 
-      type="button" class="btn btn-sm btn-secondary">Save</button>
-      </div>
-     </template>  
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1400
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Application Lodged (Proof of Lodgement)'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
 
-    <hr/> 
+                                            <template v-if="licence.application_lodged_at">
+                                                <DateComponent
+                                                    :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                    :errors="errors"
+                                                    :column=5
+                                                    :dated_at="'Pass the stage date here'"
+                                                    :success="success"
+                                                />
+                                            </template>
 
-    <div class="col-md-12 columns">
-      <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-      <input class="active-checkbox" id="finat" type="checkbox"
-      @input="pushData($event,120)" :checked="licence.status >= 120" value="120">
-      <label for="finat" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoice </label>
-      </div>
-      </div>
-            
-      <ul class="list-group">
-        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-          <div class="avatar me-3" v-if="client_finalisation !== null">
-          <a :href="`${$page.props.blob_file_path}${client_finalisation.document_file}`" target="_blank">
-          <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-          </a>
-          </div>
-      
-         <div class="d-flex align-items-start flex-column justify-content-center">
-          <h6 v-if="!client_finalisation" class="mb-0 text-sm">Document</h6>
-          <h6 v-else-if="client_finalisation" class="mb-0 text-sm limit-file-name">{{ client_finalisation.document_name }}</h6>
-          </div>
-      
-          <a v-if="client_finalisation !== null" @click="deleteDocument(client_finalisation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-          </a>
-          <a v-else @click="getDocType(12,'Client Finalisation Invoiced')" data-bs-toggle="modal" data-bs-target="#documents" 
-          class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-          <i class="fa fa-upload h5" aria-hidden="true"></i>
-          </a>
-        </li>
-      </ul>
-      <hr/>
-      
-      <div class="col-md-6 columns">
-        <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-        <input class="active-checkbox" id="client-paid" type="checkbox"
-        @input="pushData($event,130)" :checked="licence.status >= 130" value="130">
-        <!-- this was previouly client paid -->
-        <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Finalisation Paid </label>
-        </div>
-        </div>
-        
- <template v-if="licence.client_paid_at"> 
-       
-  <div class="col-md-4 columns mb-4">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
-     </div>
-   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-   </div>
-   <div class="col-md-1 columns">
-    <button v-if="licence.client_paid_at" 
-    
-    @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-   </div>   
-</template>
-                     
-<template v-else>      
-  <div class="col-md-4 columns mb-4">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Date</label>
-    <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
-     </div>
-   <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
-   </div>
-   <div class="col-md-1 columns">
-    <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    
-     @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-   </div>  
- </template>  
-        <hr/>
+                                            <template v-else>
 
-        <div class="col-md-6 columns">
-          <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-          <input class="active-checkbox" id="activ-fee" type="checkbox" 
-          @input="pushData($event,140)" :checked="licence.status >= 140" value="140">
-          <label for="activ-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Paid </label>
-          </div>
-          </div>
-          
-          
+                                                <DateComponent
+                                                    :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                    :errors="errors"
+                                                    :column=5
+                                                    :dated_at="'Pass the stage date here'"
+                                                    :success="success"
+                                                />
+                                            </template>
+
+                                            <DocComponent
+                                                :documentModel="application_logded"
+                                                :errors="errors"
+                                                :orderByNumber=1500
+                                                :docType="'Application Lodged'"
+                                                :success="success"
+                                            />
+                                            <hr/>
+
+                                            <!-- this stage must appear once licnce lodged is ticked -->
+                                            <template v-if="licence.status >= 1500">
+
+                                                <StageComponent
+                                                    :dbStatus="licence.status"
+                                                    :errors="errors"
+                                                    :stageValue=1600
+                                                    :licence_id="licence.slug"
+                                                    :stageTitle="'Additional Documents/Information'"
+                                                    :success="success"
+                                                    @stage-value-changed="pushData"
+                                                />
 
 
-           <template v-if="licence.activation_fee_paid_at"> 
-       
-            <div class="col-md-4 columns">
-              <div class="input-group input-group-outline null is-filled ">
-              <label class="form-label">Date</label>
-          <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
+                                                <AdditionalDocsComponent
+                                                    :licence_id="licence.id"
+                                                    :additional_docs="additional_docs"
+                                                    :success="success"
+                                                    :error="error"
+                                                    :errors="errors"/>
+                                            </template>
+                                            <hr/>
+
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1700
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Initial Inspection'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
+
+
+
+                                            <template v-if="licence.initial_inspection_at">
+
+                                                <DateComponent
+                                                    :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                    :errors="errors"
+                                                    :column=4
+                                                    :dated_at="'Pass the Inspection stage date here'"
+                                                    :success="success"
+                                                />
+                                            </template>
+
+                                            <template v-else>
+                                                <DateComponent
+                                                    :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                    :errors="errors"
+                                                    :column=4
+                                                    :dated_at="'Pass the Inspection stage date here'"
+                                                    :success="success"
+                                                />
+                                            </template>
+
+                                            <DocComponent
+                                                :documentModel="application_logded"
+                                                :errors="errors"
+                                                :orderByNumber=1700
+                                                :docType="'Initial Inspection'"
+                                                :success="success"
+                                            />
+                                            <hr/>
+
+
+
+                                            <StageComponent
+                                                :dbStatus="licence.status"
+                                                :errors="errors"
+                                                :stageValue=1800
+                                                :licence_id="licence.slug"
+                                                :stageTitle="'Final Inspection'"
+                                                :success="success"
+                                                @stage-value-changed="pushData"
+                                            />
+
+                                            <template v-if="licence.final_inspection_at">
+
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
+                                                    </div>
+                                                    <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="licence.final_inspection_at"
+                                                            @click="updateRegistrationDate"
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.final_inspection_at">
+                                                    </div>
+                                                    <div v-if="errors.	final_inspection_at" class="text-danger">{{ errors.final_inspection_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
+                                                            @click="updateRegistrationDate"
+
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+
+
+                                            </template>
+
+
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="final_inspection_doc !== null">
+                                                        <a :href="`${$page.props.blob_file_path}${final_inspection_doc.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!final_inspection_doc" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="final_inspection_doc" class="mb-0 text-sm limit-file-name">{{ final_inspection_doc.document_name }}</h6>
+                                                    </div>
+
+                                                    <a v-if="final_inspection_doc !== null" @click="deleteDocument(final_inspection_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(10,'Final Inspection')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr/>
+
+
+
+
+                                            <div class="col-md-6 columns">
+                                                <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+                                                    <input class="active-checkbox" id="activation-fee" type="checkbox"
+                                                           @input="pushData($event,110)" :checked="licence.status >= 110" value="110">
+                                                    <label for="activation-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Requested </label>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <template v-if="licence.activation_fee_requested_at">
+
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
+                                                    </div>
+                                                    <div v-if="errors.activation_fee_requested_at" class="text-danger">
+                                                        {{ errors.activation_fee_requested_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="licence.activation_fee_requested_at"
+                                                            @click="updateRegistrationDate"
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.activation_fee_requested_at">
+                                                    </div>
+                                                    <div v-if="errors.activation_fee_requested_at" class="text-danger">
+                                                        {{ errors.activation_fee_requested_at }}</div>
+                                                </div>
+
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
+                                                            @click="updateRegistrationDate"
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+                                            <hr/>
+
+                                            <div class="col-md-12 columns">
+                                                <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+                                                    <input class="active-checkbox" id="finat" type="checkbox"
+                                                           @input="pushData($event,120)" :checked="licence.status >= 120" value="120">
+                                                    <label for="finat" class="form-check-label text-body text-truncate status-heading"> Client Finalisation Invoice </label>
+                                                </div>
+                                            </div>
+
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="client_finalisation !== null">
+                                                        <a :href="`${$page.props.blob_file_path}${client_finalisation.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!client_finalisation" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="client_finalisation" class="mb-0 text-sm limit-file-name">{{ client_finalisation.document_name }}</h6>
+                                                    </div>
+
+                                                    <a v-if="client_finalisation !== null" @click="deleteDocument(client_finalisation.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(12,'Client Finalisation Invoiced')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr/>
+
+                                            <div class="col-md-6 columns">
+                                                <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+                                                    <input class="active-checkbox" id="client-paid" type="checkbox"
+                                                           @input="pushData($event,130)" :checked="licence.status >= 130" value="130">
+                                                    <!-- this was previouly client paid -->
+                                                    <label for="client-paid" class="form-check-label text-body text-truncate status-heading"> Finalisation Paid </label>
+                                                </div>
+                                            </div>
+
+                                            <template v-if="licence.client_paid_at">
+
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+                                                    </div>
+                                                    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="licence.client_paid_at"
+
+                                                            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="col-md-4 columns mb-4">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.client_paid_at">
+                                                    </div>
+                                                    <div v-if="errors.client_paid_at" class="text-danger">{{ errors.client_paid_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
+
+                                                            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+                                            <hr/>
+
+                                            <div class="col-md-6 columns">
+                                                <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+                                                    <input class="active-checkbox" id="activ-fee" type="checkbox"
+                                                           @input="pushData($event,140)" :checked="licence.status >= 140" value="140">
+                                                    <label for="activ-fee" class="form-check-label text-body text-truncate status-heading"> Activation Fee Paid </label>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <template v-if="licence.activation_fee_paid_at">
+
+                                                <div class="col-md-4 columns">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
+                                                    </div>
+                                                    <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button @click="updateRegistrationDate"
+
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="col-md-4 columns">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
+                                                    </div>
+                                                    <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
+                                                </div>
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
+
+                                                            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+
+
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="activation_fee_paid !== null">
+                                                        <a :href="`${$page.props.blob_file_path}${activation_fee_paid.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!activation_fee_paid" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="activation_fee_paid" class="mb-0 text-sm limit-file-name">{{ activation_fee_paid.document_name }}</h6>
+                                                    </div>
+
+                                                    <a v-if="activation_fee_paid !== null" @click="deleteDocument(activation_fee_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(14,'Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr/>
+
+                                            <div class="col-md-6 columns">
+                                                <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+                                                    <input class="active-checkbox" id="licence-issued" type="checkbox"
+                                                           @input="pushData($event,150)" :checked="licence.status >= 150" value="150">
+                                                    <label for="licence-issued" class="form-check-label text-body text-truncate status-heading"> Licence Issued </label>
+                                                </div>
+                                            </div>
+
+
+
+
+                                            <template v-if="licence.licence_issued_at">
+
+                                                <div class="col-md-4 columns">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
+                                                    </div>
+                                                    <div v-if="errors.licence_issued_at" class="text-danger">{{ errors.licence_issued_at }}</div>
+                                                </div>
+
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="licence.licence_issued_at"
+
+                                                            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="col-md-4 columns">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
+                                                    </div>
+                                                    <div v-if="errors.licence_issued_at" class="text-danger">{{ errors.licence_issued_at }}</div>
+                                                </div>
+
+                                                <div class="col-md-1 columns">
+                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
+
+                                                            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="licence_issued_doc !== null">
+                                                        <a :href="`${$page.props.blob_file_path}${licence_issued_doc.document_file}`" target="_blank">
+                                                            <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!licence_issued_doc" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="licence_issued_doc" class="mb-0 text-sm limit-file-name">{{ licence_issued_doc.document_name }}</h6>
+                                                    </div>
+
+                                                    <a v-if="licence_issued_doc !== null" @click="deleteDocument(licence_issued_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(15,'Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <hr/>
+
+
+
+
+                                            <div class="col-md-6 columns mb-4">
+                                                <div class=" form-switch d-flex ps-0 ms-0  is-filled">
+                                                    <input class="active-checkbox" id="licence-delivered" type="checkbox"
+                                                           @input="pushData($event,160)" :checked="licence.status >= 160">
+                                                    <label for="licence-delivered" class="form-check-label text-body text-truncate status-heading"> Licence Delivered </label>
+                                                </div>
+                                            </div>
+
+
+                                            <template v-if="licence.licence_delivered_at">
+
+                                                <div class="col-md-4 columns">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.licence_delivered_at">
+                                                    </div>
+                                                    <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
+                                                </div>
+
+                                                <div class="col-md-1 columns">
+                                                    <button @click="updateRegistrationDate"
+
+                                                            type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+                                            <template v-else>
+                                                <div class="col-md-4 columns">
+                                                    <div class="input-group input-group-outline null is-filled ">
+                                                        <label class="form-label">Date</label>
+                                                        <input type="date" class="form-control form-control-default" v-model="form.licence_delivered_at">
+                                                    </div>
+                                                    <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
+                                                </div>
+
+                                                <div class="col-md-1 columns">
+                                                    <button  v-if="$page.props.auth.has_slowtow_admin_role"
+
+                                                             @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+                                                </div>
+                                            </template>
+
+
+                                            <ul class="list-group">
+                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                    <div class="avatar me-3" v-if="licence_delivered !== null">
+                                                        <a :href="`${$page.props.blob_file_path}${licence_delivered.document_file}`" target="_blank">
+                                                            <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
+                                                        </a>
+                                                    </div>
+
+                                                    <div class="d-flex align-items-start flex-column justify-content-center">
+                                                        <h6 v-if="!licence_delivered" class="mb-0 text-sm">Document</h6>
+                                                        <h6 v-else-if="licence_delivered" class="mb-0 text-sm limit-file-name">{{ licence_delivered.document_name }}</h6>
+                                                    </div>
+
+                                                    <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+                                                    </a>
+                                                    <a v-else @click="getDocType(16,'Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents"
+                                                       class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
+                                                        <i class="fa fa-upload h5" aria-hidden="true"></i>
+                                                    </a>
+                                                </li>
+                                            </ul>
+
+                                            <div>
+                                                <div v-if="form.status >= 150" class="text-xs text-danger d-flex">Please note that this licence will no longer be a
+                                                    new application and this action is irreversible once saved.</div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <hr class="vertical dark" />
+                        </div>
+
+                    </div>
+
+                </div>
+                <hr>
+
+                <Task
+                    v-if="licence.status >= 150"
+                    :tasks="tasks"
+                    :model_id="licence.id"
+                    :success="success"
+                    :error="error"
+                    :errors="errors"
+                    :model_type="'Licence'"/>
+
+
+
             </div>
-          <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
-      </div>
-          <div class="col-md-1 columns">
-            <button @click="updateRegistrationDate" 
-            
-            type="button" class="btn btn-sm btn-secondary">Save</button>
-           </div>  
-          </template>
-                               
-          <template v-else>      
-            <div class="col-md-4 columns">
-              <div class="input-group input-group-outline null is-filled ">
-              <label class="form-label">Date</label>
-          <input type="date" class="form-control form-control-default" v-model="form.activation_fee_paid_at">
-            </div>
-          <div v-if="errors.activation_fee_paid_at" class="text-danger">{{ errors.activation_fee_paid_at }}</div>
-             </div>
-          <div class="col-md-1 columns">
-            <button v-if="$page.props.auth.has_slowtow_admin_role" 
-            
-             @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-           </div>  
-       </template> 
-
-
-
-          <ul class="list-group">
-            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-              <div class="avatar me-3" v-if="activation_fee_paid !== null">
-              <a :href="`${$page.props.blob_file_path}${activation_fee_paid.document_file}`" target="_blank">
-              <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
-              </a>
-              </div>
-          
-             <div class="d-flex align-items-start flex-column justify-content-center">
-              <h6 v-if="!activation_fee_paid" class="mb-0 text-sm">Document</h6>
-              <h6 v-else-if="activation_fee_paid" class="mb-0 text-sm limit-file-name">{{ activation_fee_paid.document_name }}</h6>
-              </div>
-          
-              <a v-if="activation_fee_paid !== null" @click="deleteDocument(activation_fee_paid.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-              <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-              </a>
-              <a v-else @click="getDocType(14,'Activation Fee Paid')" data-bs-toggle="modal" data-bs-target="#documents" 
-              class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-              <i class="fa fa-upload h5" aria-hidden="true"></i>
-              </a>
-            </li>
-          </ul>
-          <hr/>
-          
-          <div class="col-md-6 columns">
-            <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-            <input class="active-checkbox" id="licence-issued" type="checkbox"
-            @input="pushData($event,150)" :checked="licence.status >= 150" value="150">
-            <label for="licence-issued" class="form-check-label text-body text-truncate status-heading"> Licence Issued </label>
-            </div>
-            </div>
-            
-           
-   
-             
-             <template v-if="licence.licence_issued_at"> 
-       
-              <div class="col-md-4 columns">
-                <div class="input-group input-group-outline null is-filled ">
-                <label class="form-label">Date</label>
-              <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
-                </div>
-              <div v-if="errors.licence_issued_at" class="text-danger">{{ errors.licence_issued_at }}</div>
-             </div>
-
-            <div class="col-md-1 columns">
-              <button v-if="licence.licence_issued_at" 
-             
-              @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-             </div>
-          </template>
-                               
-          <template v-else>      
-            <div class="col-md-4 columns">
-              <div class="input-group input-group-outline null is-filled ">
-              <label class="form-label">Date</label>
-            <input type="date" class="form-control form-control-default" v-model="form.licence_issued_at">
-              </div>
-            <div v-if="errors.licence_issued_at" class="text-danger">{{ errors.licence_issued_at }}</div>
         </div>
 
-          <div class="col-md-1 columns">
-            <button v-if="$page.props.auth.has_slowtow_admin_role" 
-            
-            @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-           </div>
-       </template> 
 
+        <div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
 
-            <ul class="list-group">
-              <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                <div class="avatar me-3" v-if="licence_issued_doc !== null">
-                <a :href="`${$page.props.blob_file_path}${licence_issued_doc.document_file}`" target="_blank">
-                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                </a>
-                </div>
-            
-               <div class="d-flex align-items-start flex-column justify-content-center">
-                <h6 v-if="!licence_issued_doc" class="mb-0 text-sm">Document</h6>
-                <h6 v-else-if="licence_issued_doc" class="mb-0 text-sm limit-file-name">{{ licence_issued_doc.document_name }}</h6>
-                </div>
-            
-                <a v-if="licence_issued_doc !== null" @click="deleteDocument(licence_issued_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-                </a>
-                <a v-else @click="getDocType(15,'Licence Issued')" data-bs-toggle="modal" data-bs-target="#documents" 
-                class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                <i class="fa fa-upload h5" aria-hidden="true"></i>
-                </a>
-              </li>
-            </ul> 
-            <hr/>
-
-
-
-
-            <div class="col-md-6 columns mb-4">
-              <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-              <input class="active-checkbox" id="licence-delivered" type="checkbox" 
-              @input="pushData($event,160)" :checked="licence.status >= 160">
-              <label for="licence-delivered" class="form-check-label text-body text-truncate status-heading"> Licence Delivered </label>
-              </div>
-              </div>
-              
-              
-               <template v-if="licence.licence_delivered_at"> 
-       
-                <div class="col-md-4 columns">
-                  <div class="input-group input-group-outline null is-filled ">
-                  <label class="form-label">Date</label>
-            <input type="date" class="form-control form-control-default" v-model="form.licence_delivered_at">
-              </div>
-               <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
-                </div>
-
-              <div class="col-md-1 columns">
-                <button @click="updateRegistrationDate" 
-                 
-                type="button" class="btn btn-sm btn-secondary">Save</button>
-               </div>
-            </template>
-                                 
-            <template v-else>      
-              <div class="col-md-4 columns">
-                  <div class="input-group input-group-outline null is-filled ">
-                  <label class="form-label">Date</label>
-            <input type="date" class="form-control form-control-default" v-model="form.licence_delivered_at">
-              </div>
-               <div v-if="errors.licence_delivered_at" class="text-danger">{{ errors.licence_delivered_at }}</div>
-                </div>
-
-              <div class="col-md-1 columns">
-                <button  v-if="$page.props.auth.has_slowtow_admin_role" 
-                 
-                @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-               </div>
-         </template> 
-
-
-              <ul class="list-group">
-                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                  <div class="avatar me-3" v-if="licence_delivered !== null">
-                  <a :href="`${$page.props.blob_file_path}${licence_delivered.document_file}`" target="_blank">
-                  <i class="fa fa-file-pdf text-danger" aria-hidden="true"></i>
-                  </a>
-                  </div>
-              
-                 <div class="d-flex align-items-start flex-column justify-content-center">
-                  <h6 v-if="!licence_delivered" class="mb-0 text-sm">Document</h6>
-                  <h6 v-else-if="licence_delivered" class="mb-0 text-sm limit-file-name">{{ licence_delivered.document_name }}</h6>
-                  </div>
-              
-                  <a v-if="licence_delivered !== null" @click="deleteDocument(licence_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                  <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
-                  </a>
-                  <a v-else @click="getDocType(16,'Licence Delivered')" data-bs-toggle="modal" data-bs-target="#documents" 
-                  class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-                  <i class="fa fa-upload h5" aria-hidden="true"></i>
-                  </a>
-                </li>
-              </ul> 
-  
-  <div>
-    <div v-if="form.status >= 150" class="text-xs text-danger d-flex">Please note that this licence will no longer be a 
-      new application and this action is irreversible once saved.</div>
-  </div>
-  </div>
-  </form>
-    </div>
-  </div>
-  <hr class="vertical dark" />
-  </div>
-          
-  </div>
-  
-  </div>
-  <hr>
- 
-  <Task 
-  v-if="licence.status >= 150"
-  :tasks="tasks" 
-  :model_id="licence.id" 
-  :success="success" 
-  :error="error" 
-  :errors="errors" 
-  :model_type="'Licence'"/>
-
-
-
-  </div>
-  </div>
-
-  
-  <div v-if="show_modal" class="modal fade" id="documents" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
-          
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <p v-if="uploadDoc.doc_type == 'Licence Issued'
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <p v-if="uploadDoc.doc_type == 'Licence Issued'
         || uploadDoc.doc_type == 'Licence Delivered'" class="p-2 text-danger">
-          Please note that this licence will no longer be a new application and this action 
-          is irreversible once saved.</p>
+                        Please note that this licence will no longer be a new application and this action
+                        is irreversible once saved.</p>
 
-        <form @submit.prevent="submitDocument">
-        <input type="hidden" v-model="uploadDoc.doc_type">
-        <input type="hidden" v-model="uploadDoc.num">
-        <div class="modal-body">      
-          <div class="row">    
-          <div class="col-md-12 columns">
-          <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
-           <input type="file" @change="getFileName"
-           hidden id="licence-doc" accept=".pdf"/>
-           <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
-           <div v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
-             <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
-           </div>
-         <div class="col-md-12">
-            <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
-           {{ uploadDoc.progress.percentage }}%
-           </progress>
-           </div>
-           </div> 
+                    <form @submit.prevent="submitDocument">
+                        <input type="hidden" v-model="uploadDoc.doc_type">
+                        <input type="hidden" v-model="uploadDoc.num">
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12 columns">
+                                    <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
+                                    <input type="file" @change="getFileName"
+                                           hidden id="licence-doc" accept=".pdf"/>
+                                    <div v-if="errors.doc" class="text-danger">{{ errors.doc }}</div>
+                                    <div v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
+                                    <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>
+                                </div>
+                                <div class="col-md-12">
+                                    <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
+                                        {{ uploadDoc.progress.percentage }}%
+                                    </progress>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
+                                <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                Save</button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
         </div>
-    
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
-           <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-           Save</button>
-           </div>
-        </form>
-        
-      </div>
-    </div>
-  </div>
 
     </Layout>
-  </template>
-    <style src="@vueform/multiselect/themes/default.css"></style>
-  <style scoped>
-  .columns{
+</template>
+<style src="@vueform/multiselect/themes/default.css"></style>
+<style scoped>
+.columns{
     margin-bottom: 1rem;
-  }
-  .upload-icon{
+}
+.upload-icon{
     cursor: pointer;
-  }
-  .active-checkbox{
+}
+.active-checkbox{
     margin-top: -10px;
     margin-left: 3px;
-  }
-  .status-heading{
+}
+.status-heading{
     font-weight: 700;
-  }
-  .list-group{
+}
+.list-group{
     margin-top: -1.4rem;
-  }
+}
 
-  
-  </style>
 
-  <script src="./registration.js"></script>
-  
-  
+</style>
+
+<script src="./registration.js"></script>
+
