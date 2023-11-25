@@ -127,7 +127,6 @@ class NewApplicationController extends Controller
                 'client_number' => $request->client_number,
                 'latest_renewal' => $request->latest_renewal,
                 'licence_date' => $request->licence_date,
-                'licence_issued_at' => $request->licence_date,
                 'postal_code' => $request->postal_code,
             ]);
 
@@ -135,7 +134,8 @@ class NewApplicationController extends Controller
                 return back()->with('success', 'Licence updated successfully.');
             }
         } catch (\Throwable $th) {
-            return back()->with('error', 'An error occurred. Please try again.');
+            throw $th;
+            //return back()->with('error', 'An error occurred. Please try again.');
         }
     }
 

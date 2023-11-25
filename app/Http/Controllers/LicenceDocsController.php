@@ -152,7 +152,7 @@ class LicenceDocsController extends Controller
      */
     private function updateLicenceStatusAndFlags($request, $licence)
     {
-        if ($request instanceof Request && $request->stage && intval($request->stage) >= 150) {
+        if ($request instanceof Request && $request->stage && intval($request->stage) >= 3500) {
             $licence->update(['is_new_app' => false]);
         }
 

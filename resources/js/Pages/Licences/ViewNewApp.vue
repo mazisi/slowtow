@@ -170,9 +170,15 @@
 
 
 
+                                            <div class="col-4 columns">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Address Line 3</label>
+                                                    <input type="text" class="form-control form-control-default" v-model="form.address3">
+                                                </div>
+                                            </div>
 
 
-                                            <div class="col-4 columns" v-if="licence.status >= 150">
+                                            <div class="col-4 columns" v-if="licence.status >= 3500">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Latest Renewal</label>
                                                     <input type="text" class="form-control form-control-default" v-model="form.latest_renewal">
@@ -198,6 +204,16 @@
                                                     </select>
                                                 </div>
                                             </div>
+
+                                            <div class="col-4 columns">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Province</label>
+                                                    <select required class="form-control form-control-default" v-model="form.province" >
+                                                        <option :value="''" disabled selected>Select Province</option>
+                                                        <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Renewal Amount</label>
@@ -214,27 +230,19 @@
                                             </div>
 
 
-                                            <div class="col-4 columns">
-                                                <div class="input-group input-group-outline null is-filled">
-                                                    <label class="form-label">Province</label>
-                                                    <select required class="form-control form-control-default" v-model="form.province" >
-                                                        <option :value="''" disabled selected>Select Province</option>
-                                                        <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                            
 
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Liquor Board Region</label>
-                                                    <select required class="form-control form-control-default" v-model="form.board_region" >
+                                                    <select class="form-control form-control-default" v-model="form.board_region" >
                                                         <option :value="''" disabled selected>Select Liquor Board Region</option>
                                                         <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
                                                     </select>
                                                 </div>
                                             </div>
 
-                                            <div class="col-4 columns"></div>
+                                           
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Postal Code</label>
