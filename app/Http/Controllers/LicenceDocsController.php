@@ -13,118 +13,209 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class LicenceDocsController extends Controller
 {
-    public function store(Request $request){
+    /**
+     * Store a document file, update the associated licence status and flags, and return a success message.
+     *
+     * @param Request $request The request object containing the document file, doc type, licence ID, num, and stage.
+     * @return \Illuminate\Http\RedirectResponse The response with success or error message.
+     */
+    public function store(Request $request)
+    {
         $request->validate([
-            "document_file"=> "required|mimes:pdf",
-            "doc_type"=> "required"
-            ]);
-         
-            $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
-            $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace); 
-            $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+            "document_file" => "required|mimes:pdf",
+            "doc_type" => "required"
+        ]);
 
-            if(!fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
-              $fileModel = new LicenceDocument;
-              $fileModel->document_name = $request->document_file->getClientOriginalName();
-              $fileModel->licence_id = $request->licence_id;
-              $fileModel->document_type = $request->doc_type;
-              $fileModel->num = $request->num;
-              $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-              $fileModel->save();
+        $fileName = $this->generateFileName($request->document_file);
+        $filePath = $this->storeDocumentFile($request->document_file, $fileName);
 
+        if (!$this->fileExists($filePath)) {
+            $fileModel = $this->createLicenceDocument($request, $fileName);
+            $this->updateLicenceStatusAndFlags($request, $fileModel);
 
-                if($request->stage && intval($request->stage) >= 150){
-                  Licence::whereId($fileModel->licence_id)->update(['is_new_app' => false]);
-                }
-
-                if($request->stage){
-                  Licence::whereId($fileModel->licence_id)->update(['status' => $request->stage]);
-                 }
-               
-
-            }else{
-              return back()->with('error','Azure storage could not be reached.Please try again.');
-            }
-
-           
-
-            $updateLicence = Licence::find($request->licence_id);
-            switch ($request->doc_type) {
-              case 'Client Quoted':
-                $updateLicence->update(['is_client_invoiced' => true]);
-                break;
-              case 'Application Lodged':
-                $updateLicence->update(['is_application_logded_doc_uploaded' => true]);
-                break;
-              case 'Client Finalisation Invoiced':
-                $updateLicence->update(['is_finalisation_doc_uploaded' => true]);
-                break;                
-              default:
-                # code...
-                break;
-            }
-
-       
-      return back()->with('success','Document uploaded successfully.');
-    
+            return back()->with('success', 'Document uploaded successfully.');
+        } else {
+            return back()->with('error', 'Azure storage could not be reached. Please try again.');
+        }
     }
 
-    public function destroy($id){
+    /**
+     * Delete a document file, update the associated licence status and flags, and return a success message.
+     *
+     * @param int $id The ID of the document to be removed.
+     * @return \Illuminate\Http\RedirectResponse The response with success or error message.
+     */
+    public function destroy($id)
+    {
         $model = LicenceDocument::find($id);
         $updateLicence = Licence::find($model->licence_id);
-        switch ($model->document_type) {
-          case 'Client Quoted':
-            $updateLicence->update(['is_client_invoiced' => null]);
-            break;
-          case 'Application Lodged':
-            $updateLicence->update(['is_application_logded_doc_uploaded' => null]);
-            break;
-          case 'Client Finalisation Invoiced':
-            $updateLicence->update(['is_finalisation_doc_uploaded' => null]);
-            break;               
-          default:
-            # code...
-            break;
-        }
-        if(!is_null($model->document_file)){
+
+        $this->updateLicenceStatusAndFlags($model, $updateLicence);
+
+        if (!is_null($model->document_file)) {
             $model->delete();
-            return back()->with('success','Document removed successfully.');
+            return back()->with('success', 'Document removed successfully.');
         }
-        
-             return back()->with('error','Document not successfully.');
+
+        return back()->with('error', 'Document not successfully.');
     }
 
-    public function merge($licence_id){
+    /**
+     * Merge all the documents associated with a licence, update the merged document file, and return a success message.
+     *
+     * @param int $licence_id The ID of the licence to merge the documents for.
+     * @return \Illuminate\Http\RedirectResponse The response with success or error message.
+     */
+    public function merge($licence_id)
+    {
+        try {
+            $exist = Licence::whereId($licence_id)->first(['id', 'merged_document']);
 
-      try {
-        
-        $exist =  Licence::whereId($licence_id)->first(['id','merged_document']); 
-        $merger = PDFMerger::init();           
-          if (! is_null($exist->merged_document)) {
-            unlink(storage_path().'app/public/'.$exist->merged_document);
-            $exist->update(['merged_document' => null]);
-          }
-                  
-         $all_docs = LicenceDocument::where('licence_id',$exist->id)->whereNotNull('num')->orderBy('num','ASC')
-         ->get(['id','document_file','licence_id','document_type']);
-         
-         $liquor_board_doc = LicenceDocument::where('licence_id',$exist->id)->where('document_type','Payment To The Liquor Board')->get(['id','document_file']);
-         $merged_collections = $all_docs->merge($liquor_board_doc);
-         foreach ($merged_collections as $doc) {
-            $merger->addPDF(env('BLOB_FILE_PATH').$doc->document_file, 'all');
-          }
-          $fileName = 'licence'.'_'.time().'.pdf';
-          $merger->merge();
+            $this->deleteExistingMergedDocument($exist);
 
-          $exist->update(['merged_document' => $fileName]);
+            $mergedDocument = $this->mergeDocuments($exist);
 
-          $merger->save(storage_path('/app/public/'.$fileName));
-          return back()->with('success','Documents merged successfully.');
+            $this->updateMergedDocument($exist, $mergedDocument);
 
-      } catch (\Throwable $th) {
-        throw $th;
-        //return back()->with('error','Error merging documents.');
-      }
-          
+            return back()->with('success', 'Documents merged successfully.');
+        } catch (\Throwable $th) {
+            throw $th;
+            //return back()->with('error','Error merging documents.');
+        }
+    }
+
+    /**
+     * Generate a unique file name for the document file.
+     *
+     * @param \Illuminate\Http\UploadedFile $documentFile The uploaded document file.
+     * @return string The generated file name.
+     */
+    private function generateFileName($documentFile)
+    {
+        $removeSpace = str_replace(' ', '_', $documentFile->getClientOriginalName());
+        $fileName = Str::limit(sha1(now()), 3) . str_replace('-', '_', $removeSpace);
+
+        return $fileName;
+    }
+
+    /**
+     * Store the document file and return the file path.
+     *
+     * @param \Illuminate\Http\UploadedFile $documentFile The uploaded document file.
+     * @param string $fileName The file name for the document file.
+     * @return string The file path.
+     */
+    private function storeDocumentFile($documentFile, $fileName)
+    {
+        $filePath = $documentFile->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+
+        return $filePath;
+    }
+
+    /**
+     * Check if the file exists in the storage.
+     *
+     * @param string $filePath The file path.
+     * @return bool True if the file exists, false otherwise.
+     */
+    private function fileExists($filePath)
+    {
+        return file_exists(env('AZURE_STORAGE_URL') . '/' . env('AZURE_STORAGE_CONTAINER') . '/' . $filePath);
+    }
+
+    /**
+     * Create a new LicenceDocument model.
+     *
+     * @param Request $request The request object containing the document file, doc type, licence ID, num, and stage.
+     * @param string $fileName The file name for the document file.
+     * @return LicenceDocument The created LicenceDocument model.
+     */
+    private function createLicenceDocument($request, $fileName)
+    {
+        $fileModel = new LicenceDocument;
+        $fileModel->document_name = $request->document_file->getClientOriginalName();
+        $fileModel->licence_id = $request->licence_id;
+        $fileModel->document_type = $request->doc_type;
+        $fileModel->num = $request->num;
+        $fileModel->document_file = env('AZURE_STORAGE_CONTAINER') . '/' . $fileName;
+        $fileModel->save();
+
+        return $fileModel;
+    }
+
+    /**
+     * Update the licence status and flags based on the document type.
+     *
+     * @param Request|LicenceDocument $request The request object or LicenceDocument model.
+     * @param Licence $licence The Licence model.
+     * @return void
+     */
+    private function updateLicenceStatusAndFlags($request, $licence)
+    {
+        if ($request instanceof Request && $request->stage && intval($request->stage) >= 150) {
+            $licence->update(['is_new_app' => false]);
+        }
+
+        if ($request instanceof Request && $request->stage) {
+            $licence->update(['status' => $request->stage]);
+        }
+    }
+
+    /**
+     * Delete the existing merged document file.
+     *
+     * @param Licence $licence The Licence model.
+     * @return void
+     */
+    private function deleteExistingMergedDocument($licence)
+    {
+        if (!is_null($licence->merged_document)) {
+            unlink(storage_path() . 'app/public/' . $licence->merged_document);
+            $licence->update(['merged_document' => null]);
+        }
+    }
+
+    /**
+     * Merge all the documents associated with a licence.
+     *
+     * @param Licence $licence The Licence model.
+     * @return string The file name of the merged document.
+     */
+    private function mergeDocuments($licence)
+    {
+        $merger = PDFMerger::init();
+
+        $allDocs = LicenceDocument::where('licence_id', $licence->id)
+            ->whereNotNull('num')
+            ->orderBy('num', 'ASC')
+            ->get(['id', 'document_file', 'licence_id', 'document_type']);
+
+        $liquorBoardDoc = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Payment To The Liquor Board')
+            ->get(['id', 'document_file']);
+
+        $mergedCollections = $allDocs->merge($liquorBoardDoc);
+
+        foreach ($mergedCollections as $doc) {
+            $merger->addPDF(env('BLOB_FILE_PATH') . $doc->document_file, 'all');
+        }
+
+        $fileName = 'licence' . '_' . time() . '.pdf';
+        $merger->merge();
+        $merger->save(storage_path('/app/public/' . $fileName));
+
+        return $fileName;
+    }
+
+    /**
+     * Update the merged document file for the licence.
+     *
+     * @param Licence $licence The Licence model.
+     * @param string $mergedDocument The file name of the merged document.
+     * @return void
+     */
+    private function updateMergedDocument($licence, $mergedDocument)
+    {
+        $licence->update(['merged_document' => $mergedDocument]);
     }
 }

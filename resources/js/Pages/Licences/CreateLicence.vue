@@ -47,7 +47,7 @@
                                             <div class="col-6 columns" >
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Applicant</label>
-                                                    <select v-model="form.belongs_to" @change="selectApplicant($event)" class="form-control form-control-default" required>
+                                                    <select v-model="form.belongs_to" @change="onApplicantChange($event)" class="form-control form-control-default" required>
                                                         <option :value="''" disabled selected>Select Applicant</option>
                                                         <option value="Company">Company</option>
                                                         <option value="Individual">Individual</option>
@@ -63,6 +63,7 @@
                                                     :options="company_options"
                                                     :searchable="true"
                                                     :class="multiselect"
+                                                    @select="onSelectApplicant($event)"
                                                 />
                                                 <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
                                             </div>
@@ -74,6 +75,7 @@
                                                     placeholder="Search Individual"
                                                     :options="people_options"
                                                     :searchable="true"
+                                                    @select="onSelectApplicant($event)"
                                                     style="margin:top: 1rem;"
                                                 />
                                                 <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
@@ -139,17 +141,26 @@
                                                 :errors="errors.old_licence_number"
                                                 :input_id="old_licence_number"
                                             />
+{{ filterForm }}
 
-
-                                            <!-- <TextInputComponent
-                                                :inputType="'date'"
-                                                v-model="form.licence_date"
-                                                :value="form.licence_date"
+                                            <TextInputComponent v-if="form.belongs_to == 'Company'"
+                                                :inputType="'text'"
+                                                :disabled="true"
+                                                :value="form.value"
                                                 :column="'col-6'"
-                                                :label="'Licence Date'"
-                                                :errors="errors.licence_date"
-                                                :input_id="licence_date"
-                                            /> -->
+                                                :label="'Company Registration Number'"
+                                                :input_id="'company'"
+                                            /> 
+                                            <TextInputComponent v-if="form.belongs_to == 'Individual'"
+                                                :inputType="'text'"
+                                                :disabled="true"
+                                                :value="form.value"
+                                                :column="'col-6'"
+                                                :label="'ID Number'"
+                                                :input_id="'individual'"
+                                            /> 
+
+                                            
 
 
                                         </div>
@@ -196,7 +207,7 @@
 
 
                                 <TextInputComponent
-                                    :inputType="'text'"
+                                    :inputType="'number'"
                                     v-model="form.postal_code"
                                     :value="form.postal_code"
                                     :column="'col-12'"
@@ -237,6 +248,7 @@ import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
+import { Inertia } from '@inertiajs/inertia'
 import common from '../common-js/common.js';
 import { computed, ref } from 'vue';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
@@ -249,9 +261,11 @@ export default {
         errors: Object,
         licence_dropdowns: Object,
         companies: Array,
+        type: String,
         people: Array,
         success: String,
         error: String,
+        get_reg_num_or_id_number: String
     },
 
 
@@ -262,10 +276,10 @@ export default {
         const form = useForm({
             trading_name: '',
             licence_type: '',
+            type: props.type,
             is_licence_active: '1',
             licence_number: '',
             old_licence_number: '',
-            licence_date: null,
             address: '',
             address2: '',
             address3: '',
@@ -274,10 +288,13 @@ export default {
             company: '',//company id
             person: '', //person id
             postal_code: '',
-            belongs_to: ''
+            belongs_to: '',
+            value: '',
+            import_export: ''
         })
 
         let licence_types = ref(null);
+        
         //list licence types based on province selected
         function  selectedProvince(){
 
@@ -286,6 +303,37 @@ export default {
             this.licence_types = filteredLicenses;
         }
 
+        const filterForm = useForm({
+            variation: '',
+            id: form.company ? form.company : form.person
+        })
+
+        function onSelectApplicant(e){
+            
+            form.value=''
+          if(form.belongs_to === 'Company'){
+            filterForm.variation = 'Company';
+            filterForm.id = form.company;
+            form.person='';
+          }else if(form.belongs_to === 'Individual'){
+            filterForm.variation = 'Individual';
+            filterForm.id = form.person;
+            filterForm.company='';
+          }
+          console.log('belongs_to',form.belongs_to)
+
+          filterForm.get(`/create-licence?id=${filterForm.id}&type=${form.type}`, {
+            preserveScroll: true,
+            replace: true,
+            preserveState: true,
+            onSuccess: () => {
+                        form.value = props.get_reg_num_or_id_number;
+                      },
+            })
+
+     }
+
+        
         function submit() {
             form.post('/submit-licence', {
                 preserveScroll: true,
@@ -293,7 +341,7 @@ export default {
 
         }
 
-        function selectApplicant(event){
+        function onApplicantChange(event){
             if(form.belongs_to === 'Company'){
                 form.belongs_to = event.target.value;
                 form.person='';
@@ -302,7 +350,7 @@ export default {
                 form.company='';
             }
 
-        }
+         }
         //return Unique provinces from licence_dropdowns
 
 
@@ -314,7 +362,8 @@ export default {
             () => [...new Set(props.licence_dropdowns.map((province) => province.province))]
         );
 
-        return { submit,selectApplicant,company_options, people_options, form,computedBoardRegions, distictProvinces , selectedProvince, licence_types}
+        return { submit,company_options,onSelectApplicant,onApplicantChange,
+             people_options, form,computedBoardRegions, distictProvinces , selectedProvince, licence_types}
     },
     components: {
         Layout,

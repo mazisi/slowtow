@@ -3,7 +3,6 @@
     
         <div class="row justify-content-center">
             
-
             <div class="col-4 columns">    
               <div class="input-group input-group-outline null is-filled">
               <label class="form-label">Documents/Information Submitted</label>
@@ -11,8 +10,9 @@
               </div>
               <div v-if="errors.description">{{ errors.description }}</div>
               </div>
-
+             
               <div class="col-3 columns mb-4">
+           
                 <label for="attach-doc" class="btn mb-0 bg-gradient-dark btn-md null null">
                   <input @change="getFileName" type="file" hidden id="attach-doc">
                   <i class="fas fa-paperclip me-2" aria-hidden="true"></i> Attach Document </label>
@@ -111,22 +111,25 @@ margin-left: 3px;
 
       
       function getFileName(e){
-        this.show_file_name = true;
-        this.doc_form.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
-        this.file_has_apostrophe = this.file_name.includes("'");
+        if(e.target.files[0].name.includes("'")){
+          file_has_apostrophe = true
+          return;
+        }
+        show_file_name = true;
+        doc_form.document = e.target.files[0];
+        file_name = e.target.files[0].name;
       }
 
       function submit(){
         doc_form.post(route('submit_additional_doc'), {
             onSuccess: () => {
               if(props.success){
-                this.show_file_name = false;
                 notify(props.success)
               }else if(props.error){
               notify(props.error)
               }
               doc_form.reset();
+              doc_form.document = '';
             }
         })
       }

@@ -20,6 +20,7 @@
       persons: Array,
       success: String,
       error: String,
+      type: String,
       get_reg_num_or_id_number: String
     },
 
@@ -41,7 +42,9 @@
             province: '',
             company: '',
             person: '',
-            board_region: ''
+            board_region: '',
+            import_export: '',
+            type: props.type
       })
 
       const idRegForm = useForm({
@@ -85,7 +88,7 @@
             form.company='';
           }
 
-          filterForm.get(`/create-new-app?id=${filterForm.id}`, {
+          filterForm.get(`/create-new-app?type=${props.type}&id=${filterForm.id}`, {
                       onStart: () => {
                         let mess = filterForm.variation === 'Individual' ? ' ID Number' : ' Registration Number';
                         getchIdOrRegNumber(mess);

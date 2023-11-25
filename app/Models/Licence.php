@@ -75,6 +75,11 @@ class Licence extends Model
     public function documents(){
       return $this->hasMany(LicenceDocument::class, 'licence_id');
     }
+
+    public function additional_docs()
+    {
+       return $this->hasMany(AdditionalDoc::class);
+    }
     
     
 }

@@ -10,4 +10,8 @@ class AdditionalDoc extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    function licence() {
+        return $this->belongsTo(Licence::class);
+    }
 }

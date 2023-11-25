@@ -20,8 +20,7 @@ import Layout from "../../Shared/Layout.vue";
       errors: Object,
       licence: Object,
       success: String,
-      error: String,
-      additional_docs: Object,
+      error: String
     },
   
     setup (props) {      
@@ -136,24 +135,32 @@ import Layout from "../../Shared/Layout.vue";
 
         }
 
-        function hasFile(doc_type){          
-          if(! props.licence.documents){
-            return ''
-          }else{
-            let licence_documents = props.licence.documents;//object with all licence docs
-            for (let i = 0; i < licence_documents.length; i++) {
-              if (licence_documents[i].licence_id === props.licence.id && licence_documents[i].document_type === doc_type) {
-                return {
-                  fileName: licence_documents[i].document_name,
-                  docPath: licence_documents[i].document_file,
-                  id: licence_documents[i].id
-                };
-              }
+        function hasFile(doc_type) {
+          if (!props.licence.documents) {
+            return {}; // Return an empty object if props.licence.documents doesn't exist
+          } else {
+            let licence_documents = props.licence.documents; // Object with all licence docs
+        
+            const foundDocument = licence_documents.find(doc =>
+              doc.licence_id === props.licence.id &&
+              doc.document_type === doc_type &&
+              doc.document_file &&
+              doc.document_name &&
+              doc.id
+            );
+        
+            if (foundDocument) {
+              return {
+                fileName: foundDocument.document_name,
+                docPath: foundDocument.document_file,
+                id: foundDocument.id
+              };
+            } else {
+              return {}; // Return an empty object if no document satisfies the conditions
             }
-            return '';
-          }        
-
+          }
         }
+        
 
         
          function getStatus(status_param) {
@@ -265,20 +272,3 @@ import Layout from "../../Shared/Layout.vue";
     },
     
   };
-  //The following are status keys
-  // 1. Client Quoted
-  // 2. Deposit Invoice
-  // 3. Deposit Paid
-  // 4. Payment to the Liquor Board
-  // 5. Prepare New Application
-  // 6. Scanned Application
-  // 7. Application Lodged
-  // 8. Initial Inspection
-  // 9. Liquor Board Requests
-  // 10. Final Inspection
-  // 11. Activation Fee Requested
-  // 12. Client Finalisation Invoice
-  // 13. Client Paid
-  // 14. Activation Fee Paid
-  // 15. Licence Issued
-  // 16. Licence Delivered 

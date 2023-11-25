@@ -119,7 +119,7 @@
                                                 v-if="form.province !== ''"
                                             />
 
-                                            <LiquorBoardRegionComponent
+                                            <LiquorBoardRegionComponent 
                                                 :dropdownList="computedBoardRegions"
                                                 :label="'Liquor Board Region*'"
                                                 :defaultDisabledText="'Select Liquor Board Region'"
@@ -128,8 +128,8 @@
                                                 v-model="form.board_region"
                                                 :errors="errors.board_region"
                                                 :input_id="board_region"
-                                                :required="true"
-                                                v-if="form.province !== '' && form.province === 'Gauteng'"
+                                                :required="false"
+                                                v-if="form.province !== '' && form.province === 'Gauteng' && form.type == 'retail'"
                                             />
 
 
@@ -185,6 +185,18 @@
                                     :errors="errors.postal_code "
                                     :input_id="postal_code"
                                 />
+
+                                <div class="col-12 columns" v-if="form.type == 'wholesale'">
+                                    <div class="input-group input-group-outline null is-filled">
+                                        <label class="form-label">Import/Export</label>
+                                        <select v-model="form.import_export" class="form-control form-control-default" required>
+                                            <option :value="''" disabled selected>Choose...</option>
+                                            <option value="Import">Import</option>
+                                            <option value="Export">Export</option>
+                                        </select>
+                                    </div>
+                                    <div v-if="errors.import_export" class="text-danger">{{ errors.import_export }}</div>
+                                </div>
                                 <div>
                                     <button :disabled="form.processing || filterForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
                                         <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

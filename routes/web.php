@@ -76,6 +76,7 @@ use App\Http\Controllers\EmailComms\TemporaryLicenceEmailCommsController;
 
 Route::group([], __DIR__.'/company_admin.php');
 
+
 Route::get('/test',function(){
     return view('emails.ecomms.mail_base_template');
 });
@@ -124,7 +125,7 @@ Route::group(['middleware' => ['guest']], function () {
     Route::group(['middleware' => ['auth', 'user_active','role:slowtow-admin|slowtow-user']], function () {
 
         
-
+        Route::group([], __DIR__.'/wholesale.php');
 
         Route::get('/slotow-admins',[AdminsController::class,'index'])->name('slotow_admins');
 

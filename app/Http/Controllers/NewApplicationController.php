@@ -17,80 +17,102 @@ use App\Models\LiquorBoardRequest;
 
 class NewApplicationController extends Controller
 {
+    /**
+     * The registration number or ID number of a company or individual.
+     *
+     * @var string
+     */
     public $get_reg_num_or_id_number = '';
 
-    public function create(){
-        
-        if(request('variation') && request('variation') == 'Company'){
+    /**
+     * Retrieves data needed to render the new license application form and returns the rendered view.
+     *
+     * @return \Inertia\Response
+     */
+    public function create()
+    {
+        if (request('variation') === 'Company') {
             $comp = Company::whereId(request('id'))->first(['reg_number']);
             $this->get_reg_num_or_id_number = $comp->reg_number;
-          }elseif(request('variation') && request('variation') == 'Individual'){
-           $person = People::whereId(request('id'))->first(['id_or_passport']);
-           $this->get_reg_num_or_id_number = $person->id_or_passport;
-          }
+        } elseif (request('variation') === 'Individual') {
+            $person = People::whereId(request('id'))->first(['id_or_passport']);
+            $this->get_reg_num_or_id_number = $person->id_or_passport;
+        }
 
-        $persons = People::pluck('full_name','id');
-        $companies = Company::pluck('name','id');
-        $licence_dropdowns = LicenceType::orderBy('licence_type','ASC')->get();
+        $persons = People::pluck('full_name', 'id');
+        $companies = Company::pluck('name', 'id');
+        $licence_dropdowns = LicenceType::orderBy('licence_type', 'ASC')->get();
 
-        return Inertia::render('New Applications/Index',[
+        return Inertia::render('New Applications/Index', [
             'persons' => $persons,
-             'companies' => $companies,
-             'licence_dropdowns' => $licence_dropdowns,
-             'get_reg_num_or_id_number' => $this->get_reg_num_or_id_number
+            'companies' => $companies,
+            'licence_dropdowns' => $licence_dropdowns,
+            'type' => request('type'),
+            'get_reg_num_or_id_number' => $this->get_reg_num_or_id_number
         ]);
     }
 
-    public function store(Request $request){
+    /**
+     * Validates and stores a new licence application based on the provided request data.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function store(Request $request)
+    {
         try {
             $request->validate([
                 'trading_name' => 'required',
                 'licence_type' => 'required|exists:licence_types,id',
                 'belongs_to' => 'required|in:Company,Individual',
-                'board_region' => 'required' 
-               ]);
-        
-               if($request->belongs_to === 'Company'){
+                'board_region' => ''
+            ]);
+
+            if ($request->belongs_to === 'Company') {
                 $request->validate(['company' => 'required|exists:companies,id']);
-               }else{
+            } else {
                 $request->validate(['person' => 'required|exists:people,id']);
-               }
-        
-               $licence = Licence::create([
+            }
+
+            $licence = Licence::create([
                 'trading_name' => $request->trading_name,
                 'licence_type_id' => $request->licence_type,
+                'type' => $request->type,
                 'belongs_to' => $request->belongs_to,
-                'company_id' => $request->belongs_to === 'Company' ? $request->company : NULL,
-                'people_id' => $request->belongs_to === 'Individual' ? $request->person: NULL,
+                'company_id' => $request->belongs_to === 'Company' ? $request->company : null,
+                'people_id' => $request->belongs_to === 'Individual' ? $request->person : null,
                 'board_region' => $request->board_region,
                 'is_new_app' => true,
-                'board_region' => $request->board_region,
                 'address' => $request->address,
                 'address2' => $request->address2,
                 'address3' => $request->address3,
                 'province' => $request->province,
                 'slug' => sha1(now())
-               ]);
-               if($licence){
-                return to_route('view_registration',['slug' => $licence->slug])->with('success','New App created successfully.');
-               }
-               
+            ]);
+
+            if ($licence) {
+                return redirect()->route('view_registration', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
+            }
         } catch (\Throwable $th) {
-            //throw $th;
-           return back()->with('error','An error occured.Please try again.');
+            return back()->with('error', 'An error occurred. Please try again.');
         }
-       
     }
 
-    public function update(Request $request,$slug){
-        
-      
+    /**
+     * Validates and updates an existing license application based on the provided request data and slug.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function update(Request $request, $slug)
+    {
         try {
             $request->validate([
                 'trading_name' => 'required'
-               ]);             
-        
-               $licence = Licence::whereSlug($slug)->update([
+            ]);
+
+            $licence = Licence::whereSlug($slug)->update([
                 'trading_name' => $request->trading_name,
                 'licence_type_id' => $request->licence_type,
                 'belongs_to' => $request->belongs_to,
@@ -107,100 +129,123 @@ class NewApplicationController extends Controller
                 'licence_date' => $request->licence_date,
                 'licence_issued_at' => $request->licence_date,
                 'postal_code' => $request->postal_code,
-               ]);
-               if($licence){
-                return back()->with('success','Licence updated successfully.');
-               }
-               
+            ]);
+
+            if ($licence) {
+                return back()->with('success', 'Licence updated successfully.');
+            }
         } catch (\Throwable $th) {
-            //throw $th;
-            return back()->with('error','An error occured.Please try again.');
+            return back()->with('error', 'An error occurred. Please try again.');
         }
-       
     }
 
-    public function view_registration(Request $request){
-        $licence = Licence::with('company','licence_stage_dates','documents')->whereSlug($request->slug)->first();
-      
-        $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence')->where('model_id',$licence->id)->get();
-       
-        $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->latest()->paginate(4)->withQueryString();        
-        $additional_docs = AdditionalDoc::get();
+    /**
+     * Retrieves and returns the license registration information for a given slug.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Inertia\Response
+     */
+    public function view_registration(Request $request)
+    {
+        $licence = Licence::with('company', 'licence_stage_dates', 'documents','additional_docs')->whereSlug($request->slug)->first();
+        $tasks = Task::where('model_type', 'Licence')->where('model_id', $licence->id)->latest()->paginate(4)->withQueryString();
 
-        return Inertia::render('New Applications/Registration',[
+        $view = $licence->type === 'wholesale' ? 'New Applications/Wholesale/ViewWholesale' : 'New Applications/Registration';
+        return Inertia::render($view, [
             'licence' => $licence,
-            'additional_docs' => $additional_docs,
-            'liqour_board_requests' => $liqour_board_requests,
-            'tasks' => $tasks]);
-    }
-
-    public function updateRegistration(Request $request, $slug){
-       try {
-        $licence = Licence::whereSlug($slug)->first();
-        $status = '';
-        if($request->status){
-            if($request->unChecked){
-                $status = $request->prevStage;
-            }else{
-                $status = $request->status[0];
-            }
-        }
-        
-        //Start new nomination if its licence Issued stage
-        if($status >= 2300){
-            $nom = Nomination::where('year',now()->format('Y'))->where('licence_id', $licence->id)->first();
-            if(is_null($nom)){
-                Nomination::create([//begin nomination
-                    'licence_id' => $licence->id,
-                    'year' => now()->format('Y'),
-                    'slug' => sha1(now())
-                ]);
-                
-            }
-
-            //If stage is issued then its no longer a new app.
-            $licence->update(['is_new_app' => false]);
-        }
-
-        $licence->update([
-            //'renewal_amount' => $request->renewal_amount,
-            'status' => $status <= 0 ? NULL : $status,
-           ]);
-           
-           return back()->with('success','Status Updated successfully');
-       } catch (\Throwable $th) {
-         //throw $th;
-         return back()->with('error','An error occured while updating.');
-       }
-       
-    }
-
-public function updateRegistrationDate(Request $request, $slug)
-{
-    try {
-        //Validate
-        $request->validate([
-            'dated_at' => 'required',
-            'stage'  => 'required',
-            'licence_id' => 'required|exists:licences,id'
+            'tasks' => $tasks
         ]);
-        
-        if($request->stage == 'Licence Issued'){
-              //If stage is issued then its no longer a new app.
-              Licence::whereSlug($slug)->update(['is_new_app' => false, 'licence_date' => $request->dated_at]);
-              
-        }
-        LicenceDate::create([
-            'dated_at' => $request->dated_at,
-            'licence_id' => $request->licence_id,
-            'stage' => $request->stage,
-           ]);
-       return back()->with('success','Date updated successfully.');
-    } catch (\Throwable $th) {
-        throw $th;
-        return back()->with('error','Error updating date.');
     }
-}
 
+    /**
+     * Updates the status of a license registration based on the provided request data and slug.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateRegistration(Request $request, $slug)
+    {
+        try {
+            $licence = Licence::whereSlug($slug)->first();
+            $status = '';
 
+            if ($request->status) {
+                if ($request->unChecked) {
+                    $status = $request->prevStage;
+                } else {
+                    $status = $request->status[0];
+                }
+            }
+
+            if ($status >= 2300) {
+                $nom = Nomination::where('year', now()->format('Y'))->where('licence_id', $licence->id)->first();
+
+                if (is_null($nom)) {
+                    Nomination::create([
+                        'licence_id' => $licence->id,
+                        'year' => now()->format('Y'),
+                        'slug' => sha1(now())
+                    ]);
+                }
+
+                $licence->update(['is_new_app' => false]);
+            }
+
+            $licence->update([
+                'status' => $status <= 0 ? null : $status,
+            ]);
+
+            return back()->with('success', 'Status updated successfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'An error occurred while updating.');
+        }
+    }
+
+    /**
+     * Validates and updates the date of a license registration based on the provided request data and slug.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $slug
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateRegistrationDate(Request $request, $slug)
+    {
+        try {
+            $request->validate([
+                'dated_at' => 'required',
+                'stage' => 'required',
+                'licence_id' => 'required|exists:licences,id'
+            ]);
+
+            LicenceDate::create([
+                'dated_at' => $request->dated_at,
+                'licence_id' => $request->licence_id,
+                'stage' => $request->stage,
+            ]);
+
+            $this->updateLicenceDate($request);
+
+            return back()->with('success', 'Date updated successfully.');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Error updating date.');
+        }
+    }
+
+    /**
+     * If request->stage is 'Licence Issued'(Retail) & 'NLA 9 Issued'(Wholsale) then its no longer a NewApp
+     * Updates the `is_new_app` and `licence_date` fields of a `Licence` model based on the provided request data.
+     *
+     * @param object $request The request object that contains the data needed to update the licence date.
+     *                        It should have the following properties:
+     *                        - stage: The stage of the licence application.
+     *                        - licence_id: The ID of the licence.
+     *                        - date: The date to be updated.
+     * @return void
+     */
+    function updateLicenceDate($request) {
+        if ($request->stage === 'Licence Issued' || $request->stage === 'NLA 9 Issued') {
+            Licence::whereSlug($request->licence_id)->update(['is_new_app' => false, 'licence_date' => $request->date]);
+        }
+    }
 }

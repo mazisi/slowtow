@@ -963,7 +963,7 @@ prevStage=1500
     
   <AdditionalDocsComponent 
   :licence_id="licence.id" 
-  :additional_docs="additional_docs"
+  :additional_docs="licence.additional_docs"
   :success="success" 
   :errors="errors"
   :error="error"/>

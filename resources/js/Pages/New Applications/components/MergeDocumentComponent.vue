@@ -10,7 +10,7 @@
       <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
     </label>
     
-    <a v-if="hasFile" :href="`${$page.props.blob_file_path}${hasFile.fileName}`" target="_blank">
+    <a v-if="hasFile" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
     <i class="fa fa-file-pdf h5 upload-icon mx-1"></i></a>
     <i v-if="hasFile" @click="deleteDocument" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
    
