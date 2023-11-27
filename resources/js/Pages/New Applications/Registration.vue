@@ -1267,7 +1267,7 @@ prevStage=1500
   <hr>
  
   <Task 
-  v-if="licence.status >= 150"
+  v-if="licence.status >= 2300"
   :tasks="tasks" 
   :model_id="licence.id" 
   :success="success" 

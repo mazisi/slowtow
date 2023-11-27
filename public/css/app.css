@@ -669,6 +669,10 @@ select {
   margin-left: auto;
   margin-right: auto;
 }
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -680,10 +684,6 @@ select {
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
-}
-.mx-2 {
-  margin-left: 0.5rem;
-  margin-right: 0.5rem;
 }
 .my-auto {
   margin-top: auto;

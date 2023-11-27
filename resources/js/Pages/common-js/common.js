@@ -13,11 +13,11 @@ const PROVINCES =      ['Eastern Cape',
 
 const BOARD_REGIONS  = ['Eastern Cape',
                         'Free State',
-                        'Gauteng - Ekurhuleni',
-                        'Gauteng - Johannesburg',
-                        'Gauteng - Sedibeng',
-                        'Gauteng - Tshwane',
-                        'Gauteng - West Rand',
+                        'Ekurhuleni',
+                        'Johannesburg',
+                        'Sedibeng',
+                        'Tshwane',
+                        'West Rand',
                         'KwaZulu-Natal',
                         'Limpopo',
                         'Mpumalanga',
@@ -26,6 +26,15 @@ const BOARD_REGIONS  = ['Eastern Cape',
                         'North West',
                         'Western Cape',
                       ];
+
+    const BOARD_REGIONS_GAUTENG  = ['Eastern Cape',
+                                    'Free State',
+                                    'Ekurhuleni',
+                                    'Johannesburg',
+                                    'Sedibeng',
+                                    'Tshwane',
+                                    'West Rand',
+                                  ];
 
   const COMPANY_TYPES = [
                       "Association",
@@ -42,6 +51,10 @@ const BOARD_REGIONS  = ['Eastern Cape',
 export default {
   getProvinces() {
     return PROVINCES;
+  },
+
+  getGautengProvinces() {
+    return BOARD_REGIONS_GAUTENG;
   },
 
   getCompanyTypes() {
