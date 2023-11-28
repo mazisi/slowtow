@@ -2,7 +2,8 @@ import Layout from "../../Shared/Layout.vue";
 import { Link, useForm, Head } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue';
-import { defineAsyncComponent } from 'vue';
+import { defineAsyncComponent, ref, watch, computed } from 'vue';
+import  common from '../common-js/common.js';
 
 const Paginate = defineAsyncComponent(() =>
   import('../../Shared/Paginate.vue')

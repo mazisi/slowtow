@@ -6,12 +6,12 @@ import Layout from "../../../Shared/Layout.vue";
   import Banner from '../../components/Banner.vue';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
-  import AdditionalDocsComponent from './../components/AdditionalDocsComponent.vue';
-  import StageComponent from './../components/StageComponent.vue';
-  import DocComponent from './../components/DocComponent.vue';
-  import MergeDocumentComponent from './../components/MergeDocumentComponent.vue';  
-  import DateComponent from './../components/DateComponent.vue';  
-  import MergeButtonComponent from './../components/MergeButtonComponent.vue';  
+  import AdditionalDocsComponent from '../../components/slotow-components/AdditionalDocsComponent.vue';
+  import StageComponent from '../../components/slotow-components/StageComponent.vue';
+  import DocComponent from '../../components/slotow-components/DocComponent.vue';
+  import MergeDocumentComponent from '../../components/slotow-components/MergeDocumentComponent.vue';  
+  import DateComponent from '../../components/slotow-components/DateComponent.vue';  
+  import MergeButtonComponent from '../../components/slotow-components/MergeButtonComponent.vue';  
   
   export default {
     props: {

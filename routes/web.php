@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\TaskController;
 
-use App\Http\Controllers\IssueController;
-
 use App\Http\Controllers\PersonController;
 
 use App\Http\Controllers\CompanyController;
@@ -74,7 +72,7 @@ use App\Http\Controllers\EmailComms\TransferEmailCommsController;
 use App\Http\Controllers\EmailComms\AlterationEmailCommsController;
 use App\Http\Controllers\EmailComms\TemporaryLicenceEmailCommsController;
 
-Route::group([], __DIR__.'/company_admin.php');
+// Route::group([], __DIR__.'/company_admin.php');
 
 
 Route::get('/test',function(){
@@ -471,19 +469,4 @@ Route::group(['middleware' => ['guest']], function () {
     });
 
    
-    Route::group(['middleware' => ['auth']], function () {
-
-
-        Route::get('issues', [IssueController::class,'index'])->name('issues');
-
-        Route::get('create-issue', [IssueController::class,'create'])->name('create_issue');
-
-        Route::get('view-issue/{slug}', [IssueController::class,'show'])->name('view_issue');
-
-        Route::post('submit-issue', [IssueController::class,'store'])->name('submit_issue');
-
-        Route::post('change-issue-status/{slug}/{status}', [IssueController::class,'changeStatus']);
-        
-        Route::patch('update-issue/{slug}', [IssueController::class,'update']);
-});
-
+ 

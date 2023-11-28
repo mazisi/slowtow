@@ -21,4 +21,8 @@ class Alteration extends Model
     {
         return $this->belongsTo(Licence::class);
     }
+
+    function documents() {
+        return $this->hasMany(AlterationDocument::class,'alteration_id');
+    }
 }

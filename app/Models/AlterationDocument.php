@@ -19,4 +19,8 @@ class AlterationDocument extends Model
 
         return "docs/".$value;
     }
+
+    function alteration() {
+        return $this->belongsTo(Alteration::class);
+    }
 }

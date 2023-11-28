@@ -42,7 +42,8 @@ class AlterLicenceController extends Controller
 
 
     public function show($slug){
-      $alteration = Alteration::with('licence')->whereSlug($slug)->first();
+      $alteration = Alteration::with('licence','documents')->whereSlug($slug)->first();
+      // dd($alteration);
       $client_quoted = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Quoted')->first();
       $client_invoiced = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
       $alteration_letter = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alteration Letter')->first();

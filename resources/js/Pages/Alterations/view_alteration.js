@@ -7,7 +7,8 @@ import { ref,onMounted } from "vue";
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-
+import { DocComponent } from '../components/slotow-components/DocComponent.vue'
+import { StageComponent } from '../components/slotow-components/StageComponent.vue'
 
 export default {
   name: "ViewAlteration",
@@ -191,37 +192,45 @@ export default {
         }
        
 
-         function viewFile(model_id) {
-              let model = 'AlterationDocument';
-               Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
-              },
-                
-               })
-         }
 
-        //  onMounted(() => {
-        //   if(props.success){
-        //     notify(props.success)
-        //   }else if(props.error){
-        //     notify(props.error)
-        //   }
-        // });
+         function hasFile(doc_type) {
+          if (!props.alteration.documents) {
+            return {}; // Return an empty object if props.licence.documents doesn't exist
+          } else {
+            let alteration_documents = props.alteration.documents; // Object with all licence docs
+        
+            const foundDocument = alteration_documents.find(doc =>
+              doc.licence_id === props.licence.id &&
+              doc.doc_type === doc_type &&
+              doc.path &&
+              doc.document_name &&
+              doc.id
+            );
+        
+            if (foundDocument) {
+              return {
+                fileName: foundDocument.document_name,
+                docPath: foundDocument.path,
+                id: foundDocument.id
+              };
+            } else {
+              return {}; // Return an empty object if no document satisfies the conditions
+            }
+          }
+        }
 
     return {
       form,showMenu,show_modal,updateDate,
       update,update,mergeDocuments,
       pushData,file_name,
       show_file_name,
-      getFileName,
+      getFileName,hasFile,
       submitDocument,
       deleteDocument,
       getDocType,toast,
       uploadDoc,getDocumentType,
       deleteAlteration,file_has_apostrophe,
-      viewFile,checkingFileProgress,notify
+      checkingFileProgress,notify
     };
   },
     
@@ -231,6 +240,8 @@ export default {
     Link,
     Banner,
     Head,
+    DocComponent,
+    StageComponent,
     Task
   },
   beforeUnmount() {

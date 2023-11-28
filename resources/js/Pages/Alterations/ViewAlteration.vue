@@ -1,3 +1,6 @@
+
+import DocComponent from '../components/slotow-components/DocComponent.vue';
+
 <script src="./view_alteration.js"></script>
 <style>
 .columns{
@@ -38,35 +41,32 @@
   <form @submit.prevent="update">
 <div class="row">
 
+  <StageComponent
+      :column=12
+      :dbStatus="alteration.status"
+      :errors="errors"
+      :error="error"
+      :stageValue=100
+      :prevStage='0'
+      :licence_id="alteration.slug"
+      :stageTitle="'Client Quoted'"
+      :success="success"
+      @stage-value-changed="pushData"
+    />
 
-  <div class="col-12 columns">
-    <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input id="client-quoted" class="active-checkbox" @input="pushData($event,1)" type="checkbox" value="1" :checked="alteration.status >= 1">
-    <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
-    </div>
-  </div>  
+  
    
     
     <div class="col-9 columns">
-    <ul class="list-group">
-      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-        <div class="avatar me-3" v-if="client_quoted !== null">
-        <a :href="`${$page.props.blob_file_path}${client_quoted.path}`" target="_blank" >
-        <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-        </a>
-        </div>
-        <div class="d-flex align-items-start flex-column justify-content-center">
-          <h6 class="mb-0 text-sm">Document</h6>
-           <p v-if="client_quoted !== null" class="mb-0 text-xs limit-file-name">{{ client_quoted.document_name }}</p>
-          <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-        </div>
-        <a v-if="client_quoted !== null" @click="deleteDocument(client_quoted.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-        </a>
-        <a v-else @click="getDocType(1,'Client Quoted')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-        <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
-      </li> 
-    </ul>
+      <DocComponent
+      :documentModel="alteration"
+      :hasFile="hasFile('Client Quoted')"
+      :errors="errors"
+      :error="error"
+      :orderByNumber=100
+      :docType="'Client Quoted'"
+      :success="success"
+      />
     </div>
 <hr/>
 
