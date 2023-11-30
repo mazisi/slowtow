@@ -40,9 +40,6 @@
 <script>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import { Inertia } from '@inertiajs/inertia';
 
 export default{
   
@@ -54,7 +51,7 @@ export default{
     docType: String,
     success: Object
   },
-  setup(props){
+  setup(props, context){
    
     let file_has_apostrophe = ref(false);
 
@@ -70,58 +67,18 @@ export default{
           this.file_has_apostrophe = true
           return;
         }
-        submitDocument();
+        context.emit('file-value-changed', uploadDoc);
         e.target.value = '';
+        file_has_apostrophe=false;
       }
 
-
-      function submitDocument(){
+      function deleteDocument(id){
+        context.emit('file-deleted', id);
+      }
         
-        uploadDoc.post('/upload-licence-document', {
-          preserveScroll: true,
-          onSuccess: () => { 
-              file_has_apostrophe=false;
-                        if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-            uploadDoc.doc_type = null;
-           },
-        })
-      }
-
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-
-        function deleteDocument(id){
-          if(confirm('Document will be deleted...Continue ??')){
-            Inertia.delete(`/delete-licence-document/${id}`, {
-              onSuccess: () => { 
-                        if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-                      },
-            })
-          }
-        }
     return {
-      uploadDoc,notify,upload,
-      file_has_apostrophe,
-      submitDocument,toast,
-      deleteDocument
+      uploadDoc,upload,
+      file_has_apostrophe,deleteDocument
     }
   }
 }

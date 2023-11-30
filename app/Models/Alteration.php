@@ -25,4 +25,8 @@ class Alteration extends Model
     function documents() {
         return $this->hasMany(AlterationDocument::class,'alteration_id');
     }
+
+    function dates() {
+        return $this->hasMany(AlterationDate::class,'alteration_id');
+    }
 }

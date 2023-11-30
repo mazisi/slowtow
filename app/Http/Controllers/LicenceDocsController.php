@@ -54,10 +54,10 @@ class LicenceDocsController extends Controller
 
         if (!is_null($model->document_file)) {
             $model->delete();
-            return back()->with('success', 'Document removed successfully.');
+            return back()->with('success', 'Licence Document removed successfully.');
         }
 
-        return back()->with('error', 'Document not successfully.');
+        return back()->with('error', 'An error occurred.');
     }
 
     /**

@@ -8,6 +8,7 @@ use App\Models\Licence;
 use App\Models\Alteration;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use App\Models\AlterationDate;
 use App\Models\AlterationDocument;
 use App\Http\Requests\AlterationRequest;
 
@@ -42,7 +43,7 @@ class AlterLicenceController extends Controller
 
 
     public function show($slug){
-      $alteration = Alteration::with('licence','documents')->whereSlug($slug)->first();
+      $alteration = Alteration::with('licence','documents','dates')->whereSlug($slug)->first();
       // dd($alteration);
       $client_quoted = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Quoted')->first();
       $client_invoiced = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
@@ -104,17 +105,13 @@ class AlterLicenceController extends Controller
 
 
     public function updateAlterationDate(Request $request, $slug){
-      Alteration::whereSlug($slug)->update([
-          'invoiced_at' => $request->invoiced_at,
-         'client_paid_at' => $request->client_paid_at,
-         'liquor_board_at' => $request->liquor_board_at, 
-         'logded_at' => $request->date,
-         'date' => $request->date,
-         'certification_issued_at' => $request->certification_issued_at,
-         'delivered_at' => $request->delivered_at    
-       ]);
+          AlterationDate::create([
+            'dated_at' => $request->dated_at,
+            'alteration_id' => $request->licence_id,
+            'stage' => $request->stage,
+        ]);
         return back()->with('success','Date updated succesfully.');
-       
+        
     }
 
     public function destroy($slug, $licence_slug)

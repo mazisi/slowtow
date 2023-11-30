@@ -8,14 +8,14 @@
   </div>
   <div class="col-md-1 columns">
     <button v-if="canSave"     
-    @click="updateRegistrationDate" type="button" class="btn btn-sm btn-secondary">Save</button>
+    @click="emitDataToParent" type="button" class="btn btn-sm btn-secondary">Save</button>
   </div>
 </template>
 
 <script>
 import { useForm } from '@inertiajs/inertia-vue3';
-import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import { defineEmits } from 'vue'
 
 export default{
   
@@ -30,41 +30,21 @@ export default{
     dated_at: String
   },
   setup(props, context){
+    const emit = defineEmits(['date-value-changed'])
     const form = useForm({
       licence_id: props.licence.id,
       stage: props.stage,
-      dated_at: props.dated_at? props.dated_at : null
+      dated_at: props.dated_at? props.dated_at.dated_at : null
     })
     // console.log('form',form)
 
-    function updateRegistrationDate(){
-        form.patch(`/update-registration-date/${props.licence.id}`, {
-          preserveScroll: true,
-          onSuccess: () => { 
-                    if(props.success){
-                        notify(props.success)
-                      }else if(props.error){
-                        notify(props.error)
-                      }
-                      },
-        })     
-      }
-
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+    function emitDataToParent(){
+      context.emit('date-value-changed', form);
+    }
+   
 
     return {
-      form,updateRegistrationDate,toast,notify
+      form,emit,emitDataToParent
     }
   }
 }
