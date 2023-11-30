@@ -39,6 +39,8 @@
       />
       <hr/>
       <DocComponent
+      @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
          :documentModel="licence"
          :hasFile="hasFile('Client Quoted')"
          :errors="errors"
@@ -63,6 +65,8 @@
         @stage-value-changed="pushData"
       />
       <DocComponent
+      @file-value-changed="submitDocument"
+       @file-deleted="deleteDocument"
       :documentModel="licence"
       :hasFile="hasFile('Client Invoiced')"
       :errors="errors"
@@ -122,6 +126,8 @@
       
     <div class="col-md-6">
       <MergeDocumentComponent
+      @file-value-changed="submitDocument"
+      @file-deleted="deleteDocument"
       :success="success"
       :error="error"
       :errors="errors"
@@ -136,6 +142,8 @@
   
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -149,6 +157,8 @@
     />
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -162,6 +172,8 @@
     />
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -176,6 +188,8 @@
     />
     
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -189,6 +203,8 @@
     />
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -202,6 +218,8 @@
     />
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -217,6 +235,8 @@
   </div>
   <div class="col-6">
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -229,6 +249,8 @@
     />
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -244,6 +266,8 @@
   
     <!-- This stage must only appear if  manufacturing -->
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -257,7 +281,9 @@
     :hasFile="hasFile('Product Analysis Certificate')"
     />
 
-    <MergeDocumentComponent v-if="licence.import_export"
+    <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument" v-if="licence.import_export"
     :success="success"
     :error="error"
     :errors="errors"
@@ -271,6 +297,8 @@
     />
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -286,6 +314,8 @@
   
   
     <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -300,6 +330,8 @@
     />
   
      <MergeDocumentComponent
+     @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
      :success="success"
     :error="error"
     :errors="errors"
@@ -358,6 +390,8 @@
   
    <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('Initial Application Fee')"
     :errors="errors"
@@ -441,6 +475,8 @@
   
   <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('NLA 6 Proposed')"
     :errors="errors"
@@ -466,6 +502,8 @@
   
   <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('NLA 7 Submitted')"
     :errors="errors"
@@ -502,6 +540,8 @@
   
   <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('NLA 8 Issued')"
     :errors="errors"
@@ -537,6 +577,8 @@
   
   <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('Activation Fee')"
     :errors="errors"
@@ -573,6 +615,8 @@
   
   <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('NLA 9 Issued')"
     :errors="errors"
@@ -607,6 +651,8 @@
       />   
       <div class="col-md-6" >
       <DocComponent
+      @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
       :documentModel="licence"
       :hasFile="hasFile('Original Licence')"
       :errors="errors"
@@ -634,6 +680,8 @@
   
   <div class="col-md-6">
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('Application Lodged')"
     :errors="errors"

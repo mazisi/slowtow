@@ -21,9 +21,6 @@
 <script>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import { Inertia } from '@inertiajs/inertia';
 
 export default{
   
