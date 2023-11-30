@@ -123,7 +123,7 @@ export default {
 
                 const foundDocument = alteration_documents.find(
                     (doc) =>
-                        doc.licence_id === props.licence.id &&
+                        doc.alteration_id === props.alteration.id &&
                         doc.doc_type === doc_type &&
                         doc.path &&
                         doc.document_name &&
@@ -142,8 +142,7 @@ export default {
             }
         }
 
-        function getAlterationDate(alteration_id, stage) {
-            
+        function getAlterationDate(alteration_id, stage) {           
 
             if (!props.alteration.dates) {
               return {}; // Return an empty object if props.alteration.dates doesn't exist
@@ -177,6 +176,35 @@ export default {
                         },
           })     
         }
+
+        function submitDocument(form_data){
+            form_data.post('/submit-alteration-document', {
+              preserveScroll: true,
+              onSuccess: () => { 
+                 if(props.success){
+                   notify(props.success)
+                 }else if(props.error){
+                  notify(props.error)
+                 }
+                
+           },
+            })
+          }
+
+      function deleteDocument(id){
+          if(confirm('Document will be deleted...Continue ??')){
+            Inertia.delete(`/delete-alteration-document/${id}`, {
+              onSuccess: () => { 
+               if(props.success){
+                  notify(props.success)
+                }else if(props.error){
+                  notify(props.error)
+                }
+              },
+            })
+          }
+        }
+
   
         
 
@@ -192,6 +220,8 @@ export default {
             getAlterationDate,
             deleteAlteration,
             notify,
+            submitDocument,
+            deleteDocument
         };
     },
 

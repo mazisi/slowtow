@@ -10,24 +10,25 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class AlterationDocumentController extends Controller
 {
-    public function store(Request $request){
+    public function store(Request $request){dd($request);
         $request->validate([
-            "document"=> "required|mimes:pdf",
-            "doc_type"=> "required"
+            "document_file"=> "required|mimes:pdf",
+            "doc_type"=> "required",
+            "licence_id"=> "required|exists:alterations,id"
             ]);
             
 
-            $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+            $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
             $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
-            $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+            $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             
 
-            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+            if(!fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
               $fileModel = new AlterationDocument;
-              $fileModel->alteration_id = $request->alteration_id;
+              $fileModel->alteration_id = $request->licence_id;
               $fileModel->doc_type = $request->doc_type;
               $fileModel->num = $request->doc_number;
-              $fileModel->document_name = $request->document->getClientOriginalName();
+              $fileModel->document_name = $request->document_file->getClientOriginalName();
               $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
   
               if($fileModel->save()){

@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AlterLicenceController;
+use App\Http\Controllers\AlterationDocumentController;
 
 
 Route::get('/alterations',[AlterLicenceController::class,'index'])->name('alterations');

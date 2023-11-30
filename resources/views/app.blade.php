@@ -164,6 +164,10 @@
           .btn{
             border-radius: 0.2rem !important;
           }
+
+          label, .form-label {
+            color: #000000 !important
+          }
    </style>
 
     </head>

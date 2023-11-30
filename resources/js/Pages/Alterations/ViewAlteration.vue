@@ -59,6 +59,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
     
     <div class="col-9 columns">
       <DocComponent
+      @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
       :documentModel="alteration"
       :hasFile="hasFile('Client Quoted')"
       :errors="errors"
@@ -88,6 +90,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 <div class="col-9 columns">
 
 <DocComponent
+@file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
       :documentModel="alteration"
       :hasFile="hasFile('Client Invoiced')"
       :errors="errors"
@@ -115,6 +119,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 
 
     <DocComponent
+    @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
         :documentModel="alteration"
         :hasFile="hasFile('Client Paid')"
         :errors="errors"
@@ -157,6 +163,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 <div class="col-md-6 columns">
 
   <MergeDocComponent
+   @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"
@@ -170,6 +178,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
   />
 
   <MergeDocComponent
+   @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"
@@ -184,6 +194,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 
 
   <MergeDocComponent
+   @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"
@@ -202,6 +214,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 <div class="col-md-6 columns">
 
   <MergeDocComponent
+   @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"
@@ -215,6 +229,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
   />
 
   <MergeDocComponent
+   @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"
@@ -258,6 +274,8 @@ v-if="application_form !== null
       
       
           <DocComponent
+          @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
               :documentModel="alteration"
               :hasFile="hasFile('Payment to the Liquor Board')"
               :errors="errors"
@@ -300,6 +318,8 @@ v-if="application_form !== null
         
         
             <DocComponent
+            @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
                 :documentModel="alteration"
                 :hasFile="hasFile('Alterations Lodged')"
                 :errors="errors"
@@ -341,6 +361,8 @@ v-if="application_form !== null
           
           
               <DocComponent
+              @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
                   :documentModel="alteration"
                   :hasFile="hasFile('Alterations Certificate Issued')"
                   :errors="errors"
@@ -381,6 +403,8 @@ v-if="application_form !== null
             
             
                 <DocComponent
+                @file-value-changed="submitDocument"
+          @file-deleted="deleteDocument"
                     :documentModel="alteration"
                     :hasFile="hasFile('Alterations Delivered')"
                     :errors="errors"
