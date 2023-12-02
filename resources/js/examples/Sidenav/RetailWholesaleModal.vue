@@ -3,7 +3,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Create New Licence</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Select Licence Type</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
        
@@ -12,7 +12,6 @@
          
           
             <div class="text-center w-100">
-              <h6 class="mt-3">Select Licence Type!</h6>
               <a @click="redirect('retail')" href="#!" class="mb-0 btn btn-dark me-2" as="button">
                 
                 Retail Liquor Licence </a>

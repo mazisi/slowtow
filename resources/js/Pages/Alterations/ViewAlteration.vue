@@ -248,15 +248,14 @@
 
 <a v-if="alteration.merged_document" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
 
-<button 
-v-if="application_form !== null
-&& smoking_affidavict !== null
-&& poa_res !== null
-&& payment_to_liquor_board !== null
-&& dimensional_plans !== null" 
- type="button" 
- @click="mergeDocuments" class="btn btn-sm btn-secondary float-end">Compile & Merge</button>
- <button v-else class="btn btn-sm btn-secondary float-end" disabled="disabled">Compile & Merge</button>
+      <button 
+      :disabled="!hasAllMergeDocs"
+      type="button" 
+      @click="mergeDocuments" 
+      class="btn btn-sm btn-secondary float-end">
+      Compile & Merge
+      </button>
+      
 </div>
 </div>
 <hr>

@@ -27,7 +27,7 @@ class AlterationDocumentController extends Controller
               $fileModel = new AlterationDocument;
               $fileModel->alteration_id = $request->licence_id;
               $fileModel->doc_type = $request->doc_type;
-              $fileModel->num = $request->doc_number;
+              $fileModel->num = $request->num;
               $fileModel->document_name = $request->document_file->getClientOriginalName();
               $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
   
@@ -66,6 +66,7 @@ class AlterationDocumentController extends Controller
                 
          $alterations =  AlterationDocument::where('alteration_id',$request->alteration_id)->whereNotNull('num')->orderBy('num','ASC')->get(['path']);
          $model =  Alteration::whereId($request->alteration_id)->first();
+         dd($alterations);
           foreach ($alterations as $alteration) {
             $merger->addPDF(env('BLOB_FILE_PATH').$alteration->path, 'all');
           }

@@ -10,7 +10,7 @@ import "vue3-toastify/dist/index.css";
 import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
-// import DateComponent from "../components/slotow-components/DateComponent.vue";
+import DateComponent from "../components/slotow-components/DateComponent.vue";
 
 export default {
     name: "ViewAlteration",
@@ -102,9 +102,9 @@ export default {
 
         function hasFile(doc_type) {
             if (!props.alteration.documents) {
-                return {}; // Return an empty object if props.licence.documents doesn't exist
+                return {}; 
             } else {
-                let alteration_documents = props.alteration.documents; // Object with all licence docs
+                let alteration_documents = props.alteration.documents; 
 
                 const foundDocument = alteration_documents.find(
                     (doc) =>
@@ -122,7 +122,7 @@ export default {
                         id: foundDocument.id,
                     };
                 } else {
-                    return {}; // Return an empty object if no document satisfies the conditions
+                    return {};
                 }
             }
         }
@@ -191,12 +191,22 @@ export default {
         }
 
   
-        
+        function hasAllMergeDocs(){
+            let documentsWithMergeNum = props.alteration.documents.filter(doc => doc.num !== null);
+           
+            return documentsWithMergeNum ? documentsWithMergeNum.length == 5 : false
+        }
 
+        function mergeDocuments(){alert('Cool')
+            Inertia.post(`/merge-alteration-documents/${props.alteration.id}`, {
+                    //
+            })
+          }
+        
         return {
-            form,
+            form,hasAllMergeDocs,
             updateAlterationDate,
-            showMenu,
+            showMenu,mergeDocuments,
             updateDate,
             update,
             pushData,
@@ -219,7 +229,7 @@ export default {
         DocComponent,
         StageComponent,
         MergeDocumentComponent,
-        // DateComponent,
+        DateComponent,
         Task,
     },
     beforeUnmount() {
