@@ -51,12 +51,12 @@ class AlterLicenceController extends Controller
 
 
     public function update(Request $request){
-      try {dd($request);
+      try {
       $status = null;
-      if($request->status){
-        if($request->unChecked){
-            $status = intval($request->status[0]) - 1;
-        }else{
+      if ($request->status) {
+        if ($request->unChecked) {
+            $status = $request->prevStage;
+        } else {
             $status = $request->status[0];
         }
     }

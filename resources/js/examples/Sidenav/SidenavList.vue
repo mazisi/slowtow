@@ -15,7 +15,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'licences'}"
           collapseRef="/licences"
           navText="Licences">
@@ -30,7 +30,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'companies'}"
           collapseRef="/companies"
           navText="Companies"
@@ -49,7 +49,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'people'}"
           collapseRef="/people"
           navText="People">
@@ -67,7 +67,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'temp_licences'}"
           collapseRef="/temp-licences"
           navText="Temporary Licences">
@@ -91,7 +91,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_company'}"
           collapseRef="/create-company"
           navText="New Company"
@@ -111,7 +111,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_person'}"
           collapseRef="/create-person"
           navText="New Individual"
@@ -130,11 +130,12 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_licence'}"
-          @click="showModal"
+          @click="popModal()"
           data-bs-toggle="modal" data-bs-target="#select-licence-type"
-          navText="Existing licence"
+          navText="Existing Licence"
+          collapseRef="#!"
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">add</i>
@@ -147,9 +148,9 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_new_app'}"
-          @click="showModal"
+          @click="popModal()"
           data-bs-toggle="modal" data-bs-target="#select-licence-type"
           navText="New Application"
         >
@@ -170,7 +171,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_temp_licence'}"
           collapseRef="/create-temp-licence"
           navText="New Temporary Licence">
@@ -199,7 +200,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'upload_contacts'}"
           collapseRef="/upload-contacts"
           navText="Upload Contacts"
@@ -224,7 +225,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'contacts'}"
           collapseRef="/goverify-contacts"
           navText="Contacts">
@@ -242,7 +243,7 @@
         <sidenav-collapse
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'reports'}"
           collapseRef="/reports"
           navText="Reports"
@@ -258,7 +259,7 @@
         <sidenav-collapse 
           url="#"
           :aria-controls="''"
-          v-bind:collapse="false"
+          :collapse="false"
           :class="{ active: $page.props.currentRoute == 'email_comms'
           || $page.props.currentRoute == 'get_licence_transfers'
           || $page.props.currentRoute == 'get_nominations'}"
@@ -283,6 +284,7 @@
 
 
       <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
+      
       <RetailWholesaleModal @redirect-with-type="redirectToCreateLicence"/>
 
     </ul>
@@ -323,7 +325,7 @@ export default {
       Inertia.get(`/${url}?type=${type}`)
     },
 
-    showModal(){
+    popModal(){
       this.showModal=true;
     },
     goBack(){
