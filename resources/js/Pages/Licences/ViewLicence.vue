@@ -290,18 +290,6 @@
                                     <input type="number" class="input-field form-control-default" v-model="form.renewal_amount" placeholder="Renewal amount">
                                 </div>
 
-                                <!-- <TextInputComponent
-                                    v-model="form.renewal_amount"
-                                    :column="'col-12'"
-                                    :label="'Renewal Amount'"
-                                    :value="form.renewal_amount"
-                                    :errors="errors.renewal_amount"
-                                    :input_id="renewal_amount"
-                                    :inputType="'number'"
-                                /> -->
-
-
-
 
                             </div>
 
