@@ -118,21 +118,29 @@ import Layout from "../../Shared/Layout.vue";
 
 
         function getLicenceDate(licence_id, stage){
-          // console.log('licence_stage_dates',props.licence.licence_stage_dates)
-          if(! props.licence.licence_stage_dates){
-            return ''
-          }else{
-            let licence_dates = props.licence.licence_stage_dates;//object with all licence stages
-            for (let i = 0; i < licence_dates.length; i++) {
-              if (licence_dates[i].licence_id === licence_id && licence_dates[i].stage === stage) {
-                return licence_dates[i].dated_at;
-              }
-            }
-            return '';
-          }
          
+          if(! props.licence.licence_stage_dates){
+            return {}; // Return an empty object if props.licence.dates doesn't exist
+          } else {
+            let licence_dates = props.licence.licence_stage_dates;
+        
+            const dateFound = licence_dates.find(date =>
+              date.licence_id === props.licence.id &&
+              date.stage === stage 
+            );
+        
+            if (dateFound) {
+              return {
+                dated_at: dateFound.dated_at
+              };
+            } else {
+              return {};
+            }
+          }
 
         }
+
+        
 
         function hasFile(doc_type) {
           if (!props.licence.documents) {
@@ -160,7 +168,46 @@ import Layout from "../../Shared/Layout.vue";
           }
         }
         
+        function updateStageDate(form_data){
+          form_data.patch(`/update-registration-date/${props.licence.id}`, {
+            preserveScroll: true,
+            onSuccess: () => { 
+                      if(props.success){
+                          notify(props.success)
+                        }else if(props.error){
+                          notify(props.error)
+                        }
+                        },
+          })     
+        }
 
+        function submitDocument(file_data){        
+          file_data.post('/upload-licence-document', {
+            preserveScroll: true,
+            onSuccess: () => { 
+                if(props.success){
+                              notify(props.success)
+                           }else if(props.error){
+                             notify(props.error)
+                           }
+              uploadDoc.doc_type = null;
+             },
+          })
+        }
+
+        function deleteDocument(id){
+          if(confirm('Document will be deleted...Continue ??')){
+            Inertia.delete(`/delete-licence-document/${id}`, {
+              onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
+            })
+          }
+        }
         
          function getStatus(status_param) {
           let status;
@@ -248,10 +295,12 @@ import Layout from "../../Shared/Layout.vue";
         notify,hasFile,
         form,getStatus,
         updateRegistration,
-        pushData,
+        pushData,updateStageDate,
         getLicenceDate,
         mergeDocs,
         deleteRegistration,
+        submitDocument,
+        deleteDocument,
         toast
        }
     },

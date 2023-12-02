@@ -149,7 +149,6 @@ class NewApplicationController extends Controller
     {
         $licence = Licence::with('company', 'licence_stage_dates', 'documents','additional_docs')->whereSlug($request->slug)->first();
         $tasks = Task::where('model_type', 'Licence')->where('model_id', $licence->id)->latest()->paginate(4)->withQueryString();
-
         $view = $licence->type === 'wholesale' ? 'New Applications/Wholesale/ViewWholesale' : 'New Applications/Registration';
         return Inertia::render($view, [
             'licence' => $licence,

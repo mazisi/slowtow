@@ -109,13 +109,33 @@ import Layout from "../../../Shared/Layout.vue";
           }
         }
 
-        function checkingFileProgress(message){
-          setTimeout(() => {
-              toast.remove();
-            }, 3000);
-            toast.loading(message);
+        function submitDocument(file_data){        
+          file_data.post('/upload-licence-document', {
+            preserveScroll: true,
+            onSuccess: () => { 
+                if(props.success){
+                              notify(props.success)
+                           }else if(props.error){
+                             notify(props.error)
+                           }
+              uploadDoc.doc_type = null;
+             },
+          })
         }
 
+        function deleteDocument(id){
+          if(confirm('Document will be deleted...Continue ??')){
+            Inertia.delete(`/delete-licence-document/${id}`, {
+              onSuccess: () => { 
+                        if(props.success){
+                            notify(props.success)
+                         }else if(props.error){
+                           notify(props.error)
+                         }
+                      },
+            })
+          }
+        }
 
         function getLicenceDate(licence_id, stage){
           // console.log('licence_stage_dates',props.licence.licence_stage_dates)
@@ -225,7 +245,8 @@ import Layout from "../../../Shared/Layout.vue";
         getLicenceDate,
         mergeDocs,
         deleteRegistration,
-        toast
+        toast,deleteDocument,
+        submitDocument
        }
     },
      components: {

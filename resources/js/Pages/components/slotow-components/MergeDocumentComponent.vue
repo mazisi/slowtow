@@ -4,15 +4,14 @@
   <button type="button" class="btn btn-outline-success w-95"> {{ docTitle }}</button>
  </div>
   <div class="col-md-1 d-flex">
-    <label v-if="!hasFile" :for="uploadDoc.doc_type">
+    <label v-if="!hasFile.id" :for="uploadDoc.doc_type">
       <i v-if="isLiquorBoard()" class="cursor-pointer fa fa-link h5" aria-hidden="true"></i>
       <i v-else class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
       <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
     </label>
-    
-    <a v-if="hasFile" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+    <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
     <i class="fa fa-file-pdf h5 upload-icon mx-1"></i></a>
-    <i v-if="hasFile" @click="deleteDocument" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
+    <i v-if="hasFile.id" @click="deleteDocument(hasFile.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
    
   </div>
   
@@ -22,9 +21,6 @@
 <script>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import { Inertia } from '@inertiajs/inertia';
 
 export default{
   
@@ -57,61 +53,24 @@ export default{
           this.file_has_apostrophe = true
           return;
         }
-        submitDocument();
+        context.emit('file-value-changed', uploadDoc);
         e.target.value = '';
+        file_has_apostrophe=false;
       }
 
 
-      function submitDocument(){
-        
-        uploadDoc.post('/upload-licence-document', {
-          preserveScroll: true,
-          onSuccess: () => { 
-              file_has_apostrophe=false;
-                        if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-            uploadDoc.doc_type = null;
-           },
-        })
-      }
-
-
-      function deleteDocument(){
-          if(confirm('Document will be deleted...Continue ??')){
-            Inertia.delete(`/delete-licence-document/${props.hasFile.id}`, {
-              onSuccess: () => { 
-                        if(props.success){
-                            notify(props.success)
-                         }else if(props.error){
-                           notify(props.error)
-                         }
-                      },
-            })
-          }
+      function deleteDocument(id){
+        context.emit('file-deleted', id);
         }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+     
 
       const isLiquorBoard = () => {
           return props.docType === 'Payment To The Liquor Board2' 
       }
     return {
-      upload,submitDocument,notify,uploadDoc, file_has_apostrophe,toast,deleteDocument,
-      isLiquorBoard
+      upload,uploadDoc, file_has_apostrophe,
+      isLiquorBoard,deleteDocument
     }
   }
 }

@@ -57,7 +57,7 @@ class LicenceDocsController extends Controller
             return back()->with('success', 'Document removed successfully.');
         }
 
-        return back()->with('error', 'Document not successfully.');
+        return back()->with('error', 'An error occurred.');
     }
 
     /**
