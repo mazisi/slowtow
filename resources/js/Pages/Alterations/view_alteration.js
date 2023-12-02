@@ -9,8 +9,8 @@ import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
 import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
+import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 // import DateComponent from "../components/slotow-components/DateComponent.vue";
-import MergeDocComponent from './components/MergeDocComponent.vue'
 
 export default {
     name: "ViewAlteration",
@@ -20,32 +20,16 @@ export default {
         success: String,
         error: String,
         tasks: Object,
-        client_quoted: Object,
-        client_invoiced: Object, //doc
-        liqour_board: Object, // secod doc
-        site_map_file: Object, //doc
-        application_form: Object,
-        dimensional_plans: Object,
-        poa_res: Object,
-        smoking_affidavict: Object,
-        payment_to_liquor_board: Object,
-        alteration_logded: Object,
-        certification_issued: Object,
-        alteration_delivered: Object,
+       
     },
     setup(props) {
         let showMenu = false;
         const form = useForm({
             licence_slug: props.alteration.licence.slug,
             slug: props.alteration.slug,
-            client_paid_at: props.alteration.client_paid_at,
             status: [],
             unChecked: false,
-            invoiced_at: props.alteration.invoiced_at,
-            liquor_board_at: props.alteration.liquor_board_at,
-            date: props.alteration.logded_at,
-            certification_issued_at: props.alteration.certification_issued_at,
-            delivered_at: props.alteration.delivered_at,
+            prevStage: null
         });
 
        
@@ -104,14 +88,15 @@ export default {
             }
         };
 
-        function pushData(e, status_value) {
+        function pushData(e, status_value,prevStage) {
             if (e.target.checked) {
-                this.form.status[0] = status_value;
-                this.form.unChecked = false;
+                form.status[0] = status_value;
+                form.unChecked = false;
             } else if (!e.target.checked) {
-                this.form.unChecked = true;
-                this.form.status[0] = status_value;
+                form.unChecked = true;
+                form.status[0] = status_value;
             }
+            form.prevStage = prevStage;
             update();
         }
 
@@ -233,20 +218,11 @@ export default {
         Head,
         DocComponent,
         StageComponent,
+        MergeDocumentComponent,
         // DateComponent,
-        MergeDocComponent,
         Task,
     },
     beforeUnmount() {
         this.$store.state.isAbsolute = false;
     },
 };
-//Status keys:
-// 1. Client Quoted
-//2 => Client Invoiced
-//3 => Client Paid
-//4 => Prepare Alterations Application
-//5 => Payment to the Liquor Board
-//6 => Alterations Lodged
-//7 => Alterations Certificate Issued
-//8 => Alterations Delivered

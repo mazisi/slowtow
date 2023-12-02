@@ -356,7 +356,7 @@
 
   <MergeDocumentComponent
   @file-value-changed="submitDocument"
-      @file-deleted="deleteDocument"
+  @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"

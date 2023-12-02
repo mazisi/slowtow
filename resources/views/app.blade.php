@@ -33,7 +33,11 @@
 
 
 
-        <script src="{{ mix('js/app.js') }}" defer></script>
+        @if(App::environment('production'))
+           <script src="{{ asset('public/js/app.js') }}" defer></script>
+        @else
+          <script src="{{ mix('js/app.js') }}" defer></script>
+        @endif
 
         @inertiaHead
 
@@ -165,9 +169,9 @@
             border-radius: 0.2rem !important;
           }
 
-          label, .form-label {
+          /* label, .form-label {
             color: #000000 !important
-          }
+          } */
    </style>
 
     </head>
@@ -178,7 +182,7 @@
 
         @inertia
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
+        {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script> --}}
 
        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 

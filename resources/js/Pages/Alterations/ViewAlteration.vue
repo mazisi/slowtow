@@ -1,6 +1,4 @@
 
-import DocComponent from '../components/slotow-components/DocComponent.vue';
-
 <script src="./view_alteration.js"></script>
 <style>
 .columns{
@@ -16,6 +14,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 
 </style>
 <style src="@vueform/multiselect/themes/default.css"></style>
+
+
 <template>
 <Layout>
   <Head title="View Alteration" />
@@ -47,6 +47,7 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
       :errors="errors"
       :error="error"
       :stageValue=100
+      prevStage=0
       :prevStage='0'
       :licence_id="alteration.slug"
       :stageTitle="'Client Quoted'"
@@ -119,8 +120,8 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 
 
     <DocComponent
-    @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+        @file-value-changed="submitDocument"
+        @file-deleted="deleteDocument"
         :documentModel="alteration"
         :hasFile="hasFile('Client Paid')"
         :errors="errors"
@@ -160,26 +161,28 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 
 
 <div class="row">
+  
 <div class="col-md-6 columns">
 
-  <MergeDocComponent
-   @file-value-changed="submitDocument"
-     @file-deleted="deleteDocument"
-  :success="success"
-  :error="error"
-  :errors="errors"
-  :column=6
-  :docTitle="'Application Form'"
-  :docType="'Application Form'"
-  :docModel="alteration"
-  :stage=400
-  :mergeNum="1"
-  :hasFile="hasFile('Application Form')"
-  />
+ 
+    <MergeDocumentComponent
+    @file-value-changed="submitDocument"
+    @file-deleted="deleteDocument"
+    :success="success"
+    :error="error"
+    :errors="errors"
+    :column=6
+    :docTitle="'Application Form'"
+    :docType="'Application Form'"
+    :docModel="alteration"
+    :stage=400
+    :mergeNum="1"
+    :hasFile="hasFile('Application Form')"
+    />
 
-  <MergeDocComponent
+  <MergeDocumentComponent
    @file-value-changed="submitDocument"
-     @file-deleted="deleteDocument"
+   @file-deleted="deleteDocument"
   :success="success"
   :error="error"
   :errors="errors"
@@ -193,7 +196,7 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
   />
 
 
-  <MergeDocComponent
+  <MergeDocumentComponent
    @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
   :success="success"
@@ -213,7 +216,7 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
 
 <div class="col-md-6 columns">
 
-  <MergeDocComponent
+  <MergeDocumentComponent
    @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
   :success="success"
@@ -228,7 +231,7 @@ import DocComponent from '../components/slotow-components/DocComponent.vue';
   :hasFile="hasFile('POA & RES')"
   />
 
-  <MergeDocComponent
+  <MergeDocumentComponent
    @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
   :success="success"
@@ -435,6 +438,8 @@ v-if="application_form !== null
             </div>
           
           </div>
+
+
       <Task :tasks="tasks" :model_id="alteration.id" :success="success" :error="error" :errors="errors" :model_type="'Alteration'"/>
         
         </div>
@@ -443,46 +448,5 @@ v-if="application_form !== null
     </div>
   </div>
 
-
-  <!-- <div v-if="show_modal" class="modal fade" id="document-upload" tabindex="-1" 
-  aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form @submit.prevent="submitDocument">
-      <input type="hidden" v-model="uploadDoc.doc_type">
-      <div class="modal-body">      
-        <div class="row">
-        <div class="col-md-12 columns">
-        <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
-         <input type="file" @change="getFileName"
-         hidden id="licence-doc" accept=".pdf"/>
-         <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-         <div v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
-         <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>  
-       </div>
-       <div class="col-md-12">
-          <progress v-if="uploadDoc.progress" :value="uploadDoc.progress.percentage" max="100">
-         {{ uploadDoc.progress.percentage }}%
-         </progress>
-         </div>
-         </div>   
-
-
-      </div>
-  
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary" :disabled="uploadDoc.processing || file_has_apostrophe">
-         <span v-if="uploadDoc.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-         Save</button>
-      </div>
-      </form>
-    </div>
-  </div>
-</div> -->
   </Layout>
 </template>

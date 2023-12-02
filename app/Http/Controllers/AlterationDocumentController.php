@@ -10,7 +10,7 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class AlterationDocumentController extends Controller
 {
-    public function store(Request $request){dd($request);
+    public function store(Request $request){
         $request->validate([
             "document_file"=> "required|mimes:pdf",
             "doc_type"=> "required",

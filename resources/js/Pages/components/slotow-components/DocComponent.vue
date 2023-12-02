@@ -13,7 +13,7 @@
       </div>
   
        <a v-if="hasFile.id" @click="deleteDocument(hasFile.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
-      <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
+         <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
       <div v-else 
        class="mb-0  btn btn-link pe-3 ps-0 ms-4" :class="{ 'd-none': uploadDoc.processing}">
