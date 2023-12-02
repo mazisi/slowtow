@@ -33,12 +33,12 @@
 
 
 
-        @if(App::environment('production'))
+        <!-- @if(App::environment('production'))
            <script src="{{ asset('public/js/app.js') }}" defer></script>
         @else
           <script src="{{ mix('js/app.js') }}" defer></script>
-        @endif
-
+        @endif -->
+        <script src="{{ mix('js/app.js') }}" defer></script>
         @inertiaHead
 
         <style>
