@@ -1,6 +1,6 @@
 <template>
   <Layout>
-    <Head title="Nominations" />
+    <Head title="Duplicate Originals" />
   <div class="container-fluid">
   <Banner/>
   <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -10,7 +10,7 @@
   </div>
   <div class="row">
   <div class="col-lg-12">
-  <h6 class="mb-1">Nominations For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
+  <h6 class="mb-1">Duplicated Originals For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
     {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
   </div>
   </div>
@@ -38,43 +38,44 @@
                     </tr>
                   </thead>
                    <tbody>
-                    <tr v-if="nomination_years.data" v-for="nom in nomination_years.data" :key="nom.id" >
+                    <tr v-if="originals_years.data" v-for="original_year in originals_years.data" :key="original_year.id" >
                       <td>
                         <div style="margin-left: 20px;">                       
                      
-                       <Link :href="`/view-nomination/${nom.slug}`">
-                        <h6 class="mb-0 text-sm">{{ nom.year }}</h6>
+                       <Link :href="`/view-duplicate-original/${original_year.slug}`">
+                        <h6 class="mb-0 text-sm">{{ original_year.year }}</h6>
                        </Link>                  
                       </div>
                       </td>
                        
-                      <td class="text-center"  v-if="nom.status == 1"><Link class="ml-1 badge bg-dark text-default" :href="`/view-nomination/${nom.slug}`">Client Quoted</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 2"><Link class="ml-1 badge bg-info text-default" :href="`/view-nomination/${nom.slug}`">Client Invoiced</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 3"><Link class="ml-1 badge bg-light text-dark" :href="`/view-nomination/${nom.slug}`">Client Paid</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 4"><Link class="ml-1 badge bg-warning text-default" :href="`/view-nomination/${nom.slug}`">Payment to the Liquor Board</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 5"><Link class="ml-1 badge bg-secondary text-default" :href="`/view-nomination/${nom.slug}`">Select Nominees</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 6"><Link class="ml-1 badge bg-success text-default" :href="`/view-nomination/${nom.slug}`">Prepare Nomination Application</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 7"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Scanned Application</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 8"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Nomination Lodged</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 9"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Nomination Issued</Link></td>
-                      <td class="text-center"  v-else-if="nom.status == 10"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Nomination Delivered</Link></td>
+                      <td class="text-center"  v-if="original_year.status == 1"><Link class="ml-1 badge bg-dark text-default" :href="`/view-duplicate-original/${original_year.slug}`">Client Quoted</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 2"><Link class="ml-1 badge bg-info text-default" :href="`/view-duplicate-original/${original_year.slug}`">Client Invoiced</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 3"><Link class="ml-1 badge bg-light text-dark" :href="`/view-duplicate-original/${original_year.slug}`">Client Paid</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 4"><Link class="ml-1 badge bg-warning text-default" :href="`/view-duplicate-original/${original_year.slug}`">Payment to the Liquor Board</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 5"><Link class="ml-1 badge bg-secondary text-default" :href="`/view-duplicate-original/${original_year.slug}`">Select Nominees</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 6"><Link class="ml-1 badge bg-success text-default" :href="`/view-duplicate-original/${original_year.slug}`">Prepare Nomination Application</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 7"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Scanned Application</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 8"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Nomination Lodged</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 9"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Nomination Issued</Link></td>
+                      <td class="text-center"  v-else-if="original_year.status == 10"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Nomination Delivered</Link></td>
                       <td class="text-center"  v-else></td>
   
                         <td class="text-center">
-                          <Link :href='`/view-nomination/${nom.slug}`'>
+                          <Link :href='`/view-duplicate-original/${original_year.slug}`'>
                           <i class="fa fa-eye"></i></Link>
                           </td>
                     </tr>
                     <tr v-else>
-                      <p class="text-center text-danger text-sm">No nominations found.</p>
+                      <p class="text-center text-danger text-sm">Empty.</p>
                     </tr>
                     </tbody>
                 </table>
                 
               </div>
               <Paginate 
-                :modelName="nomination_years"
-                :modelType="Nominations"
+                v-if="originals_years"
+                :modelName="originals_years"
+                :modelType="'Duplicate-Originals'"
                 />
               </div>
               
@@ -100,15 +101,6 @@
     Submit
   </button>
  
-  <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
-         :class="{ active:  $page.props.currentRoute == 'new-application'}"
-         :href="`/duplicate`">
-        <div class="text-center d-flex align-items-center justify-content-center me-2">
-        <i class="material-icons-round opacity-10 fs-5">app_registration</i>
-        </div>
-        <span class="nav-link-text ms-1">Duplicate Originals</span>
-        
-        </Link>
   </form>
   
   </div>
@@ -146,7 +138,7 @@
       years: Object,
       success: String,
       error: String,
-      nomination_years: Object
+      originals_years: Object
     },
   
     setup (props) {
@@ -163,11 +155,11 @@
       })
   
       function submit() {
-        form.post('/submit-nomination', {
-          onFinish: () => form.reset('password'),
+        form.post('/submit-duplicate-original', {
           onSuccess: () => { 
               if(props.success){
                     notify(props.success)
+                    form.reset('year');
                  }else if(props.error){
                     notify(props.error)
               }
