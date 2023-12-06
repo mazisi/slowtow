@@ -28,7 +28,7 @@ class LicenceRenewalController extends Controller
 
 
     public function store(Request $request){
-       
+
         $request->validate([
             'year' => 'required',
         ]);
@@ -52,28 +52,19 @@ class LicenceRenewalController extends Controller
 
 
     public function show($slug){
-        $renewal = LicenceRenewal::with('licence')->whereSlug($slug)->first();
+        $renewal = LicenceRenewal::with('licence', 'renewal_documents')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Renewal')->where('model_id',$renewal->id)->get();
 
-        $client_invoiced = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Invoiced')->first();
-        $renewal_issued = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Issued')->first();
-        $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
-        $renewal_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Delivered')->first();
-        $liqour_board = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Payment To The Liquor Board')->first();
         $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->latest()->paginate(4)->withQueryString();
         return Inertia::render('Renewals/ViewLicenceRenewal',[
             'renewal' => $renewal,
             'tasks'  => $tasks,
-            'client_invoiced' => $client_invoiced,
-            'renewal_issued' => $renewal_issued,
-            'client_quoted'  => $client_quoted,
-            'renewal_doc' => $renewal_doc,
-            'liqour_board' => $liqour_board,
+
             'liqour_board_requests' => $liqour_board_requests
         ]);
     }
 
-    
+
 
     public function update(Request $request){
        $request->validate([
@@ -93,7 +84,7 @@ class LicenceRenewalController extends Controller
        $ren->update([
         'date' => $request->year,
         'status' => $status <= 0 ? NULL : $status,
-        
+
        ]);
        if($ren){
         return back()->with('success','Renewal updated successfully.');
@@ -104,49 +95,70 @@ class LicenceRenewalController extends Controller
     public function uploadDocuments(Request $request){
         try {
             $request->validate([
-                "document"=> "required|mimes:pdf"
+                "document_file"=> "required|mimes:pdf"
                 ]);
-   
-                
 
-                $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+                $renewal_id = $request->licence_id;
+
+                $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
                 $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
-                $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-                           
+                $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
-           
-                $fileModel = new RenewalDocument; 
-                $fileModel->document_name = $request->document->getClientOriginalName();
+
+    // check if file saved in azure todo mazisi
+                $fileModel = new RenewalDocument;
+                $fileModel->document_name = $request->document_file->getClientOriginalName();
                 $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-                $fileModel->licence_renewal_id = $request->renewal_id;
+                $fileModel->licence_renewal_id = $renewal_id;
                 $fileModel->doc_type = $request->doc_type;
-                $fileModel->date = $request->date;
+                $fileModel->date = $request->date; //check this date.
                 $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-  
+
                 if($fileModel->save()){
                     LicenceRenewal::whereId($fileModel->licence_renewal_id)->update(['status' => $request->stage]);
                    return back()->with('success','Document uploaded successfully.');
                  }
-                 
-            
+
+
         } catch (\Throwable $th) {
             //throw $th;
            return back()->with('error','Error uploading document.');
         }
-       
+
     }
 
     public function updateDates(Request $request, $slug){
+        $stage = $request->stage;
+        $fieldToUpdate = '';
             try {
-                LicenceRenewal::whereSlug($slug)->update([
-                    'client_paid_at' => $request->client_paid_at,
-                    'renewal_issued_at' => $request->renewal_issued_at,
-                    'renewal_delivered_at' => $request->renewal_delivered_at,
-                    'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
-                    'client_invoiced_at' => $request->client_invoiced_at
-                    
+                switch ($stage) {
+                    case 'Client Paid':
+                        $fieldToUpdate = 'client_paid_at';
+                        break;
+
+                    case 'Payment To The Liquor Board':
+                        $fieldToUpdate = 'payment_to_liquor_board_at';
+                        break;
+
+                    case 'Renewal Issued':
+                        $fieldToUpdate = 'renewal_issued_at';
+                        break;
+
+                    case 'Renewal Delivered':
+                        $fieldToUpdate = 'renewal_delivered_at';
+                        break;
+
+                    default:
+                        // Handle the default case, if needed.
+                        break;
+                }
+
+                LicenceRenewal::where('id', $request->renewal_id)->update([
+                    $fieldToUpdate => $request->dated_at
                 ]);
-            return back()->with('success','Date updated successfully.');
+
+                return back()->with('success', 'Date updated successfully.');
+
             } catch (\Throwable $th) {
                 return back()->with('error','Error updating date.');
             }
@@ -163,19 +175,19 @@ class LicenceRenewalController extends Controller
             } catch (\Throwable $th) {
                 return back()->with('error','Error deleting document.');
             }
-        
+
     }
 
     public function destroy($licence_slug, $slug){
         try {
             LicenceRenewal::whereSlug($slug)->delete();
-        
+
             return to_route('renew_licence',['slug' => $licence_slug])->with('success','Renewal deleted successfully.');
-      
+
         } catch (\Throwable $th) {
             return to_route('renew_licence',['slug' => $licence_slug])->with('error','Error deleting renewal.');
         }
-       
+
     }
 
 }
