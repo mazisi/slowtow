@@ -37,6 +37,10 @@ class Licence extends Model
     {
        return $this->hasMany(LicenceDocument::class);
     }
+    public function duplicate_originals()
+    {
+       return $this->hasMany(DuplicateOriginals::class);
+    }
     public function nominations()
     {
        return $this->hasMany(Nomination::class);

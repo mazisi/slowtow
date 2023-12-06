@@ -25,20 +25,7 @@ export default {
         
         </Link>
       </li>
-<!-- NKanyiso duplicate originals 
 
-id,
-lincense_id
-year
-created,
-updated
-
-
-
-
-model->camelcase = licensedocument
-
--->
       <li v-if="$page.props.currentRoute == 'view_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
