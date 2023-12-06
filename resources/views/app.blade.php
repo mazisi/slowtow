@@ -172,6 +172,19 @@
           /* label, .form-label {
             color: #000000 !important
           } */
+
+main{
+  min-height: 100vh
+}
+
+          .py-3.footer {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+            position: fixed;
+            bottom: 0;
+            width: 80%;
+            background: white
+        }
    </style>
 
     </head>

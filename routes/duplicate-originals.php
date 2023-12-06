@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DuplicateOriginalsController;
 
         Route::get('/duplicate-originals',[DuplicateOriginalsController::class,'index'])->name('dup_originals');
-
+        Route::get('/duplicate',[DuplicateOriginalsController::class,'view_duplicate'])->name('view_duplicate');
         // Route::get('/create-licence',[LicenceController::class,'create'])->name('create_licence');
 
         // Route::get('/view-licence',[LicenceController::class,'show'])->name('view_licence');
