@@ -178,6 +178,7 @@ class LicenceController extends Controller
             ->latest()
             ->paginate(4)
             ->withQueryString();
+            
 
         $view = $licence->is_new_app ? 'ViewNewApp' : 'ViewLicence';
 

@@ -33,12 +33,12 @@
 
 
 
-        @if(App::environment('production'))
+        <!-- @if(App::environment('production'))
            <script src="{{ asset('public/js/app.js') }}" defer></script>
         @else
           <script src="{{ mix('js/app.js') }}" defer></script>
-        @endif
-
+        @endif -->
+        <script src="{{ mix('js/app.js') }}" defer></script>
         @inertiaHead
 
         <style>
@@ -172,6 +172,19 @@
           /* label, .form-label {
             color: #000000 !important
           } */
+
+main{
+  min-height: 100vh
+}
+
+          .py-3.footer {
+            padding-top: 1rem !important;
+            padding-bottom: 1rem !important;
+            position: fixed;
+            bottom: 0;
+            width: 80%;
+            background: white
+        }
    </style>
 
     </head>
@@ -182,7 +195,7 @@
 
         @inertia
 
-        {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script> --}}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" ></script>
 
        <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
 

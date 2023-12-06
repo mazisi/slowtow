@@ -60,12 +60,13 @@ class Handler extends ExceptionHandler
                     'message' => 'The page expired, please try again.',
                 ]);
 
-            } elseif ($response->status() === 5000) {
-                return redirect('/server-error');
-            } elseif($response->status() === 404) {
-                return redirect('/file-not-found');
-            }elseif ($response->status() === 403) {
-                return redirect('/access-denied');
+            // } elseif ($response->status() === 5000) {
+            //     return redirect('/server-error');
+            // } elseif($response->status() === 404) {
+            //     return redirect('/file-not-found');
+            // }elseif ($response->status() === 403) {
+            //     return redirect('/access-denied');
+            // }
             }
         
             return $response;

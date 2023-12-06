@@ -1,5 +1,5 @@
 
-<script src="./view_alteration.js"></script>
+<script src="./view_duplicate_originals.js"></script>
 <style>
 .columns{
   margin-bottom: 1rem;
@@ -22,15 +22,15 @@
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-      <div class="row">
+      <div class="row">   
   <div class="col-lg-9 col-9">
    <h6> Alteration Info for: 
-    <Link :href="`/view-licence?slug=${alteration.licence.slug}`">
-      <span class="text-success">{{ alteration.licence.trading_name }}</span></Link></h6>
+    <Link :href="`#`">
+      <span class="text-success">{{ duplicate_original.licence.trading_name }}</span></Link></h6>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    @click="deleteAlteration(alteration.slug)" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+    @click="deleteAlteration(duplicate_original.slug)" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
 </div>
       <div class="row">
@@ -43,13 +43,13 @@
 
   <StageComponent
       :column=12
-      :dbStatus="alteration.status"
+      :dbStatus="duplicate_original.status"
       :errors="errors"
       :error="error"
       :stageValue=100
       prevStage=0
       :prevStage='0'
-      :licence_id="alteration.slug"
+      :licence_id="duplicate_original.slug"
       :stageTitle="'Client Quoted'"
       :success="success"
       @stage-value-changed="pushData"
@@ -76,12 +76,12 @@
 
 <StageComponent
       :column=12
-      :dbStatus="alteration.status"
+      :dbStatus="duplicate_original.status"
       :errors="errors"
       :error="error"
       :stageValue=200
       :prevStage='100'
-      :licence_id="alteration.slug"
+      :licence_id="duplicate_original.slug"
       :stageTitle="'Client Invoiced'"
       :success="success"
       @stage-value-changed="pushData"
@@ -107,12 +107,12 @@
 <div class="col-5 columns">
 <StageComponent
       :column=5
-      :dbStatus="alteration.status"
+      :dbStatus="duplicate_original.status"
       :errors="errors"
       :error="error"
       :stageValue=300
       :prevStage=200
-      :licence_id="alteration.slug"
+      :licence_id="duplicate_original.slug"
       :stageTitle="'Client Paid'"
       :success="success"
       @stage-value-changed="pushData"
@@ -141,19 +141,19 @@
     :error="error"
     :column=5
     @date-value-changed="updateAlterationDate"
-    :dated_at="getAlterationDate(alteration.id, 'Client Paid')"
+    :dated_at="getAlterationDate(duplicate_original.id, 'Client Paid')"
     :success="success"
     /> 
 <hr>
 
 <StageComponent
       :column=5
-      :dbStatus="alteration.status"
+      :dbStatus="duplicate_original.status"
       :errors="errors"
       :error="error"
       :stageValue=400
       :prevStage=300
-      :licence_id="alteration.slug"
+      :licence_id="duplicate_original.slug"
       :stageTitle="'Prepare Alterations Application'"
       :success="success"
       @stage-value-changed="pushData"
@@ -174,7 +174,7 @@
     :column=6
     :docTitle="'Application Form'"
     :docType="'Application Form'"
-    :docModel="alteration"
+    :docModel="duplicate_original"
     :stage=400
     :mergeNum="1"
     :hasFile="hasFile('Application Form')"
@@ -189,7 +189,7 @@
   :column=6
   :docTitle="'Fully Dimensional Plans'"
   :docType="'Fully Dimensional Plans'"
-  :docModel="alteration"
+  :docModel="duplicate_original"
   :stage=400
   :mergeNum="2"
   :hasFile="hasFile('Fully Dimensional Plans')"
@@ -205,7 +205,7 @@
   :column=6
   :docTitle="'Payment To The Liquor Board'"
   :docType="'Payment To The Liquor Board'"
-  :docModel="alteration"
+  :docModel="duplicate_original"
   :stage=400
   :mergeNum="5"
   :hasFile="hasFile('Payment To The Liquor Board')"
@@ -225,7 +225,7 @@
   :column=6
   :docTitle="'POA & RES'"
   :docType="'POA & RES'"
-  :docModel="alteration"
+  :docModel="duplicate_original"
   :stage=400
   :mergeNum="3"
   :hasFile="hasFile('POA & RES')"
@@ -240,13 +240,13 @@
   :column=6
   :docTitle="'Smoking Affidavit'"
   :docType="'Smoking Affidavit'"
-  :docModel="alteration"
+  :docModel="duplicate_original"
   :stage=400
   :mergeNum="4"
   :hasFile="hasFile('Smoking Affidavit')"
   />
 
-<a v-if="alteration.merged_document" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
+<a v-if="duplicate_original.merged_document" :href="`/storage/app/public/${duplicate_original.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
 
       <button 
       :disabled="!hasAllMergeDocs"
@@ -263,12 +263,12 @@
     <div class="col-5 columns">
       <StageComponent
             :column=5
-            :dbStatus="alteration.status"
+            :dbStatus="duplicate_original.status"
             :errors="errors"
             :error="error"
             :stageValue=500
             :prevStage=400
-            :licence_id="alteration.slug"
+            :licence_id="duplicate_original.slug"
             :stageTitle="'Payment to the Liquor Board'"
             :success="success"
             @stage-value-changed="pushData"
@@ -297,7 +297,7 @@
           :error="error"
           :column=5
           @date-value-changed="updateAlterationDate"
-          :dated_at="getAlterationDate(alteration.id, 'Payment to the Liquor Board')"
+          :dated_at="getAlterationDate(duplicate_original.id, 'Payment to the Liquor Board')"
           :success="success"
           /> 
       <hr>
@@ -307,12 +307,12 @@
       <div class="col-5 columns">
         <StageComponent
               :column=5
-              :dbStatus="alteration.status"
+              :dbStatus="duplicate_original.status"
               :errors="errors"
               :error="error"
               :stageValue=600
               :prevStage=500
-              :licence_id="alteration.slug"
+              :licence_id="duplicate_original.slug"
               :stageTitle="'Alterations Lodged'"
               :success="success"
               @stage-value-changed="pushData"
@@ -341,7 +341,7 @@
             :error="error"
             :column=5
             @date-value-changed="updateAlterationDate"
-            :dated_at="getAlterationDate(alteration.id, 'Alterations Lodged')"
+            :dated_at="getAlterationDate(duplicate_original.id, 'Alterations Lodged')"
             :success="success"
             /> 
         <hr>
@@ -350,12 +350,12 @@
         <div class="col-5 columns">
           <StageComponent
                 :column=5
-                :dbStatus="alteration.status"
+                :dbStatus="duplicate_original.status"
                 :errors="errors"
                 :error="error"
                 :stageValue=700
                 :prevStage=600
-                :licence_id="alteration.slug"
+                :licence_id="duplicate_original.slug"
                 :stageTitle="'Alterations Certificate Issued'"
                 :success="success"
                 @stage-value-changed="pushData"
@@ -384,7 +384,7 @@
               :error="error"
               :column=5
               @date-value-changed="updateAlterationDate"
-              :dated_at="getAlterationDate(alteration.id, 'Alterations Certificate Issued')"
+              :dated_at="getAlterationDate(duplicate_original.id, 'Alterations Certificate Issued')"
               :success="success"
               /> 
           <hr>
@@ -392,12 +392,12 @@
           <div class="col-5 columns">
             <StageComponent
                   :column=5
-                  :dbStatus="alteration.status"
+                  :dbStatus="duplicate_original.status"
                   :errors="errors"
                   :error="error"
                   :stageValue=800
                   :prevStage=700
-                  :licence_id="alteration.slug"
+                  :licence_id="duplicate_original.slug"
                   :stageTitle="'Alterations Delivered'"
                   :success="success"
                   @stage-value-changed="pushData"
@@ -426,7 +426,7 @@
                 :error="error"
                 :column=5
                 @date-value-changed="updateAlterationDate"
-                :dated_at="getAlterationDate(alteration.id, 'Alterations Delivered')"
+                :dated_at="getAlterationDate(duplicate_original.id, 'Alterations Delivered')"
                 :success="success"
                 /> 
             <hr>
@@ -439,7 +439,7 @@
           </div>
 
 
-      <Task :tasks="tasks" :model_id="alteration.id" :success="success" :error="error" :errors="errors" :model_type="'Alteration'"/>
+      <Task :tasks="tasks" :model_id="duplicate_original.id" :success="success" :error="error" :errors="errors" :model_type="'Alteration'"/>
         
         </div>
         

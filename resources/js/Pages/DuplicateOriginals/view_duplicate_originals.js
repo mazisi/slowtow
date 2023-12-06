@@ -13,10 +13,10 @@ import MergeDocumentComponent from "../components/slotow-components/MergeDocumen
 import DateComponent from "../components/slotow-components/DateComponent.vue";
 
 export default {
-    name: "ViewAlteration",
+    name: "Viewduplicate",
     props: {
         errors: Object,
-        alteration: Object,
+        duplicate_original: Object,
         success: String,
         error: String,
         tasks: Object,
@@ -25,8 +25,7 @@ export default {
     setup(props) {
         let showMenu = false;
         const form = useForm({
-            licence_slug: props.alteration.licence.slug,
-            slug: props.alteration.slug,
+            slug: props.duplicate_original.slug,
             status: [],
             unChecked: false,
             prevStage: null
@@ -35,7 +34,7 @@ export default {
        
 
         function update() {
-            form.patch(`/update-alteration`, {
+            form.patch(`/update-duplicate_original`, {
                 onStart: () => {
                     setTimeout(() => {
                         toast.remove();
@@ -52,11 +51,11 @@ export default {
             });
         }
 
-        function deleteAlteration(
-            slug,
-            licence_slug = props.alteration.licence.slug
+        function deleteDuplicateOriginal(
+            // slug,
+            // licence_slug = props.duplicate_original.licence.slug
         ) {
-            if (confirm("Are you sure you want to delete this alteration?")) {
+            if (confirm("Are you sure you want to delete this duplicate_original?")) {
                 Inertia.delete(
                     `/delete-altered-licence/${slug}/${licence_slug}`
                 );
@@ -64,7 +63,7 @@ export default {
         }
 
         function updateDate() {
-            form.patch(`/update-alteration-date/${props.alteration.slug}`, {
+            form.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (props.success) {
@@ -100,15 +99,15 @@ export default {
             update();
         }
 
-        function hasFile(doc_type) {
-            if (!props.alteration.documents) {
+        function hasFile(doc_type) { return {};   
+            if (!props.duplicate_original.documents) {
                 return {}; 
             } else {
-                let alteration_documents = props.alteration.documents; 
+                let duplicate_original_documents = props.duplicate_original.documents; 
 
-                const foundDocument = alteration_documents.find(
+                const foundDocument = duplicate_original_documents.find(
                     (doc) =>
-                        doc.alteration_id === props.alteration.id &&
+                        doc.duplicate_original_id === props.duplicate_original.id &&
                         doc.doc_type === doc_type &&
                         doc.path &&
                         doc.document_name &&
@@ -127,15 +126,15 @@ export default {
             }
         }
 
-        function getAlterationDate(alteration_id, stage) {           
-
-            if (!props.alteration.dates) {
-              return {}; // Return an empty object if props.alteration.dates doesn't exist
+        function getAlterationDate(duplicate_original_id, stage) {           
+   return {}
+            if (!props.duplicate_original.dates) {
+              return {}; // Return an empty object if props.duplicate_original.dates doesn't exist
             } else {
-              let alteration_dates = props.alteration.dates;
+              let duplicate_original_dates = props.duplicate_original.dates;
           
-              const dateFound = alteration_dates.find(date =>
-                date.alteration_id === props.alteration.id &&
+              const dateFound = duplicate_original_dates.find(date =>
+                date.duplicate_original_id === props.duplicate_original.id &&
                 date.stage === stage 
               );
           
@@ -149,8 +148,8 @@ export default {
             }
         }
 
-        function updateAlterationDate(form_data){
-          form_data.patch(`/update-alteration-date/${props.alteration.id}`, {
+        function updateduplicate_originalDate(form_data){
+          form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.id}`, {
             preserveScroll: true,
             onSuccess: () => { 
                       if(props.success){
@@ -163,7 +162,7 @@ export default {
         }
 
         function submitDocument(form_data){
-            form_data.post('/submit-alteration-document', {
+            form_data.post('/submit-duplicate_original-document', {
               preserveScroll: true,
               onSuccess: () => { 
                  if(props.success){
@@ -178,7 +177,7 @@ export default {
 
       function deleteDocument(id){
           if(confirm('Document will be deleted...Continue ??')){
-            Inertia.delete(`/delete-alteration-document/${id}`, {
+            Inertia.delete(`/delete-duplicate_original-document/${id}`, {
               onSuccess: () => { 
                if(props.success){
                   notify(props.success)
@@ -191,21 +190,21 @@ export default {
         }
 
   
-        function hasAllMergeDocs(){
-            let documentsWithMergeNum = props.alteration.documents.filter(doc => doc.num !== null);
+        function hasAllMergeDocs(){ return true;
+            let documentsWithMergeNum = props.duplicate.documents.filter(doc => doc.num !== null);
            
             return documentsWithMergeNum ? documentsWithMergeNum.length == 5 : false
         }
 
         function mergeDocuments(){alert('Cool')
-            Inertia.post(`/merge-alteration-documents/${props.alteration.id}`, {
+            Inertia.post(`/merge-duplicate-documents/${props.duplicate.id}`, {
                     //
             })
           }
         
         return {
             form,hasAllMergeDocs,
-            updateAlterationDate,
+            // updateduplicateDate,
             showMenu,mergeDocuments,
             updateDate,
             update,
@@ -213,7 +212,8 @@ export default {
             hasFile,
             toast,
             getAlterationDate,
-            deleteAlteration,
+            // getduplicateDate,
+            deleteDuplicateOriginal,
             notify,
             submitDocument,
             deleteDocument

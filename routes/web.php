@@ -74,6 +74,7 @@ Route::group(['middleware' => ['guest']], function () {
         Route::group([], __DIR__.'/alterations.php');
 
         Route::group([], __DIR__.'/contact.php');
+        Route::group([], __DIR__.'/duplicate-originals.php');
         //Reports
 
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
