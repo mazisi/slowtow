@@ -9,7 +9,7 @@ use App\Http\Controllers\DuplicateOriginalsController;
         
         Route::post('/submit-duplicate-original',[DuplicateOriginalsController::class,'store']);
 
-        // Route::patch('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
+        Route::patch('/update-duplicate_original',[DuplicateOriginalsController::class,'updateStage']);
 
         // Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 

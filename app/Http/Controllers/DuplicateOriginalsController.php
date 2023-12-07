@@ -12,12 +12,11 @@ use App\Models\Task;
 
 class DuplicateOriginalsController extends Controller
 {
-    //
     public function index(Request $request){
         $licence = Licence::whereSlug($request->slug)->firstOrFail();
         $originals_years = DuplicateOriginal::where('licence_id',$licence->id)->orderBy('year','DESC')->paginate(10)->withQueryString();
         $years = DB::table('years')->get()->pluck('year');//dropdown of years
-        
+     
         return Inertia::render('DuplicateOriginals/DuplicateOriginals',[
             'licence' => $licence,
             'originals_years' => $originals_years,
@@ -25,7 +24,7 @@ class DuplicateOriginalsController extends Controller
           ]);
        
     }
-    public function view_duplicate($slug){dd('In Progreess.....');    
+    public function view_duplicate($slug){ 
       $duplicate_original = DuplicateOriginal::with('licence','duplicate_documents')->whereSlug($slug)->first();
 
       $tasks = Task::where('model_type', 'Duplicate-Originals')
@@ -54,4 +53,26 @@ class DuplicateOriginalsController extends Controller
         ]);
         return to_route('view_duplicate_original',['slug' => $dup->slug]);
     }
+
+    function updateStage(Request $request) {
+        try {
+            $orig = DuplicateOriginal::whereSlug($request->slug)->first(['id', 'status']);
+            $status = '';
+
+            if ($request->status) {
+                if ($request->unChecked) {
+                    $status = $request->prevStage;
+                } else {
+                    $status = $request->status[0];
+                }
+                $orig->update([
+                    'status' => $status,
+                ]);
+            }
+            return back()->with('success', 'Status updated successfully');
+        } catch (\Throwable $th) {
+            return back()->with('error', 'An error occurred while updating.');
+        }
+    }
+    
 }

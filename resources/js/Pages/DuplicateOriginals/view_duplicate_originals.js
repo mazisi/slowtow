@@ -19,7 +19,7 @@ export default {
         duplicate_original: Object,
         success: String,
         error: String,
-        tasks: Object,
+        tasks: Object      
        
     },
     setup(props) {
@@ -164,6 +164,10 @@ export default {
           }
         }
 
+        function getDate(){
+
+        }
+
         function mergeDocuments(){alert('Cool')
             Inertia.post(`/merge-duplicate-documents/${props.duplicate_original.id}`, {
                     //
@@ -178,7 +182,7 @@ export default {
             update,
             pushData,
             hasFile,
-            toast,
+            toast,getDate,
             deleteDuplicateOriginal,
             notify,
             submitDocument,
