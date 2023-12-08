@@ -45,6 +45,7 @@
                                             </div>
 
                                             <ProvinceSelectDropdownComponent
+                                            v-if="form.type == 'retail'"
                                                 :provinceList="computedProvinces"
                                                 :required="true"
                                                 :label="'Province'"
@@ -106,7 +107,7 @@
                                             />
 
 
-                                            <LicenceTypeDropDownComponent
+                                            <LicenceTypeDropDownComponent                                          
                                                 :dropdownList="licenceByProvince"
                                                 :label="'Licence Type *'"
                                                 :defaultDisabledText="'Select Licence Type'"
@@ -116,7 +117,7 @@
                                                 :errors="errors.licence_type"
                                                 :input_id="licence_type"
                                                 :required="true"
-                                                v-if="form.province !== ''"
+                                                v-if="form.province !== '' && form.type == 'retail'"
                                             />
 
                                             <LiquorBoardRegionComponent 
@@ -132,7 +133,17 @@
                                                 v-if="form.province !== '' && form.province === 'Gauteng' && form.type == 'retail'"
                                             />
 
-
+                                <div class="col-12 columns" v-if="form.type == 'wholesale'">
+                                    <div class="input-group input-group-outline null is-filled">
+                                        <label :for="label" class="form-label">{{ label }}</label>
+                                        <select required="required" v-model="form.licence_type"
+                                        class="form-control form-control-default">
+                                                <option :value="''" disabled selected>Select Liquor Board Region</option>
+                                                <option v-for='dropdown in wholesaleLicenceTypes' :key="dropdown.id" :value="dropdown.id"> {{ dropdown.licence_type }}</option>
+                                        </select>
+                                    </div>
+                                    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+                                </div>
 
                                         </div>
 
@@ -177,7 +188,7 @@
 
 
                                 <TextInputComponent
-                                    :inputType="'text'"
+                                    :inputType="'number'"
                                     :label="'Postal Code'"
                                     v-model="form.postal_code"
                                     :column="'col-12'"

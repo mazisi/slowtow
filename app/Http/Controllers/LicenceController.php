@@ -51,9 +51,11 @@ class LicenceController extends Controller
         $companies = Company::pluck('name', 'id');
         $people = People::pluck('full_name', 'id');
         $licence_dropdowns = LicenceType::get();
+        $wholesaleLicenceTypes = LicenceType::where('province', 'null')->get();
 
         return Inertia::render('Licences/CreateLicence', [
             'licence_dropdowns' => $licence_dropdowns,
+            'wholesaleLicenceTypes' => $wholesaleLicenceTypes,
             'companies' => $companies,
             'people' => $people,
             'type' => request('type'),
@@ -178,6 +180,7 @@ class LicenceController extends Controller
             ->latest()
             ->paginate(4)
             ->withQueryString();
+            
 
         $view = $licence->is_new_app ? 'ViewNewApp' : 'ViewLicence';
 

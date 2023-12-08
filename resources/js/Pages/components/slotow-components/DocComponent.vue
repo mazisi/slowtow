@@ -2,9 +2,13 @@
   <ul class="list-group">
     <li class="px-0  border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="hasFile.docPath">
-      <a :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+      <a  data-bs-toggle="modal" data-bs-target="#view-file" target="_blank">
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
+
+      <!-- <a :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+        <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+        </a> -->
       </div>
      
      <div class=" d-flex align-items-start flex-column justify-content-center">
@@ -29,7 +33,7 @@
   </li>
   
   </ul> 
-  
+  <ViewFile/>
 </template>
 <style scoped>
 .cursor-pointer{
@@ -39,7 +43,9 @@
 </style>
 <script>
 import { ref } from 'vue';
+import VuePdfEmbed from 'vue-pdf-embed';
 import { useForm } from '@inertiajs/inertia-vue3';
+import ViewFile from './ViewFile.vue'
 
 export default{
   
@@ -54,6 +60,7 @@ export default{
   setup(props, context){
    
     let file_has_apostrophe = ref(false);
+    const blob = ref()
 
     const uploadDoc = useForm({
       licence_id: props.documentModel.id,
@@ -75,11 +82,16 @@ export default{
       function deleteDocument(id){
         context.emit('file-deleted', id);
       }
-        
+        function viewFile(file_path){
+          //$page.props.blob_file_path
+        }
     return {
-      uploadDoc,upload,
+      uploadDoc,upload,viewFile,
       file_has_apostrophe,deleteDocument
     }
+  },
+  components: {
+    ViewFile
   }
 }
 </script>

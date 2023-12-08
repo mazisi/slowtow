@@ -4,14 +4,12 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DuplicateOriginalsController;
 
         Route::get('/duplicate-originals',[DuplicateOriginalsController::class,'index'])->name('dup_originals');
-        Route::get('/duplicate',[DuplicateOriginalsController::class,'view_duplicate'])->name('view_duplicate');
-        // Route::get('/create-licence',[LicenceController::class,'create'])->name('create_licence');
 
-        // Route::get('/view-licence',[LicenceController::class,'show'])->name('view_licence');
+        Route::get('/view-duplicate-original/{slug}',[DuplicateOriginalsController::class,'view_duplicate'])->name('view_duplicate_original');
+        
+        Route::post('/submit-duplicate-original',[DuplicateOriginalsController::class,'store']);
 
-        // Route::post('/submit-licence',[LicenceController::class,'store'])->name('submit_licence');
-
-        // Route::patch('/update-licence/{slug}',[LicenceController::class,'update'])->name('update_licence');
+        Route::patch('/update-duplicate_original',[DuplicateOriginalsController::class,'updateStage']);
 
         // Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
