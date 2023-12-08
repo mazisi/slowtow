@@ -185,6 +185,13 @@ main{
             width: 80%;
             background: white
         }
+        .fixed-profile{
+          background: #42424a8c
+        }
+        .john-title .text-white{
+          margin: 0;
+          font-size: 14px
+        }
    </style>
 
     </head>
