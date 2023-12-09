@@ -33,13 +33,22 @@
   </li>
   
   </ul> 
+
+  <div class="progress" v-if="uploadDoc.progress">
+  <div class="progress-bar" role="progressbar" 
+  :style="{ width: uploadDoc.progress.percentage + '%' }" 
+  :aria-valuenow="uploadDoc.progress.percentage" aria-valuemin="0" aria-valuemax="100">
+  {{ uploadDoc.progress.percentage }}%</div>
+</div>
   <ViewFile/>
 </template>
 <style scoped>
 .cursor-pointer{
   cursor: pointer !important;
 }
-
+.progress-bar {
+    height: 15px !important;
+}
 </style>
 <script>
 import { ref } from 'vue';

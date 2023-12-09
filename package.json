@@ -47,8 +47,6 @@
         "chart.js": "3.6.0",
         "core-js": "3.6.5",
         "epic-spinners": "^1.1.0",
-        "filepond": "^4.30.4",
-        "filepond-plugin-file-validate-type": "^1.2.8",
         "tinymce": "^6.1.2",
         "v-offline": "^3.4.0",
         "vue-filepond": "^7.0.3",
