@@ -18,19 +18,19 @@
 
 <template>
 <Layout>
-  <Head title="View Alteration" />
+  <Head title="View Duplicate Original" />
 <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">   
   <div class="col-lg-9 col-9">
-   <h6> Alteration Info for: 
-    <Link :href="`#`">
+   <h6> Duplicate Original for: 
+    <Link :href="`/view-licence?slug=${duplicate_original.licence.slug}`">
       <span class="text-success">{{ duplicate_original.licence.trading_name }}</span></Link></h6>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    @click="deleteAlteration(duplicate_original.slug)" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+    @click="deleteDuplicateOriginal(duplicate_original.slug)" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
   </div>
 </div>
       <div class="row">
@@ -128,7 +128,7 @@
     :errors="errors"
     :error="error"
     :column=5
-    @date-value-changed="updateduplicate_originalDate"
+    @date-value-changed="updateDate"
     :dated_at="duplicate_original.paid_at"
     :success="success"
     /> 
@@ -233,7 +233,7 @@
             :errors="errors"
             :error="error"
             :column=5
-            @date-value-changed="updateAlterationDate"
+            @date-value-changed="updateDate"
             :dated_at="duplicate_original.lodged_at"
             :success="success"
             /> 
@@ -276,7 +276,7 @@
               :errors="errors"
               :error="error"
               :column=5
-              @date-value-changed="updateAlterationDate"
+              @date-value-changed="updateDate"
               :dated_at="duplicate_original.issued_at"
               :success="success"
               /> 
@@ -299,7 +299,7 @@
             
                 <DocComponent
                 @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+                      @file-deleted="deleteDocument"
                     :documentModel="duplicate_original"
                     :hasFile="hasFile('Duplicate Original Delivered')"
                     :errors="errors"
@@ -318,7 +318,7 @@
                 :errors="errors"
                 :error="error"
                 :column=5
-                @date-value-changed="updateAlterationDate"
+                @date-value-changed="updateDate"
                 :dated_at="duplicate_original.delivered_at"
                 :success="success"
                 /> 
