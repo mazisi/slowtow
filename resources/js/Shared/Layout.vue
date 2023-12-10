@@ -7,20 +7,20 @@
   />
   <main class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden">
 
-    <!-- <v-offline
+ <v-offline
       online-class="online"
       offline-class="offline"
       @detected-condition="setConnected"
     >
-    <template v-if="connected">
+    <!-- <template v-if="connected">
     <div class="text-center bg-success">Connected</div>
     </template>
 
     <template v-if="!connected">
     
     <div class="text-center bg-danger">Not connected</div>
-  </template>
-    </v-offline> -->
+  </template> -->
+    </v-offline>
    
 
     <navbar
@@ -62,13 +62,18 @@ export default {
     Sidenav,
     Navbar,
     AppFooter,
-    VOffline,
-    toast
+    VOffline
   },
   methods: {
     ...mapMutations(["toggleConfigurator", "navbarMinimize"]),
 
   setConnected(e){
+    if(e){
+        //toast.success('Connected')
+      }else{
+        toast.warning('It looks like you are offline')
+      }
+
       this.connected = e;
       console.log(e)
       console.log('connected',this.connected)
