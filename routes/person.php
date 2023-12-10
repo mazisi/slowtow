@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PeopleDocumentController;
 
 Route::get('/people', [PersonController::class,'index'])->name('people');
