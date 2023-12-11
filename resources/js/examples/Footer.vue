@@ -13,7 +13,16 @@
             </li>
           </ul>
         </div>
-        <div class="col-lg-2 badge badge-success">Admins</div>
+        <div class="col-lg-2">
+          <ul
+            class="nav nav-footer">
+            <li class="nav-item">
+              <inertia-link
+                href="/slotow-admins"
+                class="nav-link text-muted"> Admins</inertia-link>             
+            </li>
+          </ul>
+        </div>
         <div class="col-lg-4">
         <ul class="nav nav-footer d-flex justify-content-center justify-content-lg-end">
             <li class="nav-item">

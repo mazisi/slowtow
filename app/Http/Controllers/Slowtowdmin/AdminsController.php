@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 class AdminsController extends Controller
 {
     public function index(){
-      $users = User::with('roles')->latest()->paginate(10,['id','name','email','created_at','picture','is_active','last_activity_at']);
+      $users = User::with('roles')->latest()->paginate(6,['id','name','email','created_at','picture','is_active','last_activity_at']);
       return Inertia::render('AccountAdmin/Admins',['users' => $users]);
     }
 
