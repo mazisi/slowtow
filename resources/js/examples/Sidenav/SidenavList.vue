@@ -293,7 +293,8 @@
       <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
   <div class="hstack gap-3">
     <div class="john-img">
-      <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${$page.props.auth.user.name}`" class="rounded-circle" width="40" height="40" alt="">
+      <img v-if="$page.props.auth.user.picture" :src="`${$page.props.blob_file_path}${$page.props.auth.user.picture}`" class="rounded-circle" width="40" height="40" alt="">
+      <img v-else :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${$page.props.auth.user.name}`" class="rounded-circle" width="40" height="40" alt="">
     </div>
     <div class="john-title">
       <p class="ms-1 text-white"> {{ $page.props.auth.user.name }}</p>

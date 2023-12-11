@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\CompanyDocsController;
 use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
 

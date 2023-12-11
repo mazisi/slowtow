@@ -32,14 +32,19 @@
     </div>
   </li>
   
-  </ul> 
+  </ul>
+ <div v-if="uploadDoc.progress">
+  <CircleProgressBar  
+  :value="uploadDoc.progress.percentage"  
+  :max="100"  
+  percentage  
+ rounded
+ :size="60"
+ :colorFilled="'#4caf50'"
+ :animationDuration="'0.7s'">
+</CircleProgressBar>
+ </div>
 
-  <div class="progress" v-if="uploadDoc.progress">
-  <div class="progress-bar" role="progressbar" 
-  :style="{ width: uploadDoc.progress.percentage + '%' }" 
-  :aria-valuenow="uploadDoc.progress.percentage" aria-valuemin="0" aria-valuemax="100">
-  {{ uploadDoc.progress.percentage }}%</div>
-</div>
   <ViewFile/>
 </template>
 <style scoped>
@@ -54,7 +59,9 @@
 import { ref } from 'vue';
 import VuePdfEmbed from 'vue-pdf-embed';
 import { useForm } from '@inertiajs/inertia-vue3';
-import ViewFile from './ViewFile.vue'
+import ViewFile from './ViewFile.vue';
+import { CircleProgressBar } from 'circle-progress.vue';
+
 
 export default{
   
@@ -70,13 +77,14 @@ export default{
    
     let file_has_apostrophe = ref(false);
     const blob = ref()
+    let max = ref(100)
+    const value = ref(55)
 
     const uploadDoc = useForm({
       licence_id: props.documentModel.id,
       doc_type: props.docType,
       document_file: null
     })
-
     function upload(e){
         uploadDoc.document_file = e.target.files[0];
         if(e.target.files[0].name.includes("'")){
@@ -95,12 +103,13 @@ export default{
           //$page.props.blob_file_path
         }
     return {
-      uploadDoc,upload,viewFile,
+      uploadDoc,upload,viewFile,max,value,
       file_has_apostrophe,deleteDocument
     }
   },
   components: {
-    ViewFile
+    ViewFile,
+    CircleProgressBar
   }
 }
 </script>

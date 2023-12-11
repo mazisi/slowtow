@@ -6,7 +6,23 @@
     v-if="showSidenav"
   />
   <main class="main-content position-relative max-height-vh-100 h-100 overflow-x-hidden">
-    <!-- nav -->
+
+ <v-offline
+      online-class="online"
+      offline-class="offline"
+      @detected-condition="setConnected"
+    >
+    <!-- <template v-if="connected">
+    <div class="text-center bg-success">Connected</div>
+    </template>
+
+    <template v-if="!connected">
+    
+    <div class="text-center bg-danger">Not connected</div>
+  </template> -->
+    </v-offline>
+   
+
     <navbar
       :class="[isNavFixed ? navbarFixed : '', isAbsolute ? absolute : '']"
       :color="isAbsolute ? 'text-white opacity-8' : ''"
@@ -39,24 +55,27 @@ export default {
 
   data() {
       return { 
-        online: false
+        connected: false
       }
     },
   components: {
     Sidenav,
     Navbar,
     AppFooter,
-    VOffline,
-    toast
+    VOffline
   },
   methods: {
     ...mapMutations(["toggleConfigurator", "navbarMinimize"]),
 
-    onNetworkChange(status) {
-        online.value = status;
-        console.log('Msesh')
+  setConnected(e){
+    if(e){
+        //toast.success('Connected')
+      }else{
+        toast.warning('It looks like you are offline')
       }
 
+
+    }
     
   },
   computed: {
