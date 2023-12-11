@@ -74,9 +74,6 @@ export default {
         toast.warning('It looks like you are offline')
       }
 
-      this.connected = e;
-      console.log(e)
-      console.log('connected',this.connected)
 
     }
     
