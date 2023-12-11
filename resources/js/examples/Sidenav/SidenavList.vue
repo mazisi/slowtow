@@ -282,12 +282,34 @@
         <div class="collapse"></div>
       </li>
 
-
       <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
       
       <RetailWholesaleModal @redirect-with-type="redirectToCreateLicence"/>
+      
 
     </ul>
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
+  <div class="hstack gap-3">
+    <div class="john-img">
+      <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${$page.props.auth.user.name}`" class="rounded-circle" width="40" height="40" alt="">
+    </div>
+    <div class="john-title">
+      <p class="ms-1 text-white"> {{ $page.props.auth.user.name }}</p>
+     
+      <span v-if="$page.props.auth.user.roles[0].name == 'slotow-admin'" class="ms-2 text-white ">SuperAdmin</span>
+      <span v-else class="ms-2 text-white ">Admin</span>
+    </div>
+    <Link href="/logout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" 
+    type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+      <i class="fa fa-power-off"></i>
+    </Link>
+    
+  </div>
+</div>
+    </li>
+  </ul>
   </div>
 </template>
 <script>

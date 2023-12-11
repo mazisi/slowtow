@@ -21,6 +21,7 @@
       success: String,
       error: String,
       type: String,
+      wholesaleLicenceTypes: Object,
       get_reg_num_or_id_number: String
     },
 
@@ -57,7 +58,7 @@
       function submit() {
         form.post('/submit-new-app', {
           onSuccess: () => {
-              notify(props.success)
+              //notify(props.success)
            },
           preserveScroll: true,
         })

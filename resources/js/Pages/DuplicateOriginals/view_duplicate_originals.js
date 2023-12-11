@@ -10,16 +10,16 @@ import "vue3-toastify/dist/index.css";
 import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
-import DateComponent from "../components/slotow-components/DateComponent.vue";
+import DateComponent from "./components/DateComponent.vue";
 
 export default {
-    name: "Viewduplicate",
+    name: "ViewDuplicate",
     props: {
         errors: Object,
         duplicate_original: Object,
         success: String,
         error: String,
-        tasks: Object,
+        tasks: Object      
        
     },
     setup(props) {
@@ -51,19 +51,15 @@ export default {
             });
         }
 
-        function deleteDuplicateOriginal(
-            // slug,
-            // licence_slug = props.duplicate_original.licence.slug
-        ) {
-            if (confirm("Are you sure you want to delete this duplicate_original?")) {
-                Inertia.delete(
-                    `/delete-altered-licence/${slug}/${licence_slug}`
+        function deleteDuplicateOriginal(slug) {
+            if (confirm("Are you sure you want to delete this duplicate original?")) {
+                Inertia.delete(`/delete-duplicate-original/${slug}`
                 );
             }
         }
 
-        function updateDate() {
-            form.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
+        function updateDate(form_data) {
+            form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (props.success) {
@@ -99,11 +95,11 @@ export default {
             update();
         }
 
-        function hasFile(doc_type) { return {};   
-            if (!props.duplicate_original.documents) {
+        function hasFile(doc_type) {   
+            if (!props.duplicate_original.duplicate_documents) {
                 return {}; 
             } else {
-                let duplicate_original_documents = props.duplicate_original.documents; 
+                let duplicate_original_documents = props.duplicate_original.duplicate_documents; 
 
                 const foundDocument = duplicate_original_documents.find(
                     (doc) =>
@@ -126,42 +122,9 @@ export default {
             }
         }
 
-        function getAlterationDate(duplicate_original_id, stage) {           
-   return {}
-            if (!props.duplicate_original.dates) {
-              return {}; // Return an empty object if props.duplicate_original.dates doesn't exist
-            } else {
-              let duplicate_original_dates = props.duplicate_original.dates;
-          
-              const dateFound = duplicate_original_dates.find(date =>
-                date.duplicate_original_id === props.duplicate_original.id &&
-                date.stage === stage 
-              );
-          
-              if (dateFound) {
-                return {
-                  dated_at: dateFound.dated_at
-                };
-              } else {
-                return {}; // Return an empty object if no date satisfies the conditions
-              }
-            }
-        }
+    
 
-        function updateduplicate_originalDate(form_data){
-          form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.id}`, {
-            preserveScroll: true,
-            onSuccess: () => { 
-                      if(props.success){
-                          notify(props.success)
-                        }else if(props.error){
-                          notify(props.error)
-                        }
-                        },
-          })     
-        }
-
-        function submitDocument(form_data){
+        function submitDocument(form_data){            
             form_data.post('/submit-duplicate_original-document', {
               preserveScroll: true,
               onSuccess: () => { 
@@ -189,30 +152,21 @@ export default {
           }
         }
 
-  
-        function hasAllMergeDocs(){ return true;
-            let documentsWithMergeNum = props.duplicate.documents.filter(doc => doc.num !== null);
-           
-            return documentsWithMergeNum ? documentsWithMergeNum.length == 5 : false
-        }
 
         function mergeDocuments(){alert('Cool')
-            Inertia.post(`/merge-duplicate-documents/${props.duplicate.id}`, {
+            Inertia.post(`/merge-duplicate-documents/${props.duplicate_original.id}`, {
                     //
             })
           }
         
         return {
-            form,hasAllMergeDocs,
-            // updateduplicateDate,
+            form,
             showMenu,mergeDocuments,
             updateDate,
             update,
             pushData,
             hasFile,
             toast,
-            getAlterationDate,
-            // getduplicateDate,
             deleteDuplicateOriginal,
             notify,
             submitDocument,

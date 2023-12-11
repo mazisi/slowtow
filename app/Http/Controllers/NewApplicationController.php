@@ -42,11 +42,14 @@ class NewApplicationController extends Controller
         $persons = People::pluck('full_name', 'id');
         $companies = Company::pluck('name', 'id');
         $licence_dropdowns = LicenceType::orderBy('licence_type', 'ASC')->get();
+        $wholesaleLicenceTypes = LicenceType::where('province', 'null')->get();
+   
 
         return Inertia::render('New Applications/Index', [
             'persons' => $persons,
             'companies' => $companies,
             'licence_dropdowns' => $licence_dropdowns,
+            'wholesaleLicenceTypes' => $wholesaleLicenceTypes,
             'type' => request('type'),
             'get_reg_num_or_id_number' => $this->get_reg_num_or_id_number
         ]);
@@ -93,8 +96,8 @@ class NewApplicationController extends Controller
             if ($licence) {
                 return redirect()->route('view_registration', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
             }
-        } catch (\Throwable $th) {
-            return back()->with('error', 'An error occurred. Please try again.');
+        } catch (\Throwable $th) {throw $th;
+           // return back()->with('error', 'An error occurred. Please try again.');
         }
     }
 

@@ -2,20 +2,24 @@
   <ul class="list-group">
     <li class="px-0  border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="hasFile.docPath">
-      <a :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+      <a  data-bs-toggle="modal" data-bs-target="#view-file" target="_blank">
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a>
-      </div>
 
+      <!-- <a :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+        <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+        </a> -->
+      </div>
+     
      <div class=" d-flex align-items-start flex-column justify-content-center">
       <!-- <h6 v-if="!hasFile" class="mb-0 text-sm">Document</h6> -->
       <h6 v-if="hasFile.fileName" class="mb-0 text-sm limit-file-name">{{ hasFile.fileName }}</h6>
       </div>
-
+  
        <a v-if="hasFile.id" @click="deleteDocument(hasFile.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" href="javascript:;">
          <i class="fa fa-trash text-danger h5" aria-hidden="true"></i>
       </a>
-      <div v-else
+      <div v-else 
        class="mb-0  btn btn-link pe-3 ps-0 ms-4" :class="{ 'd-none': uploadDoc.processing}">
       <label :for="uploadDoc.doc_type">
         <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
@@ -27,40 +31,50 @@
       <div v-if="file_has_apostrophe" class="mb-2 text-danger text-sm">File cannot contain apostrophes.</div>
     </div>
   </li>
+  
+  </ul> 
 
-  </ul>
-
+  <div class="progress" v-if="uploadDoc.progress">
+  <div class="progress-bar" role="progressbar" 
+  :style="{ width: uploadDoc.progress.percentage + '%' }" 
+  :aria-valuenow="uploadDoc.progress.percentage" aria-valuemin="0" aria-valuemax="100">
+  {{ uploadDoc.progress.percentage }}%</div>
+</div>
+  <ViewFile/>
 </template>
 <style scoped>
 .cursor-pointer{
   cursor: pointer !important;
 }
-
+.progress-bar {
+    height: 15px !important;
+}
 </style>
 <script>
 import { ref } from 'vue';
+import VuePdfEmbed from 'vue-pdf-embed';
 import { useForm } from '@inertiajs/inertia-vue3';
+import ViewFile from './ViewFile.vue'
 
 export default{
-
+  
   props: {
     documentModel: Object,
     hasFile: Object,
     errors: Object,
     orderByNumber: Number,
     docType: String,
-    success: Object,
-    stage: String
+    success: Object
   },
   setup(props, context){
-
+   
     let file_has_apostrophe = ref(false);
+    const blob = ref()
 
     const uploadDoc = useForm({
       licence_id: props.documentModel.id,
       doc_type: props.docType,
-      document_file: null,
-      stage: props.stage? props.stage : null,
+      document_file: null
     })
 
     function upload(e){
@@ -77,11 +91,16 @@ export default{
       function deleteDocument(id){
         context.emit('file-deleted', id);
       }
-
+        function viewFile(file_path){
+          //$page.props.blob_file_path
+        }
     return {
-      uploadDoc,upload,
+      uploadDoc,upload,viewFile,
       file_has_apostrophe,deleteDocument
     }
+  },
+  components: {
+    ViewFile
   }
 }
 </script>
