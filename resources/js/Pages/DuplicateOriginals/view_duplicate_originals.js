@@ -10,7 +10,7 @@ import "vue3-toastify/dist/index.css";
 import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
-import DateComponent from "../components/slotow-components/DateComponent.vue";
+import DateComponent from "./components/DateComponent.vue";
 
 export default {
     name: "ViewDuplicate",
@@ -51,16 +51,15 @@ export default {
             });
         }
 
-        function deleteDuplicateOriginal() {
-            if (confirm("Are you sure you want to delete this duplicate_original?")) {
-                Inertia.delete(
-                    `/delete-altered-licence/${slug}/${licence_slug}`
+        function deleteDuplicateOriginal(slug) {
+            if (confirm("Are you sure you want to delete this duplicate original?")) {
+                Inertia.delete(`/delete-duplicate-original/${slug}`
                 );
             }
         }
 
-        function updateDate() {
-            form.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
+        function updateDate(form_data) {
+            form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (props.success) {
@@ -123,20 +122,9 @@ export default {
             }
         }
 
-        function updateDate(form_data){
-          form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.id}`, {
-            preserveScroll: true,
-            onSuccess: () => { 
-                      if(props.success){
-                          notify(props.success)
-                        }else if(props.error){
-                          notify(props.error)
-                        }
-                        },
-          })     
-        }
+    
 
-        function submitDocument(form_data){
+        function submitDocument(form_data){            
             form_data.post('/submit-duplicate_original-document', {
               preserveScroll: true,
               onSuccess: () => { 
@@ -164,9 +152,6 @@ export default {
           }
         }
 
-        function getDate(){
-
-        }
 
         function mergeDocuments(){alert('Cool')
             Inertia.post(`/merge-duplicate-documents/${props.duplicate_original.id}`, {
@@ -176,13 +161,12 @@ export default {
         
         return {
             form,
-            // updateduplicateDate,
             showMenu,mergeDocuments,
             updateDate,
             update,
             pushData,
             hasFile,
-            toast,getDate,
+            toast,
             deleteDuplicateOriginal,
             notify,
             submitDocument,

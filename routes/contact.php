@@ -2,7 +2,6 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\CompanyDocsController;
 
 Route::get('/goverify-contacts',[ContactController::class,'index'])->name('contacts');
 

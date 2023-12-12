@@ -3,20 +3,26 @@
     <div class="container-fluid">
       <div class="row align-items-center justify-content-lg-between">
         
-        <div class="col-lg-8">
+        <div class="col-lg-6">
           <ul
-            class="nav nav-footer "
-          >
+            class="nav nav-footer">
             <li class="nav-item">
               <inertia-link
                 href="/logout"
-                class="nav-link text-muted"
-              > You are logged in as:<b> {{ user.name }}</b><span class="mx-2 text-danger">(Logout)</span></inertia-link>
-             
+                class="nav-link text-muted"> You are logged in as:<b> {{ user.name }}</b><span class="mx-2 text-danger">(Logout)</span></inertia-link>             
             </li>
           </ul>
         </div>
-
+        <div class="col-lg-2">
+          <ul
+            class="nav nav-footer">
+            <li class="nav-item">
+              <inertia-link
+                href="/slotow-admins"
+                class="nav-link text-muted"> Admins</inertia-link>             
+            </li>
+          </ul>
+        </div>
         <div class="col-lg-4">
         <ul class="nav nav-footer d-flex justify-content-center justify-content-lg-end">
             <li class="nav-item">

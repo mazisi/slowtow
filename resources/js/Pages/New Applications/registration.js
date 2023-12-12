@@ -9,10 +9,10 @@ import Layout from "../../Shared/Layout.vue";
   import AdditionalDocsComponent from '../components/slotow-components/AdditionalDocsComponent.vue';
   import StageComponent from '../components/slotow-components/StageComponent.vue';
   import DocComponent from '../components/slotow-components/DocComponent.vue';
-  import MergeDocumentComponent from '../components/slotow-components/MergeDocumentComponent.vue';  
-  import DateComponent from '../components/slotow-components/DateComponent.vue';  
-  import MergeButtonComponent from '../components/slotow-components/MergeButtonComponent.vue';  
-  
+  import MergeDocumentComponent from '../components/slotow-components/MergeDocumentComponent.vue';
+  import DateComponent from '../components/slotow-components/DateComponent.vue';
+  import MergeButtonComponent from '../components/slotow-components/MergeButtonComponent.vue';
+
   export default {
     props: {
       tasks: Object,
@@ -21,26 +21,26 @@ import Layout from "../../Shared/Layout.vue";
       success: String,
       error: String
     },
-  
-    setup (props) {      
+
+    setup (props) {
 
       const form = useForm({
         status: [],
         unChecked: false,
         prevStage: ''
        })
-  
-    
+
+
       function updateRegistration() {//handles dates updates
         form.patch(`/update-new-registration/${props.licence.slug}`, {
           preserveScroll: true,
-          onStart: () => { 
+          onStart: () => {
             setTimeout(() => {
               toast.remove();
             }, 3000);
             toast.loading('Updating stage...');
           },
-          onSuccess: () => { 
+          onSuccess: () => {
                         if(props.success){
                             notify(props.success)
                          }else if(props.error){
@@ -49,7 +49,7 @@ import Layout from "../../Shared/Layout.vue";
                       },
         })
       }
- 
+
 
       function pushData(e,status_value, prevStage){
            if (e.target.checked) {
@@ -61,16 +61,16 @@ import Layout from "../../Shared/Layout.vue";
             }
             form.prevStage = prevStage;
             updateRegistration();
-            
+
         }
 
         function mergeDocs(){
           Inertia.post(`/merge-licence-docs/${props.licence.id}`, {
           preserveScroll: true,
-          onStart: () => {                  
-                  checkingFileProgress('This operation can take a while depending on number of files...')                
+          onStart: () => {
+                  checkingFileProgress('This operation can take a while depending on number of files...')
               },
-          onSuccess: () => { 
+          onSuccess: () => {
                         if(props.success){
                             notify(props.success)
                          }else if(props.error){
@@ -84,24 +84,24 @@ import Layout from "../../Shared/Layout.vue";
         function deleteRegistration(){
           form.patch(`/update-registration-date/${props.licence.slug}`, {
           preserveScroll: true,
-          onSuccess: () => { 
+          onSuccess: () => {
                         if(props.success){
                             notify(props.success)
                          }else if(props.error){
                            notify(props.error)
                          }
                       },
-        })   
+        })
         }
-       
-      
+
+
 
       const notify = (message) => {
           if(props.success){
             toast.success(message, {
             autoClose: 2000,
           });
-          
+
           }else if(props.error){
             toast.error(message, {
             autoClose: 2000,
@@ -118,17 +118,17 @@ import Layout from "../../Shared/Layout.vue";
 
 
         function getLicenceDate(licence_id, stage){
-         
+
           if(! props.licence.licence_stage_dates){
             return {}; // Return an empty object if props.licence.dates doesn't exist
           } else {
             let licence_dates = props.licence.licence_stage_dates;
-        
+
             const dateFound = licence_dates.find(date =>
               date.licence_id === props.licence.id &&
-              date.stage === stage 
+              date.stage === stage
             );
-        
+
             if (dateFound) {
               return {
                 dated_at: dateFound.dated_at
@@ -140,14 +140,14 @@ import Layout from "../../Shared/Layout.vue";
 
         }
 
-        
+
 
         function hasFile(doc_type) {
           if (!props.licence.documents) {
             return {}; // Return an empty object if props.licence.documents doesn't exist
           } else {
             let licence_documents = props.licence.documents; // Object with all licence docs
-        
+
             const foundDocument = licence_documents.find(doc =>
               doc.licence_id === props.licence.id &&
               doc.document_type === doc_type &&
@@ -155,7 +155,7 @@ import Layout from "../../Shared/Layout.vue";
               doc.document_name &&
               doc.id
             );
-        
+
             if (foundDocument) {
               return {
                 fileName: foundDocument.document_name,
@@ -167,24 +167,24 @@ import Layout from "../../Shared/Layout.vue";
             }
           }
         }
-        
+
         function updateStageDate(form_data){
           form_data.patch(`/update-registration-date/${props.licence.id}`, {
             preserveScroll: true,
-            onSuccess: () => { 
+            onSuccess: () => {
                       if(props.success){
                           notify(props.success)
                         }else if(props.error){
                           notify(props.error)
                         }
                         },
-          })     
+          })
         }
 
-        function submitDocument(file_data){        
+        function submitDocument(file_data){
           file_data.post('/upload-licence-document', {
             preserveScroll: true,
-            onSuccess: () => { 
+            onSuccess: () => {
                 if(props.success){
                               notify(props.success)
                            }else if(props.error){
@@ -198,7 +198,7 @@ import Layout from "../../Shared/Layout.vue";
         function deleteDocument(id){
           if(confirm('Document will be deleted...Continue ??')){
             Inertia.delete(`/delete-licence-document/${id}`, {
-              onSuccess: () => { 
+              onSuccess: () => {
                         if(props.success){
                             notify(props.success)
                          }else if(props.error){
@@ -208,7 +208,7 @@ import Layout from "../../Shared/Layout.vue";
             })
           }
         }
-        
+
          function getStatus(status_param) {
           let status;
           switch (status_param) {
@@ -235,7 +235,7 @@ import Layout from "../../Shared/Layout.vue";
               break;
               case '800':
               status = 'Municipal Comments'
-              break;  
+              break;
               case '900':
               status = 'Completed Application Scanned'
               break;
@@ -247,7 +247,7 @@ import Layout from "../../Shared/Layout.vue";
               break;
               case '1200':
               status = 'Lodged with DPO'
-              break; 
+              break;
               case '1300':
               status = 'Police Report'
               break;
@@ -291,7 +291,7 @@ import Layout from "../../Shared/Layout.vue";
           return status;
         }
 
-      return { 
+      return {
         notify,hasFile,
         form,getStatus,
         updateRegistration,
@@ -312,11 +312,10 @@ import Layout from "../../Shared/Layout.vue";
       AdditionalDocsComponent,
       StageComponent,
       DocComponent,
-      DocComponent,
       DateComponent,
       MergeDocumentComponent,
       MergeButtonComponent,
       Banner
     },
-    
+
   };

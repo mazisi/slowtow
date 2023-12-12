@@ -11,6 +11,10 @@ use App\Http\Controllers\DuplicateOriginalsController;
 
         Route::patch('/update-duplicate_original',[DuplicateOriginalsController::class,'updateStage']);
 
-        // Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
+        Route::post('/submit-duplicate_original-document',[DuplicateOriginalsController::class,'uploadDocument']);
 
-        // Route::patch('/update-licence-active-status/{slug}',[LicenceController::class,'updateActiveStatus']);
+        Route::delete('/delete-duplicate_original-document/{id}',[DuplicateOriginalsController::class,'deleteDocument']);
+
+        Route::patch('/update-duplicate_original-date/{id}',[DuplicateOriginalsController::class,'updateDate']);
+
+        Route::delete('/delete-duplicate-original/{slug}',[DuplicateOriginalsController::class,'destroy']);
