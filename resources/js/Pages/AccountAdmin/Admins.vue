@@ -76,7 +76,7 @@
           </div>
           <!-- end row -->
           <div class="row">
-            <div class="col-lg-8">
+            <div class="col-lg-9">
               <div class="row">
               <div class="col-lg-4" v-for="user in users.data" :key="user.id">
                   <div class="text-center card-box">
@@ -122,6 +122,7 @@
                           
                       </div>
                   </div>
+                  
               </div>
               <Paginate
               :modelName="users"
@@ -132,7 +133,7 @@
               </div>
 <!-- {{ form }} -->
 <!-- <div class="hidden"></div> -->
-              <div class="col-lg-4">
+              <div class="col-lg-3">
                 <div class="row">
                   <div class="col-12 columns">
                     <div class="input-group input-group-outline null is-filled ">
@@ -171,6 +172,9 @@
                       <div class="col-3 columns">
                         <button type="button" @click="generatePassword" class="btn btn-sm btn-secondary">Generate</button>
                       </div>
+                      <button type="submit" class="btn btn-primary" :disabled="editForm.processing">
+                        <span v-if="editForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        Update</button>
                  </div>
               </div>
           </div>
