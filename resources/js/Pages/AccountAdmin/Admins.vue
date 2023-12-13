@@ -117,8 +117,9 @@
                               <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype"></i></a></li>
                           </ul>
                           <button @click="editUser(user)" type="button" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">
-                            <i class="fas fa-pencil me-2"></i> Edit
+                            Edit
                           </button>
+                          Last Acrivity: {{ getMomentDate(user.last_activity) }}
                           
                       </div>
                   </div>
@@ -131,8 +132,7 @@
             </div>
           
               </div>
-<!-- {{ form }} -->
-<!-- <div class="hidden"></div> -->
+
               <div class="col-lg-3">
                 <div class="row">
                   <div class="col-12 columns">
@@ -157,6 +157,7 @@
                           <option :value="''">Select Role..</option>
                           <option value="slowtow-admin">Super Admin</option>
                           <option value="slowtow-user">Admin</option>
+                          <option value="client">Client</option>
                         </select>
                         </div>
                         <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>
@@ -172,9 +173,11 @@
                       <div class="col-3 columns">
                         <button type="button" @click="generatePassword" class="btn btn-sm btn-secondary">Generate</button>
                       </div>
-                      <button type="submit" class="btn btn-primary" :disabled="editForm.processing">
-                        <span v-if="editForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                        Update</button>
+                      <button type="button" @click="submitUser" class="btn btn-primary" :disabled="form.processing">
+                        <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                        </span>
+                        {{ form.id ? 'Update' : 'Create' }} User
+                        </button>
                  </div>
               </div>
           </div>
@@ -214,6 +217,7 @@
   import Paginate from '../../Shared/Paginate.vue';
   import { toast } from 'vue3-toastify';
    import 'vue3-toastify/dist/index.css';
+   import moment from 'moment';
   
   export default {
    props: {
@@ -235,25 +239,14 @@
             full_name: '',
             email: '',
             role: '',
-            password: '' ,
-            id: '',
-            profilePic: null
-          }) 
-
-          const editForm = useForm({
-            full_name: '',
-            email: '',
-            role: '',
             password: '',
             id: '',
             profilePic: null
           }) 
-        
+
           function submitUser() {
             form.post('/submit-user', {
               onSuccess: () => {
-                this.show_modal = false;
-                document.querySelector('.modal-backdrop').remove();
                 if(props.success){
                    notify(props.success)
                     }else if(props.error){
@@ -282,44 +275,17 @@
             }            
           }
 
-          //DRY PRNCIPLE VIOLATED--Will come to this!!!!!!!!!!!!!
-          function generateEditPassword(){
-            let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            let passwordLength = 8;
-
-            if(this.editForm.password == ''){
-              for (var i = 0; i <= passwordLength; i++) {
-                  var randomNumber = Math.floor(Math.random() * chars.length);
-                  this.editForm.password += chars.substring(randomNumber, randomNumber +1);
-             }
-            }else{
-              this.editForm.password = '';
-              for (var i = 0; i <= passwordLength; i++) {
-                  var randomNumber = Math.floor(Math.random() * chars.length);
-                  this.editForm.password += chars.substring(randomNumber, randomNumber +1);
-               }
-            }            
-          }
 
           function editUser(user){
-            this.form.full_name = user.name;
-            this.form.email = user.email;
-            this.form.role = user.role;
-            this.form.id = user.id;
+            form.full_name = user.name;
+            form.email = user.email;
+            form.role = user.roles[0].name;
+            form.id = user.id;
+            
           }
 
-          function updateUser(){
-            editForm.post('/update-user', {
-              onSuccess: () => {
-                this.show_modal = false;
-                document.querySelector('.modal-backdrop').remove();
-                if(props.success){
-                   notify(props.success)
-                    }else if(props.error){
-                      notify(props.error)
-                    }
-              }
-             })
+          function getMomentDate(date){
+            return moment(Date.now()).from(date);
           }
 
           function deActivateuser(id, status){
@@ -350,7 +316,7 @@
 
 
           function getFileName(e){
-            this.editForm.profilePic = e.target.files[0];
+            this.form.profilePic = e.target.files[0];
             this.file_name = e.target.files[0].name;
             this.file_has_apostrophe = this.file_name.includes("'");
           }
@@ -372,7 +338,6 @@
         toast,
         form,
         notify,
-        editForm,
         deleteUser,
         file_name,
         getFileName,
@@ -381,11 +346,9 @@
         show_modal,
         submitUser,
         generatePassword,
-        generateEditPassword,
         editUser,
-        updateUser,
         deActivateuser,
-        
+        getMomentDate
       }
     },
      components: {

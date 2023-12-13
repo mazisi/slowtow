@@ -21,6 +21,9 @@ class AdminsController extends Controller
     public function store(Request $request)
     {
         try {
+          if($request->id){
+           return $this->update($request);
+          }
             $request->validate([
                 'email' => 'required|email',
                 'full_name' => 'required',
@@ -55,7 +58,7 @@ class AdminsController extends Controller
         }
     }
 
-    public function update(Request $request){
+    public function update($request){
         try {
             $request->validate([
                 'email' => 'required|email',

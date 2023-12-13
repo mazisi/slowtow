@@ -33,6 +33,7 @@
   </li>
   
   </ul>
+
  <div v-if="uploadDoc.progress">
   <CircleProgressBar  
   :value="uploadDoc.progress.percentage"  
@@ -45,7 +46,11 @@
 </CircleProgressBar>
  </div>
 
-  <ViewFile/>
+  <ViewFile 
+  :filePath="hasFile"
+  />
+
+
 </template>
 <style scoped>
 .cursor-pointer{
@@ -57,7 +62,6 @@
 </style>
 <script>
 import { ref } from 'vue';
-import VuePdfEmbed from 'vue-pdf-embed';
 import { useForm } from '@inertiajs/inertia-vue3';
 import ViewFile from './ViewFile.vue';
 import { CircleProgressBar } from 'circle-progress.vue';
