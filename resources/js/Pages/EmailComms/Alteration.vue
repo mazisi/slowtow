@@ -4,6 +4,9 @@ import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import common from '../common-js/common.js';
+import useAlteration from '../Alterations/composables/useAlteration';
+import useToaster from '../../store/useToaster'
+
 
 export default {
   name: "Alterations",
@@ -25,10 +28,15 @@ export default {
 
   },
   data() {
+    const { getBadgeStatus } = useAlteration();
+    const { notifySuccess, notifyError } = useToaster();
     return {
       month: '',
       province: '',
-      stage: '', 
+      stage: '',
+      getBadgeStatus,
+      notifySuccess,
+      notifyError 
     }
   },
   components: {
@@ -91,56 +99,18 @@ methods: {
     },
      
 
-      notify(message){
-          if(this.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(this.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        },
-
     
 
     getStatus(status){
-      if(status == 100){
-        return 'Client Quoted'
-      }
-      if(status == 200){
-        return 'Client Invoiced'
-      }
-      if(status == 300){
-        return 'Client Paid'
-      }
-      if(status == 400){
-        return 'Prepare Alterations Application'
-      }
-      if(status == 500){
-        return 'Payment to the Liquor Board'
-      }
-      if(status == 600){
-        return 'Alterations Lodged'
-      }
-      if(status == 700){
-        return 'Alterations Certificate Issued'
-      }
-      if(status == 800){
-        return 'Alterations Delivered'
-      }else{
-        return 'Not Set'
-      }
+      return getBadgeStatus(status);
 
     }
   },
     mounted(){ 
           if(this.success){
-            notify(this.success)
+            notifySuccess(this.success)
           }else if(this.error){
-            notify(this.error)
+            notifyError(this.error)
           }
         },
 

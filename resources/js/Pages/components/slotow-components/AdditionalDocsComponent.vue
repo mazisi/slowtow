@@ -87,6 +87,7 @@ margin-left: 3px;
   import Paginate from '../../../Shared/Paginate.vue';
   import { toast } from 'vue3-toastify';
   import { ref } from 'vue';
+  import useToaster from '../../../store/useToaster'
 
   export default{
     props: {
@@ -96,6 +97,7 @@ margin-left: 3px;
       success: Object
     },
     setup(props){
+      const { notifySuccess, notifyError } = useToaster();
       let file_has_apostrophe = ref();
       let show_file_name = ref(false);
       let file_name = ref('');
@@ -124,9 +126,9 @@ margin-left: 3px;
         doc_form.post(route('submit_additional_doc'), {
             onSuccess: () => {
               if(props.success){
-                notify(props.success)
+                notifySuccess(props.success)
               }else if(props.error){
-              notify(props.error)
+                notifyError(props.error)
               }
               doc_form.reset();
               doc_form.document = '';
@@ -142,30 +144,18 @@ margin-left: 3px;
              preserveScroll: true,
              onSuccess: () => { 
               if(props.success){
-                notify(props.success)
+                notifySuccess(props.success)
               }else if(props.error){
-                notify(props.error)
+                notifyError(props.error)
               }
              },
            }); 
         }
       }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-
+     
         return{
-          submit,deleteDocument,notify, doc_form,getFileName,
+          submit,deleteDocument, doc_form,getFileName,
           show_file_name,file_name,file_has_apostrophe
         }
     },

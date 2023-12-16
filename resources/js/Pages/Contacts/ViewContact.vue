@@ -5,6 +5,7 @@ import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster'
 
 export default {
   
@@ -15,7 +16,7 @@ export default {
     contact: Object
   },
   setup(props) {
- 
+    const { notifySuccess, notifyError } = useToaster();
    let showMenu = false;
    const form = useForm({
       first_name: props.contact.first_name,
@@ -29,9 +30,9 @@ export default {
             form.patch(`/update-individual-contact/${props.contact.id}`, {
                 onSuccess: () => {
                   if(props.success){
-                  notify(props.success)
+                    notifySuccess(props.success)
                   }else if(props.error){
-                  notify(props.error)
+                    notifyError(props.error)
                  }
                   form.reset()
                 } 
@@ -44,26 +45,12 @@ export default {
         }
       }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-
     return{
       showMenu,
       form,
       update,
       deleteContact,
-      toast,
-      notify
+      toast
     }
   },
   components: {

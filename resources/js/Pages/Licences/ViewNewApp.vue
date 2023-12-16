@@ -301,6 +301,7 @@ import 'vue3-toastify/dist/index.css';
 import common from '../common-js/common.js';
 import { computed } from 'vue';
 import Task from "../Tasks/Task.vue";
+import useToaster from '../../store/useToaster'
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 
 export default {
@@ -319,6 +320,8 @@ export default {
     setup (props) {
         let companyOptions = props.companies;
         let peopleOptions = props.people;
+        const { notifySuccess, notifyError } = useToaster();
+
 
         const form = useForm({
             trading_name: props.licence.trading_name,
@@ -342,11 +345,11 @@ export default {
             person_id: props.licence.belongs_to == 'Individual' ? props.licence.people.id : '',
 
         })
-        console.log(form)
+        
         function submit() {
             form.patch(`/update-new-app/${props.licence.slug}`, {
                 onSuccess: () => {
-                    notify(props.success)
+                    notifySuccess(props.success)
                 },
                 preserveScroll: true,
             })
@@ -359,18 +362,7 @@ export default {
             }
         }
 
-        const notify = (message) => {
-            if(props.success){
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-
-            }else if(props.error){
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-        }
+    
 
         function selectApplicant(event){
             if(form.belongs_to === 'Company'){
@@ -385,9 +377,9 @@ export default {
 
         // onMounted(() => {
         //   if(props.success){
-        //     notify(props.success)
+        //     notifySuccess(props.success)
         //   }else if(props.error){
-        //     notify(props.error)
+        //     notifyError(props.error)
         //   }
         // });
 
@@ -401,7 +393,7 @@ export default {
         return { submit, form , toast,
             companyOptions,
             peopleOptions,
-            deleteLicence, notify,
+            deleteLicence,
             computedProvinces,
             computedBoardRegions,
             selectApplicant

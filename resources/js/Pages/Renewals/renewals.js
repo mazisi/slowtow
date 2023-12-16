@@ -8,7 +8,7 @@ import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-
+import useToaster from '../../store/useToaster';
 import { ref,onMounted } from 'vue';
 import StageComponent from "@/Pages/components/slotow-components/StageComponent.vue";
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
@@ -29,6 +29,7 @@ export default {
 
     setup (props) {
         const year = ref(new Date().getFullYear());
+        const { notifySuccess, notifyError } = useToaster();
 
 
         const form = useForm({
@@ -77,9 +78,9 @@ export default {
                 Inertia.delete(`/delete-renewal-document/${id}`, {
                     onSuccess: () => {
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                         }else if(props.error){
-                            notify(props.error)
+                            notifyError(props.error)
                         }
                     }
                 })
@@ -101,9 +102,9 @@ export default {
                 onSuccess: () => {
 
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                     uploadDoc.reset();
                 },
@@ -115,9 +116,9 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 }
             })
@@ -156,20 +157,6 @@ export default {
             this.file_has_apostrophe = this.file_name.includes("'");
         }
 
-        const notify = (message) => {
-            if(props.success){
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-                props.success='';
-                props.error=''
-            }else if(props.error){
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-
-        }
 
         function checkingFileProgress(message){
             setTimeout(() => {
@@ -226,7 +213,7 @@ export default {
 
         }
 
-        return { year,form, notify,
+        return { year,form,
             updateRenewal,getStatus,
             getRenewalYear, pushData, submitDocument,
             deleteDocument,

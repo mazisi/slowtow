@@ -53,18 +53,7 @@ export default {
            }, { preserveState: true, replace: true });
         }, 1000));
 
-        const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+       
 
         function getUrlParam(){
           const urlParams = new URLSearchParams(window.location.search);
@@ -92,7 +81,6 @@ export default {
       search,
       toast,
       limit,
-      notify,
       computedCompanyTypes,
       getUrlParam
     }

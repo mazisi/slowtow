@@ -116,6 +116,7 @@ import { onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster';
 
 export default {
   name: "Transfers",
@@ -127,7 +128,8 @@ export default {
     errors: Object
   },
   setup(props){
-
+    const { notifySuccess, notifyError } = useToaster();
+   
     Inertia.on('navigate', (event) => {
           Inertia.visit(`${event.detail.page.url}`, { preserveState: true, preserveScroll: true });
         })
@@ -140,30 +142,18 @@ export default {
         }
 
 
-        const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+      
 
         onMounted(() => {
           if(props.success){
-            notify(props.success)
+            notifySuccess(props.success)
           }else if(props.error){
-            notify(props.error)
+            notifyError(props.error)
           }
         });
 
     return {
       limit,
-      notify,
       toast
     }
   },

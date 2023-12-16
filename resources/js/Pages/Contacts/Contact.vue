@@ -129,18 +129,7 @@ export default {
   }, 2000));
 
 
-  const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+  
 
         // onMounted(() => {
         //   if(props.success){
@@ -154,8 +143,7 @@ export default {
       q,
       search,
       form,
-      toast,
-      notify
+      toast
      }
   },
  components: {

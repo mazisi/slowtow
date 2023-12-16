@@ -9,6 +9,7 @@ import Task from "../Tasks/Task.vue";
 import { ref } from 'vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster';
 
 export default {
   props: {
@@ -58,6 +59,8 @@ export default {
     let show_modal = ref(true);  
     let show_file_name = ref(false);
     let file_name = ref('');
+    const { notifySuccess, notifyError } = useToaster();
+
 
     const form = useForm({
       status: [],
@@ -93,9 +96,9 @@ export default {
                 document.querySelector('.modal-backdrop').remove();
                 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
 
                 uploadDoc.reset();
@@ -130,9 +133,9 @@ export default {
           Inertia.delete(`/delete-temporal-licence-document/${id}`, {
             onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
           })
@@ -152,9 +155,9 @@ export default {
         preserveScroll: true,
         onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
       })
@@ -194,26 +197,15 @@ export default {
              preserveScroll: true,
              onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
            }) 
       }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+      
 
         function checkingFileProgress(message){
           setTimeout(() => {
@@ -288,7 +280,7 @@ export default {
      mergeDocuments,
      mergeForm,
      deleteTemporalLicence,
-     toast,viewFile,checkingFileProgress,notify
+     toast,viewFile,checkingFileProgress
      }
   },
    components: {

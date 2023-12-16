@@ -16,8 +16,39 @@ function getBadgeStatus(status_param) {
     return statusMap[status_param] || defaultStatus;
 }
 
+function getStatus(status){
+    if(status == 100){
+      return 'Client Quoted'
+    }
+    if(status == 200){
+      return 'Client Invoiced'
+    }
+    if(status == 300){
+      return 'Client Paid'
+    }
+    if(status == 400){
+      return 'Prepare Alterations Application'
+    }
+    if(status == 500){
+      return 'Payment to the Liquor Board'
+    }
+    if(status == 600){
+      return 'Alterations Lodged'
+    }
+    if(status == 700){
+      return 'Alterations Certificate Issued'
+    }
+    if(status == 800){
+      return 'Alterations Delivered'
+    }else{
+      return 'Not Set'
+    }
+
+  }
+
     return {
-        getBadgeStatus
+        getBadgeStatus,
+        getStatus
     }
     
 }

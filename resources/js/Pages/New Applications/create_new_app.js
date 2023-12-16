@@ -66,11 +66,8 @@
       }
 
         function filterLicenceTypes(){
-            console.log(form.province);
             licenceByProvince.value = props.licence_dropdowns
                 .filter(obj => obj.province === form.province);
-
-            console.log(licenceByProvince);
         }
 
       const filterForm = useForm({

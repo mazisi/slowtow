@@ -17,6 +17,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import 'vue3-toastify/dist/index.css';
 import { defineEmits } from 'vue'
 import {toast} from "vue3-toastify";
+import useToaster from '../../../store/useToaster';
 
 export default{
 
@@ -32,33 +33,22 @@ export default{
     },
     setup(props, context){
         const emit = defineEmits(['date-value-changed'])
+      const { notifySuccess, notifyError } = useToaster();
+
         const form = useForm({
             renewal_id: props.renewal.id,
             stage: props.stage,
             dated_at:  props.dated_at
         })
-        const notify = (message) => {
-            if(props.success){
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-                props.success='';
-                props.error=''
-            }else if(props.error){
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-
-        }
+     
         function updateDate(){
             form.patch(`/update-renewal-date/${props.renewal.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 }
             })
@@ -66,7 +56,7 @@ export default{
 
 
         return {
-            form,emit,updateDate, notify
+            form,emit,updateDate
         }
     }
 }

@@ -9,6 +9,7 @@ import Task from "../Tasks/Task.vue";
 import common from '../common-js/common.js';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster';
 // import vueFilePond from 'vue-filepond';
 // import "filepond/dist/filepond.min.css"
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
@@ -47,6 +48,7 @@ export default {
         let all_licences = ref([]);
         
       
+    const { notifySuccess, notifyError } = useToaster();
         
         
 
@@ -124,9 +126,9 @@ export default {
           preserveScroll: true,
           onSuccess: () => { 
             if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
          }
         })    
@@ -140,9 +142,9 @@ export default {
           document.querySelector('.modal-backdrop').remove();
 
                 if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
           originalLicenceForm.reset();
          },
@@ -154,9 +156,9 @@ export default {
             Inertia.delete(`/delete-licence-document/${id}`,{
               onSuccess: () => { 
                 if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
                },
             })
@@ -168,9 +170,9 @@ export default {
             Inertia.delete(`/delete-licence/${props.licence.slug}`,{
               onSuccess: () => { 
                if(props.success){
-            notify(props.success)
+            notifySuccess(props.success)
           }else if(props.error){
-            notify(props.error)
+            notifyError(props.error)
           }
               },
             })
@@ -194,9 +196,9 @@ export default {
                     updateStatusForm.patch(`/update-licence-active-status/${props.licence.slug}`,{
                       onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
                       })
@@ -228,18 +230,7 @@ export default {
       }
       
       
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+
 
         function checkingFileProgress(message){
           setTimeout(() => {
@@ -272,7 +263,7 @@ export default {
       show_current_company,
       change_company,
       companyOptions,peopleOptions,
-      form,toast,notify,
+      form,toast,
       limit,common,
       changeCompany,
       updateLicence,

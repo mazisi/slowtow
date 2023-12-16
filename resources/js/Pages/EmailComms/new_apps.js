@@ -56,18 +56,7 @@ export default {
         })
         }
 
-        const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+    
 
         watch(term, _.debounce(function (value) {
           Inertia.get(route('get_new_app_template'), { 
@@ -142,7 +131,6 @@ export default {
           form,
           term,
           search,
-          notify,
           getUrlParam
         }
         

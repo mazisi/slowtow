@@ -226,6 +226,7 @@
    import moment from 'moment';
    import { Swiper,SwiperSlide  } from 'swiper/vue';
    import 'swiper/css';
+   import useToaster from "@/store/useToaster";
   
   export default {
    props: {
@@ -237,7 +238,7 @@
     
     
     setup (props) {
-
+      const { notifySuccess, notifyError } = useToaster();
           let showMenu = ref(false);
           let show_modal = ref(true); 
           let file_name = ref('');
@@ -256,9 +257,9 @@
             form.post('/submit-user', {
               onSuccess: () => {
                 if(props.success){
-                   notify(props.success)
+                  notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
                 form.reset('body','full_name','email','role');
               }
@@ -300,9 +301,9 @@
             Inertia.post(`/deactivate-user/${id}/${status}`,{
               onSuccess: () => {
                 if(props.success){
-                   notify(props.success)
+                  notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
               }
             })
@@ -313,9 +314,9 @@
                 Inertia.patch(`/delete-user/${user_id}`,{
                 onSuccess: () => {
                   if(props.success){
-                   notify(props.success)
+                    notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
                 }
                 })
@@ -329,19 +330,7 @@
             this.file_has_apostrophe = this.file_name.includes("'");
           }
 
-          const notify = (message) => {
-            if(props.success){
-              toast.success(message, {
-              autoClose: 2000,
-            });
-            
-            }else if(props.error){
-              toast.error(message, {
-              autoClose: 2000,
-            });
-            }
-        }
-
+      
         const onSwiper = (swiper) => {
         console.log(swiper);
       };
@@ -354,7 +343,6 @@
         onSlideChange,
         toast,
         form,
-        notify,
         deleteUser,
         file_name,
         getFileName,

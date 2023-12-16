@@ -5,6 +5,7 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster'
 
 export default {
   name: "Emmail-Comms",
@@ -14,11 +15,14 @@ export default {
     error: String
   },
   data() {
+    const { notifySuccess, notifyError } = useToaster();
     return {
       month: '',
       province: '',
       stage: '',
-      isActive: false
+      isActive: false,
+      notifySuccess,
+      notifyError
     }
   },
   components: {
@@ -80,18 +84,6 @@ methods: {
         }
         },
 
-         notify(message){
-          if(this.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(this.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
 
     },
 
@@ -106,9 +98,9 @@ methods: {
 
     mounted(){ 
           if(this.success){
-            notify(this.success)
+            notifySuccess(this.success)
           }else if(this.error){
-            notify(this.error)
+            notifyError(this.error)
           }
         }
 };
