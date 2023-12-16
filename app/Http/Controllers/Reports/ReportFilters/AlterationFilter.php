@@ -54,13 +54,13 @@ class AlterationFilter{
           
           ->when(request('is_licence_complete') === 'Pending' , function ($query){
                   $query->where(function ($query) {
-                      $query->where('alterations.status','<', 7);
+                      $query->where('alterations.status','<', 700);
                   });
               
               })
 
           ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-              $query->where('alterations.status', '>=', 7);
+              $query->where('alterations.status', '>=', 700);
           });
 
       })

@@ -92,14 +92,14 @@ export default {
 <input type="hidden" v-model="form.slug">
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-Quoted" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
+<input id="client-Quoted" class="active-checkbox" v-model="form.status" type="checkbox" value="100">
 <label for="client-Quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted</label>
 </div>
 </div>  
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-Invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
+<input id="client-Invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="200">
 <label for="client-Invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced</label>
 </div>
 </div>
@@ -108,7 +108,7 @@ export default {
 
 <div class="col-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="alteration-Paid" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
+<input id="alteration-Paid" class="active-checkbox" v-model="form.status" type="checkbox" value="300">
 <label for="alteration-Paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>
@@ -119,7 +119,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="alteration-Application" class="active-checkbox" v-model="form.status" type="checkbox" value="4">
+<input id="alteration-Application" class="active-checkbox" v-model="form.status" type="checkbox" value="400">
 <label for="alteration-Application" class="form-check-label text-body text-truncate status-heading">Prepare Alterations Application</label>
 </div>
 </div> 
@@ -127,7 +127,7 @@ export default {
 <hr/>
 <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-  <input id="alteration-Liquor" class="active-checkbox" v-model="form.status" type="checkbox" value="5">
+  <input id="alteration-Liquor" class="active-checkbox" v-model="form.status" type="checkbox" value="500">
   <label for="alteration-Liquor" class="form-check-label text-body text-truncate status-heading">Payment to the Liquor Board</label>
   </div>
   </div> 
@@ -135,7 +135,7 @@ export default {
   <hr/>
   <div class="col-md-8 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input id="alteration-Lodged" class="active-checkbox" v-model="form.status" type="checkbox" value="6">
+    <input id="alteration-Lodged" class="active-checkbox" v-model="form.status" type="checkbox" value="600">
     <label for="alteration-Lodged" class="form-check-label text-body text-truncate status-heading">Alterations Lodged</label>
     </div>
  </div> 
@@ -151,7 +151,7 @@ export default {
  <hr/>
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-      <input id="alteration-Certificate" class="active-checkbox" v-model="form.status" type="checkbox" value="7">
+      <input id="alteration-Certificate" class="active-checkbox" v-model="form.status" type="checkbox" value="700">
       <label for="alteration-Certificate" class="form-check-label text-body text-truncate status-heading">Alterations Certificate Issued</label>
       </div>
     </div> 
@@ -159,7 +159,7 @@ export default {
 <hr/>
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input id="alteration-Delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="8">
+    <input id="alteration-Delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="800">
     <label for="alteration-Delivered" class="form-check-label text-body text-truncate status-heading">Alterations Delivered</label>
     </div>
   </div> 

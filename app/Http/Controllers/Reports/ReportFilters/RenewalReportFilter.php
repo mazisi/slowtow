@@ -53,12 +53,12 @@ class RenewalReportFilter {
                $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
            })
            ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-               $query->where('licence_renewals.status','<', 5)
+               $query->where('licence_renewals.status','<', 500)
                ->orWhereNull('licence_renewals.status');
            })
 
            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-               $query->where('licence_renewals.status','>=', 5);
+               $query->where('licence_renewals.status','>=', 500);
            });
 
            })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')

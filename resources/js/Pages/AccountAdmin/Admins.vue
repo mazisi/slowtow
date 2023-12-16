@@ -50,7 +50,7 @@
           border-radius: 2em;
       }
       .text-muted {
-          color: #98a6ad!important;
+          color: #000!important;
       }
       h4 {
           line-height: 22px;
@@ -75,9 +75,19 @@
               <!-- end col -->
           </div>
           <!-- end row -->
+    
+   
           <div class="row">
             <div class="col-lg-9">
               <div class="row">
+                <!-- <swiper
+    :slides-per-view="3"
+    :space-between="50"
+    @swiper="onSwiper"
+    @slideChange="onSlideChange">
+    
+    
+  </swiper> -->
               <div class="col-lg-4" v-for="user in users.data" :key="user.id">
                   <div class="text-center card-box">
                       <div class="member-card pt-2 pb-2">
@@ -109,17 +119,13 @@
                                   </span>
                                 </p>
                                </template>
-                              
+                              <div class="text-sm text-muted">Last Activity:</div>
+                              <div class="text-sm text-muted">{{ getMomentDate(user.last_activity) }}</div>
                           </div>
-                          <ul class="social-links list-inline">
-                              <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Facebook"><i class="fa fa-facebook"></i></a></li>
-                              <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Twitter"><i class="fa fa-twitter"></i></a></li>
-                              <li class="list-inline-item"><a title="" data-placement="top" data-toggle="tooltip" class="tooltips" href="" data-original-title="Skype"><i class="fa fa-skype"></i></a></li>
-                          </ul>
-                          <button @click="editUser(user)" type="button" class="btn btn-primary mt-3 btn-rounded waves-effect w-md waves-light">
+                          <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 btn-rounded waves-effect w-md waves-light">
                             Edit
                           </button>
-                          Last Acrivity: {{ getMomentDate(user.last_activity) }}
+                          
                           
                       </div>
                   </div>
@@ -173,7 +179,7 @@
                       <div class="col-3 columns">
                         <button type="button" @click="generatePassword" class="btn btn-sm btn-secondary">Generate</button>
                       </div>
-                      <button type="button" @click="submitUser" class="btn btn-primary" :disabled="form.processing">
+                      <button type="button" @click="submitUser" class="btn bg-gradient-dark" :disabled="form.processing">
                         <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
                         </span>
                         {{ form.id ? 'Update' : 'Create' }} User
@@ -218,6 +224,8 @@
   import { toast } from 'vue3-toastify';
    import 'vue3-toastify/dist/index.css';
    import moment from 'moment';
+   import { Swiper,SwiperSlide  } from 'swiper/vue';
+   import 'swiper/css';
   
   export default {
    props: {
@@ -333,8 +341,17 @@
             });
             }
         }
+
+        const onSwiper = (swiper) => {
+        console.log(swiper);
+      };
+      const onSlideChange = () => {
+        console.log('slide change');
+      };
   
       return {
+        onSwiper,
+        onSlideChange,
         toast,
         form,
         notify,
@@ -357,6 +374,8 @@
       Head,
       Banner,
       Paginate,
+      Swiper,
+      SwiperSlide
       
     },
     

@@ -19,7 +19,7 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
   function getMailTemplate($renewal){
     $template = '';
 
-     if($renewal->status == '1'){//quoted
+     if($renewal->status == '100'){//quoted
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached quotation and below basic requirements for an&nbsp;alteration&rsquo;s application:</p>
@@ -30,13 +30,13 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
       <p>Once the application has been lodged, we will furnish you with the necessary documents to have on display in the interim to avoid any problems with inspectors.</p>
       <p><br>Many thanks,</p>'; 
 
-  }elseif ($renewal->status == '2') {//Client Invoiced
+  }elseif ($renewal->status == '200') {//Client Invoiced
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached invoice in respect of the alteration’s application.</p>
       <p><br>Many thanks,</p>';
       
-  }elseif ($renewal->status == '5') {//Payment To the liquour board
+  }elseif ($renewal->status == '500') {//Payment To the liquour board
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached proof of payment to the Liquor Board in respect of the alteration’s application. Please ensure that this document is on display until
@@ -44,7 +44,7 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
       <p><br>Many thanks,</p>';
 
       
-  }elseif ($renewal->status == '6') {//Lodged
+  }elseif ($renewal->status == '600') {//Lodged
      
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
@@ -52,7 +52,7 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
        issued.</p>
       <p><br>Many thanks,</p>';
 
-    }elseif ($renewal->status == '7') {//Issued
+    }elseif ($renewal->status == '700') {//Issued
      
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>

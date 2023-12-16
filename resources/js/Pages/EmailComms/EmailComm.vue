@@ -178,10 +178,10 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="1">Client Quoted</option>
-<option value="2">Client Invoiced </option>
-<option value="4">Payment to the Liquor Board</option>
-<option value="5">Renewal Issued</option>
+<option value="100">Client Quoted</option>
+<option value="200">Client Invoiced </option>
+<option value="400">Payment to the Liquor Board</option>
+<option value="500">Renewal Issued</option>
 
 </select>
 </div>

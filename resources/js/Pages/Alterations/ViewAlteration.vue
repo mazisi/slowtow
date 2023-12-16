@@ -27,6 +27,9 @@
    <h6> Alteration Info for: 
     <Link :href="`/view-licence?slug=${alteration.licence.slug}`">
       <span class="text-success">{{ alteration.licence.trading_name }}</span></Link></h6>
+      <p class="text-sm mb-0">Current Stage: 
+          <span v-html="getStatus(alteration.status)"></span>
+</p>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 

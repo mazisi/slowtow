@@ -6,7 +6,7 @@ import Paginate from '../../Shared/Paginate.vue';
 import common from '../common-js/common.js';
 
 export default {
-  name: "Altreations",
+  name: "Alterations",
   props: {
     alterations: Object,
     errors: Object,
@@ -14,14 +14,14 @@ export default {
     success: String
 
 //Status keys:
-// 1. Client Quoted
-//2 => Client Invoiced
-//3 => Client Paid
-//4 => Prepare Alterations Application
-//5 => Payment to the Liquor Board
-//6 => Alterations Lodged
-//7 => Alterations Certificate Issued
-//8 => Alterations Delivered
+// 100. Client Quoted
+//200 => Client Invoiced
+//300 => Client Paid
+//400 => Prepare Alterations Application
+//500 => Payment to the Liquor Board
+//600 => Alterations Lodged
+//700 => Alterations Certificate Issued
+//800 => Alterations Delivered
 
   },
   data() {
@@ -102,12 +102,40 @@ methods: {
             autoClose: 2000,
           });
           }
-        }
-
-    },
+        },
 
     
 
+    getStatus(status){
+      if(status == 100){
+        return 'Client Quoted'
+      }
+      if(status == 200){
+        return 'Client Invoiced'
+      }
+      if(status == 300){
+        return 'Client Paid'
+      }
+      if(status == 400){
+        return 'Prepare Alterations Application'
+      }
+      if(status == 500){
+        return 'Payment to the Liquor Board'
+      }
+      if(status == 600){
+        return 'Alterations Lodged'
+      }
+      if(status == 700){
+        return 'Alterations Certificate Issued'
+      }
+      if(status == 800){
+        return 'Alterations Delivered'
+      }else{
+        return 'Not Set'
+      }
+
+    }
+  },
     mounted(){ 
           if(this.success){
             notify(this.success)
@@ -125,6 +153,8 @@ methods: {
       return common.getBoardRegions();
     }
   },
+
+
 };
 </script>
 <style>
@@ -248,22 +278,15 @@ methods: {
           </div>
         </td>
         <td>
+          
           <p class="text-xs font-weight-bold mb-0">{{ alteration.licence.licence_number ? alteration.licence.licence_number : '' }}</p>
         </td>
         <td class="align-middle font-weight-bold text-center text-sm">
           <span>{{ new Date(alteration.licence.licence_date).toISOString().split('T')[0] }}</span>
         </td>
          <td class="align-middle text-center">
-         
-          <span class="font-weight-bold text-sm" v-if="alteration.status == '1'">Client Quoted</span>
-          <span v-if="alteration.status == '2'" class="font-weight-bold text-sm">Client Invoiced</span>
-          <span v-if="alteration.status == '3'" class="font-weight-bold text-sm">Client Paid</span>
-          <span v-if="alteration.status == '4'" class="font-weight-bold text-sm">Prepare Alterations Application</span>
-          <span v-if="alteration.status == '5'" class="font-weight-bold text-sm">Payment to the Liquor Board</span>
-          <span v-if="alteration.status == '6'" class="font-weight-bold text-sm">Alterations Lodged </span>
-          <span v-if="alteration.status == '7'" class="font-weight-bold text-sm">Alterations Certificate Issued</span>
-          <span v-if="alteration.status == '8'" class="font-weight-bold text-sm">Alterations Delivered </span>
-        </td>
+            {{ getStatus(alteration.status) }}
+          </td>
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${alteration.slug}/alterations`" class="text-secondary text-center font-weight-bold text-xs"> 
         <i class="fa fa-envelope"></i> Send </Link>

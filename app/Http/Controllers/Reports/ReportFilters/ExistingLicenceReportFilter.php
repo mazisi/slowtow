@@ -56,12 +56,12 @@ class ExistingLicenceReportFilter{
              //})
 
              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                $query->where('status','<', 15)
+                $query->where('status','<', 2300)
                 ->orWhereNull('status');
             })
 
             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                $query->where('status','>=', 150);
+                $query->where('status','>=', 2300);
             });
             
             })

@@ -49,6 +49,7 @@
         "core-js": "3.6.5",
         "epic-spinners": "^1.1.0",
         "moment": "^2.29.4",
+        "swiper": "^11.0.5",
         "tinymce": "^6.1.2",
         "v-offline": "^3.4.0",
         "vue-filepond": "^7.0.3",

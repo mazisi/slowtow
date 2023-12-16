@@ -3,14 +3,15 @@ import Multiselect from "@vueform/multiselect";
 import { Link, useForm, Head } from "@inertiajs/inertia-vue3";
 import Banner from "../components/Banner.vue";
 import { Inertia } from "@inertiajs/inertia";
-import { ref, onMounted } from "vue";
-import Task from "../Tasks/Task.vue";
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import Task from "../Tasks/Task.vue";
 import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 import DateComponent from "../components/slotow-components/DateComponent.vue";
+import useAlteration from "./composables/useAlteration";
+import useToaster from '../../store/useToaster'; 
 
 export default {
     name: "ViewAlteration",
@@ -24,6 +25,10 @@ export default {
     },
     setup(props) {
         let showMenu = false;
+        
+        const { getBadgeStatus } = useAlteration();
+        const { notifySuccess, notifyError } = useToaster();
+
         const form = useForm({
             licence_slug: props.alteration.licence.slug,
             slug: props.alteration.slug,
@@ -32,7 +37,12 @@ export default {
             prevStage: null
         });
 
-       
+
+        function getStatus(status) {
+            return getBadgeStatus(status);
+          }
+
+          
 
         function update() {
             form.patch(`/update-alteration`, {
@@ -44,9 +54,9 @@ export default {
                 },
                 onSuccess: () => {
                     if (props.success) {
-                        notify(props.success);
+                        notifySuccess(props.success);
                     } else if (props.error) {
-                        notify(props.error);
+                        notifySuccess(props.error);
                     }
                 },
             });
@@ -68,25 +78,15 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (props.success) {
-                        notify(props.success);
+                        notifySuccess(props.success);
                     } else if (props.error) {
-                        notify(props.error);
+                        notifyError(props.error);
                     }
                 },
             });
         }
 
-        const notify = (message) => {
-            if (props.success) {
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-            } else if (props.error) {
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-        };
+        
 
         function pushData(e, status_value,prevStage) {
             if (e.target.checked) {
@@ -154,9 +154,9 @@ export default {
             preserveScroll: true,
             onSuccess: () => { 
                       if(props.success){
-                          notify(props.success)
+                           notifySuccess(props.success)
                         }else if(props.error){
-                          notify(props.error)
+                            notifyError(props.error)
                         }
                         },
           })     
@@ -167,9 +167,9 @@ export default {
               preserveScroll: true,
               onSuccess: () => { 
                  if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                  }else if(props.error){
-                  notify(props.error)
+                  notifyError(props.error)
                  }
                 
            },
@@ -181,9 +181,9 @@ export default {
             Inertia.delete(`/delete-alteration-document/${id}`, {
               onSuccess: () => { 
                if(props.success){
-                  notify(props.success)
+                   notifySuccess(props.success)
                 }else if(props.error){
-                  notify(props.error)
+                    notifyError(props.error)
                 }
               },
             })
@@ -211,10 +211,9 @@ export default {
             update,
             pushData,
             hasFile,
-            toast,
             getAlterationDate,
             deleteAlteration,
-            notify,
+            getStatus,
             submitDocument,
             deleteDocument
         };

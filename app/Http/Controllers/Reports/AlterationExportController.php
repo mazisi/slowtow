@@ -59,28 +59,28 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
 
         function getStatus($number) : string {
             switch ($number) {
-                case '1':
+                case '100':
                     $status = 'Client Quoted';
                 break;
-                case '2':
+                case '200':
                     $status = 'Client Invoiced';
                     break;
-                case '3':
+                case '300':
                     $status = 'Client Paid';
                     break;
-                case '4':
+                case '400':
                     $status = 'Prepare Alterations Application';
                     break;
-                case '5':
+                case '500':
                     $status = 'Payment to the Liquor Board';
                     break;
-                case '6':
+                case '600':
                     $status = 'Alterations Lodged';
                     break;
-                case '7':
+                case '700':
                     $status = 'Alterations Certificate Issued';
                     break;
-                case '8':
+                case '800':
                     $status = 'Alterations Delivered';
                     break;
                 default:
