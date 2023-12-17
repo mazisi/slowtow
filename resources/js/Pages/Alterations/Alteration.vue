@@ -55,7 +55,7 @@ export default {
         
 
         getStatus(status_param) {
-            return getBadgeStatus(status_param);
+            return this.getBadgeStatus(status_param);
         },
 
     },

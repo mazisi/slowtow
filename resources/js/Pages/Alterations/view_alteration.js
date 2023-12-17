@@ -10,7 +10,7 @@ import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 import DateComponent from "../components/slotow-components/DateComponent.vue";
-import useAlteration from "./composables/useAlteration";
+import useAlteration from "./composables/useAlteration.js";
 import useToaster from '../../store/useToaster'; 
 
 export default {

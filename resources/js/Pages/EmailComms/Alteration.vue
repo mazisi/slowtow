@@ -102,15 +102,15 @@ methods: {
     
 
     getStatus(status){
-      return getBadgeStatus(status);
+      return this.getBadgeStatus(status);
 
     }
   },
     mounted(){ 
           if(this.success){
-            notifySuccess(this.success)
+            this.notifySuccess(this.success)
           }else if(this.error){
-            notifyError(this.error)
+            this.notifyError(this.error)
           }
         },
 

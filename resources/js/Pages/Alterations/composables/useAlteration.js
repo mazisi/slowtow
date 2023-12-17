@@ -1,5 +1,5 @@
 export default function useAlteration() {
-function getBadgeStatus(status_param) {
+function getBadgeStatus(status) {
     const statusMap = {
         '100': '<span class="badge bg-dark text-default">Client Quoted</span>',
         '200': '<span class="badge bg-info text-default">Client Invoiced</span>',
@@ -13,7 +13,7 @@ function getBadgeStatus(status_param) {
 
     const defaultStatus = '<span class="badge bg-default text-default">Not Set</span>';
 
-    return statusMap[status_param] || defaultStatus;
+    return statusMap[status] || defaultStatus;
 }
 
 function getStatus(status){
