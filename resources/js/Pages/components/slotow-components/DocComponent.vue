@@ -26,10 +26,22 @@
           stage. The order of the documents should be Stage 13  Stage 11  Stage
           10  Stage 9.
          -->
-      <label v-if="orderByNumber !== 1400" :for="uploadDoc.doc_type">
+      <span><label v-if="orderByNumber !== 1400" :for="uploadDoc.doc_type">
         <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
         <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
-      </label>
+      </label> </span>   
+      
+      <span v-if="uploadDoc.progress">
+  <CircleProgressBar  
+  :value="uploadDoc.progress.percentage"  
+  :max="100"  
+  percentage  
+ rounded
+ :size="30"
+ :colorFilled="'#4caf50'"
+ :animationDuration="'0.7s'">
+</CircleProgressBar>
+</span>
       
       <div v-if="uploadDoc.processing" class="spinner-border text-danger spinner-border-sm" role="status">
         <span class="visually-hidden">Loading...</span>
@@ -40,17 +52,7 @@
   
   </ul>
 
- <div v-if="uploadDoc.progress">
-  <CircleProgressBar  
-  :value="uploadDoc.progress.percentage"  
-  :max="100"  
-  percentage  
- rounded
- :size="60"
- :colorFilled="'#4caf50'"
- :animationDuration="'0.7s'">
-</CircleProgressBar>
- </div>
+
 
   <ViewFile 
   :filePath="hasFile"

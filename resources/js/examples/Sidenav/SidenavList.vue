@@ -288,7 +288,7 @@
       
 
     </ul>
-  <ul class="navbar-nav">
+  <ul class="navbar-nav mt-3">
     <li class="nav-item">
       <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
   <div class="hstack gap-3">
@@ -315,6 +315,8 @@
 </div>
     </li>
   </ul>
+
+
   </div>
 </template>
 <script>

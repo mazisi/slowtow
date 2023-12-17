@@ -32,7 +32,7 @@ class LicenceDocsController extends Controller
         if (!$this->fileExists($filePath)) {
             $fileModel = $this->createLicenceDocument($request, $fileName);
             $this->updateLicenceStatusAndFlags($request, $fileModel);
-            (new WholesaleController())->generateLicenceIssuedDocs($request->licence_id);
+            // (new WholesaleController())->generateLicenceIssuedDocs($request->licence_id);
             return back()->with('success', 'Document uploaded successfully.');
         } else {
             return back()->with('error', 'Azure storage could not be reached. Please try again.');
