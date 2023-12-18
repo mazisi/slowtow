@@ -109,7 +109,7 @@
                           :dated_at="renewal.client_paid_at"
                           :success="success"
                       />
-                        {{}}
+
                       <DocComponent
                           :documentModel="renewal"
                           @file-value-changed="submitDocument"
