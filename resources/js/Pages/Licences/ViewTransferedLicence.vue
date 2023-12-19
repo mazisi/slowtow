@@ -9,7 +9,7 @@ import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-
+import useToaster from '../../store/useToaster'
 
 export default {
  props: {
@@ -56,8 +56,9 @@ export default {
     // let options = props.companies_dropdown;
     let show_file_name = ref(false);
     let file_name = ref('');
-
+    const { notifySuccess, notifyError } = useToaster();
     const form = useForm({
+      
           trading_name: props.view_transfer.licence.trading_name,
           new_company: props.view_transfer.company_id,
           transfer_date: props.view_transfer.date,
@@ -93,9 +94,9 @@ export default {
           preserveScroll: true,
           onSuccess: () => {
             if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                 }
           }
         })
@@ -106,9 +107,9 @@ export default {
            preserveScroll: true,
            onSuccess: () => {
             if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                 } 
            },
           })  
@@ -124,9 +125,9 @@ export default {
            document.querySelector('.modal-backdrop').remove();
            
             if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                 }
            
           },
@@ -160,9 +161,9 @@ export default {
           Inertia.delete(`/delete-transfer-document/${id}`, {
             onSuccess: () => { 
             if(props.success){
-                   notify(props.success)
+                   notifyError(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifySuccess(props.error)
               }
          }
           })
@@ -190,26 +191,15 @@ export default {
              preserveScroll: true,
              onSuccess: () => { 
                if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
               }
            }) 
       }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+      
 
         function checkingFileProgress(message){
           setTimeout(() => {

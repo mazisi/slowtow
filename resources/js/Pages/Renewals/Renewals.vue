@@ -130,6 +130,7 @@ import Paginate from "@/Shared/Paginate.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { onMounted } from 'vue';
+import useToaster from '../../store/useToaster'
 
 
 import { ref } from 'vue';
@@ -148,6 +149,8 @@ export default {
   setup (props) {
     const year = ref(new Date().getFullYear());
     let years = props.years;
+    const { notifySuccess, notifyError } = useToaster();
+
 
     const form = useForm({
       year: null,
@@ -158,9 +161,9 @@ export default {
       form.post('/submit-licence-renewal', {
         onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
          },
       })
@@ -171,9 +174,9 @@ export default {
        Inertia.delete(`/delete-licence-renewal/${slug}`,{
         onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
         },
       })
@@ -189,30 +192,17 @@ export default {
         }
         }
 
-        const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-          props.success='';
-          props.error=''
-        }
+
 
         onMounted(() => {
           if(props.success){
-            notify(props.success)
+            notifySuccess(props.success)
           }else if(props.error){
-            notify(props.error)
+            notifyError(props.error)
           }
         });
 
-    return { year,years,form, submit, deleteRenewal, limit,toast, notify }
+    return { year,years,form, submit, deleteRenewal, limit,toast }
   },
    components: {
     Layout,

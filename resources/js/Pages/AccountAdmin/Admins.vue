@@ -1,4 +1,7 @@
 <style scoped>
+.card-box{
+  background:#DCDCDC !important;
+}
         .columns{
           margin-bottom: 1rem;
         }
@@ -6,6 +9,53 @@
           margin-left: 3px;
         }
     
+        .card-box {
+          padding: 20px;
+          border-radius: 3px;
+          margin-bottom: 30px;
+          background-color: #fff;
+      }
+      
+      .social-links li a {
+          border-radius: 50%;
+          color: rgba(121, 121, 121, .8);
+          display: inline-block;
+          height: 30px;
+          line-height: 27px;
+          border: 2px solid rgba(121, 121, 121, .5);
+          text-align: center;
+          width: 30px
+      }
+      
+      .social-links li a:hover {
+          color: #797979;
+          border: 2px solid #797979
+      }
+      .thumb-lg {
+          height: 88px;
+          width: 88px;
+      }
+      .img-thumbnail {
+          padding: .25rem;
+          background-color: #4caf50;
+          border: 1px solid #dee2e6;
+          border-radius: .25rem;
+          max-width: 100%;
+          height: auto;
+      }
+      .text-pink {
+          color: #ff679b!important;
+      }
+      .btn-rounded {
+          border-radius: 2em;
+      }
+      .text-muted {
+          color: #000!important;
+      }
+      h4 {
+          line-height: 22px;
+          font-size: 18px;
+      }
     </style>
     <template>
   <Layout>
@@ -15,238 +65,138 @@
   
   <Banner/>
   
-  <div class="card card-body mx-3 mx-md-4 mt-n6">
-    <div class="row">
-                  <div class="col-lg-6 col-7">
-                    <h6 class="mx-2">Slotow Admins</h6>
-                    </div>
-                  <div class="col-lg-6 col-5 my-auto text-end">
-                    <a @click="show_modal = true" data-bs-toggle="modal" data-bs-target="#add-user" href="#!" class="float-end btn btn-dark">
-                      <i class="material-icons-round">person_add_alt</i>
-                     </a>
-                  </div>
-                </div>
-  <div class="col-12">
-  <div class="my-4">
-  
-  <div class="px-0 pb-2">
-  <div class="table-responsive p-0">
-    <table class="table align-items-center mb-0">
-                    <thead>
-                      <tr>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Full Name </th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 "> Function </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Status </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Last Activity </th>
-                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="user in users.data" :key="user.id">
-                        <td>
-                          <div class="d-flex px-2 py-1">
-                            <div>
-                              
-                              <img v-if="user.picture" :src="`${$page.props.blob_file_path}${user.picture}`" 
-                              class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
+  <div class="card card-body mx-3 mx-md-4 mt-n6">   
+    <div class="content">
+      <div class="container">
+          <div class="row">
+              <div class="col-sm-4">
+                <h5 class="mx-2">Slotow Admins</h5>
+              </div>
+              <!-- end col -->
+          </div>
+          <!-- end row -->
+    
+   
+          <div class="row">
+            <div class="col-lg-9">
+              <div class="row">
+                <!-- <swiper
+    :slides-per-view="3"
+    :space-between="50"
+    @swiper="onSwiper"
+    @slideChange="onSlideChange">
+    
+    
+  </swiper> -->
+              <div class="col-lg-4" v-for="user in users.data" :key="user.id">
+                  <div class="text-center card-box">
+                      <div class="member-card pt-2 pb-2">
+                          <div class="thumb-lg member-thumb mx-auto">
 
-                              <img v-else loading="lazy"
-                               :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" 
-                              class="avatar avatar-sm me-3 border-radius-lg" alt="user1">
-
-                            </div>
-                            <div class="d-flex flex-column justify-content-center">
-                              <h6 class="mb-0 text-sm">{{ user.name }}</h6>
-                              <p class="text-xs text-secondary mb-0"> {{ user.email.toLowerCase() }} </p>
-                            </div>
+                            <!-- <img v-if="user.picture" :src="`${$page.props.blob_file_path}${user.picture}`" class="rounded-circle img-thumbnail" alt="profile-image"> -->
+                            <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" class="rounded-circle img-thumbnail" alt="profile-image">
                           </div>
-                        </td>
-                        <td>
-                          <p v-for="role in user.roles" class="text-xs font-weight-bold mb-0">
-                           <span v-if="role.name === 'slowtow-admin'">Super Admin</span>
-                           <span v-else-if="role.name === 'slowtow-user'">Admin</span>
-                           <span v-else >User</span>
-                          </p>
-                        </td>
-                        <td class="align-middle text-center text-sm">
-                          <span v-if="user.is_active" class="badge badge-sm bg-gradient-success">Active</span>
-                          <span v-else class="badge badge-sm bg-gradient-warning">Deactivated</span>
-                        </td>
-                        <td class="align-middle text-center"><span class="text-secondary text-xs font-weight-bold">
-                          {{ user.last_activity_at  }}</span></td>
-                        <td class="align-middle text-center">
-          
-  
-    <div class="dropdown float-lg-end pe-4">
-      <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
-      </a>
-      <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable" >
-        <li><a @click="editUser(user.id,user.name,user.email,user.roles[0].name)" 
-          data-bs-toggle="modal" data-bs-target="#edit-user" class="dropdown-item active" href="#!">
-          <i class="fa fa-pencil"></i> Edit</a>
-        </li>
-        
-        <li v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)">
-          <a  
-           class="dropdown-item border-radius-md" href="javascript:;"> 
-           <i class="fa fa-minus-square"></i> Deactivate </a>
-          </li>
-          <li v-else @click="deActivateuser(user.id, user.is_active)">
-            <a class="dropdown-item border-radius-md" href="javascript:;">
-              <i class="fa fa-plus-square-o"></i> Activate </a>
-          </li>
-      <li><a @click="deleteUser(user.name, user.id)" class="dropdown-item text-danger" href="javascript:;"> 
-        <i class="fa fa-trash-o"></i> Delete </a></li>
-    </ul></div>
-  </td>
-                      </tr>
-                   
-                    </tbody>
-                  </table>
-  
-  
-  </div>
-  </div>
-  <Paginate
-  :modelName="users"
-  :modelType="Users"
-  />
-  </div>
-  </div>
-  </div>
-  </div>
+                          <div class="">
+                              <h4>{{ user.name }}</h4>                              
 
+                               <template v-for="role in user.roles" :key="role.id">
 
-  <div v-if="show_modal" class="modal fade" id="add-user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Add User</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form @submit.prevent="submitUser">        
-          <div class="modal-body">      
-            <div class="row">
-              <div class="col-12 columns">
-                <div class="input-group input-group-outline null is-filled ">
-                <label class="form-label">Full Name</label>
-                <input type="text" required class="form-control form-control-default" v-model="form.full_name" >
-                </div>
-                <div v-if="errors.full_name" class="text-danger">{{ errors.full_name }}</div>
-                </div>
-  
-                <div class="col-12 columns">
-                  <div class="input-group input-group-outline null is-filled ">
-                  <label class="form-label">Email</label>
-                  <input type="email" required class="form-control form-control-default" v-model="form.email" >
+                                  <p v-if="role.name === 'slowtow-admin'" class="text-muted">Super Admin <span>| </span>
+                                  <span>
+                                    <a href="#" class="text-pink">{{ user.email }}</a>
+                                  </span>
+                                </p>
+
+                                <p v-else-if="role.name === 'slowtow-user'" class="text-muted">Admin <span>| </span>
+                                  <span>
+                                    <a href="#" class="text-pink">{{ user.email }}</a>
+                                  </span>
+                                </p>
+
+                                <p v-else class="text-muted">User <span>| </span>
+                                  <span>
+                                    <a href="#" class="text-pink">{{ user.email }}</a>
+                                  </span>
+                                </p>
+                               </template>
+                              <div class="text-sm text-muted">Last Activity:</div>
+                              <div class="text-sm text-muted">{{ getMomentDate(user.last_activity) }}</div>
+                          </div>
+                          <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 btn-rounded waves-effect w-md waves-light">
+                            Edit
+                          </button>
+                          
+                          
+                      </div>
                   </div>
-                  <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
-                  </div>                
-                  <div class="col-12 columns">
-                    <div class="input-group input-group-outline null is-filled ">
-                    <label class="form-label">Function/Role</label>
-                    <select class="form-control form-control-default" v-model="form.role">
-                      <option :value="''">Select Role..</option>
-                      <option value="slowtow-admin">Super Admin</option>
-                      <option value="slowtow-user">Admin</option>
-                    </select>
-                    </div>
-                    <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>
-                  </div>
-  
-                  <div class="col-9 columns">
-                    <div class="input-group input-group-outline null is-filled ">
-                    <label class="form-label">Password</label>
-                    <input type="text" class="form-control form-control-default" v-model="form.password" >
-                    </div>
-                    <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
-                  </div>
-                  <div class="col-3 columns">
-                    <button type="button" @click="generatePassword" class="btn btn-sm btn-secondary">Generate</button>
-                  </div>
-             </div>
-          </div>
-      
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" :disabled="form.processing">
-             <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-             Save</button>
-          </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  
-    <div v-if="show_modal" class="modal fade" id="edit-user" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edit {{ editForm.full_name }}</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <form @submit.prevent="updateUser">        
-          <div class="modal-body">      
-            <div class="row">
-              <div class="col-12 columns">
-                <div class="input-group input-group-outline null is-filled ">
-                <label class="form-label">Full Name</label>
-                <input type="text" required class="form-control form-control-default" v-model="editForm.full_name" >
-                </div>
-                <div v-if="errors.full_name" class="text-danger">{{ errors.full_name }}</div>
-                </div>
-  
-                <div class="col-12 columns">
-                  <div class="input-group input-group-outline null is-filled ">
-                  <label class="form-label">Email</label>
-                  <input type="email" required class="form-control form-control-default" v-model="editForm.email" >
-                  </div>
-                  <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
-                  </div> 
                   
-                  <div class="col-9 columns">
-                    <div class="input-group input-group-outline null is-filled ">
-                    <label class="form-label">Change Password</label>
-                    <input type="text" class="form-control form-control-default" v-model="editForm.password" >
-                    </div>
-                    <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
-                  </div>
-                  <div class="col-2 columns">
-                    <button type="button" @click="generateEditPassword" class="btn btn-sm btn-secondary">Generate</button>
-                  </div>
+              </div>
+              <Paginate
+              :modelName="users"
+              :modelType="Users"
+              />
+            </div>
+          
+              </div>
 
+              <div class="col-lg-3">
+                <div class="row">
                   <div class="col-12 columns">
                     <div class="input-group input-group-outline null is-filled ">
-                    <label for="propic" class="btn mb-0 bg-gradient-dark btn-md null w-100">Change Picture</label>
-                    <input type="file" @change="getFileName($event)" hidden id="propic" />
-                      <div v-if="file_name"><span class="text-success" v-text="file_name"></span></div>
-                      <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry 
-                        <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).</p>  
+                    <label class="form-label">Full Name</label>
+                    <input type="text" required class="form-control form-control-default" v-model="form.full_name" >
                     </div>
-                    <div v-if="errors.picture" class="text-danger">{{ errors.picture }}</div>
-                  </div>
-
-                  <div class="col-md-12">
-                    <progress v-if="editForm.progress" :value="editForm.progress.percentage" max="100">
-                      {{ editForm.progress.percentage }}%
-                      </progress>
-                    
-                   </div>
-
-             </div>
-          </div>
+                    <div v-if="errors.full_name" class="text-danger">{{ errors.full_name }}</div>
+                    </div>
       
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary" :disabled="editForm.processing">
-             <span v-if="editForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-             Update</button>
+                    <div class="col-12 columns">
+                      <div class="input-group input-group-outline null is-filled ">
+                      <label class="form-label">Email</label>
+                      <input type="email" required class="form-control form-control-default" v-model="form.email" >
+                      </div>
+                      <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
+                      </div>                
+                      <div class="col-12 columns">
+                        <div class="input-group input-group-outline null is-filled ">
+                        <label class="form-label">Function/Role</label>
+                        <select class="form-control form-control-default" v-model="form.role">
+                          <option :value="''">Select Role..</option>
+                          <option value="slowtow-admin">Super Admin</option>
+                          <option value="slowtow-user">Admin</option>
+                          <option value="client">Client</option>
+                        </select>
+                        </div>
+                        <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>
+                      </div>
+      
+                      <div class="col-9 columns">
+                        <div class="input-group input-group-outline null is-filled ">
+                        <label class="form-label">Password</label>
+                        <input type="text" class="form-control form-control-default" v-model="form.password" >
+                        </div>
+                        <div v-if="errors.password" class="text-danger">{{ errors.password }}</div>
+                      </div>
+                      <div class="col-3 columns">
+                        <button type="button" @click="generatePassword" class="btn btn-sm btn-secondary">Generate</button>
+                      </div>
+                      <button type="button" @click="submitUser" class="btn bg-gradient-dark" :disabled="form.processing">
+                        <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true">
+                        </span>
+                        {{ form.id ? 'Update' : 'Create' }} User
+                        </button>
+                 </div>
+              </div>
           </div>
-          </form>
-        </div>
+
+          
       </div>
-    </div>
+      <!-- container -->
+      
+  </div>
+  </div>
+  </div>
+
+
   </Layout>
   </template>
   
@@ -273,6 +223,10 @@
   import Paginate from '../../Shared/Paginate.vue';
   import { toast } from 'vue3-toastify';
    import 'vue3-toastify/dist/index.css';
+   import moment from 'moment';
+   import { Swiper,SwiperSlide  } from 'swiper/vue';
+   import 'swiper/css';
+   import useToaster from "@/store/useToaster";
   
   export default {
    props: {
@@ -284,7 +238,7 @@
     
     
     setup (props) {
-
+      const { notifySuccess, notifyError } = useToaster();
           let showMenu = ref(false);
           let show_modal = ref(true); 
           let file_name = ref('');
@@ -294,27 +248,18 @@
             full_name: '',
             email: '',
             role: '',
-            password: '' 
-          }) 
-
-          const editForm = useForm({
-            full_name: '',
-            email: '',
-            role: '',
             password: '',
             id: '',
             profilePic: null
           }) 
-        
+
           function submitUser() {
             form.post('/submit-user', {
               onSuccess: () => {
-                this.show_modal = false;
-                document.querySelector('.modal-backdrop').remove();
                 if(props.success){
-                   notify(props.success)
+                  notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
                 form.reset('body','full_name','email','role');
               }
@@ -339,54 +284,26 @@
             }            
           }
 
-          //DRY PRNCIPLE VIOLATED--Will come to this!!!!!!!!!!!!!
-          function generateEditPassword(){
-            let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            let passwordLength = 8;
 
-            if(this.editForm.password == ''){
-              for (var i = 0; i <= passwordLength; i++) {
-                  var randomNumber = Math.floor(Math.random() * chars.length);
-                  this.editForm.password += chars.substring(randomNumber, randomNumber +1);
-             }
-            }else{
-              this.editForm.password = '';
-              for (var i = 0; i <= passwordLength; i++) {
-                  var randomNumber = Math.floor(Math.random() * chars.length);
-                  this.editForm.password += chars.substring(randomNumber, randomNumber +1);
-               }
-            }            
+          function editUser(user){
+            form.full_name = user.name;
+            form.email = user.email;
+            form.role = user.roles[0].name;
+            form.id = user.id;
+            
           }
 
-          function editUser(user_id,name,email,role){
-            this.editForm.full_name = name;
-            this.editForm.email = email;
-            this.editForm.role = role;
-            this.editForm.id = user_id;
-            this.show_modal = true;
-          }
-
-          function updateUser(){
-            editForm.post('/update-user', {
-              onSuccess: () => {
-                this.show_modal = false;
-                document.querySelector('.modal-backdrop').remove();
-                if(props.success){
-                   notify(props.success)
-                    }else if(props.error){
-                      notify(props.error)
-                    }
-              }
-             })
+          function getMomentDate(date){
+            return moment(Date.now()).from(date);
           }
 
           function deActivateuser(id, status){
             Inertia.post(`/deactivate-user/${id}/${status}`,{
               onSuccess: () => {
                 if(props.success){
-                   notify(props.success)
+                  notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
               }
             })
@@ -397,9 +314,9 @@
                 Inertia.patch(`/delete-user/${user_id}`,{
                 onSuccess: () => {
                   if(props.success){
-                   notify(props.success)
+                    notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
                 }
                 })
@@ -408,29 +325,24 @@
 
 
           function getFileName(e){
-            this.editForm.profilePic = e.target.files[0];
+            this.form.profilePic = e.target.files[0];
             this.file_name = e.target.files[0].name;
             this.file_has_apostrophe = this.file_name.includes("'");
           }
 
-          const notify = (message) => {
-            if(props.success){
-              toast.success(message, {
-              autoClose: 2000,
-            });
-            
-            }else if(props.error){
-              toast.error(message, {
-              autoClose: 2000,
-            });
-            }
-        }
+      
+        const onSwiper = (swiper) => {
+        console.log(swiper);
+      };
+      const onSlideChange = () => {
+        console.log('slide change');
+      };
   
       return {
+        onSwiper,
+        onSlideChange,
         toast,
         form,
-        notify,
-        editForm,
         deleteUser,
         file_name,
         getFileName,
@@ -439,11 +351,9 @@
         show_modal,
         submitUser,
         generatePassword,
-        generateEditPassword,
         editUser,
-        updateUser,
         deActivateuser,
-        
+        getMomentDate
       }
     },
      components: {
@@ -452,6 +362,8 @@
       Head,
       Banner,
       Paginate,
+      Swiper,
+      SwiperSlide
       
     },
     

@@ -9,7 +9,8 @@ import Task from "../Tasks/Task.vue";
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import common from '../common-js/common.js';
-import TextInputComponent from '../components/input-components/TextInputComponent.vue'
+import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import useToaster from '../../store/useToaster';
 
 export default {
  props: {
@@ -37,6 +38,7 @@ export default {
   
   setup (props) {
     let showMenu = false;
+    const { notifySuccess, notifyError } = useToaster();
     let people_options = props.people;
     let show_modal = ref(true); 
     let show_file_name = ref(false);
@@ -102,7 +104,7 @@ export default {
            onSuccess: () => { 
             this.show_modal = false;
             document.querySelector('.modal-backdrop').remove()
-            notify(props.success);
+            notifySuccess(props.success);
             addCompanyUserForm.reset();
            },
            onError: () => { 
@@ -123,9 +125,9 @@ export default {
            preserveScroll: true,
            onSuccess: () => {
             if(props.success){
-                   notify(props.success)
+              notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                    }    
            },
           })  
@@ -138,9 +140,9 @@ export default {
             this.show_modal = false;
             document.querySelector('.modal-backdrop').remove();
             if(props.success){
-                   notify(props.success)
+              notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
             addPeopleForm.reset();
            },
@@ -159,9 +161,9 @@ export default {
             this.show_file_name = false;
             document.querySelector('.modal-backdrop').remove()
             if(props.success){
-                   notify(props.success)
+              notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
            
           },
@@ -181,9 +183,9 @@ export default {
             Inertia.delete(`/delete-company-document/${id}`,{
               onSuccess: () => { 
                if(props.success){
-                   notify(props.success)
+                notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
              }
             })
@@ -195,9 +197,9 @@ export default {
             Inertia.delete(`/delete-company/${props.company.slug}`,{
               onSuccess: () => { 
                if(props.success){
-                   notify(props.success)
+                notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
               }
             })
@@ -209,9 +211,9 @@ export default {
         preserveScroll: true,
         onSuccess: () => { 
                if(props.success){
-                   notify(props.success)
+                notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
              }
       })
@@ -225,9 +227,9 @@ export default {
           Inertia.delete(`/unlink-person/${id}`,{
             onSuccess: () => { 
                if(props.success){
-                   notify(props.success)
+                notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
              }
         })
@@ -253,9 +255,9 @@ export default {
             updateStatusForm.patch(`/update-company-active-status/${props.company.slug}`,{
               onSuccess: () => { 
                 if(props.success){
-                   notify(props.success)
+                  notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
              }
              })
@@ -280,18 +282,7 @@ export default {
       }
 
     
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+  
 
         function checkingFileProgress(message){
           setTimeout(() => {
@@ -323,7 +314,6 @@ export default {
 
     return {
       showMenu,
-      notify,
       common,
       file_name,
       file_has_apostrophe,

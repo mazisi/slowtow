@@ -3,6 +3,7 @@ import { Link, Head } from "@inertiajs/inertia-vue3";
 import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
+import useToaster from '../../store/useToaster';
 
 export default {
   name: "email-comms-transfers",
@@ -12,10 +13,14 @@ export default {
     error: String
   },
   data() {
+    const { notifySuccess, notifyError } = useToaster();
+
     return {
       month: '',
       province: '',
       stage: '',
+      notifySuccess,
+      notifyError
     }
   },
   components: {
@@ -78,27 +83,15 @@ methods: {
       this.$inertia.get('/email-comms/new-apps');
     },
     
-    notify(message){
-          if(this.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(this.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
     },
 
     
 
     mounted(){ 
           if(this.success){
-            notify(this.success)
+            notifySuccess(this.success)
           }else if(this.error){
-            notify(this.error)
+            notifyError(this.error)
           }
         }
 };

@@ -13,15 +13,6 @@ use Illuminate\Support\Facades\Mail;
 
 class HandleAlterationMail {
 
-    //Status keys:
-// 1. Client Quoted
-//2 => Client Invoiced
-//3 => Client Paid
-//4 => Prepare Alterations Application
-//5 => Payment to the Liquor Board
-//6 => Alterations Lodged
-//7 => Alterations Certificate Issued
-//8 => Alterations Delivered
 
   public function dispatchAlterationMail(Request $request){
     try {
@@ -41,22 +32,22 @@ class HandleAlterationMail {
 
         
         switch ($alteration->status) {      
-            case '1':                
+            case '100':                
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Quoted')->first();
                break;
-            case '2':
+            case '200':
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Client Invoiced')->first();
                 break;
-            case '4':
+            case '400':
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Payment To The Liquor Board')->first();
                 break;
-            case '5':
+            case '500':
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Payment to the Liquor Board-2')->first();
                 break;
-            case '6':
+            case '600':
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Lodged')->first();
                 break;
-            case '7':
+            case '700':
                 $get_doc = AlterationDocument::where('alteration_id',$alteration->id)->where('doc_type','Alterations Certificate Issued')->first();
                 break;
             default:

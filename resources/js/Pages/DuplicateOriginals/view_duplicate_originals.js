@@ -11,6 +11,7 @@ import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 import DateComponent from "./components/DateComponent.vue";
+import useToaster from "../../store/useToaster";
 
 export default {
     name: "ViewDuplicate",
@@ -24,6 +25,7 @@ export default {
     },
     setup(props) {
         let showMenu = false;
+        const { notifySuccess, notifyError } = useToaster();
         const form = useForm({
             slug: props.duplicate_original.slug,
             status: [],
@@ -43,9 +45,9 @@ export default {
                 },
                 onSuccess: () => {
                     if (props.success) {
-                        notify(props.success);
+                        notifySuccess(props.success);
                     } else if (props.error) {
-                        notify(props.error);
+                        notifyError(props.error);
                     }
                 },
             });
@@ -63,25 +65,15 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (props.success) {
-                        notify(props.success);
+                        notifySuccess(props.success);
                     } else if (props.error) {
-                        notify(props.error);
+                        notifyError(props.error);
                     }
                 },
             });
         }
 
-        const notify = (message) => {
-            if (props.success) {
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-            } else if (props.error) {
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-        };
+       
 
         function pushData(e, status_value,prevStage) {
             if (e.target.checked) {
@@ -129,9 +121,9 @@ export default {
               preserveScroll: true,
               onSuccess: () => { 
                  if(props.success){
-                   notify(props.success)
+                    notifySuccess(props.success)
                  }else if(props.error){
-                  notify(props.error)
+                    notifyError(props.error)
                  }
                 
            },
@@ -143,9 +135,9 @@ export default {
             Inertia.delete(`/delete-duplicate_original-document/${id}`, {
               onSuccess: () => { 
                if(props.success){
-                  notify(props.success)
+                notifySuccess(props.success)
                 }else if(props.error){
-                  notify(props.error)
+                    notifyError(props.error)
                 }
               },
             })
@@ -168,7 +160,6 @@ export default {
             hasFile,
             toast,
             deleteDuplicateOriginal,
-            notify,
             submitDocument,
             deleteDocument
         };

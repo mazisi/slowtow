@@ -9,6 +9,7 @@ import 'vue3-toastify/dist/index.css';
 import Paginate from "../../Shared/Paginate.vue";
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
+import useToaster from '../../store/useToaster';
 
 export default {
 
@@ -30,6 +31,7 @@ props:{
 setup (props) {
   let show_file_name = ref(false);
   let file_name = ref('');
+  const { notifySuccess, notifyError } = useToaster();
 
 const form = useForm({
        name: props.person.full_name,
@@ -66,9 +68,9 @@ const form = useForm({
             this.show_doc_modal = false;
             document.querySelector('.modal-backdrop').remove();
             if(props.success){
-               notify(props.success)
+               notifySuccess(props.success)
              }else if(props.error){
-                 notify(props.error)
+                 notifyError(props.error)
              }
             this.uploadDoc.reset()
            },
@@ -86,9 +88,9 @@ const form = useForm({
           Inertia.delete(`/delete-person-document/${slug}`, {
             onSuccess: () => { 
                if(props.success){
-                  notify(props.success)
+                  notifySuccess(props.success)
                }else if(props.error){
-                 notify(props.error)
+                 notifyError(props.error)
              }
             },
           })
@@ -101,9 +103,9 @@ const form = useForm({
       form.post('/update-person', {
         onSuccess: () => { 
           if(props.success){
-            notify(props.success)
+            notifySuccess(props.success)
           }else if(props.error){
-            notify(props.error)
+            notifyError(props.error)
           }
            
          },
@@ -127,9 +129,9 @@ const form = useForm({
            updateStatusForm.patch(`/update-person-active-status/${props.person.slug}`,{
             onSuccess: () => { 
                if(props.success){
-                  notify(props.success)
+                  notifySuccess(props.success)
                }else if(props.error){
-                   notify(props.error)
+                   notifyError(props.error)
                }
               },
             })
@@ -141,9 +143,9 @@ const form = useForm({
             Inertia.delete(`/delete-person/${props.person.slug}`,{
               onSuccess: () => { 
                  if(props.success){
-            notify(props.success)
+            notifySuccess(props.success)
           }else if(props.error){
-            notify(props.error)
+            notifyError(props.error)
           }
               },
             })
@@ -163,19 +165,7 @@ const form = useForm({
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-        
+      
 
        
         
@@ -201,9 +191,9 @@ const form = useForm({
 
         //  onMounted(() => {
         //   if(props.success){
-        //     notify(props.success)
+        //     notifySuccess(props.success)
         //   }else if(props.error){
-        //     notify(props.error)
+        //     notifyError(props.error)
         //   }
         // });
 

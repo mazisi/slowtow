@@ -5,6 +5,7 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster'
 
 export default {
   name: "Emmail-Comms",
@@ -14,11 +15,14 @@ export default {
     error: String
   },
   data() {
+    const { notifySuccess, notifyError } = useToaster();
     return {
       month: '',
       province: '',
       stage: '',
-      isActive: false
+      isActive: false,
+      notifySuccess,
+      notifyError
     }
   },
   components: {
@@ -80,18 +84,6 @@ methods: {
         }
         },
 
-         notify(message){
-          if(this.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(this.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
 
     },
 
@@ -106,9 +98,9 @@ methods: {
 
     mounted(){ 
           if(this.success){
-            notify(this.success)
+            this.notifySuccess(this.success)
           }else if(this.error){
-            notify(this.error)
+            this.notifyError(this.error)
           }
         }
 };
@@ -178,10 +170,10 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="1">Client Quoted</option>
-<option value="2">Client Invoiced </option>
-<option value="4">Payment to the Liquor Board</option>
-<option value="5">Renewal Issued</option>
+<option value="100">Client Quoted</option>
+<option value="200">Client Invoiced </option>
+<option value="400">Payment to the Liquor Board</option>
+<option value="500">Renewal Issued</option>
 
 </select>
 </div>

@@ -14,13 +14,16 @@ use Illuminate\Support\Facades\Mail;
 class AdminsController extends Controller
 {
     public function index(){
-      $users = User::with('roles')->latest()->paginate(10,['id','name','email','created_at','picture','is_active','last_activity_at']);
+      $users = User::with('roles')->latest()->paginate(6,['id','name','email','created_at','picture','is_active','last_activity_at']);
       return Inertia::render('AccountAdmin/Admins',['users' => $users]);
     }
 
     public function store(Request $request)
     {
         try {
+          if($request->id){
+           return $this->update($request);
+          }
             $request->validate([
                 'email' => 'required|email',
                 'full_name' => 'required',
@@ -55,7 +58,7 @@ class AdminsController extends Controller
         }
     }
 
-    public function update(Request $request){
+    public function update($request){
         try {
             $request->validate([
                 'email' => 'required|email',

@@ -21,10 +21,28 @@
       </a>
       <div v-else 
        class="mb-0  btn btn-link pe-3 ps-0 ms-4" :class="{ 'd-none': uploadDoc.processing}">
-      <label :for="uploadDoc.doc_type">
+       <!-- Original Licence stage will display a combined PDF document. The documents uploaded
+          for Stages 9, 10, 11 and 13 must be merged into one and saved under this
+          stage. The order of the documents should be Stage 13  Stage 11  Stage
+          10  Stage 9.
+         -->
+      <span><label v-if="orderByNumber !== 1400" :for="uploadDoc.doc_type">
         <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
         <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
-      </label>
+      </label> </span>   
+      
+      <span v-if="uploadDoc.progress">
+  <CircleProgressBar  
+  :value="uploadDoc.progress.percentage"  
+  :max="100"  
+  percentage  
+ rounded
+ :size="30"
+ :colorFilled="'#4caf50'"
+ :animationDuration="'0.7s'">
+</CircleProgressBar>
+</span>
+      
       <div v-if="uploadDoc.processing" class="spinner-border text-danger spinner-border-sm" role="status">
         <span class="visually-hidden">Loading...</span>
       </div>
@@ -33,19 +51,14 @@
   </li>
   
   </ul>
- <div v-if="uploadDoc.progress">
-  <CircleProgressBar  
-  :value="uploadDoc.progress.percentage"  
-  :max="100"  
-  percentage  
- rounded
- :size="60"
- :colorFilled="'#4caf50'"
- :animationDuration="'0.7s'">
-</CircleProgressBar>
- </div>
 
-  <ViewFile/>
+
+
+  <ViewFile 
+  :filePath="hasFile"
+  />
+
+
 </template>
 <style scoped>
 .cursor-pointer{
@@ -57,7 +70,6 @@
 </style>
 <script>
 import { ref } from 'vue';
-import VuePdfEmbed from 'vue-pdf-embed';
 import { useForm } from '@inertiajs/inertia-vue3';
 import ViewFile from './ViewFile.vue';
 import { CircleProgressBar } from 'circle-progress.vue';

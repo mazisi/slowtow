@@ -70,6 +70,7 @@
 
 <script>
   import { ref } from 'vue';
+  import useToaster from '../../../store/useToaster';
 
 export default {
 
@@ -78,6 +79,7 @@ export default {
   },
 
   setup(){
+    const { notifySuccess, notifyError } = useToaster();
     let show_modal = ref(true); 
     let show_file_name = ref(false);
     let file_name = ref(''); 
@@ -98,9 +100,9 @@ export default {
             this.show_file_name = false;
             document.querySelector('.modal-backdrop').remove()
             if(props.success){
-                   notify(props.success)
+              notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
            
           },
@@ -120,9 +122,9 @@ export default {
             Inertia.delete(`/delete-company-document/${id}`,{
               onSuccess: () => { 
                if(props.success){
-                   notify(props.success)
+                notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
              }
             })

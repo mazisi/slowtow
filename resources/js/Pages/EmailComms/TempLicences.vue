@@ -4,6 +4,7 @@ import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import common from '../common-js/common.js';
+import useToaster from '../../store/useToaster'
 
 export default {
   name: "TemporaryLicences",
@@ -26,10 +27,14 @@ export default {
 
   },
   data() {
+    const { notifySuccess, notifyError } = useToaster();
+
     return {
       month: '',
       province: '',
       stage: '', 
+      notifySuccess,
+      notifyError
     }
   },
   components: {
@@ -100,18 +105,6 @@ methods: {
     },
      
 
-      notify(message){
-          if(this.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(this.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
 
     },
 
@@ -119,9 +112,9 @@ methods: {
 
     mounted(){ 
           if(this.success){
-            notify(this.success)
+            this.notifySuccess(this.success)
           }else if(this.error){
-            notify(this.error)
+            this.notifyError(this.error)
           }
         },
 

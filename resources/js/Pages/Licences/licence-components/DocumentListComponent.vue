@@ -66,6 +66,7 @@ import 'vue3-toastify/dist/index.css';
 import { useForm } from '@inertiajs/inertia-vue3';
 import { ref } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
+import useToaster from '../../../store/useToaster';
 
 export default{
   
@@ -79,6 +80,8 @@ export default{
   },
 
   setup(props){
+    const { notifySuccess, notifyError } = useToaster();
+
         let show_modal = ref(true);
         let file_name = ref(''); 
         let show_file_name = ref(false);
@@ -95,9 +98,9 @@ export default{
             Inertia.delete(`/delete-licence-document/${id}`,{
               onSuccess: () => { 
                 if(props.success){
-                   notify(props.success)
+                   notifySuccess(props.success)
                     }else if(props.error){
-                      notify(props.error)
+                      notifyError(props.error)
                     }
                },
             })
@@ -132,19 +135,7 @@ export default{
               return file_name;
       }
 
-         const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-
+      
 
       function getDocType(doc_type){
         this.show_modal = true
@@ -169,9 +160,9 @@ export default{
           document.querySelector('.modal-backdrop').remove();
 
             if(props.success){
-                notify(props.success)
+                notifySuccess(props.success)
             }else if(props.error){
-                notify(props.error)
+                notifyError(props.error)
             }
          // documentForm.reset();
          },

@@ -54,6 +54,7 @@ import Editor from '@tinymce/tinymce-vue';
 import Banner from '../components/Banner.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster'
 
 export default {
  props: {
@@ -66,6 +67,7 @@ export default {
   
   
   setup (props) {   
+    const { notifySuccess, notifyError } = useToaster();
 
     const mailForm = useForm({
       mail_body: props.template,
@@ -77,31 +79,19 @@ export default {
       mailForm.post('/dispatch-temporal-licence-mail', {
         onSuccess: () => {
           if(props.success){
-                  notify(props.success)
+                  notifySuccess(props.success)
                   }else if(props.error){
-                  notify(props.error)
+                  notifyError(props.error)
                  }
         }
         })
     }
 
-    const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
+   
 
     return {
       sendMail,
-      mailForm,
-      notify
+      mailForm
     }
   },
    components: {

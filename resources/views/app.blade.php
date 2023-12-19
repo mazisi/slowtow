@@ -45,7 +45,7 @@
 
           
   .multiselect{
-    margin:top: 1rem; border-color: #4caf50 !important;box-shadow: inset 1px 0 #4caf50
+    margin-top: 1rem; border-color: #4caf50 !important;box-shadow: inset 1px 0 #4caf50;
   }
             .half-circle-spinner, .half-circle-spinner * {
 
@@ -174,16 +174,18 @@
           } */
 
 main{
-  min-height: 100vh
+  min-height: 100vh;
 }
 
           .py-3.footer {
+            margin-top: 50px;
             padding-top: 1rem !important;
             padding-bottom: 1rem !important;
-            position: fixed;
+            position: sticky;
             bottom: 0;
-            width: 80%;
-            background: white
+            width: 100%;
+            background: white;
+            
         }
         .fixed-profile{
           background: #42424a8c
@@ -191,6 +193,10 @@ main{
         .john-title .text-white{
           margin: 0;
           font-size: 14px
+        }
+
+        .circle-progress__content .circle-progress__percentage {
+          font-size: 10px !important;
         }
    </style>
 

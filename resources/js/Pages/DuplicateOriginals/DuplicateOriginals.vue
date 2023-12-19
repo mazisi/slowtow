@@ -127,6 +127,7 @@
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
   import { onMounted } from 'vue';
+  import useToaster from '../../store/useToaster'
   
   
   import { ref } from 'vue';
@@ -144,6 +145,7 @@
     setup (props) {
       const year = ref(new Date().getFullYear());
       let years = props.years
+      const { notifySuccess, notifyError } = useToaster();
   
       const form = useForm({
         year: null,
@@ -158,37 +160,26 @@
         form.post('/submit-duplicate-original', {
           onSuccess: () => { 
               if(props.success){
-                    notify(props.success)
+                notifySuccess(props.success)
                     form.reset('year');
                  }else if(props.error){
-                    notify(props.error)
+                  notifyError(props.error)
               }
            }
         })
       }
   
-      const notify = (message) => {
-            if(props.success){
-              toast.success(message, {
-              autoClose: 2000,
-            });
-            
-            }else if(props.error){
-              toast.error(message, {
-              autoClose: 2000,
-            });
-            }
-          }
+     
           
           onMounted(() => {
             if(props.success){
-              notify(props.success)
+              notifySuccess(props.success)
             }else if(props.error){
-              notify(props.error)
+              notifyError(props.error)
             }
   
            });
-      return { year, years,form, submit,toast ,notify}
+      return { year, years,form, submit,toast}
     },
      components: {
       Layout,

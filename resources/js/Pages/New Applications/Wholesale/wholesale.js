@@ -11,7 +11,9 @@ import Layout from "../../../Shared/Layout.vue";
   import DocComponent from '../../components/slotow-components/DocComponent.vue';
   import MergeDocumentComponent from '../../components/slotow-components/MergeDocumentComponent.vue';  
   import DateComponent from '../../components/slotow-components/DateComponent.vue';  
-  import MergeButtonComponent from '../../components/slotow-components/MergeButtonComponent.vue';  
+  import MergeButtonComponent from '../../components/slotow-components/MergeButtonComponent.vue'; 
+  import useToaster from '../../../store/useToaster';
+  import useWholesaleStatus from '../../../store/useWholesaleStatus'; 
   
   export default {
     props: {
@@ -23,7 +25,8 @@ import Layout from "../../../Shared/Layout.vue";
     },
   
     setup (props) {      
-
+      const { notifySuccess, notifyError } = useToaster();
+      const { getPlainStatus } = useWholesaleStatus();
       const form = useForm({
         status: [],
         unChecked: false,
@@ -42,9 +45,9 @@ import Layout from "../../../Shared/Layout.vue";
           },
           onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
         })
@@ -72,9 +75,9 @@ import Layout from "../../../Shared/Layout.vue";
               },
           onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
         })
@@ -86,9 +89,9 @@ import Layout from "../../../Shared/Layout.vue";
           preserveScroll: true,
           onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
         })   
@@ -96,27 +99,15 @@ import Layout from "../../../Shared/Layout.vue";
        
       
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
 
         function submitDocument(file_data){        
           file_data.post('/upload-licence-document', {
             preserveScroll: true,
             onSuccess: () => { 
                 if(props.success){
-                              notify(props.success)
+                              notifySuccess(props.success)
                            }else if(props.error){
-                             notify(props.error)
+                             notifyError(props.error)
                            }
               uploadDoc.doc_type = null;
              },
@@ -128,9 +119,9 @@ import Layout from "../../../Shared/Layout.vue";
             Inertia.delete(`/delete-licence-document/${id}`, {
               onSuccess: () => { 
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
             })
@@ -182,63 +173,12 @@ import Layout from "../../../Shared/Layout.vue";
         
 
         
-         function getStatus(status_param) {
-          let status;
-          switch (status_param) {
-            case '100':
-              status = 'Client Quoted'
-              break;
-              case '200':
-              status = 'Deposit Invoiced'
-              break;
-              case '300':
-              status = 'Deposit Paid'
-              break;
-              case '400':
-              status = 'Prepare New Application'
-              break;
-              case '500':
-              status = 'Application Submitted'
-              break;
-              case '600':
-              status = 'Initial Application Fee'
-              break;
-              case '700':
-              status = 'Application Lodged'
-              break;
-              case '800':
-              status = 'Additional Documents Request'
-              break;  
-              case '900':
-              status = 'NLA 6 Proposed'
-              break;
-              case '1000':
-              status = 'NLA 7 Submitted'
-              break;
-              case '1100':
-              status = 'NLA 8 Issued'
-              break;
-              case '1200':
-              status = 'Activation Fee'
-              break; 
-              case '1300':
-              status = 'NLA 9 Issued'
-              break;
-              case '1400':
-              status = 'Original Licence'
-              break;
-              case '1500':
-              status = 'Original Licence Delivered'
-              break;
-            default:
-              status='Not Set';
-              break;
-          }
-          return status;
-        }
+function getStatus(statusParam) {
+    return getPlainStatus(statusParam);
+}
 
       return { 
-        notify,hasFile,
+        hasFile,
         form,getStatus,
         updateRegistration,
         pushData,

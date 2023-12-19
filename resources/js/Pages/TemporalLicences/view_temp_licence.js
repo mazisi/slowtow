@@ -7,6 +7,7 @@ import { ref, computed } from 'vue';
 import { toast } from 'vue3-toastify';
 import common from '../common-js/common.js';
 import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster';
 
 export default {
  name: "ViewTemporalLicence",
@@ -17,6 +18,7 @@ export default {
     people: Array
   },
   setup(props) {
+    const { notifySuccess, notifyError } = useToaster();
    
       let showMenu = ref(false);
       let options = props.companies;
@@ -49,9 +51,9 @@ export default {
          form.patch(`/update-temp-licence`, {
           onSuccess: () => { 
             if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
          },
           })
@@ -63,19 +65,7 @@ export default {
           }      
         }
 
-        const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-
+        
         const computedBoardRegions = computed(() => {
           return common.getBoardRegions();
         })
@@ -85,7 +75,7 @@ export default {
       computedBoardRegions,
       options,
       persons,
-      form,notify,
+      form,
       computeLogdementDate,
       update,
       deleteTempLicence

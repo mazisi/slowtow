@@ -3,9 +3,9 @@ import Layout from "../../Shared/Layout.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 // import Paginate from "../../Shared/Paginate.vue";
-import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { defineAsyncComponent } from 'vue';
+import useAlteration from "./composables/useAlteration";
 
 const Paginate = defineAsyncComponent(() =>
     import ('../../Shared/Paginate.vue')
@@ -13,6 +13,7 @@ const Paginate = defineAsyncComponent(() =>
 
 export default {
     name: "Alterations",
+    
     props: {
         errors: Object,
         licence_dropdowns: Object,
@@ -23,12 +24,14 @@ export default {
     },
 
     data() {
+        const { getBadgeStatus } = useAlteration();
         return {
             form: {
                 alter_date: null,
                 alter_status: null
             },
             showMenu: false,
+            getBadgeStatus
         };
     },
     components: {
@@ -41,19 +44,6 @@ export default {
 
     methods: {
 
-        notify(message) {
-            if (this.success) {
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-
-            } else if (this.error) {
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-        },
-
         limit(string = '', limit = 35) {
             if (string) {
                 if (string.length >= limit) {
@@ -62,38 +52,10 @@ export default {
                 return string.substring(0, limit)
             }
         },
+        
 
         getStatus(status_param) {
-            let status = 'Not Set';
-            switch (status_param) {
-                case '1':
-                    status = '<span class="badge bg-dark text-default">Client Quoted</span>'
-                    break;
-                case '2':
-                    status = '<span class="badge bg-info text-default">Client Invoiced</span>'
-                    break;
-                case '3':
-                    status = '<span class="badge bg-light text-dark">Client Paid</span>'
-                    break;
-                case '4':
-                    status = '<span class="badge bg-warning text-default">Prepare Alterations Application</span>'
-                    break;
-                case '5':
-                    status = ' <span class="badge bg-secondary text-default">Payment to the Liquor Board</span>'
-                    break;
-                case '6':
-                    status = '<span class="badge bg-secondary text-default">Alterations Lodged</span>'
-                    break;
-                case '7':
-                    status = '<span class="badge bg-secondary text-default">Alterations Certificate Issued</span>'
-                    break;
-                case '8':
-                    status = '<span class="badge bg-success text-default">Alterations Delivered</span>'
-                    break;
-                default:
-                    break;
-            }
-            return status;
+            return this.getBadgeStatus(status_param);
         },
 
     },

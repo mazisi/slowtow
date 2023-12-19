@@ -58,6 +58,7 @@
   import Paginate from '../../Shared/Paginate.vue';
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
+  import useToaster from '../../store/useToaster';
 
   export default{
     props: {
@@ -69,6 +70,8 @@
     },
     setup(props){
       const body_max = ref(100);
+      const { notifySuccess, notifyError } = useToaster();
+
       const createTask = useForm({
             body: '',
             model_type: props.model_type,
@@ -80,9 +83,9 @@
         createTask.post('/submit-task', {
             onSuccess: () => {
               if(props.success){
-                notify(props.success)
+                notifySuccess(props.success)
               }else if(props.error){
-              notify(props.error)
+              notifyError(props.error)
               }
               createTask.reset();
             }
@@ -101,30 +104,18 @@
              preserveScroll: true,
              onSuccess: () => { 
               if(props.success){
-                notify(props.success)
+                notifySuccess(props.success)
               }else if(props.error){
-                notify(props.error)
+                notifyError(props.error)
               }
              },
            }); 
         }
       }
 
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-          
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
-        }
-
+    
         return{
-          createTask,submitTask,checkBodyLength,body_max,deleteNote,notify
+          createTask,submitTask,checkBodyLength,body_max,deleteNote
         }
     },
     components:{

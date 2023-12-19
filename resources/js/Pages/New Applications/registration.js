@@ -12,6 +12,8 @@ import Layout from "../../Shared/Layout.vue";
   import MergeDocumentComponent from '../components/slotow-components/MergeDocumentComponent.vue';
   import DateComponent from '../components/slotow-components/DateComponent.vue';
   import MergeButtonComponent from '../components/slotow-components/MergeButtonComponent.vue';
+  import useToaster from '../../store/useToaster';
+  import useLicenceStatus from '../../store/useLicenceStatus';
 
   export default {
     props: {
@@ -23,7 +25,8 @@ import Layout from "../../Shared/Layout.vue";
     },
 
     setup (props) {
-
+    const { notifySuccess, notifyError } = useToaster();
+    const { getPlainStatus } = useLicenceStatus();
       const form = useForm({
         status: [],
         unChecked: false,
@@ -42,9 +45,9 @@ import Layout from "../../Shared/Layout.vue";
           },
           onSuccess: () => {
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
         })
@@ -72,9 +75,9 @@ import Layout from "../../Shared/Layout.vue";
               },
           onSuccess: () => {
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
         })
@@ -86,27 +89,12 @@ import Layout from "../../Shared/Layout.vue";
           preserveScroll: true,
           onSuccess: () => {
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
         })
-        }
-
-
-
-      const notify = (message) => {
-          if(props.success){
-            toast.success(message, {
-            autoClose: 2000,
-          });
-
-          }else if(props.error){
-            toast.error(message, {
-            autoClose: 2000,
-          });
-          }
         }
 
         function checkingFileProgress(message){
@@ -173,9 +161,9 @@ import Layout from "../../Shared/Layout.vue";
             preserveScroll: true,
             onSuccess: () => {
                       if(props.success){
-                          notify(props.success)
+                          notifySuccess(props.success)
                         }else if(props.error){
-                          notify(props.error)
+                          notifyError(props.error)
                         }
                         },
           })
@@ -186,9 +174,9 @@ import Layout from "../../Shared/Layout.vue";
             preserveScroll: true,
             onSuccess: () => {
                 if(props.success){
-                              notify(props.success)
+                              notifySuccess(props.success)
                            }else if(props.error){
-                             notify(props.error)
+                             notifyError(props.error)
                            }
               uploadDoc.doc_type = null;
              },
@@ -200,99 +188,22 @@ import Layout from "../../Shared/Layout.vue";
             Inertia.delete(`/delete-licence-document/${id}`, {
               onSuccess: () => {
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                          }else if(props.error){
-                           notify(props.error)
+                           notifyError(props.error)
                          }
                       },
             })
           }
         }
 
-         function getStatus(status_param) {
-          let status;
-          switch (status_param) {
-            case '100':
-              status = 'Client Quoted'
-              break;
-              case '200':
-              status = 'Deposit Invoice'
-              break;
-              case '300':
-              status = 'Deposit Paid'
-              break;
-              case '400':
-              status = 'Payment to the Liquor Board'
-              break;
-              case '500':
-              status = 'Prepare New Application'
-              break;
-              case '600':
-              status = 'Scanned Application'
-              break;
-              case '700':
-              status = 'Lodged with Municipality'
-              break;
-              case '800':
-              status = 'Municipal Comments'
-              break;
-              case '900':
-              status = 'Completed Application Scanned'
-              break;
-              case '1000':
-              status = 'Lodged with MER'
-              break;
-              case '1100':
-              status = 'Lodged with Magistrate'
-              break;
-              case '1200':
-              status = 'Lodged with DPO'
-              break;
-              case '1300':
-              status = 'Police Report'
-              break;
-              case '1400':
-              status = 'Lodged With Liquor Board'
-              break;
-              case '1500':
-              status = 'Application Lodged'
-              break;
-            case '1600':
-              status = 'Additional Documents/Information'
-              break;
-            case '1700':
-              status = 'Initial Inspection'
-              break;
-            case '1800':
-              status = 'Final Inspection'
-              break;
-            case '1900':
-            status = 'Activation Fee Requested'
-              break;
-            case '2000':
-            status = 'Client Finalisation Invoice'
-              break;
-            case '2100':
-            status = 'Finalisation Paid'
-            break;
-            case '2200':
-              status = 'Activation Fee Paid'
-              break;
-              case '2300':
-            status = 'Licence Issued'
-            break;
-            case '2400':
-            status = 'Licence Delivered'
-            break;
-            default:
-              status='Not Set';
-              break;
-          }
-          return status;
-        }
+
+function getStatus(status_param) {
+    return getPlainStatus(status_param);
+}
 
       return {
-        notify,hasFile,
+        hasFile,
         form,getStatus,
         updateRegistration,
         pushData,updateStageDate,

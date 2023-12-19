@@ -56,7 +56,7 @@ class AlterationExportAction{
                                     
                                     ->when(request('is_licence_complete') === 'Pending' , function ($query){
                                             $query->where(function ($query) {
-                                                $query->where('alterations.status','<', 8)
+                                                $query->where('alterations.status','<', 800)
                                                        ->orWhere('alterations.status', 0)
                                                       ->orWhereNull('alterations.status');
                                             });
@@ -64,7 +64,7 @@ class AlterationExportAction{
                                         })
                 
                                     ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                                        $query->where('alterations.status',8);
+                                        $query->where('alterations.status',800);
                                     });
 
                                 })

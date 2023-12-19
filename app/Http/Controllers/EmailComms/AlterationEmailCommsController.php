@@ -32,11 +32,11 @@ class AlterationEmailCommsController extends Controller
         })
         ->where(function($query){
             $query->where('status','1')
-                    ->orWhere('status','2')
-                    ->orWhere('status','4')
-                    ->orWhere('status','5')
-                    ->orWhere('status','6')
-                    ->orWhere('status','7');   
+                    ->orWhere('status','200')
+                    ->orWhere('status','400')
+                    ->orWhere('status','500')
+                    ->orWhere('status','600')
+                    ->orWhere('status','700');   
                      })
     ->whereNull('deleted_at')
         ->orderBy('status','asc')
