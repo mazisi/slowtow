@@ -3,7 +3,7 @@
     <h6 class="text-center">Notes</h6>
     <div class="col-8">
     <div class="row">
-    <div v-for="task in tasks.data" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0">
+    <div v-for="task in tasks.data" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0 animate__animated animate__fadeInLeft">
     <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
     <span class="alert-icon"><i class=""></i></span>
     <span class="alert-text"> 
@@ -59,6 +59,7 @@
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
   import useToaster from '../../store/useToaster';
+  
 
   export default{
     props: {

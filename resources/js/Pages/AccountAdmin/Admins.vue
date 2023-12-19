@@ -118,9 +118,10 @@
                                     <a href="#" class="text-pink">{{ user.email }}</a>
                                   </span>
                                 </p>
-                               </template>
+                               
                               <div class="text-sm text-muted">Last Activity:</div>
-                              <div class="text-sm text-muted">{{ getMomentDate(user.last_activity) }}</div>
+                              <div class="text-sm text-muted">{{ getMomentDate(user.last_activity_at) }}</div>
+                            </template>
                           </div>
                           <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 btn-rounded waves-effect w-md waves-light">
                             Edit
@@ -294,7 +295,9 @@
           }
 
           function getMomentDate(date){
-            return moment(Date.now()).from(date);
+            let now = moment();
+            const date_param = moment(date, 'YYYY-MM-DD HH:mm:ss');
+            return moment.duration(moment(date_param).diff(now)).humanize(true);
           }
 
           function deActivateuser(id, status){

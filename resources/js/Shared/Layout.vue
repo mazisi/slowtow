@@ -49,6 +49,7 @@ import { mapMutations, mapState } from "vuex";
 import { VOffline } from 'v-offline';
 import { toast } from 'vue3-toastify'
 import { slotFlagsText } from "@vue/shared";
+import 'animate.css';
 
 export default {
   name: "App",

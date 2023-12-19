@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PagePreviews\PeoplePreviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PersonController;
 use App\Http\Controllers\PeopleDocumentController;
@@ -21,3 +22,6 @@ Route::post('/upload-person-documents', [PeopleDocumentController::class,'upload
 Route::delete('/delete-person-document/{slug}', [PeopleDocumentController::class,'deleteDocument']);
 
 Route::patch('/update-person-active-status/{slug}',[PersonController::class,'updateActiveStatus']);
+
+//print person doc preview
+Route::get('/preview-person/{slug}',[PeoplePreviewController::class,'printDocument']);

@@ -26,7 +26,8 @@ createInertiaApp({
             .use(plugin)
             .use(store)
             .use(Vue3Toasity,{
-                autoClose: 3000
+                autoClose: 3000,
+                multiple: false,
               })
             .use(MaterialDashboard)
             .component('InertiaLink', Link)

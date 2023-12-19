@@ -178,29 +178,17 @@ const form = useForm({
 
        
 
-         function viewFile(model_id) {
-              let model = 'PeopleDocument';
-               Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
-              },
-                
-               })
+         function previewPerson() {
+          let url = `/preview-person/${props.person.slug}`
+          window.open(url,'_blank');
          }
 
-        //  onMounted(() => {
-        //   if(props.success){
-        //     notifySuccess(props.success)
-        //   }else if(props.error){
-        //     notifyError(props.error)
-        //   }
-        // });
+    
 
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
         assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
-        show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,viewFile
+        show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,previewPerson
        
      }
 },

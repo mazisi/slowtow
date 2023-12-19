@@ -724,15 +724,15 @@
     
     </div>
     <hr>
-<!--    
+    
     <Task 
-    v-if="licence.status >= 3500"
+    v-if="licence.status >= 1100"
     :tasks="tasks" 
     :model_id="licence.id" 
     :success="success" 
     :error="error" 
     :errors="errors"
-    :model_type="'Licence'"/> -->
+    :model_type="'Licence'"/> 
   
   
   

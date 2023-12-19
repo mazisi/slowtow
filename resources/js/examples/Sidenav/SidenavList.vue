@@ -288,7 +288,7 @@
       
 
     </ul>
-  <ul class="navbar-nav mt-3">
+  <ul class="navbar-nav mt-3 animate__animated animate__fadeInUp">
     <li class="nav-item">
       <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
   <div class="hstack gap-3">
