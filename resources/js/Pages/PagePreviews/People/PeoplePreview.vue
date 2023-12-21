@@ -1,13 +1,14 @@
 <template>
     <Layout>
       <Head title="View Person" />
+     
     <div class="container-fluid mt-6">
     <!-- <Banner/> -->
     <div class="card card-body mx-3 mx-md-4 mt-n6">
     <div class="row">
     <div class="col-lg-6 col-7">
     <h6 class="mb-1">{{ person.full_name }} - {{ person.id_or_passport }}</h6>
-    </div>
+    </div> 
     <div class="col-lg-6 col-5 my-auto text-end">
       <button @click="mergeAndDownload" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-download text-md"></i>
        Merge And Download
@@ -17,84 +18,98 @@
     </div>
     
     <div class="row">
-         
+     
+     
+      <div class="row">
+  <div class="col-md-6">Full Name And Surname *</div>
+  <div class="col-md-6">
+    <input 
+      type="text"
+      v-model="form.name"
+      class="form-control"
+      placeholder="Full Name And Surname *"
+      :required="true"
+    />
+  </div>
+</div>
 
-          <TextInputComponent 
-          :inputType="'text'"
-          v-model="form.name" 
-          :value="form.name"  
-          :column="'col-4'" 
-          :label="'Full Name And Surname *'" 
-          :errors="errors.name"
-          :input_id="name"
-          :required="true"
-        />
+<div class="row">
+  <div class="col-md-6">ID/Passport Number</div>
+  <div class="col-md-6">
+    <input 
+      type="text"
+      v-model="form.id_or_passport"
+      class="form-control"
+      placeholder="ID/Passport Number"
+    />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">Date of Birth</div>
+  <div class="col-md-6">
+    <input 
+      type="text"
+      v-model="form.date_of_birth"
+      class="form-control"
+      placeholder="Date of Birth"
+      :disabled="true"
+    />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">Email Address</div>
+  <div class="col-md-6">
+    <input 
+      type="email"
+      v-model="form.email_address_1"
+      class="form-control"
+      placeholder="Email Address"
+    />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">Email Address</div>
+  <div class="col-md-6">
+    <input 
+      type="email"
+      v-model="form.email_address_2"
+      class="form-control"
+      placeholder="Email Address"
+    />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">Phone Number</div>
+  <div class="col-md-6">
+    <input 
+      type="text"
+      v-model="form.cell_number"
+      class="form-control"
+      placeholder="Phone Number"
+    />
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">Work Number</div>
+  <div class="col-md-6">
+    <input 
+      type="tel"
+      v-model="form.telephone"
+      class="form-control"
+      placeholder="Work Number"
+    />
+  </div>
+</div>
 
 
-        <TextInputComponent 
-          :inputType="'text'"
-          v-model="form.id_or_passport"  
-          :value="form.id_or_passport" 
-          :column="'col-4'" 
-          :label="'ID/Passport Number'" 
-          :errors="errors.id_or_passport"
-          :input_id="id_or_passport"
-        />
+        
 
-        <TextInputComponent 
-          :inputType="'text'"
-          v-model="form.date_of_birth"  
-          :value="form.date_of_birth" 
-          :column="'col-4'" 
-          :label="'Date of Birth'" 
-          :errors="errors.date_of_birth"
-          :input_id="date_of_birth"
-          :disabled="true"
-        />
-
-        <TextInputComponent 
-            :inputType="'email'"
-            v-model="form.email_address_1" 
-            :value="form.email_address_1"  
-            :column="'col-4'" 
-            :label="'Email Address'" 
-            :errors="errors.email_address_1"
-            :input_id="email_address_1"
-         />
-
-                      
-                      
-         <TextInputComponent 
-            :inputType="'email'"
-            v-model="form.email_address_2"
-            :value="form.email_address_2"  
-            :column="'col-4'" 
-            :label="'Email Address'" 
-            :errors="errors.email_address_2"
-            :input_id="email_address_2"
-         />
-
-         <TextInputComponent 
-            :inputType="'text'"
-            v-model="form.cell_number"
-            :value="form.cell_number"  
-            :column="'col-4'" 
-            :label="'Phone Number'" 
-            :errors="errors.cell_number"
-            :input_id="cell_number"
-         />
-
-         <TextInputComponent 
-            :inputType="'tel'"
-            v-model="form.telephone" 
-            :value="form.telephone"
-            :column="'col-4'" 
-            :label="'Work Number'" 
-            :errors="errors.telephone"
-            :input_id="telephone"
-         />
-
-         <div >
+         <div class="col-md-12" >
             <div v-for="docType in ['ID Document', 'Passport', 'Work Permit', 'Police Clearance']" :key="docType" class="mb-2">
                 <iframe v-if="checkDocType(docType)?.id" :src="`https://slotowstorage.blob.core.windows.net/${checkDocType(docType)?.docPath}`" frameborder="0" width="100%" height="600px"></iframe>
               </div>
