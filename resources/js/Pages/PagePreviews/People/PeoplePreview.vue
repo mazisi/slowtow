@@ -20,19 +20,11 @@
     <div class="row">
      
      
-      <div class="row">
-  <div class="col-md-6">Full Name And Surname *</div>
-  <div class="col-md-6">
-    <input 
-      type="text"
-      v-model="form.name"
-      class="form-control"
-      placeholder="Full Name And Surname *"
-      :required="true"
-    />
-  </div>
-</div>
-
+    
+<PreviewTextComponent
+   :value="person.full_name"
+   label="Full Name And Surname"
+/>
 <div class="row">
   <div class="col-md-6">ID/Passport Number</div>
   <div class="col-md-6">
@@ -144,8 +136,8 @@
 
     <script>
    import Layout from '../../../Shared/Layout.vue';
-   import TextInputComponent from '../../components/input-components/TextInputComponent.vue';
    import { useForm,Link, Head } from '@inertiajs/inertia-vue3';
+   import PreviewTextComponent from '../components/PreviewTextComponent.vue';
 
    export default {
        props: {
@@ -209,7 +201,7 @@
 
        components: {
            Layout,
-           TextInputComponent
+           PreviewTextComponent
        }
    }
 </script>
