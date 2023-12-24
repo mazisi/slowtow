@@ -1,6 +1,6 @@
 <template>
     <Layout>
-      <Head title="View Person" />
+      <Head title="Preview Person" />
      
     <div class="container-fluid mt-6">
     <!-- <Banner/> -->
@@ -16,8 +16,12 @@
     
     </div>
     </div>
+
+
     
-    <div class="row">
+    <!-- <template v-slot:pdf-content> -->
+    
+    <div class="row" >
      
      
     
@@ -106,8 +110,8 @@
                 <iframe v-if="checkDocType(docType)?.id" :src="`https://slotowstorage.blob.core.windows.net/${checkDocType(docType)?.docPath}`" frameborder="0" width="100%" height="600px"></iframe>
               </div>
          </div>
-
-      </div>
+</div>
+        
       <!-- <iframe :src="`${$page.props.blob_file_path}${filePath.docPath}`" frameborder="0" width="100%" height="600px"></iframe> -->
     </div>
     </div>
@@ -136,10 +140,13 @@
 
     <script>
    import Layout from '../../../Shared/Layout.vue';
+   import { ref } from 'vue'
    import { useForm,Link, Head } from '@inertiajs/inertia-vue3';
    import PreviewTextComponent from '../components/PreviewTextComponent.vue';
+   import Vue3Html2pdf from 'vue3-html2pdf'
 
    export default {
+    name: 'PeoplePreview',
        props: {
            person: Object,
            errors: Object
@@ -163,10 +170,17 @@
             active: props.person.active,
             slug: props.person.slug,      
             });
-
+            const html2Pdf = ref(null)
             const mergeAndDownload = () => {
-                alert("WooooHoooooo")
-                //form.post('/people/merge-and-download')
+                // alert("WooooHoooooo")
+       
+      const options = {
+        filename: 'example.pdf', // Change the filename as needed
+        image: { type: 'jpeg', quality: 0.98 }, // Optional
+        html2canvas: {}, // Optional
+        jsPDF: {} // Optional
+      };
+      html2Pdf.download()
             }
 
             const checkDocType = (doc_type) => {
@@ -196,12 +210,13 @@
             }
             }
 
-           return {form,mergeAndDownload,checkDocType}
+           return {form,mergeAndDownload,checkDocType,html2Pdf}
        },
 
        components: {
            Layout,
-           PreviewTextComponent
+           PreviewTextComponent,
+           Vue3Html2pdf
        }
    }
 </script>

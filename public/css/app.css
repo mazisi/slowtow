@@ -1021,6 +1021,10 @@ select {
   padding-left: 0.5rem;
   padding-right: 0.5rem;
 }
+.py-3 {
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+}
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem;
@@ -1028,10 +1032,6 @@ select {
 .px-6 {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-}
-.py-3 {
-  padding-top: 0.75rem;
-  padding-bottom: 0.75rem;
 }
 .px-0 {
   padding-left: 0px;
@@ -1150,6 +1150,10 @@ select {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
 }
+.text-white {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
 .text-gray-200 {
   --tw-text-opacity: 1;
   color: rgb(229 231 235 / var(--tw-text-opacity));
@@ -1169,10 +1173,6 @@ select {
 .text-gray-900 {
   --tw-text-opacity: 1;
   color: rgb(17 24 39 / var(--tw-text-opacity));
-}
-.text-white {
-  --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .text-gray-800 {
   --tw-text-opacity: 1;

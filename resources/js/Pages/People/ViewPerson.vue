@@ -9,12 +9,14 @@
 <h6 class="mb-1">Person Info: {{ person.full_name }}</h6>
 </div>
 <div class="col-lg-6 col-5 my-auto text-end">
-  <button @click="previewPerson" type="button" class="btn btn-sm btn-info mx-2">
+
+
+  <button @click="previewPerson" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
    Preview
-  </button>
+      </button>
 
   <button @click="deletePerson(person.full_name)" type="button" class="btn btn-sm btn-danger">
-    Delete
+    <i class="fa fa-trash-alt text-md"></i> Delete
   </button>
 </div>
 </div>

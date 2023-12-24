@@ -5,6 +5,8 @@ import { Inertia } from '@inertiajs/inertia';
 import { useForm, Head } from '@inertiajs/inertia-vue3';
 import { ref, computed } from 'vue';
 import { toast } from 'vue3-toastify';
+import TextInputComponent from '../components/input-components/TextInputComponent.vue';
+import LiquorBoardRegionComponent from '../components/input-components/LiquorBoardRegionComponent.vue';
 import common from '../common-js/common.js';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
@@ -23,6 +25,7 @@ export default {
       let showMenu = ref(false);
       let options = props.companies;
       let persons = props.people;
+
       const form = useForm({
           slug: props.licence.slug,
           event_name: props.licence.event_name,
@@ -65,13 +68,19 @@ export default {
           }      
         }
 
+        const previewTemp = () =>{
+
+          let endpoint = `/preview-temp-licence/${props.licence.slug}`
+          window.open(endpoint,'_blank');
+        }
+
         
         const computedBoardRegions = computed(() => {
           return common.getBoardRegions();
         })
 
     return {
-      showMenu,
+      showMenu,previewTemp,
       computedBoardRegions,
       options,
       persons,
@@ -91,7 +100,9 @@ export default {
 
   components: {
     Layout,
+    LiquorBoardRegionComponent,
     Multiselect,
+    TextInputComponent,
     Banner,
     Head
   },
