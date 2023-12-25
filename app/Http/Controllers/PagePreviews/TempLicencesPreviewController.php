@@ -10,7 +10,7 @@ use App\Models\TemporalLicence;
 class TempLicencesPreviewController extends Controller
 {
     function preview() {
-        $licence = TemporalLicence::whereSlug(request('slug'))->firstOrFail();
+        $licence = TemporalLicence::with('company','people','temp_documents')->whereSlug(request('slug'))->firstOrFail();
         return Inertia::render('PagePreviews/TempLicences/TempLicencesPreview',['licence' => $licence]);
     }
 }

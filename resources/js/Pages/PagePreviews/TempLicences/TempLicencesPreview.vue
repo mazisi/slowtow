@@ -7,8 +7,8 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
     <div class="row">
     <div class="col-lg-6 col-7">
-    <h6 v-if="form.belongs_to == 'Company'" class="mb-1">{{ form.full_name }} - {{ form.id_or_passport }}</h6>
-    <h6 v-else class="mb-1">{{ form.name }} - {{ form.reg_number }}</h6>
+    <h6 v-if="form.belongs_to == 'Individual'" class="mb-1">{{ form.full_name }} - {{ form.id_or_passport }}</h6>
+    <h6 v-else class="mb-1">{{ form.company_name }} - {{ form.reg_number }}</h6>
     </div> 
     <div class="col-lg-6 col-5 my-auto text-end">
       <button @click="mergeAndDownload" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-download text-md"></i>
@@ -114,9 +114,9 @@
         
 
          <div class="col-md-12" >
-            <!-- <div v-for="docType in ['ID Document', 'Passport', 'Work Permit', 'Police Clearance']" :key="docType" class="mb-2">
+           <div v-for="docType in ['Licence Issued', 'Payment To The Liquor Board']" :key="docType" class="mb-2">
                 <iframe v-if="checkDocType(docType)?.id" :src="`https://slotowstorage.blob.core.windows.net/${checkDocType(docType)?.docPath}`" frameborder="0" width="100%" height="600px"></iframe>
-              </div> -->
+              </div>
          </div>
 </div>
         
@@ -154,8 +154,6 @@ export default {
     const { notifySuccess, notifyError } = useToaster();
  
       let showMenu = ref(false);
-      let options = props.companies;
-      let persons = props.people;
 
       const form = useForm({
           slug: props.licence.slug,
@@ -192,10 +190,39 @@ export default {
             return date
           }
 
+          const checkDocType = (doc_type) => {
+                if (!props.licence.temp_documents) {
+                return {}; 
+            } else {
+                let temp_documents = props.licence.temp_documents; 
+
+                const foundDocument = temp_documents.find(
+                    (doc) =>
+                        doc.temporal_licence_id === props.licence.id &&
+                        doc.doc_type === doc_type &&
+                        doc.document &&
+                        doc.document_name &&
+                        doc.id
+                );
+                console.log(foundDocument)
+
+                if (foundDocument) {
+                    return {
+                        fileName: foundDocument.document_name,
+                        docPath: foundDocument.document,
+                        id: foundDocument.id,
+                    };
+                } else {
+                    return {};
+                }
+            }
+            }
+
     return {
       showMenu,previewTemp,
       form,returnMomentDate,
       computeLogdementDate,
+      checkDocType
     }
   },
   
