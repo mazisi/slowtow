@@ -115,8 +115,14 @@
           return common.getBoardRegions();
         })
 
+        const filteredLicenceTypes = props.licence_types.filter(
+          type => [2, 3, 4].includes(type.id)
+        );
+
+        console.log(filteredLicenceTypes);
+        
       return { submit, form ,options, idRegForm,
-        selectApplicant, filterForm,toast,
+        selectApplicant, filterForm,toast,filteredLicenceTypes,
         getchIdOrRegNumber, computedProvinces,
         computedBoardRegions, licenceByProvince, filterLicenceTypes
       }

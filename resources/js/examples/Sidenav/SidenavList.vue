@@ -7,7 +7,7 @@
 </style>
 
 <template v-if="$page.props.auth" >
-  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100 animate__animated animate__fadeInLeft" 
+  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100 " 
   id="sidenav-collapse-main">
     <ul class="navbar-nav">
 

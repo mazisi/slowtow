@@ -29,145 +29,140 @@
     
                 </div>
     
-                <div class="row">
-    
-                    <div class="mt-3 ">
-    
-                        <form class="row" @submit.prevent="submit">
-    
-                            <div class="col-8 col-md-8 col-xl-8 position-relative">
-    
-                                <div class="card card-plain h-100">
-    
-                                    <div class="p-3 card-body">
-    
-    
-    
-                                        <div class="row">
-    
-    
-    
-    
-    
-                                            <CheckBoxInputComponent :label="'Active'" :value="'1'" :isChecked="form.is_licence_active == '1'" :column="'col-md-12'" />
-    
-    
-    
-                                            <TextInputComponent :inputType="'text'" :required="true" :label="'Trading Name *'" v-model="form.trading_name" :column="'col-md-6'" :value="form.trading_name" :errors="errors.trading_name " :input_id="trading_name" />
-    
-    
-    
-    
-    
-    
-    
-                                            <div class="col-6 columns">
-    
-                                                <div class="input-group input-group-outline null is-filled">
-    
-                                                    <label class="form-label">Applicant</label>
-    
-                                                    <select v-model="form.belongs_to" @change="onApplicantChange($event)" class="form-control form-control-default" required>
-    
-                                                            <option :value="''" disabled selected>Select Applicant</option>
-    
-                                                            <option value="Company">Company</option>
-    
-                                                            <option value="Individual">Individual</option>
-    
-                                                        </select>
-    
-                                                </div>
-    
-                                                <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
-    
-                                            </div>
-    
-    
-    
-                                            <div class="col-md-6 columns" v-if="form.belongs_to === 'Company'">
-    
-                                                <Multiselect v-model="form.company" placeholder="Search company" :options="company_options" :searchable="true" :class="multiselect" @select="onSelectApplicant($event)" />
-    
-                                                <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
-    
-                                            </div>
-    
-    
-    
-    
-    
-                                            <div class="col-6 columns" v-if="form.belongs_to === 'Individual'">
-    
-                                                <Multiselect v-model="form.person" placeholder="Search Individual" :options="people_options" :searchable="true" @select="onSelectApplicant($event)" style="margin:top: 1rem;" />
-    
-                                                <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
-    
-                                            </div>
-    
-    
-    
-    
-    
-                                            <!-- Province Trigger Licence Type+ -->
-    
-                                            <div class="col-6 columns">
-    
-                                                <div class="input-group input-group-outline null is-filled">
-    
-                                                    <label class="form-label">Province</label>
-    
-                                                    <select class="form-control form-control-default" v-model="form.province" required @change="selectedProvince()">
-    
-                                                            <option :value="''" disabled selected>Select Province</option>
-    
-                                                            <option v-for="province in distictProvinces" :key="province" :value=province>{{ province }}</option>
-    
-                                                        </select>
-    
-                                                </div>
-    
-                                            </div>
-    
-    
-    
-                                            <!-- end Province Trigger Licence Type+ -->
-    
-                                            <LicenceTypeDropDownComponent :dropdownList="licence_types" :label="'Licence Type *'" :defaultDisabledText="'Select Licence Type'" :column="'col-6'" :value="form.licence_type" v-model="form.licence_type" :errors="errors.licence_type" :input_id="licence_type"
-    
-                                                :required="true" v-if="form.province !== ''" />
-    
-    
-    
-                                            <LiquorBoardRegionComponent :dropdownList="computedBoardRegions" :label="'Liquor Board Region*'" :defaultDisabledText="'Select Liquor Board Region'" :column="'col-6'" :value="form.board_region" v-model="form.board_region" :errors="errors.board_region"
-    
-                                                :input_id="board_region" v-if="form.province !== '' && form.province == 'Gauteng'" />
-    
-    
-    
-    
-    
-    
-    
-                                            <TextInputComponent :inputType="'text'" :required="true" v-model="form.licence_number" :value="form.licence_number" :column="'col-6'" :label="'Licence Number'" :errors="errors.licence_number" :input_id="licence_number" />
-    
-    
-    
-                                            <TextInputComponent :inputType="'text'" v-model="form.old_licence_number" :value="form.old_licence_number" :column="'col-6'" :label="'Old Licence Number'" :errors="errors.old_licence_number" :input_id="old_licence_number" /> {{ filterForm }}
-    
-                                            
-    
-                                            <TextInputComponent v-if="form.belongs_to == 'Company'" :inputType="'text'" :disabled="true" :value="form.value" :column="'col-6'" :label="'Company Registration Number'" :input_id="'company'" />
-    
-                                            <TextInputComponent v-if="form.belongs_to == 'Individual'" :inputType="'text'" :disabled="true" :value="form.value" :column="'col-6'" :label="'ID Number'" :input_id="'individual'" />
-    
-    
-    
-                                        </div>
-    
-    
-    
-                                    </div>
+<div class="row">
+
+<div class="mt-3 ">
+
+<form class="row" @submit.prevent="submit">
+
+<div class="col-8 col-md-8 col-xl-8 position-relative">
+
+    <div class="card card-plain h-100">
+
+        <div class="p-3 card-body">
+
+
+
+            <div class="row">
+
+
+
+
+
+                <CheckBoxInputComponent :label="'Active'" :value="'1'" :isChecked="form.is_licence_active == '1'" :column="'col-md-12'" />
+
+
+
+                <TextInputComponent :inputType="'text'" :required="true" :label="'Trading Name *'" v-model="form.trading_name" :column="'col-md-6'" :value="form.trading_name" :errors="errors.trading_name " :input_id="trading_name" />
+
+
+
+
+
+
+
+                <div class="col-6 columns">
+
+                    <div class="input-group input-group-outline null is-filled">
+
+                        <label class="form-label">Applicant</label>
+
+                        <select v-model="form.belongs_to" @change="onApplicantChange($event)" class="form-control form-control-default" required>
+
+                                <option :value="''" disabled selected>Select Applicant</option>
+
+                                <option value="Company">Company</option>
+
+                                <option value="Individual">Individual</option>
+
+                            </select>
+
+                    </div>
+
+                    <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
+
+                </div>
+
+
+
+                <div class="col-md-6 columns" v-if="form.belongs_to === 'Company'">
+
+                    <Multiselect v-model="form.company" placeholder="Search company" :options="company_options" :searchable="true" :class="multiselect" @select="onSelectApplicant($event)" />
+
+                    <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
+
+                </div>
+
+
+
+
+
+                <div class="col-6 columns" v-if="form.belongs_to === 'Individual'">
+
+                    <Multiselect v-model="form.person" placeholder="Search Individual" :options="people_options" :searchable="true" @select="onSelectApplicant($event)" style="margin:top: 1rem;" />
+
+                    <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
+
+                </div>
+
+
+
+
+
+                <!-- Province Trigger Licence Type+ -->
+
+                <div class="col-6 columns">
+
+                    <div class="input-group input-group-outline null is-filled">
+
+                        <label class="form-label">Province</label>
+
+                        <select class="form-control form-control-default" v-model="form.province" required @change="selectedProvince()">
+
+                                <option :value="''" disabled selected>Select Province</option>
+
+                                <option v-for="province in distictProvinces" :key="province" :value=province>{{ province }}</option>
+
+                            </select>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- end Province Trigger Licence Type+ -->
+
+                <LicenceTypeDropDownComponent :dropdownList="licence_types" :label="'Licence Type *'" :defaultDisabledText="'Select Licence Type'" :column="'col-6'" :value="form.licence_type" v-model="form.licence_type" :errors="errors.licence_type" :input_id="licence_type"
+
+                    :required="true" v-if="form.province !== ''" />
+
+
+
+                <LiquorBoardRegionComponent :dropdownList="computedBoardRegions" :label="'Liquor Board Region*'" :defaultDisabledText="'Select Liquor Board Region'" :column="'col-6'" :value="form.board_region" v-model="form.board_region" :errors="errors.board_region"
+
+                    :input_id="board_region" v-if="form.province !== '' && form.province == 'Gauteng'" />
+
+
+                <TextInputComponent :inputType="'text'" :required="true" v-model="form.licence_number" :value="form.licence_number" :column="'col-6'" :label="'Licence Number'" :errors="errors.licence_number" :input_id="licence_number" />
+
+
+
+                <TextInputComponent :inputType="'text'" v-model="form.old_licence_number" :value="form.old_licence_number" :column="'col-6'" :label="'Old Licence Number'" :errors="errors.old_licence_number" :input_id="old_licence_number" /> {{ filterForm }}
+
+                
+
+                <TextInputComponent v-if="form.belongs_to == 'Company'" :inputType="'text'" :disabled="true" :value="form.value" :column="'col-6'" :label="'Company Registration Number'" :input_id="'company'" />
+
+                <TextInputComponent v-if="form.belongs_to == 'Individual'" :inputType="'text'" :disabled="true" :value="form.value" :column="'col-6'" :label="'ID Number'" :input_id="'individual'" />
+
+
+
+            </div>
+
+
+
+        </div>
     
                                 </div>
     

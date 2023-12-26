@@ -25,14 +25,16 @@ class LicenceDocsController extends Controller
             "document_file" => "required|mimes:pdf",
             "doc_type" => "required"
         ]);
-
+$licence = Licence::find($request->licence_id);
         $fileName = $this->generateFileName($request->document_file);
         $filePath = $this->storeDocumentFile($request->document_file, $fileName);
 
         if (!$this->fileExists($filePath)) {
             $fileModel = $this->createLicenceDocument($request, $fileName);
             $this->updateLicenceStatusAndFlags($request, $fileModel);
-            // (new WholesaleController())->generateLicenceIssuedDocs($request->licence_id);
+
+            (new WholesaleController())->generateLicenceIssuedDocs($licence);
+
             return back()->with('success', 'Document uploaded successfully.');
         } else {
             return back()->with('error', 'Azure storage could not be reached. Please try again.');

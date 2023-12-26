@@ -113,11 +113,19 @@
 
         
 
-         <div class="col-md-12" >
-           <div v-for="docType in ['Licence Issued', 'Payment To The Liquor Board']" :key="docType" class="mb-2">
-                <iframe v-if="checkDocType(docType)?.id" :src="`https://slotowstorage.blob.core.windows.net/${checkDocType(docType)?.docPath}`" frameborder="0" width="100%" height="600px"></iframe>
-              </div>
-         </div>
+  <div class="col-md-12" >
+  <div v-if="checkDocType('Licence Issued')?.id" class="mb-2">
+    <iframe :src="`https://slotowstorage.blob.core.windows.net/${checkDocType('Licence Issued')?.docPath}`" 
+    frameborder="0" width="100%" height="600px"></iframe>
+  </div>
+  <div v-else-if="checkDocType('Payment To The Liquor Board')?.id" class="mb-2">
+    <iframe :src="`https://slotowstorage.blob.core.windows.net/${checkDocType('Payment To The Liquor Board')?.docPath}`" 
+    frameborder="0" width="100%" height="600px"></iframe>
+  </div>
+  <div v-else>
+    <p>No document available</p>
+  </div>
+  </div>
 </div>
         
       <!-- <iframe :src="`${$page.props.blob_file_path}${filePath.docPath}`" frameborder="0" width="100%" height="600px"></iframe> -->
