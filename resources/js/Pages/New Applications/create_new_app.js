@@ -115,8 +115,8 @@
           return common.getBoardRegions();
         })
 
-        const filteredLicenceTypes = props.licence_types.filter(
-          type => [2, 3, 4].includes(type.id)
+        const filteredLicenceTypes = props.licence_dropdowns.filter(
+          type => [102, 103, 104].includes(type.id)
         );
 
         console.log(filteredLicenceTypes);

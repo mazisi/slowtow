@@ -131,18 +131,7 @@
                                                 v-if="form.province !== '' && form.type == 'retail'"
                                             />
 
-                                            <LicenceTypeDropDownComponent 
-                                                v-if="form.type == 'wholesale'"                                         
-                                                :dropdownList="licenceByProvince"
-                                                :label="'Licence Type *'"
-                                                :defaultDisabledText="'Select Licence Type'"
-                                                :column="'col-12'"
-                                                :value="form.licence_type"
-                                                v-model="form.licence_type"
-                                                :errors="errors.licence_type"
-                                                :input_id="licence_type"
-                                                :required="true"
-                                            />
+                                           
 
                                             <LiquorBoardRegionComponent 
                                                 :dropdownList="computedBoardRegions"
