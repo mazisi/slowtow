@@ -21,4 +21,9 @@ class TemporalLicence extends Model
     {
         return $this->belongsTo(People::class);
     }
+
+    function temp_documents(){
+        return $this->hasMany(TemporalLicenceDocument::class, 'temporal_licence_id');
+        
+    }
 }

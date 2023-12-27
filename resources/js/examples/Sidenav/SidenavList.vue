@@ -7,7 +7,8 @@
 </style>
 
 <template v-if="$page.props.auth" >
-  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100" id="sidenav-collapse-main">
+  <div class="w-auto h-auto collapse navbar-collapse max-height-vh-100 h-100 " 
+  id="sidenav-collapse-main">
     <ul class="navbar-nav">
 
        <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
@@ -288,7 +289,7 @@
       
 
     </ul>
-  <ul class="navbar-nav mt-3 animate__animated animate__fadeInUp">
+  <ul class="navbar-nav mt-3 ">
     <li class="nav-item">
       <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
   <div class="hstack gap-3">

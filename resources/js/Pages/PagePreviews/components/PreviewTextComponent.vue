@@ -3,7 +3,7 @@
         <div class="col-md-6">{{ label }}</div>
         <div class="col-md-6">
           <input 
-            type="text"
+            :type="type"
             :value="value"
             class="form-control"
             :required="true"
@@ -17,6 +17,7 @@ export default {
     props: {
         value: String,
         label: String,
+        type: String,
     },
 }
 </script>

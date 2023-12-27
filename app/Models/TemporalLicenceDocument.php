@@ -20,4 +20,8 @@ class TemporalLicenceDocument extends Model
 
         return "docs/".$value;
     }
+
+    function temp_licence() {
+        return $this->belongsTo(TemporalLicence::class);
+    }
 }

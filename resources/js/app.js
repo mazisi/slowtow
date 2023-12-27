@@ -9,6 +9,7 @@ import { createInertiaApp } from '@inertiajs/inertia-vue3';
 import { InertiaProgress } from '@inertiajs/progress';
 import { Link } from '@inertiajs/inertia-vue3';
 import Vue3Toasity from 'vue3-toastify';
+import Vue3Html2pdf from 'vue3-html2pdf'
 
 
 
@@ -30,6 +31,7 @@ createInertiaApp({
                 multiple: false,
               })
             .use(MaterialDashboard)
+            .use(Vue3Html2pdf)
             .component('InertiaLink', Link)
             .component('Datepicker', Datepicker)
             .mixin({ methods: { route } })
