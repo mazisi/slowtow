@@ -138,9 +138,16 @@ class LicenceController extends Controller
      */
     public function show(Request $request)
     {
+        
         $licence = Licence::with('company', 'people', 'licence_documents')
             ->whereSlug($request->slug)
             ->first();
+            
+        $duplicate_original_lic = LicenceDocument::where('licence_id', $licence->id)
+        ->where('document_type', 'Duplicate-Licence')
+        ->latest()
+        ->first();
+        
 
         $original_lic = LicenceDocument::where('licence_id', $licence->id)
             ->where('document_type', 'Original-Licence')
@@ -152,10 +159,7 @@ class LicenceController extends Controller
             ->latest()
             ->first();
 
-        $duplicate_original_lic = LicenceDocument::where('licence_id', $licence->id)
-            ->where('document_type', 'Duplicate-Licence')
-            ->latest()
-            ->first();
+        
 
         $original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
             ->where('document_type', 'Original-Licence-Delivered')

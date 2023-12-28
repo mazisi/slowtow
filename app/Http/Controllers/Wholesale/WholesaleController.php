@@ -58,9 +58,21 @@ class WholesaleController extends Controller
                //$merger->addPDF(env('BLOB_FILE_PATH').$doc->document, 'all');
              }
  
-             $fileName = Str::lower($licence->trading_name).'merged_doc'.time().'.pdf';
+             $fileName = 'merged_doc'.time().'.pdf';
              //$merger->merge();
- 
+
+            $exist = LicenceDocument::where('licence_id',$licence->id)->first();
+
+                if($exist){
+                    $exist->delete();
+                }
+
+             LicenceDocument::create([
+                 'licence_id' => $licence->id,
+                 'document_type' => 'Duplicate-Licence',
+                 'document_name' => $fileName,
+                 'document_file' => env('AZURE_STORAGE_CONTAINER') . '/' . $fileName
+             ]);
             Licence::whereId($licence->id)->update(['merged_document' => $fileName]);
  
              //$merger->save(storage_path('/app/public/'.$fileName));

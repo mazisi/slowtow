@@ -153,23 +153,16 @@
   <div class="col-md-12" >
     <template v-for="licence in company.licences" :key="licence.id">
 
-        <div v-for="doc in licence.licence_documents" :key="doc.id" class="mb-2">
-            {{ doc.document_name}}
-            <!-- <iframe :src="`https://slotowstorage.blob.core.windows.net/${checkDocType('Licence Issued')?.docPath}`" 
-            frameborder="0" width="100%" height="600px"></iframe> -->
+        <div v-if="licence?.licence_documents" v-for="doc in filterDocs(licence.licence_documents)" :key="doc.id" class="mb-2">
+            
+         <iframe v-if="doc" :src="`https://slotowstorage.blob.core.windows.net/${doc.document_file}`" 
+          frameborder="0" width="100%" height="600px"></iframe>
+
+          <iframe v-else :src="`https://slotowstorage.blob.core.windows.net/${doc.document_file}`" 
+          frameborder="0" width="100%" height="600px"></iframe>
+
         </div>
     </template>
-  <!-- <div v-if="checkDocType('Licence Issued')?.id" class="mb-2">
-    <iframe :src="`https://slotowstorage.blob.core.windows.net/${checkDocType('Licence Issued')?.docPath}`" 
-    frameborder="0" width="100%" height="600px"></iframe>
-  </div>
-  <div v-else-if="checkDocType('Payment To The Liquor Board')?.id" class="mb-2">
-    <iframe :src="`https://slotowstorage.blob.core.windows.net/${checkDocType('Payment To The Liquor Board')?.docPath}`" 
-    frameborder="0" width="100%" height="600px"></iframe>
-  </div>
-  <div v-else>
-    <p>No document available</p>
-  </div> -->
   </div> 
 </div>
         
@@ -268,10 +261,21 @@ export default {
             }
             }
 
+            const filterDocs = (docs) => {
+               let doc =  docs.filter(doc =>
+               doc.document_type === 'Original-Licence' && doc.document_type === 'Duplicate-Licence' || doc.document_type === 'Payment To The Liquor Board'
+               );
+               return doc;
+            }
+
+            const hasDuplicateOriginal = (docs) => {
+               return docs.some(doc => doc.document_type === 'Duplicate-Licence');
+            }
+
     return {
       showMenu,previewTemp,
-      form,
-      checkDocType
+      form,filterDocs,
+      checkDocType,hasDuplicateOriginal
     }
   },
   
