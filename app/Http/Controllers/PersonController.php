@@ -30,7 +30,7 @@ class PersonController extends Controller
             'name' => 'required|string|max:200',
             'id_or_passport' => 'required|unique:people,id_or_passport'
         ]);
-       try {        
+       try {
         $person = People::create([
             'full_name'=> $request->name.' '.$request->surname,
             'date_of_birth' => $request->date_of_birth,
@@ -42,7 +42,7 @@ class PersonController extends Controller
             'passport_valid_until' => $request->passport_valid_until,
              'slug' => sha1(time()),
             ]);
-            
+
             if($person){
                return to_route('view_person',['slug' => $person->slug])->with('success','Individual created succesfully.');
             }
@@ -54,28 +54,19 @@ class PersonController extends Controller
 
     public function show($slug){
         $person = People::with('nominations','people_documents','company')->whereSlug($slug)->first();
-        $id_document = PeopleDocument::where('people_id',$person->id)->where('doc_type','ID Document')->first();
-        $police_clearance = PeopleDocument::where('people_id',$person->id)->where('doc_type','Police Clearance')->first();
-        $passport_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Passport')->first();
-        $work_permit_doc = PeopleDocument::where('people_id',$person->id)->where('doc_type','Work Permit')->first();
-        $fingerprints = PeopleDocument::where('people_id',$person->id)->where('doc_type','Fingerprints')->first();
+
         $tasks = Task::where('model_type','Individual')->where('model_id',$person->id)->latest()->paginate(4)->withQueryString();
         $linked_licences = Licence::with('company')->where('people_id',$person->id)->paginate(10);
 
         return Inertia::render('People/ViewPerson',[
             'person' => $person,
             'tasks' => $tasks,
-            'id_document' => $id_document,
             'linked_licences' => $linked_licences,
-            'police_clearance' => $police_clearance,
-            'passport_doc' => $passport_doc,
-            'work_permit_doc' => $work_permit_doc,
-            'fingerprints' => $fingerprints
            ]);
      }
 
     public function update(ValidatePeople $request){
-        
+
        try {
            $person = People::whereSlug($request->slug)->update([
             'full_name'=> $request->name,
@@ -105,11 +96,11 @@ class PersonController extends Controller
             }
 
             //delete transfers belonging to person
-            $deleteTransfers = LicenceTransfer::where(function ($query) use($delete_person){ 
+            $deleteTransfers = LicenceTransfer::where(function ($query) use($delete_person){
                 $query->where('people_id',$delete_person->id)
-                      ->orWhere('old_people_id',$delete_person->id);         
+                      ->orWhere('old_people_id',$delete_person->id);
              })->get(['id']);
-           
+
             foreach ($deleteTransfers as $delete_transfer) {
                 $delete_transfer->delete();
             }
@@ -119,7 +110,7 @@ class PersonController extends Controller
     }
 
 
-  
+
 
 
     public function updateActiveStatus(Request $request,$slug){
@@ -135,5 +126,5 @@ class PersonController extends Controller
             return back()->with('error','An error occurred.');
         }
     }
-    
+
 }

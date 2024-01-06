@@ -10,6 +10,7 @@ import Paginate from "../../Shared/Paginate.vue";
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 import useToaster from '../../store/useToaster';
+import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
 
 export default {
 
@@ -58,6 +59,35 @@ const form = useForm({
           file_name: file_name,
           people_id: props.person.id
     });
+    // function hasFile(doc_type) {
+    //
+    //         return {}; // Return an empty object if no document satisfies the conditions
+    //
+    //     }
+
+
+    function hasFile(doc_type) {
+        if (props.person.people_documents) {
+            const foundDocument = props.person.people_documents.find(doc =>
+                doc.people_id === props.person.id &&
+                doc.doc_type === doc_type &&
+                doc.document_name &&
+                doc.path &&
+                doc.id
+            );
+
+            console.log(foundDocument, "found")
+            if (foundDocument) {
+                return {
+                    fileName: foundDocument.document_name,
+                    docPath: foundDocument.path,
+                    id: foundDocument.id
+                };
+            }
+            return {}; // Return an empty object if no document satisfies the conditions
+
+        }
+    }
 
       let show_doc_modal = ref(true);
 
@@ -165,10 +195,6 @@ const form = useForm({
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-
-
-
-
         function checkingFileProgress(message){
           setTimeout(() => {
               toast.remove();
@@ -188,11 +214,12 @@ const form = useForm({
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
         assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
-        show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,previewPerson
+        show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,previewPerson, hasFile
 
      }
 },
  components: {
+     DocComponent,
     Layout,
     Banner,
     Head,
