@@ -23,14 +23,22 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row ">
        
-        <div class="col-auto my-auto">
+        <div class="col-7 my-auto">
           <div class="h-100">
             <h5 class="mb-1">View Temporary Licence</h5>
           </div>
         </div>
-        <div class="mx-auto mt-3 col-lg-4 col-md-6 my-sm-auto ms-sm-auto me-sm-0">
-          <button v-if="$page.props.auth.has_slowtow_admin_role" 
-           @click="deleteTempLicence" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+        <div class="mx-auto mt-3 col-4 my-sm-auto ms-sm-auto me-sm-0">
+
+           <button @click="previewTemp" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
+            Preview
+           </button>
+
+          <button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteTempLicence" 
+          type="button" class="btn btn-sm btn-danger">
+            <i class="fa fa-trash-alt text-md"></i> Delete
+          </button>
+
         </div>
       </div>
       <div class="row">
@@ -41,60 +49,82 @@
   <form @submit.prevent="update">
 <div class="row">
   
-  
+  <TextInputComponent 
+      :inputType="'text'"
+      v-model="form.event_name" 
+      :value="form.event_name"  
+      :column="'col-4'" 
+      :label="'Event Name'" 
+      :errors="errors.event_name"
+      :input_id="form.event_name"
+    />
 
-   <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Event Name</label>
-    <input type="text" class="form-control form-control-default" v-model="form.event_name" >
-     </div>
-   <div v-if="errors.event_name" class="text-danger">{{ errors.event_name }}</div>
-   </div>
+    <TextInputComponent 
+      :inputType="'date'"
+      v-model="form.start_date" 
+      :value="form.start_date"  
+      :column="'col-4'" 
+      :label="'Event Start Date'" 
+      :errors="errors.start_date"
+      :input_id="form.start_date"
+      @input="computeLogdementDate"
+    />
+
+    <TextInputComponent 
+      :inputType="'date'"
+      v-model="form.end_date" 
+      :value="form.end_date"  
+      :column="'col-4'" 
+      :label="'Event Ending Date'" 
+      :errors="errors.end_date"
+      :input_id="form.end_date"
+      @input="computeLogdementDate"
+    />
+
+    <TextInputComponent 
+      :inputType="'text'"
+      v-model="form.latest_lodgment_date" 
+      :value="form.latest_lodgment_date"  
+      :column="'col-4'" 
+      :label="'Latest Lodgment Date'" 
+      :errors="errors.latest_lodgment_date"
+      :input_id="form.latest_lodgment_date"
+      disabled="true"
+    />
+
+    <TextInputComponent 
+      :inputType="'text'"
+      v-model="form.liquor_licence_number" 
+      :value="form.liquor_licence_number"  
+      :column="'col-4'" 
+      :label="'Licence Number'" 
+      :errors="errors.liquor_licence_number"
+      :input_id="form.liquor_licence_number"
+    />
  
- <div class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Event Start Date</label>
-    <input type="date" required class="form-control form-control-default" v-model="form.start_date" @input="computeLogdementDate">
-     </div>
-   <div v-if="errors.start_date" class="text-danger">{{ errors.start_date }}</div>
-   </div>
+    <TextInputComponent 
+      :inputType="'text'"
+      v-model="form.address" 
+      :value="form.address"  
+      :column="'col-4'" 
+      :label="'Event Address Region'" 
+      :errors="errors.address"
+      :input_id="form.address"
+    />
 
-
-<div class="col-md-4 columns">
-   <div class="input-group input-group-outline null is-filled">
-  <label class="form-label">Event Ending Date</label>
-  <input type="date" class="form-control form-control-default" v-model="form.end_date" >
-   </div>
-  <div v-if="errors.end_date" class="text-danger">{{ errors.end_date }}</div>
-</div>  
-
-<div class="col-md-4 columns">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Latest Lodgment Date</label>
-  <input type="text" disabled class="form-control form-control-default" v-model="form.latest_lodgment_date" >
-   </div>
-   <div v-if="errors.latest_lodgment_date" class="text-danger">{{ errors.latest_lodgment_date }}</div>
- </div>
-
- <div class="col-md-4 columns">
-  <div class="input-group input-group-outline null is-filled ">
-  <label class="form-label">Licence Number</label>
-  <input type="text" class="form-control form-control-default" v-model="form.liquor_licence_number" >
-   </div>
- <div v-if="errors.liquor_licence_number" class="text-danger">{{ errors.liquor_licence_number }}</div>
- </div>
+    <LiquorBoardRegionComponent 
+        :dropdownList="computedBoardRegions"
+        :label="'Event Address Region'"
+        :defaultDisabledText="'Select Event Address Region'"
+        :column="'col-4'"
+        :value="form.board_region"
+        v-model="form.board_region"
+        :errors="errors.board_region"
+        :input_id="board_region"
+        :required="false"
+    />
  
- <div class="col-md-4 columns">
-  <div class="input-group input-group-outline null is-filled ">
-  
-  <select class="form-control form-control-default" v-model="form.address" >
-    <option :value="''" disabled selected >Event Address Region</option>
-    <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
-
-  </select>
-   </div>
- <div v-if="errors.address" class="text-danger">{{ errors.address }}</div>
- </div>
+   
 
  <div class="col-md-4 columns">
   <div class="input-group input-group-outline null is-filled ">
@@ -109,38 +139,55 @@
  </div>
 
 
-  <div v-if="form.belongs_to =='Company'" class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Company Name</label>
-    <input type="text" disabled class="form-control form-control-default" v-model="form.company_name" >
-     </div>
-   <div v-if="errors.company_name" class="text-danger">{{ errors.company_name }}</div>
-   </div>
 
-   <div v-if="form.belongs_to =='Individual'" class="col-md-4 columns">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Person Name</label>
-    <input type="text" disabled class="form-control form-control-default" v-model="form.person" >
-     </div>
-   <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
-   </div>
+ <TextInputComponent 
+ v-if="form.belongs_to =='Company'"
+      :inputType="'text'"
+      v-model="form.company_name" 
+      :value="form.company_name"  
+      :column="'col-4'" 
+      :label="'Company Name'" 
+      :errors="errors.company_name"
+      :input_id="form.company_name"
+      disabled="true"
+    />
 
-   <div class="col-md-4 columns" v-if="form.belongs_to === 'Company'">
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">Registration Number</label>
-    <input type="text" disabled class="form-control form-control-default" v-model="form.reg_number">
-     </div>
-   <div v-if="errors.reg_number" class="text-danger">{{ errors.reg_number }}</div>
-   </div>
+    <TextInputComponent 
+      v-if="form.belongs_to =='Individual'"
+      :inputType="'text'"
+      v-model="form.person" 
+      :value="form.person"  
+      :column="'col-4'" 
+      :label="'Person Name'" 
+      :errors="errors.person"
+      :input_id="form.person"
+      disabled="true"
+    />
+
+    <TextInputComponent 
+      v-if="form.belongs_to =='Company'"
+      :inputType="'text'"
+      v-model="form.reg_number" 
+      :value="form.reg_number"  
+      :column="'col-4'" 
+      :label="'Registration Number'" 
+      :errors="errors.reg_number"
+      :input_id="form.reg_number"
+      disabled="true"
+    />
   
-   <div class="col-md-4 columns" v-else>
-    <div class="input-group input-group-outline null is-filled ">
-    <label class="form-label">ID Number</label>
-    <input type="text" disabled class="form-control form-control-default" v-model="form.id_or_passport">
-     </div>
-   <div v-if="errors.id_or_passport" class="text-danger">{{ errors.id_or_passport }}</div>
-   </div>
-
+    <TextInputComponent 
+      v-if="form.belongs_to =='Individual'"
+      :inputType="'text'"
+      v-model="form.id_or_passport" 
+      :value="form.id_or_passport"  
+      :column="'col-4'" 
+      :label="'ID Number'" 
+      :errors="errors.id_or_passport"
+      :input_id="form.id_or_passport"
+      disabled="true"
+    />
+ 
   
     
   <div><button type="submit" class="btn btn-secondary ms-2" :style="{float: 'right'}">Save</button></div>

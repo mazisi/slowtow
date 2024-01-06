@@ -45,7 +45,7 @@
                                             </div>
 
                                             <ProvinceSelectDropdownComponent
-                                            v-if="form.type == 'retail'"
+                                               v-if="form.type == 'retail'"
                                                 :provinceList="computedProvinces"
                                                 :required="true"
                                                 :label="'Province'"
@@ -55,6 +55,18 @@
                                                 v-model="form.province"
                                                 :errors="errors.province"
                                                 @change="filterLicenceTypes()"
+                                            />
+
+                                            <ProvinceSelectDropdownComponent
+                                            v-if="form.type == 'wholesale'"
+                                                :provinceList="computedProvinces"
+                                                :required="true"
+                                                :label="'Province'"
+                                                :defaultDisabledText="'Select province..'"
+                                                :column="'col-12'"
+                                                :value="form.province"
+                                                v-model="form.province"
+                                                :errors="errors.province"
                                             />
 
                                             <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
@@ -83,7 +95,6 @@
 
 
 
-
                                             <TextInputComponent v-if="form.belongs_to ==='Individual'"
                                                                 :inputType="'text'"
                                                                 :required="true"
@@ -107,7 +118,7 @@
                                             />
 
 
-                                            <LicenceTypeDropDownComponent                                          
+                                            <LicenceTypeDropDownComponent                                      
                                                 :dropdownList="licenceByProvince"
                                                 :label="'Licence Type *'"
                                                 :defaultDisabledText="'Select Licence Type'"
@@ -119,6 +130,8 @@
                                                 :required="true"
                                                 v-if="form.province !== '' && form.type == 'retail'"
                                             />
+
+                                           
 
                                             <LiquorBoardRegionComponent 
                                                 :dropdownList="computedBoardRegions"

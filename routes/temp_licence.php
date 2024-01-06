@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PagePreviews\TempLicencesPreviewController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TemporalLicenceController;
 use App\Http\Controllers\TemporalLicenceDocsController;
@@ -28,4 +29,5 @@ Route::patch('/update-process-app-date/{slug}', [TemporalLicenceController::clas
         Route::delete('/delete-temporal-licence-document/{id}', [TemporalLicenceDocsController::class,'destroy']);
 
         Route::post('/merge-temporal-documents/{type}', [TemporalLicenceDocsController::class,'merge']);
+        Route::get('/preview-temp-licence/{slug}', [TempLicencesPreviewController::class,'preview']);
 

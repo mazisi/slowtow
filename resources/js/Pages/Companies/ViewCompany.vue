@@ -9,7 +9,13 @@
 <h6 class="mb-1">Company Info: {{ company.name }}</h6>
 </div>
 <div class="col-lg-3 col-3 my-auto text-end">
+
+  <i @click="preview" class="fa fa-file-o mx-4 text-secondary cursor-pointer" aria-hidden="true"></i>
+
 <div v-if="$page.props.auth.has_slowtow_admin_role" class="dropdown float-lg-end pe-4">
+
+
+
 <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
 </a>
@@ -722,6 +728,9 @@ v-model="form.business_address"
   .columns{
       margin-bottom: 1rem;
     }
+
+    
+  
 
 </style>
 

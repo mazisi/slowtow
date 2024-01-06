@@ -236,6 +236,11 @@ export default {
         }
       }
 
+
+      const preview = () => {
+        let url = `/preview-company/${props.company.slug}`
+        window.open(url,'_blank');
+      }
       
 
       function assignActiveValue(e,status_value){
@@ -338,7 +343,7 @@ export default {
       updatePerson,
       show_modal,
       copyBusinessAddress,
-      deleteCompany,
+      deleteCompany,preview,
       viewFile,checkingFileProgress
     }
   },

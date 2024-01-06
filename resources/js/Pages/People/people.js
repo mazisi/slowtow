@@ -9,6 +9,7 @@ import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
 
 export default {
+  
   props: {
     success: String,
     error: String,

@@ -159,6 +159,11 @@
     margin: 0 auto;
   }
 
+  .cursor-pointer{
+  cursor: pointer !important;
+}
+
+
    .centered-select option {
     text-align: center;
   }
