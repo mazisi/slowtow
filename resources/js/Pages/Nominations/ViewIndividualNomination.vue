@@ -24,17 +24,7 @@
                             {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
                         <!--refactor this code -->
                         <p class="text-sm mb-0">Current Stage:
-                            <span class="font-weight-bold ms-1" v-if="nomination.status == '1'">Client Quoted</span>
-                            <span v-if="nomination.status == '2'" class="font-weight-bold ms-1">Client Invoiced</span>
-                            <span v-if="nomination.status == '3'" class="font-weight-bold ms-1">Client Paid</span>
-                            <span v-if="nomination.status == '4'" class="font-weight-bold ms-1">Payment to the Liquor Board</span>
-                            <span v-if="nomination.status == '5'" class="font-weight-bold ms-1">Select Nominees</span>
-                            <span v-if="nomination.status == '6'" class="font-weight-bold ms-1">Prepare Nomination Application </span>
-                            <span v-if="nomination.status == '7'" class="font-weight-bold ms-1">Scanned Application</span>
-                            <span v-if="nomination.status == '8'" class="font-weight-bold ms-1">Nomination Lodged </span>
-                            <span v-if="nomination.status == '9'" class="font-weight-bold ms-1">Nomination Issued</span>
-                            <span v-if="nomination.status == '10'" class="font-weight-bold ms-1">Nomination Delivered</span>
-                            <span v-else class="font-weight-bold ms-1"></span>
+                            <span class="font-weight-bold ms-1" >{{getStatus(nomination.status)}}</span>
                         </p>
                         <!--end refactor-->
 
@@ -88,10 +78,10 @@
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=200
+                                                :prevStage=100
                                                 :licence_id=null
-                                                :stageTitle="'Client Quoted'"
+                                                :stageTitle="'Client Invoiced'"
                                                 :success="success"
                                                 @stage-value-changed="pushData"
                                             />
@@ -99,13 +89,13 @@
                                                 :documentModel="nomination"
                                                 @file-value-changed="submitDocument"
                                                 @file-deleted="deleteDocument"
-                                                :hasFile="hasFile('Client Quoted')"
+                                                :hasFile="hasFile('Client Invoiced')"
                                                 :errors="errors"
                                                 :error="error"
-                                                :orderByNumber=100
-                                                :docType="'Client Quoted'"
+                                                :orderByNumber=200
+                                                :docType="'Client Invoiced'"
                                                 :success="success"
-                                                :stage="100"
+                                                :stage="200"
                                             />
                                             <hr>
                                             <!-- Client Paid -->
@@ -114,7 +104,7 @@
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
+                                                :stageValue=300
                                                 :prevStage=null
                                                 :licence_id=null
                                                 :stageTitle="'Client Paid'"
@@ -137,11 +127,11 @@
                                                 :documentModel="nomination"
                                                 @file-value-changed="submitDocument"
                                                 @file-deleted="deleteDocument"
-                                                :hasFile="hasFile('Client Quoted')"
+                                                :hasFile="hasFile('Client Paid')"
                                                 :errors="errors"
                                                 :error="error"
-                                                :orderByNumber=100
-                                                :docType="'Client Quoted'"
+                                                :orderByNumber=300
+                                                :docType="'Client Paid'"
                                                 :success="success"
                                                 :stage="100"
                                             />
@@ -154,8 +144,8 @@
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=400
+                                                :prevStage=300
                                                 :licence_id=null
                                                 :stageTitle="'Payment To The Liquor Board'"
                                                 :success="success"
@@ -164,12 +154,12 @@
                                             <DateComponent
                                                 :stage="'Payment To The Liquor Board'"
                                                 :model="nomination"
-                                                :licence="client_paid_at"
+                                                :licence="payment_to_liquor_board_at"
                                                 :canSave="$page.props.auth.has_slowtow_admin_role"
                                                 :errors="errors"
                                                 :error="error"
                                                 :column=5
-                                                :dated_at="nomination.client_paid_at"
+                                                :dated_at="nomination.payment_to_liquor_board_at"
                                                 :success="success"
                                                 @date-value-changed="updateDate"
                                             />
@@ -180,7 +170,7 @@
                                                 :hasFile="hasFile('Payment To The Liquor Board')"
                                                 :errors="errors"
                                                 :error="error"
-                                                :orderByNumber=100
+                                                :orderByNumber=400
                                                 :docType="'Payment To The Liquor Board'"
                                                 :success="success"
                                                 :stage="100"
@@ -188,14 +178,14 @@
 
                                             <hr>
 
-                                            <!-- Payment To The Liquor Board -->
+                                            <!-- Select Person(s) To Nominate -->
                                             <StageComponent
                                                 :column=10
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=500
+                                                :prevStage=400
                                                 :licence_id=null
                                                 :stageTitle="'Select Person(s) To Nominate'"
                                                 :success="success"
@@ -267,8 +257,8 @@
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=600
+                                                :prevStage=500
                                                 :licence_id=null
                                                 :stageTitle="'Prepare Nomination Application'"
                                                 :success="success"
@@ -279,33 +269,25 @@
                                             <div class="col-md-4 columns">
                                                 <ul class="list-group">
                                                     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" v-if="nomination_forms !== null">
-                                                            <a :href="`${$page.props.blob_file_path}${nomination_forms.document}`" target="_blank">
-                                                                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
+
                                                         <div class="d-flex align-items-start flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm"> Nomination Forms </h6>
-                                                            <p v-if="nomination_forms !== null" class="mb-0 text-xs limit-file-name">{{ nomination_forms.document_name }}</p>
-                                                            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+
                                                         </div>
-                                                        <a v-if="nomination_forms !== null" @click="deleteDocument(nomination_forms.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-                                                        </a>
+                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                         <DocComponent
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Client Quoted')"
+                                                            :hasFile="hasFile('Nomination Forms')"
                                                             :errors="errors"
                                                             :error="error"
                                                             :orderByNumber=100
-                                                            :docType="'Client Quoted'"
+                                                            :docType="'Nomination Forms'"
                                                             :success="success"
-                                                            :stage="100"
+                                                            :stage="600"
                                                         />
-                                                        <a v-else @click="getDocType(6,'Nomination Forms')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -319,7 +301,7 @@
                                                             <h6 class="mb-0 text-sm">Proof Of Payment</h6>
                                                         </div>
                                                         <a v-if="liquor_board !== null"
-                                                           :href="`${$page.props.blob_file_path}${liquor_board.document}`" target="_blank" class="mb-0 btn btn-link ms-auto" >
+                                                           :href="`${$page.props.blob_file_path}${'test.pdf'}`" target="_blank" class="mb-0 btn btn-link ms-auto" >
                                                             <i class="fa fa-link h5 " aria-hidden="true"></i></a>
                                                         <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" >
                                                             <i class="fa fa-link h5" aria-hidden="true"></i></a>
@@ -331,21 +313,23 @@
                                             <div class="col-md-4 columns">
                                                 <ul class="list-group">
                                                     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" v-if="attorney_doc !== null">
-                                                            <a :href="`${$page.props.blob_file_path}${attorney_doc.document}`" target="_blank">
-                                                                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
                                                         <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Signed Power Of Attorney And Resolution </h6>
-                                                            <p v-if="attorney_doc !== null" class="mb-0 text-xs limit-file-name">{{ attorney_doc.document_name }}</p>
-                                                            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                                                            <h6 class="mb-0 text-sm">Signed Power Of Attorney And Resolution</h6>
                                                         </div>
-                                                        <a v-if="attorney_doc !== null" @click="deleteDocument(attorney_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-                                                        </a>
-                                                        <a v-else @click="getDocType(6,'Power of Attorney')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                        <DocComponent
+                                                            :documentModel="nomination"
+                                                            @file-value-changed="submitDocument"
+                                                            @file-deleted="deleteDocument"
+                                                            :hasFile="hasFile('Signed Power Of Attorney And Resolution')"
+                                                            :errors="errors"
+                                                            :error="error"
+                                                            :orderByNumber=100
+                                                            :docType="'Signed Power Of Attorney And Resolution'"
+                                                            :success="success"
+                                                            :stage="600"
+                                                        />
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
@@ -353,33 +337,24 @@
                                             <div class="col-md-4 columns">
                                                 <ul class="list-group">
                                                     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" v-if="certified_id_doc !== null">
-                                                            <a :href="`${$page.props.blob_file_path}${certified_id_doc.document}`" target="_blank">
-                                                                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
                                                         <div class="d-flex align-items-start flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">ID Documents</h6>
-                                                            <p v-if="certified_id_doc !== null" class="mb-0 text-xs limit-file-name">{{ certified_id_doc.document_name }}</p>
-                                                            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
                                                         </div>
-                                                        <a v-if="certified_id_doc !== null" @click="deleteDocument(certified_id_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-                                                        </a>
-                                                        <DocComponent
-                                                            :documentModel="nomination"
-                                                            @file-value-changed="submitDocument"
-                                                            @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Client Quoted')"
-                                                            :errors="errors"
-                                                            :error="error"
-                                                            :orderByNumber=100
-                                                            :docType="'Client Quoted'"
-                                                            :success="success"
-                                                            :stage="100"
-                                                        />
-                                                        <a v-else @click="getDocType(6,'ID Document')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                            <DocComponent
+                                                                :documentModel="nomination"
+                                                                @file-value-changed="submitDocument"
+                                                                @file-deleted="deleteDocument"
+                                                                :hasFile="hasFile('ID Documents')"
+                                                                :errors="errors"
+                                                                :error="error"
+                                                                :orderByNumber=100
+                                                                :docType="'ID Documents'"
+                                                                :success="success"
+                                                                :stage="600"
+                                                            />
+                                                        </div>
+
                                                     </li>
                                                 </ul>
                                             </div>
@@ -387,61 +362,62 @@
                                             <div class="col-md-4 columns">
                                                 <ul class="list-group">
                                                     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" v-if="police_clearance_doc !== null">
-                                                            <a :href="`${$page.props.blob_file_path}${police_clearance_doc.document}`" target="_blank">
-                                                                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
                                                         <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Police Clearances </h6>
-                                                            <p v-if="police_clearance_doc !== null" class="mb-0 text-xs limit-file-name">{{ police_clearance_doc.document_name }}</p>
-                                                            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
+                                                            <h6 class="mb-0 text-sm">Police Clearances</h6>
                                                         </div>
-                                                        <a v-if="police_clearance_doc !== null" @click="deleteDocument(police_clearance_doc.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-                                                        </a>
+                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                         <DocComponent
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Client Quoted')"
+                                                            :hasFile="hasFile('Police Clearances')"
                                                             :errors="errors"
                                                             :error="error"
                                                             :orderByNumber=100
-                                                            :docType="'Client Quoted'"
+                                                            :docType="'Police Clearances'"
                                                             :success="success"
-                                                            :stage="100"
+                                                            :stage="600"
                                                         />
-                                                        <a v-else @click="getDocType(6,'Police Clearances')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" >
-                                                            <i class="fa fa-upload h5 " aria-hidden="true"></i></a>
+                                                        </div>
                                                     </li>
                                                 </ul>
                                             </div>
 
-                                                                                                    <DocComponent
+                                            <div class="col-md-4 columns">
+                                                <ul class="list-group">
+                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+                                                        <div class="d-flex align-items-start flex-column justify-content-center">
+                                                            <h6 class="mb-0 text-sm">Latest Renewal/Licence</h6>
+                                                        </div>
+                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                        <DocComponent
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Client Quoted')"
+                                                            :hasFile="hasFile('Latest Renewal/Licence')"
                                                             :errors="errors"
                                                             :error="error"
                                                             :orderByNumber=100
-                                                            :docType="'Client Quoted'"
+                                                            :docType="'Latest Renewal/Licence'"
                                                             :success="success"
-                                                            :stage="100"
+                                                            :stage="600"
                                                         />
-
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
 
                                             <div class="text-end ">
                                                 <button v-if="police_clearance_doc !== null
                                                         && certified_id_doc !== null
                                                         && attorney_doc !== null
                                                         && liquor_board !== null
-                                                        && nomination_forms !== null" @click="mergeDocument" type="button" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
+                                                        && nomination_forms !== null"
+                                                        @click="mergeDocument"
+                                                        type="button" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
                                                 </button>
 
                                                 <Link v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</Link>
-
 
                                                 <a v-if="nomination.merged_document !== null"
                                                    :href="`/storage/app/public/${nomination.merged_document}`"
@@ -455,8 +431,8 @@
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=700
+                                                :prevStage=600
                                                 :licence_id=null
                                                 :stageTitle="'Scanned Application'"
                                                 :success="success"
@@ -467,241 +443,134 @@
                                                 :documentModel="nomination"
                                                 @file-value-changed="submitDocument"
                                                 @file-deleted="deleteDocument"
-                                                :hasFile="hasFile('Client Quoted')"
+                                                :hasFile="hasFile('Scanned Application')"
                                                 :errors="errors"
                                                 :error="error"
-                                                :orderByNumber=100
-                                                :docType="'Client Quoted'"
+                                                :orderByNumber=700
+                                                :docType="'Scanned Application'"
                                                 :success="success"
-                                                :stage="100"
+                                                :stage="700"
                                             />
                                             <hr/>
 
                                             <!-- Application Lodged -->
                                             <StageComponent
-                                                :column=10
+                                                :column=5
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=800
+                                                :prevStage=700
                                                 :licence_id=null
                                                 :stageTitle="'Application Lodged'"
                                                 :success="success"
                                                 @stage-value-changed="pushData"
                                             />
-
+                                            <DateComponent
+                                                :stage="'Nomination Lodged'"
+                                                :model="nomination"
+                                                :licence="nomination_lodged_at"
+                                                :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                :errors="errors"
+                                                :error="error"
+                                                :column=5
+                                                :dated_at="nomination.nomination_lodged_at"
+                                                :success="success"
+                                                @date-value-changed="updateDate"
+                                            />
                                             <DocComponent
                                                 :documentModel="nomination"
                                                 @file-value-changed="submitDocument"
                                                 @file-deleted="deleteDocument"
-                                                :hasFile="hasFile('Client Quoted')"
+                                                :hasFile="hasFile('Nomination Lodged')"
                                                 :errors="errors"
                                                 :error="error"
-                                                :orderByNumber=100
-                                                :docType="'Client Quoted'"
+                                                :orderByNumber=800
+                                                :docType="'Nomination Lodged'"
                                                 :success="success"
                                                 :stage="100"
                                             />
 
-
-                                            <template v-if="nomination.nomination_lodged_at == null">
-                                                <div class="col-md-5 columns mb-4">
-                                                    <div class="input-group input-group-outline null is-filled ">
-                                                        <label class="form-label">Date</label>
-                                                        <input type="date" class="form-control form-control-default"
-                                                               v-model="updateForm.nomination_lodged_at" >
-                                                    </div>
-                                                    <div v-if="errors.nomination_lodged_at" class="text-danger">{{ errors.nomination_lodged_at }}</div>
-                                                </div>
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-1 columns">
-                                                    <button v-if="nomination.nomination_lodged_at == null"
-                                                            @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-                                                </div>
-                                            </template>
-
-                                            <template v-else>F
-                                                <div class="col-md-5 columns mb-4">
-                                                    <div class="input-group input-group-outline null is-filled ">
-                                                        <label class="form-label">Date</label>
-                                                        <input type="date" class="form-control form-control-default"
-                                                               v-model="updateForm.nomination_lodged_at" >
-                                                    </div>
-                                                    <div v-if="errors.nomination_lodged_at" class="text-danger">{{ errors.nomination_lodged_at }}</div>
-                                                </div>
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-1 columns">
-                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
-                                                            @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-                                                </div>
-                                            </template>
                                             <hr>
 
                                             <!-- Nomination Issued -->
                                             <StageComponent
-                                                :column=10
+                                                :column=5
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=900
+                                                :prevStage=800
                                                 :licence_id=null
                                                 :stageTitle="'Nomination Issued'"
                                                 :success="success"
                                                 @stage-value-changed="pushData"
                                             />
+                                            <DateComponent
+                                                :stage="'Nomination Issued'"
+                                                :model="nomination"
+                                                :licence="nomination_issued_at"
+                                                :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                :errors="errors"
+                                                :error="error"
+                                                :column=5
+                                                :dated_at="nomination.nomination_issued_at"
+                                                :success="success"
+                                                @date-value-changed="updateDate"
+                                            />
+                                            <DocComponent
+                                                :documentModel="nomination"
+                                                @file-value-changed="submitDocument"
+                                                @file-deleted="deleteDocument"
+                                                :hasFile="hasFile('Nomination Issued')"
+                                                :errors="errors"
+                                                :error="error"
+                                                :orderByNumber=900
+                                                :docType="'Nomination Issued'"
+                                                :success="success"
+                                                :stage="900"
+                                            />
 
-
-                                            <div class="col-md-5 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" v-if="nomination_issued !== null">
-                                                            <a :href="`${$page.props.blob_file_path}${nomination_issued.document}`" target="_blank">
-                                                                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Document</h6>
-                                                            <p v-if="nomination_issued !== null" class="mb-0 text-xs limit-file-name">{{ nomination_issued.document_name }}</p>
-                                                            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-                                                        </div>
-                                                        <a v-if="nomination_issued !== null" @click="deleteDocument(nomination_issued.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
-                                                            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-                                                        </a>
-                                                        <DocComponent
-                                                            :documentModel="nomination"
-                                                            @file-value-changed="submitDocument"
-                                                            @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Client Quoted')"
-                                                            :errors="errors"
-                                                            :error="error"
-                                                            :orderByNumber=100
-                                                            :docType="'Client Quoted'"
-                                                            :success="success"
-                                                            :stage="100"
-                                                        />
-                                                        <!--                                                        <a v-else @click="getDocType(9,'Nomination Issued')" data-bs-toggle="modal" data-bs-target="#document-upload" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >-->
-                                                        <!--                                                            <i class="fa fa-upload h5 " aria-hidden="true"></i></a>-->
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-
-
-                                            <template v-if="nomination.nomination_issued_at == null">
-                                                <div class="col-md-5 columns mb-4">
-                                                    <div class="input-group input-group-outline null is-filled ">
-                                                        <label class="form-label">Date</label>
-                                                        <input type="date" class="form-control form-control-default"
-                                                               v-model="updateForm.nomination_issued_at" >
-                                                    </div>
-                                                    <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
-                                                </div>
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-1 columns">
-                                                    <button v-if="nomination.nomination_issued_at == null"
-                                                            @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-                                                </div>
-                                            </template>
-
-                                            <template v-else>
-                                                <div class="col-md-5 columns mb-4">
-                                                    <div class="input-group input-group-outline null is-filled ">
-                                                        <label class="form-label">Date</label>
-                                                        <input type="date" class="form-control form-control-default"
-                                                               v-model="updateForm.nomination_issued_at" >
-                                                    </div>
-                                                    <div v-if="errors.nomination_issued_at" class="text-danger">{{ errors.nomination_issued_at }}</div>
-                                                </div>
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-1 columns">
-                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
-                                                            @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-                                                </div>
-                                            </template>
                                             <hr>
                                             <!-- Nomination Delivered -->
                                             <StageComponent
-                                                :column=10
+                                                :column=5
                                                 :dbStatus="nomination.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                :stageValue=100
-                                                :prevStage=null
+                                                :stageValue=1000
+                                                :prevStage=900
                                                 :licence_id=null
                                                 :stageTitle="'Nomination Delivered'"
                                                 :success="success"
                                                 @stage-value-changed="pushData"
                                             />
+                                            <DateComponent
+                                                :stage="'Nomination Delivered'"
+                                                :model="nomination"
+                                                :licence="nomination_delivered_at"
+                                                :canSave="$page.props.auth.has_slowtow_admin_role"
+                                                :errors="errors"
+                                                :error="error"
+                                                :column=5
+                                                :dated_at="nomination.nomination_delivered_at"
+                                                :success="success"
+                                                @date-value-changed="updateDate"
+                                            />
+                                            <DocComponent
+                                                :documentModel="nomination"
+                                                @file-value-changed="submitDocument"
+                                                @file-deleted="deleteDocument"
+                                                :hasFile="hasFile('Nomination Delivered')"
+                                                :errors="errors"
+                                                :error="error"
+                                                :orderByNumber=1000
+                                                :docType="'Nomination Delivered'"
+                                                :success="success"
+                                                :stage="100"
+                                            />
 
-                                            <div class="col-md-5 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" v-if="nomination_delivered !== null">
-                                                            <a :href="`${$page.props.blob_file_path}${nomination_delivered.document}`" target="_blank">
-                                                                <i class="fas fa-file-pdf h5 text-danger" aria-hidden="true"></i>
-                                                            </a>
-                                                        </div>
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Document</h6>
-                                                            <p v-if="nomination_delivered !== null" class="mb-0 text-xs limit-file-name">{{ nomination_delivered.document_name }}</p>
-                                                            <p v-else class="mb-0 text-xs text-danger">Document Not Uploaded</p>
-                                                            <p v-if="nomination_delivered !== null" class="mb-0 text-xs"></p>
-                                                        </div>
-                                                        <a v-if="nomination_delivered !== null" @click="deleteDocument(nomination_delivered.id)" class="mb-0 btn btn-link pe-3 ps-0 ms-4" >
-                                                            <i class="fa fa-trash-o text-danger h5" aria-hidden="true"></i>
-                                                        </a>
-                                                        <DocComponent
-                                                            :documentModel="nomination"
-                                                            @file-value-changed="submitDocument"
-                                                            @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Nomination Delivered')"
-                                                            :errors="errors"
-                                                            :error="error"
-                                                            :orderByNumber=100
-                                                            :docType="'Nomination Delivered'"
-                                                            :success="success"
-                                                            :stage="100"
-                                                        />
 
-                                                    </li>
-                                                </ul>
-                                            </div>
-
-                                            <template v-if="nomination.nomination_delivered_at == null">
-                                                <div class="col-md-5 columns mb-4">
-                                                    <div class="input-group input-group-outline null is-filled ">
-                                                        <label class="form-label">Date</label>
-                                                        <input type="date" class="form-control form-control-default"
-                                                               v-model="updateForm.nomination_delivered_at" >
-                                                    </div>
-                                                    <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
-                                                </div>
-
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-1 columns">
-                                                    <button v-if="nomination.nomination_delivered_at == null"
-                                                            @click="updateDate" type="button" class="btn btn-sm btn-secondary">Save</button>
-                                                </div>
-                                            </template>
-
-                                            <template v-else>
-                                                <div class="col-md-5 columns mb-4">
-                                                    <div class="input-group input-group-outline null is-filled ">
-                                                        <label class="form-label">Date</label>
-                                                        <input type="date" class="form-control form-control-default"
-                                                               v-model="updateForm.nomination_delivered_at" >
-                                                    </div>
-                                                    <div v-if="errors.nomination_delivered_at" class="text-danger">{{ errors.nomination_delivered_at }}</div>
-                                                </div>
-
-                                                <div class="col-md-1"></div>
-                                                <div class="col-md-1 columns">
-                                                    <button v-if="$page.props.auth.has_slowtow_admin_role"
-                                                            @click="updateDate" class="btn btn-sm btn-secondary">Save</button>
-                                                </div>
-                                            </template>
                                             <hr>
 
                                         </div>
@@ -725,6 +594,7 @@
                 </div>
             </div>
         </div>
+
 
         <div v-if="show_modal" class="modal fade" id="pop-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">

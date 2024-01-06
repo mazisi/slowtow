@@ -56,9 +56,6 @@ export default {
                     doc.document &&
                     doc.id
                 );
-
-
-
                 if (foundDocument) {
                     return {
                         fileName: foundDocument.document_name,

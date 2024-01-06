@@ -47,10 +47,10 @@ const form = useForm({
         valid_fingerprint: props.person.valid_fingerprint,
         fingerprint_valid_until: props.person.fingerprint_valid_until,
         active: props.person.active,
-        slug: props.person.slug,      
+        slug: props.person.slug,
 });
 
-    
+
     const uploadDoc = useForm({
           doc_type: null,
           document: null,
@@ -63,7 +63,7 @@ const form = useForm({
 
       function submitDocument () {
         uploadDoc.post('/upload-person-documents', {
-           onSuccess: () => { 
+           onSuccess: () => {
             this.show_file_name = false;
             this.show_doc_modal = false;
             document.querySelector('.modal-backdrop').remove();
@@ -86,7 +86,7 @@ const form = useForm({
       function deleteDocument (document_name,slug) {
         if(confirm(document_name + ' will be deleted permanently...Continue ??')){
           Inertia.delete(`/delete-person-document/${slug}`, {
-            onSuccess: () => { 
+            onSuccess: () => {
                if(props.success){
                   notifySuccess(props.success)
                }else if(props.error){
@@ -96,24 +96,24 @@ const form = useForm({
           })
         }
       }
-      
-  
+
+
 
     function updatePerson () {
       form.post('/update-person', {
-        onSuccess: () => { 
+        onSuccess: () => {
           if(props.success){
             notifySuccess(props.success)
           }else if(props.error){
             notifyError(props.error)
           }
-           
+
          },
       })
     };
 
     function assignActiveValue(e,status_value){
-       
+
        const updateStatusForm = useForm({
            unChecked: null,
            status: null,
@@ -127,7 +127,7 @@ const form = useForm({
              updateStatusForm.status = status_value;
            }
            updateStatusForm.patch(`/update-person-active-status/${props.person.slug}`,{
-            onSuccess: () => { 
+            onSuccess: () => {
                if(props.success){
                   notifySuccess(props.success)
                }else if(props.error){
@@ -135,13 +135,13 @@ const form = useForm({
                }
               },
             })
-          
+
      }
 
     function deletePerson (full_name) {
          if (confirm('Are you sure you want to delete ' + full_name + '??')) {
             Inertia.delete(`/delete-person/${props.person.slug}`,{
-              onSuccess: () => { 
+              onSuccess: () => {
                  if(props.success){
             notifySuccess(props.success)
           }else if(props.error){
@@ -165,10 +165,10 @@ const form = useForm({
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-      
 
-       
-        
+
+
+
         function checkingFileProgress(message){
           setTimeout(() => {
               toast.remove();
@@ -176,20 +176,20 @@ const form = useForm({
             toast.loading(message);
         }
 
-       
+
 
          function previewPerson() {
           let url = `/preview-person/${props.person.slug}`
           window.open(url,'_blank');
          }
 
-    
+
 
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
         assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
         show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,previewPerson
-       
+
      }
 },
  components: {
@@ -202,5 +202,5 @@ const form = useForm({
     TextInputComponent,
     CheckBoxInputComponent
   },
-  
+
 }

@@ -24,19 +24,6 @@ export default{
         success: String,
         error: String,
         nomination: Object,
-        client_quoted: Object,//doc
-        client_invoiced: Object,//doc
-        liquor_board: Object,//doc
-        nomination_forms: Object,//doc
-        proof_of_payment: Object,//doc
-        attorney_doc: Object,//doc
-        certified_id_doc: Object,//doc
-        police_clearance_doc: Object,//doc
-        latest_renewal_doc: Object,//doc
-        nomination_logded: Object,//doc
-        nomination_issued: Object,//doc
-        nomination_delivered: Object,//doc
-        scanned_app: Object,//doc,
         latest_renewal_licence_doc: Object,
         liqour_board_requests: Object
     },
@@ -70,26 +57,23 @@ export default{
 
 
         function hasFile(doc_type) {
-            if (!props.nomination.renewal_documents) {
-                return {}; // Return an empty object if props.licence.documents doesn't exist
-            } else {
-                let licence_documents = props.renewal.renewal_documents; // Object with all licence docs
-                const foundDocument = licence_documents.find(doc =>
-                    doc.licence_renewal_id === props.renewal.id &&
+            if (props.nomination.nomination_documents) {
+                let nomination_documents = props.nomination.nomination_documents; // Object with all licence docs
+                const foundDocument = nomination_documents.find(doc =>
+                    doc.nomination_id === props.nomination.id &&
                     doc.doc_type === doc_type &&
                     doc.document &&
                     doc.id
                 );
-
                 if (foundDocument) {
                     return {
-                        fileName: foundDocument.document_name,
+                        fileName: foundDocument.document,
                         docPath: foundDocument.document,
                         id: foundDocument.id
                     };
-                } else {
-                    return {}; // Return an empty object if no document satisfies the conditions
                 }
+                    return {}; // Return an empty object if no document satisfies the conditions
+
             }
         }
 
@@ -98,15 +82,11 @@ export default{
             nomination_id: props.nomination.id
         });
 
-        function getDocType(stage=null,doc_type) {
-            uploadDoc.doc_type = doc_type;
-            uploadDoc.stage = stage;
-            this.show_modal = true;
-        }
 
 
-        function submitDocument(){
-            uploadDoc.post('/submit-nomination-document', {
+
+        function submitDocument(formDoc){
+            formDoc.post('/submit-nomination-document', {
                 preserveScroll: true,
                 onSuccess: () => {
                     this.show_modal = false;
@@ -117,7 +97,7 @@ export default{
                     }else if(props.error){
                         notify(props.error)
                     }
-                    uploadDoc.reset();
+                    formDoc.reset();
                 },
             })
         }
@@ -147,7 +127,6 @@ export default{
                 onSuccess: () => {
                     this.show_modal = false;
                     document.querySelector('.modal-backdrop').remove();
-
                     if(props.success){
                         notify(props.success)
                     }else if(props.error){
@@ -202,17 +181,17 @@ export default{
 
         function pushData(e,status_value) {
             if (e.target.checked) {
-                this.updateForm.status[0] = status_value;
-                this.updateForm.unChecked = false;
+                updateForm.status[0] = status_value;
+                updateForm.unChecked = false;
             }else if(!e.target.checked){
-                this.updateForm.unChecked = true
-                this.updateForm.status[0] = status_value;
+                updateForm.unChecked = true
+                updateForm.status[0] = status_value;
             }
             updateNomination();
         }
 
-        function updateDate(data){ console.log(data);
-            updateForm.patch(`/update-nomination-date/${props.nomination.slug}`, {
+        function updateDate(data){ console.log('Test Heloo',data);
+            data.patch(`/update-nomination-date/${props.nomination.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
@@ -272,13 +251,54 @@ export default{
             })
         }
 
+        function getStatus(status_param) {
+            let status;
+
+            switch (status_param) {
+                case '100':
+                    status = 'Client Quoted'
+                    break;
+                case '200':
+                    status = 'Client Invoiced'
+                    break;
+                case '300':
+                    status = 'Client Paid'
+                    break;
+                case '400':
+                    status = 'Payment To The Liquor Board'
+                    break;
+                case '500':
+                    status = 'Select Nominees'
+                    break;
+                case '600':
+                    status = 'Prepare Nomination Application'
+                    break;
+                case '700':
+                    status = 'Scanned Application'
+                    break;
+                case '800':
+                    status = 'Nomination Lodged'
+                    break;
+                case '900':
+                    status = 'Nomination Issued'
+                    break;
+                case '1000':
+                    status = 'Nomination Delivered'
+                    break;
+                default:
+                    status='Not Set';
+                    break;
+            }
+            return status;
+        }
+
 
 
         return{options,pushData,updateNomination,updateDate,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
-            computeDocumentDate,deleteDocument,submitDocument,show_file_name,
-            getDocType,nomineeForm,uploadDoc,updateForm,file_name,getFileName,notify,
-            checkingFileProgress, viewFile, deleteNomination,mergeDocument,hasFile
+            computeDocumentDate,deleteDocument,submitDocument,show_file_name,nomineeForm,
+            uploadDoc,updateForm,file_name,getFileName,notify,checkingFileProgress, viewFile,
+            deleteNomination,mergeDocument,hasFile,getStatus
 
 
 

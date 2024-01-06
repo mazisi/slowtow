@@ -2,7 +2,7 @@
 .navbar-vertical.navbar-expand-xs .navbar-nav .nav-link {
     padding-top: 0.2rem;
     padding-bottom: 0.2rem;
-   
+
 }
 </style>
 
@@ -41,7 +41,7 @@
         </sidenav-collapse>
       </li>
 
-      
+
 
 
  <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
@@ -78,15 +78,15 @@
           </template>
         </sidenav-collapse>
   </li>
-     
+
     <hr>
       <li v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
       " class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>
 
 
-      <li v-if="$page.props.currentRoute == 'companies' 
+      <li v-if="$page.props.currentRoute == 'companies'
       || $page.props.currentRoute == 'view_company'
-      && $page.props.auth.has_slowtow_admin_role 
+      && $page.props.auth.has_slowtow_admin_role
       " class="nav-item">
         <sidenav-collapse
           url="#"
@@ -103,7 +103,7 @@
       </li>
 
 
-      <li v-if="$page.props.currentRoute == 'people' 
+      <li v-if="$page.props.currentRoute == 'people'
               || $page.props.currentRoute == 'view_person'
               || $page.props.currentRoute == 'create_person'
               && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
@@ -122,8 +122,8 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences' 
-              && ($page.props.auth.has_slowtow_admin_role 
+      <li v-if="$page.props.currentRoute == 'licences'
+              && ($page.props.auth.has_slowtow_admin_role
               || $page.props.auth.has_slowtow_user_role)
 
       " class="nav-item">
@@ -159,14 +159,14 @@
           </template>
         </sidenav-collapse>
       </li>
-      
+
 <!-- <<<<<<<<<<<<<<<<<<<<<<<<===============Licence variations Starts ==============>>>>>>>>>>>>>>>> -->
 
      <LicenceActions/>
       <!-- <<<<<<<<<<<<<<<<<<<<<<<<===============Licence variations Ends ==============>>>>>>>>>>>>>>>> -->
 
 
-      <li v-if="$page.props.currentRoute == 'temp_licences' 
+      <li v-if="$page.props.currentRoute == 'temp_licences'
                || $page.props.currentRoute == 'create_temp_licence'" class="nav-item">
         <sidenav-collapse
           url="#"
@@ -182,18 +182,18 @@
       </li>
 
 <li class="nav-item">
-        <Link v-if="$page.props.currentRoute == 'view_temp_licence'" data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
+        <Link v-if="$page.props.currentRoute == 'view_temp_licence'" data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link"
         :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
         :href="`/process-temp-application?slug=${$page.props.slug}`">
        <div class="text-center d-flex align-items-center justify-content-center me-2">
        <i class="material-icons-round opacity-10 fs-5">account_tree</i>
        </div>
        <span class="nav-link-text ms-1">Process Application</span>
-       
+
        </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'contacts' 
+      <li v-if="$page.props.currentRoute == 'contacts'
       || $page.props.currentRoute == 'upload_contacts'
       && $page.props.auth.has_slowtow_admin_role
       " class="nav-item">
@@ -214,9 +214,9 @@
 
 
       <!-- <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>   -->
-      
 
-   
+
+
           <hr v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role"/>
 
 
@@ -256,7 +256,7 @@
 
       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
        || $page.props.auth.has_slowtow_user_role">
-        <sidenav-collapse 
+        <sidenav-collapse
           url="#"
           :aria-controls="''"
           :collapse="false"
@@ -268,11 +268,11 @@
         >
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">email</i>
-            
+
           </template>
         </sidenav-collapse>
       </li>
-      
+
       <li class="nav-item">
         <a @click="goBack" aria-expanded="false" class="nav-link" url="#" href="#!">
           <div class="text-center d-flex align-items-center justify-content-center me-2">
@@ -283,9 +283,9 @@
       </li>
 
       <hr v-if="$page.props.auth.has_slowtow_admin_role"/>
-      
+
       <RetailWholesaleModal @redirect-with-type="redirectToCreateLicence"/>
-      
+
 
     </ul>
   <ul class="navbar-nav mt-3 animate__animated animate__fadeInUp">
@@ -298,19 +298,19 @@
     </div>
     <div class="john-title">
       <p class="ms-1 text-white"> {{ $page.props.auth.user.name }}</p>
-     
+
      <div class="d-flex align-items-space justify-content-space">
       <span v-if="$page.props.auth.user.roles[0].name == 'slotow-admin'" class="ms-2 text-white ">SuperAdmin</span>
       <span v-else class="ms-2 text-white ">Admin</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       <span>
-        <Link href="/logout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0" 
+        <Link href="/logout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0"
     type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
       <i class="fa fa-power-off"></i>
     </Link></span>
      </div>
     </div>
-    
-    
+
+
   </div>
 </div>
     </li>
@@ -350,7 +350,7 @@ export default {
   methods: {
 
     redirectToCreateLicence(type) {
-      let url = type == 'retail' ? 'create-licence' : 'create-new-app'; 
+      let url = type == 'retail' ? 'create-licence' : 'create-new-app';
       Inertia.get(`/${url}?type=${type}`)
     },
 
@@ -359,7 +359,7 @@ export default {
     },
     goBack(){
       history.back()
-      
+
     }
   }
 };
