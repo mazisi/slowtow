@@ -27,7 +27,7 @@ class NominationController extends Controller
             'years' => $years
           ]);
     }
-    
+
 
     public function store(Request $request){
         $request->validate([
@@ -45,8 +45,8 @@ class NominationController extends Controller
             "licence_id" => $request->licence_id,
             "slug" => sha1(time())
         ]);
-        
-        if($nom){ 
+
+        if($nom){
            return to_route('view_nomination',['slug' => $nom->slug])->with('success','Nomination created successfully.');
          }
          return to_route('view_nomination',['slug' => $nom->slug])->with('error','Error creating nomination.');
@@ -64,45 +64,17 @@ class NominationController extends Controller
      * Vue nominee.
      */
     public function viewIndividualNomination($slug){
-        $nomination = Nomination::with('licence','people','merged_document')->whereSlug($slug)->first();
+        $nomination = Nomination::with('licence','people','merged_document','nomination_documents')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
         $nominees = People::pluck('full_name','id');
         $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->latest()->paginate(4)->withQueryString();
-        
-$client_quoted = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Quoted')->first();
-$client_invoiced = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Client Invoiced')->first();
-$liquor_board = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Payment To The Liquor Board')->first();
-$nomination_forms = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Forms')->first();
-$proof_of_payment = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Proof of Payment')->first();
-$attorney_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Power of Attorney')->first();
-$certified_id_doc =  NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','ID Document')->first();
-$police_clearance_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Police Clearances')->first();
-$latest_renewal_doc = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Latest Renewal/Licence')->first();
-$nomination_logded = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Lodged')->first();
-$scanned_app = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Scanned Application')->first();
-$nomination_issued = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Issued')->first();
-$nomination_delivered = NominationDocument::where('nomination_id',$nomination->id)->where('doc_type','Nomination Delivered')->first();
-$latest_renewal_licence_doc = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$nomination->licence_id)->first(['document_file']);
+
 
 return Inertia::render('Nominations/ViewIndividualNomination',[
         'nomination' => $nomination,
         'nominees' => $nominees,
         'tasks' => $tasks,
-        'client_quoted' => $client_quoted,
-        'client_invoiced' => $client_invoiced,
-            'liquor_board' => $liquor_board,
-            'nomination_forms' => $nomination_forms,
-            'proof_of_payment' => $proof_of_payment,
-            'attorney_doc' => $attorney_doc,
-            'certified_id_doc' => $certified_id_doc,
-            'police_clearance_doc' => $police_clearance_doc,
-            'latest_renewal_doc' => $latest_renewal_doc,
-            'nomination_logded' => $nomination_logded,
-            'nomination_issued' => $nomination_issued,
-            'nomination_delivered' => $nomination_delivered,
-            'scanned_app' => $scanned_app,
-            'latest_renewal_licence_doc' => $latest_renewal_licence_doc,
-            'liqour_board_requests' => $liqour_board_requests
+        'liqour_board_requests' => $liqour_board_requests
     ]);
     }
 
@@ -126,10 +98,10 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             $request->validate([
                 'nomination_id' => 'required|exists:nominations,id'
             ]);
-    
+
         if($request->status){
             if($request->unChecked){
-                $status = intval($request->status[0]) - 1;
+                $status = intval($request->status[0]) - 100;
             }else{
                 $status = $request->status[0];
             }
@@ -137,11 +109,11 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
         Nomination::find($request->nomination_id)->update([
             "year" => $request->nomination_year,
             "status" => $status <= 0 ? NULL : $status,
-            
+
         ]);
              return back()->with('success','Nomination updated succesfully.');
-        
-       
+
+
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with('error','Error updating nomination.');
@@ -149,14 +121,45 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     }
 
     public function updateDate(Request $request, $slug){
-        Nomination::whereSlug($slug)->update([
-            "client_paid_date" => $request->client_paid_date,
-            "nomination_lodged_at" => $request->nomination_lodged_at,
-            "nomination_issued_at" => $request->nomination_issued_at,
-            "nomination_delivered_at" => $request->nomination_delivered_at,
-            "payment_to_liquor_board_at" => $request->payment_to_liquor_board_at            
-        ]);
-        return back()->with('success','Date updated succesfully.');
+        $stage = $request->stage;
+        $fieldToUpdate = '';
+        try {
+            switch ($stage) {
+                case 'Client Paid':
+                    $fieldToUpdate = 'client_paid_date';
+                    break;
+
+                case 'Nomination Lodged':
+                    $fieldToUpdate = 'nomination_lodged_at';
+                    break;
+
+                case 'Nomination Issued':
+                    $fieldToUpdate = 'nomination_issued_at';
+                    break;
+
+                case 'Nomination Delivered':
+                    $fieldToUpdate = 'nomination_delivered_at';
+                    break;
+
+                case 'Payment To The Liquor Board':
+                    $fieldToUpdate = 'payment_to_liquor_board_at';
+                    break;
+
+                default:
+                    // Handle the default case, if needed.
+                    break;
+            }
+
+            Nomination::where('id', $request->model_id)->update([
+                $fieldToUpdate => $request->dated_at
+            ]);
+
+            return back()->with('success', 'Date updated successfully.');
+
+        } catch (\Throwable $th) {
+            return back()->with('error','Error updating date.');
+        }
+
     }
 
     public function addSelectedNominees(Request $request){
@@ -183,33 +186,34 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             return back()->with('error','Error removing individual.');
         }
     }
-    
+
     public function uploadDocument(Request $request){
         $request->validate([
-            "document"=> "required|mimes:pdf"
+            "document_file"=> "required|mimes:pdf",
+            "licence_id" => "required",
+            "doc_type" => "required"
             ]);
-            
-                $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
-                $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
-                $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
-                if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
+                $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
+                $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+
+//                if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                         $fileModel = new NominationDocument;
-                        $fileModel->document_name = $request->document->getClientOriginalName();
+                        $fileModel->document_name = $request->document_file->getClientOriginalName();
                         $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-                        $fileModel->nomination_id = $request->nomination_id;
+                        $fileModel->nomination_id = $request->licence_id;
                         $fileModel->doc_type = $request->doc_type;
-                        $fileModel->date = $request->date;
                         $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-        
+
                     if($fileModel->save()){
                         Nomination::whereId($fileModel->nomination_id)->update(['status' => $request->stage]);
                             return back()->with('success','Document uploaded successfully.');
                     }
-                
-                }else{
-                    return back()->with('error','Azure storage could not be reached.Please try again.');
-                  }
+
+//                }else{
+//                    return back()->with('error','Azure storage could not be reached.Please try again.');
+//                  }
 
     }
 

@@ -16,7 +16,7 @@ class Nomination extends Model
 
         return date("d-m-Y", strtotime($value));
     }
-    
+
     public function people(){
 
     return $this->belongsToMany(
@@ -25,6 +25,11 @@ class Nomination extends Model
 
     public function licence(){
         return $this->belongsTo(Licence::class);
+    }
+
+    public function nomination_documents()
+    {
+        return $this->hasMany(NominationDocument::class,'nomination_id');
     }
 
     public function merged_document()

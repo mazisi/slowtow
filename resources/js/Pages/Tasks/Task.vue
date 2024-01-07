@@ -6,7 +6,7 @@
     <div v-for="task in tasks.data" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0 animate__animated animate__fadeInLeft">
     <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
     <span class="alert-icon"><i class=""></i></span>
-    <span class="alert-text"> 
+    <span class="alert-text">
     <span class="text-sm">{{ task.body }}</span>
     </span>
     <a @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
@@ -17,23 +17,23 @@
     </div>
     <h6 v-if="!tasks" class="text-center">No notes found.</h6>
     </div>
-    
+
 
     <Paginate v-if="tasks.data.length"
     :modelName="tasks"
     :modelType="Tasks"
-    /> 
-    
+    />
+
     </div>
-    
+
     <div class="col-4">
     <form @submit.prevent="submitTask">
     <div class="col-12 columns">
     <label class="form-check-label text-body text-truncate status-heading">New Note:
     <span><i class="fa fa-clock-o mx-2" aria-hidden="true"></i>{{ new Date().toISOString().split('T')[0] }}</span></label>
     </div>
-    
-    <div class="col-12 columns">    
+
+    <div class="col-12 columns">
     <div class="input-group input-group-outline null is-filled">
     <label class="form-label">New Task</label>
     <textarea v-model="createTask.body" required class="form-control form-control-default" rows="3" ></textarea>
@@ -45,11 +45,11 @@
       Save
     </button>
     </form>
-    
+
     </div>
-     
+
     </div>
-    
+
 </template>
 <script>
   import { ref } from 'vue';
@@ -59,7 +59,7 @@
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
   import useToaster from '../../store/useToaster';
-  
+
 
   export default{
     props: {
@@ -77,9 +77,9 @@
             body: '',
             model_type: props.model_type,
             model_id: props.model_id,
-            taskDate: ''     
+            taskDate: ''
       })
-  
+
       function submitTask(){
         createTask.post('/submit-task', {
             onSuccess: () => {
@@ -92,7 +92,7 @@
             }
         })
       }
-  
+
       function checkBodyLength(){//Monitor task body length..
             if(this.createTask.body.length > this.body_max){
                 this.createTask.body = this.createTask.body.substring(0,this.body_max)
@@ -103,18 +103,18 @@
         if(confirm('This note will be deleted. Continue ?')){
           Inertia.delete(`/delete-task/${id}`, {
              preserveScroll: true,
-             onSuccess: () => { 
+             onSuccess: () => {
               if(props.success){
                 notifySuccess(props.success)
               }else if(props.error){
                 notifyError(props.error)
               }
              },
-           }); 
+           });
         }
       }
 
-    
+
         return{
           createTask,submitTask,checkBodyLength,body_max,deleteNote
         }

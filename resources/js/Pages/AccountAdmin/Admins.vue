@@ -8,14 +8,14 @@
         #active-checkbox{
           margin-left: 3px;
         }
-    
+
         .card-box {
           padding: 20px;
           border-radius: 3px;
           margin-bottom: 30px;
           background-color: #fff;
       }
-      
+
       .social-links li a {
           border-radius: 50%;
           color: rgba(121, 121, 121, .8);
@@ -26,7 +26,7 @@
           text-align: center;
           width: 30px
       }
-      
+
       .social-links li a:hover {
           color: #797979;
           border: 2px solid #797979
@@ -62,10 +62,10 @@
 
     <Head title="All Users" />
   <div class="container-fluid">
-  
+
   <Banner/>
-  
-  <div class="card card-body mx-3 mx-md-4 mt-n6">   
+
+  <div class="card card-body mx-3 mx-md-4 mt-n6">
     <div class="content">
       <div class="container">
           <div class="row">
@@ -75,8 +75,8 @@
               <!-- end col -->
           </div>
           <!-- end row -->
-    
-   
+
+
           <div class="row">
             <div class="col-lg-9">
               <div class="row">
@@ -85,8 +85,8 @@
     :space-between="50"
     @swiper="onSwiper"
     @slideChange="onSlideChange">
-    
-    
+
+
   </swiper> -->
               <div class="col-lg-4" v-for="user in users.data" :key="user.id">
                   <div class="text-center card-box">
@@ -97,7 +97,7 @@
                             <img :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${user.name}`" class="rounded-circle img-thumbnail" alt="profile-image">
                           </div>
                           <div class="">
-                              <h4>{{ user.name }}</h4>                              
+                              <h4>{{ user.name }}</h4>
 
                                <template v-for="role in user.roles" :key="role.id">
 
@@ -118,7 +118,7 @@
                                     <a href="#" class="text-pink">{{ user.email }}</a>
                                   </span>
                                 </p>
-                               
+
                               <div class="text-sm text-muted">Last Activity:</div>
                               <div class="text-sm text-muted">{{ getMomentDate(user.last_activity_at) }}</div>
                             </template>
@@ -126,18 +126,18 @@
                           <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 btn-rounded waves-effect w-md waves-light">
                             Edit
                           </button>
-                          
-                          
+
+
                       </div>
                   </div>
-                  
+
               </div>
               <Paginate
               :modelName="users"
               :modelType="Users"
               />
             </div>
-          
+
               </div>
 
               <div class="col-lg-3">
@@ -149,14 +149,14 @@
                     </div>
                     <div v-if="errors.full_name" class="text-danger">{{ errors.full_name }}</div>
                     </div>
-      
+
                     <div class="col-12 columns">
                       <div class="input-group input-group-outline null is-filled ">
                       <label class="form-label">Email</label>
                       <input type="email" required class="form-control form-control-default" v-model="form.email" >
                       </div>
                       <div v-if="errors.email" class="text-danger">{{ errors.email }}</div>
-                      </div>                
+                      </div>
                       <div class="col-12 columns">
                         <div class="input-group input-group-outline null is-filled ">
                         <label class="form-label">Function/Role</label>
@@ -169,7 +169,7 @@
                         </div>
                         <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>
                       </div>
-      
+
                       <div class="col-9 columns">
                         <div class="input-group input-group-outline null is-filled ">
                         <label class="form-label">Password</label>
@@ -189,10 +189,10 @@
               </div>
           </div>
 
-          
+
       </div>
       <!-- container -->
-      
+
   </div>
   </div>
   </div>
@@ -200,7 +200,7 @@
 
   </Layout>
   </template>
-  
+
   <style>
   .filters{
    margin-top: 10px;
@@ -208,13 +208,13 @@
     .table thead th {
       padding: 0;
       }
-   
+
     #with-thrashed{
       margin-top: 3px;
       margin-left: 3px;
     }
   </style>
-  
+
   <script>
   import Layout from "../../Shared/Layout.vue";
   import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
@@ -228,7 +228,7 @@
    import { Swiper,SwiperSlide  } from 'swiper/vue';
    import 'swiper/css';
    import useToaster from "@/store/useToaster";
-  
+
   export default {
    props: {
       errors: Object,
@@ -236,15 +236,15 @@
       success: String,
       error: String
     },
-    
-    
+
+
     setup (props) {
       const { notifySuccess, notifyError } = useToaster();
           let showMenu = ref(false);
-          let show_modal = ref(true); 
+          let show_modal = ref(true);
           let file_name = ref('');
-          let file_has_apostrophe = ref(''); 
-  
+          let file_has_apostrophe = ref('');
+
           const form = useForm({
             full_name: '',
             email: '',
@@ -252,7 +252,7 @@
             password: '',
             id: '',
             profilePic: null
-          }) 
+          })
 
           function submitUser() {
             form.post('/submit-user', {
@@ -266,7 +266,7 @@
               }
              })
           }
-  
+
           function generatePassword(){
             let chars = "0123456789abcdefghijklmnopqrstuvwxyz!@#$%^&*()ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             let passwordLength = 8;
@@ -282,7 +282,7 @@
                   var randomNumber = Math.floor(Math.random() * chars.length);
                   this.form.password += chars.substring(randomNumber, randomNumber +1);
                }
-            }            
+            }
           }
 
 
@@ -291,7 +291,7 @@
             form.email = user.email;
             form.role = user.roles[0].name;
             form.id = user.id;
-            
+
           }
 
           function getMomentDate(date){
@@ -333,14 +333,14 @@
             this.file_has_apostrophe = this.file_name.includes("'");
           }
 
-      
+
         const onSwiper = (swiper) => {
         console.log(swiper);
       };
       const onSlideChange = () => {
         console.log('slide change');
       };
-  
+
       return {
         onSwiper,
         onSlideChange,
@@ -367,8 +367,8 @@
       Paginate,
       Swiper,
       SwiperSlide
-      
+
     },
-    
+
   };
   </script>

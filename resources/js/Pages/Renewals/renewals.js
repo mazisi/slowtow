@@ -12,7 +12,7 @@ import useToaster from '../../store/useToaster';
 import { ref,onMounted } from 'vue';
 import StageComponent from "@/Pages/components/slotow-components/StageComponent.vue";
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
-import DateComponent from "@/Pages/Renewals/Components/DateComponent.vue";
+import DateComponent from "@/Pages/components/DateComponent.vue";
 
 export default {
     props: {
@@ -56,9 +56,6 @@ export default {
                     doc.document &&
                     doc.id
                 );
-
-
-
                 if (foundDocument) {
                     return {
                         fileName: foundDocument.document_name,
