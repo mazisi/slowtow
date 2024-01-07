@@ -17,8 +17,6 @@
     </div>
     </div>
 
-
-    
     <!-- <template v-slot:pdf-content> -->
     
 <div class="row" >
@@ -151,17 +149,15 @@
         
 
   <div class="col-md-12" >
-    <template v-for="licence in company.licences" :key="licence.id">
-
-        <div v-if="licence?.licence_documents" v-for="doc in filterDocs(licence.licence_documents)" :key="doc.id" class="mb-2">
-            
-         <iframe v-if="doc" :src="`https://slotowstorage.blob.core.windows.net/${doc.document_file}`" 
-          frameborder="0" width="100%" height="600px"></iframe>
-
-          <iframe v-else :src="`https://slotowstorage.blob.core.windows.net/${doc.document_file}`" 
-          frameborder="0" width="100%" height="600px"></iframe>
-
+   <template v-if="company.licences" v-for="licence in company.licences" :key="licence.id">
+      <div v-if="licence?.licence_documents">
+        <div v-for="doc in filterDocs(licence.licence_documents)" :key="doc.id" class="mb-2">
+          <iframe v-if="doc.document_type === 'Original-Licence'" :src="`${$page.props.blob_file_path}storage/${doc.document_name}`" frameborder="0" width="100%" height="600px"></iframe>
+          <iframe v-else-if="doc.document_type === 'Duplicate-Licence'" :src="`${$page.props.blob_file_path}storage/${doc.document_name}`" frameborder="0" width="100%" height="600px"></iframe>
+          <iframe v-else-if="doc.document_type === 'Payment To The Liquor Board' && !hasOriginalLicence(licence.licence_documents)" 
+          :src="`${$page.props.blob_file_path}storage/${doc.document_name}`" frameborder="0" width="100%" height="600px"></iframe>
         </div>
+      </div>
     </template>
   </div> 
 </div>
@@ -196,6 +192,7 @@ export default {
     company: Object
   },
   setup(props) {
+   console.log(props.company);
     const { notifySuccess, notifyError } = useToaster();
  
       let showMenu = ref(false);
@@ -261,21 +258,19 @@ export default {
             }
             }
 
-            const filterDocs = (docs) => {
-               let doc =  docs.filter(doc =>
-               doc.document_type === 'Original-Licence' && doc.document_type === 'Duplicate-Licence' || doc.document_type === 'Payment To The Liquor Board'
-               );
-               return doc;
-            }
-
-            const hasDuplicateOriginal = (docs) => {
-               return docs.some(doc => doc.document_type === 'Duplicate-Licence');
-            }
+const filterDocs = (docs) => {
+   return docs.filter(doc =>doc.document_type === 'Original-Licence' || doc.document_type === 'Duplicate-Licence' || doc.document_type === 'Payment To The Liquor Board'
+   );
+   
+}
+const hasOriginalLicence = (docs) => {
+      return docs.some(doc => doc.document_type === 'Original-Licence');
+    }
 
     return {
       showMenu,previewTemp,
       form,filterDocs,
-      checkDocType,hasDuplicateOriginal
+      checkDocType,hasOriginalLicence
     }
   },
   
