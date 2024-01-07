@@ -93,7 +93,7 @@ class TransferLicenceController extends Controller
        * View licence transfer individually.
        */
       public function viewTransferedLicence($slug){
-        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence')->whereSlug($slug)->first();
+        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence','transfer_documents')->whereSlug($slug)->first();
         
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
       
@@ -165,17 +165,16 @@ class TransferLicenceController extends Controller
       }
 
       public function update(Request $request) {
-      
+       $status='';
         if($request->status){
-          if($request->unChecked){
-              $status = intval($request->status[0]) - 1;
+          if($request->checked){
+              $status = $request->prevStage;
           }else{
-              $status = $request->status[0];
+              $status = $request->status;
           }
       }
         $update = LicenceTransfer::whereSlug($request->slug)->update([
-          'status' => $status <= 0 ? NULL : $status,
-          'date' => $request->transfer_date
+          'status' => $status
         ]);
         if ($update) {
           return back()->with('success','Licence transfer updated successfully.');
@@ -184,15 +183,32 @@ class TransferLicenceController extends Controller
       }
 
       public function updateDates(Request $request, $slug){
-        LicenceTransfer::whereSlug($slug)->update([
-          'lodged_at' => $request->lodged_at,
-          'activation_fee_paid_at' => $request->activation_fee_paid_at,
-          'issued_at' => $request->issued_at,
-          'delivered_at' => $request->delivered_at,
-          'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
-            
-        ]);
+        try {
+          $fieldToUpdate = '';
+          switch ($request->stage) {
+            case 'Application Logded':
+              $fieldToUpdate = 'lodged_at';
+             break;
+            case 'Activation Fee Paid':
+             $fieldToUpdate = 'activation_fee_paid_at';
+             break;
+            case 'Transfer Issued':
+              $fieldToUpdate = 'issued_at';
+            break;
+            case 'Transfer Delivered':
+              $fieldToUpdate = 'delivered_at';
+            break;
+            case 'Payment To The Liquor Board':
+              $fieldToUpdate = 'payment_to_liquor_board_at';
+            break;
+            default:
+            return back()->with('error','Error.');
+          }
+        LicenceTransfer::whereSlug($slug)->update([$fieldToUpdate => $request->dated_at]);
          return back()->with('success','Date updated successfully.');
+        } catch (\Throwable $th) {
+          throw $th;
+        }
       }
 
       /**
