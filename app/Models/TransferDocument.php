@@ -13,7 +13,7 @@ class TransferDocument extends Model
 
     public function licence_transfer()
     {
-        return $this->belongsTo(LicenceTransfer::class);
+        return $this->belongsTo(LicenceTransfer::class,'id');
     }
     
      public function getDocumentAttribute($value)

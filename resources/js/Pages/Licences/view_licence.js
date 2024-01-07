@@ -229,7 +229,10 @@ export default {
             return file_name;
       }
       
-      
+      const preview = () => {
+        let url = `/preview-licence/${props.licence.slug}`
+        window.open(url,'_blank');
+      }
 
 
         function checkingFileProgress(message){
@@ -255,6 +258,7 @@ export default {
       
 
     return {
+      preview,
       checkingFileProgress,viewFile,
       showMenu,file_has_apostrophe,
       file_name,getFileName,

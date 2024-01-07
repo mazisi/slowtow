@@ -18,7 +18,7 @@ class LicenceTransfer extends Model
 
     public function transfer_documents()
     {
-       return $this->hasMany(TransferDocument::class);
+       return $this->hasMany(TransferDocument::class,'licence_transfer_id');
     }
 
     public function old_company()

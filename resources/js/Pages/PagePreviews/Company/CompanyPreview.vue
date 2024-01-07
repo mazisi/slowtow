@@ -105,41 +105,41 @@
    type="text"
 />
 
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.business_province"
    label="Province"
    type="text"
 />
 
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.business_address_postal_code"
    label="Postal Code"
    type="text"
 />
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.postal_address"
    label="Postal Address 1"
    type="text"
 />
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.postal_address2"
    label="Postal Address Line 2"
    type="text"
 />
 
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.postal_address3"
    label="Postal Address Line 3"
    type="text"
 />
 
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.postal_province"
    label="Province"
    type="text"
 />
 
-<PreviewTextComponentVue
+<PreviewTextComponent
    :value="form.postal_code"
    label="Postal Code"
    type="text"

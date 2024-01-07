@@ -246,7 +246,7 @@ export default {
       getFileName,
       mergeDocuments,
       submitDocuments,
-      submit,notify,
+      submit,
       show_modal,
       documentsForm,
       setDocType,

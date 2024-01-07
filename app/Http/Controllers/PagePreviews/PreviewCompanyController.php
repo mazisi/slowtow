@@ -11,12 +11,9 @@ use App\Models\Licence;
 class PreviewCompanyController extends Controller
 {
     function preview($slug) {
-        // $company = Company::with('licences.licence_documents')->whereSlug($slug)->firstOrFail();
 
         $company = Company::whereSlug($slug)->with('licences.licence_documents')->firstOrFail();
-// dd($company);
 
-        // $licence  = Licence::where('company_id',$company->id)->firstOrFail();
         return Inertia::render('PagePreviews/Company/CompanyPreview',
         ['company' => $company]);
     }
