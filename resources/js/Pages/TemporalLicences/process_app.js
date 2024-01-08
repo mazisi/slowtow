@@ -10,6 +10,11 @@ import { ref } from 'vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
+import StageComponent from '../components/slotow-components/StageComponent.vue';
+import DocComponent from '../components/slotow-components/DocComponent.vue';
+import DateComponent from '../components/slotow-components/DateComponent.vue';
+import PrepareTemp from './temp-licence-components/PrepareTemp.vue';
+import LinkComponent from './temp-licence-components/LinkComponent.vue';
 
 export default {
   props: {
@@ -254,22 +259,31 @@ export default {
         }
        
 
-         function viewFile(model_id, alt_model='') {
-          let model = '';
-          if(alt_model){
-            model = alt_model;
-          }else{
-            model = 'TemporalLicenceDocument';
+        function hasFile(doc_type) {
+          if (!props.licence.temp_documents) {
+            return {}; // Return an empty object if props.licence.documents doesn't exist
+          } else {
+            let licence_documents = props.licence.temp_documents; // Object with all licence docs
+
+            const foundDocument = licence_documents.find(doc =>
+              doc.temporal_licence_id === props.licence.id &&
+              doc.doc_type === doc_type &&
+              doc.document &&
+              doc.document_name &&
+              doc.id
+            );
+
+            if (foundDocument) {
+              return {
+                fileName: foundDocument.document_name,
+                docPath: foundDocument.document,
+                id: foundDocument.id
+              };
+            } else {
+              return {}; // Return an empty object if no document satisfies the conditions
+            }
           }
-             
-               Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
-              },
-                
-               })
-         }
+        }
 
     return { year,form,show_modal,
      updateLicence,file_name,show_file_name,getFileName,
@@ -280,7 +294,7 @@ export default {
      mergeDocuments,
      mergeForm,
      deleteTemporalLicence,
-     toast,viewFile,checkingFileProgress
+     toast,hasFile,checkingFileProgress
      }
   },
    components: {
@@ -288,6 +302,11 @@ export default {
     Link,
     Head,
     Datepicker,
+    StageComponent,
+     DocComponent,
+     DateComponent,
+     PrepareTemp,
+     LinkComponent,
     LiquorBoardRequest,
     Banner,
     Task

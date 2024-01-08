@@ -115,7 +115,7 @@ class TemporalLicenceController extends Controller
      }
 
     public function processApplication(Request $request){
-        $licence = TemporalLicence::with('company','people')->whereSlug($request->slug)->first();
+        $licence = TemporalLicence::with('company','people','temp_documents')->whereSlug($request->slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Temporal Licence')->where('model_id',$licence->id)->get();
 
         $client_invoiced = TemporalLicenceDocument::where('doc_type','Client Invoiced')->where('temporal_licence_id',$licence->id)->first();

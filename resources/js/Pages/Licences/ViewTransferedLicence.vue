@@ -213,7 +213,7 @@
       :errors="errors"
       :error="error"
       stage="400"
-      belongsTo="Old Licence Holder"
+      belongsTo="Current Licence Holder"
       orderByNumber='500'
       :dontUpload="true"
       :docType="'Smoking Affidavit'"
@@ -247,7 +247,7 @@
     :errors="errors"
     :error="error"
     stage="400"
-    belongsTo="Current Licence Holder"
+    :belongsTo="'Current Licence Holder'"
     orderByNumber='600'
     :dontUpload="true"
     :docType="'POA & RES'"
