@@ -69,6 +69,7 @@ export default {
 
     const form = useForm({
       status: [],
+      prevStage: '',
       unChecked: false,
       client_paid_at: props.licence.client_paid_at,
       payment_to_liquor_board_at: props.licence.payment_to_liquor_board_at,
@@ -81,24 +82,14 @@ export default {
       belongs_to: props.licence.belongs_to
      })
 
-    const uploadDoc = useForm({
-      document: null,
-      doc_type: null,
-      person_or_company: null,
-      merge_number: null,
-      stage: null,
-      file_name: file_name,
-      temp_licence_id: props.licence.id    
-    })
 
 
-      function submitDocument(){
-            uploadDoc.post('/submit-temporal-licence-document', {
+
+      function submitDocument(docForm){
+ 
+        docForm.post('/submit-temporal-licence-document', {
               preserveScroll: true,
               onSuccess: () => { 
-                this.show_file_name = false;
-                this.show_modal = false;
-                document.querySelector('.modal-backdrop').remove();
                 
                         if(props.success){
                             notifySuccess(props.success)
@@ -106,7 +97,6 @@ export default {
                            notifyError(props.error)
                          }
 
-                uploadDoc.reset();
               },
             })
           }
@@ -124,14 +114,6 @@ export default {
             })
           }
 
-    function getDocType(stage=null,doc_type,person_or_company,merge_number){
-      this.uploadDoc.stage = stage;
-      this.uploadDoc.doc_type = doc_type;
-      this.uploadDoc.person_or_company = person_or_company
-      this.uploadDoc.merge_number = merge_number
-      this.show_modal =true  
-      this.show_file_name = true; 
-    }
 
     function deleteDocument(id){
         if(confirm('Document will be deleted permanently...Continue ??')){
@@ -177,28 +159,25 @@ export default {
         return new Date(date_param).toLocaleString().split(',')[0]
     };
 
-    function pushData(e,status_value){
+    function pushData(e,status_value,prevStage){
+     
       if (e.target.checked) {
-            this.form.status[0] = status_value;
-            this.form.unChecked = false;
+            form.status[0] = status_value;
+            form.unChecked = false;
           }else if(!e.target.checked){
-            this.form.unChecked = true
-            this.form.status[0] = status_value;
+            form.unChecked = true
+            form.status[0] = status_value;
           }
+          form.prevStage = prevStage;
           updateLicence();
       }
 
-      let file_has_apostrophe = ref();
-      function getFileName(e){
-        this.uploadDoc.document = e.target.files[0];
-        this.file_name = e.target.files[0].name;
-        this.file_has_apostrophe = this.file_name.includes("'");
-      }
 
       
 
-      function updateDate(){
-        form.patch(`/update-process-app-date/${props.licence.slug}`, {
+      function updateStageDate(form_param){
+        console.log(form_param)
+        form_param.patch(`/update-process-app-date/${props.licence.slug}`, {
              preserveScroll: true,
              onSuccess: () => { 
                         if(props.success){
@@ -212,43 +191,36 @@ export default {
 
       
 
-        function checkingFileProgress(message){
-          setTimeout(() => {
-              toast.remove();
-            }, 3000);
-            toast.loading(message);
-        }
-
 
         function getStatus(status_param) {
           let status;
 
           switch (status_param) {
-            case '10':
+            case '100':
               status = 'Client Quoted'
               break;
-              case '20':
+              case '200':
               status = 'Client Invoiced'
               break;
-              case '30':
+              case '300':
               status = 'Client Paid'
               break;
-              case '40':
+              case '400':
               status = 'Collate Temporary Licence Documents'
               break;
-              case '50':
+              case '500':
               status = 'Payment To The Liquor Board'
               break;
-              case '60':
+              case '600':
               status = 'Scanned Application'
               break; 
-              case '70':
+              case '700':
               status = 'Temporary Licence Lodged'
               break; 
-              case '80':
+              case '800':
               status = 'Temporary Licence Issued'
               break; 
-              case '90':
+              case '900':
               status = 'Temporary Licence Delivered'
               break;              
             default:
@@ -285,16 +257,42 @@ export default {
           }
         }
 
-    return { year,form,show_modal,
-     updateLicence,file_name,show_file_name,getFileName,
-     getRenewalYear, pushData,uploadDoc,getStatus,
-     getDocType, submitDocument,file_has_apostrophe,
+        function hasMergeFile(doc_type, belongsTo) {
+          if (!props.licence.temp_documents) {
+            return {}; // Return an empty object if props.licence.documents doesn't exist
+          } else {
+            let licence_documents = props.licence.temp_documents; // Object with all licence docs
+
+            const foundDocument = licence_documents.find(doc =>
+              doc.temporal_licence_id === props.licence.id &&
+              doc.doc_type === doc_type && doc.belongs_to === belongsTo &&
+              doc.document &&
+              doc.document_name &&
+              doc.id
+            );
+
+            if (foundDocument) {
+              return {
+                fileName: foundDocument.document_name,
+                docPath: foundDocument.document,
+                id: foundDocument.id
+              };
+            } else {
+              return {}; // Return an empty object if no document satisfies the conditions
+            }
+          }
+        }
+        
+    return { year,form,
+     updateLicence,hasMergeFile,
+     getRenewalYear, pushData,getStatus,
+     submitDocument,
      computeDocumentDate,deleteDocument,
-     updateDate,
+     updateStageDate,
      mergeDocuments,
      mergeForm,
      deleteTemporalLicence,
-     toast,hasFile,checkingFileProgress
+     toast,hasFile
      }
   },
    components: {
@@ -321,13 +319,3 @@ export default {
   },
   
 };
-//The following are status keys
-// 1 => Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Collate Temporary Licence Documents 
-// 5 => Payment To The Liquor Board 
-// 6 => Scanned Application
-// 7 => Temporary Licence Lodged 
-// 8 => Temporary Licence Issued 
-// 9 => Temporary Licence Delivered

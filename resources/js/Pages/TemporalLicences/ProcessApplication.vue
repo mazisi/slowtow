@@ -34,9 +34,12 @@
 
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
-    <button v-if="$page.props.auth.has_slowtow_admin_role" 
-    @click="deleteTemporalLicence" class=" border-radius-md btn-danger" style="border: none">
-      <i class="fa fa-trash-o cursor-pointer" aria-hidden="true" ></i> Delete</button>
+    
+
+      <button v-if="$page.props.auth.has_slowtow_admin_role" 
+       @click="deleteTemporalLicence" type="button" class="btn btn-sm btn-danger">
+        <i class="fa fa-trash-alt text-md"></i> Delete
+      </button>
   </div>
 </div>
 
@@ -143,48 +146,54 @@
 @stage-value-changed="pushData"
 />
 
-
 <div class="">
 
 <!-- ===============   Company File Uploads ===========================-->
-<div v-if="licence?.people_id" class="d-flex row">
+<div v-if="!licence?.people_id" class="d-flex row">
   <div class="col-sm-2"></div>
   
   <div class="col-sm-5">
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Application Form')"
+    :hasFile="hasMergeFile('Application Form','Company')"
+    doc_type="Application Form"
     title="Application Form"
     belongsTo="Company"
     orderByNum=100
     />
 
 
-    <LinkComponent :title="'Proof Of Payment'" 
+    <LinkComponent v-if="hasFile('Payment To The Liquor Board').id"
+    :title="'Proof Of Payment'" 
     :linkModel="hasFile('Payment To The Liquor Board')
     "/>
 
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('POA And RES')"
+    :hasFile="hasMergeFile('POA And RES','Company')"
+    doc_type="POA And RES"
     belongsTo="Company"
     orderByNum=300
     title="POA &amp; RES"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Annexure B')"
+    :hasFile="hasMergeFile('Annexure B','Company')"
+    doc_type="Annexure B"
     belongsTo="Company"
     orderByNum=400
     title="Annexure B & C"
@@ -199,11 +208,13 @@
         <a v-if="company_annexure_c !== null" :href="`${$page.props.blob_file_path}${company_annexure_c.document}`" target="_blank">
         <i v-if="company_annexure_c !== null" class="fa fa-file-pdf h4 text-danger"></i></a><br> -->
         <PrepareTemp
+        :errors="errors"
         :docModel="licence"
         stage=400
         @file-value-changed="submitDocument"
         @file-deleted="deleteDocument"
-        :hasFile="hasFile('CIPC Certificate')"
+        :hasFile="hasMergeFile('CIPC Certificate','Company')"
+        doc_type="CIPC Certificate"
         belongsTo="Company"
         orderByNum=600
         title="CIPC Certificate"
@@ -215,44 +226,52 @@
   <div class="col-sm-5">
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('ID Document')"
+    :hasFile="hasMergeFile('ID Document','Company')"
+    doc_type="ID Document"
     belongsTo="Company"
     orderByNum=700
     title="ID Document"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Representations')"
+    :hasFile="hasMergeFile('Representations','Company')"
+    doc_type="Representations"
     belongsTo="Company"
     orderByNum=800
     title="Representations"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Landlord Letter')"
+    :hasFile="hasMergeFile('Landlord Letter','Company')"
+    doc_type="Landlord Letter"
     belongsTo="Company"
     orderByNum=900
     title="Landlord Letter"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Security Letter')"
+    :hasFile="hasMergeFile('Security Letter','Company')"
+    doc_type="Security Letter"
     belongsTo="Company"
     orderByNum=1000
     title="Security Letter"
@@ -260,22 +279,26 @@
 
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Advert/Blurb')"
+    :hasFile="hasMergeFile('Advert/Blurb','Company')"
+    doc_type="Advert/Blurb"
     belongsTo="Company"
     orderByNum=1100
     title="Advert/Blurb"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Plan/Maps')"
+    :hasFile="hasMergeFile('Plan/Maps','Company')"
+    doc_type="Plan/Maps"
     belongsTo="Company"
     orderByNum=1200
     title="Plan/Maps"
@@ -284,14 +307,14 @@
 
   <div class="col-sm-1"> </div>
  
- <div class="d-flex">
+ <div class="d-flex" v-if="licence?.company_id && ">
   <button @click="mergeDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
   <span class="visually-hidden">Loading...</span> Compile Application
 </button>
-  <!-- <a :href="`/storage/app/public/${licence.merged_document}`" 
- v-if="licence.merged_document !== null" target="_blank"  class="ms-2 btn btn-sm btn-secondary" >
-  View </a> -->
+   <a :href="`/storage/app/public/${licence.merged_document}`" 
+   v-if="licence.merged_document" target="_blank"  class="ms-2 btn btn-sm btn-secondary" >
+  View </a> 
  </div>
 
 
@@ -304,44 +327,51 @@
 
 
 <!-- ===============   Individual File Uploads ===========================-->
-<div v-if="licence?.company_id == null" class="d-flex row">
+<div v-if="!licence?.company_id" class="d-flex row">
   <div class="col-sm-2"></div>
   
   <div class="col-sm-5">
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Application Form')"
+    :hasFile="hasMergeFile('Application Form','Individual')"
+    doc_type="Application Form"
     belongsTo="Individual"
     orderByNum=100
     title="Application Form"
     />
 
   
-    <LinkComponent :title="'Proof Of Payment'" 
+    <LinkComponent v-if="hasFile('Payment To The Liquor Board').id"
+    :title="'Proof Of Payment'" 
     :linkModel="hasFile('Payment To The Liquor Board')
     "/>
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Power Of Attorney')"
+    :hasFile="hasMergeFile('Power Of Attorney','Individual')"
+    doc_type="Power Of Attorney"
     belongsTo="Individual"
     orderByNum=300
     title="Power Of Attorney"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Annexure B')"
+    :hasFile="hasMergeFile('Annexure B','Individual')"
+    doc_type="Annexure B"
     belongsTo="Individual"
     orderByNum=400
     title="Annexure B & C"
@@ -349,10 +379,11 @@
 
     
 
-<div v-if="licence.company_id == null">
+<div v-if="!licence.company_id">
 
 
-  <LinkComponent :title="'ID Documentt'" 
+  <LinkComponent v-if="hasFile('ID Document').id"
+  :title="'ID Document'" 
   :linkModel="hasFile('ID Document')
   "/>
   
@@ -364,55 +395,65 @@
   <div class="col-sm-5">
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Representations')"
+    :hasFile="hasMergeFile('Representations','Individual')"
+    doc_type="Representations"
     belongsTo="Individual"
     orderByNum=700
     title="Representations"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Landlord Letter')"
+    :hasFile="hasMergeFile('Landlord Letter','Individual')"
+    doc_type="Landlord Letter"
     belongsTo="Individual"
     orderByNum=800
     title="Landlord Letter"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Security Letter')"
+    :hasFile="hasMergeFile('Security Letter','Individual')"
+    doc_type="Security Letter"
     belongsTo="Individual"
     orderByNum=900
     title="Security Letter"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Advert/Blurb')"
+    :hasFile="hasMergeFile('Advert/Blurb','Individual')"
+    doc_type="Advert/Blurb"
     belongsTo="Individual"
     orderByNum=1000
     title="Advert/Blurb"
     />
 
     <PrepareTemp
+    :errors="errors"
     :docModel="licence"
     stage=400
     @file-value-changed="submitDocument"
     @file-deleted="deleteDocument"
-    :hasFile="hasFile('Plan/Maps')"
+    :hasFile="hasMergeFile('Plan/Maps','Individual')"
+    doc_type="Plan/Maps"
     belongsTo="Individual"
     orderByNum=1100
     title="Plan/Maps"
@@ -462,7 +503,7 @@
 :error="error"
 :column=4
 @date-value-changed="updateStageDate"
-:dated_at="form.client_paid_at"
+:dated_at="form.payment_to_liquor_board_at"
 :success="success"
 />
 
