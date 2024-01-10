@@ -12,23 +12,23 @@ class CompanyDocsController extends Controller
 {
     public function store(Request $request){
         $request->validate([
-            "document"=> "required|mimes:pdf"
+            "document_file"=> "required|mimes:pdf"
             ]);
 
             try {
-                $removeSpace = str_replace('-', '_',$request->document->getClientOriginalName());
+                $removeSpace = str_replace('-', '_',$request->document_file->getClientOriginalName());
                 $fileModel = new CompanyDocument;
                 $fileName = Str::limit(sha1(now()),7).str_replace(' ', '_',$removeSpace);
-                $filePath = $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
-                $fileModel->document_name = $request->document->getClientOriginalName();
+                $filePath = $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+                $fileModel->document_name = $request->document_file->getClientOriginalName();
                 $fileModel->uploaded_by = $request->user()->hasRole('company-admin') ? auth()->id() : NULL;
                 $fileModel->document_file = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-                $fileModel->company_id = $request->company_id;
+                $fileModel->company_id = $request->licence_id;
                 $fileModel->document_type = $request->doc_type;
                 $fileModel->expiry_date = $request->expiry_date;
                 $fileModel->file_path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
                 $fileModel->save();
-               
+                return back()->with('success','Document uploaded successfully.');
              if($request->user()->hasRole('company-admin')){
                 $mailables = [
                     'company_name' => $request->company_name,
@@ -40,13 +40,14 @@ class CompanyDocsController extends Controller
                  Mail::to('mazisimsebele18@gmail.com')->send(new NotifySlotowMail($mailables));
              }
              return back()->with('success','Document uploaded successfully.');
-             
+
             } catch (\Throwable $th) {
+                throw $th;
                 return back()->with('error','Error uploading documents. Please contact development team.');
             }
-        
-         
-    
+
+
+
     }
 
     public function destroy($id){

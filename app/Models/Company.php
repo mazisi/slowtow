@@ -11,13 +11,13 @@ class Company extends Model
     use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    
 
-    public function documents()
+
+    public function company_documents()
     {
-       return $this->hasMany(Document::class);
+       return $this->hasMany(CompanyDocument::class);
     }
-    
+
     public function users()
     {
        return $this->belongsToMany(User::class);

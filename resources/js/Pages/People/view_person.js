@@ -91,11 +91,9 @@ const form = useForm({
 
       let show_doc_modal = ref(true);
 
-      function submitDocument () {
-        uploadDoc.post('/upload-person-documents', {
+      function submitDocument (formFile) {
+        formFile.post('/upload-person-documents', {
            onSuccess: () => {
-            this.show_file_name = false;
-            this.show_doc_modal = false;
             document.querySelector('.modal-backdrop').remove();
             if(props.success){
                notifySuccess(props.success)
