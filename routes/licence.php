@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LicenceController;
+use App\Http\Controllers\PagePreviews\LicencePreviewController;
 
         Route::get('/licences',[LicenceController::class,'index'])->name('licences');
 
@@ -16,3 +17,4 @@ use App\Http\Controllers\LicenceController;
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
         Route::patch('/update-licence-active-status/{slug}',[LicenceController::class,'updateActiveStatus']);
+        Route::get('/preview-licence/{slug}',[LicencePreviewController::class,'preview']);

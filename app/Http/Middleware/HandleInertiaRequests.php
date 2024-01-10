@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 class HandleInertiaRequests extends Middleware
 {
     /**
-     * The root template that is loaded on the first page visit.
+     * Author: Mazisi Msebele
      *
      * @var string
      */
@@ -28,6 +28,16 @@ class HandleInertiaRequests extends Middleware
     {
         return parent::version($request);
     }
+
+    public function isProduction()
+    {
+        if (app()->environment(['production'])) {
+            return  env('BLOB_FILE_PATH');
+        }
+        return env('APP_URL');
+    }
+
+
 
     /**
      * Define the props that are shared by default.
@@ -48,12 +58,12 @@ class HandleInertiaRequests extends Middleware
             'ziggy' => function () {
                 return (new Ziggy)->toArray();
             },
-            //This is for hiding options in navbar if stage is less than issued.
+            //Global Licence.
             'viewed_licence' => Licence::whereSlug(request('slug'))->first(['id','status','trading_name']),
             'currentRoute' => fn () => Route::currentRouteName(),
             'success' => fn () => $request->session()->get('success'),
             'error' => fn () => $request->session()->get('error'),
-            'blob_file_path' => fn () => env('BLOB_FILE_PATH'),
+            'blob_file_path' => fn () => $this->isProduction(),
             'slug' => fn () => $request->slug,
             'message' => fn () => $request->session()->get('message'),
             

@@ -14,8 +14,10 @@
                     </div>
 
 
-                    <div class="col-lg-1 col-1 my-auto text-end">
+                    <div class="col-lg-1 col-1 my-auto text-end d-flex">
+                        <i @click="preview" class="fa fa-file-o mx-4 my-1 text-secondary cursor-pointer" aria-hidden="true"></i>
                         <div class="dropdown float-lg-end pe-4">
+                     
                             <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
                             </a>

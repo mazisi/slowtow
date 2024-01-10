@@ -115,7 +115,7 @@ class TemporalLicenceController extends Controller
      }
 
     public function processApplication(Request $request){
-        $licence = TemporalLicence::with('company','people')->whereSlug($request->slug)->first();
+        $licence = TemporalLicence::with('company','people','temp_documents')->whereSlug($request->slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Temporal Licence')->where('model_id',$licence->id)->get();
 
         $client_invoiced = TemporalLicenceDocument::where('doc_type','Client Invoiced')->where('temporal_licence_id',$licence->id)->first();
@@ -224,16 +224,15 @@ class TemporalLicenceController extends Controller
     public function update_prepared_temp_app(Request $request,$slug){
         try {
             $status = '';
-
             if($request->status){
                 if($request->unChecked){
-                    $status = intval($request->status[0]) - 1;
+                    $status = $request->prevStage;
                 }else{
                     $status = $request->status[0];
                 }
             }
     
-            TemporalLicence::whereSlug($slug)->update(["status" => $status <= 0 ? NULL : $status]);   
+            TemporalLicence::whereSlug($slug)->update(["status" => $status]);   
                
             return back()->with('success','Temporary Licence updated successfully.');
          
@@ -247,13 +246,34 @@ class TemporalLicenceController extends Controller
 
      public function updateDates(Request $request, $slug){
         try {
-            TemporalLicence::whereSlug($slug)->update([
-                'client_paid_at' => $request->client_paid_at,
-                'payment_to_liquor_board_at' => $request->payment_to_liquor_board_at,
-                'logded_at' => $request->logded_at,
-                'issued_at' => $request->issued_at,
-                'delivered_at' => $request->delivered_at,
-                ]);
+
+            switch ($request->stage) {
+                case 'Client Paid':
+                    $fieldToUpdate = 'client_paid_at';
+                    break;
+
+                case 'Payment To The Liquor Board':
+                    $fieldToUpdate = 'payment_to_liquor_board_at';
+                    break;
+
+                case 'Temporary Licence Lodged':
+                    $fieldToUpdate = 'logded_at';
+                    break;
+
+                case 'Temporary Licence Issued':
+                    $fieldToUpdate = 'issued_at';
+                    break;
+
+                case 'Temporary Licence Delivered':
+                    $fieldToUpdate = 'delivered_at';
+                    break;
+
+                default:
+                    // Handle the default case, if needed.
+                    break;
+            }
+
+            TemporalLicence::whereSlug($slug)->update([$fieldToUpdate => $request->dated_at]);
                 return back()->with('success','Date updated successfully.');
         } catch (\Throwable $th) {
             return back()->with('error','An unknown error occured while updating date.');

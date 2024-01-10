@@ -16,23 +16,23 @@ class TemporalLicenceDocsController extends Controller
 {
    public function store(Request $request){
     $request->validate([
-        "document"=> "required|mimes:pdf"
+        "document_file"=> "required|mimes:pdf"
         ]); 
 
         try {
-          $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+          $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
           $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
-          $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+          $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
           
 
-          if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+          if(!fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
             $fileModel = new TemporalLicenceDocument;
-            $fileModel->document_name = $request->document->getClientOriginalName();
+            $fileModel->document_name = $request->document_file->getClientOriginalName();
             $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
-            $fileModel->temporal_licence_id = $request->temp_licence_id;
+            $fileModel->temporal_licence_id = $request->licence_id;
             $fileModel->doc_type = $request->doc_type;
             $fileModel->num = $request->merge_number;
-            $fileModel->belongs_to = $request->person_or_company;
+            $fileModel->belongs_to = $request->belongs_to;
             $fileModel->slug = sha1(now());
 
             if($fileModel->save()){
@@ -43,7 +43,8 @@ class TemporalLicenceDocsController extends Controller
             return back()->with('error','Azure storage could not be reached.Please try again.');              
           }
         } catch (\Throwable $th) {
-          return back()->with('error','An unknown error while uploading document.');
+          throw $th;
+          // return back()->with('error','An unknown error while uploading document.');
         }
         
 
