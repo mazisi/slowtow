@@ -17,11 +17,11 @@ use App\Http\Requests\CompanyValidateRequest;
 
 class CompanyController extends Controller
 {
-    
-    public function index(){         
-            $companies = (new CompanyFilterAction)->filterCompanies();    
+
+    public function index(){
+            $companies = (new CompanyFilterAction)->filterCompanies();
             return Inertia::render('Companies/Company',['companies'=> $companies]);
-         
+
     }
 
     public function create() {
@@ -58,32 +58,21 @@ class CompanyController extends Controller
                 return redirect('/companies')->with('success', 'Company successfully created!');
             }
             return back()->with('error', 'Ooops!!Error creating company!');
-        
+
     }
 
 
     public function show($slug){
-        $company = Company::with('users','licences','people')->whereSlug($slug)->first();
+        $company = Company::with('users','licences','people', 'company_documents')->whereSlug($slug)->first();
         $linked_licences = Licence::where('company_id',$company->id)->paginate(10);
-        $contrib_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','Contribution-Certificate')->latest()->first();
-        $bee_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','BEE-Certificate')->latest()->first();
-        $cipc_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','CIPC-Certificate')->latest()->first();
-        $lta_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','LTA-Certificate')->latest()->first();
-        $company_doc = CompanyDocument::where('company_id',$company->id)->where('document_type','Company-Document')->latest()->first();
         $tasks = Task::where('model_type','Company')->where('model_id',$company->id)->latest()->paginate(4)->withQueryString();
-        $sars_cert = CompanyDocument::where('company_id',$company->id)->where('document_type','SARS-Certificate')->latest()->first();
         $people = People::pluck('full_name','id');
-        
+
+
         return Inertia::render('Companies/ViewCompany',[
             'company'=> $company,
             'people' => $people,
              'tasks' => $tasks,
-             'contrib_cert' => $contrib_cert,
-             'bee_cert' => $bee_cert,
-             'cipc_cert' => $cipc_cert,
-             'lta_cert' => $lta_cert,
-             'company_doc' => $company_doc,
-             'sars_cert' => $sars_cert,
              'linked_licences' => $linked_licences
             ]);
     }
@@ -99,8 +88,8 @@ class CompanyController extends Controller
             'email1' => $request->email_address_2,
             'email2' => $request->email_address_3,
             'tel_number' => $request->telephone_number_1,
-            'tel_number1' => $request->telephone_number_2,            
-            'website' => $request->website,            
+            'tel_number1' => $request->telephone_number_2,
+            'website' => $request->website,
             'business_address' => $request->business_address,
             'business_address2' => $request->business_address2,
              'business_address3' => $request->business_address3,
@@ -142,18 +131,18 @@ class CompanyController extends Controller
             }
             $company->people()->attach($person);
         }
-        return back()->with('success','People added successfully.');            
-        
+        return back()->with('success','People added successfully.');
+
     }
 
-   
+
 public function updatePeople(Request $request,$pivot_id){
     try {
         $update = DB::table('company_people')
         ->whereId($pivot_id)
         ->update(['position' => $request->position]);
             if($update){
-                return back()->with('success','Position updated successfully.'); 
+                return back()->with('success','Position updated successfully.');
             }
 
     } catch (\Throwable $th) {
@@ -167,9 +156,9 @@ public function updatePeople(Request $request,$pivot_id){
        try {
         $unlink = DB::table('company_people')->where('id',$id)->delete();
        if($unlink){
-        return back()->with('success','Individual removed successfully.');            
+        return back()->with('success','Individual removed successfully.');
         }
-        
+
        } catch (\Throwable $th) {
         // throw $th;
         return back()->with('error','Error..Something went wrong.');
@@ -188,23 +177,23 @@ public function updatePeople(Request $request,$pivot_id){
             }
 
             //soft delete transfers belonging to this company
-            $deleteTransfers = LicenceTransfer::where(function ($query) use($company){ 
+            $deleteTransfers = LicenceTransfer::where(function ($query) use($company){
                 $query->where('company_id',$company->id)
-                      ->orWhere('old_company_id',$company->id);         
+                      ->orWhere('old_company_id',$company->id);
              })->get(['id']);
-           
+
             foreach ($deleteTransfers as $delete_transfer) {
                 $delete_transfer->delete();
             }
-            
+
             if($company->delete()){
-                return to_route('companies')->with('success','Company deleted successfully.');            
+                return to_route('companies')->with('success','Company deleted successfully.');
             }
-           
+
         } catch (\Throwable $th) {
             return to_route('companies')->with('error','Error..Something went wrong.');
         }
-       
+
     }
 
 }

@@ -11,6 +11,7 @@ import 'vue3-toastify/dist/index.css';
 import common from '../common-js/common.js';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import useToaster from '../../store/useToaster';
+import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
 
 export default {
  props: {
@@ -18,31 +19,25 @@ export default {
     errors: Object,
     company: Object,
     people: Array,
-    company_doc: Object,
-    contrib_cert: Object,
-    bee_cert: Object,
-    cipc_cert: Object,
-    lta_cert: Object,
-    sars_cert: Object,
     success: String,
     error: String,
     message: String,
     linked_licences: Object
- },  
+ },
 
  computed: {
   computedProvinces() {
     return common.getProvinces();
   }
 },
-  
+
   setup (props) {
     let showMenu = false;
     const { notifySuccess, notifyError } = useToaster();
     let people_options = props.people;
-    let show_modal = ref(true); 
+    let show_modal = ref(true);
     let show_file_name = ref(false);
-    let file_name = ref(''); 
+    let file_name = ref('');
 
     const form = useForm({
             company_name: props.company.name,
@@ -83,7 +78,6 @@ export default {
     }
 
 
-
       const documentsForm = useForm({
             document: null,
             expiry_date: null,
@@ -101,26 +95,26 @@ export default {
         function addCompanyUser(){
         addCompanyUserForm.post(`/add-company-admin`, {
         preserveScroll: true,
-           onSuccess: () => { 
+           onSuccess: () => {
             this.show_modal = false;
             document.querySelector('.modal-backdrop').remove()
             notifySuccess(props.success);
             addCompanyUserForm.reset();
            },
-           onError: () => { 
+           onError: () => {
               error()
             },
-          }) 
-      } 
+          })
+      }
 
       const editPerson = useForm({position: null,})
-        
 
-        function getPositionValue(position){//Get position value on edit 
+
+        function getPositionValue(position){//Get position value on edit
           editPerson.position = position;
         }
 
-        function updatePerson(pivot_id){//Update when you adit position 
+        function updatePerson(pivot_id){//Update when you adit position
            editPerson.patch(`/update-position/${pivot_id}`, {
            preserveScroll: true,
            onSuccess: () => {
@@ -128,9 +122,9 @@ export default {
               notifySuccess(props.success)
                     }else if(props.error){
                       notifyError(props.error)
-                   }    
+                   }
            },
-          })  
+          })
         }
 
         function submitPeople(){
@@ -146,32 +140,51 @@ export default {
                     }
             addPeopleForm.reset();
            },
-           onError: () => { 
+           onError: () => {
               error()
             },
-          })  
+          })
         }
 
-      function submitDocuments(){
-          documentsForm.post(`/submit-company-documents`, {
-          preserveScroll: true,
-          onSuccess: () => {
-            this.documentsForm.reset();
-            this.show_modal = false;
-            this.show_file_name = false;
-            document.querySelector('.modal-backdrop').remove()
-            if(props.success){
-              notifySuccess(props.success)
-                    }else if(props.error){
+      function submitDocument(formFile){ console.log(formFile, "test ooooo");
+          formFile.post(`/submit-company-documents`, {
+          preserveScroll: true, onSuccess: () => {
+                  if(props.success){
+                      notifySuccess(props.success)
+                  }else if(props.error){
                       notifyError(props.error)
-                    }
-           
-          },
-          onError: () => { 
+                  }
+
+              },
+          onError: () => {
               error()
             },
-        })    
+        })
         }
+
+
+      function hasFile(doc_type) {
+          if (props.company.company_documents) {
+              const foundDocument = props.company.company_documents.find(doc =>
+                  doc.people_id === props.company.id &&
+                  doc.doc_type === doc_type &&
+                  doc.document_name &&
+                  doc.document_file &&
+                  doc.id
+              );
+
+              console.log(foundDocument, "found")
+              if (foundDocument) {
+                  return {
+                      fileName: foundDocument.document_name,
+                      docPath: foundDocument.document_file,
+                      id: foundDocument.id
+                  };
+              }
+              return {}; // Return an empty object if no document satisfies the conditions
+
+          }
+      }
 
       function getDocType(doc_type){
         this.documentsForm.doc_type = doc_type;
@@ -181,7 +194,7 @@ export default {
       function deleteDocument(id){
           if(confirm('Document will be deleted permanently!! Continue??')){
             Inertia.delete(`/delete-company-document/${id}`,{
-              onSuccess: () => { 
+              onSuccess: () => {
                if(props.success){
                 notifySuccess(props.success)
                     }else if(props.error){
@@ -195,7 +208,7 @@ export default {
         function deleteCompany(company_name){
           if(confirm(company_name + ' will be deleted.. Continue??')){
             Inertia.delete(`/delete-company/${props.company.slug}`,{
-              onSuccess: () => { 
+              onSuccess: () => {
                if(props.success){
                 notifySuccess(props.success)
                     }else if(props.error){
@@ -209,7 +222,7 @@ export default {
     function submit() {//Update company details
       form.post('/update-company', {
         preserveScroll: true,
-        onSuccess: () => { 
+        onSuccess: () => {
                if(props.success){
                 notifySuccess(props.success)
                     }else if(props.error){
@@ -217,15 +230,15 @@ export default {
                     }
              }
       })
-      
+
     }
- 
+
 
 
       function unlinkPerson(full_name,id){
         if(confirm(full_name + ' will be removed from this company...Continue..??')){
           Inertia.delete(`/unlink-person/${id}`,{
-            onSuccess: () => { 
+            onSuccess: () => {
                if(props.success){
                 notifySuccess(props.success)
                     }else if(props.error){
@@ -241,10 +254,10 @@ export default {
         let url = `/preview-company/${props.company.slug}`
         window.open(url,'_blank');
       }
-      
+
 
       function assignActiveValue(e,status_value){
-       
+
         const updateStatusForm = useForm({
             unChecked: null,
             status: null,
@@ -258,7 +271,7 @@ export default {
               updateStatusForm.status = status_value;
             }
             updateStatusForm.patch(`/update-company-active-status/${props.company.slug}`,{
-              onSuccess: () => { 
+              onSuccess: () => {
                 if(props.success){
                   notifySuccess(props.success)
                     }else if(props.error){
@@ -266,7 +279,7 @@ export default {
                     }
              }
              })
-           
+
       }
 
       function redirectToWebsite(url){
@@ -275,7 +288,7 @@ export default {
         }else{
           window.open(`https://${url}`, "_blank");
         }
-        
+
       }
 
       let file_has_apostrophe = ref();
@@ -286,8 +299,8 @@ export default {
         this.file_has_apostrophe = this.file_name.includes("'");
       }
 
-    
-  
+
+
 
         function checkingFileProgress(message){
           setTimeout(() => {
@@ -296,16 +309,16 @@ export default {
             toast.loading(message);
         }
 
-       
+
 
          function viewFile(model_id) {
               let model = 'CompanyDocument';
                Inertia.visit(`/view-file/${model}/${model_id}`,{
                 replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
+                onStart: () => {
+                  checkingFileProgress('Checking file availability...')
               },
-                
+
                })
          }
 
@@ -326,6 +339,7 @@ export default {
       submit,
       addCompanyUser,
       addCompanyUserForm,
+        hasFile,
       unlinkPerson,
       assignActiveValue,
       redirectToWebsite,
@@ -334,7 +348,7 @@ export default {
       form,toast,
       documentsForm,
       getDocType,
-      submitDocuments,
+      submitDocument,
       deleteDocument,
       addPeopleForm,
       submitPeople,
@@ -349,6 +363,7 @@ export default {
   },
 
    components: {
+       DocComponent,
     Layout,
     Link,
     Head,
@@ -358,5 +373,5 @@ export default {
     Task,
     TextInputComponent
   },
-  
+
 };
