@@ -146,7 +146,7 @@ export default {
           })
         }
 
-      function submitDocument(formFile){ console.log(formFile, "test ooooo");
+      function submitDocument(formFile){
           formFile.post(`/submit-company-documents`, {
           preserveScroll: true, onSuccess: () => {
                   if(props.success){
@@ -163,17 +163,17 @@ export default {
         }
 
 
-      function hasFile(doc_type) {
+      function hasFile(doc_type) { console.log(props.company.company_documents, 'documents');
           if (props.company.company_documents) {
               const foundDocument = props.company.company_documents.find(doc =>
-                  doc.people_id === props.company.id &&
-                  doc.doc_type === doc_type &&
+                  doc.company_id === props.company.id &&
+                  doc.document_type === doc_type &&
                   doc.document_name &&
                   doc.document_file &&
                   doc.id
               );
 
-              console.log(foundDocument, "found")
+
               if (foundDocument) {
                   return {
                       fileName: foundDocument.document_name,
