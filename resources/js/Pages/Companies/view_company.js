@@ -163,7 +163,7 @@ export default {
         }
 
 
-      function hasFile(doc_type) { console.log(props.company.company_documents, 'documents');
+      function hasFile(doc_type) {
           if (props.company.company_documents) {
               const foundDocument = props.company.company_documents.find(doc =>
                   doc.company_id === props.company.id &&
