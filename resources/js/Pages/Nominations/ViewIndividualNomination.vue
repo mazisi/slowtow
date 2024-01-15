@@ -321,7 +321,7 @@
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Signed Power Of Attorney And Resolution')"
+                                                            :hasFile="hasFile('Power of Attorney')"
                                                             :errors="errors"
                                                             :error="error"
                                                             :orderByNumber=100
@@ -409,9 +409,9 @@
 
                                             <div class="text-end">
                                               <MergeNominationDocs
-                                                v-if="canMerge()"
-                                                :disabled="!canMerge()"
+                                                :mergeCount="canMerge()"
                                                 :nomination="nomination"
+                                                @mergeDocs="mergeDocument()"
                                               />
                                             </div>
                                             <hr>

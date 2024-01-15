@@ -291,7 +291,7 @@ export default{
             
           }
 
-          console.log(canMerge());
+   
         return{
             options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
