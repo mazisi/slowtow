@@ -53,6 +53,18 @@ import Layout from "../../../Shared/Layout.vue";
         })
       }
  
+      function updateStageDate(form_data){
+        form_data.patch(`/update-registration-date/${props.licence.id}`, {
+          preserveScroll: true,
+          onSuccess: () => {
+                    if(props.success){
+                        notifySuccess(props.success)
+                      }else if(props.error){
+                        notifyError(props.error)
+                      }
+                      },
+        })
+      }
 
       function pushData(e,status_value, prevStage){
            if (e.target.checked) {
@@ -129,19 +141,25 @@ import Layout from "../../../Shared/Layout.vue";
         }
 
         function getLicenceDate(licence_id, stage){
-          // console.log('licence_stage_dates',props.licence.licence_stage_dates)
+
           if(! props.licence.licence_stage_dates){
-            return ''
-          }else{
-            let licence_dates = props.licence.licence_stage_dates;//object with all licence stages
-            for (let i = 0; i < licence_dates.length; i++) {
-              if (licence_dates[i].licence_id === licence_id && licence_dates[i].stage === stage) {
-                return licence_dates[i].dated_at;
-              }
+            return {}; // Return an empty object if props.licence.dates doesn't exist
+          } else {
+            let licence_dates = props.licence.licence_stage_dates;
+
+            const dateFound = licence_dates.find(date =>
+              date.licence_id === props.licence.id &&
+              date.stage === stage
+            );
+
+            if (dateFound) {
+              return {
+                dated_at: dateFound.dated_at
+              };
+            } else {
+              return {};
             }
-            return '';
           }
-         
 
         }
 
@@ -181,6 +199,7 @@ function getStatus(statusParam) {
         hasFile,
         form,getStatus,
         updateRegistration,
+        updateStageDate,
         pushData,
         getLicenceDate,
         mergeDocs,
