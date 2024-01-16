@@ -66,34 +66,34 @@ public static function export($request){
 
 function getStatus($number) : string {
     switch ($number) {
-        case '1':
+        case '100':
            $status = 'Client Quoted';
             break;
-        case '2':
+        case '200':
             $status = 'Client Invoiced';
             break;
-        case '3':
+        case '300':
             $status = 'Client Paid';
             break;
-        case '4':
+        case '400':
             $status = 'Prepare Transfer Application';
             break;
-        case '5':
+        case '500':
             $status = 'Payment To The Liquor Board';
             break;
-        case '6':
+        case '600':
             $status = 'Scanned Application';
             break;
-        case '7':
+        case '700':
             $status = 'Application Logded';
             break;
-        case '8':
+        case '800':
             $status = 'Activation Fee Paid';
             break;
-        case '9':
+        case '900':
             $status = 'Transfer Issued';
             break;
-        case '10':
+        case '1000':
             $status = 'Transfer Delivered';
             break;
         default:

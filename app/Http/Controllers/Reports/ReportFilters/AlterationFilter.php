@@ -10,18 +10,19 @@ class AlterationFilter{
  function filter($request){
 
   return DB::table('alterations')
-        ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-        licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
+        ->selectRaw("alterations.id, licences.trading_name, licences.licence_number, licences.province, 
+       licences.board_region,licence_type_id,alterations.date, 
         alterations.status, licence_date, is_licence_active")
         ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
+        ->join('alteration_dates', 'alteration_dates.alteration_id' , '=', 'alterations.id' )
 
       ->when($request,function($query){
           $query->when(request('month_from') && request('month_to'), function($query){
-              $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
+              $query->whereBetween(DB::raw('MONTH(alteration_dates.dated_at)'),[request('month_from'), request('month_to')]);
            })
 
           ->when(request('month_from') && !request('month_to'), function ($query)  {
-              $query->whereMonth('alterations.logded_at', request('month_from'));
+              $query->whereMonth('alteration_dates.dated_at', request('month_from'));
           })
           ->when(request('activeStatus') == 'Active', function ($query) {
               $query->where('is_licence_active',1);
@@ -67,7 +68,6 @@ class AlterationFilter{
       ->whereNull('alterations.deleted_at')
       ->orderBy('trading_name')
        ->get([
-          'certification_issued_at',
           'id','trading_name',
           'licence_number',
           'board_region',
@@ -76,11 +76,9 @@ class AlterationFilter{
           'board_region',
           'doc_type',
           'date',
-          'licence_issued_at',
           'licence_type_id',
           'belongs_to',
-          'is_licence_active',
-          'logded_at'
+          'is_licence_active'
   ]);
  }
 }

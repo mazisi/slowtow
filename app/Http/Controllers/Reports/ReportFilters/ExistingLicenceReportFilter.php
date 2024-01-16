@@ -14,6 +14,7 @@ class ExistingLicenceReportFilter{
                     client_paid_at,status, board_region,licence_date, is_new_app")
 
       ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
+      ->join('licence_dates', 'licence_dates.licence_id' , '=', 'licences.id')
 
          ->when($request,function($query){
             $query->when(request('month_from') && request('month_to'), function($query){
@@ -81,11 +82,7 @@ class ExistingLicenceReportFilter{
                 'province',
                 'board_region',
                 'licence_date',
-                'deposit_paid_at',
-                'licence_issued_at',
-                'application_lodged_at',
-                'activation_fee_paid_at',
-                'client_paid_at','status',
+                'status',
                 'is_new_app',
                 'is_licence_active'
                 ]);
