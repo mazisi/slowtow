@@ -12,8 +12,9 @@ import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
 import StageComponent from '../components/slotow-components/StageComponent.vue';
 import DocComponent from '../components/slotow-components/DocComponent.vue';
-import DateComponent from '../components/slotow-components/DateComponent.vue';
+import DateComponent from './temp-licence-components/DateComponent.vue';
 import PrepareTemp from './temp-licence-components/PrepareTemp.vue';
+import MergeButton from './temp-licence-components/MergeButton.vue';
 import LinkComponent from './temp-licence-components/LinkComponent.vue';
 
 export default {
@@ -25,37 +26,6 @@ export default {
     licence: Object,
     success: String,
     error: String,
-    licence_logded: Object,//doc
-    scanned_app: Object,//doc
-    client_invoiced: Object,//doc
-    licence_issued: Object,//doc
-    client_quoted: Object,//doc
-    collate: Object,
-    liqour_board: Object,
-    licence_delivered: Object,
-    company_application_form: Object,
-    company_poa: Object,
-    company_annexure_b: Object,
-    company_annexure_c: Object,
-    company_cipc: Object,
-    company_id_document: Object,
-    company_representations: Object,
-    company_landlord_letter: Object,
-    company_security_letter: Object,
-    company_advert: Object,
-    company_plan: Object,
-    //individual
-    
-    individual_application_form: Object,
-    power_of_attorney: Object,
-    individual_annexure_b: Object,
-    individual_annexure_c: Object,
-    individual_representations: Object,
-    individual_landlord_letter: Object,
-    individual_security_letter: Object,
-    individual_advert: Object,
-    individual_plan: Object,
-    get_person_id_document: Object
      
   },
 
@@ -83,7 +53,7 @@ export default {
      })
 
 
-
+console.log(form)
 
       function submitDocument(docForm){
  
@@ -106,10 +76,11 @@ export default {
           company_id: props.licence.company_id,
           person_id: props.licence.people_id
           })
-          function mergeDocuments(type){
+          function mergeDocuments(){
+            const type = props.licence.belongs_to === 'Company' ? 'Company' : 'Individual'
             mergeForm.post(`/merge-temporal-documents/${type}`,{
               onStart: () => { 
-                checkingFileProgress('Checking file availability...') 
+                toast.info('Gathering documents.. Please wait...') 
                },
             })
           }
@@ -176,7 +147,6 @@ export default {
       
 
       function updateStageDate(form_param){
-        console.log(form_param)
         form_param.patch(`/update-process-app-date/${props.licence.slug}`, {
              preserveScroll: true,
              onSuccess: () => { 
@@ -282,8 +252,36 @@ export default {
             }
           }
         }
+
+        function countMergeFiles(belongsTo) {
+
+          let baseDocs = [
+            "Plan/Maps", "Advert/Blurb", "Security Letter", "Landlord Letter", "Representations",
+            "Annexure B", "Application Form", "POA And RES", "Payment To The Liquor Board"
+          ];
+          
+          if (belongsTo === 'Company') {
+            let company_docs = ["POA And RES", "Payment To The Liquor Board"];
+            baseDocs.push(...company_docs);
+          } else {
+            let individual_docs = ["Power Of Attorney", "ID Document"];
+            baseDocs.push(...individual_docs);
+          }
+          // Now baseDocs contains the common documents and the individual or company-specific documents
+          console.log(baseDocs);
+            const allDocTypesPresent = baseDocs.every(docType => {
+              return props.licence?.temp_documents.some(document => document.doc_type === docType);
+            });
         
-    return { year,form,
+            if (allDocTypesPresent) {
+              return baseDocs.length;
+            } else {
+              return 0;
+            }
+          
+        }
+        
+    return { year,form,countMergeFiles,
      updateLicence,hasMergeFile,
      getRenewalYear, pushData,getStatus,
      submitDocument,
@@ -300,6 +298,8 @@ export default {
     Link,
     Head,
     Datepicker,
+    PrepareTemp,
+    MergeButton,
     StageComponent,
      DocComponent,
      DateComponent,

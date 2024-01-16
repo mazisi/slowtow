@@ -306,18 +306,15 @@
 
 
   <div class="col-sm-1"> </div>
- 
- <div class="d-flex" v-if="licence?.company_id && ">
-  <button @click="mergeDocuments('Company')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
-  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Compile Application
-</button>
-   <a :href="`/storage/app/public/${licence.merged_document}`" 
-   v-if="licence.merged_document" target="_blank"  class="ms-2 btn btn-sm btn-secondary" >
-  View </a> 
- </div>
-
-
+      <div class="d-flex">
+      <MergeButton 
+        v-if="licence?.company_id && countMergeFiles('Company')"
+        @time-to-merge="mergeDocuments('Company')"
+        :licence="licence"
+        :mergeForm="mergeForm"
+        :disabled="countMergeFiles('Company') <= 0 || mergeForm.processing"
+      />
+    </div>
   </div>
   
 </div>
@@ -463,11 +460,13 @@
   <div class="col-sm-1"> </div>
  
   <div class="d-flex">
-    <button
-@click="mergeDocuments('Individual')" type="button" :disabled="mergeForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary" >
-  <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-  <span class="visually-hidden">Loading...</span> Compile Application</button>
-   
+      <MergeButton 
+      v-if="licence?.company_id && countMergeFiles('Individual')"
+      @time-to-merge="mergeDocuments('Individual')"
+      :licence="licence"
+      :mergeForm="mergeForm"
+      :disabled="countMergeFiles('Individual') <= 0 || mergeForm.processing"
+    />
   </div>
  
 

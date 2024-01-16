@@ -300,8 +300,8 @@
                                                         <div class="d-flex align-items-start flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Proof Of Payment</h6>
                                                         </div>
-                                                        <a v-if="liquor_board !== null"
-                                                           :href="`${$page.props.blob_file_path}${'test.pdf'}`" target="_blank" class="mb-0 btn btn-link ms-auto" >
+                                                        <a v-if="hasFile('Payment To The Liquor Board').id"
+                                                           :href="`${$page.props.blob_file_path}${hasFile('Payment To The Liquor Board').docPath}`" target="_blank" class="mb-0 btn btn-link ms-auto" >
                                                             <i class="fa fa-link h5 " aria-hidden="true"></i></a>
                                                         <a v-else style="cursor: no-drop;" title="Liqour document not uploaded" class="mb-0 btn btn-link ms-auto" >
                                                             <i class="fa fa-link h5" aria-hidden="true"></i></a>
@@ -325,7 +325,7 @@
                                                             :errors="errors"
                                                             :error="error"
                                                             :orderByNumber=100
-                                                            :docType="'Signed Power Of Attorney And Resolution'"
+                                                            :docType="'Power of Attorney'"
                                                             :success="success"
                                                             :stage="600"
                                                         />
@@ -345,11 +345,11 @@
                                                                 :documentModel="nomination"
                                                                 @file-value-changed="submitDocument"
                                                                 @file-deleted="deleteDocument"
-                                                                :hasFile="hasFile('ID Documents')"
+                                                                :hasFile="hasFile('ID Document')"
                                                                 :errors="errors"
                                                                 :error="error"
                                                                 :orderByNumber=100
-                                                                :docType="'ID Documents'"
+                                                                :docType="'ID Document'"
                                                                 :success="success"
                                                                 :stage="600"
                                                             />
@@ -407,21 +407,12 @@
                                                 </ul>
                                             </div>
 
-                                            <div class="text-end ">
-                                                <button v-if="police_clearance_doc !== null
-                                                        && certified_id_doc !== null
-                                                        && attorney_doc !== null
-                                                        && liquor_board !== null
-                                                        && nomination_forms !== null"
-                                                        @click="mergeDocument"
-                                                        type="button" class="btn btn-sm btn-secondary mx-2">Compile &amp; Merge
-                                                </button>
-
-                                                <Link v-else class="btn btn-sm btn-secondary mx-2 disabled">Compile &amp; Merge</Link>
-
-                                                <a v-if="nomination.merged_document !== null"
-                                                   :href="`/storage/app/public/${nomination.merged_document}`"
-                                                   target="_blank" class="btn btn-sm btn-secondary">View</a>
+                                            <div class="text-end">
+                                              <MergeNominationDocs
+                                                v-if="canMerge()"
+                                                :disabled="!canMerge()"
+                                                :nomination="nomination"
+                                              />
                                             </div>
                                             <hr>
 

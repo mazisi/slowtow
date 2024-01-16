@@ -33,14 +33,14 @@
       
       <span v-if="uploadDoc.progress">
   <CircleProgressBar  
-  :value="uploadDoc.progress.percentage"  
-  :max="100"  
-  percentage  
- rounded
- :size="30"
- :colorFilled="'#4caf50'"
- :animationDuration="'0.7s'">
-</CircleProgressBar>
+      :value="uploadDoc.progress.percentage"  
+      :max="100"  
+      percentage  
+      rounded
+      :size="30"
+      :colorFilled="'#4caf50'"
+      :animationDuration="'0.7s'">
+    </CircleProgressBar>
 </span>
       
       <div v-if="uploadDoc.processing" class="spinner-border text-danger spinner-border-sm" role="status">

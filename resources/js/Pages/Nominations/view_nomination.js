@@ -13,6 +13,7 @@ import 'vue3-toastify/dist/index.css';
 import StageComponent from "@/Pages/components/slotow-components/StageComponent.vue";
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
 import DateComponent from "@/Pages/components/DateComponent.vue";
+import MergeNominationDocs from './MergeNominationDocs.vue'
 
 
 export default{
@@ -67,8 +68,8 @@ export default{
                 );
                 if (foundDocument) {
                     return {
-                        fileName: foundDocument.document,
-                        docPath: foundDocument.document,
+                        fileName: foundDocument.document_name,
+                        docPath: foundDocument.path,
                         id: foundDocument.id
                     };
                 }
@@ -89,15 +90,11 @@ export default{
             formDoc.post('/submit-nomination-document', {
                 preserveScroll: true,
                 onSuccess: () => {
-                    this.show_modal = false;
-                    this.show_file_name = false;
-                    document.querySelector('.modal-backdrop').remove();
                     if(props.success){
                         notify(props.success)
                     }else if(props.error){
                         notify(props.error)
                     }
-                    formDoc.reset();
                 },
             })
         }
@@ -234,23 +231,6 @@ export default{
 
 
 
-        function viewFile(model_id,file_model) {
-            let model = '';
-            if(file_model){
-                model = file_model;
-            }else{
-                model = 'NominationDocument';
-            }
-
-            Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {
-                    checkingFileProgress('Checking file availability...')
-                },
-
-            })
-        }
-
         function getStatus(status_param) {
             let status;
 
@@ -292,12 +272,31 @@ export default{
             return status;
         }
 
+        function canMerge() {
+            let baseDocs = [
+              "ID Document", "Nomination Forms", "Payment To The Liquor Board", 
+              "Police Clearances","Power of Attorney", "Latest Renewal/Licence"
+            ];
+           
+              const allDocTypesPresent = baseDocs.every(docType => {
+                console.log('DocType',docType);
+                return props.nomination.nomination_documents.some(document => document.doc_type === docType);
+              });
+              console.log('All',allDocTypesPresent);
+              if (allDocTypesPresent) {
+                return baseDocs.length;
+              } else {
+                return 0;
+              }
+            
+          }
 
-
-        return{options,pushData,updateNomination,updateDate,
+          console.log(canMerge());
+        return{
+            options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,nomineeForm,
-            uploadDoc,updateForm,file_name,getFileName,notify,checkingFileProgress, viewFile,
+            uploadDoc,updateForm,file_name,getFileName,notify,checkingFileProgress,
             deleteNomination,mergeDocument,hasFile,getStatus
 
 
@@ -314,6 +313,7 @@ export default{
         Head,
         Multiselect,
         Datepicker,
+        MergeNominationDocs,
         LiquorBoardRequest,
         Banner,
         Task
