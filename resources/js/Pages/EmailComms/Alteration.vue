@@ -5,7 +5,9 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import common from '../common-js/common.js';
 import useAlteration from '../Alterations/composables/useAlteration';
-import useToaster from '../../store/useToaster'
+import useToaster from '../../store/useToaster';
+import Navigation from './Navigation.vue';
+import useMonths from '../../store/useMonths'
 
 
 export default {
@@ -15,28 +17,31 @@ export default {
     errors: Object,
     error: String,
     success: String
-
-//Status keys:
-// 100. Client Quoted
-//200 => Client Invoiced
-//300 => Client Paid
-//400 => Prepare Alterations Application
-//500 => Payment to the Liquor Board
-//600 => Alterations Lodged
-//700 => Alterations Certificate Issued
-//800 => Alterations Delivered
-
   },
   data() {
     const { getBadgeStatus } = useAlteration();
     const { notifySuccess, notifyError } = useToaster();
+    const { months } = useMonths();
+
+    const stages = [
+      { name: 'Client Quoted', value: 100 },
+      { name: 'Client Invoiced', value: 200 },
+      { name: 'Client Paid', value: 300 },
+      { name: 'Prepare Alterations Application', value: 400 },
+      { name: 'Payment to the Liquor Board', value: 500 },
+      { name: 'Alterations Lodged', value: 600 },
+      { name: 'Alterations Certificate Issued', value: 700 },
+      { name: 'Alterations Delivered', value: 800 },
+    ];
+
     return {
       month: '',
       province: '',
       stage: '',
       getBadgeStatus,
       notifySuccess,
-      notifyError 
+      notifyError ,months,
+      stages
     }
   },
   components: {
@@ -44,6 +49,7 @@ export default {
     Link,
     Banner,
     Paginate,
+    Navigation,
     Head
 },
 methods: {
@@ -69,37 +75,6 @@ methods: {
       return computed_date + 1;    
     },
 
-    //On navigation click get renewal data
-    getLicenceRenewals(){
-      this.$inertia.get('/email-comms');
-    },
-
-    //On navigation click get transfer data
-    getLicenceTransfers(){
-      this.$inertia.get('/email-comms/transfers');
-    },
-    getNominations(){
-      this.$inertia.get('/email-comms/nominations');
-    },
-
-    getTemporaryLicences(){
-      this.$inertia.get('/email-comms/temp-licences');
-    },
-
-    getAlterations(){
-      this.$inertia.get('/email-comms/alterations');
-    },
-
-    getEmmails(){
-      this.$inertia.get('/emails-report');
-    },
-
-    getNewApps(){
-      this.$inertia.get('/email-comms/new-apps');
-    },
-     
-
-    
 
     getStatus(status){
       return this.getBadgeStatus(status);
@@ -138,42 +113,9 @@ methods: {
   <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-  <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
 
-  <li class="nav-item" role="presentation">
-    <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white " id="Renewals" data-bs-toggle="pill" data-bs-target="#renewals" 
-    type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  
-  <li class="nav-item" role="presentation">
-    <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-    type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <li class="nav-item" role="presentation">
-    <button @click="getNominations" class="nav-link btn btn-secondary text-white " id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-    type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  <Navigation/>
 
-  <li class="nav-item" role="presentation">
-    <button @click="getAlterations" class="nav-link btn btn-success text-white active" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
-  </li>
-
-  <li class="nav-item" role="presentation">
-    <button @click="getNewApps" class="nav-link btn btn-secondary text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
-    type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
-  </li>
-
-  <li class="nav-item" role="presentation">
-    <button @click="getTemporaryLicences" class="nav-link btn btn-secondary text-white mx-4" id="Temporay-Licences" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
-  </li>
-
-  <!-- <li class="nav-item" role="presentation">
-    <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Emails</button>
-  </li> -->
-</ul>
 <div class="tab-content" id="pills-tabContent">
 
 
@@ -183,35 +125,17 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="1">Client Quoted </option>
-<option value="2">Client Invoiced </option>
-<option value="3">Client Paid </option>
-<option value="4">Prepare Alterations Application</option>
-<option value="5">Payment to the Liquor Board</option>
-<option value="6">Alterations Lodged</option>
-<option value="7">Alterations Certificate Issued</option>
-<option value="8">Alterations Delivered </option>
+<option v-for="stage in stages" :key="stage.value" :value="stage.value">{{ stage.name }}</option>
 
 </select>
 </div>
 
 </div>
-  <div class="col-4 columns">                  
+  <div class="col-4 columns">     
 <div class="input-group input-group-outline null is-filled">
 <select v-model="month" @change="filter" class="form-control form-control-default" >
 <option :value="''" disabled selected>Filter By Month</option>
-<option value="1">January</option>
-<option value="2">February</option>
-<option value="3">March</option>
-<option value="4">April</option>
-<option value="5">May</option>
-<option value="6">June</option>
-<option value="7">July</option>
-<option value="8">August</option>
-<option value="9">September</option>
-<option value="10">October</option>
-<option value="11">November</option>
-<option value="12">December</option>
+<option v-for="month in months" :value="month.id" :key="month.id">{{ month.name }}</option>
 </select>
 </div>
 
@@ -255,7 +179,7 @@ methods: {
           <span>{{ new Date(alteration.licence.licence_date).toISOString().split('T')[0] }}</span>
         </td>
          <td class="align-middle text-center">
-            {{ getStatus(alteration.status) }}
+            <div v-html="getStatus(alteration.status)"></div>
           </td>
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${alteration.slug}/alterations`" class="text-secondary text-center font-weight-bold text-xs"> 

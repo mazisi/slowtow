@@ -52,12 +52,12 @@ class NominationReportFilter {
             })
 
             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-              $query->where('nominations.status','<', 9)
+              $query->where('nominations.status','<', 900)
                     ->orWhereNull('nominations.status');
           })
 
           ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-              $query->where('nominations.status','>=', 9);
+              $query->where('nominations.status','>=', 900);
           })
           
           ->when(request('year'), function ($query) {

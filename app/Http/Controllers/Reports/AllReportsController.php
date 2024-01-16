@@ -50,9 +50,9 @@ class AllReportsController extends Controller
                             $arr_of_alterations[$i]->trading_name, 
                             $arr_of_alterations[$i]->licence_number, 
                             request('boardRegion') ? $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region : $arr_of_alterations[$i]->province,
-                            $arr_of_alterations[$i]->logded_at,
+                            AlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Lodged'),
                             $proof_of_lodgiment ? 'TRUE' : 'FALSE',
-                            $arr_of_alterations[$i]->certification_issued_at,
+                            AlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Certificate Issued'),
                             (new AlterationExportController)->getStatus($arr_of_alterations[$i]->status), 
                             ExportNotes::getNoteExports($arr_of_alterations[$i]->id, 'Alteration')
                             ];
@@ -106,23 +106,25 @@ class AllReportsController extends Controller
 
             for($i = 0; $i < count($arr_of_existing_licences); $i++ ){
                 
-                    $data = [ 
+                     $data = [ 
                         $arr_of_existing_licences[$i]->trading_name, 
                         $arr_of_existing_licences[$i]->licence_type,
                         $arr_of_existing_licences[$i]->licence_number,
                         request('boardRegion') ? $arr_of_existing_licences[$i]->province.' - '.$arr_of_existing_licences[$i]->board_region : $arr_of_existing_licences[$i]->province,
                         '',
-                        $arr_of_existing_licences[$i]->deposit_paid_at ? 'TRUE': 'FALSE',
-                        $arr_of_existing_licences[$i]->application_lodged_at ? date('Y/m/d', strtotime($arr_of_existing_licences[$i]->application_lodged_at)) : '',
+                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested')?ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested'): '',
+                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
+                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Application Lodged'))) : '',
                         (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_existing_licences[$i]->id) ? 'TRUE': 'FALSE',
-                        $arr_of_existing_licences[$i]->activation_fee_paid_at,
+                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested')?ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested'): '',
                         '',
-                        $arr_of_existing_licences[$i]->client_paid_at ? date('d-m-Y', strtotime($arr_of_existing_licences[$i]->client_paid_at)) : '',
-                        $arr_of_existing_licences[$i]->licence_issued_at ? date('d-m-Y', strtotime($arr_of_existing_licences[$i]->licence_issued_at)) : '',
+                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Finalisation Paid'))) : '',
+                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Licence Issued') ? date('d M Y', strtotime(ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Licence Issued'))) : '',
                         LicenceStatus::getLicenceStatus($arr_of_existing_licences[$i]->status),
                         '',
                         ExportNotes::getNoteExports($arr_of_existing_licences[$i]->id, 'Licence')
-                     ];
+                        ];
+        
 
                 $existingLicencesData[] = $data;
 
@@ -172,19 +174,20 @@ class AllReportsController extends Controller
    
     for($i = 0; $i < count($arr_of_new_apps_licences); $i++ ){
        
-            $data = [ 
+
+             $data = [ 
                 $arr_of_new_apps_licences[$i]->trading_name, 
                 $arr_of_new_apps_licences[$i]->licence_type,
                 $arr_of_new_apps_licences[$i]->licence_number,
                 request('boardRegion') ? $arr_of_new_apps_licences[$i]->province.' - '.$arr_of_new_apps_licences[$i]->board_region : $arr_of_new_apps_licences[$i]->province,
                 '',
-                $arr_of_new_apps_licences[$i]->deposit_paid_at ? 'TRUE': 'FALSE',
-                $arr_of_new_apps_licences[$i]->application_lodged_at ? date('Y/m/d', strtotime($arr_of_new_apps_licences[$i]->application_lodged_at)) : '',
-                (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_new_apps_licences[$i]->id) ? 'TRUE': 'FALSE',
-                $arr_of_new_apps_licences[$i]->activation_fee_paid_at,
-                '',
-                $arr_of_new_apps_licences[$i]->client_paid_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->client_paid_at)) : '',
-                $arr_of_new_apps_licences[$i]->licence_issued_at ? date('d M Y', strtotime($arr_of_new_apps_licences[$i]->licence_issued_at)) : '',
+                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
+                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged'))) : '',
+                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged') ? 'TRUE': 'FALSE',
+                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Activation Fee Requested') ? NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Activation Fee Requested'): '',
+                 '',
+                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Finalisation Paid'))) : '',
+                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Licence Issued') ? date('d M Y', strtotime(NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Licence Issued'))) : '',
                 LicenceStatus::getLicenceStatus($arr_of_new_apps_licences[$i]->status),
                 '',
                 ExportNotes::getNoteExports($arr_of_new_apps_licences[$i]->id, 'Licence')

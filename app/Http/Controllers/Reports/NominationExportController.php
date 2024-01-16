@@ -66,34 +66,34 @@ function getProofOfLodgiment($nomination_id){
 
 function getStatus($num_status) : string {
     switch ($num_status) {
-        case '1':
+        case '100':
             $status = 'Client Quoted';
              break;
-         case '2':
+         case '200':
              $status = 'Client Invoiced';
              break;
-         case '3':
+         case '300':
              $status = 'Client Paid';
              break;
-         case '4':
+         case '400':
              $status = 'Payment To The Liquor Board';
              break;
-         case '5':
+         case '500':
              $status = 'Select Nominees';
              break;
-         case '6':
+         case '600':
              $status = 'Prepare Nomination Application';
              break;
-         case '7':
+         case '700':
              $status = 'Scanned Application';
              break;
-         case '8':
+         case '800':
              $status = 'Nomination Lodged';
              break;
-         case '9':
+         case '900':
              $status = 'Nomination Issued';
              break;
-         case '10':
+         case '1000':
              $status = 'Nomination Delivered';
              break;
          default:

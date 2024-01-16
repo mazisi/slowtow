@@ -36,7 +36,6 @@ class RenewalReportFilter {
            })
 
            ->when(request('boardRegion'), function ($query)  {
-               // $query->whereIn(DB::raw('licences.board_region'),array_values(explode(",",request('boardRegion'))));
                $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
            })
            ->when(request('applicant'), function ($query)  {

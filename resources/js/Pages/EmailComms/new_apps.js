@@ -5,6 +5,8 @@ import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue';
 import Paginate from "../../Shared/Paginate.vue";
 import  common from '../common-js/common.js';
+import Navigation from './Navigation.vue';
+import useMonths from '../../store/useMonths'
 
 export default {
     props: {
@@ -20,12 +22,14 @@ export default {
         Link,
         Head,
         Banner,
-        Paginate
+        Paginate,
+        Navigation
     },
     
     
 
     setup(props) {
+      const { months } = useMonths();
       const [search_query, status_query, licence_type, licence_date, province] = getUrlParam();
     
         const term = search_query ? search_query : ref('')
@@ -37,6 +41,18 @@ export default {
               licence_date: licence_date ? licence_date : '',
               province: province ? province : ''
             })
+
+            const statuses = [
+              { name: 'Client Quoted', value: 100 },
+              { name: 'Client Invoiced', value: 200 },
+              { name: 'Payment to the Liquor Board', value:400 },
+              { name: 'Application Lodged', value: 1500 },
+              { name: 'Initial Inspection', value: 1700 },
+              { name: 'Final Inspection', value: 1800 },
+              { name: 'Client Finalisation Invoice', value: 2000 },
+              { name: 'Activation Fee Paid', value: 2200 },
+              { name: 'Licence Issued', value: 2300 },
+            ];
 
        function limit(string='', limit = 25) {
         if(string !== ''){
@@ -93,26 +109,7 @@ export default {
           ];
         }
 
-        function getLicenceRenewals(){
-          this.$inertia.get('/email-comms');
-        }
-    
-        //On navigation click get transfer data
-        function getLicenceTransfers(){
-          this.$inertia.get('/email-comms/transfers');
-        }
-        function getNominations(){
-          this.$inertia.get('/email-comms/nominations');
-        }
-    
-        function getAlterations(){
-          this.$inertia.get('/email-comms/alterations');
-        }
-
-        function getTemporayLicences(){
-          this.$inertia.get('/email-comms/temp-licences');
-        }
-
+        
         
       function resetFilter(){
         form.status = '';
@@ -125,13 +122,14 @@ export default {
       }
 
         return {
-          getLicenceRenewals,getLicenceTransfers,getNominations,getAlterations,getTemporayLicences,
           limit,resetFilter,
           computedProvinces,
           form,
           term,
           search,
-          getUrlParam
+          getUrlParam,
+          statuses,
+          months
         }
         
     },

@@ -6,44 +6,7 @@
   <Banner/>
   
   <div class="card card-body mt-n6">
-    <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
-
-      <li class="nav-item" role="presentation">
-        <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white"  id="Renewals" 
-        data-bs-toggle="pill" data-bs-target="#renewals" 
-        type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      
-      <li class="nav-item" role="presentation">
-        <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-        type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <li class="nav-item" role="presentation">
-        <button @click="getNominations" class="nav-link btn btn-secondary text-white" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-        type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
-      </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-    
-      <li class="nav-item" role="presentation">
-        <button @click="getAlterations" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-        type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
-      </li>
-    
-      <li class="nav-item" role="presentation">
-        <button @click="getNewApps" class="nav-link btn btn-success active text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
-        type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
-      </li>
-    
-      <li class="nav-item" role="presentation">
-        <button @click="getTemporayLicences" class="nav-link btn btn-secondary text-white mx-2" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-        type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
-      </li>
-    
-      <li class="nav-item" role="presentation">
-        <button @click="resetFilter" class="nav-link btn btn-danger text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-        type="button" role="tab" aria-controls="alterations" aria-selected="false"> Reset</button>
-      </li>
-      
-    </ul>
+    <Navigation/>
   <div class="col-12">
   <div class="row">
   <div  class="col-md-12 col-xl-12 col-lg-12">
@@ -57,15 +20,7 @@
   <div class="input-group input-group-outline null is-filled">
   <select @change="search" v-model="form.status" class="form-control form-control-default centered-select">
   <option :value="''" disabled selected>Filter By Stage</option>
-  <option value="1">Client Quoted</option>
-  <option value="2">Client Invoiced</option>
-  <option value="4">Payment to the Liquor Board</option>
-  <option value="7">Application Lodged</option>
-  <option value="8">Initial Inspection</option>
-  <option value="10">Final Inspection</option>
-  <option value="12">Client Finalisation Invoice</option>
-  <option value="14">Activation Fee Paid</option>
-  <option value="15">Licence Issued</option>
+  <option v-for="status in statuses" :key="status.value" :value="status.value">{{ status.name }}</option>
 
   </select>
   
@@ -85,18 +40,7 @@
   <div class="input-group input-group-outline null is-filled">
   <select @change="search" v-model="form.licence_date" class="form-control form-control-default centered-select">
   <option :value="''" disabled selected>Licence Date</option>
-  <option value="01">January</option>
-  <option value="02">February</option>
-  <option value="03">March</option>
-  <option value="04">April</option>
-  <option value="05">May</option>
-  <option value="06">June</option>
-  <option value="07">July</option>
-  <option value="08">August</option>
-  <option value="09">September</option>
-  <option value="10">October</option>
-  <option value="11">November</option>
-  <option value="12">December</option>
+  <option v-for="month in months" :value="month.id" :key="month.id">{{ month.name }}</option>
   </select>
   </div>
   </div>

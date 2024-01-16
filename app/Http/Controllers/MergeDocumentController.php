@@ -11,12 +11,12 @@ use App\Models\NominationDocument;
 class MergeDocumentController extends Controller{
 
     public function merge($id){
-
+      
        try {
         
 
-        $nominations =  NominationDocument::where('nomination_id',$id)->get(['document','licence_id']);
-      
+        $nominations =  NominationDocument::where('nomination_id',$id)->get();
+             
           $merger = PDFMerger::init();
 
           $exist = MergedDocument::where('nomination_id',$id)->first(['file_name']);
@@ -67,6 +67,7 @@ class MergeDocumentController extends Controller{
 
 
        } catch (\Throwable $th) {
+        throw $th;
           return back()->with('error','Error uploading document.');
        }
 

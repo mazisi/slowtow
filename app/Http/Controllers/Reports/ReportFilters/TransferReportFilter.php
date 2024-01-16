@@ -46,11 +46,11 @@ class TransferReportFilter {
         })
 
         ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-            $query->where('licence_transfers.status','<', 9);
+            $query->where('licence_transfers.status','<', 900);
         })
 
         ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-            $query->where('licence_transfers.status','>=',9);
+            $query->where('licence_transfers.status','>=',900);
         });
 
           })->when(request('year'), function ($query) {

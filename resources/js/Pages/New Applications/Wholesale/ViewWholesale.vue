@@ -94,6 +94,7 @@
     <div class="col-md-1 columns"></div>
     
       <DateComponent
+      @date-value-changed="updateStageDate"
           :stage="'Client Paid'"
           :licence="licence"
           :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -363,6 +364,7 @@
   />
   <div class="col-md-1 columns"></div>
     <DateComponent
+    @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'Scanned Application'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -401,7 +403,8 @@
     :success="success"
   />
   </div>
-  <DateComponent 
+  <DateComponent
+  @date-value-changed="updateStageDate" 
         :licence="licence"
         :stage="'Initial Application Fee'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -429,6 +432,7 @@
   
   <div class="col-md-1 columns"></div>
   <DateComponent
+  @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'Application Lodged'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -515,6 +519,7 @@
     />
     </div>
     <DateComponent
+    @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'NLA 7 Submitted'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -553,6 +558,7 @@
     />
     </div>
     <DateComponent
+    @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'NLA 8 Issued'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -590,6 +596,7 @@
     />
     </div>
     <DateComponent
+    @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'Activation Fee'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -628,6 +635,7 @@
     />
     </div>
     <DateComponent
+    @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'NLA 9 Issued'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -693,6 +701,7 @@
    />
   </div>
     <DateComponent
+    @date-value-changed="updateStageDate"
     :licence="licence"
     :stage="'Original Licence Delivered'"
     :canSave="$page.props.auth.has_slowtow_admin_role"

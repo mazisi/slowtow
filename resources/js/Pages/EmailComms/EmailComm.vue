@@ -5,10 +5,12 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import useToaster from '../../store/useToaster'
+import useToaster from '../../store/useToaster';
+import Navigation from './Navigation.vue';
 
 export default {
   name: "Emmail-Comms",
+
   props: {
     renewals: Object,
     success: String,
@@ -16,7 +18,16 @@ export default {
   },
   data() {
     const { notifySuccess, notifyError } = useToaster();
+
+    const stages = [
+      { name: 'Client Quoted', value: 100 },
+      { name: 'Client Invoiced', value: 200 },
+      { name: 'Payment To The Liquor Board', value: 400 },
+      { name: 'Renewal Issued', value: 500 },
+    ];
+
     return {
+      stages,
       month: '',
       province: '',
       stage: '',
@@ -30,6 +41,7 @@ export default {
     Link,
     Banner,
     Paginate,
+    Navigation,
     Head
 },
 methods: {
@@ -41,39 +53,38 @@ methods: {
           }))
      },
 
+     navigateTo(to){
+      //switch
+      switch (to) {
+        case 'Renewals':
+          this.getLicenceRenewals();
+          break;
+         case 'Transfers':
+          this.getLicenceTransfers();
+          break;
+         case 'Nominations':
+          this.getNominations();
+          break;
+         case 'Temporary Licences':
+          this.getTemporaryLicences();
+          break;
+         case 'Alterations':
+          this.getAlterations();
+          break;
+         case 'New Applications':
+          this.getNewApps();
+          break;
+
+        default:
+          break;
+      }
+     },
     getRenewalYear(date){
       let computed_date = new Date(date).getFullYear();
       return computed_date + 1;    
     },
 
-    //On navigation click get renewal data
-    getLicenceRenewals(){
-      this.isActive = true;
-      this.$inertia.get('/email-comms');
-    },
-
-    //On navigation click get transfer data
-    getLicenceTransfers(){
-      this.$inertia.get('/email-comms/transfers');
-    },
-    getNominations(){
-      this.$inertia.get('/email-comms/nominations');
-    },
-    getTemporaryLicences(){
-      this.$inertia.get('/email-comms/temp-licences');
-    },
-
-    getAlterations(){
-      this.$inertia.get('/email-comms/alterations');
-    },
-
-    getNewApps(){
-      this.$inertia.get('/email-comms/new-apps');
-    },
-
-    getEmmails(){
-      this.$inertia.get('/emails-report');
-    },
+    
 
     limit(string='', limit = 25) {
         if(string){
@@ -123,44 +134,7 @@ methods: {
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
     
-  <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
-
-  <li class="nav-item" role="presentation">
-    <button @click="getLicenceRenewals" class="nav-link btn btn-success text-white"  id="Renewals" 
-    data-bs-toggle="pill" data-bs-target="#renewals" 
-    type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  
-  <li class="nav-item" role="presentation">
-    <button @click="getLicenceTransfers" class="nav-link btn btn-secondary text-white ml-4" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-    type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <li class="nav-item" role="presentation">
-    <button @click="getNominations" class="nav-link btn btn-secondary text-white" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-    type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-  <li class="nav-item" role="presentation">
-    <button @click="getAlterations" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
-  </li>
-
-  <li class="nav-item" role="presentation">
-    <button @click="getNewApps" class="nav-link btn btn-secondary text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
-    type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
-  </li>
-
-  <li class="nav-item" role="presentation">
-    <button @click="getTemporaryLicences" class="nav-link btn btn-secondary text-white mx-2" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporary Licences</button>
-  </li>
-
-  <!-- <li class="nav-item" role="presentation">
-    <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false"> Emails</button>
-  </li> -->
-  
-</ul>
+  <Navigation/>
 <div class="tab-content" id="pills-tabContent">
 
 
@@ -170,10 +144,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="100">Client Quoted</option>
-<option value="200">Client Invoiced </option>
-<option value="400">Payment to the Liquor Board</option>
-<option value="500">Renewal Issued</option>
+<option v-for="stage in stages" :value="stage.value" :key="stage.id">{{ stage.name }}</option>
 
 </select>
 </div>

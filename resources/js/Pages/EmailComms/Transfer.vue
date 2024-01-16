@@ -4,6 +4,7 @@ import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import useToaster from '../../store/useToaster';
+import Navigation from './Navigation.vue';
 
 export default {
   name: "email-comms-transfers",
@@ -27,6 +28,7 @@ export default {
     Layout,
     Link,
     Banner,
+    Navigation,
     Head,
     Paginate
 },
@@ -49,39 +51,6 @@ methods: {
           }))
         },
 
-    getRenewalYear(date){
-      let computed_date = new Date(date).getFullYear();
-      return computed_date + 1;    
-    },
-
-    //On navigation click get renewal data
-    getLicenceRenewals(){
-      this.$inertia.get('/email-comms');
-    },
-
-    //On navigation click get transfer data
-    getLicenceTransfers(){
-      this.$inertia.get('/email-comms/transfers');
-    },
-    getNominations(){
-      this.$inertia.get('/email-comms/nominations');
-    },
-     
-    getTemporaryLicences(){
-      this.$inertia.get('/email-comms/temp-licences');
-    },
-
-    getAlterations(){
-      this.$inertia.get('/email-comms/alterations');
-    },
-
-     getEmmails(){
-      this.$inertia.get('/emails-report');
-    },
-
-    getNewApps(){
-      this.$inertia.get('/email-comms/new-apps');
-    },
     
     },
 
@@ -107,42 +76,7 @@ methods: {
   <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
-  <ul class="nav mb-3 pt-3" id="pills-tab" role="tablist">
-
-  <li class="nav-item" role="presentation">
-    <button @click="getLicenceRenewals" class="nav-link btn btn-secondary text-white " id="Renewals" data-bs-toggle="pill" data-bs-target="#renewals" 
-    type="button" role="tab" aria-controls="renewals" aria-selected="true">Renewals</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  
-  <li class="nav-item" role="presentation">
-    <button @click="getLicenceTransfers" class="nav-link btn btn-success text-white ml-4 active" id="Transfers" data-bs-toggle="pill" data-bs-target="#transfers" 
-    type="button" role="tab" aria-controls="transfers" aria-selected="false">Transfers</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-  <li class="nav-item" role="presentation">
-    <button @click="getNominations" class="nav-link btn btn-secondary text-white" id="Nominations" data-bs-toggle="pill" data-bs-target="#nominations" 
-    type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
-  </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-
-  <li class="nav-item" role="presentation">
-    <button @click="getAlterations" class="nav-link btn btn-secondary text-white" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Alterations</button>
-  </li>
-
-  <li class="nav-item" role="presentation">
-    <button @click="getNewApps" class="nav-link btn btn-secondary text-white mx-4" id="New Applications" data-bs-toggle="pill" data-bs-target="#new-apps" 
-    type="button" role="tab" aria-controls="new-apps" aria-selected="false">New Applications</button>
-  </li>
-
-  <li class="nav-item" role="presentation">
-    <button @click="getTemporaryLicences" class="nav-link btn btn-secondary text-white mx-4" id="Alterations" data-bs-toggle="pill" data-bs-target="#alterations" 
-    type="button" role="tab" aria-controls="alterations" aria-selected="false">Temporal Licences</button>
-  </li>
-
-  <!-- <li class="nav-item" role="presentation">
-    <button @click="getEmmails" class="nav-link btn btn-secondary text-white mx-4" id="emails" data-bs-toggle="pill" data-bs-target="#emails" 
-    type="button" role="tab" aria-controls="emails" aria-selected="false">Emails</button>
-  </li> -->
-</ul>
+  <Navigation/>
 <div class="tab-content" id="pills-tabContent">
 
 

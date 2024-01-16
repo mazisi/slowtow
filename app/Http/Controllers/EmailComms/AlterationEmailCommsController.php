@@ -46,17 +46,4 @@ class AlterationEmailCommsController extends Controller
     return Inertia::render('EmailComms/Alteration',['alterations' => $alterations]);
 }
 
-
-//Status keys:
-// 1. Client Quoted
-//2 => Client Invoiced
-//3 => Client Paid
-//4 => Prepare Alterations Application
-//5 => Payment to the Liquor Board
-//6 => Alterations Lodged
-//7 => Alterations Certificate Issued
-//8 => Alterations Delivered
-
-
-
 }

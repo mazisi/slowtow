@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NominationController;
+use App\Http\Controllers\MergeDocumentController;
 
 Route::get('/nominate',[NominationController::class,'index'])->name('nominate');
 
@@ -26,3 +27,5 @@ Route::delete('/delete-nomination-document/{id}',[NominationController::class,'d
 Route::delete('/delete-nomination/{licence_slug}/{slug}',[NominationController::class,'destroy']);
 
 Route::patch('/update-nomination-date/{slug}',[NominationController::class,'updateDate']);
+
+Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');      

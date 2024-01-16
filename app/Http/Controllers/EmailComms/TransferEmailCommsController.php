@@ -33,12 +33,12 @@ class TransferEmailCommsController extends Controller
             $query->where('status',$request->stage);
         });
         })->where(function($query){
-            $query->where('status',1)
-            ->orWhere('status',2)
-            ->orWhere('status',5)
-            ->orWhere('status',6)
-            ->orWhere('status',7)
-            ->orWhere('status',8);
+            $query->where('status',100)
+            ->orWhere('status',200)
+            ->orWhere('status',500)
+            ->orWhere('status',600)
+            ->orWhere('status',700)
+            ->orWhere('status',800);
         })->whereNull('deleted_at')
         ->orderBy('status','asc')
            ->paginate(20)->withQueryString();
@@ -46,20 +46,6 @@ class TransferEmailCommsController extends Controller
 
     return Inertia::render('EmailComms/Transfer',['transfers' => $transfers]);
 }
-
-
-//The following are status keys
-// 1 => Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Prepare Transfer Application
-// 5 => Payment To The Liquor Board
-// 6 => Scanned Application
-// 7 => Application Logded
-// 8 => Activation Fee Paid
-// 9 => Transfer Issued
-// 10 => Transfer Delivered
-
 
 
 }

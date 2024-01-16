@@ -8,6 +8,7 @@ use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
 use App\Http\Controllers\Reports\ReportFilters\AlterationFilter;
+use App\Models\AlterationDate;
 
 class AlterationExportController extends Controller implements ReportShouldHaveStatusInterface
 {
@@ -36,9 +37,9 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
                         $arr_of_alterations[$i]->trading_name, 
                         $arr_of_alterations[$i]->licence_number, 
                         request('boardRegion') ? $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region : $arr_of_alterations[$i]->province,
-                        $arr_of_alterations[$i]->logded_at,
+                        self::getDate($arr_of_alterations[$i]->id,'Alterations Lodged')? self::getDate($arr_of_alterations[$i]->id,'Alterations Lodged'): '',
                         $proof_of_lodgiment ? 'TRUE' : 'FALSE',
-                        $arr_of_alterations[$i]->certification_issued_at,
+                        self::getDate($arr_of_alterations[$i]->id,'Alterations Certificate Issued'),
                         $status, 
                         ExportNotes::getNoteExports($arr_of_alterations[$i]->id, 'Alteration'),
                         ];
@@ -55,6 +56,11 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
                                                     ->where('doc_type','Alterations Lodged')->first(['id']);
             return $proof_of_lodgiment;
 
+        }
+
+        public static function getDate($alteration_id,$stage){
+            $getDate = AlterationDate::where('alteration_id',$alteration_id)->where('stage',$stage)->first();
+            return $getDate ? $getDate->dated_at : '';
         }
 
         function getStatus($number) : string {

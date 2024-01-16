@@ -91,7 +91,7 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::group([], __DIR__.'/email_comms.php');
 
-        Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');        
+          
         Route::get('view-file/{model}/{id}', [ViewFileController::class,'view_file'])->name('view_file');
         Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');
         Route::delete('/delete-task/{id}',[TaskController::class,'destroy'])->name('delete_task');
