@@ -1,34 +1,34 @@
 <template>
     <Layout>
-    
-    
-    
+
+
+
         <Head title="Create Licence" />
-    
-    
-    
+
+
+
         <div class="container-fluid">
-    
-    
-    
+
+
+
             <Banner/>
-    
-    
-    
+
+
+
             <div class="card card-body mx-3 mx-md-4 mt-n6">
-    
+
                 <div class="row">
-    
+
                     <div class="col-lg-6 col-7">
-    
+
                         <h6 class="mb-1">New Licence </h6>
-    
+
                     </div>
-    
-    
-    
+
+
+
                 </div>
-    
+
 <div class="row">
 
 <div class="mt-3 ">
@@ -150,7 +150,7 @@
 
                 <TextInputComponent :inputType="'text'" v-model="form.old_licence_number" :value="form.old_licence_number" :column="'col-6'" :label="'Old Licence Number'" :errors="errors.old_licence_number" :input_id="old_licence_number" /> {{ filterForm }}
 
-                
+
 
                 <TextInputComponent v-if="form.belongs_to == 'Company'" :inputType="'text'" :disabled="true" :value="form.value" :column="'col-6'" :label="'Company Registration Number'" :input_id="'company'" />
 
@@ -163,71 +163,71 @@
 
 
         </div>
-    
+
                                 </div>
-    
+
                                 <hr class="vertical dark" />
-    
+
                             </div>
-    
-    
-    
+
+
+
                             <div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
-    
-    
-    
-    
-    
+
+
+
+
+
                                 <TextInputComponent :inputType="'text'" v-model="form.address" :value="form.address" :column="'col-12'" :label="'Address Line 1'" :errors="errors.address" :input_id="address" />
-    
-    
-    
+
+
+
                                 <TextInputComponent :inputType="'text'" v-model="form.address2" :value="form.address2" :column="'col-12'" :label="'Address Line 2'" :errors="errors.address2" :input_id="address2" />
-    
-    
-    
+
+
+
                                 <TextInputComponent :inputType="'text'" v-model="form.address3" :value="form.address3" :column="'col-12'" :label="'Address Line 3'" :errors="errors.address3" :input_id="address3" />
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
+
+
                                 <TextInputComponent :inputType="'number'" v-model="form.postal_code" :value="form.postal_code" :column="'col-12'" :label="'Postal Code'" :errors="errors.postal_code" :input_id="postal_code" />
-    
-    
-    
+
+
+
                             </div>
-    
+
                             <div>
-    
+
                                 <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
-    
+
                                         <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-    
+
                                         <span class="visually-hidden">Loading...</span> Submit</button>
-    
+
                             </div>
-    
+
                         </form>
-    
+
                         <hr>
-    
-    
-    
+
+
+
                     </div>
-    
-    
-    
+
+
+
                 </div>
-    
+
             </div>
-    
+
         </div>
-    
+
     </Layout>
 </template>
 
@@ -296,11 +296,12 @@ export default {
         let licence_types = ref(null);
 
         //list licence types based on province selected
-        function selectedProvince() {
+        function selectedProvince() { console.log("test this");
 
             const filteredLicenses = props.licence_dropdowns
                 .filter(obj => obj.province === form.province);
             this.licence_types = filteredLicenses;
+            console.log(this.licence_types, "test this function");
         }
 
         const filterForm = useForm({

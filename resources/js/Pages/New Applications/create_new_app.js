@@ -66,8 +66,16 @@
       }
 
         function filterLicenceTypes(){
-            licenceByProvince.value = props.licence_dropdowns
-                .filter(obj => obj.province === form.province);
+          if(props.type == 'wholesale') {
+              licenceByProvince.value = props.licence_dropdowns
+                  .filter(obj => obj.province === 'Wholesale');
+          }else{
+              licenceByProvince.value = props.licence_dropdowns
+                  .filter(obj => obj.province === form.province);
+          }
+
+          console.log(licenceByProvince.value);
+
         }
 
       const filterForm = useForm({
@@ -120,7 +128,7 @@
         );
 
         console.log(filteredLicenceTypes);
-        
+
       return { submit, form ,options, idRegForm,
         selectApplicant, filterForm,toast,filteredLicenceTypes,
         getchIdOrRegNumber, computedProvinces,

@@ -58,14 +58,14 @@ export default {
     }
 
     function filterLicenceTypes() {
-      console.log(form.province);
+      console.log(form.province, 'test this');
       licenceByProvince.value = props.all_licence_types
         .filter(obj => obj.province === form.province);
 
       console.log(licenceByProvince);
     }
 
- 
+
 
     watch(term, _.debounce(function (value) {
       Inertia.get('/licences', {
