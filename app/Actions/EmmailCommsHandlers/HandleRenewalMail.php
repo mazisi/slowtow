@@ -34,16 +34,16 @@ class HandleRenewalMail {
 
         
         switch ($renewal->status) {            
-            case '1':
+            case '100':
                 $renewal_stage = 'Client Quoted';                
                 break;
-            case '2':
+            case '200':
                 $renewal_stage = 'Client Invoiced';
                 break;
-            case '3':
+            case '300':
                 $renewal_stage = 'Client Paid';
                 break;
-            case '5':
+            case '500':
                 $renewal_stage = 'Renewal Issued';
                 break;
             default:

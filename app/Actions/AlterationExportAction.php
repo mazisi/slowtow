@@ -6,6 +6,7 @@ use App\Models\Task;
 use App\Models\AlterationDocument;
 use Illuminate\Support\Facades\DB;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use App\Http\Controllers\Reports\AlterationExportController;
 
 class AlterationExportAction{
   
@@ -15,8 +16,8 @@ class AlterationExportAction{
 
 
   $alterations = DB::table('alterations')
-                            ->selectRaw("alterations.id, alterations.certification_issued_at, licences.trading_name, licences.licence_number, licences.province, 
-                            licences.licence_issued_at, alterations.logded_at,licences.board_region,licence_type_id,alterations.date, 
+                            ->selectRaw("alterations.id, llicences.trading_name, licences.licence_number, licences.province, 
+                            licences.board_region,licence_type_id,alterations.date, 
                             alterations.status")
                             ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
 
@@ -70,21 +71,7 @@ class AlterationExportAction{
                                 })
                                 ->whereNull('alterations.deleted_at')
                                 ->orderBy('trading_name')
-                                 ->get([
-                                    'certification_issued_at',
-                                    'id','trading_name',
-                                    'licence_number',
-                                    'board_region',
-                                    'province',
-                                    'status',
-                                    'board_region',
-                                    'doc_type',
-                                    'date',
-                                    'licence_issued_at',
-                                    'licence_type_id',
-                                    'belongs_to',
-                                    'logded_at'
-                            ]);
+                                 ->get();
 
               $status = '';
               $notesCollection = '';
@@ -93,28 +80,28 @@ class AlterationExportAction{
 
           for($i = 0; $i < count($arr_of_alterations); $i++ ){
                   switch ($arr_of_alterations[$i]->status) {
-                  case '1':
+                  case '100':
                       $status = 'Client Quoted';
                   break;
-                  case '2':
+                  case '200':
                       $status = 'Client Invoiced';
                       break;
-                  case '3':
+                  case '300':
                       $status = 'Client Paid';
                       break;
-                  case '4':
+                  case '400':
                       $status = 'Prepare Alterations Application';
                       break;
-                  case '5':
+                  case '500':
                       $status = 'Payment to the Liquor Board';
                       break;
-                  case '6':
+                  case '600':
                       $status = 'Alterations Lodged';
                       break;
-                  case '7':
+                  case '700':
                       $status = 'Alterations Certificate Issued';
                       break;
-                  case '8':
+                  case '800':
                       $status = 'Alterations Delivered';
                       break;
                   default:
@@ -140,10 +127,11 @@ class AlterationExportAction{
                   $arr_of_alterations[$i]->province.'/'.$arr_of_alterations[$i]->board_region,
                   $arr_of_alterations[$i]->date,
                   is_null($proof_of_logdiment) ? 'FALSE' : 'TRUE',
-                  $arr_of_alterations[$i]->certification_issued_at,
+                  AlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Certificate Issued'),
                   $status, 
                   $notesCollection
                   ];
+
                   $pushedAlterationsData[] = $data;
 
           }

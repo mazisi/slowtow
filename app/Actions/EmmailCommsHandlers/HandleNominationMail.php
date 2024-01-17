@@ -45,28 +45,29 @@ class HandleNominationMail {
             return back()->with('error','Mail NOT sent. Primary email address not found.');
         }
 
+
         switch ($nomination->status) {            
-                case '1':                
+                case '100':                
                     $stage='Client Quoted';
                     $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
-                case '2':
+                case '200':
                     $stage='Client Invoiced';
                     $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
-                case '3':
+                case '300':
                     $stage='Client Paid';
                     $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
-                case '4':
+                case '400':
                     $stage='Payment To The Liquor Board';
                     $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
-                case '8':
+                case '800':
                     $stage='Nomination Logded';
                     $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
-                case '9':
+                case '900':
                     $stage='Nomination Issued';
                     $get_doc = $this->getDocumentType($nomination->id, $stage);
                     break;
@@ -114,14 +115,14 @@ class HandleNominationMail {
             Mail::to($email)
             ->cc([$email1,'info@slotow.co.za'])
             ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-            ->send(new NominationMailer($alteration, request('mail_body'), $full_document_path)); 
+            ->send(new NominationMailer($nomination, request('mail_body'), $full_document_path)); 
         }
     
         elseif($email && !$email1){
                 Mail::to($email)
                 ->cc('info@slotow.co.za')
                 ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                ->send(new NominationMailer($alteration, request('mail_body'), $full_document_path));
+                ->send(new NominationMailer($nomination, request('mail_body'), $full_document_path));
         }else{
             return back()->with('error','Mail NOT sent. Company does not have email addresses.');
         }
@@ -138,21 +139,21 @@ class HandleNominationMail {
         if(! is_null($email) && $email1 && $email2){
             Mail::to($email)
             ->cc([$email1,'info@slotow.co.za'])
-            ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new NominationMailer($nomination, $request->mail_body,$full_document_path)); 
+            ->bcc([$email2,'sales@slotow.co.za','info@goverify.co.za'])->send(new NominationMailer($nomination, request('mail_body'), $full_document_path)); 
         }
     
         elseif($email && $email1 && !$email2){
             Mail::to($email)
             ->cc([$email1, 'info@slotow.co.za'])
             ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-            ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
+            ->send(new NominationMailer($nomination, request('mail_body'),$full_document_path));
         }
         
         elseif($email && !$email1 && !$email2){
                 Mail::to($email)
                 ->cc('info@slotow.co.za')
                 ->bcc(['sales@slotow.co.za','info@goverify.co.za'])
-                ->send(new NominationMailer($nomination, $request->mail_body,$full_document_path));
+                ->send(new NominationMailer($nomination, request('mail_body'),$full_document_path));
         }else{
             return back()->with('error','Mail NOT sent. Company does not have email addresses.');
         }

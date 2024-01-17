@@ -12,16 +12,6 @@ use App\Models\TemporalLicenceDocument;
 
 class HandleTemporalLicenceMail {
 
-    //Status keys:
-// 1 => Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Collate Temporary Licence Documents 
-// 5 => Payment To The Liquor Board 
-// 6 => Scanned Application
-// 7 => Temporary Licence Lodged 
-// 8 => Temporary Licence Issued 
-// 9 => Temporary Licence Delivered
 
   public function dispatchTemporalMail(Request $request){
     try {
@@ -32,19 +22,19 @@ class HandleTemporalLicenceMail {
         }
         
         switch ($temporal_licence->status) {      
-            case '1':                
+            case '100':                
                 $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Client Quoted')->first(['document']);
                break;
-            case '2':
+            case '200':
                 $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Client Invoiced')->first(['document']);
                 break;
-            case '5':
+            case '500':
                 $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Payment To The Liquor Board')->first(['document']);
                 break;
-            case '7':
+            case '700':
                 $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Licence Lodged')->first(['document']);
                 break;
-            case '8':
+            case '800':
                 $get_doc = TemporalLicenceDocument::where('temporal_licence_id',$temporal_licence->id)->where('doc_type','Licence Issued')->first(['document']);
                 break;
             default:
