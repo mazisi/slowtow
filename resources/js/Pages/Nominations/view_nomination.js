@@ -187,7 +187,7 @@ export default{
             updateNomination();
         }
 
-        function updateDate(data){ console.log('Test Heloo',data);
+        function updateDate(data){
             data.patch(`/update-nomination-date/${props.nomination.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
@@ -274,10 +274,10 @@ export default{
 
         function canMerge() {
             let baseDocs = [
-              "ID Document", "Nomination Forms", "Payment To The Liquor Board", 
+              "ID Document", "Nomination Forms", "Payment To The Liquor Board",
               "Police Clearances","Power of Attorney", "Latest Renewal/Licence"
             ];
-           
+
               const allDocTypesPresent = baseDocs.every(docType => {
                 console.log('DocType',docType);
                 return props.nomination.nomination_documents.some(document => document.doc_type === docType);
@@ -288,10 +288,10 @@ export default{
               } else {
                 return 0;
               }
-            
+
           }
 
-   
+
         return{
             options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,

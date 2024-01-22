@@ -27,7 +27,7 @@ export default {
         liqour_board: Object
     },
 
-    setup (props) {
+    setup (props) { console.log(props.renewal, "test this");
         const year = ref(new Date().getFullYear());
         const { notifySuccess, notifyError } = useToaster();
 
@@ -175,6 +175,19 @@ export default {
             })
         }
 
+        function updateDate(data){
+            data.patch(`/update-renewal-date/${props.renewal.slug}`, {
+                preserveScroll: true,
+                onSuccess: () => {
+                    if(props.success){
+                        notify(props.success)
+                    }else if(props.error){
+                        notify(props.error)
+                    }
+                },
+            })
+        }
+
         function getStatus(status_param) {
             let status;
 
@@ -217,7 +230,8 @@ export default {
             deleteRenewal,
             getRenewalDate,
             limit,toast,viewFile,checkingFileProgress,
-            hasFile
+            hasFile,
+            updateDate
         }
     },
     components: {
