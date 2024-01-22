@@ -100,13 +100,14 @@
 
                       <DateComponent
                           :stage="'Client Paid'"
-                          :renewal="renewal"
+                          :model="renewal"
                           :licence="client_paid_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
                           :dated_at="renewal.client_paid_at"
+                          @date-value-changed="updateDate"
                           :success="success"
                       />
 
@@ -139,13 +140,14 @@
 
                       <DateComponent
                           :stage="'Payment To The Liquor Board'"
-                          :renewal="renewal"
+                          :model="renewal"
                           :licence="payment_to_liquor_board_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
                           :dated_at="renewal.payment_to_liquor_board_at"
+                          @date-value-changed="updateDate"
                           :success="success"
 
                       />
@@ -180,12 +182,13 @@
 
                       <DateComponent
                           :stage="'Renewal Issued'"
-                          :renewal="renewal"
+                          :model="renewal"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
                           :dated_at="renewal.renewal_issued_at"
+                          @date-value-changed="updateDate"
                           :success="success"
                       />
                       <DocComponent
@@ -218,12 +221,13 @@
 
                       <DateComponent
                           :stage="'Renewal Delivered'"
-                          :renewal="renewal"
+                          :model="renewal"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
                           :dated_at="renewal.renewal_delivered_at"
+                          @date-value-changed="updateDate"
                           :success="success"
                       />
                       <DocComponent

@@ -75,7 +75,7 @@ class LicenceRenewalController extends Controller
        $status = null;
         if($request->status){
             if($request->unChecked){
-                $status = $request->status[0] - 1;
+                $status = $request->status[0] - 100;
             }else{
                 $status = $request->status[0];
             }
@@ -153,7 +153,7 @@ class LicenceRenewalController extends Controller
                         break;
                 }
 
-                LicenceRenewal::where('id', $request->renewal_id)->update([
+                LicenceRenewal::where('id', $request->model_id)->update([
                     $fieldToUpdate => $request->dated_at
                 ]);
 
