@@ -73,11 +73,14 @@ class AlterLicenceController extends Controller
 
 
     public function updateAlterationDate(Request $request, $slug){
-          AlterationDate::create([
+      $alter = AlterationDate::create([
             'dated_at' => $request->dated_at,
             'alteration_id' => $request->licence_id,
             'stage' => $request->stage,
         ]);
+        if($request->stage == 'Alterations Lodged'){
+          $alter->update(['logded_at' => $request->dated_at]);
+        }
         return back()->with('success','Date updated succesfully.');
         
     }
