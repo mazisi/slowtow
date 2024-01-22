@@ -189,6 +189,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     }
 
     public function uploadDocument(Request $request){
+       
         $request->validate([
             "document_file"=> "required|mimes:pdf",
             "licence_id" => "required",

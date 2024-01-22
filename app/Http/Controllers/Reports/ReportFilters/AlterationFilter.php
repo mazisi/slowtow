@@ -14,7 +14,7 @@ class AlterationFilter{
        licences.board_region,licence_type_id,alterations.date, 
         alterations.status, licence_date, is_licence_active")
         ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
-        ->join('alteration_dates', 'alteration_dates.alteration_id' , '=', 'alterations.id' )
+        ->leftJoin('alteration_dates', 'alteration_dates.alteration_id' , '=', 'alterations.id' )
 
       ->when($request,function($query){
           $query->when(request('month_from') && request('month_to'), function($query){

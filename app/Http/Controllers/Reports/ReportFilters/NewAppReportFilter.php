@@ -8,11 +8,11 @@ class NewAppReportFilter {
   function filter($request){
     
     return DB::table('licences')
-        ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, province, licence_number,
+        ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type, licences.province, licence_number,
         status, board_region,licence_date, is_new_app")
 
         ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
-        ->join('licence_dates', 'licence_dates.licence_id' , '=', 'licences.id')
+        ->leftJoin('licence_dates', 'licence_dates.licence_id' , '=', 'licences.id')
 
         ->when($request,function($query){
            $query->when(request('month_from') && request('month_to'), function($query){

@@ -22,40 +22,40 @@ class HandleTransferMail {
                 return back()->with('error','Mail NOT sent. Primary email address not found.');
             }
             switch ($transfer->status) {            
-                case '1':                
+                case '100':                
                     $stage = 'Client Quoted';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '2':
+                case '200':
                     $stage = 'Client Invoiced';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '3':
+                case '300':
                     $stage = 'Client Paid';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '5':
+                case '500':
                     $stage = 'Payment To The Liquor Board';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
 
-                case '6':
+                case '600':
                     $stage = 'Scanned Application';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '7':
+                case '700':
                     $stage = 'Transfer Logded';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '8':
+                case '800':
                     $stage = 'Activation Fee Paid';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '9':
+                case '900':
                     $stage = 'Transfer Issued';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;
-                case '10':
+                case '1000':
                     $stage = 'Transfer Delivered';
                     $get_doc = $this->getDocumentType($transfer,$stage);
                     break;

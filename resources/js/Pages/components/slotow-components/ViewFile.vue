@@ -5,7 +5,6 @@
           
           <div class="modal-body">      
             <div class="row">
-              <!-- <embed type="application/pdf" :src="url" width="100%" height="600px"/> -->
               <iframe :src="`${$page.props.blob_file_path}${filePath.docPath}`" frameborder="0" width="100%" height="600px"></iframe>
           </div>
         </div>

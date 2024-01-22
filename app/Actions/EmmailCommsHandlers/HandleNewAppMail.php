@@ -48,38 +48,38 @@ class HandleNewAppMail {
         }
         
       
-        $licence_stage = '';  
+        $licence_stage = ''; 
         
         switch ($licence->status) {            
-            case '1':
+            case '100':
                 $licence_stage = 'Client Quoted';                
                 break;
-            case '2':
-                $licence_stage = 'Client Invoiced';
+            case '200':
+                $licence_stage = 'Client Invoice';
                 break;
-            case '4':
+            case '400':
                 $licence_stage = 'Payment to the Liquor Board';
                 break;
-            case '7':
+            case '1500'://was 700 b4
                 $licence_stage = 'Application Lodged';
                 break;
-            case '8':
+            case '1700':
                 $licence_stage = 'Initial Inspection';
                 break;
-            case '10':
+            case '1800':
                 $licence_stage = 'Final Inspection';
                 break;
-            case '12':
+            case '2000':
                 $licence_stage = 'Client Finalisation Invoice';
                 break;
-            case '14':
+            case '2200':
                 $licence_stage = 'Activation Fee Paid';
                 break;
-            case '15':
+            case '2300':
                 $licence_stage = 'Licence Issued';
                 break;
             default:
-            return back()->with('error','Could not send email.');
+            return back()->with('error','Stage out of bounce exception!!.');
                 break;
         }
         
@@ -88,7 +88,7 @@ class HandleNewAppMail {
         
         if(is_null($get_doc)){
             $error_message = 'Quote Document Not Uploaded';                     
-            return back()->with('error','Mail NOT SENT!!!!.Quote Document is not yet uploaded.');
+            return back()->with('error','Mail NOT SENT!.Quote Document is not yet uploaded.');
         }
         
         $this->handle($licence, $get_doc->document_file);

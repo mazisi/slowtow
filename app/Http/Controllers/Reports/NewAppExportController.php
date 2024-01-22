@@ -64,8 +64,8 @@ class NewAppExportController extends Controller
    
 }
 
-public static function getDate($licence_id,$doc_type){
-    $getDate = LicenceDate::where('licence_id',$licence_id)->where('document_type',$doc_type)->first();
+public static function getDate($licence_id,$stage){
+    $getDate = LicenceDate::where('licence_id',$licence_id)->where('stage',$stage)->first();
     return $getDate ? $getDate->dated_at : '';
 }
 
