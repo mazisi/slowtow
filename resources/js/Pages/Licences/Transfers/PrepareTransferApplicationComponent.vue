@@ -3,11 +3,11 @@
     <div class="px-3 d-flex mb-2 active w-10">
         <label :for="docType" v-if="!hasFile <= 0" @click="setDocType(stage,docType,belongsTo,orderByNumber)" 
          class="fa fa-upload h5 " aria-hidden="true"></label>
-         <a v-if="hasFile" :href="`${$page.props.blob_file_path}${hasFile.document}`" target="_blank">
+         <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.document}`" target="_blank">
           <i class="fa fa-file-pdf h5 mx-2 text-danger curser-pointer"></i>
           </a>
-       {{ belongsTo }}
-          <i v-if="hasFile" @click="deleteDocument(hasFile.id)" 
+    
+          <i v-if="hasFile.id" @click="deleteDocument(hasFile.id)" 
           class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i> 
         <input type="file" :id="docType" @change="upload($event)" accept=".pdf" hidden>
       </div>
