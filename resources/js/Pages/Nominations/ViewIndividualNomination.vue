@@ -114,12 +114,12 @@
                                             <DateComponent
                                                 :stage="'Client Paid'"
                                                 :model="nomination"
-                                                :licence="client_paid_at"
+                                                :licence="client_paid_date"
                                                 :canSave="$page.props.auth.has_slowtow_admin_role"
                                                 :errors="errors"
                                                 :error="error"
                                                 :column=5
-                                                :dated_at="nomination.client_paid_at"
+                                                :dated_at="nomination.client_paid_date"
                                                 :success="success"
                                                 @date-value-changed="updateDate"
                                             />

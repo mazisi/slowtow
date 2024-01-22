@@ -67,6 +67,7 @@
                                                 :value="form.province"
                                                 v-model="form.province"
                                                 :errors="errors.province"
+                                                @change="filterLicenceTypes()"
                                             />
 
                                             <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
@@ -76,7 +77,7 @@
                                                     :options="companies"
                                                     :searchable="true"
                                                     @select="selectApplicant"
-                                                    style="margin:top: 1rem;"
+                                                    style="margin-top: 1rem;"
                                                 />
                                                 <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
                                             </div>
@@ -88,7 +89,7 @@
                                                     :options="persons"
                                                     :searchable="true"
                                                     @select="selectApplicant"
-                                                    style="margin:top: 1rem;"
+                                                    style="margin-top: 1rem;"
                                                 />
                                                 <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
                                             </div>
@@ -118,7 +119,7 @@
                                             />
 
 
-                                            <LicenceTypeDropDownComponent                                      
+                                            <LicenceTypeDropDownComponent
                                                 :dropdownList="licenceByProvince"
                                                 :label="'Licence Type *'"
                                                 :defaultDisabledText="'Select Licence Type'"
@@ -131,9 +132,21 @@
                                                 v-if="form.province !== '' && form.type == 'retail'"
                                             />
 
-                                           
 
-                                            <LiquorBoardRegionComponent 
+                                            <LicenceTypeDropDownComponent
+                                                :dropdownList="licenceByProvince"
+                                                :label="'Licence Type *'"
+                                                :defaultDisabledText="'Select Licence Type'"
+                                                :column="'col-12'"
+                                                :value="form.licence_type"
+                                                v-model="form.licence_type"
+                                                :errors="errors.licence_type"
+                                                :input_id="licence_type"
+                                                :required="true"
+                                                v-if="form.province !== '' && form.type == 'wholesale'"
+                                            />
+
+                                            <LiquorBoardRegionComponent
                                                 :dropdownList="computedBoardRegions"
                                                 :label="'Liquor Board Region*'"
                                                 :defaultDisabledText="'Select Liquor Board Region'"
@@ -146,17 +159,7 @@
                                                 v-if="form.province !== '' && form.province === 'Gauteng' && form.type == 'retail'"
                                             />
 
-                                <div class="col-12 columns" v-if="form.type == 'wholesale'">
-                                    <div class="input-group input-group-outline null is-filled">
-                                        <label :for="label" class="form-label">{{ label }}</label>
-                                        <select required="required" v-model="form.licence_type"
-                                        class="form-control form-control-default">
-                                                <option :value="''" disabled selected>Select Liquor Board Region</option>
-                                                <option v-for='dropdown in wholesaleLicenceTypes' :key="dropdown.id" :value="dropdown.id"> {{ dropdown.licence_type }}</option>
-                                        </select>
-                                    </div>
-                                    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
-                                </div>
+
 
                                         </div>
 
@@ -196,9 +199,6 @@
                                     :errors="errors.address3 "
                                     :input_id="address3"
                                 />
-
-
-
 
                                 <TextInputComponent
                                     :inputType="'number'"

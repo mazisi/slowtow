@@ -157,6 +157,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             return back()->with('success', 'Date updated successfully.');
 
         } catch (\Throwable $th) {
+            dd($th);
             return back()->with('error','Error updating date.');
         }
 
