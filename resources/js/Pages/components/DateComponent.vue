@@ -22,7 +22,7 @@ export default{
 
     props: {
         stage : String,
-        renewal: Object,
+        model: Object,
         canSave: Boolean,
         errors: Object,
         error: String,
@@ -33,7 +33,7 @@ export default{
     setup(props, context){
         const emit = defineEmits(['date-value-changed'])
         const form = useForm({
-            model_id: props.renewal.id,
+            model_id: props.model.id,
             stage: props.stage,
             dated_at:  props.dated_at
         })

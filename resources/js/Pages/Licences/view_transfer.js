@@ -107,7 +107,7 @@ export default {
       }
 
     
-      function submitDocument(form_data){
+      function submitDocument(form_data){ console.log(form_data, "form data");
         form_data.post(`/submit-transfer-documents/${props.view_transfer.id}`, {
           preserveScroll: true,
           onSuccess: () => {
@@ -151,15 +151,42 @@ export default {
           Inertia.delete(`/delete-transfer-document/${id}`, {
             onSuccess: () => { 
             if(props.success){
-                   notifyError(props.success)
+              notifySuccess(props.success)
                     }else if(props.error){
-                      notifySuccess(props.error)
+                      notifyError(props.error)
               }
          }
           })
         }
       }
 
+      function hasMergeFile(doc_type, belong_to) {
+        if (!props.view_transfer.transfer_documents) {
+            return {}; 
+        } else {
+            let transfer_documents = props.view_transfer.transfer_documents; 
+
+            const foundDocument = transfer_documents.find(
+                (doc) =>
+                doc.belongs_to === belong_to &&
+                    doc.licence_transfer_id === props.view_transfer.id &&
+                    doc.doc_type === doc_type &&
+                    doc.document &&
+                    doc.document_name &&
+                    doc.id
+            );
+
+            if (foundDocument) {
+                return {
+                    fileName: foundDocument.document_name,
+                    docPath: foundDocument.document,
+                    id: foundDocument.id,
+                };
+            } else {
+                return {};
+            }
+        }
+    }
 
       function hasFile(doc_type) {
             if (!props.view_transfer.transfer_documents) {
@@ -221,6 +248,7 @@ export default {
       updateStageDate,
       getStatus,
       pushData,
+      hasMergeFile,
       hasFile,
       mergeForm,
       mergeDocuments,

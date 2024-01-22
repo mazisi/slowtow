@@ -1,15 +1,26 @@
 <template>
 
     <div class="px-3 d-flex mb-2 active w-10">
-        <label :for="docType" v-if="!hasFile <= 0" @click="setDocType(stage,docType,belongsTo,orderByNumber)" 
-         class="fa fa-upload h5 " aria-hidden="true"></label>
+        <label :for="docType" v-if="!hasFile.id" @click="setDocType(stage,docType,belongsTo,orderByNumber)" 
+         class="fa fa-upload h5 " :class="{ 'd-none': uploadDoc.processing}" aria-hidden="true"></label>
          <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.document}`" target="_blank">
           <i class="fa fa-file-pdf h5 mx-2 text-danger curser-pointer"></i>
           </a>
-    
+    {{ typeof belongsTo }}
           <i v-if="hasFile.id" @click="deleteDocument(hasFile.id)" 
           class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i> 
         <input type="file" :id="docType" @change="upload($event)" accept=".pdf" hidden>
+        <span v-if="uploadDoc.progress">
+          <CircleProgressBar  
+              :value="uploadDoc.progress.percentage"  
+              :max="100"  
+              percentage  
+              rounded
+              :size="30"
+              :colorFilled="'#4caf50'"
+              :animationDuration="'0.7s'">
+            </CircleProgressBar>
+        </span>
       </div>
 </template>
 <script>
@@ -26,43 +37,39 @@ export default {
     orderByNumber: Number,
     docType: String,
     success: Object,
-    belongsTo:String,
+    belongsTo: String,
     stage: Number
     },
 
     setup(props, context){
-   
-    let file_has_apostrophe = ref(false);
-    let stage = ref('');
-    let doc_type = ref('');
-    let belongs_to = ref('');
+  
 
+    let uploadDoc = useForm({
+      licence_id: props.documentModel.id,
+      doc_type: props.docType,
+      document: null,
+      belongs_to: null,
+      stage: props.stage,
+    })
     
 
-    const setDocType = (stage, docType, belongsTo, orderByNumber) => {
-        console.log(stage, docType, belongsTo, orderByNumber);
-        stage = stage;
-        doc_type = docType;
-        belongs_to = belongsTo;
+    let setDocType = (stage, docType, belongsTo, orderByNumber) => {  
+        uploadDoc.stage = stage;
+        uploadDoc.doc_type = docType;
+         uploadDoc.belongs_to = belongsTo;
       };
-    console.log('file',uploadDoc)
-      const uploadDoc = useForm({
-      licence_id: props.documentModel.id,
-      doc_type: doc_type,
-      document: null,
-      belongs_to: belongs_to,
-      stage: stage,
-    })
+    
+     
     function upload(e){
-        uploadDoc.document = e.target.files[0];
+        this.uploadDoc.document = e.target.files[0];
         if(e.target.files[0].name.includes("'")){
           this.file_has_apostrophe = true
           return;
         }
-        console.log('formss',uploadDoc);
-        context.emit('file-value-changed', uploadDoc);
+        console.log('formss',this.uploadDoc);
+        context.emit('file-value-changed', this.uploadDoc);
         e.target.value = '';
-        file_has_apostrophe=false;
+        this.file_has_apostrophe=false;
       }
 
       function deleteDocument(id){
@@ -73,7 +80,7 @@ export default {
         }
     return {
       uploadDoc,upload,viewFile,setDocType,
-      file_has_apostrophe,deleteDocument
+      deleteDocument
     }
   },
   components: {
