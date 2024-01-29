@@ -12,7 +12,7 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class TransferDocsController extends Controller
 {
-    public function store(Request $request,$transfer_id){dd($request);
+    public function store(Request $request,$transfer_id){
         $request->validate([
             "document"=> "required|mimes:pdf"
             ]);

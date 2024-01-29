@@ -248,12 +248,12 @@
     :errors="errors"
     :error="error"
     stage="400"
-    belongsTo="'Current Licence Holder'"
+    :belongsTo="'Current Licence Holder'"
     orderByNumber='600'
     :dontUpload="true"
     :docType="'POA & RES'"
     :success="success"
-  />
+  ></PrepareTransferApplicationComponent>
 
 </div>
 
@@ -485,7 +485,7 @@
     <NoneUploadComponent/>
     <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
 
-    <PrepareTransferApplicationComponent
+    <PrepareTransferApplicationComponent v-if="hasMergeFile('Latest Renewal','Current Licence Holder').id"
       @file-value-changed="submitDocument"
       @file-deleted="deleteDocument"
       :documentModel="view_transfer"

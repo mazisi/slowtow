@@ -1,15 +1,15 @@
 <template>
 
     <div class="px-3 d-flex mb-2 active w-10">
-        <label :for="docType" v-if="!hasFile.id" @click="setDocType(stage,docType,belongsTo,orderByNumber)" 
+        <label :for="docType + belongsTo" v-if="!hasFile.id" @click="setDocType(stage,docType,belongsTo,orderByNumber)" 
          class="fa fa-upload h5 " :class="{ 'd-none': uploadDoc.processing}" aria-hidden="true"></label>
          <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.document}`" target="_blank">
           <i class="fa fa-file-pdf h5 mx-2 text-danger curser-pointer"></i>
           </a>
-    {{ typeof belongsTo }}
+    
           <i v-if="hasFile.id" @click="deleteDocument(hasFile.id)" 
           class="fa fa-trash curser-pointer text-danger mx-2 h5" aria-hidden="true"></i> 
-        <input type="file" :id="docType" @change="upload($event)" accept=".pdf" hidden>
+        <input type="file" :id="docType + belongsTo" @change="upload($event)" accept=".pdf" hidden>
         <span v-if="uploadDoc.progress">
           <CircleProgressBar  
               :value="uploadDoc.progress.percentage"  
@@ -19,7 +19,7 @@
               :size="30"
               :colorFilled="'#4caf50'"
               :animationDuration="'0.7s'">
-            </CircleProgressBar>
+         </CircleProgressBar>
         </span>
       </div>
 </template>
