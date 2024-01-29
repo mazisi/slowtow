@@ -2,13 +2,13 @@
   <ul class="list-group">
     <li class="px-0  border-0 list-group-item d-flex align-items-center">
       <div class="avatar me-3" v-if="hasFile.docPath">
-      <a  data-bs-toggle="modal" data-bs-target="#view-file" target="_blank">
+      <!-- <a  data-bs-toggle="modal" data-bs-target="#view-file" target="_blank">
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-      </a>
+      </a> -->
 
-      <!-- <a :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+       <a class="cursor-pointer" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
         <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
-        </a> -->
+        </a> 
       </div>
      
      <div class=" d-flex align-items-start flex-column justify-content-center">
@@ -27,9 +27,9 @@
           10  Stage 9.
          -->
       <span :class="{ 'd-none': uploadDoc.processing}">
-        <label v-if="orderByNumber !== 1400" :for="uploadDoc.doc_type">
+        <label v-if="orderByNumber !== 1400" :for="uploadDoc.doc_type + uploadDoc.orderByNumber">
         <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
-        <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
+        <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + uploadDoc.orderByNumber">
       </label> </span>   
       
       <span v-if="uploadDoc.progress" style="margin-top: -2rem;">
@@ -52,9 +52,6 @@
 
 
 
-  <ViewFile 
-  :filePath="hasFile"
-  />
 
 
 </template>
@@ -69,7 +66,6 @@
 <script>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
-import ViewFile from './ViewFile.vue';
 import { CircleProgressBar } from 'circle-progress.vue';
 
 
@@ -80,6 +76,7 @@ export default{
     hasFile: Object,
     errors: Object,
     orderByNumber: Number,
+    stage: Number,
     docType: String,
     success: Object
   },
@@ -93,6 +90,7 @@ export default{
     const uploadDoc = useForm({
       licence_id: props.documentModel.id,
       doc_type: props.docType,
+      stage: props.stage,
       document_file: null
     })
     function upload(e){
@@ -118,7 +116,6 @@ export default{
     }
   },
   components: {
-    ViewFile,
     CircleProgressBar
   }
 }

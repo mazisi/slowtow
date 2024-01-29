@@ -94,71 +94,16 @@ class TransferLicenceController extends Controller
        */
       public function viewTransferedLicence($slug){
         $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence','transfer_documents')->whereSlug($slug)->first();
-        
-        $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Transfer')->where('model_id',$view_transfer->id)->get();
+        $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
       
         // $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->latest()->paginate(4)->withQueryString();
 
-        $old_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $current_transfer_forms = TransferDocument::where('doc_type','Transfer Forms')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $smoking_affidavict = TransferDocument::where('doc_type','Smoking Affidavit')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $old_poa_res_docs = TransferDocument::where('doc_type','POA & RES')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $current_poa_res_docs = TransferDocument::where('doc_type','POA & RES')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $old_shareholding = TransferDocument::where('doc_type','Shareholding')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $current_shareholding = TransferDocument::where('doc_type','Shareholding')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $old_cipc_certificate = TransferDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Old Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $current_cipc_certificate = TransferDocument::where('doc_type','CIPC Certificate')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $company_docs = TransferDocument::where('doc_type','Company Documents')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $id_docs = TransferDocument::where('doc_type','ID Documents')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $police_clearance = TransferDocument::where('doc_type','Police Clearances')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $tax_clearance = TransferDocument::where('doc_type','Tax Clearance')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $lta_certificate = TransferDocument::where('doc_type','LTA Certificate')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $financial_interest = TransferDocument::where('doc_type','Financial Interests')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $landloard_letter = TransferDocument::where('doc_type','Lease/Landlord Letter')->where('belongs_to','Current Licence Holder')->where('licence_transfer_id',$view_transfer->id)->first();
-        $representation = TransferDocument::where('doc_type','Representation')->where('licence_transfer_id',$view_transfer->id)->first();
-        $index_page = TransferDocument::where('doc_type','Index page')->where('licence_transfer_id',$view_transfer->id)->first();
-        $client_quoted = TransferDocument::where('doc_type','Client Quoted')->where('licence_transfer_id',$view_transfer->id)->first();
-        $client_invoiced = TransferDocument::where('doc_type','Client Invoiced')->where('licence_transfer_id',$view_transfer->id)->first();
-        $payment_to_liquor_board = TransferDocument::where('doc_type','Payment To The Liquor Board')->where('licence_transfer_id',$view_transfer->id)->first();
-        $transfer_logded = TransferDocument::where('doc_type','Transfer Logded')->where('licence_transfer_id',$view_transfer->id)->first();
-        $activation_fee =  TransferDocument::where('doc_type','Activation Fee Paid')->where('licence_transfer_id',$view_transfer->id)->first();
-        $transfer_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id',$view_transfer->id)->first();
-        $transfer_delivered = TransferDocument::where('doc_type','Transfer Delivered')->where('licence_transfer_id',$view_transfer->id)->first();
-        $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
-        $latest_renewal = TransferDocument::where('doc_type','Latest Renewal')->where('licence_transfer_id',$view_transfer->id)->first();
         
         return Inertia::render('Licences/ViewTransferedLicence',
         ['view_transfer' => $view_transfer,
                  'tasks' => $tasks,
-          'old_transfer_forms' =>$old_transfer_forms,
-          'current_transfer_forms' => $current_transfer_forms,
-          'smoking_affidavict' => $smoking_affidavict,
-          'old_poa_res_docs' => $old_poa_res_docs,
-          'current_poa_res_docs' => $current_poa_res_docs,
-          'old_shareholding' => $old_shareholding,
-          'current_shareholding' => $current_shareholding,
-          'old_cipc_certificate' => $old_cipc_certificate,
-          'current_cipc_certificate' => $current_cipc_certificate,
-          'company_docs' => $company_docs,
-          'id_docs' => $id_docs,
-          'police_clearance' => $police_clearance,
-          'tax_clearance' => $tax_clearance,
-          'lta_certificate' => $lta_certificate,
-          'financial_interest' => $financial_interest,
-          'landloard_letter' => $landloard_letter,
-          'representation' => $representation,
-          'index_page' => $index_page,
-          'client_quoted' => $client_quoted,
-          'client_invoiced' => $client_invoiced,
-          'payment_to_liquor_board' => $payment_to_liquor_board,
-          'transfer_logded' => $transfer_logded,
-          'activation_fee' => $activation_fee,
-          'transfer_issued' => $transfer_issued,
-          'transfer_delivered' => $transfer_delivered,
-          'original_licence' => $original_licence,
-          'latest_renewal' => $latest_renewal,
-          'liqour_board_requests' => $liqour_board_requests
+                 'original_licence' => $original_licence
         ]);
       }
 
@@ -166,9 +111,9 @@ class TransferLicenceController extends Controller
        $status='';
         if($request->status){
           if($request->checked){
-              $status = $request->prevStage;
-          }else{
               $status = $request->status;
+          }else{
+              $status = $request->prevStage;
           }
       }
         $update = LicenceTransfer::whereSlug($request->slug)->update([

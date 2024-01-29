@@ -14,30 +14,31 @@ class TransferDocsController extends Controller
 {
     public function store(Request $request,$transfer_id){
         $request->validate([
-            "document"=> "required|mimes:pdf"
+            "document_file"=> "required|mimes:pdf"
             ]);
            
             
             try {
-                $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
+                $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
                 $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
-                $request->file('document')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
+                $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
                 
 
                 // if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                   $fileModel = new TransferDocument;
-                  $fileModel->document_name = $request->document->getClientOriginalName();
+                  $fileModel->document_name = $request->document_file->getClientOriginalName();
                   $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
                   $fileModel->licence_transfer_id = $transfer_id;
                   $fileModel->doc_type = $request->doc_type;
-                  $fileModel->num = $request->stage;
+                  $fileModel->num = $request->doc_type == 'Payment To The Liquor Board' ? 200 : $request->orderByNumber;
                   $fileModel->belongs_to = $request->belongs_to;
                   $fileModel->slug = sha1(now());
       
                   if($fileModel->save()){
                     LicenceTransfer::whereId($fileModel->licence_transfer_id)->update(['status' => $request->stage]);
-                    return back()->with('success','Document uploaded successfully.');
                   }
+             
+                  return back()->with('success','Document uploaded successfully.');
                 // }else{
                 //   return back()->with('error','Azure storage could not be reached.Please try again.');
                 // }
@@ -70,7 +71,7 @@ class TransferDocsController extends Controller
               $fileModel->document = sha1(now()).$original_licence->document_file;
               $fileModel->licence_transfer_id = $request->transfer_id;
               $fileModel->doc_type = 'Original-Licence';
-              $fileModel->num = 9;
+              $fileModel->num = 900;
               $fileModel->slug = sha1(now());
               $fileModel->save();
               
@@ -78,7 +79,7 @@ class TransferDocsController extends Controller
             }
             //get proof of payment to merge
             $merge_proof_of_payment = TransferDocument::where('licence_transfer_id',$request->transfer_id)->where('doc_type','Payment To The Liquor Board')->first(['id','num']);
-            $merge_proof_of_payment->update(['num' => 2]);
+            $merge_proof_of_payment->update(['num' => 200]);
             
             $transfers =  TransferDocument::where('licence_transfer_id',$request->transfer_id)->whereNotNull('num')->orderBy('num','ASC')->get();
             $model =  LicenceTransfer::whereId($request->transfer_id)->first();

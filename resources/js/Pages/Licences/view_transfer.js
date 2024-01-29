@@ -23,38 +23,10 @@ export default {
   liqour_board_requests: Object,
     errors: Object,
     view_transfer: Object,
-    // companies_dropdown: Array,
+    original_licence: Object,
     success: String,
     error: String,
-    tasks: Object,
-    old_transfer_forms: Object,
-    current_transfer_forms: Object,
-    smoking_affidavict: Object,
-    old_poa_res_docs: Object,
-    current_poa_res_docs: Object,
-    old_shareholding: Object,
-    current_shareholding: Object,
-    old_cipc_certificate: Object,
-    current_cipc_certificate: Object,
-    company_docs: Object,
-    id_docs: Object,
-    police_clearance: Object,
-    tax_clearance: Object,
-    lta_certificate: Object,
-    financial_interest: Object,
-    landloard_letter: Object,
-    representation: Object,
-    index_page: Object,
-    client_quoted: Object,
-    client_invoiced: Object,
-    payment_to_liquor_board: Object,
-    original_licence: Object,
-    transfer_logded: Object,
-    activation_fee: Object,
-    transfer_issued: Object,
-    transfer_delivered: Object,
-    latest_renewal: Object,
-    scanned_application: Object
+    tasks: Object
   },
 
   setup (props) {
@@ -243,8 +215,14 @@ export default {
             return getPlainStatus(statusParam);
         }
 
+        function canMerge() {
+          //find documents with num != null
+          let docsNum = props.view_transfer.transfer_documents.filter((doc) => doc.num !== null);
+          return docsNum?.length >= 19 ? true : false;          
+        }
     
     return {
+      canMerge,
       updateStageDate,
       getStatus,
       pushData,

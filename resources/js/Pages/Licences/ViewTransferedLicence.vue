@@ -67,6 +67,7 @@
     :errors="errors"
     :error="error"
     orderByNumber=''
+    stage='100'
     :docType="'Client Quoted'"
     :success="success"
     />
@@ -92,7 +93,7 @@
     :hasFile="hasFile('Client Invoiced')"
     :errors="errors"
     :error="error"
-    orderByNumber=''
+    stage='200'
     :docType="'Client Invoiced'"
     :success="success"
     />
@@ -194,7 +195,7 @@
       :error="error"
       stage="400"
       belongsTo="Current Licence Holder"
-      orderByNumber='300'
+      orderByNumber='400'
       :docType="'Transfer Forms'"
       :success="success"
     />
@@ -249,7 +250,7 @@
     :error="error"
     stage="400"
     :belongsTo="'Current Licence Holder'"
-    orderByNumber='600'
+    orderByNumber='700'
     :dontUpload="true"
     :docType="'POA & RES'"
     :success="success"
@@ -283,7 +284,7 @@
     :error="error"
     stage="400"
     belongsTo="Current Licence Holder"
-    orderByNumber='1000'
+    orderByNumber='1200'
     :dontUpload="true"
     :docType="'Shareholding'"
     :success="success"
@@ -317,7 +318,7 @@
     :error="error"
     stage="400"
     belongsTo="Current Licence Holder"
-    orderByNumber='1100'
+    orderByNumber='1300'
     :dontUpload="true"
     :docType="'CIPC Certificate'"
     :success="success"
@@ -485,7 +486,7 @@
     <NoneUploadComponent/>
     <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Latest Renewal/Licence </button>
 
-    <PrepareTransferApplicationComponent v-if="hasMergeFile('Latest Renewal','Current Licence Holder').id"
+    <PrepareTransferApplicationComponent
       @file-value-changed="submitDocument"
       @file-deleted="deleteDocument"
       :documentModel="view_transfer"
@@ -497,6 +498,7 @@
       :docType="'Latest Renewal'"
       :orderByNumber='900'
       :success="success"
+      original_licence="original_licence"
     />
 </div>
 
@@ -525,19 +527,23 @@
      </div>
   <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2"> Proof Of Payment </button>
   <div class="px-3 mb-2 ms-2 d-flex  w-10">
-    <a v-if="payment_to_liquor_board !== null" :href="`${$page.props.blob_file_path}${payment_to_liquor_board.document}`" target="_blank">
+    <a v-if="hasFile('Payment To The Liquor Board').id" :href="`${$page.props.blob_file_path}${hasFile('Payment To The Liquor Board').docPath}`" target="_blank">
     <i class="fa fa-link float-end h5 "></i>
  </a>
     
     </div>
 </div>
 <div >
-<div v-if="view_transfer.merged_document !==null">
+<div v-if="view_transfer.merged_document">
 <a :href="`/storage/app/public/${view_transfer.merged_document}`" target="_blank" :style="{float: 'right'}" class="btn btn-secondary ms-2" >View</a>
 </div>
-  <button @click="mergeDocuments" :style="{float: 'right'}" type="button" class="btn btn-secondary ms-2" :disabled="mergeForm.processing">
+
+  <button 
+  @click="mergeDocuments" :style="{float: 'right'}" 
+  type="button" class="btn btn-secondary ms-2" :disabled="mergeForm.processing || !canMerge()">
   <span v-if="mergeForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-         Compile And Merge</button>
+         Compile And Merge
+ </button>
 
 
 </div>
@@ -566,6 +572,7 @@
                               :errors="errors"
                               :error="error"
                               :orderByNumber=null
+                              stage='500'
                               :docType="'Payment To The Liquor Board'"
                               :success="success"
                           />
@@ -608,6 +615,7 @@
       :errors="errors"
       :error="error"
       orderByNumber=''
+      stage='600'
       :docType="'Scanned Application'"
       :success="success"
       /> 
@@ -635,6 +643,7 @@
           :errors="errors"
           :error="error"
           :orderByNumber=null
+          stage='700'
           :docType="'Transfer Logded'"
           :success="success"
         />
@@ -676,6 +685,7 @@
           :errors="errors"
           :error="error"
           :orderByNumber=null
+          stage='800'
           :docType="'Activation Fee Paid'"
           :success="success"
         />
@@ -715,6 +725,7 @@
           :errors="errors"
           :error="error"
           :orderByNumber=null
+          stage='900'
           :docType="'Transfer Issued'"
           :success="success"
         />
@@ -755,6 +766,7 @@
           :errors="errors"
           :error="error"
           :orderByNumber=null
+          stage='1000'
           :docType="'Transfer Delivered'"
           :success="success"
         />

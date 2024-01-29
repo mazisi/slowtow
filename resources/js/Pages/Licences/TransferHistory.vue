@@ -69,17 +69,14 @@
                      
                     </td>
                    
-          <td   v-if="transfer.status == 1"><Link class="ml-1 badge bg-dark text-default" :href="`/view-transfered-licence/${transfer.slug}`">Client Quoted</Link></td>
-          <td   v-else-if="transfer.status == 2"><Link class="ml-1 badge bg-info text-default" :href="`/view-transfered-licence/${transfer.slug}`">Client Invoiced</Link></td>
-          <td   v-else-if="transfer.status == 3"><Link class="ml-1 badge bg-light text-dark" :href="`/view-transfered-licence/${transfer.slug}`">Client Paid</Link></td>
-          <td   v-else-if="transfer.status == 4"><Link class="ml-1 badge bg-warning text-default" :href="`/view-transfered-licence/${transfer.slug}`">Prepare Transfer Application</Link></td>
-          <td   v-else-if="transfer.status == 5"><Link class="ml-1 badge bg-secondary text-default" :href="`/view-transfered-licence/${transfer.slug}`">Payment To The Liquor Board</Link></td>
-          <td   v-else-if="transfer.status == 6"><Link class="ml-1 badge bg-success text-default" :href="`/view-transfered-licence/${transfer.slug}`">Scanned Application</Link></td>
-          <td   v-else-if="transfer.status == 7"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Application Logded</Link></td>
-          <td   v-else-if="transfer.status == 8"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Activation Fee Paid</Link></td>
-          <td   v-else-if="transfer.status == 9"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Transfer Issued</Link></td>
-          <td   v-else-if="transfer.status == 10"><Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">Transfer Delivered</Link></td>
-          <td   v-else></td>
+          <td >
+            <Link class="" :href="`/view-transfered-licence/${transfer.slug}`">
+             <span v-html="getStatus(transfer.status)"></span>
+            </Link>
+          
+          </td>
+          
+            
           
 
                  <td >
@@ -117,6 +114,7 @@ import { Inertia } from '@inertiajs/inertia'
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
+import useTransferStatus from '../../store/useTransferStatus'
 
 export default {
   name: "Transfers",
@@ -129,6 +127,7 @@ export default {
   },
   setup(props){
     const { notifySuccess, notifyError } = useToaster();
+    const { getBadgeStatus } = useTransferStatus();
    
     Inertia.on('navigate', (event) => {
           Inertia.visit(`${event.detail.page.url}`, { preserveState: true, preserveScroll: true });
@@ -142,7 +141,9 @@ export default {
         }
 
 
-      
+        function getStatus(statusParam) {
+            return getBadgeStatus(statusParam);
+        }
 
         onMounted(() => {
           if(props.success){
@@ -153,6 +154,7 @@ export default {
         });
 
     return {
+      getStatus,
       limit,
       toast
     }
