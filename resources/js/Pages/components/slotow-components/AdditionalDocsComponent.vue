@@ -46,7 +46,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-if="additional_docs" v-for="additional_doc in additional_docs" :key="additional_doc.id">
+      <tr v-if="additional_docs.length > 0" v-for="additional_doc in additional_docs" :key="additional_doc.id">
         <th>{{ additional_doc.description }}</th>
         <td>{{ additional_doc.uploaded_at }}</td>
         <td> <a :href="`${$page.props.blob_file_path}${additional_doc.path}`" target="_blank">
@@ -55,9 +55,11 @@
         </td>
       </tr>
       <tr v-else >
-        <td class="text-danger">You have not uploaded any documents as yet</td>
+        <td class="text-danger text-center" colspan="6" > You have not uploaded any documents as yet</td>
       </tr>
-           
+      <!-- <tr v-if="errors?.uploaded_at">
+        <td class="text-danger text-center">{{errors.uploaded_at}}</td>
+      </tr>  -->
     </tbody>
   </table>
    

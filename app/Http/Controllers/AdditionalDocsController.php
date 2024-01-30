@@ -13,6 +13,7 @@ class AdditionalDocsController extends Controller
         $request->validate([
             'description' => 'required',
             'document' => 'mimes:pdf',
+            'uploaded_at' => 'required',
             "licence_id" => "required|exists:licences,id"
             ]);
 

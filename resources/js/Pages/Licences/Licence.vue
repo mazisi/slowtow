@@ -82,7 +82,8 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr v-for="licence in licences.data" :key="licence.id">
+                                    <tr v-if="licences.data?.length > 0" 
+                                        v-for="licence in licences.data" :key="licence.id">
                                         <td v-if="licence.is_licence_active === '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
                                         <td v-else><i class="fa fa-times text-danger" aria-hidden="true"></i></td>
                                         <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.trading_name">{{ licence.trading_name }}</Link></td>
@@ -92,11 +93,14 @@
                                         <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.belongs_to === 'Individual' ? licence.people.full_name :licence.company.name }}</Link></td>
 
                                     </tr>
+                                    <tr v-else>
+                                        <td colspan="6" class="text-center text-danger">No Licences Found.</td>
+                                    </tr>
                                     </tbody>
                                 </table>
 
 
-                                <Paginate
+                                <Paginate v-if="licences.data?.length > 0"
                                     :modelName="licences"
                                     :modelType="Licences"
                                 />

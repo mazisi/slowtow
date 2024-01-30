@@ -251,7 +251,10 @@ import { Head, Link, useForm } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 import { Inertia } from '@inertiajs/inertia'
 import common from '../common-js/common.js';
-import { computed, ref } from 'vue';
+import { computed, ref,onMounted } from 'vue';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import useToaster from '../../store/useToaster';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue'
@@ -271,8 +274,10 @@ export default {
 
 
     setup(props) {
+        
         let company_options = props.companies;
         let people_options = props.people;
+        const { notifyError } = useToaster();
 
         const form = useForm({
             trading_name: '',
@@ -363,6 +368,9 @@ export default {
             () => [...new Set(props.licence_dropdowns.map((province) => province.province))]
         );
 
+
+       
+
         return {
             submit,
             company_options,
@@ -376,6 +384,7 @@ export default {
             licence_types
         }
     },
+
     components: {
         Layout,
         Link,

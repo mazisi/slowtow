@@ -103,7 +103,7 @@ class LicenceController extends Controller
         try {
             $licence = Licence::create([
                 'type' => $request->type,
-                'is_licence_active' => $request->is_licence_active,
+                'is_licence_active' => true,
                 'trading_name' => $request->trading_name,
                 'belongs_to' => $request->belongs_to,
                 'licence_type_id' => $request->licence_type,
@@ -214,7 +214,7 @@ class LicenceController extends Controller
     {
         try {
             $request->validate([
-                'change_company' => 'required|exists:companies,id'
+                // 'belongs_to' => 'required|exists:companies,id'
             ]);
 
             $company_var = $request->change_company;
@@ -245,7 +245,7 @@ class LicenceController extends Controller
             if ($update) {
                 return back()->with('success', 'Licence updated successfully.');
             }
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {throw $th;
             return back()->with('error', 'Error updating licence.');
         }
     }

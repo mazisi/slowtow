@@ -12,7 +12,8 @@ export default {
   }
 };
 </script>
-<template v-if="$page.props.viewed_licence.status >= 3500">
+<template v-if="$page.props.viewed_licence.status >= 3500"> 
+  
      <li v-if="$page.props.currentRoute == 'view_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 

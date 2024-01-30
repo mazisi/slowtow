@@ -120,6 +120,7 @@
 
 
                                             <LicenceTypeDropDownComponent
+                                                v-if="form.province !== '' && form.type == 'retail'"
                                                 :dropdownList="licenceByProvince"
                                                 :label="'Licence Type *'"
                                                 :defaultDisabledText="'Select Licence Type'"
@@ -129,13 +130,14 @@
                                                 :errors="errors.licence_type"
                                                 :input_id="licence_type"
                                                 :required="true"
-                                                v-if="form.province !== '' && form.type == 'retail'"
+                                                
                                             />
 
 
                                             <LicenceTypeDropDownComponent
+                                                v-if="form.province !== '' && form.type == 'wholesale'"
                                                 :dropdownList="licenceByProvince"
-                                                :label="'Licence Type *'"
+                                                :label="'Licence Type **'"
                                                 :defaultDisabledText="'Select Licence Type'"
                                                 :column="'col-12'"
                                                 :value="form.licence_type"
@@ -143,7 +145,7 @@
                                                 :errors="errors.licence_type"
                                                 :input_id="licence_type"
                                                 :required="true"
-                                                v-if="form.province !== '' && form.type == 'wholesale'"
+                                                
                                             />
 
                                             <LiquorBoardRegionComponent

@@ -70,7 +70,7 @@
                    <div class="col-md-4 columns">            
                     <div class="input-group input-group-outline null is-filled">
                     <label class="form-label">Date of Birth</label>
-                    <input type="date"
+                    <input
                       class="form-control form-control-default" v-model="form.date_of_birth"
                       max="11" />
                       </div>

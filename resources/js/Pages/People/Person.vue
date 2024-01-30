@@ -47,7 +47,9 @@
 </tr>
 </thead>
 <tbody>
-<tr v-for="person in people.data" :key="person.id">
+
+
+<tr v-if="people.data?.length > 0" v-for="person in people.data" :key="person.id">
 <td>
 <div class="avatar-group ">
 <i v-if="person.active" class="fa fa-check text-success" aria-hidden="true"></i>
@@ -66,7 +68,9 @@
 <i class="material-icons me-sm-1">visibility </i></Link>
 </td>
 </tr>
-
+<tr v-else>
+  <td colspan="6" class="text-center text-danger">No people found.</td>
+</tr>
 </tbody>
 </table>
 
@@ -74,7 +78,7 @@
 </div>
 </div>
 
-<Paginate
+<Paginate v-if="people.data?.length > 0"
   :modelName="people"
   :modelType="People"
   />

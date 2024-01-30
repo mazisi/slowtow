@@ -107,11 +107,9 @@ export default{
       function deleteDocument(id){
         context.emit('file-deleted', id);
       }
-        function viewFile(file_path){
-          //$page.props.blob_file_path
-        }
+    
     return {
-      uploadDoc,upload,viewFile,max,value,
+      uploadDoc,upload,max,value,
       file_has_apostrophe,deleteDocument
     }
   },

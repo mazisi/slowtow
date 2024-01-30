@@ -4,11 +4,26 @@
   <button type="button" class="btn btn-outline-success w-95"> {{ docTitle }}</button>
  </div>
   <div class="col-md-1 d-flex">
-    <label v-if="!hasFile.id" :for="uploadDoc.doc_type">
+    <span :class="{ 'd-none': uploadDoc.processing}">
+    <label v-if="!hasFile.id" :for="uploadDoc.doc_type + stage">
       <i v-if="isLiquorBoard()" class="cursor-pointer fa fa-link h5" aria-hidden="true"></i>
       <i v-else class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
-      <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
+      <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + stage">
     </label>
+  </span>
+
+    <span v-if="uploadDoc.progress" >
+      <CircleProgressBar  
+          :value="uploadDoc.progress.percentage"  
+          :max="100"  
+          percentage  
+          rounded
+          :size="30"
+          :colorFilled="'#4caf50'"
+          :animationDuration="'0.7s'">
+        </CircleProgressBar>
+    </span>
+
     <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
     <i class="fa fa-file-pdf h5 upload-icon mx-1"></i></a>
     <i v-if="hasFile.id" @click="deleteDocument(hasFile.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
@@ -21,6 +36,7 @@
 <script>
 import { ref } from 'vue';
 import { useForm } from '@inertiajs/inertia-vue3';
+import { CircleProgressBar } from 'circle-progress.vue';
 
 export default{
   
@@ -72,6 +88,9 @@ export default{
       upload,uploadDoc, file_has_apostrophe,
       isLiquorBoard,deleteDocument
     }
+  },
+  components: {
+    CircleProgressBar
   }
 }
 </script>

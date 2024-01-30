@@ -465,7 +465,7 @@
     :errors="errors"
     :error="error"/>
 
-  
+  <hr/>
   <StageComponent
   :dbStatus="licence.status"
   :errors="errors"

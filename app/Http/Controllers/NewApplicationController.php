@@ -88,6 +88,7 @@ class NewApplicationController extends Controller
                 'is_new_app' => true,
                 'address' => $request->address,
                 'address2' => $request->address2,
+                'is_licence_active' => true,
                 'address3' => $request->address3,
                 'province' => $request->province,
                 'slug' => sha1(now())
@@ -229,7 +230,7 @@ class NewApplicationController extends Controller
             $this->updateLicenceDate($request);
 
             return back()->with('success', 'Date updated successfully.');
-        } catch (\Throwable $th) {
+        } catch (\Throwable $th) {throw $th;
             return back()->with('error', 'Error updating date.');
         }
     }
@@ -247,7 +248,7 @@ class NewApplicationController extends Controller
      */
     function updateLicenceDate($request) {
         if ($request->stage === 'Licence Issued' || $request->stage === 'NLA 9 Issued') {
-            Licence::whereSlug($request->licence_id)->update(['is_new_app' => false, 'licence_date' => $request->date]);
+            Licence::whereId($request->licence_id)->update(['is_new_app' => false, 'licence_date' => $request->date_at]);
         }
     }
 }

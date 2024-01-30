@@ -165,7 +165,7 @@ View
 </tr>
 </thead>
 <tbody>
-<tr v-if="companies.data" v-for="company in companies.data" :key="company.id">
+<tr v-if="companies.data?.length > 0" v-for="company in companies.data" :key="company.id">
 <td class="align-middle text-sm">
 <i v-if="company.active == 1" data-bs-placement="top" title="Active" class="fa fa-check text-success" aria-hidden="true"></i>
 
@@ -203,17 +203,16 @@ View
 </td>
 
 </tr>
-<tr v-else >
-  <td></td>
-  <td></td>
-  <td><p class="text-danger text-center">No companies found.</p></td>
+<tr v-else>
+  <td colspan="6" class="text-center"><span class="text-danger">No companies found.</span>
+    <span ><Link class="text-success ml-1" href="/create-company">Create one ?</Link></span></td>
 </tr>
 
 
 </tbody>
 </table>
 
-<Paginate
+<Paginate v-if="companies.data?.length > 0"
   :modelName="companies"
   :modelType="Companies"
   />
