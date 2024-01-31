@@ -12,9 +12,11 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import StageComponent from "@/Pages/components/slotow-components/StageComponent.vue";
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
+import MergeNominationDocsComponent from "./MergeNominationDocsComponent.vue";
 import DateComponent from "@/Pages/components/DateComponent.vue";
 import MergeNominationDocs from './MergeNominationDocs.vue'
-
+import moment from 'moment';
+import useNomination from './useNomination.js';
 
 export default{
     props:{
@@ -34,6 +36,7 @@ export default{
         let show_modal = ref(true);
         let show_file_name = ref(false);
         let file_name = ref('');
+        const { getPlainStatus } = useNomination();
 
         const updateForm = useForm({
             nomination_year: props.nomination.year,
@@ -232,45 +235,12 @@ export default{
 
 
         function getStatus(status_param) {
-            let status;
-
-            switch (status_param) {
-                case '100':
-                    status = 'Client Quoted'
-                    break;
-                case '200':
-                    status = 'Client Invoiced'
-                    break;
-                case '300':
-                    status = 'Client Paid'
-                    break;
-                case '400':
-                    status = 'Payment To The Liquor Board'
-                    break;
-                case '500':
-                    status = 'Select Nominees'
-                    break;
-                case '600':
-                    status = 'Prepare Nomination Application'
-                    break;
-                case '700':
-                    status = 'Scanned Application'
-                    break;
-                case '800':
-                    status = 'Nomination Lodged'
-                    break;
-                case '900':
-                    status = 'Nomination Issued'
-                    break;
-                case '1000':
-                    status = 'Nomination Delivered'
-                    break;
-                default:
-                    status='Not Set';
-                    break;
-            }
-            return status;
+            return getPlainStatus(status_param);
         }
+
+        function getMomentDate(date){
+            return moment(date).format('YYYY-MM-DD');
+          }
 
         function canMerge() {
             let baseDocs = [
@@ -292,7 +262,7 @@ export default{
           }
 
 
-        return{
+        return{getMomentDate,
             options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,nomineeForm,
@@ -308,6 +278,7 @@ export default{
         DateComponent,
         DocComponent,
         StageComponent,
+        MergeNominationDocsComponent,
         Layout,
         Link,
         Head,

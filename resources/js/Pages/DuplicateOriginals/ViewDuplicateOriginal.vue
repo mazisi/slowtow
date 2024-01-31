@@ -27,6 +27,9 @@
    <h6> Duplicate Original for: 
     <Link :href="`/view-licence?slug=${duplicate_original.licence.slug}`">
       <span class="text-success">{{ duplicate_original.licence.trading_name }}</span></Link></h6>
+      <p class="text-sm mb-0">Current Stage: 
+        <span v-html="getCurrentStatus()"></span>
+</p>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
@@ -47,8 +50,7 @@
       :errors="errors"
       :error="error"
       :stageValue=100
-      prevStage=0
-      :prevStage='0'
+      :prevStage=null
       :licence_id="duplicate_original"
       :stageTitle="'Client Quoted'"
       :success="success"
@@ -134,6 +136,10 @@
     /> 
 <hr>
 
+
+
+
+<div class="col-5 columns">
 <StageComponent
       :column=5
       :dbStatus="duplicate_original.status"
@@ -142,10 +148,55 @@
       :stageValue=400
       :prevStage=300
       :licence_id="duplicate_original"
+      :stageTitle="'Payment To The Liquor Board'"
+      :success="success"
+      @stage-value-changed="pushData"
+    />
+  </div> 
+
+
+  <DateComponent
+  :licence="duplicate_original"
+  :stage="'Payment To The Liquor Board'"
+  :canSave="$page.props.auth.has_slowtow_admin_role"
+  :errors="errors"
+  :error="error"
+  :column=5
+  @date-value-changed="updateDate"
+  :dated_at="duplicate_original.liquor_board_at"
+  :success="success"
+  />
+<div class="col-md-6 columns"> 
+  <DocComponent
+        @file-value-changed="submitDocument"
+        @file-deleted="deleteDocument"
+        :documentModel="duplicate_original"
+        :hasFile="hasFile('Payment To The Liquor Board')"
+        :errors="errors"
+        :error="error"
+        :orderByNumber=400
+        :docType="'Payment To The Liquor Board'"
+        :success="success"
+        />
+</div>
+
+
+<hr>
+
+
+<StageComponent
+      :column=5
+      :dbStatus="duplicate_original.status"
+      :errors="errors"
+      :error="error"
+      :stageValue=500
+      :prevStage=400
+      :licence_id="duplicate_original"
       :stageTitle="'Duplicate Original Request Letter'"
       :success="success"
       @stage-value-changed="pushData"
     />
+    
 
 
 <div class="row">
@@ -158,7 +209,7 @@
         :hasFile="hasFile('Duplicate Original Request Letter')"
         :errors="errors"
         :error="error"
-        :orderByNumber=400
+        :orderByNumber=500
         :docType="'Duplicate Original Request Letter'"
         :success="success"
         />
@@ -172,8 +223,8 @@
             :dbStatus="duplicate_original.status"
             :errors="errors"
             :error="error"
-            :stageValue=500
-            :prevStage=400
+            :stageValue=600
+            :prevStage=500
             :licence_id="duplicate_original"
             :stageTitle="'Scanned Application'"
             :success="success"
@@ -188,7 +239,7 @@
               :hasFile="hasFile('Scanned Application')"
               :errors="errors"
               :error="error"
-              :orderByNumber=500
+              :orderByNumber=600
               :docType="'Scanned Application'"
               :success="success"
               />
@@ -203,8 +254,8 @@
               :dbStatus="duplicate_original.status"
               :errors="errors"
               :error="error"
-              :stageValue=600
-              :prevStage=500
+              :stageValue=700
+              :prevStage=600
               :licence_id="duplicate_original"
               :stageTitle="'Application Lodged'"
               :success="success"
@@ -219,7 +270,7 @@
                 :hasFile="hasFile('Application Lodged')"
                 :errors="errors"
                 :error="error"
-                :orderByNumber=600
+                :orderByNumber=700
                 :docType="'Application Lodged'"
                 :success="success"
                 />
@@ -246,8 +297,8 @@
                 :dbStatus="duplicate_original.status"
                 :errors="errors"
                 :error="error"
-                :stageValue=700
-                :prevStage=600
+                :stageValue=800
+                :prevStage=700
                 :licence_id="duplicate_original"
                 :stageTitle="'Duplicate Original Issued'"
                 :success="success"
@@ -262,7 +313,7 @@
                   :hasFile="hasFile('Duplicate Original Issued')"
                   :errors="errors"
                   :error="error"
-                  :orderByNumber=700
+                  :orderByNumber=800
                   :docType="'Duplicate Original Issued'"
                   :success="success"
                   />
@@ -288,8 +339,8 @@
                   :dbStatus="duplicate_original.status"
                   :errors="errors"
                   :error="error"
-                  :stageValue=800
-                  :prevStage=700
+                  :stageValue=900
+                  :prevStage=800
                   :licence_id="duplicate_original"
                   :stageTitle="'Duplicate Original Delivered'"
                   :success="success"
@@ -304,7 +355,7 @@
                     :hasFile="hasFile('Duplicate Original Delivered')"
                     :errors="errors"
                     :error="error"
-                    :orderByNumber=800
+                    :orderByNumber=900
                     :docType="'Duplicate Original Delivered'"
                     :success="success"
                     />
@@ -332,7 +383,7 @@
           </div>
 
 
-      <Task :tasks="tasks" :model_id="duplicate_original.id" :success="success" :error="error" :errors="errors" :model_type="'Alteration'"/>
+      <Task :tasks="tasks" :model_id="duplicate_original.id" :success="success" :error="error" :errors="errors" :model_type="'Duplicate-Originals'"/>
         
         </div>
         

@@ -12,6 +12,8 @@ import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 import DateComponent from "./components/DateComponent.vue";
 import useToaster from "../../store/useToaster";
+import useDuplicate from "./useDuplicate.js";
+
 
 export default {
     name: "ViewDuplicate",
@@ -26,6 +28,9 @@ export default {
     setup(props) {
         let showMenu = false;
         const { notifySuccess, notifyError } = useToaster();
+
+        const { getStatus } = useDuplicate();
+
         const form = useForm({
             slug: props.duplicate_original.slug,
             status: [],
@@ -114,7 +119,7 @@ export default {
             }
         }
 
-    
+       
 
         function submitDocument(form_data){            
             form_data.post('/submit-duplicate_original-document', {
@@ -150,6 +155,10 @@ export default {
                     //
             })
           }
+
+          function getCurrentStatus(){
+            return getStatus(props.duplicate_original.status);
+          }
         
         return {
             form,
@@ -158,6 +167,7 @@ export default {
             update,
             pushData,
             hasFile,
+            getCurrentStatus,
             toast,
             deleteDuplicateOriginal,
             submitDocument,

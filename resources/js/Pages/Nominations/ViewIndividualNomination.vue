@@ -22,11 +22,10 @@
                     <div class="col-lg-10 col-10">
                         <h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">
                             {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
-                        <!--refactor this code -->
+                        
                         <p class="text-sm mb-0">Current Stage:
                             <span class="font-weight-bold ms-1" >{{getStatus(nomination.status)}}</span>
                         </p>
-                        <!--end refactor-->
 
                     </div>
                     <div class="col-lg-2 col-2 my-auto text-end">
@@ -218,7 +217,7 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    <tr v-if="nomination.people" v-for="person in nomination.people" :key="person.id" >
+                                                    <tr v-if="nomination.people?.length > 0" v-for="person in nomination.people" :key="person.id" >
                                                         <td>
                                                             <div class="d-flex px-2 py-1" >
 
@@ -227,7 +226,7 @@
                                                                 </div>
                                                             </div>
                                                         </td>
-                                                        <td class="text-center">{{ person.date_of_birth }}</td>
+                                                        <td class="text-center">{{ getMomentDate(person.date_of_birth) }}</td>
                                                         <td class="text-center">{{ person.id_or_passport }}</td>
                                                         <td class="text-center">
                                                             <i @click="removeSelectedNominee(person.id)"
@@ -240,9 +239,8 @@
                                                             </Link>
                                                         </td>
                                                     </tr>
-                                                    <tr v-else >
-                                                        <td></td>
-                                                        <td><p class="text-danger text-center">No nominees found.</p></td>
+                                                    <tr v-else>
+                                                        <td colspan="6" class="text-center text-danger">No nominees found.</td>
                                                     </tr>
 
                                                     </tbody>
@@ -265,38 +263,26 @@
                                                 @stage-value-changed="pushData"
                                             />
 
-
+                                            
                                             <div class="col-md-4 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"> Nomination Forms </h6>
-
-                                                        </div>
-                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                        <DocComponent
-                                                            :documentModel="nomination"
-                                                            @file-value-changed="submitDocument"
-                                                            @file-deleted="deleteDocument"
-                                                            :hasFile="hasFile('Nomination Forms')"
-                                                            :errors="errors"
-                                                            :error="error"
-                                                            :orderByNumber=100
-                                                            :docType="'Nomination Forms'"
-                                                            :success="success"
-                                                            :stage="600"
+                                                <MergeNominationDocsComponent
+                                                :documentModel="nomination"
+                                                @file-value-changed="submitDocument"
+                                                @file-deleted="deleteDocument"
+                                                :hasFile="hasFile('Nomination Forms')"
+                                                :errors="errors"
+                                                :error="error"
+                                                :orderByNumber=100
+                                                :docType="'Nomination Forms'"
+                                                :success="success"
+                                                :stage="600"
                                                         />
-                                                        </div>
-                                                    </li>
-                                                </ul>
                                             </div>
 
                                             <div class="col-md-4 columns">
                                                 <ul class="list-group">
                                                     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="avatar me-3" >
-                                                        </div>
+                                                      
                                                         <div class="d-flex align-items-start flex-column justify-content-center">
                                                             <h6 class="mb-0 text-sm">Proof Of Payment</h6>
                                                         </div>
@@ -311,13 +297,7 @@
 
 
                                             <div class="col-md-4 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Signed Power Of Attorney And Resolution</h6>
-                                                        </div>
-                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                        <DocComponent
+                                                        <MergeNominationDocsComponent
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
@@ -329,19 +309,10 @@
                                                             :success="success"
                                                             :stage="600"
                                                         />
-                                                        </div>
-                                                    </li>
-                                                </ul>
                                             </div>
 
                                             <div class="col-md-4 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">ID Documents</h6>
-                                                        </div>
-                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                            <DocComponent
+                                                            <MergeNominationDocsComponent
                                                                 :documentModel="nomination"
                                                                 @file-value-changed="submitDocument"
                                                                 @file-deleted="deleteDocument"
@@ -353,20 +324,10 @@
                                                                 :success="success"
                                                                 :stage="600"
                                                             />
-                                                        </div>
-
-                                                    </li>
-                                                </ul>
                                             </div>
 
                                             <div class="col-md-4 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Police Clearances</h6>
-                                                        </div>
-                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                        <DocComponent
+                                                        <MergeNominationDocsComponent
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
@@ -378,19 +339,10 @@
                                                             :success="success"
                                                             :stage="600"
                                                         />
-                                                        </div>
-                                                    </li>
-                                                </ul>
                                             </div>
 
                                             <div class="col-md-4 columns">
-                                                <ul class="list-group">
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">Latest Renewal/Licence</h6>
-                                                        </div>
-                                                        <div class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                        <DocComponent
+                                                        <MergeNominationDocsComponent
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
@@ -402,9 +354,6 @@
                                                             :success="success"
                                                             :stage="600"
                                                         />
-                                                        </div>
-                                                    </li>
-                                                </ul>
                                             </div>
 
                                             <div class="text-end">

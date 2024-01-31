@@ -38,7 +38,7 @@
                   </tr>
                 </thead>
                  <tbody>
-                  <tr v-if="nomination_years.data" v-for="nom in nomination_years.data" :key="nom.id" >
+                  <tr v-if="nomination_years.data.length > 0" v-for="nom in nomination_years.data" :key="nom.id" >
                     <td>
                       <div style="margin-left: 20px;">                       
                    
@@ -48,31 +48,26 @@
                     </div>
                     </td>
                      
-                    <td class="text-center"  v-if="nom.status == 1"><Link class="ml-1 badge bg-dark text-default" :href="`/view-nomination/${nom.slug}`">Client Quoted</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 2"><Link class="ml-1 badge bg-info text-default" :href="`/view-nomination/${nom.slug}`">Client Invoiced</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 3"><Link class="ml-1 badge bg-light text-dark" :href="`/view-nomination/${nom.slug}`">Client Paid</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 4"><Link class="ml-1 badge bg-warning text-default" :href="`/view-nomination/${nom.slug}`">Payment to the Liquor Board</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 5"><Link class="ml-1 badge bg-secondary text-default" :href="`/view-nomination/${nom.slug}`">Select Nominees</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 6"><Link class="ml-1 badge bg-success text-default" :href="`/view-nomination/${nom.slug}`">Prepare Nomination Application</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 7"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Scanned Application</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 8"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Nomination Lodged</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 9"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Nomination Issued</Link></td>
-                    <td class="text-center"  v-else-if="nom.status == 10"><Link class="ml-1" :href="`/view-nomination/${nom.slug}`">Nomination Delivered</Link></td>
-                    <td class="text-center"  v-else></td>
+                    <td class="text-center">
+                      <Link class="ml-1" :href="`/view-nomination/${nom.slug}`">
+                        <div v-html="getStatus(nom.status)"></div>
+                      </Link></td>
+                  
 
                       <td class="text-center">
                         <Link :href='`/view-nomination/${nom.slug}`'>
                         <i class="fa fa-eye"></i></Link>
                         </td>
                   </tr>
+                
                   <tr v-else>
-                    <p class="text-center text-danger text-sm">No nominations found.</p>
-                  </tr>
+                    <td colspan="6" class="text-center text-danger">No nominations found.</td>
+                </tr>
                   </tbody>
               </table>
               
             </div>
-            <Paginate 
+            <Paginate v-if="nomination_years.data.length > 0"
               :modelName="nomination_years"
               :modelType="Nominations"
               />
@@ -126,6 +121,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { onMounted } from 'vue';
 import useToaster from '../../store/useToaster'
+import useNomination from './useNomination'
 
 import { ref } from 'vue';
 
@@ -141,6 +137,8 @@ export default {
 
   setup (props) {
     const { notifySuccess, notifyError } = useToaster();
+    const { getBadgeStatus } = useNomination();
+
     const year = ref(new Date().getFullYear());
     let years = props.years
 
@@ -166,6 +164,10 @@ export default {
       })
     }
 
+
+         function getStatus(status_param) {
+            return getBadgeStatus(status_param);
+        }
         
         onMounted(() => {
           if(props.success){
@@ -175,7 +177,7 @@ export default {
           }
 
          });
-    return { year, years,form, submit,toast}
+    return { year, years,form, submit,toast,getStatus}
   },
    components: {
     Layout,

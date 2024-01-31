@@ -151,9 +151,10 @@ export default {
     
                                             </thead>
     
-                                            <tbody v-if="alterations">
+                                            <tbody>
     
-                                                <tr v-for="alter in alterations.data" :key="alter.id">
+                                                <tr v-if="alterations?.data.length > 0" 
+                                                    v-for="alter in alterations.data" :key="alter.id">
     
     
     
@@ -192,16 +193,10 @@ export default {
                                                     </td>
     
                                                 </tr>
-    
-                                            </tbody>
-    
-    
-    
-                                            <tbody v-else>
-    
-                                                <td></td>
-    
-                                                <td class="text-danger">No alterations found.</td>
+
+                                                <tr v-else>
+                                                    <td colspan="6" class="text-center text-danger">No alterations Found.</td>
+                                                </tr>
     
                                             </tbody>
     
@@ -215,7 +210,7 @@ export default {
     
     
     
-                                <Paginate :modelName="alterations" :modelType="Alterations" />
+                                <Paginate :modelName="alterations" :modelType="Alterations" v-if="alterations?.data.length > 0" />
     
                             </div>
     

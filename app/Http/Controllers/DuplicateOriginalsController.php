@@ -113,7 +113,8 @@ class DuplicateOriginalsController extends Controller
          'dated_at' => 'required',
          'stage' => 'required'
         ]);
-        $dup = DuplicateOriginal::whereId($request->licence_id)->first();
+        try {
+            $dup = DuplicateOriginal::whereId($request->licence_id)->first();
          switch ($request->stage) {
              case 'Client Paid':
                  $db_column = 'paid_at';
@@ -126,7 +127,10 @@ class DuplicateOriginalsController extends Controller
                  break;
              case 'Duplicate Original Delivered':
                  $db_column = 'delivered_at';
-                 break;             
+                 break; 
+            case 'Payment To The Liquor Board':
+            $db_column = 'liquor_board_at';
+            break;             
              default:
                  return back()->with('error','Sorry..An error occured.');
                  break;
@@ -140,6 +144,9 @@ class DuplicateOriginalsController extends Controller
          return back()->with('success','Date updated successfully.');
         }
         return back()->with('error','Sorry..An error occured.');
+        } catch (\Throwable $th) {
+            throw $th;
+        }
      }
 
     //Delete document

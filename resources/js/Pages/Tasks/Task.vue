@@ -12,14 +12,14 @@
     <a @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
       <i class="fa fa-trash-o text-white"></i>
     </a>
-    <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ new Date(task.created_at).toLocaleString() }}</p>
+    <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ getMomentDate(task.created_at) }}</p>
     </div>
     </div>
     <h6 v-if="!tasks" class="text-center">No notes found.</h6>
     </div>
 
 
-    <Paginate v-if="tasks.data.length"
+    <Paginate v-if="tasks.data.length > 0"
     :modelName="tasks"
     :modelType="Tasks"
     />
@@ -59,6 +59,7 @@
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
   import useToaster from '../../store/useToaster';
+  import moment from 'moment';
 
 
   export default{
@@ -113,10 +114,12 @@
            });
         }
       }
-
+          function getMomentDate(date){
+            return moment(date).format('YYYY-MM-DD');
+          }
 
         return{
-          createTask,submitTask,checkBodyLength,body_max,deleteNote
+          createTask,submitTask,checkBodyLength,body_max,deleteNote,getMomentDate
         }
     },
     components:{

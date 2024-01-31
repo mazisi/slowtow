@@ -26,7 +26,7 @@
                   <thead>
                     <tr>
                       <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                        Nomination Year
+                        Year
                       </th>
                       <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                       Current Status
@@ -38,7 +38,7 @@
                     </tr>
                   </thead>
                    <tbody>
-                    <tr v-if="originals_years.data" v-for="original_year in originals_years.data" :key="original_year.id" >
+                    <tr v-if="originals_years.data.length > 0" v-for="original_year in originals_years.data" :key="original_year.id" >
                       <td>
                         <div style="margin-left: 20px;">                       
                      
@@ -48,17 +48,12 @@
                       </div>
                       </td>
                        
-                      <td class="text-center"  v-if="original_year.status == 1"><Link class="ml-1 badge bg-dark text-default" :href="`/view-duplicate-original/${original_year.slug}`">Client Quoted</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 2"><Link class="ml-1 badge bg-info text-default" :href="`/view-duplicate-original/${original_year.slug}`">Client Invoiced</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 3"><Link class="ml-1 badge bg-light text-dark" :href="`/view-duplicate-original/${original_year.slug}`">Client Paid</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 4"><Link class="ml-1 badge bg-warning text-default" :href="`/view-duplicate-original/${original_year.slug}`">Payment to the Liquor Board</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 5"><Link class="ml-1 badge bg-secondary text-default" :href="`/view-duplicate-original/${original_year.slug}`">Select Nominees</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 6"><Link class="ml-1 badge bg-success text-default" :href="`/view-duplicate-original/${original_year.slug}`">Prepare Nomination Application</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 7"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Scanned Application</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 8"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Nomination Lodged</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 9"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Nomination Issued</Link></td>
-                      <td class="text-center"  v-else-if="original_year.status == 10"><Link class="ml-1" :href="`/view-duplicate-original/${original_year.slug}`">Nomination Delivered</Link></td>
-                      <td class="text-center"  v-else></td>
+                      <td class="text-center">
+                        <Link class="ml-1 " 
+                        :href="`/view-duplicate-original/${original_year.slug}`">
+                         <span v-html="getStatus(original_year.status)"></span>
+                      </Link></td>
+                      
   
                         <td class="text-center">
                           <Link :href='`/view-duplicate-original/${original_year.slug}`'>
@@ -66,14 +61,14 @@
                           </td>
                     </tr>
                     <tr v-else>
-                      <p class="text-center text-danger text-sm">Empty.</p>
-                    </tr>
+                      <td colspan="6" class="text-center text-danger">No duplicates found.</td>
+                  </tr>
                     </tbody>
                 </table>
                 
               </div>
               <Paginate 
-                v-if="originals_years"
+                 v-if="originals_years.data.length > 0"
                 :modelName="originals_years"
                 :modelType="'Duplicate-Originals'"
                 />
@@ -127,7 +122,8 @@
   import { toast } from 'vue3-toastify';
   import 'vue3-toastify/dist/index.css';
   import { onMounted } from 'vue';
-  import useToaster from '../../store/useToaster'
+  import useToaster from '../../store/useToaster';
+  import useDuplicate from "./useDuplicate.js";
   
   
   import { ref } from 'vue';
@@ -146,6 +142,7 @@
       const year = ref(new Date().getFullYear());
       let years = props.years
       const { notifySuccess, notifyError } = useToaster();
+      const { getBadgeStatus } = useDuplicate();
   
       const form = useForm({
         year: null,
@@ -169,7 +166,9 @@
         })
       }
   
-     
+      function getStatus(status) {
+            return getBadgeStatus(status);
+          }
           
           onMounted(() => {
             if(props.success){
@@ -179,7 +178,7 @@
             }
   
            });
-      return { year, years,form, submit,toast}
+      return { year, years,form, submit,toast, getStatus}
     },
      components: {
       Layout,

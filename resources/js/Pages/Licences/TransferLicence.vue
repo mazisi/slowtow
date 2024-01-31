@@ -125,7 +125,7 @@ export default {
 <input type="hidden" v-model="form.licence_id"> 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-quoted" class="active-checkbox" v-model="form.status" type="checkbox" value="1">
+<input id="client-quoted" class="active-checkbox" v-model="form.status" type="checkbox" value="100">
 <label for="client-quoted" class="form-check-label text-body text-truncate status-heading">Client Quoted </label>
 </div>
 </div>     
@@ -134,14 +134,14 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="2">
+<input id="client-invoiced" class="active-checkbox" v-model="form.status" type="checkbox" value="200">
 <label id="client-invoiced" class="form-check-label text-body text-truncate status-heading">Client Invoiced </label>
 </div>
 </div>   
 <hr>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="client-paid" class="active-checkbox" v-model="form.status" type="checkbox" value="3">
+<input id="client-paid" class="active-checkbox" v-model="form.status" type="checkbox" value="300">
 <label for="client-paid" class="form-check-label text-body text-truncate status-heading">Client Paid</label>
 </div>
 </div>  
@@ -149,7 +149,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="prepare" class="active-checkbox" v-model="form.status" type="checkbox" value="4">
+<input id="prepare" class="active-checkbox" v-model="form.status" type="checkbox" value="400">
 <label for="prepare" class="form-check-label text-body text-truncate status-heading">Prepare Transfer Application</label>
 </div>
 </div> 
@@ -210,21 +210,21 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="liquour-board" class="active-checkbox" v-model="form.status" type="checkbox" value="5">
+<input id="liquour-board" class="active-checkbox" v-model="form.status" type="checkbox" value="500">
 <label for="liquour-board" class="form-check-label text-body text-truncate status-heading">Payment To The Liquor Board</label>
 </div>
 </div>  
 <hr>
 <div class="col-md-6 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="scanned-app" class="active-checkbox" v-model="form.status" type="checkbox" value="6">
+<input id="scanned-app" class="active-checkbox" v-model="form.status" type="checkbox" value="600">
 <label for="scanned-app" class="form-check-label text-body text-truncate status-heading">Scanned Application</label>
 </div>
 </div>
 <hr/>
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="app-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="7">
+<input id="app-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="700">
 <label for="app-logded" class="form-check-label text-body text-truncate status-heading">Application Logded</label>
 </div>
 </div>  
@@ -232,7 +232,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="activation" class="active-checkbox" v-model="form.status" type="checkbox" value="8">
+<input id="activation" class="active-checkbox" v-model="form.status" type="checkbox" value="800">
 <label for="activation" class="form-check-label text-body text-truncate status-heading">Activation Fee Paid</label>
 </div>
 </div>  
@@ -241,7 +241,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="transfer-issued" class="active-checkbox" v-model="form.status" type="checkbox" value="9">
+<input id="transfer-issued" class="active-checkbox" v-model="form.status" type="checkbox" value="900">
 <label for="transfer-issued" class="form-check-label text-body text-truncate status-heading">Transfer Issued</label>
 </div>
 </div> 
@@ -249,7 +249,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="transfer-delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="10">
+<input id="transfer-delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="1000">
 <label for="transfer-delivered" class="form-check-label text-body text-truncate status-heading">Transfer Delivered</label>
 </div>
 </div> 
@@ -259,7 +259,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="tranfer-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="11">
+<input id="tranfer-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="1100">
 <label for="tranfer-logded" class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
 </div>
 </div> 
@@ -267,7 +267,7 @@ export default {
 
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-<input id="cert-received" class="active-checkbox" v-model="form.status" type="checkbox" value="12">
+<input id="cert-received" class="active-checkbox" v-model="form.status" type="checkbox" value="1200">
 <label for="cert-received" class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>
 </div>
 </div> 
