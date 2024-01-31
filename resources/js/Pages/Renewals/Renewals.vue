@@ -38,7 +38,7 @@
                                             </tr>
                                             </thead>
                                             <tbody>
-                                            <tr v-for="renewal in renewals.data" :key="renewal.id">
+                                            <tr v-if="renewals.data?.length > 0" v-for="renewal in renewals.data" :key="renewal.id">
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
@@ -49,12 +49,7 @@
 
                                                 <td class="align-middle text-center text-sm">
                                                     <Link :href="`/view-licence-renewal/${renewal.slug}`">
-                                                        <span v-if="renewal.status == '1'" class="badge bg-dark text-default">Client Quoted</span>
-                                                        <span v-if="renewal.status == '2'" class="badge bg-info text-default">Client Invoiced</span>
-                                                        <span v-if="renewal.status == '3'" class="badge bg-light text-dark">Client Paid</span>
-                                                        <span v-if="renewal.status == '4'" class="badge bg-warning text-default">Payment To The Liquor Board</span>
-                                                        <span v-if="renewal.status == '5'" class="badge bg-secondary text-default">Renewal Issued</span>
-                                                        <span v-if="renewal.status == '6'" class="badge bg-success text-default">Renewal Delivered</span>
+                                                        <span class="badge text-default" v-html="getStatus(renewal.status)"></span>
                                                     </Link>
                                                 </td>
                                                 <td class="align-middle text-end" >
@@ -64,19 +59,15 @@
                                                 </td>
                                             </tr>
 
-                                            <tr v-if="!renewals">
-                                                <td></td>
-                                                <td></td>
-                                                <td><h6>No renewals found for this licence.</h6></td>
-                                                <td></td>
-                                                <td></td>
+                                            <tr v-else>
+                                                <td colspan="6" class="text-center text-danger">No renewals found.</td>
                                             </tr>
 
                                             </tbody>
                                         </table>
 
                                     </div>
-                                    <Paginate
+                                    <Paginate v-if="renewals.data?.length > 0"
                                         :modelName="renewals"
                                         :modelType="Renewals"
                                     />
@@ -131,6 +122,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import { onMounted } from 'vue';
 import useToaster from '../../store/useToaster'
+import useRenewals from './useRenewals'
 
 
 import { ref } from 'vue';
@@ -150,12 +142,18 @@ export default {
         const year = ref(new Date().getFullYear());
         let years = props.years;
         const { notifySuccess, notifyError } = useToaster();
+        const { getBadgeStatus } = useRenewals();
 
 
         const form = useForm({
             year: null,
             licence_id: props.licence.id
         })
+
+        Inertia.on('navigate', (event) => {
+          Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true})
+    })
+
 
         function submit() {
             form.post('/submit-licence-renewal', {
@@ -192,7 +190,9 @@ export default {
             }
         }
 
-
+        function getStatus(status) {
+            return getBadgeStatus(status);
+          }
 
         onMounted(() => {
             if(props.success){
@@ -202,7 +202,7 @@ export default {
             }
         });
 
-        return { year,years,form, submit, deleteRenewal, limit,toast }
+        return { year,years,form, submit, deleteRenewal, limit,toast,getStatus }
     },
     components: {
         Layout,

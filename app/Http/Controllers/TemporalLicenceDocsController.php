@@ -25,7 +25,7 @@ class TemporalLicenceDocsController extends Controller
           $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
           
 
-          if(!fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+          if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
             $fileModel = new TemporalLicenceDocument;
             $fileModel->document_name = $request->document_file->getClientOriginalName();
             $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;

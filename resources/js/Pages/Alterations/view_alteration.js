@@ -191,10 +191,19 @@ export default {
         }
 
   
+       
+
         function hasAllMergeDocs(){
-            let documentsWithMergeNum = props.alteration.documents.filter(doc => doc.num !== null);
-           
-            return documentsWithMergeNum ? documentsWithMergeNum.length == 5 : false
+            let baseDocs = ['Application Form','Smoking Affidavit','POA & RES','Payment To The Liquor Board','Fully Dimensional Plans']
+            const allDocTypesPresent = baseDocs.every(docType => {
+                return props.alteration.documents.some(document => document.doc_type === docType);
+              });
+              
+              if (allDocTypesPresent) {
+                return baseDocs.length;
+              } else {
+                return 0;
+              }
         }
 
         function mergeDocuments(){alert('Cool')

@@ -23,7 +23,7 @@ class AlterationDocumentController extends Controller
             $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
             
 
-            if(!fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+            if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
               $fileModel = new AlterationDocument;
               $fileModel->alteration_id = $request->licence_id;
               $fileModel->doc_type = $request->doc_type;

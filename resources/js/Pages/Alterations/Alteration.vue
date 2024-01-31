@@ -2,6 +2,7 @@
 import Layout from "../../Shared/Layout.vue";
 import { Head, Link } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
+import { Inertia } from '@inertiajs/inertia'
 // import Paginate from "../../Shared/Paginate.vue";
 import 'vue3-toastify/dist/index.css';
 import { defineAsyncComponent } from 'vue';
@@ -25,13 +26,19 @@ export default {
 
     data() {
         const { getBadgeStatus } = useAlteration();
+
+        Inertia.on('navigate', (event) => {
+          Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true})
+    })
+
         return {
             form: {
                 alter_date: null,
                 alter_status: null
             },
             showMenu: false,
-            getBadgeStatus
+            getBadgeStatus,
+            
         };
     },
     components: {
@@ -233,4 +240,4 @@ export default {
     
     
     </Layout>
-</template>
+</template>../Renewals/useAlteration

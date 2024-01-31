@@ -70,6 +70,7 @@
       :errors="errors"
       :error="error"
       :orderByNumber=100
+      stage="100"
       :docType="'Client Quoted'"
       :success="success"
       />
@@ -101,6 +102,7 @@
       :errors="errors"
       :error="error"
       :orderByNumber=200
+      stage="200"
       :docType="'Client Invoiced'"
       :success="success"
       />
@@ -130,6 +132,7 @@
         :errors="errors"
         :error="error"
         :orderByNumber=300
+        stage="300"
         :docType="'Client Paid'"
         :success="success"
         />
@@ -249,10 +252,11 @@
   :hasFile="hasFile('Smoking Affidavit')"
   />
 
-<a v-if="alteration.merged_document" :href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
+<a v-if="alteration.merged_document" 
+:href="`/storage/app/public/${alteration.merged_document}`" target="_blank"  class="btn btn-sm btn-success float-end mx-2" >View</a>
 
       <button 
-      :disabled="!hasAllMergeDocs"
+      :disabled="hasAllMergeDocs() == 0"
       type="button" 
       @click="mergeDocuments" 
       class="btn btn-sm btn-secondary float-end">
@@ -286,6 +290,7 @@
               :errors="errors"
               :error="error"
               :orderByNumber=500
+              stage="500"
               :docType="'Payment to the Liquor Board'"
               :success="success"
               />
@@ -330,6 +335,7 @@
                 :errors="errors"
                 :error="error"
                 :orderByNumber=600
+                stage="600"
                 :docType="'Alterations Lodged'"
                 :success="success"
                 />
@@ -373,6 +379,7 @@
                   :errors="errors"
                   :error="error"
                   :orderByNumber=700
+                  stage="700"
                   :docType="'Alterations Certificate Issued'"
                   :success="success"
                   />
@@ -408,13 +415,14 @@
             
             
                 <DocComponent
-                @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+                    @file-value-changed="submitDocument"
+                    @file-deleted="deleteDocument"
                     :documentModel="alteration"
                     :hasFile="hasFile('Alterations Delivered')"
                     :errors="errors"
                     :error="error"
                     :orderByNumber=800
+                    stage="800"
                     :docType="'Alterations Delivered'"
                     :success="success"
                     />

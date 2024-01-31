@@ -1,7 +1,7 @@
 <template>
     <div :class="'col-md-' + column" class="columns mb-4">
         <div class="input-group input-group-outline null is-filled">
-            <label class="form-label">Date{{dated_at}}</label>
+            <label class="form-label">Date</label>
             <input type="date" class="form-control form-control-default" v-model="form.dated_at">
         </div>
         <div v-if="errors.dated_at" class="text-danger">{{ errors.dated_at }}</div>

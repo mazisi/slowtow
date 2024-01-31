@@ -134,7 +134,7 @@ export default {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="licence in licences.data" :key="licence.id">
+                  <tr v-if="licences.data?.length > 0" v-for="licence in licences.data" :key="licence.id">
                     <td class="text-sm" >
                       <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
                     <Link :href="`/view-temp-licence/${licence.slug}`">
@@ -177,13 +177,17 @@ export default {
                     </td>
                     
                   </tr>
+
+                  <tr v-else>
+                    <td colspan="6" class="text-center text-danger">No temporary licences found.</td>
+                </tr>
                   
                  
                 </tbody>
               </table>
             </div>
           </div>
-          <Paginate
+          <Paginate v-if="licences.data?.length > 0"
             :modelName="licences"
             :modelType="Temp-Licences"
             />

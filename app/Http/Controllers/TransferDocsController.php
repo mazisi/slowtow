@@ -24,7 +24,7 @@ class TransferDocsController extends Controller
                 $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
                 
 
-                // if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                   $fileModel = new TransferDocument;
                   $fileModel->document_name = $request->document_file->getClientOriginalName();
                   $fileModel->document = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
@@ -39,9 +39,9 @@ class TransferDocsController extends Controller
                   }
              
                   return back()->with('success','Document uploaded successfully.');
-                // }else{
-                //   return back()->with('error','Azure storage could not be reached.Please try again.');
-                // }
+                }else{
+                  return back()->with('error','Azure storage could not be reached.Please try again.');
+                }
             } catch (\Throwable $th) {
               return back()->with('error','An unknown error occured.Please try again.');
             }

@@ -6,6 +6,9 @@
  */
 if (! function_exists('fileExist')) {
     function fileExist($remote_file){
+      if (!app()->environment(['production'])) {
+        return true;
+      }
       
         $ch = curl_init($remote_file);
         curl_setopt($ch, CURLOPT_NOBODY, true);

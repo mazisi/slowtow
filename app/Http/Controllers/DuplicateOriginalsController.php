@@ -88,16 +88,16 @@ class DuplicateOriginalsController extends Controller
                 $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
                 $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
-                //if(!fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+                if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
                         $fileModel = new DuplicateOriginalDoc;
                         $fileModel->document_name = $request->document_file->getClientOriginalName();
                         $fileModel->duplicate_original_id = $request->licence_id;
                         $fileModel->doc_type = $request->doc_type;
                         $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;        
                         $fileModel->save();
-                // }else{
-                //     return back()->with('error','Azure storage could not be reached.Please try again.');
-                //   }
+                }else{
+                    return back()->with('error','Azure storage could not be reached.Please try again.');
+                  }
             
             return back()->with('success', 'Document uploaded successfully');
         } catch (\Throwable $th) {

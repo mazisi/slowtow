@@ -20,8 +20,8 @@ class PeopleDocumentController extends Controller
             $fileName = Str::limit(sha1(now()),4).str_replace('-', '_',$removeSpace);
             $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
-//    if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
-        if(true){
+   if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fileName)){
+      
                     $fileModel = new PeopleDocument;
                     $fileModel->document_name = $fileName;
                     $fileModel->document = $fileName;
