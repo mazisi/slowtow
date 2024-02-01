@@ -120,15 +120,9 @@
                       <hr>
                       <h6 class="text-center">Documents</h6>
 
-                      <div class="row">
+                      <div class="row mt-4">
                         <div class="col-4">
-                          <ul class="list-group">
-                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-
-                              <div class="d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">ID Document</h6>
-                              </div>
-                                <DocComponent
+                                <PeopleDocComponent
                                     :documentModel="person"
                                     @file-value-changed="submitDocument"
                                     @file-deleted="deleteDocument"
@@ -138,19 +132,10 @@
                                     :docType="'ID Document'"
                                     :success="success"
                                 />
-
-                            </li>
-                          </ul>
                         </div>
 
                         <div class="col-4">
-                          <ul class="list-group">
-                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                              <div class="d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">
-                                  Police Clearance</h6>
-                              </div>
-                              <DocComponent
+                              <PeopleDocComponent
                                   :documentModel="person"
                                   @file-value-changed="submitDocument"
                                   @file-deleted="deleteDocument"
@@ -160,17 +145,10 @@
                                   :docType="'Police Clearance'"
                                   :success="success"
                               />
-                            </li>
-                          </ul>
                         </div>
 
                         <div class="col-4">
-                          <ul class="list-group">
-                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                              <div class="d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">Passport</h6>
-                              </div>
-                              <DocComponent
+                              <PeopleDocComponent
                                   :documentModel="person"
                                   @file-value-changed="submitDocument"
                                   @file-deleted="deleteDocument"
@@ -180,18 +158,12 @@
                                   :docType="'Passport'"
                                   :success="success"
                               />
-                            </li>
-                          </ul>
+                           
                         </div>
 
 
                         <div class="col-4">
-                          <ul class="list-group">
-                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                              <div class="d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">Work Permit</h6>
-                              </div>
-                              <DocComponent
+                              <PeopleDocComponent
                                   :documentModel="person"
                                   @file-value-changed="submitDocument"
                                   @file-deleted="deleteDocument"
@@ -201,17 +173,10 @@
                                   :docType="'Work Permit'"
                                   :success="success"
                               />
-                            </li>
-                          </ul>
                         </div>
 
                         <div class="col-4">
-                          <ul class="list-group">
-                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                              <div class="d-flex align-items-start flex-column justify-content-center">
-                                <h6 class="mb-0 text-sm">Valid Fingerprints</h6>
-                              </div>
-                              <DocComponent
+                              <PeopleDocComponent                              
                                   :documentModel="person"
                                   @file-value-changed="submitDocument"
                                   @file-deleted="deleteDocument"
@@ -221,8 +186,6 @@
                                   :docType="'Valid Fingerprints'"
                                   :success="success"
                               />
-                            </li>
-                          </ul>
                         </div>
                       </div>
 
@@ -270,7 +233,7 @@
               </thead>
               <tbody>
 
-              <tr v-for="linked_company in person.company">
+              <tr v-if="person.company?.length > 0" v-for="linked_company in person.company">
                 <td v-if="linked_company ==1 && linked_company.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
                 <td v-else class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
                 <td class="align-left text-sm">
@@ -289,6 +252,9 @@
                   <Link :href="`/view-company/${linked_company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
                 </td>
               </tr>
+              <tr v-else>
+                <td colspan="6" class="text-center text-danger">No companies Found.</td>
+            </tr>
               </tbody>
             </table>
           </div>
@@ -323,8 +289,8 @@
               </tr>
               </thead>
               <tbody>
-
-              <tr v-for="licence in linked_licences.data" :key="licence.id">
+               
+              <tr v-if="linked_licences.data?.length > 0" v-for="licence in linked_licences.data" :key="licence.id">
                 <td>
                   <div class="d-flex px-2">
                     <div class="d-flex flex-column">
@@ -341,11 +307,15 @@
 
               </tr>
 
+              <tr v-else>
+                <td colspan="6" class="text-center text-danger">No Licences Found.</td>
+            </tr>
+
 
               </tbody>
             </table>
           </div>
-          <Paginate
+          <Paginate v-if="linked_licences.data?.length > 0"
               :modelName="linked_licences"
               :modelType="ViewPerson"
           />

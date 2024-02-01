@@ -40,8 +40,8 @@ class PeopleDocumentController extends Controller
       }
     }
 
-    public function deleteDocument($slug){
-             PeopleDocument::whereSlug($slug)->delete();
+    public function deleteDocument($id){
+             PeopleDocument::find($id)->delete();
             return back()->with('success','Document removed successfully.');
 
         return back()->with('error','An error occurred while deleting document');

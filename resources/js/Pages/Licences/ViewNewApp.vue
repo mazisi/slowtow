@@ -18,14 +18,12 @@
                                 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
-                                <li><Link :href="`/registration?slug=${licence.slug}`" class="dropdown-item border-radius-md">Registration</Link></li>
-                                <li><Link :href="`/renew-licence?slug=${licence.slug }`" class="dropdown-item border-radius-md">Renewals</Link></li>
 
-                                <li><Link :href="`/transfer-history?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
-
-                                <li><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
-
-                                <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
+                                <li v-for="licenceVariable in licenceVariables" :key="licenceVariable.id">
+                                    <Link :href="`${licenceVariable.url}?slug=${licence.slug}`" class="dropdown-item border-radius-md">
+                                        
+                                    {{ licenceVariable.name }}</Link></li>
+                                
 
                                 <li><hr class="text-danger"></li>
                                 <li><button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
@@ -320,6 +318,14 @@ export default {
     setup (props) {
         let companyOptions = props.companies;
         let peopleOptions = props.people;
+
+        const licenceVariables = [
+            {id: 1, name: 'Renewals', url: '/renew-licence'},
+            {id: 2, name: 'Transfers', url: '/transfer-history'},
+            {id: 3, name: 'Nominations', url: '/nominations'},
+            {id: 4, name: 'Alterations', url: '/alterations'},
+        ];
+
         const { notifySuccess, notifyError } = useToaster();
 
 
@@ -396,7 +402,8 @@ export default {
             deleteLicence,
             computedProvinces,
             computedBoardRegions,
-            selectApplicant
+            selectApplicant,
+            licenceVariables
         }
     },
     components: {

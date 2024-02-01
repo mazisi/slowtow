@@ -23,12 +23,12 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row ">
        
-        <div class="col-7 my-auto">
+        <div class="col-lg-6 col-7">
           <div class="h-100">
             <h5 class="mb-1">View Temporary Licence</h5>
           </div>
         </div>
-        <div class="mx-auto mt-3 col-4 my-sm-auto ms-sm-auto me-sm-0">
+        <div class="col-lg-6 col-5 my-auto text-end">
 
            <button @click="previewTemp" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
             Preview

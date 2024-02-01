@@ -10,7 +10,7 @@ import Paginate from "../../Shared/Paginate.vue";
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
 import useToaster from '../../store/useToaster';
-import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
+import PeopleDocComponent from "./PeopleDocComponent.vue";
 
 export default {
 
@@ -111,9 +111,9 @@ const form = useForm({
         uploadDoc.doc_type = doc_type;
       }
 
-      function deleteDocument (document_name,slug) {
-        if(confirm(document_name + ' will be deleted permanently...Continue ??')){
-          Inertia.delete(`/delete-person-document/${slug}`, {
+      function deleteDocument (id) {
+        if(confirm(' Are you sure you want to delete this document ?')){
+          Inertia.delete(`/delete-person-document/${id}`, {
             onSuccess: () => {
                if(props.success){
                   notifySuccess(props.success)
@@ -217,7 +217,7 @@ const form = useForm({
      }
 },
  components: {
-     DocComponent,
+  PeopleDocComponent,
     Layout,
     Banner,
     Head,

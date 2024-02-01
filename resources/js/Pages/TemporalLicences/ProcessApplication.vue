@@ -71,6 +71,7 @@
 :errors="errors"
 :error="error"
 :orderByNumber=null
+stage=100
 :docType="'Client Quoted'"
 :success="success"
 />
@@ -99,6 +100,7 @@
 :errors="errors"
 :error="error"
 :orderByNumber=100
+stage=200
 :docType="'Client Invoiced'"
 :success="success"
 />
@@ -515,6 +517,7 @@
 :errors="errors"
 :error="error"
 :orderByNumber=null
+stage=500
 :docType="'Payment To The Liquor Board'"
 :success="success"
 />
@@ -545,6 +548,7 @@
   :errors="errors"
   :error="error"
   :orderByNumber=null
+  stage=600
   :docType="'Scanned Application'"
   :success="success"
   />
@@ -589,6 +593,7 @@
   :errors="errors"
   :error="error"
   :orderByNumber=null
+  stage=700
   :docType="'Licence Lodged'"
   :success="success"
   />
@@ -630,6 +635,7 @@
   :errors="errors"
   :error="error"
   :orderByNumber=null
+  stage="800"
   :docType="'Licence Issued'"
   :success="success"
   />
@@ -671,6 +677,7 @@
   :errors="errors"
   :error="error"
   :orderByNumber=null
+  stage="900"
   :docType="'Licence Delivered'"
   :success="success"
   />

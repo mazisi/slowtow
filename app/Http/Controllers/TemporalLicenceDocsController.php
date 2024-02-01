@@ -94,7 +94,7 @@ public function merge(Request $request,$type){
                                       ->where('belongs_to',$type)
                                       ->whereNotNull('num')
                                       ->orderBy('num','ASC')->get();
-                                  
+                             
      $merger = PDFMerger::init();
 
      foreach ($temporals as $temp) {

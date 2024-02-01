@@ -236,7 +236,7 @@ class NewApplicationController extends Controller
     }
 
     /**
-     * If request->stage is 'Licence Issued'(Retail) & 'NLA 9 Issued'(Wholsale) then its no longer a NewApp
+     * If request->stage is 'Licence Issued'(Retail) & 'NLA 8 Issued'(Wholsale) then its no longer a NewApp
      * Updates the `is_new_app` and `licence_date` fields of a `Licence` model based on the provided request data.
      *
      * @param object $request The request object that contains the data needed to update the licence date.
@@ -247,8 +247,8 @@ class NewApplicationController extends Controller
      * @return void
      */
     function updateLicenceDate($request) {
-        if ($request->stage === 'Licence Issued' || $request->stage === 'NLA 9 Issued') {
-            Licence::whereId($request->licence_id)->update(['is_new_app' => false, 'licence_date' => $request->date_at]);
+        if ($request->stage === 'Licence Issued' || $request->stage === 'NLA 8 Issued') {
+            Licence::whereId($request->licence_id)->update(['is_new_app' => false, 'licence_date' => $request->dated_at]);
         }
     }
 }

@@ -1,6 +1,6 @@
 <template>
     <button type="button" class="btn btn-outline-success document-names">{{title }}</button>
-    <a v-if="linkModel" :href="`${$page.props.blob_file_path}${linkModel.document}`" target="_blank">
+    <a v-if="linkModel" :href="`${$page.props.blob_file_path}${linkModel.docPath}`" target="_blank">
   <i class="fa fa-link h5 mx-2 curser-pointer"  aria-hidden="true"></i>
   </a>
 
