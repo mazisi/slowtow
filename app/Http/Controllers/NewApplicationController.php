@@ -131,6 +131,7 @@ class NewApplicationController extends Controller
                 'client_number' => $request->client_number,
                 'latest_renewal' => $request->latest_renewal,
                 'licence_date' => $request->licence_date,
+                'licence_issued_at' => $request->licence_date,
                 'postal_code' => $request->postal_code,
             ]);
 
@@ -220,12 +221,19 @@ class NewApplicationController extends Controller
                 'stage' => 'required',
                 'licence_id' => 'required|exists:licences,id'
             ]);
+            //
+            $licence = LicenceDate::where('licence_id',$request->licence_id)->where('stage',$request->stage)->first();
+            if($licence){
+                $licence->update(['dated_at' => $request->dated_at]);
+            }else{
+                LicenceDate::create([
+                    'dated_at' => $request->dated_at,
+                    'licence_id' => $request->licence_id,
+                    'stage' => $request->stage,
+                ]);
+            }
 
-            LicenceDate::create([
-                'dated_at' => $request->dated_at,
-                'licence_id' => $request->licence_id,
-                'stage' => $request->stage,
-            ]);
+            
 
             $this->updateLicenceDate($request);
 
