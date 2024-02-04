@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 01, 2024 at 10:27 PM
--- Server version: 10.4.28-MariaDB
--- PHP Version: 8.1.17
+-- Host: 127.0.0.1:3307
+-- Generation Time: Feb 04, 2024 at 04:31 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.1.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `rico_db_changes`
+-- Database: `slotow`
 --
 
 -- --------------------------------------------------------
@@ -31,8 +31,8 @@ CREATE TABLE `additional_docs` (
   `id` bigint(20) NOT NULL,
   `licence_id` bigint(20) NOT NULL,
   `description` text NOT NULL,
-  `document_name` varchar(255) NOT NULL,
-  `path` varchar(255) NOT NULL,
+  `document_name` varchar(255) DEFAULT NULL,
+  `path` varchar(255) DEFAULT NULL,
   `uploaded_at` date NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -43,7 +43,8 @@ CREATE TABLE `additional_docs` (
 --
 
 INSERT INTO `additional_docs` (`id`, `licence_id`, `description`, `document_name`, `path`, `uploaded_at`, `created_at`, `updated_at`) VALUES
-(7, 3, 'Test', 'null_issued_at.pdf', 'mrnlabs/cd2...null_issued_at.pdf', '2024-02-02', '2024-01-30 20:47:20', '2024-01-30 20:47:20');
+(7, 3, 'Test', 'null_issued_at.pdf', 'mrnlabs/cd2...null_issued_at.pdf', '2024-02-02', '2024-01-30 20:47:20', '2024-01-30 20:47:20'),
+(8, 3, 'Man', NULL, NULL, '2024-02-04', '2024-02-04 13:11:01', '2024-02-04 13:11:01');
 
 -- --------------------------------------------------------
 
@@ -423,9 +424,9 @@ CREATE TABLE `licences` (
 --
 
 INSERT INTO `licences` (`id`, `company_id`, `people_id`, `licence_type_id`, `type`, `trading_name`, `licence_number`, `old_licence_number`, `client_number`, `licence_date`, `address`, `address2`, `address3`, `province`, `postal_code`, `belongs_to`, `reg_number`, `id_number`, `board_region`, `import_export`, `is_new_app`, `status`, `is_licence_active`, `licence_issued_at`, `latest_renewal`, `renewal_amount`, `merged_document`, `client_quoted_invoice_number`, `is_client_invoiced`, `is_application_logded_doc_uploaded`, `is_finalisation_doc_uploaded`, `slug`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 1, NULL, 1, 'retail', 'Existing Retail', '344444444', NULL, NULL, NULL, 'Plot 136 William Nicol Drive  Benoni Ext 10', '5656565', NULL, 'Gauteng', '2169', 'Company', NULL, NULL, 'Eastern Cape', NULL, NULL, NULL, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c6e3066e6b1804aa971ebb714c41f19ecfdcb9a2', NULL, '2024-01-30 21:13:21.000000', '2024-01-30 21:53:09.000000'),
+(1, 1, NULL, 1, 'retail', 'Existing Retail', '344444444', NULL, NULL, NULL, 'Plot 136 William Nicol Drive  Benoni Ext 10', '5656565', NULL, 'Gauteng', '2169', 'Company', NULL, NULL, 'Eastern Cape', NULL, NULL, '300', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'c6e3066e6b1804aa971ebb714c41f19ecfdcb9a2', NULL, '2024-01-30 21:13:21.000000', '2024-02-04 14:23:40.000000'),
 (2, NULL, 1, 102, 'wholesale', 'NewApp Wholesale', '8989', NULL, NULL, '2024-02-01', 'plot 136 William Nicol Drive  Diepsloot Ext 10', 'wwwww', 'weewewew', 'Gauteng', NULL, 'Individual', NULL, NULL, 'Free State', NULL, '1', '200', 1, '2024-02-01', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '1c3023ec39fbcd1957d5e68e8c5003d0aeb2fbf5', NULL, '2024-01-30 22:18:01.000000', '2024-02-01 22:19:52.000000'),
-(3, 1, NULL, 102, 'wholesale', 'ExisitingWholesale', NULL, NULL, NULL, '2024-03-02', 'plot 136 William Nicol Drive  Diepsloot Ext 10', NULL, NULL, 'Free State', NULL, 'Company', NULL, NULL, NULL, NULL, '0', '1100', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 'aca229c5ca63d1e8d8a3290708f113b679e0247b', NULL, '2024-01-30 22:20:13.000000', '2024-02-01 21:51:39.000000');
+(3, 1, NULL, 102, 'wholesale', 'ExisitingWholesale', NULL, NULL, NULL, '2024-03-02', 'plot 136 William Nicol Drive  Diepsloot Ext 10', NULL, NULL, 'Free State', NULL, 'Company', NULL, NULL, NULL, 'Import', '0', '1100', 1, NULL, NULL, NULL, 'Original-Licence3', NULL, NULL, NULL, NULL, 'aca229c5ca63d1e8d8a3290708f113b679e0247b', NULL, '2024-01-30 22:20:13.000000', '2024-02-04 14:26:42.000000');
 
 -- --------------------------------------------------------
 
@@ -447,7 +448,8 @@ CREATE TABLE `licence_dates` (
 INSERT INTO `licence_dates` (`id`, `licence_id`, `stage`, `dated_at`) VALUES
 (28, 2, 'Client Paid', '2024-02-03'),
 (29, 1, 'Payment To The Liquor Board', '2024-02-17'),
-(30, 2, 'Scanned Application', '2024-02-03');
+(30, 2, 'Scanned Application', '2024-02-03'),
+(31, 1, 'Initial Inspection', '2024-02-23');
 
 -- --------------------------------------------------------
 
@@ -471,11 +473,31 @@ CREATE TABLE `licence_documents` (
 --
 
 INSERT INTO `licence_documents` (`id`, `licence_id`, `document_name`, `document_file`, `document_type`, `num`, `created_at`, `updated_at`) VALUES
-(1, 3, 'belongs_to_people.pdf', 'mrnlabs/228...belongs_to_people.pdf', 'BEE Certificate/Affidavit', NULL, '2024-01-30 22:33:15.000000', '2024-01-30 22:33:15.000000'),
-(2, 3, 'licences.pdf', 'mrnlabs/5e0...licences.pdf', 'Tax Clearance', NULL, '2024-01-30 22:36:54.000000', '2024-01-30 22:36:54.000000'),
-(3, 3, 'null_issued_at.pdf', 'mrnlabs/a33...null_issued_at.pdf', 'ID Documents', NULL, '2024-01-30 22:38:10.000000', '2024-01-30 22:38:10.000000'),
-(4, 3, 'null_issued_at.pdf', 'mrnlabs/786...null_issued_at.pdf', 'NLA Application Form', 21, '2024-01-30 22:39:14.000000', '2024-01-30 22:39:14.000000'),
-(5, 3, 'null_issued_at.pdf', 'mrnlabs/edc...null_issued_at.pdf', 'Zoning Certificate', NULL, '2024-01-30 22:40:07.000000', '2024-01-30 22:40:07.000000');
+(5, 3, 'null_issued_at.pdf', 'mrnlabs/edc...null_issued_at.pdf', 'Zoning Certificate', NULL, '2024-01-30 22:40:07.000000', '2024-01-30 22:40:07.000000'),
+(6, 3, 'dummy.pdf', 'mrnlabs/d44...dummy.pdf', 'NLA 6 Proposed', NULL, '2024-02-03 19:21:57.000000', '2024-02-03 19:21:57.000000'),
+(7, 3, 'dummy.pdf', 'mrnlabs/683...dummy.pdf', 'NLA 7 Submitted', NULL, '2024-02-03 19:22:34.000000', '2024-02-03 19:22:34.000000'),
+(8, 3, 'dummy.pdf', 'mrnlabs/a5c...dummy.pdf', 'NLA 8 Issued', NULL, '2024-02-03 19:22:45.000000', '2024-02-03 19:22:45.000000'),
+(11, 3, 'dummy.pdf', 'mrnlabs/dc7...dummy.pdf', 'Activation Fee', NULL, '2024-02-03 19:28:31.000000', '2024-02-03 19:28:31.000000'),
+(15, 3, 'dummy.pdf', 'mrnlabs/db0...dummy.pdf', 'NLA 9 Issued', NULL, '2024-02-03 19:40:50.000000', '2024-02-03 19:40:50.000000'),
+(17, 1, 'dummy.pdf', 'mrnlabs/374...dummy.pdf', 'GLB Application Forms', 1, '2024-02-03 19:56:54.000000', '2024-02-03 19:56:54.000000'),
+(18, 1, 'dummy.pdf', 'mrnlabs/055...dummy.pdf', 'Payment To The Liquor Board', NULL, '2024-02-04 14:20:02.000000', '2024-02-04 14:20:02.000000'),
+(19, 3, 'dummy.pdf', 'mrnlabs/bf2...dummy.pdf', 'LAA Certificate', NULL, '2024-02-04 14:25:24.000000', '2024-02-04 14:25:24.000000'),
+(21, 3, 'dummy.pdf', 'mrnlabs/23a...dummy.pdf', 'Proof of rightful occupation', NULL, '2024-02-04 14:25:32.000000', '2024-02-04 14:25:32.000000'),
+(23, 3, 'dummy.pdf', 'mrnlabs/c73...dummy.pdf', 'Signed POA & RES', NULL, '2024-02-04 14:25:45.000000', '2024-02-04 14:25:45.000000'),
+(24, 3, 'Original-Licence3', 'mrnlabs/Original-Licence3.pdf', 'Original-Licence', NULL, '2024-02-04 14:25:45.000000', '2024-02-04 14:25:45.000000'),
+(25, 3, 'dummy.pdf', 'mrnlabs/c5f...dummy.pdf', 'Signed POA & RES', NULL, '2024-02-04 14:26:42.000000', '2024-02-04 14:26:42.000000'),
+(26, 3, 'Original-Licence3', 'mrnlabs/Original-Licence3.pdf', 'Original-Licence', NULL, '2024-02-04 14:26:42.000000', '2024-02-04 14:26:42.000000'),
+(27, 3, 'dummy.pdf', 'mrnlabs/34e...dummy.pdf', 'Signed POA & RES', NULL, '2024-02-04 14:27:58.000000', '2024-02-04 14:27:58.000000'),
+(28, 3, 'dummy.pdf', 'mrnlabs/9c9...dummy.pdf', 'Import/Export', NULL, '2024-02-04 14:48:53.000000', '2024-02-04 14:48:53.000000'),
+(29, 3, 'dummy.pdf', 'mrnlabs/952...dummy.pdf', 'Product Analysis Certificate', 19, '2024-02-04 14:49:02.000000', '2024-02-04 14:49:02.000000'),
+(30, 3, 'dummy.pdf', 'mrnlabs/b21...dummy.pdf', 'Photographs', NULL, '2024-02-04 14:49:11.000000', '2024-02-04 14:49:11.000000'),
+(31, 3, 'dummy.pdf', 'mrnlabs/f74...dummy.pdf', 'Maps/Plans', NULL, '2024-02-04 14:49:24.000000', '2024-02-04 14:49:24.000000'),
+(32, 3, 'dummy.pdf', 'mrnlabs/233...dummy.pdf', 'NLA Application Form', 21, '2024-02-04 14:49:33.000000', '2024-02-04 14:49:33.000000'),
+(33, 3, 'dummy.pdf', 'mrnlabs/a61...dummy.pdf', 'Signed NLA 1 Form', 22, '2024-02-04 14:49:46.000000', '2024-02-04 14:49:46.000000'),
+(34, 3, 'dummy.pdf', 'mrnlabs/d8f...dummy.pdf', 'BEE Certificate/Affidavit', NULL, '2024-02-04 14:54:55.000000', '2024-02-04 14:54:55.000000'),
+(35, 3, 'dummy.pdf', 'mrnlabs/768...dummy.pdf', 'Tax Clearance', NULL, '2024-02-04 14:55:04.000000', '2024-02-04 14:55:04.000000'),
+(36, 3, 'dummy.pdf', 'mrnlabs/106...dummy.pdf', 'ID Documents', NULL, '2024-02-04 14:55:55.000000', '2024-02-04 14:55:55.000000'),
+(37, 3, 'dummy.pdf', 'mrnlabs/a51...dummy.pdf', 'Company Documents', 4, '2024-02-04 14:57:05.000000', '2024-02-04 14:57:05.000000');
 
 -- --------------------------------------------------------
 
@@ -505,7 +527,7 @@ CREATE TABLE `licence_renewals` (
 --
 
 INSERT INTO `licence_renewals` (`id`, `licence_id`, `date`, `status`, `client_paid_at`, `renewal_issued_at`, `renewal_delivered_at`, `payment_to_liquor_board_at`, `client_invoiced_at`, `is_quote_sent`, `slug`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 3, '2023', '400', NULL, NULL, '2024-02-02', NULL, NULL, NULL, '2f1e2983355731c093f25f30be60018fd0986e28', NULL, '2024-01-31 22:46:33.000000', '2024-01-31 22:58:53.000000'),
+(1, 3, '2023', '500', NULL, '2024-02-08', '2024-02-02', NULL, NULL, NULL, '2f1e2983355731c093f25f30be60018fd0986e28', NULL, '2024-01-31 22:46:33.000000', '2024-02-04 16:40:11.000000'),
 (2, 1, '2023', '600', NULL, NULL, NULL, NULL, NULL, NULL, 'fa2e244b44c502c0e9caff21ff225a1a01e69d18', NULL, '2024-01-31 22:59:38.000000', '2024-01-31 22:59:41.000000');
 
 -- --------------------------------------------------------
@@ -836,7 +858,7 @@ CREATE TABLE `nominations` (
 --
 
 INSERT INTO `nominations` (`id`, `year`, `document`, `licence_id`, `status`, `client_paid_date`, `nomination_lodged_at`, `nomination_issued_at`, `nomination_delivered_at`, `payment_to_liquor_board_at`, `slug`, `deleted_at`, `created_at`, `updated_at`) VALUES
-(1, 2023, NULL, 3, '300', NULL, '2024-01-13', NULL, NULL, NULL, 'f2600e2af75e74ae784550d90f3c507b291c0a5f', NULL, '2024-01-31 20:54:27.000000', '2024-01-31 21:58:11.000000');
+(1, 2023, NULL, 3, '200', NULL, '2024-01-13', NULL, NULL, NULL, 'f2600e2af75e74ae784550d90f3c507b291c0a5f', NULL, '2024-01-31 20:54:27.000000', '2024-02-04 16:18:54.000000');
 
 -- --------------------------------------------------------
 
@@ -952,6 +974,13 @@ CREATE TABLE `people_documents` (
   `created_at` datetime(6) DEFAULT NULL,
   `updated_at` datetime(6) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `people_documents`
+--
+
+INSERT INTO `people_documents` (`id`, `people_id`, `document_name`, `document`, `expiry_date`, `doc_type`, `path`, `slug`, `created_at`, `updated_at`) VALUES
+(4, 1, '5905...dummy.pdf', '5905...dummy.pdf', NULL, 'ID Document', 'mrnlabs/5905...dummy.pdf', '51601f9e9cc6ad887ab817dd5f95c386b0582314', '2024-02-03 19:26:41.000000', '2024-02-03 19:26:41.000000');
 
 -- --------------------------------------------------------
 
@@ -1222,7 +1251,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `people_id`, `contact`, `email_verified_at`, `password`, `remember_token`, `created_at`, `last_activity_at`, `is_active`, `picture`, `updated_at`) VALUES
-(1, 'Developer Account', 'developer@slotow.co.za', NULL, '089 678 5467', '2022-10-05 12:40:00.000000', '$2y$10$dKrPFf8V7xVdk2tsagFxJ.KDsfSOnu2o42GKJGc2ExhiUe42W2NOO', 'M3k3VP61VOLsn5CsyrRjY03OeW7J5W6ZB9hAPC0OzhRBqXgyauWBOs1FE6qp', '2022-10-05 12:40:00.000000', '2024-02-01 21:21:26', 1, NULL, '2024-02-01 23:21:26.000000'),
+(1, 'Developer Account', 'developer@slotow.co.za', NULL, '089 678 5467', '2022-10-05 12:40:00.000000', '$2y$10$dKrPFf8V7xVdk2tsagFxJ.KDsfSOnu2o42GKJGc2ExhiUe42W2NOO', 'M3k3VP61VOLsn5CsyrRjY03OeW7J5W6ZB9hAPC0OzhRBqXgyauWBOs1FE6qp', '2022-10-05 12:40:00.000000', '2024-02-04 15:00:46', 1, NULL, '2024-02-04 17:00:46.000000'),
 (11, 'Nadine Meyerowitz', 'nadine@slotow.co.za', NULL, NULL, NULL, '$2y$10$dUz2ZWSVR4zjEowAax5woePD00NJkHkA6pRRXaE2zw/ACWQ2YEA.6', 'HxayN406w7hUxRZA6eCNPN2BLK6XskSfPMvsFuQXWx8TLwjqu3OY6LoC77aH', '2023-01-10 08:27:56.000000', '2023-06-02 07:21:57', 1, NULL, '2023-06-02 09:21:57.000000'),
 (12, 'Jessica Deans', 'jessica@slotow.co.za', NULL, NULL, NULL, '$2y$10$jxUK5IXpzCMajKvXiN1/uO6v1j.HQyBcfsTjt0HIP95bfzqhrJOkq', 'WQTgTZKeHBdREkkA4wPD1CHMwh6zDZjTIGeuT7bcZoDHhwwos60YmT6tFb1F', '2023-01-10 08:50:06.000000', '2023-06-05 06:34:08', 1, 'WhatsApp_Image_2023_04_24_at_11.36.26.jpg', '2023-06-05 08:34:08.000000'),
 (13, 'Nikki Deans', 'nikki@slotow.co.za', NULL, NULL, NULL, '$2y$10$D1V0lqyWO.17CDRFA99JbuWLL39Zl0roL9atExCWMp.g6ajNWE//y', 'GaEWE2HTarNNJJVqvEIdQL6lKuDYSZE7snh0LdbP0j3jDwCFlsLDiz82PBjR', '2023-01-10 08:52:19.000000', '2023-06-05 06:45:37', 1, NULL, '2023-06-05 08:45:37.000000'),
@@ -1584,7 +1613,7 @@ ALTER TABLE `years`
 -- AUTO_INCREMENT for table `additional_docs`
 --
 ALTER TABLE `additional_docs`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `alterations`
@@ -1668,13 +1697,13 @@ ALTER TABLE `licences`
 -- AUTO_INCREMENT for table `licence_dates`
 --
 ALTER TABLE `licence_dates`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `licence_documents`
 --
 ALTER TABLE `licence_documents`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=38;
 
 --
 -- AUTO_INCREMENT for table `licence_renewals`
@@ -1722,7 +1751,7 @@ ALTER TABLE `people`
 -- AUTO_INCREMENT for table `people_documents`
 --
 ALTER TABLE `people_documents`
-  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `renewal_documents`
