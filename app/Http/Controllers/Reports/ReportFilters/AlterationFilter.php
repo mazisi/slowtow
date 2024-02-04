@@ -14,15 +14,15 @@ class AlterationFilter{
        licences.board_region,licence_type_id,alterations.date, 
         alterations.status, licence_date, is_licence_active")
         ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
-        ->leftJoin('alteration_dates', 'alteration_dates.alteration_id' , '=', 'alterations.id' )
+    
 
       ->when($request,function($query){
           $query->when(request('month_from') && request('month_to'), function($query){
-              $query->whereBetween(DB::raw('MONTH(alteration_dates.dated_at)'),[request('month_from'), request('month_to')]);
+            $query->whereBetween(DB::raw('MONTH(alterations.logded_at)'),[request('month_from'), request('month_to')]);
            })
 
           ->when(request('month_from') && !request('month_to'), function ($query)  {
-              $query->whereMonth('alteration_dates.dated_at', request('month_from'));
+            $query->whereMonth('alterations.logded_at', request('month_from'));
           })
           ->when(request('activeStatus') == 'Active', function ($query) {
               $query->where('is_licence_active',1);

@@ -105,7 +105,7 @@ class TemporalExportReportFilter {
                           })
 
                           ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                             $query->where('temporal_licences.status','<', 9)
+                             $query->where('temporal_licences.status','<', 900)
                              ->orWhereNull('temporal_licences.status');
                          })
                          
@@ -114,7 +114,7 @@ class TemporalExportReportFilter {
                          })
      
                          ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                             $query->where('temporal_licences.status','=',9);
+                             $query->where('temporal_licences.status','=',900);
                          });
                        })
                        

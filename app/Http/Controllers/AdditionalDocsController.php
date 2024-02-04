@@ -12,11 +12,12 @@ class AdditionalDocsController extends Controller
         
         $request->validate([
             'description' => 'required',
-            'document' => 'mimes:pdf',
+            // 'document' => 'mimes:pdf',
             'uploaded_at' => 'required',
             "licence_id" => "required|exists:licences,id"
             ]);
 
+if($request->hasFile('document')){
 
             $removeSpace = str_replace(' ', '_',$request->document->getClientOriginalName());
             $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace); 
@@ -37,8 +38,15 @@ class AdditionalDocsController extends Controller
     }else{
         return back()->with('error','Azure storage could not be reached.Please try again.');
       }
-        
+     
     }
+    AdditionalDoc::create([
+        'description' => $request->description,
+        'uploaded_at' => $request->uploaded_at,
+        'licence_id' => $request->licence_id
+    ]);
+    return back()->with('success','Saved successfully.');
+}
 
     function destroy($id) {
         try {

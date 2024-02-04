@@ -9,7 +9,7 @@ class NominationMailTemplate implements HasEmailTemplateInterface{
  
   function getMailTemplate($nomination){
     $template = '';
-    if($nomination->status == '1'){//quoted
+    if($nomination->status == '100'){//quoted
       $template = '<p dir="ltr">Good Day '.$nomination->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$nomination->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($nomination->licence->licence_date)->format('d/m').'</p>
@@ -19,14 +19,14 @@ class NominationMailTemplate implements HasEmailTemplateInterface{
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>
       '; 
-  }elseif ($nomination->status == '2') {//Client Invoiced
+  }elseif ($nomination->status == '200') {//Client Invoiced
       $template = '<p dir="ltr">Good Day '.$nomination->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$nomination->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($nomination->licence->licence_date)->format('d/m').'</p>
       <p dir="ltr">Please see attached invoice in respect of the appointment of managers application. Note that the application will only be lodged once payment or proof of has been received.</p>
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>';
-  }elseif ($nomination->status == '4') {//Payment to the Liquor Board
+  }elseif ($nomination->status == '400') {//Payment to the Liquor Board
       $template = '<p dir="ltr">Good Day,</p>
       <p>Licence Number:&nbsp; '.$nomination->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($nomination->licence->licence_date)->format('d/m').'</p>
@@ -34,7 +34,7 @@ class NominationMailTemplate implements HasEmailTemplateInterface{
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>';
       
-  }elseif ($nomination->status == '8') {//Logded
+  }elseif ($nomination->status == '800') {//Logded
      
       $template = '<p dir="ltr">Good Day '.$nomination->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$nomination->licence->licence_number.'.</p>
@@ -42,7 +42,7 @@ class NominationMailTemplate implements HasEmailTemplateInterface{
       <p dir="ltr">Please see attached proof of lodgement in respect of the appointment of managers application. Please ensure that this is on display in the interim until the application has been approved.</p>
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>';
-  }elseif ($nomination->status == '9') {//issued
+  }elseif ($nomination->status == '900') {//issued
       $template = '<p dir="ltr">Good Day '.$nomination->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$nomination->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($nomination->licence->licence_date)->format('d/m').'</p>

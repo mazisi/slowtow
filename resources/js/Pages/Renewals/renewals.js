@@ -27,7 +27,7 @@ export default {
         liqour_board: Object
     },
 
-    setup (props) { console.log(props.renewal, "test this");
+    setup (props) {
         const year = ref(new Date().getFullYear());
         const { notifySuccess, notifyError } = useToaster();
 

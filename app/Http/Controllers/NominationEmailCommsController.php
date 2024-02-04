@@ -31,11 +31,11 @@ class NominationEmailCommsController extends Controller
             $query->where('status',$request->stage);
         });
         })->where(function($query){
-            $query->where('status',1)
-            ->orWhere('status',2)
-            ->orWhere('status',4)
-            ->orWhere('status',7)
-            ->orWhere('status',8);
+            $query->where('status',100)
+            ->orWhere('status',200)
+            ->orWhere('status',400)
+            ->orWhere('status',700)
+            ->orWhere('status',800);
         })->whereNull('deleted_at')
         ->orderBy('status','asc')->paginate(20)->withQueryString();
 

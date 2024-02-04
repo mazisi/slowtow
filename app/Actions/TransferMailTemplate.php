@@ -8,7 +8,7 @@ class TransferMailTemplate{
 
   function getMailTemplate($licence){
     $template = '';
-    if($licence->status == '1'){//quoted
+    if($licence->status == '100'){//quoted
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($licence->licence->licence_date)->format('d/m').'</p>
@@ -18,14 +18,14 @@ class TransferMailTemplate{
       <p dir="ltr">Many thanks,</p>
       <p>&nbsp;</p>,
       '; 
-  }elseif ($licence->status == '2') {//Client Invoiced
+  }elseif ($licence->status == '200') {//Client Invoiced
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($licence->licence->licence_date)->format('d/m').'</p>
       <p dir="ltr">Please see attached invoice in respect of the transfer application. Note that the application will only be lodged once payment or proof of has been received.</p>
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>';
-  }elseif ($licence->status == '5') {//Payment to the Liquor Board
+  }elseif ($licence->status == '500') {//Payment to the Liquor Board
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($licence->licence->licence_date)->format('d/m').'</p>
@@ -33,7 +33,7 @@ class TransferMailTemplate{
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>';
       
-  }elseif ($licence->status == '7') {//Logded
+  }elseif ($licence->status == '700') {//Logded
      
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
@@ -48,7 +48,7 @@ class TransferMailTemplate{
       <p dir="ltr">Please see attached proof of payment for the activation fee in the interim, we will advise soonest once the application has been approved.</p>
       <p dir="ltr">Many thanks,</p>
       <p dir="ltr">&nbsp;</p>'; 
-  }elseif ($licence->status == '9') {//Issued 
+  }elseif ($licence->status == '900') {//Issued 
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($licence->licence->licence_date)->format('d/m').'</p>

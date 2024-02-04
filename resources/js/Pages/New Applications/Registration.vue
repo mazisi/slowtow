@@ -192,22 +192,10 @@
                             :hasFile="hasFile('GLB Application Forms')"
                         />
 
-
-
-                        <MergeDocumentComponent
-                            @file-value-changed="submitDocument"
-                            @file-deleted="deleteDocument"
-                            :success="success"
-                            :error="error"
-                            :errors="errors"
-                            :column=6
-                            :model_id="licence"
-                            :docTitle="'Payment To The Liquor Board'"
-                            :docType="'Payment To The Liquor Board2'"
-                            :docModel="licence"
-                            :stage=500
-                            :mergeNum="2"
-                            :hasFile="hasFile('Payment To The Liquor Board2')"
+                        <LinkComponent
+                           :hasFile="hasFile('Payment To The Liquor Board')"
+                           :docTitle="'Payment To The Liquor Board'"
+                            :docType="'Payment To The Liquor Board'"
                         />
 
                         <MergeDocumentComponent

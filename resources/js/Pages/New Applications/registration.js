@@ -10,6 +10,7 @@ import Layout from "../../Shared/Layout.vue";
   import StageComponent from '../components/slotow-components/StageComponent.vue';
   import DocComponent from '../components/slotow-components/DocComponent.vue';
   import MergeDocumentComponent from '../components/slotow-components/MergeDocumentComponent.vue';
+  import LinkComponent from './LinkComponent.vue'
   import DateComponent from '../components/slotow-components/DateComponent.vue';
   import MergeButtonComponent from '../components/slotow-components/MergeButtonComponent.vue';
   import useToaster from '../../store/useToaster';
@@ -220,6 +221,7 @@ function getStatus(status_param) {
       Link,
       Head,
       Task,
+      LinkComponent,
       AdditionalDocsComponent,
       StageComponent,
       DocComponent,

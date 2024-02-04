@@ -441,18 +441,16 @@ class NewAppsFilterAction {
                     return $query->whereMonth('licence_date',request('licence_date'));                
                 })
 
-               
-                    
                     ->where(function ($query){ 
-                        $query->where('status','1')
-                            ->orWhere('status','2')
-                            ->orWhere('status','4')
-                            ->orWhere('status','7')
-                            ->orWhere('status','8')
-                            ->orWhere('status','10')
-                            ->orWhere('status','12')
-                            ->orWhere('status','14')
-                            ->orWhere('status','15');               
+                        $query->where('status','100')
+                            ->orWhere('status','200')
+                            ->orWhere('status','400')
+                            ->orWhere('status','1500')
+                            ->orWhere('status','1700')
+                            ->orWhere('status','1800')
+                            ->orWhere('status','2000')
+                            ->orWhere('status','2200')
+                            ->orWhere('status','2300');               
                 })
                 ->whereNull('deleted_at')
                 ->where('is_new_app',1)

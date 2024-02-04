@@ -4,7 +4,10 @@ import Layout from "../../Shared/Layout.vue";
 import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import useToaster from '../../store/useToaster';
-import Navigation from './Navigation.vue'
+import Navigation from './Navigation.vue';
+import useMonths from '../../store/useMonths';
+import  common from '../common-js/common.js';
+import useNomination from '../Nominations/useNomination'
 
 export default {
   name: "email-comms-nominations",
@@ -27,7 +30,22 @@ export default {
   },
   data() {
     const { notifySuccess, notifyError } = useToaster();
+    const { months } = useMonths();
+    const { getBadgeStatus } = useNomination();
+
+    const stagesArr = [
+      { name: 'Client Quoted With Requirements', value: 100 },
+      { name: 'Client Invoiced', value: 200 },
+      { name: 'Payment To The Liquor Board', value: 400 },
+      { name: 'Nomination Lodged', value: 800 },
+      { name: 'Nomination Issued', value: 900 },
+
+    ]
     return {
+      getBadgeStatus,
+      stagesArr,
+      common,
+      months,
       month: '',
       province: '',
       stage: '', 
@@ -35,6 +53,12 @@ export default {
       notifyError
     }
   },
+
+  computed: {
+  computedProvinces(){
+          return common.getProvinces();
+        }
+},
   components: {
     Layout,
     Link,
@@ -66,6 +90,9 @@ methods: {
       return computed_date + 1;    
     },
 
+      getStatus(stage_param){
+        return this.getBadgeStatus(stage_param);
+      }
   
 
     },
@@ -100,11 +127,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="1">Client Quoted With Requirements </option>
-<option value="2">Client Invoiced </option>
-<option value="4">Payment To The Liquor Board</option>
-<option value="7">Transfer Lodged </option>
-<option value="8">Transfer Issued </option>
+<option v-for="stage in stagesArr" :value="stage.value" :key="stage.value">{{ stage.name }}</option>"
 
 </select>
 </div>
@@ -114,18 +137,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="month" @change="filter" class="form-control form-control-default" >
 <option :value="''" disabled selected>Filter By Month</option>
-<option value="1">January</option>
-<option value="2">February</option>
-<option value="3">March</option>
-<option value="4">April</option>
-<option value="5">May</option>
-<option value="6">June</option>
-<option value="7">July</option>
-<option value="8">August</option>
-<option value="9">September</option>
-<option value="10">October</option>
-<option value="11">November</option>
-<option value="12">December</option>
+<option v-for="month in months" :value="month.id" :key="month.id">{{ month.name }}</option>
 </select>
 </div>
 
@@ -135,15 +147,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select @change="filter" class="form-control form-control-default" v-model="province">
 <option :value="''" disabled selected>Filter By Province</option>
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
+<option v-for="province in computedProvinces" :key="province"  :value=province>{{ province }}</option>
 </select>
 </div>
 </div>
@@ -175,16 +179,7 @@ methods: {
           <span>{{ new Date(nomination.licence.licence_date).toISOString().split('T')[0] }}</span>
         </td>
          <td class="align-middle text-center">
-          <span class="font-weight-bold text-sm" v-if="nomination.status == '1'">Client Quoted</span>
-          <span v-if="nomination.status == '2'" class="font-weight-bold text-sm">Client Invoiced</span>
-          <span v-if="nomination.status == '3'" class="font-weight-bold text-sm">Client Paid</span>
-          <span v-if="nomination.status == '4'" class="font-weight-bold text-sm">Payment to the Liquor Board</span>
-          <span v-if="nomination.status == '5'" class="font-weight-bold text-sm">Select Nominees</span>
-          <span v-if="nomination.status == '6'" class="font-weight-bold text-sm">Prepare Nomination Application </span>
-          <span v-if="nomination.status == '7'" class="font-weight-bold text-sm">Scanned Application</span>
-          <span v-if="nomination.status == '8'" class="font-weight-bold text-sm">Nomination Lodged </span>
-          <span v-if="nomination.status == '9'" class="font-weight-bold text-sm">Nomination Issued</span>
-          <span v-if="nomination.status == '10'" class="font-weight-bold text-sm">Nomination Delivered</span>
+          <span class="font-weight-bold text-sm" v-html="getStatus(nomination.status)"></span>
         </td>
         <td class="align-middle text-center">
         <Link :href="`/email-comms/get-mail-template/${nomination.slug}/nominations`" class="text-secondary text-center font-weight-bold text-xs"> 

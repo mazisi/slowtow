@@ -34,11 +34,11 @@ class TemporaryLicenceEmailCommsController extends Controller{
         });
         
         })->where(function($query){
-        $query->where('status','1')
-              ->orWhere('status','2')
-              ->orWhere('status','5')
-              ->orWhere('status','7')
-              ->orWhere('status','8');
+        $query->where('status','100')
+              ->orWhere('status','200')
+              ->orWhere('status','500')
+              ->orWhere('status','700')
+              ->orWhere('status','800');
         })->latest()->paginate(20)->withQueryString();
 
 

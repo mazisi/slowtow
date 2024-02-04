@@ -21,21 +21,21 @@ class TemporalLicenceEmailTemplate implements HasEmailTemplateInterface  {
   function getMailTemplate($temp_licence){
     $template = '';
 
-     if($temp_licence->status == '1'){//quoted
+     if($temp_licence->status == '100'){//quoted
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached quotation along with the basic requirements for a temporary licence application.</p>
       <p>Note that this application needs to be submitted at least two weeks prior to the event allowing the Liquor Board sufficient time to have this processed and approved.</p>
       <p>Many thanks,</p>'; 
 
-  }elseif ($temp_licence->status == '2') {//Client Invoiced
+  }elseif ($temp_licence->status == '200') {//Client Invoiced
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached invoice in respect of the temporary licence application.</p>
       <p>Many thanks,</p>';
 
       
-  }elseif ($temp_licence->status == '5') {//Liquor Board
+  }elseif ($temp_licence->status == '500') {//Liquor Board
      
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
@@ -44,14 +44,14 @@ class TemporalLicenceEmailTemplate implements HasEmailTemplateInterface  {
       furnish you with the necessary documents.</p>
       <p>Many thanks,</p>';
 
-    }elseif ($temp_licence->status == '7') {//Lodged
+    }elseif ($temp_licence->status == '700') {//Lodged
      
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>
       <p>Please see attached proof of lodgement in respect of the temporary licence application. We will advise immediately once the certificate is issued.</p>
       <p>Many thanks,</p>';
 
-    }elseif ($temp_licence->status == '8') {//Issued
+    }elseif ($temp_licence->status == '800') {//Issued
      
       $template = '<p>Good day,</p>
       <p>I hope you are well.</p>

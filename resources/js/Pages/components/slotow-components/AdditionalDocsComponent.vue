@@ -17,7 +17,7 @@
                   <input @change="getFileName" type="file" hidden id="attach-doc">
                   <i class="fas fa-paperclip me-2" aria-hidden="true"></i> Attach Document </label>
                   <div v-if="errors.document" class="text-danger">{{ errors.document }}</div>
-                    <div class="text-sm" v-if="file_name && show_file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
+                    <div class="text-sm" v-if="file_name">File Selected: <span class="text-success">{{ file_name }}</span></div>
                     <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4"> 
                       File cannot contain apostrophe(s).</p>
                </div> 
@@ -49,8 +49,10 @@
       <tr v-if="additional_docs.length > 0" v-for="additional_doc in additional_docs" :key="additional_doc.id">
         <th>{{ additional_doc.description }}</th>
         <td>{{ additional_doc.uploaded_at }}</td>
-        <td> <a :href="`${$page.props.blob_file_path}${additional_doc.path}`" target="_blank">
-          <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i></a></td>
+        <td> 
+          <a v-if="additional_doc.path" :href="`${$page.props.blob_file_path}${additional_doc.path}`" target="_blank">
+          <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i></a>
+        </td>
         <td> <i @click="deleteDocument(additional_doc.id)" class="cursor-pointer fa fa-trash-alt text-lg text-danger" aria-hidden="true"></i>
         </td>
       </tr>
@@ -100,7 +102,7 @@ margin-left: 3px;
     },
     setup(props){
       const { notifySuccess, notifyError } = useToaster();
-      let file_has_apostrophe = ref();
+      let file_has_apostrophe = ref('');
       let show_file_name = ref(false);
       let file_name = ref('');
 
@@ -116,12 +118,12 @@ margin-left: 3px;
       
       function getFileName(e){
         if(e.target.files[0].name.includes("'")){
-          file_has_apostrophe = true
+          this.file_has_apostrophe = true
           return;
         }
         show_file_name = true;
         doc_form.document = e.target.files[0];
-        file_name = e.target.files[0].name;
+        this.file_name = e.target.files[0].name;
       }
 
       function submit(){

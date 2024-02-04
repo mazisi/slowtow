@@ -6,29 +6,11 @@ use Carbon\Carbon;
 
 class NewAppsMailTemplate implements HasEmailTemplateInterface  {
 
-//The following are status keys
-  // 1. Client Quoted
-  // 2. Deposit Invoice
-  // 3. Deposit Paid
-  // 4. Payment to the Liquor Board
-  // 5. Prepare New Application
-  // 6. Scanned Application
-  // 7. Application Lodged
-  // 8. Initial Inspection
-  // 9. Liquor Board Requests
-  // 10. Final Inspection
-  // 11. Activation Fee Requested
-  // 12. Client Finalisation Invoice
-  // 13. Client Paid
-  // 14. Activation Fee Paid
-  // 15. Licence Issued
-  // 16. Licence Delivered 
-
 
   function getMailTemplate($licence){
     $template = '';
 
-     if($licence->status == '1'){//quoted
+     if($licence->status == '100'){//quoted
       $template = 'Good day,<br><br>                   
       I hope you are well.<br><br>
       Please find basic application requirements together with a quote for a tavern
@@ -48,7 +30,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
                          
       Many thanks,
       '; 
-  }elseif ($licence->status == '2') {//Client Invoiced
+  }elseif ($licence->status == '200') {//Client Invoiced
     $template = 'Good day,<br><br>                   
     I hope you are well.<br><br>
     Please see attached invoice in respect of the new licence application.<br><br>
@@ -56,7 +38,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
     Many thanks,
     '; 
       
-  }elseif ($licence->status == '4') {//Payment to the Liquor Board
+  }elseif ($licence->status == '400') {//Payment to the Liquor Board
     $template = 'Good day,<br><br>                   
     I hope you are well.<br><br>
     Please see attached proof of payment to the Liquor Board in respect of the
@@ -66,7 +48,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
     Many thanks,
     '; 
       
-  }elseif ($licence->status == '7') {//Lodged
+  }elseif ($licence->status == '1500') {//Lodged
      
     $template = 'Good day,<br><br>                   
                 I hope you are well.<br><br>
@@ -75,7 +57,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
                        
                 Many thanks,
                 '; 
-  }elseif ($licence->status == '8') {//Initial Inspection
+  }elseif ($licence->status == '1700') {//Initial Inspection
 
     $template = 'Good day,<br><br>                   
                 I hope you are well.<br><br>
@@ -87,7 +69,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
                 Many thanks,
                 '; 
 
-  }elseif ($licence->status == '10') {//Final Inspection
+  }elseif ($licence->status == '1800') {//Final Inspection
 
       $template = 'Good day,<br><br>                   
                 I hope you are well.<br><br>
@@ -98,7 +80,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
                         
                 Many thanks,
                 '; 
-  }elseif ($licence->status == '12') {//Client Finalisation Invoice
+  }elseif ($licence->status == '2000') {//Client Finalisation Invoice
 
     $template = 'Good day,<br><br>                   
               I hope you are well.<br><br>
@@ -110,7 +92,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
                       
               Many thanks,
               '; 
-}elseif ($licence->status == '14') {//Activation Fee Paid
+}elseif ($licence->status == '2200') {//Activation Fee Paid
 
   $template = 'Good day,<br><br>                   
             I hope you are well.<br><br>
@@ -120,7 +102,7 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
                     
             Many thanks,
             '; 
-}elseif ($licence->status == '15') {//Issued
+}elseif ($licence->status == '2300') {//Issued
 
   $template = 'Good day,<br><br>                   
             I hope you are well.<br><br>

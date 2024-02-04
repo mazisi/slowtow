@@ -55,7 +55,7 @@ class EmailCommsController extends Controller
                 break;
                 
             case 'nominations': 
-                $nomination = Nomination::with('licence')->whereSlug($slug)->firstOrFail();   
+                $nomination = Nomination::with('licence')->whereSlug($slug)->firstOrFail();
                 $template = (new NominationMailTemplate)->getMailTemplate($nomination);             
                 return Inertia::render('EmailComms/NominationTemplate',['licence' => $nomination,'template' => $template]);
                 break;

@@ -9,8 +9,8 @@
         <div class="card card-body mx-3 mx-md-4 mt-n6">
           <div class="row">
       <div class="col-lg-12 col-12">
-       <h6>Process New Wholesale Application for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
-        {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
+       <h6>Process New Wholesale Application - <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
+        {{ licence.trading_name ? licence.trading_name : '' }} - {{ licence?.licence_number }}</Link></h6>
        <p class="text-sm mb-0">Current Stage: 
         <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
      </p>
@@ -282,9 +282,9 @@
     :hasFile="hasFile('Product Analysis Certificate')"
     />
 
-    <MergeDocumentComponent
+    <MergeDocumentComponent v-if="licence.import_export"
     @file-value-changed="submitDocument"
-     @file-deleted="deleteDocument" v-if="licence.import_export"
+     @file-deleted="deleteDocument" 
     :success="success"
     :error="error"
     :errors="errors"
@@ -322,8 +322,8 @@
     :errors="errors"
     :column=6
     :model_id="licence"
-    :docTitle="'Signed NLA 1 form'"
-    :docType="'Signed NLA 1 form'"
+    :docTitle="'Signed NLA 1 Form'"
+    :docType="'Signed NLA 1 Form'"
     :docModel="licence"
     :stage=400
     :mergeNum="22"
@@ -338,11 +338,11 @@
     :errors="errors"
     :column="6"
     :model_id="licence"
-    :docTitle="' Signed POA & RES'"
-    :docType="' Signed POA & RES'"
+    :docTitle="'Signed POA & RES'"
+    :docType="'Signed POA & RES'"
     :docModel="licence"
     :stage="400"
-    :hasFile="hasFile(' Signed POA & RES')"
+    :hasFile="hasFile('Signed POA & RES')"
     />
   
   
@@ -663,11 +663,11 @@
       @file-value-changed="submitDocument"
           @file-deleted="deleteDocument"
       :documentModel="licence"
-      :hasFile="hasFile('Original Licence')"
+      :hasFile="hasFile('Original-Licence')"
       :errors="errors"
       :error="error"
       :orderByNumber=1400
-      :docType="'Original Licence'"
+      :docType="'Original-Licence'"
       :success="success"
       />
       </div>

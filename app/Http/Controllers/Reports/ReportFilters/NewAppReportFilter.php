@@ -12,7 +12,6 @@ class NewAppReportFilter {
         status, board_region,licence_date, is_new_app")
 
         ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
-        ->leftJoin('licence_dates', 'licence_dates.licence_id' , '=', 'licences.id')
 
         ->when($request,function($query){
            $query->when(request('month_from') && request('month_to'), function($query){
@@ -65,19 +64,7 @@ class NewAppReportFilter {
            ->whereNull('deleted_at')
            ->where('is_new_app',1)
            ->orderBy('trading_name')
-           ->get([
-               'id',
-               'is_licence_active',
-               'trading_name',
-               'licence_number',
-               'licence_type_id',
-               'licence_type',
-               'province',
-               'board_region',
-               'licence_date',
-               'status',
-               'is_new_app'
-               ]);
+           ->get();
 
   }
 }

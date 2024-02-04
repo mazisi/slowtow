@@ -13,7 +13,6 @@ class ExistingLicenceReportFilter{
                    board_region,licence_date, licences.status, is_new_app")
 
       ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
-      ->leftJoin('licence_dates', 'licence_dates.licence_id' , '=', 'licences.id')
 
          ->when($request,function($query){
             $query->when(request('month_from') && request('month_to'), function($query){

@@ -6,8 +6,7 @@
   <div class="col-md-1 d-flex">
     <span :class="{ 'd-none': uploadDoc.processing}">
     <label v-if="!hasFile.id" :for="uploadDoc.doc_type + stage">
-      <i v-if="isLiquorBoard()" class="cursor-pointer fa fa-link h5" aria-hidden="true"></i>
-      <i v-else class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
+      <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
       <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + stage">
     </label>
   </span>
@@ -64,6 +63,7 @@ export default{
     })
 
     function upload(e){
+      
         uploadDoc.document_file = e.target.files[0];
         if(e.target.files[0].name.includes("'")){
           this.file_has_apostrophe = true
@@ -79,14 +79,9 @@ export default{
         context.emit('file-deleted', id);
         }
 
-     
-
-      const isLiquorBoard = () => {
-          return props.docType === 'Payment To The Liquor Board2' 
-      }
     return {
       upload,uploadDoc, file_has_apostrophe,
-      isLiquorBoard,deleteDocument
+      deleteDocument
     }
   },
   components: {

@@ -7,6 +7,8 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
 import Navigation from './Navigation.vue';
+import  common from '../common-js/common.js';
+import useMonths from '../../store/useMonths'
 
 export default {
   name: "Emmail-Comms",
@@ -25,8 +27,11 @@ export default {
       { name: 'Payment To The Liquor Board', value: 400 },
       { name: 'Renewal Issued', value: 500 },
     ];
+    const { months } = useMonths();
 
     return {
+      common,
+      months,
       stages,
       month: '',
       province: '',
@@ -44,7 +49,15 @@ export default {
     Navigation,
     Head
 },
+computed: {
+  computedProvinces(){
+          return common.getProvinces();
+        }
+},
 methods: {
+
+
+
      filter(){
         this.$inertia.replace(route('email_comms',{
              month: this.month,
@@ -154,18 +167,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select @change="filter" class="form-control form-control-default" v-model="month">
 <option :value="''" disabled selected>Filter By Month</option>
-<option value="1">January</option>
-<option value="2">February</option>
-<option value="3">March</option>
-<option value="4">April</option>
-<option value="5">May</option>
-<option value="6">June</option>
-<option value="7">July</option>
-<option value="8">August</option>
-<option value="9">September</option>
-<option value="10">October</option>
-<option value="11">November</option>
-<option value="12">December</option>
+<option v-for="month in months" :value="month.id" :key="month.id">{{ month.name }}</option>
 </select>
 </div>
 
@@ -175,15 +177,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select @change="filter" class="form-control form-control-default" v-model="province">
 <option :value="''" disabled selected>Filter By Province</option>
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
+<option v-for="province in computedProvinces" :key="province"  :value=province>{{ province }}</option>
 </select>
 </div>
 </div>

@@ -51,27 +51,30 @@ class WholesaleController extends Controller
     }
 
     public function mergeDocuments($licence, $docs){
-        try {       
+        try {
+
+            $fileName = 'Original-Licence'.$licence->id;
+             //$merger->merge();
+
+            $exist = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->first();
+
+                if($exist){
+                    // $exist->delete();
+                    return;
+                }else{
+
            $merger = PDFMerger::init();
  
              foreach ($docs as $doc) {
                //$merger->addPDF(env('BLOB_FILE_PATH').$doc->document, 'all');
              }
  
-             $fileName = 'merged_doc'.time().'.pdf';
-             //$merger->merge();
-
-            $exist = LicenceDocument::where('licence_id',$licence->id)->first();
-
-                if($exist){
-                    $exist->delete();
-                }
-
+             
              LicenceDocument::create([
                  'licence_id' => $licence->id,
-                 'document_type' => 'Duplicate-Licence',
+                 'document_type' => 'Original-Licence',
                  'document_name' => $fileName,
-                 'document_file' => env('AZURE_STORAGE_CONTAINER') . '/' . $fileName
+                 'document_file' => env('AZURE_STORAGE_CONTAINER') . '/' . $fileName.'.pdf'
              ]);
             Licence::whereId($licence->id)->update(['merged_document' => $fileName]);
  
@@ -81,7 +84,7 @@ class WholesaleController extends Controller
         //      return back()->with('success','Document merged successfully.');
         //    }        
         //    return back()->with('error','Error uploading document.');
- 
+        }
  
         } catch (\Throwable $th) {
             throw $th;

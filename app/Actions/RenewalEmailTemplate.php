@@ -27,10 +27,10 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
             $query->where('status',$request->stage);
         });
         })->where(function($query){
-            $query->where('status',1)
-            ->orWhere('status',2)
-            ->orWhere('status',4)
-            ->orWhere('status',5);
+            $query->where('status',100)
+            ->orWhere('status',200)
+            ->orWhere('status',400)
+            ->orWhere('status',500);
         })
         ->whereNull('deleted_at')->paginate(20)->withQueryString();
     }
@@ -38,7 +38,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
   function getMailTemplate($renewal){
     $template = '';
 
-     if($renewal->status == '1'){//quoted
+     if($renewal->status == '100'){//quoted
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
       Please note that your Liquor Licence is due for renewal on the '.Carbon::parse($renewal->licence->licence_date)->format('jS').' of '.Carbon::parse($renewal->licence->licence_date)->format('F Y').'-
       attached please find a quote for us to attend to this renewal on your behalf.<br><br>
@@ -51,7 +51,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
                          
       Many thanks,
       '; 
-  }elseif ($renewal->status == '2') {//Client Invoiced
+  }elseif ($renewal->status == '200') {//Client Invoiced
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>
       Please note that your renewal is due.<br><br>
       <u>PLEASE NOTE THAT OUR BANKING DETAILS HAVE CHANGED, SEE BELOW:</u><br><br>                    
@@ -72,7 +72,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'.env('BANK_NAME').'<br>
       Account No:&nbsp;&nbsp;&nbsp;&nbsp;'.env('ACCOUNT_NUMBER').'<br><br>Many thanks,</p>';
       
-  }elseif ($renewal->status == '3') {//Client Paid
+  }elseif ($renewal->status == '300') {//Client Paid
       $template = 'Good Day '.$renewal->licence->trading_name.'.
       <p>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($renewal->licence->licence_date)->format('d/m').'</p>
@@ -82,7 +82,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
       <br><br>Many thanks,';
 
       
-  }elseif ($renewal->status == '5') {//issued
+  }elseif ($renewal->status == '500') {//issued
      
       $template = '<div><div>Good Day '.$renewal->licence->trading_name.',<br>
       <div>Licence Number:&nbsp; '.$renewal->licence->licence_number.'.</div>
