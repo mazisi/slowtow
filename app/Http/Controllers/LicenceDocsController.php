@@ -29,7 +29,7 @@ $licence = Licence::find($request->licence_id);
         $fileName = $this->generateFileName($request->document_file);
         $filePath = $this->storeDocumentFile($request->document_file, $fileName);
 
-        if (!$this->fileExists($filePath)) {
+        if (fileExist($filePath)) {
             $fileModel = $this->createLicenceDocument($request, $fileName);
             $this->updateLicenceStatusAndFlags($request, $fileModel);
 
@@ -120,10 +120,7 @@ $licence = Licence::find($request->licence_id);
      * @param string $filePath The file path.
      * @return bool True if the file exists, false otherwise.
      */
-    private function fileExists($filePath)
-    {
-        return file_exists(env('AZURE_STORAGE_URL') . '/' . env('AZURE_STORAGE_CONTAINER') . '/' . $filePath);
-    }
+
 
     /**
      * Create a new LicenceDocument model.

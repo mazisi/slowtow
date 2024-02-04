@@ -12,6 +12,7 @@ import common from '../common-js/common.js';
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import useToaster from '../../store/useToaster';
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
+import CompanyFileUploadComponent from "./CompanyFileUploadComponent.vue";
 
 export default {
  props: {
@@ -365,6 +366,7 @@ export default {
    components: {
        DocComponent,
     Layout,
+    CompanyFileUploadComponent,
     Link,
     Head,
     Multiselect,

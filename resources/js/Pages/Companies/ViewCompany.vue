@@ -160,12 +160,7 @@
 
 
                                             <div class="col-md-6 columns">
-                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-
-                                                    <div class="d-flex align-items-start flex-column" style="margin-left: -1rem;">
-                                                        <h6 class="mb-0 text-sm" >Company Documents</h6>
-                                                    </div>
-                                                    <DocComponent
+                                                    <CompanyFileUploadComponent
                                                         :documentModel="company"
                                                         @file-value-changed="submitDocument"
                                                         @file-deleted="deleteDocument"
@@ -173,82 +168,66 @@
                                                         :errors="errors"
                                                         :error="error"
                                                         :docType="'Company-Document'"
+                                                        docTitle="Company Documents"
                                                         :success="success"
                                                     />
-                                                </li>
 
-                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                     <div class="d-flex align-items-start flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">CIPC Certificate</h6>
-                                                      </div>
-                                                    <DocComponent
+                                                
+                                                    <CompanyFileUploadComponent
                                                         :documentModel="company"
                                                         @file-value-changed="submitDocument"
                                                         @file-deleted="deleteDocument"
                                                         :hasFile="hasFile('CIPC-Certificate')"
                                                         :errors="errors"
                                                         :error="error"
+                                                        docTitle="CIPC Certificate"
                                                         :docType="'CIPC-Certificate'"
                                                         :success="success"
                                                     />
-                                                </li>
 
-                                                <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-
-                                                    <div class="d-flex align-items-start flex-column justify-content-center">
-                                                        <h6 class="mb-0 text-sm">BEE Certificate</h6>
-                                                    </div>
-                                                    <DocComponent
+                                                
+                                                    <CompanyFileUploadComponent
                                                         :documentModel="company"
                                                         @file-value-changed="submitDocument"
                                                         @file-deleted="deleteDocument"
                                                         :hasFile="hasFile('BEE-Certificate')"
                                                         :errors="errors"
                                                         :error="error"
+                                                        docTitle="BEE Certificate"
                                                         :docType="'BEE-Certificate'"
                                                         :success="success"
                                                     />
-                                                </li>
+                                               
 
                                             </div>
 
                                             <div class="col-md-6 columns">
-                                                <ul class="list-group">
-
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">LTA Certificate</h6>
-                                                        </div>
-                                                        <DocComponent
+                                                <ul class="list-group">                                                   
+                                                        <CompanyFileUploadComponent
                                                             :documentModel="company"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
                                                             :hasFile="hasFile('LTA-Certificate')"
                                                             :errors="errors"
                                                             :error="error"
+                                                            docTitle="LTA Certificate"
                                                             :docType="'LTA-Certificate'"
                                                             :success="success"
                                                         />
-                                                    </li>
 
 
-                                                    <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-
-                                                        <div class="d-flex align-items-start flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm">SARS Certificate</h6>
-                                                        </div>
-                                                        <DocComponent
+                                                        <CompanyFileUploadComponent
                                                             :documentModel="company"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
                                                             :hasFile="hasFile('SARS-Certificate')"
                                                             :errors="errors"
                                                             :error="error"
+                                                            docTitle="SARS Certificate"
                                                             :docType="'SARS-Certificate'"
                                                             :success="success"
                                                         />
-                                                    </li>
+                                                  
 
                                                 </ul>
                                             </div>
