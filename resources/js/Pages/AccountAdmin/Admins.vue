@@ -123,9 +123,15 @@
                               <div class="text-sm text-muted">{{ getMomentDate(user.last_activity_at) }}</div>
                             </template>
                           </div>
-                          <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 btn-rounded waves-effect w-md waves-light">
+                          <div class="d-flex justify-content-center ">
+                          <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 mx-2 btn-rounded waves-effect w-md waves-light">
                             Edit
                           </button>
+                          <button v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)"
+                           type="button" class="btn mt-3 btn-rounded waves-effect w-md waves-light" :class="{'btn-danger': !user.is_active, 'btn-success': user.is_active}">
+                            {{ user.is_active ? 'Deactivate' : 'Activate' }}
+                          </button>
+                          </div>
 
 
                       </div>

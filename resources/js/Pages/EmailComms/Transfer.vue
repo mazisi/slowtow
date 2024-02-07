@@ -5,6 +5,8 @@ import Banner from '../components/Banner.vue';
 import Paginate from '../../Shared/Paginate.vue';
 import useToaster from '../../store/useToaster';
 import Navigation from './Navigation.vue';
+import  common from '../common-js/common.js';
+import useMonths from '../../store/useMonths';
 
 export default {
   name: "email-comms-transfers",
@@ -15,8 +17,22 @@ export default {
   },
   data() {
     const { notifySuccess, notifyError } = useToaster();
+    const { months } = useMonths();
+
+    const stagesArr = [
+
+      { name: 'Client Quoted With Requirements', value: 100 },
+      { name: 'Client Invoiced', value: 200 },
+      { name: 'Payment To The Liquor Board', value: 500 },
+      { name: 'Transfer Lodged', value: 600 },
+      { name: 'Activation Fee Paid', value: 700 },
+      { name: 'Transfer Issued', value: 800 },
+
+    ]
 
     return {
+      months,
+      stagesArr,
       month: '',
       province: '',
       stage: '',
@@ -31,6 +47,11 @@ export default {
     Navigation,
     Head,
     Paginate
+},
+computed: {
+  computedProvinces(){
+          return common.getProvinces();
+        }
 },
 methods: {
   
@@ -86,12 +107,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="1">Client Quoted With Requirements </option>
-<option value="2">Client Invoiced </option>
-<option value="5">Payment To The Liquor Board</option>
-<option value="6">Transfer Lodged </option>
-<option value="7">Activation Fee Paid </option>
-<option value="8">Transfer Issued </option>
+<option v-for="stage in stagesArr" :value="stage.value" :key="stage.value">{{ stage.name }}</option>
 </select>
 </div>
 
@@ -100,18 +116,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="month" @change="filter" class="form-control form-control-default" >
 <option :value="''" disabled selected>Filter By Month</option>
-<option value="1">January</option>
-<option value="2">February</option>
-<option value="3">March</option>
-<option value="4">April</option>
-<option value="5">May</option>
-<option value="6">June</option>
-<option value="7">July</option>
-<option value="8">August</option>
-<option value="9">September</option>
-<option value="10">October</option>
-<option value="11">November</option>
-<option value="12">December</option>
+<option v-for="month in months" :value="month.id" :key="month.id">{{ month.name }}</option>
 </select>
 </div>
 
@@ -121,15 +126,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select @change="filter" class="form-control form-control-default" v-model="province">
 <option :value="''" disabled selected>Filter By Province</option>
-<option value="Eastern Cape">Eastern Cape</option>
-<option value="Free State">Free State</option>
-<option value="Gauteng">Gauteng</option>
-<option value="KwaZulu-Natal">KwaZulu-Natal</option>
-<option value="Limpopo">Limpopo</option>
-<option value="Mpumalanga">Mpumalanga</option>
-<option value="Northern Cape">Northern Cape</option>
-<option value="North West">North West</option>
-<option value="Western Cape">Western Cape</option>
+<option v-for="province in computedProvinces" :key="province"  :value=province>{{ province }}</option>
 </select>
 </div>
 </div>
@@ -146,7 +143,7 @@ methods: {
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-for="transfer in transfers.data" :key="transfer.id">
+      <tr v-if="transfers.data?.length > 0" v-for="transfer in transfers.data" :key="transfer.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
@@ -171,7 +168,9 @@ methods: {
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
-      
+      <tr v-else>
+        <td colspan="6" class="text-center text-danger">No Transfers Found.</td>
+    </tr>
    
     </tbody>
   </table>
@@ -179,7 +178,7 @@ methods: {
 
 
   </div>
-  <Paginate
+  <Paginate v-if="transfers.data?.length > 0"
   :modelName="transfers"
   :modelType="Transfers"
   />

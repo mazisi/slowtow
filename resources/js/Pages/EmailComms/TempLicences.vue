@@ -6,6 +6,7 @@ import Paginate from '../../Shared/Paginate.vue';
 import common from '../common-js/common.js';
 import useToaster from '../../store/useToaster';
 import Navigation from './Navigation.vue';
+import useMonths from '../../store/useMonths';
 
 export default {
   name: "TemporaryLicences",
@@ -18,8 +19,23 @@ export default {
   },
   data() {
     const { notifySuccess, notifyError } = useToaster();
+    const { months } = useMonths();
+
+    const stagesArr = [
+      { name: 'Client Quoted', value: 100 },
+      { name: 'Client Invoiced', value: 200 },
+      { name: 'Client Paid', value: 300 },
+      { name: 'Collate Temporary Licence Documents', value: 400 },
+      { name: 'Payment to the Liquor Board', value: 500 },
+      { name: 'Scanned Application', value: 600 },
+      { name: 'Temporary Licence Lodged', value: 700 },
+      { name: 'Temporary Licence Issued', value: 800 },
+      { name: 'Temporary Licence Delivered', value: 900 },
+      ]
 
     return {
+      months,
+      stagesArr,
       month: '',
       province: '',
       stage: '', 
@@ -106,16 +122,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="stage" @change="filter" class="form-control form-control-default">
 <option :value="''" disabled selected>Filter By Stage</option>
-<option value="1">Client Quoted </option>
-<option value="2">Client Invoiced </option>
-<option value="3">Client Paid </option>
-<option value="4">Collate Temporary Licence Documents</option>
-<option value="5">Payment to the Liquor Board</option>
-<option value="6">Scanned Application</option>
-<option value="7">Temporary Licence Lodged </option>
-<option value="8">Temporary Licence Issued</option>
-<option value="9">Temporary Licence Delivered</option>
-
+<option v-for="stage in stagesArr" :value="stage.value" :key="stage.value">{{ stage.name }}</option>
 </select>
 </div>
 
@@ -124,18 +131,7 @@ methods: {
 <div class="input-group input-group-outline null is-filled">
 <select v-model="month" @change="filter" class="form-control form-control-default" >
 <option :value="''" disabled selected>Filter By Month</option>
-<option value="1">January</option>
-<option value="2">February</option>
-<option value="3">March</option>
-<option value="4">April</option>
-<option value="5">May</option>
-<option value="6">June</option>
-<option value="7">July</option>
-<option value="8">August</option>
-<option value="9">September</option>
-<option value="10">October</option>
-<option value="11">November</option>
-<option value="12">December</option>
+<option v-for="month in months" :value="month.id" :key="month.id">{{ month.name }}</option>
 </select>
 </div>
 
@@ -174,7 +170,7 @@ methods: {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="licence in temp_licences.data" :key="licence.id">
+        <tr v-if="temp_licences.data?.length > 0" v-for="licence in temp_licences.data" :key="licence.id">
           <td class="text-sm" >
             <h6 class="mb-0 text-sm" style="margin-left: 1rem;">
           <Link :href="`/view-temp-licence/${licence.slug}`">
@@ -225,14 +221,17 @@ methods: {
           
         </tr>
         
-       
+        <tr v-else>
+          <td colspan="6" class="text-center text-danger">No Temporary Licences Found.</td>
+      </tr>
+
       </tbody>
     </table>
 </div>
 
   </div>
 
-  <Paginate
+  <Paginate  v-if="temp_licences.data?.length > 0"
   :modelName="temp_licences"
   :modelType="TempLicences"
   />

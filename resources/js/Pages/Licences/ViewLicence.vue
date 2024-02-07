@@ -296,7 +296,7 @@
                             </div>
 
                             <h6 class="text-center mt-4">Documents</h6>
-                            <div class="row">
+                            <div class="row mt-2">
                                 <div class="col-md-6 columns">
                                     <ul class="list-group">
                                         <template v-if="original_lic">
@@ -316,9 +316,25 @@
                                                     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                                 </button>
 
-                                                <button v-else @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                <label v-else for="Original-Licence"
+                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}" 
+                                                class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-upload" aria-hidden="true"></i>
-                                                </button>
+                                                    <input type="file" @change="upload($event,'Original-Licence')" accept=".pdf" hidden id="Original-Licence">
+                                                </label>
+
+                                                <span v-if="originalLicenceForm.progress" >
+                                                    <CircleProgressBar  
+                                                        :value="originalLicenceForm.progress.percentage"  
+                                                        :max="100"  
+                                                        percentage  
+                                                        rounded
+                                                        :size="30"
+                                                        :colorFilled="'#4caf50'"
+                                                        :animationDuration="'0.7s'">
+                                                      </CircleProgressBar>
+                                                  </span>
+
                                             </li>
                                         </template>
 
@@ -356,10 +372,24 @@
                                                 <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                             </button>
 
-                                            <button v-else @click="getDocType('Duplicate-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs"
-                                                    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                <i class="fa fa-upload" aria-hidden="true"></i>
-                                            </button>
+                                            <label v-else for="Duplicate-Licence"
+                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}" 
+                                                class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                    <i class="fa fa-upload" aria-hidden="true"></i>
+                                                    <input type="file" @change="upload($event,'Duplicate-Licence')" accept=".pdf" hidden id="Duplicate-Licence">
+                                                </label>
+
+                                                <span v-if="originalLicenceForm.progress" >
+                                                    <CircleProgressBar  
+                                                        :value="originalLicenceForm.progress.percentage"  
+                                                        :max="100"  
+                                                        percentage  
+                                                        rounded
+                                                        :size="30"
+                                                        :colorFilled="'#4caf50'"
+                                                        :animationDuration="'0.7s'">
+                                                      </CircleProgressBar>
+                                                  </span>
                                         </li>
                                     </ul>
                                     <hr class="vertical dark" />
@@ -379,15 +409,32 @@
                                                     <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
                                                     <p v-if="original_lic_delivered" class="mb-0 text-xs">{{ original_lic_delivered.document_name ? removeFilePath(original_lic_delivered.document_name) : '' }}</p>
                                                     <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+                                                    <p v-if="file_has_apostrophe" class="mb-0 text-danger text-xs">File cannot contain apostrophes.</p>
                                                 </div>
 
                                                 <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                                 </button>
 
-                                                <button v-else @click="getDocType('Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                <label v-else for="Original-Licence-Delivered"
+                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}" 
+                                                class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-upload" aria-hidden="true"></i>
-                                                </button>
+                                                    <input type="file" @change="upload($event,'Original-Licence-Delivered')" accept=".pdf" hidden id="Original-Licence-Delivered">
+                                                </label>
+
+                                                <span v-if="originalLicenceForm.progress" >
+                                                    <CircleProgressBar  
+                                                        :value="originalLicenceForm.progress.percentage"  
+                                                        :max="100"  
+                                                        percentage  
+                                                        rounded
+                                                        :size="30"
+                                                        :colorFilled="'#4caf50'"
+                                                        :animationDuration="'0.7s'">
+                                                      </CircleProgressBar>
+                                                  </span>
+
                                             </li>
                                         </template>
 
@@ -409,10 +456,12 @@
                                             </li>
                                         </template>
 
-
+<!-- This document uploaded under this stage must automatically link as the
+Duplicate Original Delivered on the main licence information page.~Dupliacte Original Docs Table~ 
+ -->
                                         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                                             <div class="me-3" v-if="duplicate_original_lic_delivered">
-                                                <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.document_file}`"
+                                                <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.path}`"
                                                    target="_blank" >
 
                                                     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
@@ -424,13 +473,6 @@
                                                     {{ duplicate_original_lic_delivered.document_name ? removeFilePath(duplicate_original_lic_delivered.document_name) : '' }}</p>
                                                 <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
                                             </div>
-                                            <button  v-if="duplicate_original_lic_delivered" @click="deleteDocument(duplicate_original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                            </button>
-
-                                            <button v-else @click="getDocType('Duplicate-Original-Licence-Delivered')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                <i class="fa fa-upload" aria-hidden="true"></i>
-                                            </button>
                                         </li>
 
 
@@ -501,57 +543,6 @@
             </div>
         </div>
 
-
-        <div v-if="show_modal" class="modal fade" id="licence-docs" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Upload Document</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form @submit.prevent="uploadOriginalLicenceDoc">
-                        <input type="hidden" v-model="originalLicenceForm.doc_type">
-                        <div class="modal-body">
-                            <div class="row">
-                                <div class="col-md-12 columns">
-                                    <label for="licence-doc" class="btn btn-dark w-100" href="">Select File</label>
-                                    <input type="file" @change="getFileName"
-                                           hidden id="licence-doc" accept=".pdf"/>
-                                    <div v-if="errors.document_file" class="text-danger">{{ errors.document_file }}</div>
-                                    <div v-if="file_name">File Selected: <span class="text-success" v-text="file_name"></span></div>
-                                    <p v-if="file_has_apostrophe" class="text-danger text-sm mt-4">Sorry <span class="text-success">{{ file_name }}</span> cannot contain apostrophe(s).Replace apostrophes with backticks.</p>
-                                </div>
-
-                                <!--
-                                       <file-pond
-                                            name="test"
-                                            ref="pond"
-                                            class-name="my-pond"
-                                            label-idle="Drop files here..."
-                                            allow-multiple="true"
-                                            accepted-file-types="image/jpeg, image/png"
-                                            server="/upload-licence-document?licence=msebele"
-                                        /> -->
-
-
-                                <div class="col-md-12">
-                                    <progress v-if="originalLicenceForm.progress" :value="originalLicenceForm.progress.percentage" max="100">
-                                        {{ originalLicenceForm.progress.percentage }}%
-                                    </progress>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary" :disabled="originalLicenceForm.processing || file_has_apostrophe">
-                                <span v-if="originalLicenceForm.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                Save</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
 
     </Layout>
 </template>

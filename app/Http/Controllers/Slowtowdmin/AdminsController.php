@@ -19,7 +19,7 @@ class AdminsController extends Controller
     }
 
     public function store(Request $request)
-    {
+    {dd($request);
         try {
           if($request->id){
            return $this->update($request);
@@ -50,10 +50,10 @@ class AdminsController extends Controller
             }
              $user->assignRole($request->role);
              Mail::to($request->email)->send(new SendMailCredentials($mailables));
-             return back()->with('success','Mail sent successfully');
+             return back()->with('success','User login credentials sent.');
            }
         } catch (\Throwable $th) {
-          //throw $th;
+          throw $th;
             return back()->with('error','ERROR');
         }
     }

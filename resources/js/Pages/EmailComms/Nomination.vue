@@ -165,7 +165,7 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="nomination in nominations.data" :key="nomination.id">
+      <tr v-if="nominations.data?.length > 0" v-for="nomination in nominations.data" :key="nomination.id">
         <td>
             <div class="d-flex flex-column justify-content-center">
               <h6 data-bs-placement="top" :title="nomination.licence.trading_name" class="mb-0 text-sm">
@@ -190,7 +190,9 @@ methods: {
         <i class="fa fa-eye"></i> View </Link>
         </td>
       </tr>
-      
+      <tr v-else>
+        <td colspan="6" class="text-center text-danger">No Nominations Found.</td>
+    </tr>
    
     </tbody>
   </table>
@@ -198,7 +200,7 @@ methods: {
 
   </div>
 
-  <Paginate
+  <Paginate v-if="nominations.data?.length > 0"
   :modelName="nominations"
   :modelType="Nominations"
   />

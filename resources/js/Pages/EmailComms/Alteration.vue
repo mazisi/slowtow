@@ -163,7 +163,7 @@ methods: {
       </tr>
     </thead>
     <tbody>
-      <tr v-for="alteration in alterations.data" :key="alteration.id">
+      <tr v-if="alterations.data?.length > 0" v-for="alteration in alterations.data" :key="alteration.id">
       
         <td>
             <div class="d-flex flex-column justify-content-center">
@@ -198,7 +198,7 @@ methods: {
 
   </div>
 
-  <Paginate
+  <Paginate v-if="alterations.data?.length > 0"
   :modelName="alterations"
   :modelType="Alterations"
   />

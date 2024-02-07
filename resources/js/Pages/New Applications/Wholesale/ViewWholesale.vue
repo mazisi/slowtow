@@ -692,11 +692,11 @@
     @file-value-changed="submitDocument"
           @file-deleted="deleteDocument"
     :documentModel="licence"
-    :hasFile="hasFile('Application Lodged')"
+    :hasFile="hasFile('Duplicate-Original-Licence-Delivered')"
     :errors="errors"
     :error="error"
     :orderByNumber=1500
-    :docType="'Application Lodged'"
+    :docType="'Duplicate-Original-Licence-Delivered'"
     :success="success"
    />
   </div>

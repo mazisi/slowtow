@@ -7,13 +7,26 @@ export default {
     cardBg: String,
   },
 
+  setup(){
+function checkStatus(licenseType, status) {
+  if (licenseType === 'retail') {
+    return status >= 3500 ? true : false;
+  } else {
+    return status >= 1100 ? true : false;
+  }
+}
+    return{
+      checkStatus
+    }
+  },
+
   components: {
     Link
   }
 };
 </script>
-<template v-if="$page.props.viewed_licence.status >= 3500"> 
-  
+<template>
+<div v-if="checkStatus($page.props.viewed_licence?.type,$page.props.viewed_licence?.status)"> 
      <li v-if="$page.props.currentRoute == 'view_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
@@ -130,4 +143,5 @@ export default {
         
         </Link>
       </li>
+    </div>
 </template>

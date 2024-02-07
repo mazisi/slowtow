@@ -26,6 +26,16 @@
   
   </div>
   </div>
+
+  <div class="col-md-3 col-xl-3 col-lg-3 filters">
+    <div class="input-group input-group-outline null is-filled">
+    <select @change="search" v-model="form.province" class="form-control form-control-default centered-select">
+    <option :value="''" disabled selected>Province</option>
+    <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
+    </select>
+    </div>
+    </div>
+    
   
   <div class="col-md-3 col-xl-3 col-lg-3 filters">
   <div class="input-group input-group-outline null is-filled">
@@ -45,14 +55,7 @@
   </div>
   </div>
   
-  <div class="col-md-3 col-xl-3 col-lg-3 filters">
-  <div class="input-group input-group-outline null is-filled">
-  <select @change="search" v-model="form.province" class="form-control form-control-default centered-select">
-  <option :value="''" disabled selected>Province</option>
-  <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
-  </select>
-  </div>
-  </div>
+  
   
   
   
@@ -75,7 +78,7 @@
   </tr>
   </thead>
   <tbody>
-  <tr v-for="licence in licences.data" :key="licence.id">
+  <tr v-if="licences.data?.length > 0" v-for="licence in licences.data" :key="licence.id">
     <!-- <td v-if="licence.is_licence_active == '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
     <td v-else><i class="fa fa-times text-danger" aria-hidden="true"></i></td> -->
     <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.trading_name">{{ licence.trading_name }}</Link></td>
@@ -94,11 +97,15 @@
       </td>
 
   </tr>
+  <tr v-else>
+    <td colspan="6" class="text-center text-danger">No New Apps Found.</td>
+</tr>
+
   </tbody>
   </table>
   
   
-  <Paginate
+  <Paginate v-if="licences.data?.length > 0"
     :modelName="licences"
     :modelType="Licences"
     />

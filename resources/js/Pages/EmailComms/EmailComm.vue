@@ -194,7 +194,7 @@ methods: {
     </thead>
     <tbody>
     <!-- with_invoiced_status -->
-      <tr v-if="renewals.data" v-for="renewal in renewals.data" :key="renewal.id">
+      <tr v-if="renewals.data?.length > 0" v-for="renewal in renewals.data" :key="renewal.id">
         <td>
           <div class="d-flex px-2 py-1">
             <div class="d-flex flex-column justify-content-center">
@@ -224,9 +224,9 @@ methods: {
         </td>
       </tr>
 
-      <tr v-else >
-        <td><p class="text-center text-danger">No data found.</p></td>
-      </tr>
+      <tr v-else>
+        <td colspan="6" class="text-center text-danger">No Renewals Found.</td>
+    </tr>
       
    
     </tbody>
@@ -237,7 +237,7 @@ methods: {
   </div>
 
 
-  <Paginate
+  <Paginate v-if="renewals.data?.length > 0"
   :modelName="renewals"
   :modelType="EmailComms"
   />

@@ -59,7 +59,7 @@ class HandleInertiaRequests extends Middleware
                 return (new Ziggy)->toArray();
             },
             //Global Licence.
-            'viewed_licence' => Licence::whereSlug(request('slug'))->first(['id','status','trading_name']),
+            'viewed_licence' => Licence::whereSlug(request('slug'))->first(['id','status','trading_name','type']),
             'currentRoute' => fn () => Route::currentRouteName(),
             'success' => fn () => $request->session()->get('success'),
             'error' => fn () => $request->session()->get('error'),

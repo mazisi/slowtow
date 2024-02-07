@@ -10,6 +10,7 @@ import common from '../common-js/common.js';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
+import { CircleProgressBar } from 'circle-progress.vue';
 // import vueFilePond from 'vue-filepond';
 // import "filepond/dist/filepond.min.css"
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
@@ -134,23 +135,7 @@ export default {
         })    
         }
 
-        function uploadOriginalLicenceDoc(){
-          originalLicenceForm.post(`/upload-licence-document`, {
-          preserveScroll: true,
-          onSuccess: () => { 
-          this.show_modal = false;
-          document.querySelector('.modal-backdrop').remove();
-
-                if(props.success){
-                   notifySuccess(props.success)
-                    }else if(props.error){
-                      notifyError(props.error)
-                    }
-          originalLicenceForm.reset();
-         },
-        })    
-        }
-
+      
         function deleteDocument(id){
           if(confirm('Document will be deleted permanently!! Continue??')){
             Inertia.delete(`/delete-licence-document/${id}`,{
@@ -213,12 +198,31 @@ export default {
         }
 
         
-          function getFileName(e){
-            this.originalLicenceForm.document_file = e.target.files[0];
+          function upload(e, doc_type){
+            originalLicenceForm.document_file = e.target.files[0];
             this.file_name = e.target.files[0].name;
-            this.file_has_apostrophe = this.file_name.includes("'");
+            file_has_apostrophe=false;
+            originalLicenceForm.doc_type=doc_type
+
+            if(e.target.files[0].name.includes("'")){
+              this.file_has_apostrophe = true
+              return;
+            }
+
+            originalLicenceForm.post(`/upload-licence-document`, {
+              preserveScroll: true,
+              onSuccess: () => { 
+                    if(props.success){
+                      e.target.value = '';
+                       notifySuccess(props.success)
+                        }else if(props.error){
+                          notifyError(props.error)
+                    }
+             },
+            })    
           }
 
+      
   
 
       function removeFilePath(file_name){
@@ -235,35 +239,14 @@ export default {
       }
 
 
-        function checkingFileProgress(message){
-          setTimeout(() => {
-              toast.remove();
-            }, 3000);
-            toast.loading(message);
-        }
-
-       
-
-         function viewFile(model_id) {
-              let model = 'LicenceDocument';
-               Inertia.visit(`/view-file/${model}/${model_id}`,{
-                replace: true,
-                onStart: () => {                  
-                  checkingFileProgress('Checking file availability...')                
-              },
-                
-               })
-         }
-
-      
+    
 
     return {
+      upload,
       preview,
-      checkingFileProgress,viewFile,
-      showMenu,file_has_apostrophe,
-      file_name,getFileName,
+      showMenu,
+      file_name,
       removeFilePath,
-      show_modal,
       show_current_company,
       change_company,
       companyOptions,peopleOptions,
@@ -274,7 +257,6 @@ export default {
       deleteLicence,
       assignActiveValue,
       originalLicenceForm,
-      uploadOriginalLicenceDoc,
       getDocType,
       deleteDocument,
       selectedProvince,
@@ -298,6 +280,7 @@ export default {
 
 
    components: {
+    CircleProgressBar,
     // FilePond,
     Layout,
     Link,

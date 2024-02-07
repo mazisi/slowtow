@@ -352,11 +352,11 @@
                 @file-value-changed="submitDocument"
                       @file-deleted="deleteDocument"
                     :documentModel="duplicate_original"
-                    :hasFile="hasFile('Duplicate Original Delivered')"
+                    :hasFile="hasFile('Duplicate-Original-Licence-Delivered')"
                     :errors="errors"
                     :error="error"
                     :orderByNumber=900
-                    :docType="'Duplicate Original Delivered'"
+                    :docType="'Duplicate-Original-Licence-Delivered'"
                     :success="success"
                     />
                 </div>

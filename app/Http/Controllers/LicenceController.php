@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\LicenceFilterAction;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
@@ -12,6 +11,9 @@ use App\Models\LicenceType;
 use Illuminate\Http\Request;
 use App\Events\LogUserActivity;
 use App\Models\LicenceDocument;
+use App\Models\DuplicateOriginal;
+use App\Actions\LicenceFilterAction;
+use App\Models\DuplicateOriginalDoc;
 
 class LicenceController extends Controller
 {
@@ -171,10 +173,13 @@ class LicenceController extends Controller
             ->latest()
             ->first();
 
-        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
-            ->where('document_type', 'Duplicate-Original-Licence-Delivered')
-            ->latest()
-            ->first();
+            $fuck = DuplicateOriginal::where('licence_id', $licence->id)->first();
+
+            $duplicate_original_lic_delivered = DuplicateOriginalDoc::where('duplicate_original_id', $fuck->id)
+            ->where('doc_type', 'Duplicate-Original-Licence-Delivered')
+                    ->first();
+
+            
 
         $companies = Company::pluck('name', 'id');
         $people = People::pluck('full_name', 'id');
