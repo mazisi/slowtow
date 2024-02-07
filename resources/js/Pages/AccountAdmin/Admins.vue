@@ -127,7 +127,7 @@
                           <button @click="editUser(user)" type="button" class="btn bg-gradient-dark mt-3 mx-2 btn-rounded waves-effect w-md waves-light">
                             Edit
                           </button>
-                          <button v-if="user.is_active" @click="deActivateuser(user.id, user.is_active)"
+                          <button @click="deActivateuser(user.id, user.is_active)"
                            type="button" class="btn mt-3 btn-rounded waves-effect w-md waves-light" :class="{'btn-danger': !user.is_active, 'btn-success': user.is_active}">
                             {{ user.is_active ? 'Deactivate' : 'Activate' }}
                           </button>
@@ -301,9 +301,12 @@
           }
 
           function getMomentDate(date){
-            let now = moment();
+            if(date){
+              let now = moment();
             const date_param = moment(date, 'YYYY-MM-DD HH:mm:ss');
             return moment.duration(moment(date_param).diff(now)).humanize(true);
+            }
+            return ''
           }
 
           function deActivateuser(id, status){

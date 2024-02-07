@@ -19,7 +19,7 @@ class AdminsController extends Controller
     }
 
     public function store(Request $request)
-    {dd($request);
+    {
         try {
           if($request->id){
            return $this->update($request);

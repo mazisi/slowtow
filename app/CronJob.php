@@ -8,11 +8,11 @@ class CronJob{
     // Artisan::call('backup:run --only-db');
     //return route('/db-auto-backup');
 
-    User::create([
-      'name' => 'CronJob',
-      'password' => '12345',
-      'email' => 'cron@ex.com'
-    ]);
+    // User::create([
+    //   'name' => 'CronJob',
+    //   'password' => '12345',
+    //   'email' => 'cron@ex.com'
+    // ]);
   }
 
 }
