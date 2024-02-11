@@ -175,7 +175,7 @@ class LicenceController extends Controller
 
             $fuck = DuplicateOriginal::where('licence_id', $licence->id)->first();
 
-            $duplicate_original_lic_delivered = DuplicateOriginalDoc::where('duplicate_original_id', $fuck->id)
+            $duplicate_original_lic_delivered = DuplicateOriginalDoc::where('duplicate_original_id', $fuck?->id)
             ->where('doc_type', 'Duplicate-Original-Licence-Delivered')
                     ->first();
 
