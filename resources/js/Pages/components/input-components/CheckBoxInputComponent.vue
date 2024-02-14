@@ -3,7 +3,7 @@
     <div :class="column" class=" columns">
         <div class=" form-switch d-flex ps-0 ms-0  is-filled">
             <label class="form-check-label mb-0 text-body text-truncate">{{ label }}</label>
-            <input id="active-checkbox" type="checkbox" :value="value" :checked="isChecked" />
+            <input id="active-checkbox" type="checkbox" :value="value" :checked="isChecked" :disabled="disabled" />
         </div>
     </div>
 
@@ -16,7 +16,8 @@
             column: String,
             label: String,
             isChecked: Boolean,
-            value: Number
+            value: Number,
+            disabled: Boolean,
         }
     }
 

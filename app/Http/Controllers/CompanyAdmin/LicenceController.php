@@ -5,6 +5,7 @@ namespace App\Http\Controllers\CompanyAdmin;
 use App\Models\Task;
 use App\Models\User;
 use Inertia\Inertia;
+use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceType;
@@ -12,7 +13,9 @@ use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use App\Models\LicenceDocument;
 use App\Models\RenewalDocument;
+use App\Models\DuplicateOriginal;
 use App\Http\Controllers\Controller;
+use App\Models\DuplicateOriginalDoc;
 
 class LicenceController extends Controller
 {
@@ -129,30 +132,75 @@ class LicenceController extends Controller
     }
 
     
-    public function show($slug){
-        $licence = Licence::with('company','licence_documents')->whereSlug($slug)->first();
-        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->get();
-        $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->get();
-        $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->get();
-        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->get();
-        $companies = Company::pluck('name','id');
-        $licence_dropdowns = LicenceType::get();
+    public function show(Request $request, $slug)
+    {
 
-        return Inertia::render('CompanyAdmin/Licences/ViewMyLicences',[
-                                            'licence' => $licence,
-                                            'licence_dropdowns' => $licence_dropdowns,
-                                             'companies' => $companies,
-                                             'original_lic' => $original_lic,
-                                             'duplicate_original_lic' => $duplicate_original_lic,
-                                             'original_lic_delivered' => $original_lic_delivered,
-                                             'duplicate_original_lic_delivered' => $duplicate_original_lic_delivered,
+        $licence = Licence::with('company', 'people', 'licence_documents')
+            ->whereSlug($slug)
+            ->first();
+
+        $duplicate_original_lic = LicenceDocument::where('licence_id', $licence->id)
+        ->where('document_type', 'Duplicate-Licence')
+        ->latest()
+        ->first();
+
+
+        $original_lic = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Original-Licence')
+            ->latest()
+            ->first();
+
+        $licence_issued = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Licence Issued')
+            ->latest()
+            ->first();
+
+
+
+        $original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Original-Licence-Delivered')
+            ->latest()
+            ->first();
+
+        $licence_delivered = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Licence Delivered')
+            ->latest()
+            ->first();
+
+            $fuck = DuplicateOriginal::where('licence_id', $licence->id)->first();
+
+            $duplicate_original_lic_delivered = DuplicateOriginalDoc::where('duplicate_original_id', $fuck?->id)
+            ->where('doc_type', 'Duplicate-Original-Licence-Delivered')
+                    ->first();
+
+            
+
+        $companies = Company::pluck('name', 'id');
+        $people = People::pluck('full_name', 'id');
+        $licence_dropdowns = LicenceType::orderBy('licence_type')->get();
+
+
+        $view = $licence->is_new_app ? 'ViewNewApp' : 'ViewMyLicences';
+
+        return Inertia::render('CompanyAdmin/Licences/'. $view,[
+            'licence' => $licence,
+            'licence_dropdowns' => $licence_dropdowns,
+            'companies' => $companies,
+            'people' => $people,
+            'original_lic' => $original_lic,
+            'licence_issued' => $licence_issued,
+            'duplicate_original_lic' => $duplicate_original_lic,
+            'original_lic_delivered' => $original_lic_delivered,
+            'licence_delivered' => $licence_delivered,
+            'duplicate_original_lic_delivered' => $duplicate_original_lic_delivered
                                             ]);
     }
 
 
 public function my_renewals(Request $request){
     $licence = Licence::with('licence_renewals')->whereSlug($request->slug)->first();
-    return Inertia::render('CompanyAdminDash/Licences/MyRenewals',['licence' => $licence]);
+    $renewals = LicenceRenewal::where('licence_id',$licence->id)->paginate(10);
+    return Inertia::render('CompanyAdmin/Renewals/MyRenewals',['licence' => $licence, 'renewals' => $renewals]);
 }
 
 public function view_my_renewal($slug){

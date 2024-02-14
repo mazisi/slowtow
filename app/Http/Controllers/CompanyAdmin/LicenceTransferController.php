@@ -21,7 +21,7 @@ class LicenceTransferController extends Controller
             $query->where('slug',$request->slug);
           })->get();
 
-        return Inertia::render('CompanyAdminDash/Transfers/MyTransfers',['licence' => $licence, 'transfers' => $transfers]);
+        return Inertia::render('CompanyAdmin/Transfers/MyTransfers',['licence' => $licence, 'transfers' => $transfers]);
     }
 
     public function view_my_transfer($slug) {

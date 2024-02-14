@@ -38,7 +38,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for=" (  transfer, index  ) in transfers.data" :key="index" >
+                  <tr v-if="transfers.data?.length > 0" v-for=" (  transfer, index  ) in transfers.data" :key="index" >
                     <td >
                     <div class="d-flex flex-column">
                         <Link class="ml-1" v-if="transfer.transfered_from === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
@@ -85,6 +85,10 @@
                     </Link>
                       
                     </td>
+                  </tr>
+
+                  <tr v-else>
+                    <td colspan="5" class="text-center text-danger">No transfers found</td>
                   </tr>
                   
                  

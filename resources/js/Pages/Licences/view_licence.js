@@ -50,8 +50,14 @@ export default {
         
       
     const { notifySuccess, notifyError } = useToaster();
-        
-        
+      //These are only for  company admin menu
+    const campanyMenuOptions = [
+      {id: 1, name: 'Registration', endpoint: 'my-registration'},
+      {id: 2, name: 'Renewals', endpoint: 'my-renewals'},
+      {id: 3, name: 'Transfers', endpoint: 'my-transfer-history'},
+      {id: 4, name: 'Nominations', endpoint: 'my-nominations'},
+      {id: 5, name: 'Alterations', endpoint: 'my-alterations'}
+  ];
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -261,6 +267,7 @@ export default {
       deleteDocument,
       selectedProvince,
       all_licences,
+      campanyMenuOptions
     }
   },
 

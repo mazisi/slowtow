@@ -52,12 +52,12 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
         Route::get('/view-my-temp-licences/{slug}',[TemporalLicenceController::class,'show']);
 
 
-        Route::get('/nominations',[NominationController::class,'index'])->name('my_nominations');
+        Route::get('/my-nominations',[NominationController::class,'index'])->name('my_nominations');
 
         Route::get('/view-nomination/{slug}',[NominationController::class,'show'])->name('view_company__nomination');
 
 
-        Route::get('/alterations',[AlterationController::class,'index'])->name('company_alterations');
+        Route::get('/my-alterations',[AlterationController::class,'index'])->name('company_alterations');
         Route::get('/view-company-alteration/{slug}',[AlterationController::class,'show'])->name('view_company_alteration');
 
         Route::get('/registration',[CompanyRegistrationController::class,'registration'])->name('company_registration');
