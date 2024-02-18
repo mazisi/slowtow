@@ -91,6 +91,8 @@ Route::group(['middleware' => ['guest']], function () {
 
         Route::group([], __DIR__.'/email_comms.php');
 
+      
+
           
         Route::get('view-file/{model}/{id}', [ViewFileController::class,'view_file'])->name('view_file');
         Route::post('/submit-task',[TaskController::class,'store'])->name('submit_task');
@@ -101,6 +103,8 @@ Route::group(['middleware' => ['guest']], function () {
         Route::delete('/delete-additional-doc/{id}',[AdditionalDocsController::class,'destroy'])->name('delete_additional_doc');
        
     });
+
+    Route::group([], __DIR__.'/companyAdmin.php');
 
     Route::get('email-template',function(){
         return view('emails.mail-template');

@@ -26,6 +26,21 @@
         </sidenav-collapse>
       </li>
 
+
+      <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'company_admin_licences'}"
+          :collapseRef="route('company_admin_licences')"
+          navText="Licences">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">wine_bar</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
       <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role
       || $page.props.auth.has_slowtow_user_role">
         <sidenav-collapse
@@ -36,6 +51,20 @@
           collapseRef="/companies"
           navText="Companies"
         >
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5">store</i>
+          </template>
+        </sidenav-collapse>
+      </li>
+
+      <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          v-bind:collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'my_companies'}"
+          collapseRef="/company/my-companies"
+          navText="Companies">
           <template v-slot:icon>
             <i class="material-icons-round opacity-10 fs-5">store</i>
           </template>
@@ -79,6 +108,23 @@
           </template>
         </sidenav-collapse>
   </li>
+
+
+  <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
+    <sidenav-collapse
+      url="#"
+      :aria-controls="''"
+      v-bind:collapse="false"
+      :class="{ active:  $page.props.currentRoute == 'my_temp_licences'}"
+      collapseRef="/company/my-temp-licences"
+      navText="Temporary Licences">
+      <template v-slot:icon>
+        <i class="material-icons-round opacity-10 fs-5"
+          >timer</i
+        >
+      </template>
+    </sidenav-collapse>
+</li>
 
     <hr>
       <li v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
@@ -214,7 +260,7 @@
 
 
 
-      <!-- <Company-Admin-Vue v-if="$page.props.auth.has_company_admin_role"/>   -->
+      <CompanyAdmin v-if="$page.props.auth.has_company_admin_role"/>  
 
 
 
@@ -323,7 +369,7 @@
 <script>
 import SidenavCollapse from "./SidenavCollapse.vue";
 import { Link } from '@inertiajs/inertia-vue3';
-import CompanyAdminVue from "./CompanyAdmin.vue";
+import CompanyAdmin from "./CompanyAdmin.vue";
 import LicenceActions from "./LicenceActions.vue";
 import RetailWholesaleModal from "./RetailWholesaleModal.vue";
 import { Inertia } from '@inertiajs/inertia'
@@ -344,7 +390,7 @@ export default {
   components: {
     SidenavCollapse,
     Link,
-    CompanyAdminVue,
+    CompanyAdmin,
     LicenceActions,
     RetailWholesaleModal
   },
