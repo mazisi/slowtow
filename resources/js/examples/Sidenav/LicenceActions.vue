@@ -26,7 +26,7 @@ function checkStatus(licenseType, status) {
 };
 </script>
 <template>
-<div v-if="checkStatus($page.props.viewed_licence?.type,$page.props.viewed_licence?.status)"> 
+
      <li v-if="$page.props.currentRoute == 'view_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
@@ -39,7 +39,7 @@ function checkStatus(licenseType, status) {
         
         </Link>
       </li>
-
+<div v-if="checkStatus($page.props.viewed_licence?.type,$page.props.viewed_licence?.status)"> 
       <li v-if="$page.props.currentRoute == 'view_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 

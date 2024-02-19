@@ -42,19 +42,19 @@
                                                 <td>
                                                     <div class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <Link :href="`/view-licence-renewal/${renewal.slug}`"><h6 class="text-center">{{ renewal.date }}</h6></Link>
+                                                            <Link :href="`/company/view-my-licence-renewal/${renewal.slug}`"><h6 class="text-center">{{ renewal.date }}</h6></Link>
                                                         </div>
                                                     </div>
                                                 </td>
 
                                                 <td class="align-middle text-center text-sm">
-                                                    <Link :href="`/view-licence-renewal/${renewal.slug}`">
+                                                    <Link :href="`/company/view-my-licence-renewal/${renewal.slug}`">
                                                         <span class="badge text-default" v-html="getStatus(renewal.status)"></span>
                                                     </Link>
                                                 </td>
                                                 <td class="align-middle text-end" >
                                                     <div class="d-flex justify-content-center">
-                                                        <Link :href="`/view-licence-renewal/${renewal.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
+                                                        <Link :href="`/company/view-my-licence-renewal/${renewal.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
                                                     </div>
                                                 </td>
                                             </tr>

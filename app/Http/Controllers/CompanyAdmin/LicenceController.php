@@ -204,14 +204,14 @@ public function my_renewals(Request $request){
 }
 
 public function view_my_renewal($slug){
-    $renewal = LicenceRenewal::with('licence')->whereSlug($slug)->first();
+    $renewal = LicenceRenewal::with('licence', 'renewal_documents')->whereSlug($slug)->first();
 
     $client_invoiced = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Invoiced')->first();
     $renewal_issued = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Issued')->first();
     $client_quoted = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Client Quoted')->first();
     $renewal_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Renewal Delivered')->first();
     $liqour_board = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type','Payment To The Liquor Board')->first();
-    return Inertia::render('CompanyAdminDash/Licences/ViewMyRenewal',
+    return Inertia::render('CompanyAdmin/Renewals/ViewMyRenewal',
     [
 
     'renewal' => $renewal,
