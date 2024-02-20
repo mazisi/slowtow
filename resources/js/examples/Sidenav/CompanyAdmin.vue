@@ -43,7 +43,7 @@
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'my_nominations' 
         || $page.props.currentRoute == 'view_nomination'}"
-         :href="`/company/nominations?slug=${$page.props.slug}`">
+         :href="`/company/my-nominations?slug=${$page.props.slug}`">
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">move_down</i>
         </div>

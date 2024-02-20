@@ -11,9 +11,7 @@
        <h5>Transfers for: <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h5>
       </div>
       <div class="col-lg-3 col-3 my-auto text-end">
-        <div class="dropdown float-lg-end pe-4">
-         <Link :href="`/transfer-licence?slug=${$page.props.slug}`" class="btn btn-sm btn-secondary">New Transfer</Link>
-        </div>
+        <!--  -->
       </div>
     </div>
             <div class=" my-4">
@@ -41,13 +39,13 @@
                       <tr v-for=" (  transfer, index  ) in transfers.data" :key="index" >
                         <td >
                         <div class="d-flex flex-column">
-                            <Link class="ml-1" v-if="transfer.transfered_from === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
+                            <Link class="ml-1" v-if="transfer.transfered_from === 'Company'" :href="`/company/view-my-transfer/${transfer.slug}`">
                               <h6 class="mb-0 text-sm">
                               {{ limit(transfer.old_company.name) }}
                                </h6>    
                             </Link> 
     
-                            <Link class="ml-1" v-if="transfer.transfered_from === 'Individual'" :href="`/view-transfered-licence/${transfer.slug}`">
+                            <Link class="ml-1" v-if="transfer.transfered_from === 'Individual'" :href="`/company/view-my-transfer/${transfer.slug}`">
                               <h6 class="mb-0 text-sm">
                               {{ limit(transfer.old_person.full_name) }}
                                </h6>    
@@ -56,12 +54,12 @@
                             </td>
                         <td >
                           
-                          <Link class="ml-1" v-if="transfer.transfered_to === 'Company'" :href="`/view-transfered-licence/${transfer.slug}`">
+                          <Link class="ml-1" v-if="transfer.transfered_to === 'Company'" :href="`/company/view-my-transfer/${transfer.slug}`">
                             <h6 class="text-sm">
                             {{ limit(transfer.new_company.name) }}
                           </h6>    
                             </Link>  
-                            <Link class="ml-1" v-if="transfer.transfered_to === 'Individual'" :href="`/view-transfered-licence/${transfer.slug}`">
+                            <Link class="ml-1" v-if="transfer.transfered_to === 'Individual'" :href="`/company/view-my-transfer/${transfer.slug}`">
                               <h6 class="text-sm">
                               {{ limit(transfer.new_person.full_name) }}
                             </h6>    
@@ -70,7 +68,7 @@
                         </td>
                        
               <td >
-                <Link class="" :href="`/view-transfered-licence/${transfer.slug}`">
+                <Link class="" :href="`/company/view-my-transfer/${transfer.slug}`">
                  <span v-html="getStatus(transfer.status)"></span>
                 </Link>
               
@@ -80,7 +78,7 @@
               
     
                      <td >
-                        <Link class="ml-1" :href="`/view-transfered-licence/${transfer.slug}`">
+                        <Link class="ml-1" :href="`/company/view-my-transfer/${transfer.slug}`">
                         <i class="fa fa-eye  " aria-hidden="true"></i>
                         </Link>
                           

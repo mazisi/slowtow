@@ -5,7 +5,7 @@
        
     
         <div class="row ">
-          <Link :href="`/licences`" class="col-xl-3 col-lg-3">
+          <Link :href="`/company/licences`" class="col-xl-3 col-lg-3">
               <div class="card l-bg-cherry">
                   <div class="card-statistic-3 p-4">
                       <div class="card-icon card-icon-large"><i class="fas fa-wine-glass"></i>"></div>
@@ -28,7 +28,7 @@
                   </div>
               </div>
             </Link>
-            <Link :href="`/companies`"  class="col-xl-3 col-lg-3">
+            <Link :href="`/company/my-companies`"  class="col-xl-3 col-lg-3">
               <div class="card l-bg-blue-dark">
                   <div class="card-statistic-3 p-4">
                       <div class="card-icon card-icon-large"><i class="fas fa-building"></i></div>

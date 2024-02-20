@@ -10,7 +10,7 @@ export default {
   setup(){
 function checkStatus(licenseType, status) {
   if (licenseType === 'retail') {
-    return status >= 3500 ? true : false;
+    return status >= 2300 ? true : false;
   } else {
     return status >= 1100 ? true : false;
   }

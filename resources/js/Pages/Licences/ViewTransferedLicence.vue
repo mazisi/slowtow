@@ -809,4 +809,3 @@
 
   </Layout>
 </template>
-./view_transfer.js./view_transfer.js

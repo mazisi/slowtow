@@ -25,7 +25,7 @@ use App\Http\Controllers\Reports\ExistingLicenceExportController;
 class ReportController extends Controller
 {
     public function index(Request $request){
-        $years = DB::table('years')->get()->pluck('year');
+        $years = DB::table('years')->orderBy('year', 'DESC')->get()->pluck('year');
           $renewals = LicenceRenewal::with(['licence','renewal_documents' => function ($query){
               $query ->where('doc_type','Client Quoted');            
             }])->paginate(1);
