@@ -28,18 +28,7 @@
             <h5 class="mb-1">View Temporary Licence</h5>
           </div>
         </div>
-        <div class="col-lg-6 col-5 my-auto text-end">
-
-           <button @click="previewTemp" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
-            Preview
-           </button>
-
-          <button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteTempLicence" 
-          type="button" class="btn btn-sm btn-danger">
-            <i class="fa fa-trash-alt text-md"></i> Delete
-          </button>
-
-        </div>
+       
       </div>
       <div class="row">
         <div class="mt-3 row">

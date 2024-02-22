@@ -33,8 +33,6 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
         Route::delete('/delete-company-document/{id}',[CompanyDocsController::class,'destroy']);
 
-
-
         Route::get('/my-renewals',[LicenceController::class,'my_renewals'])->name('my_renewals');
 
         Route::get('/view-my-licence-renewal/{slug}',[LicenceController::class,'view_my_renewal'])->name('view_renewal');
@@ -43,13 +41,11 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
         Route::get('/my-transfer-history',[LicenceTransferController::class,'index'])->name('my_transfer_history');
 
-        Route::get('/view-my-transfer/{slug}',[LicenceTransferController::class,'view_my_transfer'])->name('view_my_transfer');
-
-        
+        Route::get('/view-my-transfer/{slug}',[LicenceTransferController::class,'view_my_transfer'])->name('view_my_transfer');        
 
         Route::get('/my-temp-licences',[TemporalLicenceController::class,'index'])->name('my_temp_licences');
 
-        Route::get('/view-my-temp-licences/{slug}',[TemporalLicenceController::class,'show']);
+        Route::get('/view-my-temp-licences/{slug}',[TemporalLicenceController::class,'show'])->name('view_my_temp_licence');
 
 
         Route::get('/my-nominations',[NominationController::class,'index'])->name('my_nominations');
@@ -58,6 +54,7 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
 
         Route::get('/my-alterations',[AlterationController::class,'index'])->name('company_alterations');
+
         Route::get('/view-company-alteration/{slug}',[AlterationController::class,'show'])->name('view_company_alteration');
 
         Route::get('/registration',[CompanyRegistrationController::class,'registration'])->name('company_registration');

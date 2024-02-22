@@ -11,6 +11,18 @@
         </Link>
       </li>
 
+      <li class="nav-item">
+        <Link v-if="$page.props.currentRoute == 'view_my_temp_licence'" data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link"
+        :class="{ active:  $page.props.currentRoute == 'view_my_temp_licence'}"
+        :href="`/process-temp-application?slug=${$page.props.slug}`">
+       <div class="text-center d-flex align-items-center justify-content-center me-2">
+       <i class="material-icons-round opacity-10 fs-5">account_tree</i>
+       </div>
+       <span class="nav-link-text ms-1">Process Application</span>
+
+       </Link>
+      </li>
+
       <li class="nav-item" v-if="$page.props.currentRoute == 'view_my_licences'">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'my_renewals'}"
