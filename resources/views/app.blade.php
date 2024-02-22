@@ -32,13 +32,12 @@
         <script src="https://cdn.tiny.cloud/1/9l6lug40mtg10elrk1ncpkmwgmd9gmu8xggx0h2i8ad8xt82/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
 
 
-
-        <!-- @if(App::environment('production'))
-           <script src="{{ asset('public/js/app.js') }}" defer></script>
+        @if(app()->environment(['production']))
+        <script src="{{ asset('public/js/app.js') }}" defer></script>
         @else
-          <script src="{{ mix('js/app.js') }}" defer></script>
-        @endif -->
         <script src="{{ mix('js/app.js') }}" defer></script>
+        @endif
+
         @inertiaHead
 
         <style>
