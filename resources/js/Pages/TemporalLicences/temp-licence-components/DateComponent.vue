@@ -2,13 +2,14 @@
     <div :class="'col-md-' + column" class="columns mb-4">
       <div class="input-group input-group-outline null is-filled">
         <label class="form-label">Date</label>
-        <input type="date" class="form-control form-control-default" v-model="form.dated_at">
+        <input type="date" class="form-control form-control-default" v-model="form.dated_at" :disabled="$page.props.auth.has_company_admin_role">
       </div>
       <div v-if="errors.dated_at" class="text-danger">{{ errors.dated_at }}</div>
     </div>
 
     <div class="col-md-1 columns">
-      <button v-if="shouldShowSaveButton" @click="emitDataToParent" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button v-if="shouldShowSaveButton" @click="emitDataToParent" type="button" 
+      :class="{'invisible' : $page.props.auth.has_company_admin_role}" class="btn btn-sm btn-secondary">Save</button>
     </div>
   </template>
 

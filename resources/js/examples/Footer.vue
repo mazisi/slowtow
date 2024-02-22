@@ -16,7 +16,7 @@
         <div class="col-lg-2">
           <ul
             class="nav nav-footer">
-            <li class="nav-item">
+            <li class="nav-item" v-if="$page.props.auth.has_slowtow_admin_role">
               <inertia-link
                 href="/slotow-admins"
                 class="nav-link text-muted"> Admins</inertia-link>             

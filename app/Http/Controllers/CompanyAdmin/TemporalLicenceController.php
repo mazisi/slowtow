@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Consultant;
 use App\Models\TemporalLicence;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class TemporalLicenceController extends Controller
 {
@@ -56,6 +57,14 @@ class TemporalLicenceController extends Controller
             $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
     
             return Inertia::render('CompanyAdmin/TemporalLicences/ViewTemporalLicence',['licence' => $licence]);
+     }
+
+     public function processApplication(Request $request){
+        $licence = TemporalLicence::with('company','people','temp_documents')->whereSlug($request->slug)->first();
+
+        return Inertia::render('CompanyAdmin/TemporalLicences/ProcessApplication',
+            ['licence' => $licence]);
+
      }
 
   

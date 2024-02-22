@@ -46,6 +46,8 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
         Route::get('/my-temp-licences',[TemporalLicenceController::class,'index'])->name('my_temp_licences');
 
         Route::get('/view-my-temp-licences/{slug}',[TemporalLicenceController::class,'show'])->name('view_my_temp_licence');
+        
+        Route::get('/process-temp-application', [TemporalLicenceController::class,'processApplication']);
 
 
         Route::get('/my-nominations',[NominationController::class,'index'])->name('my_nominations');

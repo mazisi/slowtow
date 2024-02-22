@@ -10,7 +10,7 @@
      <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
      <i v-if="hasFile.id" class="fa fa-file-pdf h4 text-danger"></i>
     </a> 
-    <input type="file" @change="upload($event)" accept=".pdf" :id="title" hidden>
+    <input :disabled="$page.props.auth.has_company_admin_role" type="file" @change="upload($event)" accept=".pdf" :id="title" hidden>
      <br> 
 </template>
 <script>
