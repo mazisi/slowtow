@@ -33,9 +33,9 @@
 
 
         @if(app()->environment(['production']))
-        <script src="{{ asset('public/js/app.js') }}" defer></script>
+           <script src="{{ asset('public/js/app.js') }}" defer></script>
         @else
-        <script src="{{ mix('js/app.js') }}" defer></script>
+           <script src="{{ mix('js/app.js') }}" defer></script>
         @endif
 
         @inertiaHead
