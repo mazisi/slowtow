@@ -22,36 +22,27 @@ class TemporalLicenceController extends Controller
         } 
 
         $licences = TemporalLicence::with('company','people')
-
-        ->when(request('term'), function ($query) {
-            return $query->where('liquor_licence_number','LIKE','%'.request('term').'%')
-                ->orWhere('start_date','LIKE','%'.request('term').'%')
-                ->orWhere('end_date','LIKE','%'.request('term').'%')
-                ->orWhere('event_name', 'like', '%'.request('term').'%');
-
-        })->when(request('term') && request('active_status') == 'Active', 
+        ->when(request('term'), 
             function ($query){ 
-                return $query->where('liquor_licence_number','LIKE','%'.request('term').'%')
+                return $query->whereHas('company', function($query){
+                    $query->where('name', 'like', '%'.request('term').'%');
+                })->orWhereHas('people', function($query){
+                    $query->where('full_name', 'like', '%'.request('term').'%');                                      
+                          })
+                ->orWhere('liquor_licence_number','LIKE','%'.request('term').'%')
                 ->orWhere('start_date','LIKE','%'.request('term').'%')
                 ->orWhere('end_date','LIKE','%'.request('term').'%')
-                ->orWhere('event_name', 'like', '%'.request('term').'%')
-                ->whereActive(1);
+                ->orWhere('event_name','LIKE','%'.request('term').'%');
             
             })
-            ->when(request('term') && request('active_status') == 'Inactive', 
-                function ($query){ 
-                    return $query->where('liquor_licence_number','LIKE','%'.request('term').'%')
-                    ->orWhere('start_date','LIKE','%'.request('term').'%')
-                    ->orWhere('end_date','LIKE','%'.request('term').'%')
-                    ->orWhere('event_name', 'like', '%'.request('term').'%')
-                    ->whereNull('active');            
-                    })
+        
+               
 
             ->where('people_id',auth()->user()->people_id)
             ->orWhereIn('company_id',$get_company_ids)
-            ->get();
+            ->latest()->paginate(20)->withQueryString();
 
-        return Inertia::render('CompanyAdminDash/Licences/TemporalLicence',['licences' => $licences]);
+        return Inertia::render('CompanyAdmin/TemporalLicences/MyTemporalLicence',['licences' => $licences]);
     }
 
     public function create() {
@@ -64,7 +55,7 @@ class TemporalLicenceController extends Controller
         public function show($slug){
             $licence = TemporalLicence::with('company','people')->whereSlug($slug)->first();
     
-            return Inertia::render('CompanyAdminDash/ViewTemporalLicence',['licence' => $licence]);
+            return Inertia::render('CompanyAdmin/TemporalLicences/ViewTemporalLicence',['licence' => $licence]);
      }
 
   

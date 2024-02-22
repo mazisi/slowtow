@@ -29,7 +29,7 @@
       <span :class="{ 'd-none': uploadDoc.processing}">
         <label v-if="orderByNumber !== 1400" :for="uploadDoc.doc_type + uploadDoc.orderByNumber">
         <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
-        <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + uploadDoc.orderByNumber">
+        <input :disabled="$page.props.auth.has_company_admin_role" type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + uploadDoc.orderByNumber">
       </label> </span>   
       
       <span v-if="uploadDoc.progress" style="margin-top: -2rem;">

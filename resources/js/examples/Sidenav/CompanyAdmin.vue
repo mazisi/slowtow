@@ -59,7 +59,7 @@
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'company_alterations' 
         || $page.props.currentRoute == 'view_company_alteration'}"
-         :href="`/company/alterations?slug=${$page.props.slug}`">
+         :href="`/company/my-alterations?slug=${$page.props.slug}`">
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">settings_suggest</i>
         </div>

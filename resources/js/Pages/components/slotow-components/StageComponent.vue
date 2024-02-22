@@ -6,6 +6,7 @@
     @input="emitValue($event,stageValue,prevStage)" 
     :checked="dbStatus >= stageValue" 
     :value="stageValue"
+    :disabled="$page.props.auth.has_company_admin_role"
     />
     <label :for="stageValue" 
     class="form-check-label text-body text-truncate status-heading">{{ stageTitle }}</label>

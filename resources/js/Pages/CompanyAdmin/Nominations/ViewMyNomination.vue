@@ -20,7 +20,7 @@
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row">
                     <div class="col-lg-10 col-10">
-                        <h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">
+                        <h6><Link :href="`/company/view-my-licences/?slug=${nomination.licence.slug}`" class="text-success">
                             {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
                         
                         <p class="text-sm mb-0">Current Stage:
@@ -191,9 +191,7 @@
                                                 @stage-value-changed="pushData"
                                             />
                                             <!--add nominiees button-->
-                                            <div class="col-md-1">
-                                                <button @click="show_modal=true" type="button" data-bs-toggle="modal" data-bs-target="#pop-modal" class="btn btn-sm btn-secondary">Add</button>
-                                            </div>
+                                           
 
                                             <!-- Nominiees Table -->
                                             <div  class="table-responsive mb-2">
@@ -356,13 +354,7 @@
                                                         />
                                             </div>
 
-                                            <div class="text-end">
-                                              <MergeNominationDocs
-                                                :mergeCount="canMerge()"
-                                                :nomination="nomination"
-                                                @mergeDocs="mergeDocument()"
-                                              />
-                                            </div>
+                                            <!--  -->
                                             <hr>
 
                                             <!-- Scanned Application -->

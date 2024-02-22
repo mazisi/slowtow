@@ -7,7 +7,7 @@
     <span :class="{ 'd-none': uploadDoc.processing}">
     <label v-if="!hasFile.id" :for="uploadDoc.doc_type + stage">
       <i class="cursor-pointer fa fa-upload h5" aria-hidden="true"></i>
-      <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + stage">
+      <input :disabled="$page.props.auth.has_company_admin_role" type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type + stage">
     </label>
   </span>
 
