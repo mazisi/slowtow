@@ -256,14 +256,7 @@
           </div>
           <hr>
   
-          <Task
-  
-              :tasks="tasks"
-              :model_id="renewal.id"
-              :success="success"
-              :error="error"
-              :errors="errors"
-              :model_type="'Licence Renewal'"/>
+         
   
         </div>
       </div>
