@@ -1,5 +1,5 @@
 <template>
-     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+     <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center" >
       <div class="me-3" v-if="hasFile.docPath">
       <a v-if="hasFile.docPath" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
        <i class="fas fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
@@ -13,13 +13,13 @@
         <p v-if="file_has_apostrophe" class="mb-0 text-danger text-xs">File cannot contain apostrophes.</p>
       </div>
   
-      <button  v-if="hasFile.id" @click="deleteDocument(hasFile.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+      <button  v-if="hasFile.id " @click="deleteDocument(hasFile.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" :class="{ 'd-none': !$page.props.auth.has_company_admin_role}">
       <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
       </button>
   
-      <label v-else :for="uploadDoc.doc_type" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" :class="{ 'd-none': uploadDoc.processing}">
+      <label v-else :for="uploadDoc.doc_type" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" :class="{ 'd-none': uploadDoc.processing || $page.props.auth.has_company_admin_role}">
       <i class="fa fa-upload" aria-hidden="true"></i>
-      <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
+      <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type" :class="{ 'd-none': $page.props.auth.has_company_admin_role}">
       </label>
       <span v-if="uploadDoc.progress" style="margin-left: 5rem;">
             <CircleProgressBar  

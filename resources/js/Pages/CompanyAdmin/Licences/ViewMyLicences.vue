@@ -441,13 +441,13 @@ Duplicate Original Delivered on the main licence information page.~Dupliacte Ori
                                         <td v-else-if="licence.belongs_to ==='Individual' && licence.people.active !== null" class="text-sm"><i class="fa fa-check text-info" aria-hidden="true"></i></td>
                                         <td v-else class=" text-sm text-danger"><i class="fa fa-times"></i></td>
                                         <td class="align-middle text-sm">
-                                            <Link v-if="licence.belongs_to ==='Company'" :href="`/view-company/${licence.company.slug}`" class="text-sm text-center align-middle">
+                                            <Link v-if="licence.belongs_to ==='Company'" :href="`/company/view-my-company/${licence.company.slug}`" class="text-sm text-center align-middle">
                                                 <h6 class="mb-0 ">{{ limit(licence.company.name) }}</h6></Link>
                                             <Link v-else-if="licence.belongs_to ==='Individual'" :href="`/view-person/${licence.people.slug}`" class="text-sm text-center align-middle">
                                                 <h6 class="mb-0 ">{{ limit(licence.people.full_name) }}</h6></Link>
                                         </td>
                                         <td class="text-center">
-                                            <Link v-if="licence.belongs_to ==='Company'" :href="`/view-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
+                                            <Link v-if="licence.belongs_to ==='Company'" :href="`/company/view-my-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
                                             <Link v-else-if="licence.belongs_to ==='Individual'" :href="`/view-person/${licence.people.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
                                         </td>
                                     </tr>

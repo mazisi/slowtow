@@ -10,7 +10,7 @@ use App\Http\Controllers\CompanyAdmin\NominationController;
 use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
-
+use App\Http\Controllers\CompanyAdmin\PeopleController;
 
   Route::group(['middleware' => ['auth','role:company-admin']], function () {
       
@@ -21,6 +21,8 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
         Route::get('/licences',[LicenceController::class,'index'])->name('company_admin_licences');
 
         Route::get('/view-my-licences/{slug}',[LicenceController::class,'show'])->name('view_my_licences');
+
+        Route::get('/my-people',[PeopleController::class,'index'])->name('my_people');
 
 
 

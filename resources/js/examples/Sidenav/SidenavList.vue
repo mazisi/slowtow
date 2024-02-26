@@ -126,6 +126,24 @@
     </sidenav-collapse>
 </li>
 
+<li class="nav-item" v-if="$page.props.auth.has_company_admin_role
+ || $page.props.auth.has_slowtow_user_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          :collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'people'}"
+          collapseRef="/company/my-people"
+          navText="People">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5"
+              >groups</i
+            >
+          </template>
+        </sidenav-collapse>
+  </li>
+
+
     <hr>
       <li v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role
       " class="mt-3 nav-item"><h6 class="text-xs ps-4 text-uppercase font-weight-bolder text-white ms-2"> ACTIONS </h6></li>

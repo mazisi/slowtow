@@ -1,7 +1,7 @@
 <template>
   <div class="container mt-2 text-left">
     
-        <div class="row justify-content-center">
+        <div v-if="$page.props.auth.has_slowtow_admin_role" class="row justify-content-center">
             
             <div class="col-4 columns">    
               <div class="input-group input-group-outline null is-filled">
@@ -57,7 +57,7 @@
         </td>
       </tr>
       <tr v-else >
-        <td class="text-danger text-center" colspan="6" > You have not uploaded any documents as yet</td>
+        <td class="text-danger text-center" colspan="6" > Documents not uploaded as yet</td>
       </tr>
       <!-- <tr v-if="errors?.uploaded_at">
         <td class="text-danger text-center">{{errors.uploaded_at}}</td>
