@@ -24,6 +24,8 @@ use App\Http\Controllers\CompanyAdmin\PeopleController;
 
         Route::get('/my-people',[PeopleController::class,'index'])->name('my_people');
 
+        Route::get('/view-my-person/{id}',[PeopleController::class,'show'])->name('view_my_person');
+
 
 
 

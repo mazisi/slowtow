@@ -48,23 +48,21 @@
 </thead>
 <tbody>
 
-
-<tr v-if="people.data?.length > 0" v-for="person in people.data" :key="person.id">
+<tr v-if="company.data[0]?.users?.length > 0" v-for="person in company.data[0].users" :key="person.id">
 <td>
 <div class="avatar-group ">
-<i v-if="person.active" class="fa fa-check text-success" aria-hidden="true"></i>
-<i v-else class="fa fa-times text-danger" aria-hidden="true"></i>
+<i class="fa fa-check text-success" aria-hidden="true"></i>
 </div>
 </td>
 <td class="align-middle text-center text-sm">
-<Link :href="`/view-person/${person.slug}`">
-<h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>
-<p v-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_1.toLowerCase() }} </p>
-<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_2.toLowerCase() }} </p>
-<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_3.toLowerCase() }} </p>
+<Link :href="`/company/view-person/${person.id}`">
+<h6 class="mb-0 text-sm">{{ person.name }}</h6></Link>
+<p v-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_1?.toLowerCase() }} </p>
+<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_2?.toLowerCase() }} </p>
+<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_3?.toLowerCase() }} </p>
 </td>
 <td class="align-middle d-flex justify-content-center">
-<Link :href="`/view-person/${person.slug}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">
+<Link :href="`/company/view-person/${person.id}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">
 <i class="material-icons me-sm-1">visibility </i></Link>
 </td>
 </tr>
@@ -78,10 +76,10 @@
 </div>
 </div>
 
-<Paginate v-if="people.data?.length > 0"
+<!-- <Paginate v-if="people.data?.length > 0"
   :modelName="people"
   :modelType="People"
-  />
+  /> -->
   
 </div>
 
@@ -92,4 +90,4 @@
 
   </Layout>
 </template>
-<script src="../../People/people.js"></script>
+<script src="./my_people.js"></script>
