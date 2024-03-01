@@ -31,7 +31,7 @@ class ExistingLicenceReportFilter{
             })
 
             ->when(request('province'), function ($query) {
-                $query->whereIn('province',array_values(explode(",",request('province'))));
+                $query->whereIn('licences.province',array_values(explode(",",request('province'))));
             })
             ->when(request('boardRegion'), function ($query) {
                 $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));

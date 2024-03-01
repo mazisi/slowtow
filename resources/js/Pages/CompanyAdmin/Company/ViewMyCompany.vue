@@ -13,13 +13,13 @@
                 <div class="row">
                     <div class="mt-3 ">
                         <form class="row" >
-                            <div class="col-8 col-md-8 col-xl-8 position-relative">
+                            <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8 position-relative">
                                 <div class="card card-plain h-100">
                                     <div class="p-3 card-body">
                                         <div class="row">
 
                                             <CheckBoxInputComponent
-                                                :column="'col-12'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Active Company'"
                                                 :isChecked="company.active == '1'"
                                                 :value="1"
@@ -31,7 +31,7 @@
                                                 :inputType="'text'"
                                                 v-model="form.company_name"
                                                 :value="form.company_name"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Company Name *'"
                                                 :errors="errors.company_name"
                                                 :input_id="company_name"
@@ -41,13 +41,13 @@
                                                 :inputType="'email'"
                                                 v-model="form.email_address_1"
                                                 :value="form.email_address_1"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Email Address'"
                                                 :errors="errors.email_address_1"
                                                 :input_id="email_address_1"
                                             />
 
-                                            <div class="col-md-6 columns">
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 columns">
                                                 <div class="input-group input-group-outline null is-filled ">
                                                     <label class="form-label">Company Type </label>
                                                     <select class="form-control form-control-default" v-model="form.company_type">
@@ -71,7 +71,7 @@
                                                 :inputType="'email'"
                                                 v-model="form.email_address_2"
                                                 :value="form.email_address_2"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Email Address'"
                                                 :errors="errors.email_address_2"
                                                 :input_id="email_address_2"
@@ -81,7 +81,7 @@
                                                 :inputType="'text'"
                                                 v-model="form.reg_number"
                                                 :value="form.reg_number"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Registration Number'"
                                                 :errors="errors.reg_number"
                                                 :input_id="reg_number"
@@ -91,7 +91,7 @@
                                                 :inputType="'email'"
                                                 v-model="form.email_address_3"
                                                 :value="form.email_address_3"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Email Address'"
                                                 :errors="errors.email_address_3"
                                                 :input_id="email_address_3"
@@ -102,7 +102,7 @@
                                                 :inputType="'text'"
                                                 v-model="form.vat_number"
                                                 :value="form.vat_number"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Vat Number'"
                                                 :errors="errors.vat_number"
                                                 :input_id="vat_number"
@@ -112,7 +112,7 @@
                                                 :inputType="'text'"
                                                 v-model="form.telephone_number_1"
                                                 :value="form.telephone_number_1"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Phone Number'"
                                                 :errors="errors.telephone_number_1"
                                                 :input_id="telephone_number_1"
@@ -133,7 +133,7 @@
                                                 :inputType="'text'"
                                                 v-model="form.telephone_number_2"
                                                 :value="form.telephone_number_2"
-                                                :column="'col-6'"
+                                                :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                                 :label="'Phone Number'"
                                                 :errors="errors.telephone_number_2"
                                                 :input_id="telephone_number_2"
@@ -144,7 +144,7 @@
                                             <h6 class="text-center mt-5">Company Documents</h6>
 
 
-                                            <div class="col-md-6 columns">
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 columns">
                                                     <CompanyFileUploadComponent
                                                         :documentModel="company"
                                                         @file-value-changed="submitDocument"
@@ -186,7 +186,7 @@
 
                                             </div>
 
-                                            <div class="col-md-6 columns">
+                                            <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 columns">
                                                 <ul class="list-group">                                                   
                                                         <CompanyFileUploadComponent
                                                             :documentModel="company"
@@ -213,7 +213,6 @@
                                                             :success="success"
                                                         />
                                                   
-
                                                 </ul>
                                             </div>
 
@@ -224,14 +223,14 @@
                                 <hr class="vertical dark" />
                             </div>
 
-                            <div class="col-4 col-md-4 col-xl-4" style="margin-top: 1rem;">
+                            <div class="col-sm-12 col-md-4 col-xl-4" style="margin-top: 1rem;">
                                 <div class="row">
 
                                     <TextInputComponent
                                         :inputType="'text'"
                                         v-model="form.business_address"
                                         :value="form.business_address"
-                                        :column="'col-12'"
+                                        :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                         :label="'Business Address Line 1'"
                                         :errors="errors.business_address"
                                         :input_id="business_address"
@@ -242,7 +241,7 @@
                                         :inputType="'text'"
                                         v-model="form.business_address2"
                                         :value="form.business_address2"
-                                        :column="'col-12'"
+                                        :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                         :label="'Business Address Line 2'"
                                         :errors="errors.business_address2"
                                         :input_id="business_address2"
@@ -252,7 +251,7 @@
                                         :inputType="'text'"
                                         v-model="form.business_address3"
                                         :value="form.business_address3"
-                                        :column="'col-12'"
+                                        :column="'col-sm-12 col-md-6 col-lg-6 col-xl-6'"
                                         :label="'Business Address Line 3'"
                                         :errors="errors.business_address3"
                                         :input_id="business_address3"
@@ -365,7 +364,6 @@
                             </div>
 
                         </form>
-
                         <hr>
 
                     </div>
@@ -403,14 +401,14 @@
                                 <td>
                                     <div class="d-flex px-2">
                                         <div class="d-flex flex-column">
-                                            <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name : ''  }}</h6></Link>
+                                            <Link :href="`/company/view-licences/${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name : ''  }}</h6></Link>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_number ? licence.licence_number : '' }}</Link></td>
-                                <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_date }}</Link></td>
+                                <td class="text-center"><Link :href="`/company/view-my-licences/${licence.slug }`">{{ licence.licence_number ? licence.licence_number : '' }}</Link></td>
+                                <td class="text-center"><Link :href="`/company/view-my-licences/${licence.slug }`">{{ licence.licence_date }}</Link></td>
                                 <td class="text-center">
-                                    <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 ms-2 justify-content-center">
+                                    <Link :href="`/company/view-my-licences/${licence.slug }`" class="mx-2 ms-2 justify-content-center">
                                         <i class="fa fa-eye"></i></Link>
                                 </td>
 
@@ -456,7 +454,7 @@
                                     <div class="d-flex px-2">
 
                                         <div class="d-flex flex-column">
-                                            <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name ? person.full_name : '' }}</h6></Link>
+                                            <Link :href="`/company/view-my-person/${person.slug}`"><h6 class="mb-0 text-sm">{{ person.full_name ? person.full_name : '' }}</h6></Link>
                                         </div>
                                     </div>
                                 </td>
@@ -469,7 +467,7 @@
                                 </td>
                                 <td class="text-end ">
                                     <div class="d-flex float-end ">
-                                        <Link :href="`/view-person/${person.slug}`"><h6 class="mb-0 text-sm"><i class="fa fa-eye" aria-hidden="true"></i></h6></Link>
+                                        <Link :href="`/company/view-my-person/${person.slug}`"><h6 class="mb-0 text-sm"><i class="fa fa-eye" aria-hidden="true"></i></h6></Link>
                                     </div>
                                 </td>
 

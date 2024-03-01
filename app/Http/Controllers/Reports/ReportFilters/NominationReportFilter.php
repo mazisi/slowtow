@@ -33,7 +33,7 @@ class NominationReportFilter {
               $query->where('is_licence_active',false);
            })
             ->when(request('province'), function ($query) {
-                $query->whereIn('province',array_values(explode(",",request('province'))));
+                $query->whereIn('licences.province',array_values(explode(",",request('province'))));
             })
             ->when(request('licence_types'), function ($query)  {
                 $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));

@@ -38,7 +38,7 @@
                 <div class="row">
                     <div class="mt-3 ">
                         <form class="row" @submit.prevent="updateLicence">
-                            <div class="col-6 col-md-6 col-xl-6 position-relative">
+                            <div class="col-sm-12  col-md-6 col-xl-6 position-relative">
                                 <div class="card card-plain h-100">
                                     <div class="p-3 card-body">
 
@@ -184,7 +184,7 @@
                                 </div>
                                 <!-- <hr class="vertical dark" /> -->
                             </div>
-                            <div class="col-6 col-md-6 col-xl-6 position-relative">
+                            <div class="col-sm-12  col-md-6 col-xl-6 position-relative">
                                 <div class="col-12 columns invisible">
                                     <div class="input-group input-group-outline null is-filled">
                                         <label class="form-label">Address Line 1</label>
@@ -386,9 +386,7 @@
                                             </li>
                                         </template>
 
-<!-- This document uploaded under this stage must automatically link as the
-Duplicate Original Delivered on the main licence information page.~Dupliacte Original Docs Table~ 
- -->
+
                                         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                                             <div class="me-3" v-if="duplicate_original_lic_delivered">
                                                 <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.path}`"
@@ -448,7 +446,7 @@ Duplicate Original Delivered on the main licence information page.~Dupliacte Ori
                                         </td>
                                         <td class="text-center">
                                             <Link v-if="licence.belongs_to ==='Company'" :href="`/company/view-my-company/${licence.company.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
-                                            <Link v-else-if="licence.belongs_to ==='Individual'" :href="`/view-person/${licence.people.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
+                                            <Link v-else-if="licence.belongs_to ==='Individual'" :href="`/view-my-person/${licence.people.slug}`"><i class="fa fa-eye" aria-hidden="true"></i></Link>
                                         </td>
                                     </tr>
                                     </tbody>

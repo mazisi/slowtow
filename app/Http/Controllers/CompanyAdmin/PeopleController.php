@@ -6,6 +6,7 @@ use App\Models\Company;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\People;
 use Inertia\Inertia;
 
 class PeopleController extends Controller
@@ -20,9 +21,11 @@ class PeopleController extends Controller
     }
 
     function show($id) {
-        $user = User::find($id);dd($user);
+        $user = User::with('company')->find($id); 
+       $person = People::with('people_documents')->find($user->people_id);
+       $user->person = $person;
         return Inertia::render('CompanyAdmin/People/ViewPerson',[
-            'user' => $user
+            'person' => $user
         ]);
     }
 }

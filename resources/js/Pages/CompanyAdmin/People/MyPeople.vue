@@ -62,7 +62,7 @@
 <p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_3?.toLowerCase() }} </p>
 </td>
 <td class="align-middle d-flex justify-content-center">
-<Link :href="`/company/view-person/${person.id}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">
+<Link :href="`/company/view-my-person/${person.id}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">
 <i class="material-icons me-sm-1">visibility </i></Link>
 </td>
 </tr>

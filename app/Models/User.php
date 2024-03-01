@@ -64,4 +64,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Issue::class);
     }
+
+    public function person(){
+
+        return $this->belongsTo(People::class);
+    }
 }

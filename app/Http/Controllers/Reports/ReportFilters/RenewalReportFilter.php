@@ -24,7 +24,7 @@ class RenewalReportFilter {
            })
 
            ->when(request('province'), function ($query)  {
-               $query->whereIn('province',array_values(explode(",",request('province'))));
+               $query->whereIn('licences.province',array_values(explode(",",request('province'))));
            })
 
            ->when(request('activeStatus') === 'Inactive', function ($query) {
