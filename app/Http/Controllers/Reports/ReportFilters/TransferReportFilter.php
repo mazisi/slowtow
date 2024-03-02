@@ -8,9 +8,9 @@ class TransferReportFilter {
 
   function filter($request){
     return DB::table('licence_transfers')
-    ->selectRaw("licence_transfers.id, is_licence_active, trading_name, licence_transfers.date, 
+    ->selectRaw("licence_transfers.id, is_licence_active,licences.belongs_to, licences.company_id,licences.people_id,trading_name, licence_transfers.date, 
                  licence_transfers.lodged_at, licence_transfers.status, payment_to_liquor_board_at, 
-                 board_region,issued_at, delivered_at,province, licence_number")
+                 board_region,issued_at,transfered_to,transfered_from, delivered_at,province, licence_number")
 
     ->join('licences', 'licences.id' , '=', 'licence_transfers.licence_id')
 
@@ -60,16 +60,6 @@ class TransferReportFilter {
               $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
           })
           ->whereNull('licences.deleted_at')->whereNull('licence_transfers.deleted_at')
-          ->orderBy('trading_name')->get([
-              'trading_name',
-              'licence_number',
-              'province',
-              'board_region',
-              'lodged_at',
-              'payment_to_liquor_board_at',
-              'issued_at',
-              'is_licence_active',
-              'status'
-          ]);
+          ->orderBy('trading_name')->get();
   }
 }

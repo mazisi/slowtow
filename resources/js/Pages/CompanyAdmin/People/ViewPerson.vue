@@ -1,12 +1,12 @@
 <template>
     <Layout>
-      <Head title="View Person" />
+      <Head title="View Person"/>
       <div class="container-fluid">
         <Banner/>
         <div class="card card-body mx-3 mx-md-4 mt-n6">
           <div class="row">
             <div class="col-lg-6 col-7">
-              <h6 class="mb-1">Person Info: {{ person.full_name }}</h6>
+              <h6 class="mb-1">Person Info: {{ form.name }}</h6>
             </div>
             
           </div>
@@ -178,7 +178,7 @@
   
           </div>
   
-          <div class="row">
+          <div class="row d-none">
             <h6 class="text-center mb-2 ">Companies Linked To : {{ person.full_name ? person.full_name : '' }}</h6>
             <div class="table-responsive p-0">
               <table class="table align-items-center mb-0">

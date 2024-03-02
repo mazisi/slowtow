@@ -55,7 +55,7 @@
 </div>
 </td>
 <td class="align-middle text-center text-sm">
-<Link :href="`/company/view-person/${person.id}`">
+<Link :href="`/company/view-my-person/${person.id}`">
 <h6 class="mb-0 text-sm">{{ person.name }}</h6></Link>
 <p v-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_1?.toLowerCase() }} </p>
 <p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_2?.toLowerCase() }} </p>

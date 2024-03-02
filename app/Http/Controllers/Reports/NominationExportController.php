@@ -16,6 +16,7 @@ class NominationExportController extends Controller implements ReportShouldHaveS
             $arrayData = array(
                 array(
                     'TRADING NAME',
+                    'LICENCE HOLDER',
                     'Client Name',
                     'LICENCE NUMBER',
                     'PROVINCE/REGION',
@@ -36,7 +37,8 @@ class NominationExportController extends Controller implements ReportShouldHaveS
             $notes = ExportNotes::getNoteExports($arr_of_nominations[$i]->id, 'Nomination');  
 
        $data = [ 
-                   $arr_of_nominations[$i]->trading_name, 
+                   $arr_of_nominations[$i]->trading_name,
+                   getLicenceHolder($arr_of_nominations[$i]), 
                    $arr_of_nominations[$i]->full_name, 
                    $arr_of_nominations[$i]->licence_number, 
                    request('boardRegion') ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,

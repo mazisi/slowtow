@@ -10,7 +10,7 @@ class NominationReportFilter {
 
     return DB::table('nominations')
 
-    ->selectRaw("nominations.id, licences.trading_name, people.full_name, licences.licence_number, licences.province, 
+    ->selectRaw("nominations.id, licences.trading_name, licences.belongs_to,licences.company_id,licences.people_id, people.full_name, licences.licence_number, licences.province, 
                  nominations.payment_to_liquor_board_at, nominations.nomination_lodged_at, 
                   nomination_lodged_at,nomination_lodged_at, '' as date_granted , 
                   nominations.status, nominations.nomination_issued_at,board_region, nominations.year, is_licence_active")
@@ -66,18 +66,6 @@ class NominationReportFilter {
             ->whereNull('licences.deleted_at')->whereNull('nominations.deleted_at')
             
       ->orderBy('trading_name')
-        ->get([
-            'id',
-            'trading_name',
-            'full_name',
-            'licence_number',
-            'board_region',
-            'province',
-            'payment_to_liquor_board_at',
-            'nomination_lodged_at',
-            'year',
-            'is_licence_active',
-            'nominations.status'
-        ]);
+        ->get();
   }
 }

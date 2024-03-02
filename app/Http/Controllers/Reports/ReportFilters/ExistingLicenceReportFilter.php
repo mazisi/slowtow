@@ -9,7 +9,7 @@ class ExistingLicenceReportFilter{
 
   function filter($request){
      return DB::table('licences')
-      ->selectRaw("licences.id, is_licence_active, trading_name,licence_type_id, licence_types.licence_type,licences.province, licence_number,
+      ->selectRaw("licences.id, is_licence_active, belongs_to,company_id,people_id,trading_name,licence_type_id, licence_types.licence_type,licences.province, licence_number,
                    board_region,licence_date, licences.status, is_new_app")
 
       ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')

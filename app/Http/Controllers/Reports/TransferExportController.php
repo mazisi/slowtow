@@ -7,6 +7,8 @@ use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
 use App\Http\Controllers\Reports\ReportFilters\TransferReportFilter;
+use App\Models\Company;
+use App\Models\People;
 use App\Models\TransferDocument;
 
 class TransferExportController extends Controller implements ReportShouldHaveStatusInterface
@@ -109,6 +111,16 @@ function getProofOfLodgiment($licence_transfer_id){
                                             ->where('doc_type','Transfer Logded')->first(['id']);
     return $proof_of_lodgiment;
 
+}
+
+function getTransferHolder($currentHolder, $transfer) {
+    if($currentHolder == 'Company'){
+        $company = Company::find($transfer->company_id);
+        return $company->name;
+    }
+       $person  = People::find($transfer->people_id);
+       return $person->full_name;
+    
 }
 
 }

@@ -16,6 +16,7 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
         $arrayData = array(
             array(                
                 'TRADING NAME',
+                'LICENCE HOLDER',
                 'LICENCE NUMBER',
                 'PROVINCE/REGION',
                 'DATE LODGED',
@@ -34,7 +35,8 @@ class AlterationExportController extends Controller implements ReportShouldHaveS
                               
                         
                         $data = [
-                        $arr_of_alterations[$i]->trading_name, 
+                        $arr_of_alterations[$i]->trading_name,
+                        getLicenceHolder($arr_of_alterations[$i]), 
                         $arr_of_alterations[$i]->licence_number, 
                         request('boardRegion') ? $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region : $arr_of_alterations[$i]->province,
                         self::getDate($arr_of_alterations[$i]->id,'Alterations Lodged')? self::getDate($arr_of_alterations[$i]->id,'Alterations Lodged'): '',

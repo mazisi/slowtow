@@ -28,6 +28,7 @@ class AllReportsController extends Controller
         $alterationData = array(
             array(                
                 'TRADING NAME',
+                'LICENCE HOLDER',
                 'LICENCE NUMBER',
                 'PROVINCE/REGION',
                 'DATE LODGED',
@@ -48,6 +49,7 @@ class AllReportsController extends Controller
                         
                         $data = [
                             $arr_of_alterations[$i]->trading_name, 
+                            getLicenceHolder($arr_of_alterations[$i]),
                             $arr_of_alterations[$i]->licence_number, 
                             request('boardRegion') ? $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region : $arr_of_alterations[$i]->province,
                             AlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Lodged'),
@@ -85,6 +87,7 @@ class AllReportsController extends Controller
         $existingLicencesData = array(
             array(
             'TRADING NAME',
+            'LICENCE HOLDER',
             'LICENCE TYPE',
             'LICENCE NUMBER',
             'PROVINCE/REGION',
@@ -107,7 +110,8 @@ class AllReportsController extends Controller
             for($i = 0; $i < count($arr_of_existing_licences); $i++ ){
                 
                      $data = [ 
-                        $arr_of_existing_licences[$i]->trading_name, 
+                        $arr_of_existing_licences[$i]->trading_name,
+                        getLicenceHolder($arr_of_existing_licences[$i]), 
                         $arr_of_existing_licences[$i]->licence_type,
                         $arr_of_existing_licences[$i]->licence_number,
                         request('boardRegion') ? $arr_of_existing_licences[$i]->province.' - '.$arr_of_existing_licences[$i]->board_region : $arr_of_existing_licences[$i]->province,
@@ -151,6 +155,7 @@ class AllReportsController extends Controller
         $newAppsData = array(
             array(
                 'TRADING NAME',
+                'LICENCE HOLDER',
                 'LICENCE TYPE',
                 'LICENCE NUMBER',
                 'PROVINCE/REGION',
@@ -176,7 +181,8 @@ class AllReportsController extends Controller
        
 
              $data = [ 
-                $arr_of_new_apps_licences[$i]->trading_name, 
+                $arr_of_new_apps_licences[$i]->trading_name,
+                getLicenceHolder($arr_of_new_apps_licences[$i]), 
                 $arr_of_new_apps_licences[$i]->licence_type,
                 $arr_of_new_apps_licences[$i]->licence_number,
                 request('boardRegion') ? $arr_of_new_apps_licences[$i]->province.' - '.$arr_of_new_apps_licences[$i]->board_region : $arr_of_new_apps_licences[$i]->province,
@@ -227,6 +233,7 @@ class AllReportsController extends Controller
         $arrayNominationData = array(
             array(
                 'TRADING NAME',
+                'LICENCE HOLDER',
                 'Client Name',
                 'LICENCE NUMBER',
                 'PROVINCE/REGION',
@@ -248,6 +255,7 @@ class AllReportsController extends Controller
 
                $data = [ 
                 $arr_of_nominations[$i]->trading_name, 
+                getLicenceHolder($arr_of_nominations[$i]),
                 $arr_of_nominations[$i]->full_name, 
                 $arr_of_nominations[$i]->licence_number, 
                 request('boardRegion') ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
@@ -292,6 +300,7 @@ class AllReportsController extends Controller
             array(
                 'ACTIVE/DEACTIVE',
                 'TRADING NAME',
+                'LICENCE HOLDER',
                 'LICENCE NUMBER',
                 'RENEWAL DATE',
                 'RENEWAL AMOUNT',
@@ -313,7 +322,8 @@ class AllReportsController extends Controller
 
                     $data = [ 
                         $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
-                        $arr_of_renewals[$i]->trading_name, 
+                        $arr_of_renewals[$i]->trading_name,
+                        getLicenceHolder($arr_of_renewals[$i]), 
                         $arr_of_renewals[$i]->licence_number,
                         $arr_of_renewals[$i]->date,
                         '',
@@ -418,6 +428,7 @@ class AllReportsController extends Controller
         $arrayTransferData = array(
             array(
                 'CURRENT TRADING NAME',
+                'LICENCE HOLDER',
                 'GAU/GLB No',
                 'PROVINCE/REGION',
                 'DEPOSIT INVOICE',
@@ -437,7 +448,8 @@ class AllReportsController extends Controller
                 for($i = 0; $i < count($arr_of_transfers); $i++ ){                               
 
                         $data = [         
-                            $arr_of_transfers[$i]->trading_name, 
+                            $arr_of_transfers[$i]->trading_name,
+                            (new TransferExportController)->getTransferHolder($arr_of_transfers[$i]->transfered_to, $arr_of_transfers[$i]),
                             $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
                             request('boardRegion') ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
                             '',

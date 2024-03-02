@@ -19,6 +19,7 @@ class RenewalExportController extends Controller
             array(
                 'ACTIVE/DEACTIVE',
                 'TRADING NAME',
+                'LICENCE HOLDER',
                 'LICENCE NUMBER',
                 'RENEWAL DATE',
                 'RENEWAL AMOUNT',
@@ -43,6 +44,7 @@ class RenewalExportController extends Controller
                     $data = [ 
                             $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
                             $arr_of_renewals[$i]->trading_name, 
+                            getLicenceHolder($arr_of_renewals[$i]),
                             $arr_of_renewals[$i]->licence_number,
                             $arr_of_renewals[$i]->date,
                             '',

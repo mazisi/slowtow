@@ -21,7 +21,7 @@
           <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
           </button>
       
-          <label v-else :for="uploadDoc.doc_type" :class="{ 'd-none': uploadDoc.processing}"
+          <label v-else :for="uploadDoc.doc_type" :class="{ 'd-none': uploadDoc.processing || $page.props.auth.has_company_admin_role}"
           class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
           <i class="fa fa-upload" aria-hidden="true"></i>
           <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
