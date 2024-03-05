@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\LicenceFilterAction;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
@@ -12,6 +11,8 @@ use App\Models\LicenceType;
 use Illuminate\Http\Request;
 use App\Events\LogUserActivity;
 use App\Models\LicenceDocument;
+use Illuminate\Validation\Rule;
+use App\Actions\LicenceFilterAction;
 
 class LicenceController extends Controller
 {
@@ -91,8 +92,15 @@ class LicenceController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             'belongs_to' => 'required|in:Company,Individual',
+            'person' => [Rule::requiredIf(function () { 
+                return request('belongs_to') == 'Individual'; 
+            })],
+            'company' => [Rule::requiredIf(function () { 
+                return request('belongs_to') == 'Company'; 
+            })],  
             'trading_name' => 'required',
             'licence_type' => 'required',
             'type' => 'required|in:retail,wholesale',

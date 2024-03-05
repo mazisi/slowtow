@@ -99,7 +99,11 @@
 
                 <div class="col-6 columns" v-if="form.belongs_to === 'Individual'">
 
-                    <Multiselect v-model="form.person" placeholder="Search Individual" :options="people_options" :searchable="true" @select="onSelectApplicant($event)" style="margin:top: 1rem;" />
+                    <Multiselect v-model="form.person" placeholder="Search Individual" 
+                    :options="people_options" 
+                    :searchable="true" 
+                    :required="true"
+                    @select="onSelectApplicant($event)" style="margin:top: 1rem;" />
 
                     <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
 
