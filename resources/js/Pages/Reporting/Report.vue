@@ -197,7 +197,9 @@
       v-model="form.licence_types"           
       :options="licenceTypes"
        mode="tags"
+       :searchable="true"
       :taggable="true"
+
       @select="fetchNewAppWithStages"
       placeholder="Licence Type"/>
       </div>

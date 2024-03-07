@@ -305,12 +305,10 @@ export default {
         let licence_types = ref(null);
 
         //list licence types based on province selected
-        function selectedProvince() { console.log("test this");
-
+        function selectedProvince() { 
             const filteredLicenses = props.licence_dropdowns
                 .filter(obj => obj.province === form.province);
             this.licence_types = filteredLicenses;
-            console.log(this.licence_types, "test this function");
         }
 
         const filterForm = useForm({

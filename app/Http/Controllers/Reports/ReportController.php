@@ -35,7 +35,7 @@ class ReportController extends Controller
               // $query ->where('doc_type','Client Quoted');            
             }])->where('model_type','Renewal')->get();
           
-          $licenceTypes = LicenceType::pluck('licence_type', 'id');
+          $licenceTypes = LicenceType::with('licence')->pluck('licence_type', 'id');
           $companies = Company::pluck('name','id');        
           $people = People::pluck('full_name','id');
           $sortedStatus = Arr::sort($request->new_app_stages);

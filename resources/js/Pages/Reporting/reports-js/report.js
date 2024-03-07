@@ -25,6 +25,7 @@ export default {
      const months = months;
      let years = props.years;                 
      let licenceTypes = props.licenceTypes;
+     console.log(licenceTypes);
      let companies = props.companies;
      let people = props.people;
 
@@ -101,8 +102,7 @@ export default {
      event.target.classList.remove('btn-success')
      event.target.classList.add('btn-info')   
     }
-   
-   
+  
 
   function getType(event,type){
      form.variation=type;
