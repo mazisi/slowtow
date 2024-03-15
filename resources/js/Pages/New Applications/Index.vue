@@ -130,7 +130,7 @@
                                                 :errors="errors.licence_type"
                                                 :input_id="licence_type"
                                                 :required="true"
-                                                
+
                                             />
 
 
@@ -138,14 +138,14 @@
                                                 v-if="form.province !== '' && form.type == 'wholesale'"
                                                 :dropdownList="licenceByProvince"
                                                 :label="'Licence Type **'"
-                                                :defaultDisabledText="'Select Licence Type'"
+                                                :defaultDisabledText="''"
                                                 :column="'col-12'"
                                                 :value="form.licence_type"
                                                 v-model="form.licence_type"
                                                 :errors="errors.licence_type"
                                                 :input_id="licence_type"
                                                 :required="true"
-                                                
+
                                             />
 
                                             <LiquorBoardRegionComponent
@@ -217,8 +217,8 @@
                                         <label class="form-label">Import/Export</label>
                                         <select v-model="form.import_export" class="form-control form-control-default" required>
                                             <option :value="''" disabled selected>Choose...</option>
-                                            <option value="Import">Import</option>
-                                            <option value="Export">Export</option>
+                                            <option value="Yes">Yes</option>
+                                            <option value="No">No</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.import_export" class="text-danger">{{ errors.import_export }}</div>

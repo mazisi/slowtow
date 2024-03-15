@@ -71,7 +71,7 @@
                   .filter(obj => obj.province === 'Wholesale');
           }else{
               licenceByProvince.value = props.licence_dropdowns
-                  .filter(obj => obj.province === form.province);
+                  .filter(obj => obj.province === form.province && obj.province !== 'Wholesale');
           }
 
           console.log(licenceByProvince.value);
@@ -116,8 +116,10 @@
 
 
         const computedProvinces = computed(() => {
-          return common.getProvinces();
+          //   exclude a province called Wholesale
+            return common.getProvinces().filter(province => province !== 'Wholesale');
         })
+
 
         const computedBoardRegions = computed(() => {
           return common.getBoardRegions();
