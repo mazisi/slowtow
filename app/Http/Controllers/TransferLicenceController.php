@@ -18,13 +18,15 @@ class TransferLicenceController extends Controller
 {
     public function index(Request $request){
         $licence = Licence::with('company','people')->whereSlug($request->slug)->first();
-        $companies_dropdown = Company::where('id','!=',$licence->company_id)->pluck('name','id');//get companies list
+        $companies_dropdown = Company::where('id','!=',$licence->company_id)->pluck('name','id');
         $people_dropdown = People::where('id','!=',$licence->people_id)->pluck('full_name','id');
-        return Inertia::render('Licences/TransferLicence',
-                                                ['licence' => $licence,
-                                               'companies_dropdown' => $companies_dropdown,
-                                               'people_dropdown'  => $people_dropdown
-                                                ]);
+        $view = $licence->type == 'wholesale' ? 'Licences/TransferWholesaleLicence' : 'Licences/TransferLicence';
+
+        return Inertia::render($view,
+            ['licence' => $licence,
+                'companies_dropdown' => $companies_dropdown,
+                'people_dropdown'  => $people_dropdown
+            ]);
     }
 
     public function store(Request $request,$slug){
@@ -41,8 +43,8 @@ class TransferLicenceController extends Controller
               "transfered_from" => "required|in:Individual,Company"
           ]);
       }
-       
-  
+
+
       $sorted_statuses = Arr::sort($request->status);
       $transfer = LicenceTransfer::create([
         'transfered_to' => $request->belongs_to,
@@ -70,7 +72,7 @@ class TransferLicenceController extends Controller
                     'belongs_to' => 'Individual'
                   ]);
                 }
-         
+
          return to_route('view_transfered_licence',['slug' => $transfer->slug])->with('success','Licence transfered successfully.');
        }
        return back()->with('errror','Oopps!!! An error occured while attempting licence transfer.');
@@ -81,7 +83,7 @@ class TransferLicenceController extends Controller
        */
       public function transferHistory(Request $request){
       $licence = Licence::whereSlug($request->slug)->first(['trading_name','slug']);
-      
+
       $transfers = LicenceTransfer::with('old_person','new_person','old_company','new_company')
           ->whereHas('licence', function ($query) use($request) {
             $query->where('slug',$request->slug);
@@ -95,16 +97,17 @@ class TransferLicenceController extends Controller
       public function viewTransferedLicence($slug){
         $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence','transfer_documents')->whereSlug($slug)->first();
         $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
-      
+
         // $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->latest()->paginate(4)->withQueryString();
 
-        
-        return Inertia::render('Licences/ViewTransferedLicence',
-        ['view_transfer' => $view_transfer,
-                 'tasks' => $tasks,
-                 'original_licence' => $original_licence
-        ]);
+        $view = $view_transfer->licence->type == "wholesale" ? "Licences/ViewWholesaleTransferedLicence": "Licences/ViewTransferedLicence";
+
+          return Inertia::render($view,
+              ['view_transfer' => $view_transfer,
+                  'tasks' => $tasks,
+                  'original_licence' => $original_licence
+              ]);
       }
 
       public function update(Request $request) {
@@ -163,7 +166,7 @@ class TransferLicenceController extends Controller
         if ($licence->delete()) {
           return to_route('transfer_history',['slug' => $licence_slug])->with('success','Licence transfer deleted successfully.');
         }
-        
+
       } catch (\Throwable $th) {
         //throw $th;
         return back()->with('error','Error deleting  licence transfer.');

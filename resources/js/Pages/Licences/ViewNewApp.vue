@@ -21,9 +21,9 @@
 
                                 <li v-for="licenceVariable in licenceVariables" :key="licenceVariable.id">
                                     <Link :href="`${licenceVariable.url}?slug=${licence.slug}`" class="dropdown-item border-radius-md">
-                                        
+
                                     {{ licenceVariable.name }}</Link></li>
-                                
+
 
                                 <li><hr class="text-danger"></li>
                                 <li><button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
@@ -212,7 +212,7 @@
                                                     </select>
                                                 </div>
                                             </div>
-                                            <div class="col-4 columns">
+                                            <div class="col-4 columns" v-if="licence.type === 'retail'">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Renewal Amount</label>
                                                     <input type="number" class="form-control form-control-default" v-model="form.renewal_amount">
@@ -228,9 +228,9 @@
                                             </div>
 
 
-                                            
 
-                                            <div class="col-4 columns">
+
+                                            <div class="col-4 columns" v-if="licence.type === 'retail'">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Liquor Board Region</label>
                                                     <select class="form-control form-control-default" v-model="form.board_region" >
@@ -240,7 +240,7 @@
                                                 </div>
                                             </div>
 
-                                           
+
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Postal Code</label>
@@ -319,12 +319,29 @@ export default {
         let companyOptions = props.companies;
         let peopleOptions = props.people;
 
-        const licenceVariables = [
-            {id: 1, name: 'Renewals', url: '/renew-licence'},
-            {id: 2, name: 'Transfers', url: '/transfer-history'},
-            {id: 3, name: 'Nominations', url: '/nominations'},
-            {id: 4, name: 'Alterations', url: '/alterations'},
-        ];
+        let licenceVariables;
+
+        if(props.licence.type === 'retail'){
+            licenceVariables = [
+                {id: 1, name: 'Renewals', url: '/renew-licence'},
+                {id: 2, name: 'Transfers', url: '/transfer-history'},
+                {id: 3, name: 'Nominations', url: '/nominations'},
+                {id: 4, name: 'Alterations', url: '/alterations'},
+            ];
+        } else {
+            licenceVariables = [
+                {id: 1, name: 'Renewals', url: '/renew-licence'},
+                {id: 2, name: 'Transfers', url: '/transfer-history'},
+                {id: 3, name: 'Additional Depot/Relocation', url: '/alterations'},
+            ];
+        }
+
+        //const licenceVariables = [
+        //     {id: 1, name: 'Renewals', url: '/renew-licence'},
+        //     {id: 2, name: 'Transfers', url: '/transfer-history'},
+        //     {id: 3, name: 'Nominations', url: '/nominations'},
+        //     {id: 4, name: 'Alterations', url: '/alterations'},
+        // ];
 
         const { notifySuccess, notifyError } = useToaster();
 
@@ -351,7 +368,7 @@ export default {
             person_id: props.licence.belongs_to == 'Individual' ? props.licence.people.id : '',
 
         })
-        
+
         function submit() {
             form.patch(`/update-new-app/${props.licence.slug}`, {
                 onSuccess: () => {
@@ -368,7 +385,7 @@ export default {
             }
         }
 
-    
+
 
         function selectApplicant(event){
             if(form.belongs_to === 'Company'){

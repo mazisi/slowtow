@@ -15,8 +15,6 @@
                                 Renewals</h6>
                         </div>
 
-
-
                     </div>
 
 
@@ -40,11 +38,12 @@
                                             <tbody>
                                             <tr v-if="renewals.data?.length > 0" v-for="renewal in renewals.data" :key="renewal.id">
                                                 <td>
-                                                    <div class="d-flex px-2 py-1">
+                                                    <div  class="d-flex px-2 py-1">
                                                         <div class="d-flex flex-column justify-content-center">
                                                             <Link :href="`/view-licence-renewal/${renewal.slug}`"><h6 class="text-center">{{ renewal.date }}</h6></Link>
                                                         </div>
                                                     </div>
+
                                                 </td>
 
                                                 <td class="align-middle text-center text-sm">

@@ -18,3 +18,8 @@ Route::delete('/delete-renewal-document/{id}',[LicenceRenewalController::class,'
 Route::patch('/update-renewal-date/{slug}',[LicenceRenewalController::class,'updateDates']);
 
 Route::delete('/delete-licence-renewal/{licence_slug}/{slug}',[LicenceRenewalController::class,'destroy'])->name('delete_licence_renewal');
+
+
+//wholesale variation routes
+
+Route::get('/wholesale-renewal/{slug}',[LicenceRenewalController::class,'wholesaleRenewal'])->name('wholesale_renewal');

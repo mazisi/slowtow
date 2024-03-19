@@ -31,9 +31,7 @@ export default{
     canActivate: Date,
   },
   setup(props, context){
-    console.log(props.stageValue === 2300 || props.stageValue === 2400 && props.canActivate === undefined, "test date here", props.canActivate, props.stageValue);
     function emitValue(event) {
-
       context.emit('stage-value-changed', event, props.stageValue, props.prevStage);
     }
 

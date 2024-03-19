@@ -3,20 +3,20 @@
     <Layout>
       <Head title="Process New Application" />
     <div class="container-fluid">
-  
+
         <Banner/>
-  
+
         <div class="card card-body mx-3 mx-md-4 mt-n6">
           <div class="row">
       <div class="col-lg-12 col-12">
        <h6>Process New Wholesale Application - <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
         {{ licence.trading_name ? licence.trading_name : '' }} - {{ licence?.licence_number }}</Link></h6>
-       <p class="text-sm mb-0">Current Stage: 
+       <p class="text-sm mb-0">Current Stage:
         <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
      </p>
     </div>
     </div>
-    
+
     <div class="row">
             <div class="mt-3 row">
               <div class="col-12 col-md-12 col-xl-12 position-relative">
@@ -24,7 +24,7 @@
                   <div class="p-3 card-body">
     <form @submit.prevent="updateRegistration">
     <div class="row">
-    
+
         <StageComponent
         :column=12
         :dbStatus="licence.status"
@@ -49,9 +49,9 @@
          :docType="'Client Quoted'"
          :success="success"
          />
-    
+
     <hr>
-    
+
      <StageComponent
         :column=12
         :dbStatus="licence.status"
@@ -75,10 +75,10 @@
       :docType="'Client Invoiced'"
       :success="success"
       />
-      
+
       <hr>
-    
-  
+
+
     <StageComponent
     :column=5
     :dbStatus="licence.status"
@@ -92,7 +92,7 @@
     @stage-value-changed="pushData"
   />
     <div class="col-md-1 columns"></div>
-    
+
       <DateComponent
       @date-value-changed="updateStageDate"
           :stage="'Client Paid'"
@@ -103,12 +103,12 @@
           :column=5
           :dated_at="getLicenceDate(licence.id, 'Client Paid')"
           :success="success"
-        />  
-     
-    
+        />
+
+
     <hr>
-  
-      
+
+
       <StageComponent
       :column=12
       :dbStatus="licence.status"
@@ -121,10 +121,10 @@
       :success="success"
       @stage-value-changed="pushData"
     />
-      
-   
-  
-      
+
+
+
+
     <div class="col-md-6">
       <MergeDocumentComponent
       @file-value-changed="submitDocument"
@@ -139,9 +139,9 @@
       :stage=400
       :hasFile="hasFile('BEE Certificate/Affidavit')"
       />
-      
-  
-  
+
+
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -156,7 +156,7 @@
     :stage=400
     :hasFile="hasFile('Tax Clearance')"
     />
-  
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -171,7 +171,7 @@
     :stage=400
     :hasFile="hasFile('ID Documents')"
     />
-  
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -187,7 +187,7 @@
     :mergeNum="4"
     :hasFile="hasFile('Company Documents')"
     />
-    
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -202,7 +202,7 @@
     :stage=400
     :hasFile="hasFile('Zoning Certificate')"
     />
-  
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -217,7 +217,7 @@
     :stage=400
     :hasFile="hasFile('LAA Certificate')"
     />
-  
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -232,7 +232,7 @@
     :stage=400
     :hasFile="hasFile('Proof of rightful occupation')"
     />
-  
+
   </div>
   <div class="col-6">
     <MergeDocumentComponent
@@ -248,7 +248,7 @@
     :stage="400"
     :hasFile="hasFile('Maps/Plans')"
     />
-  
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -263,10 +263,10 @@
     :stage="500"
     :hasFile="hasFile('Photographs')"
     />
-  
-  
+
+
     <!-- This stage must only appear if  manufacturing -->
-    <MergeDocumentComponent
+    <MergeDocumentComponent v-if="licence.licence_type === 'Manufacturing' && licence.licence_type !== 'Manufacturing and Distributing' "
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
     :success="success"
@@ -284,7 +284,7 @@
 
     <MergeDocumentComponent v-if="licence.import_export"
     @file-value-changed="submitDocument"
-     @file-deleted="deleteDocument" 
+     @file-deleted="deleteDocument"
     :success="success"
     :error="error"
     :errors="errors"
@@ -296,7 +296,7 @@
     :stage=400
     :hasFile="hasFile('Import/Export')"
     />
-  
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -312,8 +312,8 @@
     :mergeNum="21"
     :hasFile="hasFile('NLA Application Form')"
     />
-  
-  
+
+
     <MergeDocumentComponent
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -329,7 +329,7 @@
     :mergeNum="22"
     :hasFile="hasFile('Signed NLA 1 Form')"
     />
-  
+
      <MergeDocumentComponent
      @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
@@ -344,12 +344,12 @@
     :stage="400"
     :hasFile="hasFile('Signed POA & RES')"
     />
-  
-  
-  
-  </div> 
+
+
+
+  </div>
         <hr>
-    
+
     <StageComponent
     :column=5
     :dbStatus="licence.status"
@@ -374,9 +374,9 @@
         :dated_at="getLicenceDate(licence.id, 'Scanned Application')"
         :success="success"
         />
-   
-  
-    
+
+
+
 <hr/>
    <StageComponent
       :dbStatus="licence.status"
@@ -389,7 +389,7 @@
       :success="success"
       @stage-value-changed="pushData"
    />
-  
+
    <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -404,7 +404,7 @@
   />
   </div>
   <DateComponent
-  @date-value-changed="updateStageDate" 
+  @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'Initial Application Fee'"
         :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -414,8 +414,8 @@
         :dated_at="getLicenceDate(licence.id, 'Initial Application Fee')"
         :success="success"
         />
-  <hr/> 
-  
+  <hr/>
+
 
   <StageComponent
   :column=5
@@ -429,7 +429,7 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
+
   <div class="col-md-1 columns"></div>
   <DateComponent
   @date-value-changed="updateStageDate"
@@ -442,7 +442,7 @@
         :dated_at="getLicenceDate(licence.id, 'Application Lodged')"
         :success="success"
         />
-  <hr/> 
+  <hr/>
 
   <StageComponent
   :dbStatus="licence.status"
@@ -455,13 +455,13 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
-      
-    <AdditionalDocsComponent 
+
+
+    <AdditionalDocsComponent
     v-if="licence.status >= 1100"
-    :licence_id="licence.id" 
+    :licence_id="licence.id"
     :additional_docs="licence.additional_docs"
-    :success="success" 
+    :success="success"
     :errors="errors"
     :error="error"/>
 
@@ -477,7 +477,7 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
+
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -492,7 +492,7 @@
     />
     </div>
   <hr>
-  
+
   <StageComponent
   :dbStatus="licence.status"
   :errors="errors"
@@ -504,7 +504,7 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
+
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -528,11 +528,11 @@
         :column=5
         :dated_at="getLicenceDate(licence.id, 'NLA 7 Submitted')"
         :success="success"
-        /> 
+        />
   <hr>
-  
+
   <!-- Limpopo and Northwest ====================== -->
-  <StageComponent 
+  <StageComponent
   :dbStatus="licence.status"
   :errors="errors"
   :error="error"
@@ -543,7 +543,7 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
+
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -567,7 +567,7 @@
         :column=5
         :dated_at="getLicenceDate(licence.id, 'NLA 8 Issued')"
         :success="success"
-        /> 
+        />
   <hr>
 
   <StageComponent
@@ -581,7 +581,7 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
+
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -605,9 +605,9 @@
         :column=5
         :dated_at="getLicenceDate(licence.id, 'Activation Fee')"
         :success="success"
-        /> 
+        />
   <hr>
-  
+
   <!-- Limpopo and Northwest ====================== -->
   <StageComponent
   :dbStatus="licence.status"
@@ -620,7 +620,7 @@
   :success="success"
   @stage-value-changed="pushData"
   />
-  
+
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -644,10 +644,10 @@
         :column=5
         :dated_at="getLicenceDate(licence.id, 'NLA 9 Issued')"
         :success="success"
-        />   
+        />
   <hr>
-  
-      <StageComponent 
+
+      <StageComponent
       :dbStatus="licence.status"
       :errors="errors"
       :error="error"
@@ -657,7 +657,7 @@
       :stageTitle="'Original Licence'"
       :success="success"
       @stage-value-changed="pushData"
-      />   
+      />
       <div class="col-md-6" >
       <DocComponent
       @file-value-changed="submitDocument"
@@ -671,10 +671,10 @@
       :success="success"
       />
       </div>
-     
-      
+
+
   <hr/>
-    
+
   <StageComponent
   :dbStatus="licence.status"
   :errors="errors"
@@ -685,8 +685,8 @@
   :stageTitle="'Original Licence Delivered'"
   :success="success"
   @stage-value-changed="pushData"
-  />   
-  
+  />
+
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
@@ -710,16 +710,16 @@
     :column=5
     :dated_at="getLicenceDate(licence.id, 'Original Licence Delivered')"
     :success="success"
-    />      
-  
+    />
+
   <hr/>
-  
-   
-             
-    
+
+
+
+
     <div>
       <!-- If its issued stage -->
-      <div v-if="form.status >= 2300" class="text-xs text-danger d-flex">Please note that this licence will no longer be a 
+      <div v-if="form.status >= 2300" class="text-xs text-danger d-flex">Please note that this licence will no longer be a
         new application and this action is irreversible once saved.</div>
     </div>
     </div>
@@ -728,28 +728,28 @@
     </div>
     <hr class="vertical dark" />
     </div>
-            
+
     </div>
-    
+
     </div>
     <hr>
-    
-    <Task 
+
+    <Task
     v-if="licence.status >= 1100"
-    :tasks="tasks" 
-    :model_id="licence.id" 
-    :success="success" 
-    :error="error" 
+    :tasks="tasks"
+    :model_id="licence.id"
+    :success="success"
+    :error="error"
     :errors="errors"
-    :model_type="'Licence'"/> 
-  
-  
-  
+    :model_type="'Licence'"/>
+
+
+
     </div>
     </div>
-  
-    
-  
+
+
+
       </Layout>
     </template>
       <style src="@vueform/multiselect/themes/default.css"></style>
@@ -770,10 +770,9 @@
   .list-group{
       margin-top: -1.4rem;
   }
-  
-  
+
+
   </style>
-  
+
   <script src="./wholesale.js"></script>
-  
-  
+

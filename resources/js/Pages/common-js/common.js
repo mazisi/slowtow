@@ -11,21 +11,13 @@ const PROVINCES =      ['Eastern Cape',
                         'Western Cape'
                         ];
 
-const BOARD_REGIONS  = ['Eastern Cape',
-                        'Free State',
-                        'Ekurhuleni',
-                        'Johannesburg',
-                        'Sedibeng',
-                        'Tshwane',
-                        'West Rand',
-                        'KwaZulu-Natal',
-                        'Limpopo',
-                        'Mpumalanga',
-                        'National Liquor Authority',
-                        'Northern Cape',
-                        'North West',
-                        'Western Cape',
-                      ];
+const BOARD_REGIONS  = [
+                            'Ekurhuleni',
+                            'Johannesburg',
+                            'Sedibeng',
+                            'Tshwane',
+                            'West Rand'
+                            ];
 
     const BOARD_REGIONS_GAUTENG  = [
                                     'Ekurhuleni',

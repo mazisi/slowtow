@@ -17,7 +17,7 @@
                     <div class="col-lg-1 col-1 my-auto text-end d-flex">
                         <i @click="preview" class="fa fa-file-o mx-4 my-1 text-secondary cursor-pointer" aria-hidden="true"></i>
                         <div class="dropdown float-lg-end pe-4">
-                     
+
                             <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
                             </a>
@@ -26,7 +26,7 @@
 
                                 <li><Link :href="`/transfer-history?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
 
-                                <li><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
+                                <li v-if="licence.type !== 'wholesale'"><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
 
                                 <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
 
@@ -287,7 +287,7 @@
                                     :inputType="'text'"
                                 />
 
-                                <div class="input-group-custom mb-2" v-if="licence.status >= 2300">
+                                <div class="input-group-custom mb-2" v-if="licence.status >= 2300 && licence.type === 'retail'">
                                     <div class="add-on">R</div>
                                     <input type="number" class="input-field form-control-default" v-model="form.renewal_amount" placeholder="Renewal amount">
                                 </div>
@@ -317,17 +317,17 @@
                                                 </button>
 
                                                 <label v-else for="Original-Licence"
-                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}" 
+                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}"
                                                 class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-upload" aria-hidden="true"></i>
                                                     <input type="file" @change="upload($event,'Original-Licence')" accept=".pdf" hidden id="Original-Licence">
                                                 </label>
 
                                                 <span v-if="originalLicenceForm.progress" >
-                                                    <CircleProgressBar  
-                                                        :value="originalLicenceForm.progress.percentage"  
-                                                        :max="100"  
-                                                        percentage  
+                                                    <CircleProgressBar
+                                                        :value="originalLicenceForm.progress.percentage"
+                                                        :max="100"
+                                                        percentage
                                                         rounded
                                                         :size="30"
                                                         :colorFilled="'#4caf50'"
@@ -373,17 +373,17 @@
                                             </button>
 
                                             <label v-else for="Duplicate-Licence"
-                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}" 
+                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}"
                                                 class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-upload" aria-hidden="true"></i>
                                                     <input type="file" @change="upload($event,'Duplicate-Licence')" accept=".pdf" hidden id="Duplicate-Licence">
                                                 </label>
 
                                                 <span v-if="originalLicenceForm.progress" >
-                                                    <CircleProgressBar  
-                                                        :value="originalLicenceForm.progress.percentage"  
-                                                        :max="100"  
-                                                        percentage  
+                                                    <CircleProgressBar
+                                                        :value="originalLicenceForm.progress.percentage"
+                                                        :max="100"
+                                                        percentage
                                                         rounded
                                                         :size="30"
                                                         :colorFilled="'#4caf50'"
@@ -417,17 +417,17 @@
                                                 </button>
 
                                                 <label v-else for="Original-Licence-Delivered"
-                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}" 
+                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}"
                                                 class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-upload" aria-hidden="true"></i>
                                                     <input type="file" @change="upload($event,'Original-Licence-Delivered')" accept=".pdf" hidden id="Original-Licence-Delivered">
                                                 </label>
 
                                                 <span v-if="originalLicenceForm.progress" >
-                                                    <CircleProgressBar  
-                                                        :value="originalLicenceForm.progress.percentage"  
-                                                        :max="100"  
-                                                        percentage  
+                                                    <CircleProgressBar
+                                                        :value="originalLicenceForm.progress.percentage"
+                                                        :max="100"
+                                                        percentage
                                                         rounded
                                                         :size="30"
                                                         :colorFilled="'#4caf50'"
@@ -457,7 +457,7 @@
                                         </template>
 
 <!-- This document uploaded under this stage must automatically link as the
-Duplicate Original Delivered on the main licence information page.~Dupliacte Original Docs Table~ 
+Duplicate Original Delivered on the main licence information page.~Dupliacte Original Docs Table~
  -->
                                         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                                             <div class="me-3" v-if="duplicate_original_lic_delivered">

@@ -47,7 +47,7 @@ class LicenceRenewalController extends Controller
         if($renew){
          return to_route('view_licence_renewal',['slug' => $renew->slug ])->with('success','Licence renewed successfully.');
         }
-        return back()->with('error','An error occured while renewing licence.');
+        return back()->with('error','An error occurred while renewing licence.');
     }
 
 
@@ -56,13 +56,18 @@ class LicenceRenewalController extends Controller
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Renewal')->where('model_id',$renewal->id)->get();
 
         $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->latest()->paginate(4)->withQueryString();
-        return Inertia::render('Renewals/ViewLicenceRenewal',[
+
+        $view = $renewal->licence->type == 'wholesale' ? 'WholesaleLicenceRenewal' : 'ViewLicenceRenewal';
+
+        return Inertia::render('Renewals/'.$view,[
             'renewal' => $renewal,
             'tasks'  => $tasks,
-
             'liqour_board_requests' => $liqour_board_requests
         ]);
     }
+
+
+
 
 
 

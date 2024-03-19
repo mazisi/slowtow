@@ -630,13 +630,42 @@
                         </div>
                         <hr>
 
+
+                        <template v-if="licence.province === 'North West'">
+                          <StageComponent
+                              :column=12
+                              :dbStatus="licence.status"
+                              :errors="errors"
+                              :error="error"
+                              :stageValue=550
+                              prevStage=500
+                              licence_id="licence.slug"
+                              :stageTitle="'Premises Complete and Trading'"
+                              :success="success"
+                              @stage-value-changed="pushData"
+                          />
+
+
+                          <DateComponent
+                              :licence="licence"
+                              :stage="'Premises Complete and Trading'"
+                              :canSave="$page.props.auth.has_slowtow_admin_role"
+                              :errors="errors"
+                              :error="error"
+                              :column=5
+                              @date-value-changed="updateStageDate"
+                              :dated_at="getLicenceDate(licence.id, 'Premises Complete and Trading')"
+                              :success="success"
+                          />
+                        </template>
+
                         <StageComponent
                             :column=12
                             :dbStatus="licence.status"
                             :errors="errors"
                             :error="error"
                             :stageValue=600
-                            prevStage=500
+                            prevStage=550
                             licence_id="licence.slug"
                             :stageTitle="'Scanned Application'"
                             :success="success"
@@ -945,7 +974,7 @@
 
 
                         <!-- If its Mpumalanga , renamed this stage-->
-                        <template v-if="licence.province == 'Mpumalanga' || licence.province == 'North West' || licence.province == 'Limpopo'">
+                        <template v-if="licence.province !== 'Mpumalanga'">
 
                           <StageComponent
                               :dbStatus="licence.status"
@@ -992,7 +1021,8 @@
                         </template>
 
                         <!-- If its other provinces keep this stage-->
-                        <template v-if="licence.province !== 'Mpumalanga' || licence.province !== 'North West' || licence.province !== 'Limpopo'">
+<!--                        <template v-if="licence.province !== 'Mpumalanga' || licence.province !== 'North West' || licence.province !== 'Limpopo'">-->
+                          <template v-if="licence.province !== 'Mpumalanga' ">
                           <StageComponent
                               :dbStatus="licence.status"
                               :errors="errors"
