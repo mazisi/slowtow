@@ -78,8 +78,8 @@
                                                 :dbStatus="view_transfer.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                stageValue=200
-                                                prevStage=100
+                                                :stageValue=200
+                                                :prevStage=100
                                                 :licence_id="view_transfer.slug"
                                                 :stageTitle="'Client Invoiced'"
                                                 :success="success"
@@ -106,8 +106,8 @@
                                                 :dbStatus="view_transfer.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                stageValue=300
-                                                prevStage=200
+                                                :stageValue=300
+                                                :prevStage=200
                                                 :licence_id="view_transfer.slug"
                                                 :stageTitle="'Client Paid'"
                                                 :success="success"
@@ -122,7 +122,7 @@
                                               :error="error"
                                               :column=5
                                               @date-value-changed="updateStageDate"
-                                              :dated_at="view_transfer.payment_to_liquor_board_at"
+                                              :dated_at="view_transfer.client_paid_at"
                                               :success="success"
                                           />
 
@@ -136,8 +136,8 @@
                                                 :dbStatus="view_transfer.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                stageValue=400
-                                                prevStage=300
+                                                :stageValue=400
+                                                :prevStage=300
                                                 :licence_id="view_transfer.slug"
                                                 :stageTitle="'Transfer Documents Preparation'"
                                                 :success="success"
@@ -189,13 +189,13 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Transfer Forms','Old Licence Holder')"
+                                                    :hasFile="hasMergeFile('NLA 1 and NLA 10 Forms','Old Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Old Licence Holder"
                                                     orderByNumber='300'
-                                                    :docType="'Transfer Forms'"
+                                                    :docType="'NLA 1 and NLA 10 Forms'"
                                                     :success="success"
                                                 />
 
@@ -205,13 +205,13 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Transfer Forms','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('NLA 1 and NLA 10 Forms','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
                                                     orderByNumber='400'
-                                                    :docType="'Transfer Forms'"
+                                                    :docType="'NLA 1 and NLA 10 Forms'"
                                                     :success="success"
                                                 />
 
@@ -222,14 +222,14 @@
                                                   @file-value-changed="submitDocument"
                                                   @file-deleted="deleteDocument"
                                                   :documentModel="view_transfer"
-                                                  :hasFile="hasMergeFile('CIPC Certificate','Old Licence Holder')"
+                                                  :hasFile="hasMergeFile('Annual Turnover Sheet','Old Licence Holder')"
                                                   :errors="errors"
                                                   :error="error"
                                                   stage="400"
                                                   belongsTo="Old Licence Holder"
                                                   orderByNumber='1100'
                                                   :dontUpload="true"
-                                                  :docType="'CIPC Certificate'"
+                                                  :docType="'Annual Turnover Sheet'"
                                                   :success="success"
                                               />
                                                 <button type="button" class=" w-30 px-3 mb-2 btn bg-gradient-success ms-2">Annual Turnover Sheet</button>
@@ -238,14 +238,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Smoking Affidavit','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('Annual Turnover Sheet','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
                                                     orderByNumber='500'
                                                     :dontUpload="true"
-                                                    :docType="'Smoking Affidavit'"
+                                                    :docType="'Annual Turnover Sheet'"
                                                     :success="success"
                                                 />
                                             </div>
@@ -256,14 +256,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('POA & RES','Old Licence Holder')"
+                                                    :hasFile="hasMergeFile('ID Documents','Old Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     :belongsTo="'Old Licence Holder'"
                                                     orderByNumber='600'
                                                     :dontUpload="true"
-                                                    :docType="'POA & RES'"
+                                                    :docType="'ID Documents'"
                                                     :success="success"
                                                 />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">ID Documents</button>
@@ -273,14 +273,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('POA & RES','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('ID Documents','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     :belongsTo="'Current Licence Holder'"
                                                     orderByNumber='700'
                                                     :dontUpload="true"
-                                                    :docType="'POA & RES'"
+                                                    :docType="'ID Documents'"
                                                     :success="success"
                                                 ></PrepareTransferApplicationComponent>
 
@@ -291,14 +291,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Shareholding','Old Licence Holder')"
+                                                    :hasFile="hasMergeFile('Police Clearance Certificates','Old Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Old Licence Holder"
                                                     orderByNumber='1000'
                                                     :dontUpload="true"
-                                                    :docType="'Shareholding'"
+                                                    :docType="'Police Clearance Certificates'"
                                                     :success="success"
                                                 />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Police Clearance Certificates</button>
@@ -307,14 +307,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Shareholding','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('Police Clearance Certificates','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
                                                     orderByNumber='1200'
                                                     :dontUpload="true"
-                                                    :docType="'Shareholding'"
+                                                    :docType="'Police Clearance Certificates'"
                                                     :success="success"
                                                 />
                                             </div>
@@ -325,14 +325,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('CIPC Certificate','Old Licence Holder')"
+                                                    :hasFile="hasMergeFile('Contribution Certicate','Old Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Old Licence Holder"
                                                     orderByNumber='1100'
                                                     :dontUpload="true"
-                                                    :docType="'CIPC Certificate'"
+                                                    :docType="'Contribution Certicate'"
                                                     :success="success"
                                                 />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Contribution Certicate</button>
@@ -341,14 +341,14 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('CIPC Certificate','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('Contribution Certicate','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
                                                     orderByNumber='1300'
                                                     :dontUpload="true"
-                                                    :docType="'CIPC Certificate'"
+                                                    :docType="'Contribution Certicate'"
                                                     :success="success"
                                                 />
 
@@ -359,14 +359,14 @@
                                                   @file-value-changed="submitDocument"
                                                   @file-deleted="deleteDocument"
                                                   :documentModel="view_transfer"
-                                                  :hasFile="hasMergeFile('CIPC Certificate','Old Licence Holder')"
+                                                  :hasFile="hasMergeFile('Tax Clearance','Old Licence Holder')"
                                                   :errors="errors"
                                                   :error="error"
                                                   stage="400"
                                                   belongsTo="Old Licence Holder"
                                                   orderByNumber='1100'
                                                   :dontUpload="true"
-                                                  :docType="'CIPC Certificate'"
+                                                  :docType="'Tax Clearance'"
                                                   :success="success"
                                               />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Tax Clearance</button>
@@ -375,12 +375,12 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Company Documents','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('Tax Clearance','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
-                                                    :docType="'Company Documents'"
+                                                    :docType="'Tax Clearance'"
                                                     :success="success"
                                                 />
                                             </div>
@@ -390,14 +390,14 @@
                                                   @file-value-changed="submitDocument"
                                                   @file-deleted="deleteDocument"
                                                   :documentModel="view_transfer"
-                                                  :hasFile="hasMergeFile('CIPC Certificate','Old Licence Holder')"
+                                                  :hasFile="hasMergeFile('Zoning Certificate and LAA','Old Licence Holder')"
                                                   :errors="errors"
                                                   :error="error"
                                                   stage="400"
                                                   belongsTo="Old Licence Holder"
                                                   orderByNumber='1100'
                                                   :dontUpload="true"
-                                                  :docType="'CIPC Certificate'"
+                                                  :docType="'Zoning Certificate and LAA'"
                                                   :success="success"
                                               />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Zoning Certificate and LAA</button>
@@ -406,12 +406,12 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('ID Documents','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('Zoning Certificate and LAA','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
-                                                    :docType="'ID Documents'"
+                                                    :docType="'Zoning Certificate and LAA'"
                                                     :orderByNumber='1400'
                                                     :success="success"
                                                 />
@@ -423,14 +423,14 @@
                                                   @file-value-changed="submitDocument"
                                                   @file-deleted="deleteDocument"
                                                   :documentModel="view_transfer"
-                                                  :hasFile="hasMergeFile('CIPC Certificate','Old Licence Holder')"
+                                                  :hasFile="hasMergeFile('BEE Certicate/Affidavit','Old Licence Holder')"
                                                   :errors="errors"
                                                   :error="error"
                                                   stage="400"
                                                   belongsTo="Old Licence Holder"
                                                   orderByNumber='1100'
                                                   :dontUpload="true"
-                                                  :docType="'CIPC Certificate'"
+                                                  :docType="'BEE Certicate/Affidavit'"
                                                   :success="success"
                                               />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">BEE Certicate/Affidavit</button>
@@ -439,12 +439,12 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Police Clearances','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('BEE Certicate/Affidavit','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
-                                                    :docType="'Police Clearances'"
+                                                    :docType="'BEE Certicate/Affidavit'"
                                                     :orderByNumber='1500'
                                                     :success="success"
                                                 />
@@ -471,12 +471,12 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Tax Clearance','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('CIPC Certificate','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
-                                                    :docType="'Tax Clearance'"
+                                                    :docType="'CIPC Certificate'"
                                                     :orderByNumber='1600'
                                                     :success="success"
                                                 />
@@ -490,12 +490,12 @@
                                                     @file-value-changed="submitDocument"
                                                     @file-deleted="deleteDocument"
                                                     :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('LTA Certificate','Current Licence Holder')"
+                                                    :hasFile="hasMergeFile('Shareholding','Current Licence Holder')"
                                                     :errors="errors"
                                                     :error="error"
                                                     stage="400"
                                                     belongsTo="Current Licence Holder"
-                                                    :docType="'LTA Certificate'"
+                                                    :docType="'Shareholding'"
                                                     :orderByNumber='1700'
                                                     :success="success"
                                                 />
@@ -504,7 +504,6 @@
                                             <div class="d-flex justify-content-center w-100">
                                                 <NoneUploadComponent/>
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Proof of Payment</button>
-
                                                 <NoneUploadComponent/>
 
                                             </div>
@@ -533,7 +532,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 :stageValue=500
-                                                prevStage=400
+                                                :prevStage=400
                                                 :licence_id="view_transfer.slug"
                                                 stageTitle="Proof of Payment to the National Liquor Authority"
                                                 :success="success"
@@ -573,8 +572,8 @@
                                                 :dbStatus="view_transfer.status"
                                                 :errors="errors"
                                                 :error="error"
-                                                stageValue=600
-                                                prevStage=500
+                                                :stageValue=600
+                                                :prevStage=500
                                                 :licence_id="view_transfer.slug"
                                                 :stageTitle="'Scanned Application'"
                                                 :success="success"
@@ -601,7 +600,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 :stageValue=700
-                                                prevStage=600
+                                                :prevStage=600
                                                 :licence_id="view_transfer.slug"
                                                 stageTitle="Application Lodged"
                                                 :success="success"
@@ -638,11 +637,12 @@
                                             <hr>
 
                                           <StageComponent
+                                              :dbStatus="view_transfer.status"
                                               :column=6
                                               :errors="errors"
                                               :error="error"
-                                              :stageValue=600
-                                              :prevStage=null
+                                              :stageValue=800
+                                              :prevStage=700
                                               :licence_id=null
                                               :stageTitle="'Additional Documents Requested'"
                                               :success="success"
@@ -718,7 +718,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 :stageValue=900
-                                                prevStage=800
+                                                :prevStage=800
                                                 :licence_id="view_transfer.slug"
                                                 stageTitle="Transfer Issued"
                                                 :success="success"
@@ -759,7 +759,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 :stageValue=1000
-                                                prevStage=900
+                                                :prevStage=900
                                                 :licence_id="view_transfer.slug"
                                                 stageTitle="Transfer Delivered"
                                                 :success="success"

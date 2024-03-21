@@ -226,19 +226,19 @@ export default {
                     status = 'Renewal Documents Preparation'
                     break;
                 case '1100':
-                    status = 'Renewal Submitted – Processing'
+                    status = 'Renewal Submitted Processing'
                     break;
                 case '1200':
                     status = 'Additional Documents/Information Requested'
                     break;
                 case '1300':
-                    status = 'Renewal-Pending QA'
+                    status = 'Renewal Pending QA'
                     break;
                 case '1400':
-                    status = 'Renewal-Awaiting Sign Off'
+                    status = 'Renewal Awaiting Sign Off'
                     break;
                 case '1500':
-                    status = 'Renewal-Approved'
+                    status = 'Renewal Approved'
                     break;
                 case '1600':
                     status = 'NLA 33 Delivered'

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\RenewalDate;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\Licence;
@@ -132,42 +133,68 @@ class LicenceRenewalController extends Controller
 
     }
 
-    public function updateDates(Request $request, $slug){
-        $stage = $request->stage;
-        $fieldToUpdate = '';
-            try {
-                switch ($stage) {
-                    case 'Client Paid':
-                        $fieldToUpdate = 'client_paid_at';
-                        break;
+//    public function updateDates(Request $request, $slug){
+//        $stage = $request->stage;
+//        $fieldToUpdate = '';
+//            try {
+//                switch ($stage) {
+//                    case 'Client Paid':
+//                        $fieldToUpdate = 'client_paid_at';
+//                        break;
+//
+//                    case 'Payment To The Liquor Board':
+//                        $fieldToUpdate = 'payment_to_liquor_board_at';
+//                        break;
+//
+//                    case 'Renewal Issued':
+//                        $fieldToUpdate = 'renewal_issued_at';
+//                        break;
+//
+//                    case 'Renewal Delivered':
+//                        $fieldToUpdate = 'renewal_delivered_at';
+//                        break;
+//
+//                    default:
+//                        // Handle the default case, if needed.
+//                        break;
+//                }
+//
+//                LicenceRenewal::where('id', $request->model_id)->update([
+//                    $fieldToUpdate => $request->dated_at
+//                ]);
+//
+//                return back()->with('success', 'Date updated successfully.');
+//
+//            } catch (\Throwable $th) {
+//                return back()->with('error','Error updating date.');
+//            }
+//      }
 
-                    case 'Payment To The Liquor Board':
-                        $fieldToUpdate = 'payment_to_liquor_board_at';
-                        break;
-
-                    case 'Renewal Issued':
-                        $fieldToUpdate = 'renewal_issued_at';
-                        break;
-
-                    case 'Renewal Delivered':
-                        $fieldToUpdate = 'renewal_delivered_at';
-                        break;
-
-                    default:
-                        // Handle the default case, if needed.
-                        break;
-                }
-
-                LicenceRenewal::where('id', $request->model_id)->update([
-                    $fieldToUpdate => $request->dated_at
+    public function updateDates(Request $request, $slug)
+    {
+        try {
+            $request->validate([
+                'dated_at' => 'required',
+                'stage' => 'required',
+                'model_id' => 'required|exists:licence_renewals,id'
+            ]);
+            //
+            $renewal_date = RenewalDate::where('renewal_id',$request->model_id)->where('stage',$request->stage)->first();
+            if($renewal_date){
+                $renewal_date->update(['dated_at' => $request->dated_at]);
+            }else{
+                RenewalDate::create([
+                    'dated_at' => $request->dated_at,
+                    'renewal_id' => $request->model_id,
+                    'stage' => $request->stage,
                 ]);
-
-                return back()->with('success', 'Date updated successfully.');
-
-            } catch (\Throwable $th) {
-                return back()->with('error','Error updating date.');
             }
-      }
+
+            return back()->with('success', 'Date updated successfully.');
+        } catch (\Throwable $th) {
+            return back()->with('error', $th->getMessage());
+        }
+    }
 
     public function deleteDocument($id){
             try {

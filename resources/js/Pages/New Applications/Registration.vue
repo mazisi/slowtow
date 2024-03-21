@@ -1286,6 +1286,7 @@
                           :licence_id="licence.slug"
                           :stageTitle="'Licence Issued'"
                           :success="success"
+                          :canActivate="getLicenceDate(licence.id, 'Licence Issued')"
                           @stage-value-changed="pushData"
                       />
 
@@ -1328,6 +1329,7 @@
                           :licence_id="licence.slug"
                           :stageTitle="'Licence Delivered'"
                           :success="success"
+                          :canActivate="getLicenceDate(licence.id, 'Licence Delivered')"
                           @stage-value-changed="pushData"
                       />
 

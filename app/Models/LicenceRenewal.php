@@ -8,12 +8,10 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class LicenceRenewal extends Model
 {
-    use HasFactory,SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = [];
-    
 
-    
 
     public function licence()
     {
@@ -22,11 +20,17 @@ class LicenceRenewal extends Model
 
     public function renewal_documents()
     {
-        return $this->hasMany(RenewalDocument::class,'licence_renewal_id');
+        return $this->hasMany(RenewalDocument::class, 'licence_renewal_id');
     }
 
     public function emails()
     {
-        return $this->hasMany(Email::class,'model_id');
+        return $this->hasMany(Email::class, 'model_id');
+    }
+
+    public function renewal_stage_dates()
+    {
+        return $this->hasMany(RenewalDate::class, 'renewal_id');
+
     }
 }

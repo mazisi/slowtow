@@ -45,12 +45,12 @@
                       <DateComponent
                           :stage="'Renewal Notice Received'"
                           :model="renewal"
-                          :licence="client_paid_at"
+                          :licence="renewal_notice_received_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.client_paid_at"
+                          :dated_at="renewal.renewal_notice_received_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -64,7 +64,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=200
-                          :prevStage=null
+                          :prevStage=100
                           :licence_id=null
                           :stageTitle="'Turnover Information Requested'"
                           :success="success"
@@ -74,12 +74,12 @@
                       <DateComponent
                           :stage="'Turnover Information Requested'"
                           :model="renewal"
-                          :licence="client_paid_at"
+                          :licence="turnover_information_requested_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.client_paid_at"
+                          :dated_at="renewal.turnover_information_requested_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -92,7 +92,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=300
-                          :prevStage=null
+                          :prevStage=200
                           :licence_id=null
                           :stageTitle="'Turnover Information Received'"
                           :success="success"
@@ -102,12 +102,12 @@
                       <DateComponent
                           :stage="'Turnover Information Received'"
                           :model="renewal"
-                          :licence="client_paid_at"
+                          :licence="turnover_information_received_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.client_paid_at"
+                          :dated_at="renewal.turnover_information_received_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -119,7 +119,6 @@
                           :hasFile="hasFile('Turnover Information Received')"
                           :errors="errors"
                           :error="error"
-                          :orderByNumber=100
                           :docType="'Turnover Information Received'"
                           :success="success"
                           :stage="300"
@@ -135,7 +134,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=400
-                          :prevStage=null
+                          :prevStage=300
                           :licence_id=null
                           :stageTitle="'Annual Return Submited'"
                           :success="success"
@@ -145,12 +144,12 @@
                       <DateComponent
                           :stage="'Annual Return Submited'"
                           :model="renewal"
-                          :licence="payment_to_liquor_board_at"
+                          :licence="annual_return_submited_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
+                          :dated_at="renewal.annual_return_submited_at"
                           @date-value-changed="updateDate"
                           :success="success"
 
@@ -164,7 +163,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=500
-                          :prevStage=null
+                          :prevStage=400
                           :licence_id=null
                           :stageTitle="'Client Invoiced'"
                           :success="success"
@@ -179,7 +178,6 @@
                           :hasFile="hasFile('Client Invoiced')"
                           :errors="errors"
                           :error="error"
-                          :orderByNumber=500
                           :docType="'Client Invoiced'"
                           :success="success"
                           :stage="500"
@@ -192,7 +190,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=600
-                          :prevStage=null
+                          :prevStage=500
                           :licence_id=null
                           :stageTitle="'Client Paid'"
                           :success="success"
@@ -206,7 +204,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.renewal_delivered_at"
+                          :dated_at="renewal.client_paid_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -218,8 +216,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=null
+                          :stageValue=700
+                          :prevStage=600
                           :licence_id=null
                           :stageTitle="'Payment to the National Liquor Authority'"
                           :success="success"
@@ -257,8 +255,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=null
+                          :stageValue=800
+                          :prevStage=700
                           :licence_id=null
                           :stageTitle="'Renewal Forms Sent'"
                           :success="success"
@@ -272,7 +270,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.renewal_delivered_at"
+                          :dated_at="renewal.renewal_forms_sent_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -283,8 +281,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=null
+                          :stageValue=900
+                          :prevStage=800
                           :licence_id=null
                           :stageTitle="'Renewal Forms Received'"
                           :success="success"
@@ -298,7 +296,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.renewal_delivered_at"
+                          :dated_at="renewal.renewal_forms_received_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -310,8 +308,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=null
+                          :stageValue=1000
+                          :prevStage=900
                           :licence_id=null
                           :stageTitle="'Renewal Forms Preparation'"
                           :success="success"
@@ -330,7 +328,7 @@
                             :docTitle="'Tax Clearance Certificate'"
                             :docType="'Tax Clearance Certificate'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('Tax Clearance Certificate')"
                         />
 
@@ -345,7 +343,7 @@
                             :docTitle="'Contribution Certificate'"
                             :docType="'Contribution Certificate'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('Contribution Certificate')"
                         />
 
@@ -360,7 +358,7 @@
                             :docTitle="'Police Clearance Certificates'"
                             :docType="'Police Clearance Certificates'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('Police Clearance Certificates')"
                         />
 
@@ -375,7 +373,7 @@
                             :docTitle="'Proof of Payment'"
                             :docType="'Proof of Payment'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('Proof of Payment')"
                         />
 
@@ -392,7 +390,7 @@
                             :docTitle="'BEE Certificate/Affidavit'"
                             :docType="'BEE Certificate/Affidavit'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('BEE Certificate/Affidavit')"
                         />
 
@@ -407,7 +405,7 @@
                             :docTitle="'Annual Turnover Sheet'"
                             :docType="'Annual Turnover Sheet'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('Annual Turnover Sheet')"
                         />
 
@@ -422,7 +420,7 @@
                             :docTitle="'Proxy Documents'"
                             :docType="'Proxy Documents'"
                             :docModel="renewal"
-                            :stage=400
+                            :stage=1000
                             :hasFile="hasFile('Proxy Documents')"
                         />
 
@@ -435,75 +433,35 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=null
+                          :stageValue=1100
+                          :prevStage=1000
                           :licence_id=null
-                          :stageTitle="'Renewal Submited-Processing'"
+                          :stageTitle="'Renewal Submited'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal Submited-Processing'"
+                          :stage="'Renewal Submited'"
                           :model="renewal"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.renewal_delivered_at"
+                          :dated_at="renewal.renewal_submited_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
 
                       <hr>
 
-                      <!--                                            <StageComponent-->
-                      <!--                                                :column=6-->
-                      <!--                                                :dbStatus="renewal.status"-->
-                      <!--                                                :errors="errors"-->
-                      <!--                                                :error="error"-->
-                      <!--                                                :stageValue=600-->
-                      <!--                                                :prevStage=null-->
-                      <!--                                                :licence_id=null-->
-                      <!--                                                :stageTitle="'Additional Documents/Information Requested'"-->
-                      <!--                                                :success="success"-->
-                      <!--                                                @stage-value-changed="pushData"-->
-                      <!--                                            />-->
-
-                      <!--                                            <DateComponent-->
-                      <!--                                                :stage="'Turnover Information Received'"-->
-                      <!--                                                :model="renewal"-->
-                      <!--                                                :licence="client_paid_at"-->
-                      <!--                                                :canSave="$page.props.auth.has_slowtow_admin_role"-->
-                      <!--                                                :errors="errors"-->
-                      <!--                                                :error="error"-->
-                      <!--                                                :column=5-->
-                      <!--                                                :dated_at="renewal.client_paid_at"-->
-                      <!--                                                @date-value-changed="updateDate"-->
-                      <!--                                                :success="success"-->
-                      <!--                                            />-->
-                      <!--                                        <div class="col-md-6 columns">-->
-                      <!--                                            <DocComponent-->
-                      <!--                                                :documentModel="renewal"-->
-                      <!--                                                @file-value-changed="submitDocument"-->
-                      <!--                                                @file-deleted="deleteDocument"-->
-                      <!--                                                :hasFile="hasFile('Turnover Information Received')"-->
-                      <!--                                                :errors="errors"-->
-                      <!--                                                :error="error"-->
-                      <!--                                                :orderByNumber=100-->
-                      <!--                                                :docType="'Turnover Information Received'"-->
-                      <!--                                                :success="success"-->
-                      <!--                                                :stage="300"-->
-                      <!--                                            />-->
-                      <!--                                        </div>-->
-
                       <StageComponent
                           :column=6
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=null
+                          :stageValue=1200
+                          :prevStage=1100
                           :licence_id=null
                           :stageTitle="'Additional Documents/Information Requested'"
                           :success="success"
@@ -579,23 +537,23 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=400
-                          :prevStage=null
+                          :stageValue=1300
+                          :prevStage=1200
                           :licence_id=null
-                          :stageTitle="'Renewal-Pending QA'"
+                          :stageTitle="'Renewal Pending QA'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal-Pending QA'"
+                          :stage="'Renewal Pending QA'"
                           :model="renewal"
-                          :licence="payment_to_liquor_board_at"
+                          :licence="renewal_pending_qa_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
+                          :dated_at="renewal.renewal_pending_qa_at"
                           @date-value-changed="updateDate"
                           :success="success"
 
@@ -606,68 +564,28 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=400
-                          :prevStage=null
+                          :stageValue=1400
+                          :prevStage=1300
                           :licence_id=null
-                          :stageTitle="'Renewal-Awaiting Sign Off'"
+                          :stageTitle="'Renewal Awaiting Sign Off'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal-Awaiting Sign Off'"
+                          :stage="'Renewal Awaiting Sign Off'"
                           :model="renewal"
-                          :licence="payment_to_liquor_board_at"
+                          :licence="renewal_awaiting_sign_off_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
+                          :dated_at="renewal.renewal_awaiting_sign_off_at"
                           @date-value-changed="updateDate"
                           :success="success"
 
                       />
 
-                      <hr>
-                      <StageComponent
-                          :column=6
-                          :dbStatus="renewal.status"
-                          :errors="errors"
-                          :error="error"
-                          :stageValue=400
-                          :prevStage=null
-                          :licence_id=null
-                          :stageTitle="'Renewal-Awaiting Sign Off'"
-                          :success="success"
-                          @stage-value-changed="pushData"
-                      />
-
-                      <DateComponent
-                          :stage="'Renewal-Awaiting Sign Off'"
-                          :model="renewal"
-                          :licence="payment_to_liquor_board_at"
-                          :canSave="$page.props.auth.has_slowtow_admin_role"
-                          :errors="errors"
-                          :error="error"
-                          :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
-                          @date-value-changed="updateDate"
-                          :success="success"
-
-                      />
-
-                      <DocComponent
-                          :documentModel="renewal"
-                          @file-value-changed="submitDocument"
-                          @file-deleted="deleteDocument"
-                          :hasFile="hasFile('Renewal-Awaiting Sign Off')"
-                          :errors="errors"
-                          :error="error"
-                          :orderByNumber=500
-                          :docType="'Renewal-Awaiting Sign Off'"
-                          :success="success"
-                          :stage="500"
-                      />
                       <hr>
 
                       <StageComponent
@@ -675,23 +593,23 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=400
-                          :prevStage=null
+                          :stageValue=1500
+                          :prevStage=1400
                           :licence_id=null
-                          :stageTitle="'Renewal-Approved'"
+                          :stageTitle="'Renewal Approved'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal-Approved'"
+                          :stage="'Renewal Approved'"
                           :model="renewal"
-                          :licence="payment_to_liquor_board_at"
+                          :licence="renewal_approved_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
+                          :dated_at="renewal.renewal_approved_at"
                           @date-value-changed="updateDate"
                           :success="success"
 
@@ -701,11 +619,11 @@
                           :documentModel="renewal"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
-                          :hasFile="hasFile('Renewal-Approved')"
+                          :hasFile="hasFile('Renewal Approved')"
                           :errors="errors"
                           :error="error"
                           :orderByNumber=500
-                          :docType="'Renewal-Approved'"
+                          :docType="'Renewal Approved'"
                           :success="success"
                           :stage="500"
                       />
@@ -715,8 +633,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=400
-                          :prevStage=null
+                          :stageValue=1600
+                          :prevStage=1500
                           :licence_id=null
                           :stageTitle="'NLA 33 Delivered'"
                           :success="success"
@@ -726,12 +644,12 @@
                       <DateComponent
                           :stage="'NLA 33 Delivered'"
                           :model="renewal"
-                          :licence="payment_to_liquor_board_at"
+                          :licence="nla_33_delivered_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
+                          :dated_at="renewal.nla_33_delivered_at"
                           @date-value-changed="updateDate"
                           :success="success"
 

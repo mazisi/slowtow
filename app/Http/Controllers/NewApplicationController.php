@@ -43,7 +43,7 @@ class NewApplicationController extends Controller
         $companies = Company::pluck('name', 'id');
         $licence_dropdowns = LicenceType::orderBy('licence_type', 'ASC')->get();
         $wholesaleLicenceTypes = LicenceType::where('province', 'null')->get();
-   
+
 
         return Inertia::render('New Applications/Index', [
             'persons' => $persons,
@@ -139,8 +139,8 @@ class NewApplicationController extends Controller
                 return back()->with('success', 'Licence updated successfully.');
             }
         } catch (\Throwable $th) {
-            throw $th;
-            //return back()->with('error', 'An error occurred. Please try again.');
+
+            return back()->with('error', 'An error occurred. Please try again.');
         }
     }
 
@@ -233,7 +233,7 @@ class NewApplicationController extends Controller
                 ]);
             }
 
-            
+
 
             $this->updateLicenceDate($request);
 
