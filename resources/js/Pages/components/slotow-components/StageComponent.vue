@@ -1,17 +1,17 @@
 <template>
   <div :class="'col-md-' + column" class="columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
-    <input class="active-checkbox"     
-    :id="stageValue" type="checkbox" 
-    @input="emitValue($event,stageValue,prevStage)" 
-    :checked="dbStatus >= stageValue" 
+    <input class="active-checkbox"
+    :id="stageValue" type="checkbox"
+    @input="emitValue($event,stageValue,prevStage)"
+    :checked="dbStatus >= stageValue"
     :value="stageValue"
-    :disabled="$page.props.auth.has_company_admin_role"
+    :disabled="(stageValue === 2300 || stageValue === 2400) && canActivate === undefined"
     />
-    <label :for="stageValue" 
+    <label :for="stageValue"
     class="form-check-label text-body text-truncate status-heading">{{ stageTitle }}</label>
     </div>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -27,7 +27,8 @@ export default{
     stageValue: Number,
     prevStage: Number,
     stageTitle: String,
-    success: String
+    success: String,
+    canActivate: Date,
   },
   setup(props, context){
     function emitValue(event) {

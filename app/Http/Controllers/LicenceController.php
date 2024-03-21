@@ -95,17 +95,18 @@ class LicenceController extends Controller
 
         $request->validate([
             'belongs_to' => 'required|in:Company,Individual',
-            'person' => [Rule::requiredIf(function () { 
-                return request('belongs_to') == 'Individual'; 
+            'person' => [Rule::requiredIf(function () {
+                return request('belongs_to') == 'Individual';
             })],
-            'company' => [Rule::requiredIf(function () { 
-                return request('belongs_to') == 'Company'; 
-            })],  
+            'company' => [Rule::requiredIf(function () {
+                return request('belongs_to') == 'Company';
+            })],
             'trading_name' => 'required',
             'licence_type' => 'required',
             'type' => 'required|in:retail,wholesale',
             'province' => 'required',
-            'licence_number' => 'required|unique:licences,licence_number'
+            'licence_number' => 'nullable|unique:licences,licence_number'
+
         ]);
 
         try {

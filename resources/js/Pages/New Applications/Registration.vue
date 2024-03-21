@@ -65,7 +65,7 @@
                           :stageValue=200
                           prevStage=100
                           :licence_id="licence.slug"
-                          :stageTitle="'Deposit Invoice'"
+                          :stageTitle="'Client Invoice'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />

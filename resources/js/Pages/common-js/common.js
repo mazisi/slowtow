@@ -11,24 +11,15 @@ const PROVINCES =      ['Eastern Cape',
                         'Western Cape'
                         ];
 
-const BOARD_REGIONS  = ['Eastern Cape',
-                        'Free State',
-                        'Ekurhuleni',
-                        'Johannesburg',
-                        'Sedibeng',
-                        'Tshwane',
-                        'West Rand',
-                        'KwaZulu-Natal',
-                        'Limpopo',
-                        'Mpumalanga',
-                        'National Liquor Authority',
-                        'Northern Cape',
-                        'North West',
-                        'Western Cape',
-                      ];
+const BOARD_REGIONS  = [
+                            'Ekurhuleni',
+                            'Johannesburg',
+                            'Sedibeng',
+                            'Tshwane',
+                            'West Rand'
+                            ];
 
-    const BOARD_REGIONS_GAUTENG  = ['Eastern Cape',
-                                    'Free State',
+    const BOARD_REGIONS_GAUTENG  = [
                                     'Ekurhuleni',
                                     'Johannesburg',
                                     'Sedibeng',
@@ -45,7 +36,7 @@ const BOARD_REGIONS  = ['Eastern Cape',
                       "Private Company  (Proprietary) Limited",
                       "Public Company",
                       "Sole Proprietor",
-                      "Trust"                  
+                      "Trust"
                     ]
 
 export default {
@@ -64,5 +55,5 @@ export default {
   getBoardRegions() {
     return BOARD_REGIONS;
   },
-  
+
 }
