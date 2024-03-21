@@ -17,7 +17,7 @@
             <p v-if="file_has_apostrophe" class="mb-0 text-danger text-xs">File cannot contain apostrophes.</p>
           </div>
       
-          <button v-if="hasFile.docPath" @click="deleteDocument(hasFile.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+          <button v-if="hasFile.docPath " @click="deleteDocument(hasFile.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
           <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
           </button>
       

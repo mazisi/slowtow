@@ -1033,7 +1033,7 @@
                       <hr/>
 
                       <!-- this stage must appear once licence lodged is ticked -->
-                      <template v-if="licence.status >= 1500">
+                      <template>
 
                         <StageComponent
                             :dbStatus="licence.status"

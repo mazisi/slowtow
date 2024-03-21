@@ -15,7 +15,7 @@
                       <div class="row align-items-center mb-2 d-flex">
                           <div class="col-8">
                               <h2 class="d-flex align-items-center qty mb-0">
-                                  3,243
+                                  2
                               </h2>
                           </div>
                           <div class="col-4 text-right">
@@ -38,7 +38,7 @@
                       <div class="row align-items-center mb-2 d-flex">
                           <div class="col-8">
                               <h2 class="d-flex align-items-center qty mb-0">
-                                  1500
+                                  1
                               </h2>
                           </div>
                           <div class="col-4 text-right">
@@ -61,7 +61,7 @@
                       <div class="row align-items-center mb-2 d-flex">
                           <div class="col-8">
                               <h2 class="d-flex align-items-center mb-0 qty">
-                                  578
+                                  3
                               </h2>
                           </div>
                           <div class="col-4 text-right">
@@ -84,7 +84,7 @@
                       <div class="row align-items-center mb-2 d-flex">
                           <div class="col-8">
                               <h2 class="d-flex align-items-center mb-0 qty">
-                                  110
+                                  6
                               </h2>
                           </div>
                           <div class="col-4 text-right">
