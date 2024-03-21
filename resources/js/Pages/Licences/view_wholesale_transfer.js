@@ -221,6 +221,32 @@ export default {
             return docsNum?.length >= 19 ? true : false;
         }
 
+        function getDate(transfer_id, stage){
+
+            if(!props.view_transfer.dates){
+                return {}; // Return an empty object if props.licence.dates doesn't exist
+            } else {
+                let transfer_dates = props.view_transfer.dates;
+
+                const dateFound = transfer_dates.find(date =>
+                    date.transfer_id === transfer_id  &&
+                    date.stage === stage
+                );
+
+                if (dateFound) {
+
+                    return {
+                        dated_at: dateFound.dated_at
+                    };
+
+                } else {
+
+                    return {};
+                }
+            }
+
+        }
+
         return {
             canMerge,
             updateStageDate,
@@ -234,7 +260,8 @@ export default {
             form,
             deleteDocument,
             deleteTransfer,
-            toast
+            toast,
+            getDate
         }
     },
     components: {

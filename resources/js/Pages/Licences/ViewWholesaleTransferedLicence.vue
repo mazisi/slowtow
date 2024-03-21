@@ -122,7 +122,7 @@
                                               :error="error"
                                               :column=5
                                               @date-value-changed="updateStageDate"
-                                              :dated_at="view_transfer.client_paid_at"
+                                              :dated_at="getDate(view_transfer.id,'Client Paid').dated_at"
                                               :success="success"
                                           />
 
@@ -561,7 +561,7 @@
                                                 :error="error"
                                                 :column=5
                                                 @date-value-changed="updateStageDate"
-                                                :dated_at="view_transfer.payment_to_liquor_board_at"
+                                                :dated_at="getDate(view_transfer.id,'Payment To The Liquor Board').dated_at"
                                                 :success="success"
                                             />
 
@@ -629,7 +629,7 @@
                                                 :error="error"
                                                 :column=5
                                                 @date-value-changed="updateStageDate"
-                                                :dated_at="view_transfer.lodged_at"
+                                                :dated_at="getDate(view_transfer.id,'Application Lodged').dated_at"
                                                 :success="success"
                                             />
 
@@ -747,7 +747,7 @@
                                                 :error="error"
                                                 :column=5
                                                 @date-value-changed="updateStageDate"
-                                                :dated_at="view_transfer.issued_at"
+                                                :dated_at="getDate(view_transfer.id,'Transfer Issued').dated_at"
                                                 :success="success"
                                             />
 
@@ -788,7 +788,7 @@
                                                 :error="error"
                                                 :column=5
                                                 @date-value-changed="updateStageDate"
-                                                :dated_at="view_transfer.delivered_at"
+                                                :dated_at="getDate(view_transfer.id,'Transfer Delivered').dated_at"
                                                 :success="success"
                                             />
 

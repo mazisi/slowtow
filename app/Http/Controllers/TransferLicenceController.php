@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Task;
+use App\Models\TransferDate;
 use Inertia\Inertia;
 use App\Models\Company;
 use App\Models\Licence;
@@ -95,7 +96,7 @@ class TransferLicenceController extends Controller
        * View licence transfer individually.
        */
       public function viewTransferedLicence($slug){
-        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence','transfer_documents')->whereSlug($slug)->first();
+        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence','transfer_documents','dates')->whereSlug($slug)->first();
         $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
 
         // $companies_dropdown = Company::pluck('name','id');
@@ -129,32 +130,29 @@ class TransferLicenceController extends Controller
       }
 
       public function updateDates(Request $request, $slug){
-        try {
-          $fieldToUpdate = '';
-          switch ($request->stage) {
-            case 'Application Logded':
-              $fieldToUpdate = 'lodged_at';
-             break;
-            case 'Activation Fee Paid':
-             $fieldToUpdate = 'activation_fee_paid_at';
-             break;
-            case 'Transfer Issued':
-              $fieldToUpdate = 'issued_at';
-            break;
-            case 'Transfer Delivered':
-              $fieldToUpdate = 'delivered_at';
-            break;
-            case 'Payment To The Liquor Board':
-              $fieldToUpdate = 'payment_to_liquor_board_at';
-            break;
-            default:
-            return back()->with('error','Error.');
+          try {
+
+              $request->validate([
+                  'dated_at' => 'required',
+                  'stage' => 'required',
+                  'licence_id' => 'required|exists:licence_transfers,id'
+              ]);
+              //
+              $transfer_date = TransferDate::where('transfer_id',$request->licence_id)->where('stage',$request->stage)->first();
+              if($transfer_date){
+                  $transfer_date->update(['dated_at' => $request->dated_at]);
+              }else{
+                  TransferDate::create([
+                      'dated_at' => $request->dated_at,
+                      'transfer_id' => $request->licence_id,
+                      'stage' => $request->stage,
+                  ]);
+              }
+
+              return back()->with('success', 'Date updated successfully.');
+          } catch (\Throwable $th) {
+              return back()->with('error', $th->getMessage());
           }
-        LicenceTransfer::whereSlug($slug)->update([$fieldToUpdate => $request->dated_at]);
-         return back()->with('success','Date updated successfully.');
-        } catch (\Throwable $th) {
-          throw $th;
-        }
       }
 
       /**

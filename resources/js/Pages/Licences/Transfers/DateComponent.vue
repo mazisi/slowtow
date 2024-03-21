@@ -1,7 +1,7 @@
 <template>
     <div :class="'col-md-' + column" class="columns mb-4">
         <div class="input-group input-group-outline null is-filled">
-            <label class="form-label">Date</label>
+            <label class="form-label">Date{{form.dated_at}}</label>
             <input type="date" class="form-control form-control-default" v-model="form.dated_at">
         </div>
         <div v-if="errors.dated_at" class="text-danger">{{ errors.dated_at }}</div>
@@ -33,7 +33,7 @@ export default{
         const form = useForm({
             licence_id: props.licence.id,
             stage: props.stage,
-            dated_at: props.dated_at? props.dated_at : null
+            dated_at: props.dated_at? props.dated_at: null
         })
         // console.log('form',form)
 

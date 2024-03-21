@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class LicenceTransfer extends Model
 {
     use HasFactory, SoftDeletes;
-    
+
     protected $guarded = [];
 
     public function licence(){
@@ -38,5 +38,9 @@ class LicenceTransfer extends Model
     public function new_person()
     {
        return $this->belongsTo(People::class,'people_id');
+    }
+
+    function dates() {
+        return $this->hasMany(TransferDate::class,'transfer_id');
     }
 }
