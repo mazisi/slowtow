@@ -39,7 +39,7 @@
   <table class="table table-bordered mt-3">
     <thead>
       <tr>
-        <th scope="col">Request Description</th>
+        <th scope="col">Request Description {{modelable_type}}</th>
         <th scope="col">Date Requested</th>
         <th scope="col">View Document</th>
         <th scope="col">Edit</th>
@@ -98,9 +98,10 @@ margin-left: 3px;
       additional_docs: Object,
       errors: Object,
       licence_id: Number,
+      modelable_type: String,
       success: Object
     },
-    setup(props){
+    setup(props){console.log('props',props)
       const { notifySuccess, notifyError } = useToaster();
       let file_has_apostrophe = ref('');
       let show_file_name = ref(false);
@@ -110,8 +111,9 @@ margin-left: 3px;
       const doc_form = useForm({
             description: '',
             document: null,
-            licence_id: props.licence_id,
-            uploaded_at: ''
+            modelable_id: props.licence_id,
+            uploaded_at: '',
+            modelable_type: props.modelable_type
       })
 
 
@@ -130,12 +132,13 @@ margin-left: 3px;
         doc_form.post(route('submit_additional_doc'), {
             onSuccess: () => {
               if(props.success){
-                notifySuccess(props.success)
+                notifySuccess(props.success);
+                show_file_name = false;
               }else if(props.error){
                 notifyError(props.error)
               }
               doc_form.reset();
-              doc_form.document = '';
+              doc_form.document = null;
             }
         })
       }

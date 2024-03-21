@@ -14,4 +14,9 @@ class AdditionalDoc extends Model
     function licence() {
         return $this->belongsTo(Licence::class);
     }
+
+    public function modelable()
+    {
+        return $this->morphTo();
+    }
 }

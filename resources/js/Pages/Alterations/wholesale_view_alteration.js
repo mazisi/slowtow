@@ -12,6 +12,7 @@ import MergeDocumentComponent from "../components/slotow-components/MergeDocumen
 import DateComponent from "../components/slotow-components/DateComponent.vue";
 import useAlteration from "./composables/useAlteration.js";
 import useToaster from '../../store/useToaster';
+import AdditionalDocsComponent from "../components/slotow-components/AdditionalDocsComponent.vue";
 
 export default {
     name: "ViewAlteration",
@@ -238,6 +239,7 @@ export default {
         StageComponent,
         MergeDocumentComponent,
         DateComponent,
+        AdditionalDocsComponent,
         Task,
     },
     beforeUnmount() {

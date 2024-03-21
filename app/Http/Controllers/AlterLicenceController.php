@@ -41,7 +41,8 @@ class AlterLicenceController extends Controller
 
 
     public function show($slug){
-      $alteration = Alteration::with('licence','documents','dates')->whereSlug($slug)->first();
+      $alteration = Alteration::with('licence','documents','dates','additionalDocs')->whereSlug($slug)->first();
+      // $additionalDocs = $alteration->additionalDocs()->paginate(10);
       $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->latest()->paginate(4)->withQueryString();
       $view = $alteration->licence->type == 'wholesale' ? 'Alterations/WholesaleViewAlteration' : 'Alterations/ViewAlteration';
       return Inertia::render($view,[

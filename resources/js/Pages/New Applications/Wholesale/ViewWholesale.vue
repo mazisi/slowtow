@@ -458,7 +458,6 @@
 
 
     <AdditionalDocsComponent
-    v-if="licence.status >= 1100"
     :licence_id="licence.id"
     :additional_docs="licence.additional_docs"
     :success="success"
