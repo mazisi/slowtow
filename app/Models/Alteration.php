@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\AdditionalDoc;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Alteration extends Model
 {
@@ -24,6 +25,10 @@ class Alteration extends Model
 
     function documents() {
         return $this->hasMany(AlterationDocument::class,'alteration_id');
+    }
+    public function additionalDocs()
+    {
+        return $this->morphMany('App\Models\AdditionalDoc', 'modelable');
     }
 
     function dates() {
