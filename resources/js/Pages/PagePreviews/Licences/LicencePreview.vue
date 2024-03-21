@@ -9,12 +9,12 @@
     <div class="col-lg-6 col-7">
     <h6 class="mb-1">{{ form.company_name }}</h6>
     </div> 
-    <div class="col-lg-6 col-5 my-auto text-end">
+    <!-- <div class="col-lg-6 col-5 my-auto text-end">
       <button @click="mergeAndDownload" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-download text-md"></i>
        Merge And Download
       </button>
     
-    </div>
+    </div> -->
     </div>
 
 <div class="row" >
