@@ -41,9 +41,10 @@ class AlterLicenceController extends Controller
 
 
     public function show($slug){
-      $alteration = Alteration::with('licence','documents','dates')->whereSlug($slug)->first();      
-      $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->latest()->paginate(4)->withQueryString();     
-      return Inertia::render('Alterations/ViewAlteration',[
+      $alteration = Alteration::with('licence','documents','dates')->whereSlug($slug)->first();
+      $tasks = Task::where('model_type','Alteration')->where('model_id',$alteration->id)->latest()->paginate(4)->withQueryString();
+      $view = $alteration->licence->type == 'wholesale' ? 'Alterations/WholesaleViewAlteration' : 'Alterations/ViewAlteration';
+      return Inertia::render($view,[
         'alteration' => $alteration,
         'tasks' => $tasks
       ]);
@@ -63,9 +64,9 @@ class AlterLicenceController extends Controller
        Alteration::whereSlug($request->slug)->update([
         'status' => $status <= 0 ? NULL : $status,
        ]);
-      
+
         return back()->with('success','Alteration stage succesfully.');
-       
+
       } catch (\Throwable $th) {
         return back()->with('error','Error updating alteration.');
       }
@@ -82,7 +83,7 @@ class AlterLicenceController extends Controller
           $alter->update(['logded_at' => $request->dated_at]);
         }
         return back()->with('success','Date updated succesfully.');
-        
+
     }
 
     public function destroy($slug, $licence_slug)
