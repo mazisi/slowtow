@@ -177,7 +177,16 @@
                           :label="'Old Licence Number'"
                           :errors="errors.old_licence_number"
                           :input_id="old_licence_number" />
-                      {{ filterForm }}
+                   
+                          <TextInputComponent 
+                            :inputType="'date'"
+                            v-model="form.licence_date" 
+                            :value="form.licence_date" 
+                            :column="'col-6'" 
+                            :label="'Licence Date'" 
+                            :errors="errors.licence_date"
+                            :input_id="licence_date"
+                          />
 
                       <TextInputComponent
                           v-if="form.belongs_to == 'Company'"
@@ -340,6 +349,7 @@ export default {
       old_licence_number: '',
       address: '',
       address2: '',
+      licence_date: '',
       address3: '',
       province: '',
       board_region: '',

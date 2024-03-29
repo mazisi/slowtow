@@ -27,6 +27,30 @@
 
 
     setup (props) {
+
+      const wholesaleLicences =  [
+        {
+            "id": 102,
+            "licence_type": "Distribution and Manufacturing Liquor Licence",
+            "province": "Wholesale",
+            "created_at": "2024-01-16T20:07:23.000000Z",
+            "updated_at": "2024-01-16T20:07:23.000000Z"
+        },
+        {
+            "id": 103,
+            "licence_type": "Distribution Liquor Licence",
+            "province": "Wholesale",
+            "created_at": "2024-01-16T20:08:17.000000Z",
+            "updated_at": "2024-01-16T20:08:17.000000Z"
+        },
+        {
+            "id": 104,
+            "licence_type": "Manufacturing Liquor Licence",
+            "province": "Wholesale",
+            "created_at": "2024-01-16T20:08:17.000000Z",
+            "updated_at": "2024-01-16T20:08:17.000000Z"
+        }
+    ]
       let options;
 
         let licenceByProvince = ref([]);
@@ -67,14 +91,15 @@
 
         function filterLicenceTypes(){
           if(props.type == 'wholesale') {
-              licenceByProvince.value = props.licence_dropdowns
-                  .filter(obj => obj.province === 'Wholesale');
+           
+              // licenceByProvince.value = props.licence_dropdowns
+              //     .filter(obj => obj.province === 'Wholesale');
           }else{
               licenceByProvince.value = props.licence_dropdowns
                   .filter(obj => obj.province === form.province && obj.province !== 'Wholesale');
           }
 
-          console.log(licenceByProvince.value);
+          console.log(licenceByProvince);
 
         }
 
@@ -133,7 +158,7 @@
 
       return { submit, form ,options, idRegForm,
         selectApplicant, filterForm,toast,filteredLicenceTypes,
-        getchIdOrRegNumber, computedProvinces,
+        getchIdOrRegNumber, computedProvinces,wholesaleLicences,
         computedBoardRegions, licenceByProvince, filterLicenceTypes
       }
 

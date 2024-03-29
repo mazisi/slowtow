@@ -24,9 +24,8 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">   
   <div class="col-lg-9 col-9">
-   <h6> Duplicate Original for: 
-    <Link :href="`/view-licence?slug=${duplicate_original.licence.slug}`">
-      <span class="text-success">{{ duplicate_original.licence.trading_name }}</span></Link></h6>
+   <h6> <Link :href="`/view-licence?slug=${duplicate_original.licence.slug}`">
+      <span class="text-success">{{ duplicate_original.licence.trading_name }}</span></Link> - Duplicate Original</h6>
       <p class="text-sm mb-0">Current Stage: 
         <span v-html="getCurrentStatus()"></span>
 </p>

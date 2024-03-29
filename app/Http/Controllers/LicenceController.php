@@ -105,6 +105,7 @@ class LicenceController extends Controller
             'licence_type' => 'required',
             'type' => 'required|in:retail,wholesale',
             'province' => 'required',
+            'licence_date' => 'required',
             'licence_number' => 'nullable|unique:licences,licence_number'
 
         ]);
@@ -118,6 +119,8 @@ class LicenceController extends Controller
                 'licence_type_id' => $request->licence_type,
                 'company_id' => $request->company,
                 'people_id' => $request->person,
+                'licence_date' => $request->licence_date,
+                'licence_issued_at' => $request->licence_date,
                 'licence_number' => $request->licence_number,
                 'old_licence_number' => $request->old_licence_number,
                 'address' => $request->address,

@@ -135,10 +135,10 @@
 
 
                                             <LicenceTypeDropDownComponent
-                                                v-if="form.province !== '' && form.type == 'wholesale'"
-                                                :dropdownList="licenceByProvince"
+                                                v-if="form.type == 'wholesale'"
+                                                :dropdownList="wholesaleLicences"
                                                 :label="'Licence Type **'"
-                                                :defaultDisabledText="''"
+                                                :defaultDisabledText="'Select...'"
                                                 :column="'col-12'"
                                                 :value="form.licence_type"
                                                 v-model="form.licence_type"
