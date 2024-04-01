@@ -1,7 +1,28 @@
-<script >
+<script>
+import { useForm } from '@inertiajs/inertia-vue3';
 
 export default {
     name: 'TurnOverInformationComponent',
+
+    props: {
+
+    }
+
+    setup() {
+        const options = [
+            {id: 1, name: 'Between R5 Million and R15 Million'},
+            {id: 2, name: 'Between R15 Million and R250 Million'},
+            {id: 3, name: 'Less than R5 Million'},
+            {id: 4, name: 'Between R250 Million and R1 Billion'},
+            {id: 5, name: 'More than R1 Billion'},
+            {id: 6, name: 'Dormant'}
+        ],
+        const form = useForm({
+            
+        })
+
+        return { form,options }
+    }
 }
 </script>
 
@@ -45,12 +66,8 @@ export default {
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Annual Turnover</label>
             <select class="form-select">
-                <option value="Less than R5 Million">Less than R5 Million</option>
-                <option value="Between R5 Million and R15 Million">Between R5 Million and R15 Million</option>
-                <option value="Between R15 Million and R250 Million">Between R15 Million and R250 Million</option>
-                <option value="Between R250 Million and R1 Billion">Between R250 Million and R1 Billion</option>
-                <option value="More than R1 Billion">More than R1 Billion</option>
-                <option value="Dormant">Dormant</option>
+                <option :value="''" selected disabled>Select...</option>
+                <option v-for="option in options" :key="option.id" :value="option.id">{{ option.name}}</option>
 
             </select>
         </div>

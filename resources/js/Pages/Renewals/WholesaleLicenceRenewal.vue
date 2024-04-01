@@ -470,11 +470,13 @@
                       />
 
                       <AdditionalDocsComponent
-                        :licence_id="licence.id"
-                        :additional_docs="licence.additional_docs"
-                        :success="success"
-                        :errors="errors"
-                        :error="error"/>
+                            :licence_id="renewal.id"
+                            modelable_type="LicenceRenewal"
+                            :additional_docs="renewal.additional_docs"
+                            :success="success"
+                            :errors="errors"
+                            :error="error"
+                            />
 
 
                       <hr>

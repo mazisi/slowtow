@@ -7,6 +7,7 @@ use App\Models\Alteration;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\AdditionalDoc;
+use App\Models\LicenceRenewal;
 
 class AdditionalDocsController extends Controller
 {
@@ -31,6 +32,9 @@ if($request->hasFile('document')){
             break;
         case 'Alteration':
             $model = Alteration::where('licence_id', $request->modelable_id )->first();
+            break;
+        case 'LicenceRenewal':
+            $model = LicenceRenewal::where('id', $request->modelable_id )->first();
             break;
         default:
             # code...
@@ -61,6 +65,9 @@ if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fi
             break;
         case 'Alteration':
             $model = Alteration::where('licence_id', $request->modelable_id )->first();
+            break;
+        case 'LicenceRenewal':
+            $model = LicenceRenewal::where('id', $request->modelable_id )->first();
             break;
         default:
             # code...

@@ -34,9 +34,10 @@ class LicenceRenewal extends Model
 
     }
 
-    public function additional_docs()
+    public function additionalDocs()
     {
-        return $this->hasMany(RenewalDate::class, 'renewal_id');
+        return $this->morphMany('App\Models\AdditionalDoc', 'modelable');
 
     }
+    
 }

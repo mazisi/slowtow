@@ -53,7 +53,7 @@ class LicenceRenewalController extends Controller
 
 
     public function show($slug){
-        $renewal = LicenceRenewal::with('licence', 'renewal_documents','renewal_stage_dates')->whereSlug($slug)->first();
+        $renewal = LicenceRenewal::with('licence', 'renewal_documents','renewal_stage_dates','additionalDocs')->whereSlug($slug)->first();
         
 
         $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->latest()->paginate(4)->withQueryString();
