@@ -86,6 +86,7 @@ class NewApplicationController extends Controller
                 'people_id' => $request->belongs_to === 'Individual' ? $request->person : null,
                 'board_region' => $request->board_region,
                 'is_new_app' => true,
+                'import_export' => $request->import_export,
                 'address' => $request->address,
                 'address2' => $request->address2,
                 'is_licence_active' => true,
@@ -123,6 +124,7 @@ class NewApplicationController extends Controller
                 'company_id' => $request->company_id,
                 'people_id' => $request->person_id,
                 'board_region' => $request->board_region,
+                'import_export' => $request->import_export,
                 'address' => $request->address,
                 'address2' => $request->address2,
                 'address3' => $request->address3,
@@ -225,6 +227,9 @@ class NewApplicationController extends Controller
             $licence = LicenceDate::where('licence_id',$request->licence_id)->where('stage',$request->stage)->first();
             if($licence){
                 $licence->update(['dated_at' => $request->dated_at]);
+                if($request->stage == 'NLA 9 Issued'){
+                    $licence->licence()->update(['licence_date' => $request->dated_at]);
+                }
             }else{
                 LicenceDate::create([
                     'dated_at' => $request->dated_at,

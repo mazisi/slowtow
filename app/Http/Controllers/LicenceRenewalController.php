@@ -53,8 +53,8 @@ class LicenceRenewalController extends Controller
 
 
     public function show($slug){
-        $renewal = LicenceRenewal::with('licence', 'renewal_documents')->whereSlug($slug)->first();
-        $liqour_board_requests = LiquorBoardRequest::where('model_type','Licence Renewal')->where('model_id',$renewal->id)->get();
+        $renewal = LicenceRenewal::with('licence', 'renewal_documents','renewal_stage_dates')->whereSlug($slug)->first();
+        
 
         $tasks = Task::where('model_id',$renewal->id)->where('model_type','Licence Renewal')->latest()->paginate(4)->withQueryString();
 
@@ -62,8 +62,7 @@ class LicenceRenewalController extends Controller
 
         return Inertia::render('Renewals/'.$view,[
             'renewal' => $renewal,
-            'tasks'  => $tasks,
-            'liqour_board_requests' => $liqour_board_requests
+            'tasks'  => $tasks
         ]);
     }
 
@@ -81,7 +80,7 @@ class LicenceRenewalController extends Controller
        $status = null;
         if($request->status){
             if($request->unChecked){
-                $status = $request->status[0] - 100;
+                $status = $request->prevStage;
             }else{
                 $status = $request->status[0];
             }
@@ -93,7 +92,7 @@ class LicenceRenewalController extends Controller
 
        ]);
        if($ren){
-        return back()->with('success','Renewal updated successfully.');
+        return back()->with('success','Renewal stage updated successfully.');
        }
        return back()->with('error','Sorry..An error occured.');
     }

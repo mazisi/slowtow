@@ -178,6 +178,29 @@ export default {
             })
         }
 
+        function getRenewalDate(stage){
+
+            if(! props.renewal.renewal_stage_dates){
+              return {}; // Return an empty object if props.renewal.dates doesn't exist
+            } else {
+              let renewal_dates = props.renewal.renewal_stage_dates;
+  
+              const dateFound = renewal_dates.find(date =>
+                date.renewal_id === props.renewal.id &&
+                date.stage === stage
+              );
+  
+              if (dateFound) {
+                return {
+                  dated_at: dateFound.dated_at
+                };
+              } else {
+                return {};
+              }
+            }
+  
+          }
+
         function updateDate(data){
             data.patch(`/update-renewal-date/${props.renewal.slug}`, {
                 preserveScroll: true,
@@ -248,12 +271,6 @@ export default {
                     break;
             }
             return status;
-        }
-
-        function getRenewalDate(licence_id, stage){
-
-            return { }
-
         }
 
         return { year,form,

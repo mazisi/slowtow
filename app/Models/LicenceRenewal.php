@@ -33,4 +33,10 @@ class LicenceRenewal extends Model
         return $this->hasMany(RenewalDate::class, 'renewal_id');
 
     }
+
+    public function additional_docs()
+    {
+        return $this->hasMany(RenewalDate::class, 'renewal_id');
+
+    }
 }

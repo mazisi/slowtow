@@ -282,7 +282,7 @@
     :hasFile="hasFile('Product Analysis Certificate')"
     />
 
-    <MergeDocumentComponent v-if="licence.import_export"
+    <MergeDocumentComponent v-if="licence.import_export =='yes'"
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
     :success="success"
@@ -490,6 +490,18 @@
     :success="success"
     />
     </div>
+
+    <DateComponent
+    @date-value-changed="updateStageDate"
+        :licence="licence"
+        :stage="'NLA 6 Proposed'"
+        :canSave="$page.props.auth.has_slowtow_admin_role"
+        :errors="errors"
+        :error="error"
+        :column=5
+        :dated_at="getLicenceDate(licence.id, 'NLA 6 Proposed')"
+        :success="success"
+        />
   <hr>
 
   <StageComponent

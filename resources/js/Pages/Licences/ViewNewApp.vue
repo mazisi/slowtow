@@ -54,7 +54,7 @@
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled ">
                                                     <label class="form-label">Licence Date</label>
-                                                    <input type="date" class="form-control form-control-default" v-model="form.licence_date" >
+                                                    <input type="text" :disabled="true" class="form-control form-control-default" v-model="form.licence_date" >
                                                 </div>
                                                 <div v-if="errors.licence_date" class="text-danger">{{ errors.licence_date }}</div>
                                             </div>
@@ -263,7 +263,17 @@
                     </div>
 
                     <Task
-                        v-if="licence.status < 15"
+                        v-if="licence.type == 'retail' && licence.status < 2300"
+                        :tasks="tasks"
+                        :model_id="licence.id"
+                        :success="success"
+                        :error="error"
+                        :errors="errors"
+                        :model_type="'Licence'"
+                    />
+
+                    <Task
+                        v-if="licence.type == 'wholesale' && licence.status < 1100"
                         :tasks="tasks"
                         :model_id="licence.id"
                         :success="success"
@@ -336,12 +346,16 @@ export default {
             ];
         }
 
-        //const licenceVariables = [
-        //     {id: 1, name: 'Renewals', url: '/renew-licence'},
-        //     {id: 2, name: 'Transfers', url: '/transfer-history'},
-        //     {id: 3, name: 'Nominations', url: '/nominations'},
-        //     {id: 4, name: 'Alterations', url: '/alterations'},
-        // ];
+     Inertia.on('navigate', (event) => {
+        if (event.detail.page.url.includes("view-licence")) {
+       
+          Inertia.visit(`${event.detail.page.url}`,{preserveScroll: true,preserveState: true})
+
+        } else {
+          //console.log("The URL does not contain 'view-licence'");
+        }
+        // console.log(`Navigated to ${event.detail.page.url}`)
+      })
 
         const { notifySuccess, notifyError } = useToaster();
 

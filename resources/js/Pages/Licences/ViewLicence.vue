@@ -126,7 +126,19 @@
 
 
                                             <TextInputComponent
-                                                v-if="licence.status >= 150"
+                                                v-if="licence.type == 'retail' && licence.status >= 2300"
+                                                v-model="licence.licence_date"
+                                                :disabled="true"
+                                                :column="'col-md-12'"
+                                                :label="'Licence Date'"
+                                                :value="licence.licence_date"
+                                                :errors="errors.licence_date"
+                                                :input_id="licence_date"
+                                                :inputType="'date'"
+                                            />
+
+                                            <TextInputComponent
+                                                v-if="licence.type == 'wholesale' && licence.status >= 1100"
                                                 v-model="licence.licence_date"
                                                 :disabled="true"
                                                 :column="'col-md-12'"
