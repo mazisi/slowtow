@@ -125,7 +125,7 @@
                           :stage="300"
                       />
 
-                      <TurnOverInformationComponent/>
+                      <!-- <TurnOverInformationComponent/> -->
 
                       <hr>
 

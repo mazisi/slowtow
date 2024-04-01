@@ -82,7 +82,7 @@ class LicenceRenewalController extends Controller
             if($request->unChecked){
                 $status = $request->prevStage;
             }else{
-                $status = $request->status[0];
+                $status = $request->status;
             }
         }
 

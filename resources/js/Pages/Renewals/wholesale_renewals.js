@@ -39,6 +39,7 @@ export default {
             year: props.renewal.date,
             licence_id: props.renewal.licence_id,
             status: [],
+            prevStage: '',
             unChecked: false,
             client_paid_at: props.renewal.client_paid_at,
             payment_to_liquor_board_at: props.renewal.payment_to_liquor_board_at,
@@ -111,7 +112,9 @@ export default {
             })
         }
 
-        function updateRenewal() {
+        function updateRenewal(status_value, prevStage) {
+            form.status = status_value;
+            form.prevStage = prevStage;
             form.patch('/update-renewal', {
                 preserveScroll: true,
                 onSuccess: () => {
@@ -139,13 +142,13 @@ export default {
 
         function pushData(e,status_value, prevStage){
             if (e.target.checked) {
-                form.status[0] = status_value;
+                form.status = status_value;
                 form.unChecked = false;
             }else if(!e.target.checked){
                 form.unChecked = true
-                form.status[0] = status_value;
+                form.status = status_value;
             }
-            updateRenewal();
+            updateRenewal(status_value, prevStage);
         }
 
 

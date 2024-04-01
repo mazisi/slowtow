@@ -1,11 +1,11 @@
 <script>
 import { useForm } from '@inertiajs/inertia-vue3';
-import useToaster from '../../store/useToaster';
+// import useToaster from '../../store/useToaster';
 
 export default {
     setup(props) {
        
-        const { notifySuccess, notifyError } = useToaster();
+        // const { notifySuccess, notifyError } = useToaster();
 
         const form = useForm({
             volume_of_beer: '',
