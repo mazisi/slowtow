@@ -5,6 +5,7 @@ import { ref,onMounted } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
+import LinkComponent from "../New Applications/LinkComponent.vue";
 import Task from "../Tasks/Task.vue";
 import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
@@ -266,6 +267,7 @@ export default {
     },
     components: {
         Layout,
+        LinkComponent,
         DocComponent,
         PrepareTransferApplicationComponent,
         NoneUploadComponent,

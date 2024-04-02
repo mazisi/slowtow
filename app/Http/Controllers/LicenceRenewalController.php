@@ -209,6 +209,24 @@ class LicenceRenewalController extends Controller
 
     }
 
+   public function submitTurnOverInformation(Request $request,$id){
+       try {
+        $renewal = LicenceRenewal::find($id);
+        $renewal->update([
+            'exact_turnover' => $request->exact_turnover_amount,
+            'volume_beer' => $request->volume_of_beer,
+            'volume_spirits' => $request->volume_of_spirit,
+            'volume_wine' => $request->volume_of_wine,
+            'annual_turnover' => $request->annual_turnover,
+            'number_of_employees' => $request->number_of_employees
+        ]);
+        return back()->with('success','Turnover information submitted successfully.');
+       } catch (\Throwable $th) {
+        return back()->with('error','Error submitting turnover information.');
+        // throw $th;
+       }
+    }
+
     public function destroy($licence_slug, $slug){
         try {
             LicenceRenewal::whereSlug($slug)->delete();

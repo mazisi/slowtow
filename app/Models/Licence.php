@@ -80,9 +80,14 @@ class Licence extends Model
       return $this->hasMany(LicenceDocument::class, 'licence_id');
     }
 
-    public function additional_docs()
+   //  public function additional_docs()
+   //  {
+   //     return $this->hasMany(AdditionalDoc::class);
+   //  }
+
+   public function additionalDocs()
     {
-       return $this->hasMany(AdditionalDoc::class);
+        return $this->morphMany('App\Models\AdditionalDoc', 'modelable');
     }
     
     

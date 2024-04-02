@@ -1,19 +1,29 @@
 <script>
 import { useForm } from '@inertiajs/inertia-vue3';
-// import useToaster from '../../store/useToaster';
+import useToaster from '../../../store/useToaster';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 export default {
+
+    props:{
+    renewal: Object,
+    success: String,
+    error: String
+    },
+
     setup(props) {
        
-        // const { notifySuccess, notifyError } = useToaster();
+        const { notifySuccess, notifyError } = useToaster();
 
         const form = useForm({
-            volume_of_beer: '',
-            volume_of_wine: '',
-            volume_of_spirit: '',
-            exact_turnover_amount: '',
-            number_of_employees: '',
-            annual_turnover: ''
+
+            volume_of_beer: props.renewal.volume_beer,
+            volume_of_wine: props.renewal.volume_wine,
+            volume_of_spirit: props.renewal.volume_spirits,
+            exact_turnover_amount: props.renewal.exact_turnover,
+            number_of_employees:  props.renewal.number_of_employees,
+            annual_turnover:  props.renewal.annual_turnover
         })
 
         const options = [
@@ -25,19 +35,19 @@ export default {
             {id: 6, name: 'Dormant'}
         ]
 
-        form.post(route('submit_turn_over_information'), {
+        const submit = () => {
+            form.post(route('submit_turn_over_information', props.renewal.id), {
             onSuccess: () => {
               if(props.success){
                 notifySuccess(props.success);
-                show_file_name = false;
               }else if(props.error){
                 notifyError(props.error)
               }
-              doc_form.reset();
-              doc_form.document = null;
             }
         })
-        return{ options, form }
+        }
+
+        return{ options, form, submit,toast}
     }
 }
 
@@ -91,8 +101,10 @@ export default {
         </div>
     </div>
 
-    <div class="col-md-6 columns">
-        <button @click="submit" type="button" class="btn btn-sm btn-secondary">Save</button>
+    <div class="col-md-12 columns">
+        <button @click="submit()" :disabled="form.processing" type="button" class="btn btn-sm btn-secondary" style="float: right;">
+            <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+            Save</button>
     </div>
 </template>
 

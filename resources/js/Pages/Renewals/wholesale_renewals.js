@@ -10,7 +10,8 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
 import { ref,onMounted } from 'vue';
-import TurnOverInformationComponent from "@/Pages/Renewals/components/TurnOverInformationComponent.vue";
+import LinkComponent from "../New Applications/LinkComponent.vue";
+import TurnOverInformationComponent from "../Renewals/Components/TurnOverInformationComponent.vue";
 import StageComponent from "@/Pages/components/slotow-components/StageComponent.vue";
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
 import DateComponent from "@/Pages/components/DateComponent.vue";
@@ -295,6 +296,7 @@ export default {
         StageComponent,
         TurnOverInformationComponent,
         Layout,
+        LinkComponent,
         Link,
         Head,
         Datepicker,

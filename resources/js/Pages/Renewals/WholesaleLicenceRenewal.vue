@@ -124,8 +124,12 @@
                           :success="success"
                           :stage="300"
                       />
-
-                      <!-- <TurnOverInformationComponent/> -->
+                      <hr/>
+                      <TurnOverInformationComponent 
+                      :renewal="renewal"
+                      :error="error"
+                      :success="success"
+                      />
 
                       <hr>
 
@@ -363,20 +367,13 @@
                             :hasFile="hasFile('Police Clearance Certificates')"
                         />
 
-                        <MergeDocumentComponent
-                            @file-value-changed="submitDocument"
-                            @file-deleted="deleteDocument"
-                            :success="success"
-                            :error="error"
-                            :errors="errors"
-                            :column=6
-                            :model_id="renewal"
-                            :docTitle="'Proof of Payment'"
-                            :docType="'Proof of Payment'"
-                            :docModel="renewal"
-                            :stage=1000
-                            :hasFile="hasFile('Proof of Payment')"
-                        />
+                       
+                        <LinkComponent
+                        :hasFile="hasFile('Payment to the National Liquor Authority')"
+                        :docTitle="'Proof of Payment'"
+                         :docType="'Payment to the National Liquor Authority'"
+                     />
+
 
                       </div>
                       <div class="col-6">
@@ -437,19 +434,19 @@
                           :stageValue=1100
                           :prevStage=1000
                           :licence_id=null
-                          :stageTitle="'Renewal Submited'"
+                          :stageTitle="'Renewal Submitted'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal Submited'"
+                          :stage="'Renewal Submitted'"
                           :model="renewal"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="getRenewalDate('Renewal Submited').dated_at"
+                          :dated_at="getRenewalDate('Renewal Submitted').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />

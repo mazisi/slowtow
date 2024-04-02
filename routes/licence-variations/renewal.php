@@ -23,3 +23,5 @@ Route::delete('/delete-licence-renewal/{licence_slug}/{slug}',[LicenceRenewalCon
 //wholesale variation routes
 
 Route::get('/wholesale-renewal/{slug}',[LicenceRenewalController::class,'wholesaleRenewal'])->name('wholesale_renewal');
+
+Route::post('/submit-turn-over-information/{id}',[LicenceRenewalController::class,'submitTurnOverInformation'])->name('submit_turn_over_information');

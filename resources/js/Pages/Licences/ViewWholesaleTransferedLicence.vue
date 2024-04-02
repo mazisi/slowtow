@@ -504,7 +504,14 @@
                                             <div class="d-flex justify-content-center w-100">
                                                 <NoneUploadComponent/>
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Proof of Payment</button>
-                                                <NoneUploadComponent/>
+                                                <div class="row"><div class="col-md-7" >
+                                                <a v-if="hasFile('Payment To The Liquor Board').id" 
+                                                     :href="`${$page.props.blob_file_path}${hasFile('Payment To The Liquor Board').docPath}`" 
+                                                     target="_blank" class="mx-4 col-md-1">
+                                                    <i class="fa fa-link h5 upload-icon col-md-3 disabled"></i>
+                                                  </a>
+                                                </div>
+                                            </div>
 
                                             </div>
 
