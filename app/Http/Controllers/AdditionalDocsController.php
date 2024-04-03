@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\AdditionalDoc;
 use App\Models\LicenceRenewal;
+use App\Models\LicenceTransfer;
 
 class AdditionalDocsController extends Controller
 {
@@ -21,20 +22,20 @@ class AdditionalDocsController extends Controller
             "modelable_type" => "required",
             ]);
 
-if($request->hasFile('document')){
-   $this->handleDocUpload($request);       
-     
-}
+if($request->hasFile('document')){$this->handleDocUpload($request);}
     $model = "";
     switch ($request->modelable_type) {
         case 'Licence':
             $model = Licence::where('id', $request->modelable_id )->first();
             break;
         case 'Alteration':
-            $model = Alteration::where('licence_id', $request->modelable_id )->first();
+            $model = Alteration::where('id', $request->modelable_id )->first();
             break;
         case 'LicenceRenewal':
             $model = LicenceRenewal::where('id', $request->modelable_id )->first();
+            break;
+        case 'LicenceTransfer':
+            $model = LicenceTransfer::where('id', $request->modelable_id )->first();
             break;
         default:
             # code...
@@ -64,15 +65,19 @@ if(fileExist(env('AZURE_STORAGE_URL').'/'.env('AZURE_STORAGE_CONTAINER').'/'.$fi
             $model = Licence::where('id', $request->modelable_id )->first();
             break;
         case 'Alteration':
-            $model = Alteration::where('licence_id', $request->modelable_id )->first();
+            $model = Alteration::where('id', $request->modelable_id )->first();
             break;
         case 'LicenceRenewal':
             $model = LicenceRenewal::where('id', $request->modelable_id )->first();
+            break;
+        case 'LicenceTransfer':
+            $model = LicenceTransfer::where('id', $request->modelable_id )->first();
             break;
         default:
             # code...
             break;
     }
+   
       $model->additionalDocs()->create([
             'modelable_id' => $request->modelable_id,
             'modelable_type' => 'App\Models\''.$request->modelable_type,

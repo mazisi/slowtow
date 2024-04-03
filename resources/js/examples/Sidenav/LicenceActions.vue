@@ -27,8 +27,7 @@ function checkStatus(licenseType, status) {
 </script>
 <template>
 
-     <li v-if="$page.props.currentRoute == 'view_licence'"
-            class="nav-item">
+     <li v-if="$page.props.currentRoute == 'view_licence'" class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'new-application'}"
          :href="`/new-application?slug=${$page.props.slug}`">
@@ -92,7 +91,7 @@ function checkStatus(licenseType, status) {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' && $page.props.viewed_licence?.type == 'retail'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_licence'}"
@@ -105,7 +104,7 @@ function checkStatus(licenseType, status) {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'nominations'"
+      <li v-if="$page.props.currentRoute == 'nominations' && $page.props.viewed_licence?.type == 'retail'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'nominate'}"
@@ -126,7 +125,7 @@ function checkStatus(licenseType, status) {
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">settings_suggest</i>
         </div>
-        <span class="nav-link-text ms-1">Alterations</span>
+        <span class="nav-link-text ms-1">{{ $page.props.viewed_licence?.type == 'wholesale' ? 'Additional Depot' : 'Alterations' }}</span>
         
         </Link>
       </li>

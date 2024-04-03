@@ -43,4 +43,9 @@ class LicenceTransfer extends Model
     function dates() {
         return $this->hasMany(TransferDate::class,'transfer_id');
     }
+
+    public function additionalDocs()
+    {
+        return $this->morphMany('App\Models\AdditionalDoc', 'modelable');
+    }
 }

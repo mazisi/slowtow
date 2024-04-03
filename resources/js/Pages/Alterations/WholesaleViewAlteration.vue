@@ -448,7 +448,7 @@
 
                       
                       <AdditionalDocsComponent
-                            :licence_id="alteration.licence_id"
+                            :licence_id="alteration.id"
                             modelable_type="Alteration"
                             :additional_docs="alteration.additional_docs"
                             :success="success"

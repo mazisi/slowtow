@@ -39,7 +39,7 @@
   <table class="table table-bordered mt-3">
     <thead>
       <tr>
-        <th scope="col">Request Description {{modelable_type}}</th>
+        <th scope="col">Request Description</th>
         <th scope="col">Date Requested</th>
         <th scope="col">View Document</th>
         <th scope="col">Edit</th>

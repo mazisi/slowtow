@@ -13,6 +13,7 @@ import PrepareTransferApplicationComponent from './Transfers/PrepareTransferAppl
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 import DateComponent from "./Transfers/DateComponent.vue";
 import NoneUploadComponent from './Transfers/NoneUploadComponent.vue';
+import AdditionalDocsComponent from '../components/slotow-components/AdditionalDocsComponent.vue';
 
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -277,6 +278,7 @@ export default {
         Multiselect,
         Link,
         Head,
+        AdditionalDocsComponent,
         LiquorBoardRequest,
         Banner,
         Task

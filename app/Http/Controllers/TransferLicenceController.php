@@ -96,8 +96,8 @@ class TransferLicenceController extends Controller
        * View licence transfer individually.
        */
       public function viewTransferedLicence($slug){
-        $view_transfer = LicenceTransfer::with('old_person','new_person','old_company','new_company','licence','transfer_documents','dates')->whereSlug($slug)->first();
-        $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
+        $view_transfer = LicenceTransfer::with('additionalDocs','old_person','new_person','old_company','new_company','licence','transfer_documents','dates')->whereSlug($slug)->first();
+       $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
 
         // $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->latest()->paginate(4)->withQueryString();

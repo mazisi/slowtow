@@ -14,7 +14,7 @@ class AlterLicenceController extends Controller
 {
 
   public function index(Request $request){
-    $licence = Licence::whereSlug($request->slug)->first(['id','trading_name','slug']);
+    $licence = Licence::whereSlug($request->slug)->first(['id','trading_name','slug','type']);
     $alterations = Alteration::where('licence_id',$licence->id)->latest()->paginate(10)->withQueryString();
     return Inertia::render('Alterations/Alteration',[
       'licence'=> $licence,
@@ -22,7 +22,7 @@ class AlterLicenceController extends Controller
   }
 
     public function newAlteration(Request $request){
-        $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name','slug']);
+        $licence = Licence::with('alterations')->whereSlug($request->slug)->first(['id','trading_name','slug','type']);
         return Inertia::render('Alterations/AlterLicence',['licence'=> $licence]);
     }
 

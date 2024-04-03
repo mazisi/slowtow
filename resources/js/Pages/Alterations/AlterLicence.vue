@@ -120,7 +120,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="alteration-Application" class="active-checkbox" v-model="form.status" type="checkbox" value="400">
-<label for="alteration-Application" class="form-check-label text-body text-truncate status-heading">Prepare Alterations Application</label>
+<label for="alteration-Application" class="form-check-label text-body text-truncate status-heading">Prepare{{ licence.type == 'wholesale'? ' NLA 14 Application' : 'Alterations Application'}}</label>
 </div>
 </div> 
 
@@ -128,7 +128,7 @@ export default {
 <div class="col-md-12 columns">
   <div class=" form-switch d-flex ps-0 ms-0  is-filled">
   <input id="alteration-Liquor" class="active-checkbox" v-model="form.status" type="checkbox" value="500">
-  <label for="alteration-Liquor" class="form-check-label text-body text-truncate status-heading">Payment to the Liquor Board</label>
+  <label for="alteration-Liquor" class="form-check-label text-body text-truncate status-heading">{{ licence.type == 'wholesale'? 'Payment to the National Liquor Authority' : 'Payment to the Liquor Board'}}</label>
   </div>
   </div> 
 
@@ -136,7 +136,7 @@ export default {
   <div class="col-md-8 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input id="alteration-Lodged" class="active-checkbox" v-model="form.status" type="checkbox" value="600">
-    <label for="alteration-Lodged" class="form-check-label text-body text-truncate status-heading">Alterations Lodged</label>
+    <label for="alteration-Lodged" class="form-check-label text-body text-truncate status-heading">{{ licence.type == 'wholesale'? 'NLA 14' : 'Alterations' }} Lodged</label>
     </div>
  </div> 
 
@@ -152,7 +152,7 @@ export default {
     <div class="col-md-12 columns">
       <div class=" form-switch d-flex ps-0 ms-0  is-filled">
       <input id="alteration-Certificate" class="active-checkbox" v-model="form.status" type="checkbox" value="700">
-      <label for="alteration-Certificate" class="form-check-label text-body text-truncate status-heading">Alterations Certificate Issued</label>
+      <label for="alteration-Certificate" class="form-check-label text-body text-truncate status-heading">{{ licence.type == 'wholesale'? 'NLA 15' : 'Alterations' }} Certificate Issued</label>
       </div>
     </div> 
 
@@ -160,7 +160,7 @@ export default {
   <div class="col-md-12 columns">
     <div class=" form-switch d-flex ps-0 ms-0  is-filled">
     <input id="alteration-Delivered" class="active-checkbox" v-model="form.status" type="checkbox" value="800">
-    <label for="alteration-Delivered" class="form-check-label text-body text-truncate status-heading">Alterations Delivered</label>
+    <label for="alteration-Delivered" class="form-check-label text-body text-truncate status-heading">{{ licence.type == 'wholesale'? 'NLA 15' : 'Alterations' }} Delivered</label>
     </div>
   </div> 
   <hr/>

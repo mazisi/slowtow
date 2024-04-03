@@ -8,7 +8,9 @@
     </div>
   
     <div class="col-md-1 columns">
-      <button v-if="shouldShowSaveButton" @click="emitDataToParent" type="button" class="btn btn-sm btn-secondary">Save</button>
+      <button v-if="shouldShowSaveButton" @click="emitDataToParent" :disabled="form.processing" 
+      type="button" class="btn btn-sm btn-secondary flex d-flex">
+      <span v-if="form.processing" class="spinner-border spinner-border-sm mr-2" role="status" aria-hidden="true"></span>Save</button>
     </div>
   </template>
 

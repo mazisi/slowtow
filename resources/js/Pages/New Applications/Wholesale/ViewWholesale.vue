@@ -635,7 +635,7 @@
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+    @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('NLA 9 Issued')"
     :errors="errors"
