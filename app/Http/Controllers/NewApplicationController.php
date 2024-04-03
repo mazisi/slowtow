@@ -163,6 +163,15 @@ class NewApplicationController extends Controller
         ]);
     }
 
+    function getWholesaleLicenceDate($licence, $request){        
+        if($licence->type =='wholesale' && !$request->unChecked && $request->status[0] == 1100 && $request->stage == 'NLA 8 Issued'){
+            $licence_date = $licence->licence_stage_dates()->where('stage', $request->stage)->first(); 
+            if(!$licence_date){
+               return back()->with('error', 'Update stage date first.');
+            }
+        }
+    }
+
     /**
      * Updates the status of a license registration based on the provided request data and slug.
      *
@@ -171,9 +180,10 @@ class NewApplicationController extends Controller
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateRegistration(Request $request, $slug)
-    {
+    {dd($request);
         try {
             $licence = Licence::whereSlug($slug)->first();
+            
             $status = '';
 
             if ($request->status) {

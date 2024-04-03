@@ -569,7 +569,7 @@
     />
     </div>
     <DateComponent
-    @date-value-changed="updateStageDate"
+        @date-value-changed="updateStageDate"
         :licence="licence"
         :stage="'NLA 8 Issued'"
         :canSave="$page.props.auth.has_slowtow_admin_role"

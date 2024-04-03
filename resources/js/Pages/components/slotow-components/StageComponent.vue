@@ -32,7 +32,7 @@ export default{
   },
   setup(props, context){
     function emitValue(event) {
-      context.emit('stage-value-changed', event, props.stageValue, props.prevStage);
+      context.emit('stage-value-changed', event, props.stageValue, props.prevStage,props.stageTitle);
     }
 
     return {
