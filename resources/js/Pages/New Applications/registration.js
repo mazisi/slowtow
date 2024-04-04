@@ -31,7 +31,8 @@ import Layout from "../../Shared/Layout.vue";
       const form = useForm({
         status: [],
         unChecked: false,
-        prevStage: ''
+        prevStage: '',
+        stage: '',
        })
 
 
@@ -55,7 +56,7 @@ import Layout from "../../Shared/Layout.vue";
       }
 
 
-      function pushData(e,status_value, prevStage){
+      function pushData(e,status_value, prevStage,stageTitle){
            if (e.target.checked) {
               form.status[0] = status_value;
               form.unChecked = false;
@@ -64,6 +65,7 @@ import Layout from "../../Shared/Layout.vue";
               form.status[0] = status_value;
             }
             form.prevStage = prevStage;
+            form.stage = stageTitle
             updateRegistration();
 
         }

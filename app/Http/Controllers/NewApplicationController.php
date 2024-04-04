@@ -163,26 +163,70 @@ class NewApplicationController extends Controller
         ]);
     }
 
-    function getWholesaleLicenceDate($licence, $request){        
-        if($licence->type =='wholesale' && !$request->unChecked && $request->status[0] == 1100 && $request->stage == 'NLA 8 Issued'){
-            $licence_date = $licence->licence_stage_dates()->where('stage', $request->stage)->first(); 
-            if(!$licence_date){
-               return back()->with('error', 'Update stage date first.');
+
+    function getRetailLicenceDate($licence, $request) {
+        if ($licence->type == 'retail' && !$request->unChecked && $request->status[0] == 2300 && $request->stage == 'Licence Issued') {
+            $licenceDate = $licence->licence_stage_dates()->where('stage', $request->stage)->first();
+       
+            if (is_null($licenceDate)) {
+                return true;
             }
+            return false;
+        }
+//licence delivered
+        if ($licence->type == 'retail' && !$request->unChecked && $request->status[0] == 2400 && $request->stage == 'Licence Delivered') {
+            $licenceDate = $licence->licence_stage_dates()->where('stage', $request->stage)->first();
+       
+            if (is_null($licenceDate)) {
+                return true;
+            }
+            return false;
+        }
+    }
+
+
+    function getWholesaleLicenceDate($licence, $request) {
+        if ($licence->type == 'wholesale' && !$request->unChecked && $request->status[0] == 1100 && $request->stage == 'NLA 8 Issued') {
+            $licenceDate = $licence->licence_stage_dates()->where('stage', $request->stage)->first();
+       
+            if (is_null($licenceDate)) {
+                return true;
+            }
+            return false;
+        }
+//licence delivered
+        if ($licence->type == 'wholesale' && !$request->unChecked && $request->status[0] == 1500 && $request->stage == 'Original Licence Delivered') {
+            $licenceDate = $licence->licence_stage_dates()->where('stage', $request->stage)->first();
+       
+            if (is_null($licenceDate)) {
+                return true;
+            }
+            return false;
         }
     }
 
     /**
-     * Updates the status of a license registration based on the provided request data and slug.
+     * Updates the status of a licence registration based on the provided request data and slug.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string  $slug
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateRegistration(Request $request, $slug)
-    {dd($request);
+    {
         try {
             $licence = Licence::whereSlug($slug)->first();
+            if($licence->type == 'wholesale'){
+                if($this->getWholesaleLicenceDate($licence, $request)){
+                    return back()->with('error', 'Update stage date first.');
+                 }
+
+            }else{
+                if($this->getRetailLicenceDate($licence, $request)){
+                   return back()->with('error', 'Update stage date first.');
+                }
+            }
+            
             
             $status = '';
 
@@ -214,6 +258,7 @@ class NewApplicationController extends Controller
 
             return back()->with('success', 'Status updated successfully');
         } catch (\Throwable $th) {
+            throw $th;
             return back()->with('error', 'An error occurred while updating.');
         }
     }

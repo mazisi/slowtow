@@ -139,6 +139,7 @@
                           :column="'col-6'"
                           :value="form.licence_type"
                           v-model="form.licence_type"
+                          :defaultDisabledText="'Select Licence Type...'"
                           :errors="errors.licence_type"
                           :input_id="licence_type"
                           :required="true" v-if="form.province !== ''" />
@@ -163,6 +164,7 @@
                           v-model="form.licence_number"
                           :value="form.licence_number"
                           :column="'col-6'"
+                          :required="true"
                           :label="'Licence Number'"
                           :errors="errors.licence_number"
                           :input_id="licence_number" />
