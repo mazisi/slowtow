@@ -21,7 +21,7 @@
 
           <div class="col-lg-6 col-7">
 
-            <h6 class="mb-1">New Licence </h6>
+            <h6 class="mb-1">Existing Licence</h6>
 
           </div>
 
@@ -354,6 +354,7 @@ export default {
       licence_date: '',
       address3: '',
       province: '',
+      is_new_app: '0',
       board_region: '',
       company: '', //company id
       person: '', //person id

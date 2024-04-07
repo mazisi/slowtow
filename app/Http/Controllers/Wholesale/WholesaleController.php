@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Wholesale;
 
 use App\Models\Task;
 use Inertia\Inertia;
+use App\Models\People;
 use App\Models\Licence;
+use App\Models\LicenceType;
+use App\Models\Company;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
@@ -13,6 +16,42 @@ use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
 class WholesaleController extends Controller
 {
+
+    public function view_licence(Request $request)
+    {
+
+        $licence = Licence::with('company', 'people', 'licence_documents','duplicate_originals.duplicate_documents')
+            ->whereSlug($request->slug)
+            ->first();
+
+        $duplicate_original_lic = optional($licence->duplicate_originals[0]->duplicate_documents[0])->where('doc_type', 'Duplicate Original Issued')->first();
+        $original_lic_delivered = optional($licence->duplicate_originals[0]->duplicate_documents[0])->where('doc_type', 'Duplicate-Original-Licence-Delivered')->first();
+       
+
+        $companies = Company::pluck('name', 'id');
+        $people = People::pluck('full_name', 'id');
+        $licence_dropdowns = LicenceType::orderBy('licence_type')->get();
+        $tasks = Task::where('model_type', 'Licence')
+            ->where('model_id', $licence->id)
+            ->latest()
+            ->paginate(4)
+            ->withQueryString();
+
+
+        $view = (is_null($licence->is_new_app)||$licence->is_new_app==1)? 'ViewNewApp' : 'ViewWholesaleLicence';
+        
+        return Inertia::render('Licences/' . $view, [
+            'licence' => $licence,
+            'licence_dropdowns' => $licence_dropdowns,
+            'tasks' => $tasks,
+            'companies' => $companies,
+            'people' => $people,
+            'duplicate_original_lic' => $duplicate_original_lic,
+            'original_lic_delivered' => $original_lic_delivered,
+        ]);
+    }
+
+
     public function show(Request $request){
         $licence = Licence::with('company','licence_stage_dates','documents')->whereSlug($request->slug)->first();
       

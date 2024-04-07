@@ -95,9 +95,12 @@ class NewApplicationController extends Controller
                 'slug' => sha1(now())
             ]);
 
-            if ($licence) {
+            if ($licence && $request->type === 'retail') {
                 return redirect()->route('view_registration', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
             }
+
+            return redirect()->route('view_wholesale_licence', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
+            
         } catch (\Throwable $th) {throw $th;
            // return back()->with('error', 'An error occurred. Please try again.');
         }

@@ -8,8 +8,12 @@ export default {
   },
 
   setup(){
-function checkStatus(licenseType, status) {
-  if (licenseType === 'retail') {
+function checkStatus(licenseType, status, licence) {
+  if(licence == null){
+    return false;
+  }else if(licence.is_new_app == 0 || licence.is_new_app == null){
+    return true;
+  } else if (licenseType === 'retail') {
     return status >= 2300 ? true : false;
   } else {
     return status >= 1100 ? true : false;
@@ -27,7 +31,7 @@ function checkStatus(licenseType, status) {
 </script>
 <template>
 
-     <li v-if="$page.props.currentRoute == 'view_licence'" class="nav-item">
+     <li v-if="$page.props.currentRoute == 'view_licence' || $page.props.currentRoute == 'view_wholesale_licence'" class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'new-application'}"
          :href="`/new-application?slug=${$page.props.slug}`">
@@ -38,8 +42,10 @@ function checkStatus(licenseType, status) {
         
         </Link>
       </li>
-<div v-if="checkStatus($page.props.viewed_licence?.type,$page.props.viewed_licence?.status)"> 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      
+
+<div v-if="checkStatus($page.props.viewed_licence?.type,$page.props.viewed_licence?.status, $page.props.viewed_licence)"> 
+      <li v-if="$page.props.currentRoute == 'view_licence' || $page.props.currentRoute == 'view_wholesale_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'new-application'}"
@@ -52,7 +58,7 @@ function checkStatus(licenseType, status) {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' || $page.props.currentRoute == 'view_wholesale_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'renew_licence'}"
@@ -65,7 +71,7 @@ function checkStatus(licenseType, status) {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence' "
+      <li v-if="$page.props.currentRoute == 'view_licence' || $page.props.currentRoute == 'view_wholesale_licence' "
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'transfer_history'}"
@@ -117,7 +123,7 @@ function checkStatus(licenseType, status) {
         </Link>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'view_licence'"
+      <li v-if="$page.props.currentRoute == 'view_licence' || $page.props.currentRoute == 'view_wholesale_licence'"
             class="nav-item">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'alterations'}"

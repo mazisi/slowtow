@@ -92,7 +92,6 @@ class LicenceController extends Controller
      */
     public function store(Request $request)
     {
-
         $request->validate([
             'belongs_to' => 'required|in:Company,Individual',
             'person' => [Rule::requiredIf(function () {

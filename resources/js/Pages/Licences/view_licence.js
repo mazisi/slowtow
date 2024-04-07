@@ -38,6 +38,7 @@ export default {
   
   
   setup (props) {
+    console.log(props.duplicate_original_lic);
         let showMenu = false;
         let companyOptions = props.companies;
         let peopleOptions = props.people;

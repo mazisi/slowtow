@@ -159,9 +159,18 @@ export default {
           function getCurrentStatus(){
             return getStatus(props.duplicate_original.status);
           }
-        
+          const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
+
         return {
-            form,
+            form,redirect,
             showMenu,mergeDocuments,
             updateDate,
             update,

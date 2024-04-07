@@ -31,6 +31,12 @@ export default{
     canActivate: Date,
   },
   setup(props, context){
+    function truncateText(text, length) {
+      if (text.length > length) {
+        return text.slice(0, length) + '...';
+      }
+      return text;
+    }
     function emitValue(event) {
       context.emit('stage-value-changed', event, props.stageValue, props.prevStage,props.stageTitle);
     }

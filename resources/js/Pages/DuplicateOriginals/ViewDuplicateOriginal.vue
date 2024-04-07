@@ -24,7 +24,7 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">   
   <div class="col-lg-9 col-9">
-   <h6> <Link :href="`/view-licence?slug=${duplicate_original.licence.slug}`">
+   <h6> <Link @click=redirect(duplicate_original.licence)>
       <span class="text-success">{{ duplicate_original.licence.trading_name }}</span></Link> - Duplicate Original</h6>
       <p class="text-sm mb-0">Current Stage: 
         <span v-html="getCurrentStatus()"></span>
@@ -105,9 +105,9 @@
 </div>
 
 <hr/>
-<div class="col-5 columns">
+<div class="col-6 columns">
 <StageComponent
-      :column=5
+      :column=6
       :dbStatus="duplicate_original.status"
       :errors="errors"
       :error="error"
@@ -128,7 +128,7 @@
     :canSave="$page.props.auth.has_slowtow_admin_role"
     :errors="errors"
     :error="error"
-    :column=5
+    :column=4
     @date-value-changed="updateDate"
     :dated_at="duplicate_original.paid_at"
     :success="success"
@@ -138,9 +138,9 @@
 
 
 
-<div class="col-5 columns">
+<div class="col-6 columns">
 <StageComponent
-      :column=5
+      :column=6
       :dbStatus="duplicate_original.status"
       :errors="errors"
       :error="error"
@@ -160,7 +160,7 @@
   :canSave="$page.props.auth.has_slowtow_admin_role"
   :errors="errors"
   :error="error"
-  :column=5
+  :column=4
   @date-value-changed="updateDate"
   :dated_at="duplicate_original.liquor_board_at"
   :success="success"
@@ -216,9 +216,9 @@
 
 </div>
 <hr>
-    <div class="col-5 columns">
+    <div class="col-6 columns">
       <StageComponent
-            :column=5
+            :column=6
             :dbStatus="duplicate_original.status"
             :errors="errors"
             :error="error"
@@ -247,9 +247,9 @@
 
 
 
-      <div class="col-5 columns">
+      <div class="col-6 columns">
         <StageComponent
-              :column=5
+              :column=6
               :dbStatus="duplicate_original.status"
               :errors="errors"
               :error="error"
@@ -282,7 +282,7 @@
             :canSave="$page.props.auth.has_slowtow_admin_role"
             :errors="errors"
             :error="error"
-            :column=5
+            :column=4
             @date-value-changed="updateDate"
             :dated_at="duplicate_original.lodged_at"
             :success="success"
@@ -290,9 +290,9 @@
         <hr>
 
 
-        <div class="col-5 columns">
+        <div class="col-6 columns">
           <StageComponent
-                :column=5
+                :column=6
                 :dbStatus="duplicate_original.status"
                 :errors="errors"
                 :error="error"
@@ -306,8 +306,8 @@
           
           
               <DocComponent
-              @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+                  @file-value-changed="submitDocument"
+                  @file-deleted="deleteDocument"
                   :documentModel="duplicate_original"
                   :hasFile="hasFile('Duplicate Original Issued')"
                   :errors="errors"
@@ -325,16 +325,16 @@
               :canSave="$page.props.auth.has_slowtow_admin_role"
               :errors="errors"
               :error="error"
-              :column=5
+              :column=4
               @date-value-changed="updateDate"
               :dated_at="duplicate_original.issued_at"
               :success="success"
               /> 
           <hr>
 
-          <div class="col-5 columns">
+          <div class="col-6 columns">
             <StageComponent
-                  :column=5
+                  :column=6
                   :dbStatus="duplicate_original.status"
                   :errors="errors"
                   :error="error"
@@ -367,7 +367,7 @@
                 :canSave="$page.props.auth.has_slowtow_admin_role"
                 :errors="errors"
                 :error="error"
-                :column=5
+                :column=4
                 @date-value-changed="updateDate"
                 :dated_at="duplicate_original.delivered_at"
                 :success="success"
