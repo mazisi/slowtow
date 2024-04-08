@@ -10,7 +10,7 @@
   </div>
   <div class="row">
   <div class="col-lg-12">
-  <h6 class="mb-1"><Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
+  <h6 class="mb-1"><Link @click="redirect(licence)" class="text-success">
     {{ licence.trading_name ? licence.trading_name : '' }}</Link> - Duplicate Original</h6>
   </div>
   </div>
@@ -165,6 +165,16 @@
            }
         })
       }
+
+      const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
   
       function getStatus(status) {
             return getBadgeStatus(status);
@@ -178,7 +188,7 @@
             }
   
            });
-      return { year, years,form, submit,toast, getStatus}
+      return { year, years,form, submit,toast, getStatus, redirect}
     },
      components: {
       Layout,

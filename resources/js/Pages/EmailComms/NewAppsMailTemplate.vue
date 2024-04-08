@@ -2,7 +2,7 @@
 <Layout>
 <div class="container-fluid">
 <h6 class="mb-1">
-  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">Licence Info: {{ licence.trading_name ? licence.trading_name : ''}}
+  <Link @click="redirect(licence)" class="text-success">Licence Info: {{ licence.trading_name ? licence.trading_name : ''}}
   </Link></h6>
 
 <Banner/>
@@ -55,6 +55,7 @@ import Banner from '../components/Banner.vue';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster'
+import { Inertia } from '@inertiajs/inertia';
 
 export default {
  props: {
@@ -86,9 +87,19 @@ export default {
         })
     }
 
+    const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = ``
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
 
     return {
       sendMail,
+      redirect,
       mailForm
     }
   },

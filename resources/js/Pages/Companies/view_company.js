@@ -301,7 +301,15 @@ export default {
       }
 
 
-
+      const redirect = (licence) => {
+        let url = '';
+      if(licence.type == 'retail'){
+         url = `/view-licence?slug=${licence.slug}`
+      }else{
+         url = `/view-wholesale-licence?slug=${licence.slug}`
+      }
+        Inertia.get(url);
+      }
 
         function checkingFileProgress(message){
           setTimeout(() => {
@@ -337,7 +345,7 @@ export default {
       file_name,
       file_has_apostrophe,
       getFileName,
-      submit,
+      submit,redirect,
       addCompanyUser,
       addCompanyUserForm,
         hasFile,

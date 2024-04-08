@@ -23,10 +23,15 @@ class WholesaleController extends Controller
         $licence = Licence::with('company', 'people', 'licence_documents','duplicate_originals.duplicate_documents')
             ->whereSlug($request->slug)
             ->first();
-
-        $duplicate_original_lic = optional($licence->duplicate_originals[0]->duplicate_documents[0])->where('doc_type', 'Duplicate Original Issued')->first();
-        $original_lic_delivered = optional($licence->duplicate_originals[0]->duplicate_documents[0])->where('doc_type', 'Duplicate-Original-Licence-Delivered')->first();
+        
        
+         
+
+// $original_lic_delivered now contains the desired document if found
+
+        $duplicate_original_issued = json_decode(getLicenceDocs($licence))->duplicate_original_issued;
+        $original_lic_delivered = json_decode(getLicenceDocs($licence))->original_licence_delivered;
+   
 
         $companies = Company::pluck('name', 'id');
         $people = People::pluck('full_name', 'id');
@@ -46,7 +51,7 @@ class WholesaleController extends Controller
             'tasks' => $tasks,
             'companies' => $companies,
             'people' => $people,
-            'duplicate_original_lic' => $duplicate_original_lic,
+            'duplicate_original_lic' => $duplicate_original_issued,
             'original_lic_delivered' => $original_lic_delivered,
         ]);
     }

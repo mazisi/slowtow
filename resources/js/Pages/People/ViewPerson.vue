@@ -294,14 +294,14 @@
                 <td>
                   <div class="d-flex px-2">
                     <div class="d-flex flex-column">
-                      <Link :href="`/view-licence?slug=${licence.slug }`"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name : ''  }}</h6></Link>
+                      <Link @click="redirect(licence)"><h6 class="mb-0 text-sm">{{ licence.trading_name ? licence.trading_name : ''  }}</h6></Link>
                     </div>
                   </div>
                 </td>
-                <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_number ? licence.licence_number : '' }}</Link></td>
-                <td class="text-center"><Link :href="`/view-licence?slug=${licence.slug }`">{{ licence.licence_date }}</Link></td>
+                <td class="text-center"><Link @click="redirect(licence)">{{ licence.licence_number ? licence.licence_number : '' }}</Link></td>
+                <td class="text-center"><Link @click="redirect(licence)">{{ licence.licence_date }}</Link></td>
                 <td class="text-center">
-                  <Link :href="`/view-licence?slug=${licence.slug }`" class="mx-2 ms-2 justify-content-center">
+                  <Link @click="redirect(licence)" class="mx-2 ms-2 justify-content-center">
                     <i class="fa fa-eye"></i></Link>
                 </td>
 

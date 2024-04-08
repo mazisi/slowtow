@@ -67,7 +67,15 @@ export default {
 
     },
 
-
+    redirect (licence) {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        },
 
     beforeUnmount() {
         this.$store.state.isAbsolute = false;
@@ -106,7 +114,7 @@ export default {
     
                             <h6 class="mb-1">Alterations for:
     
-                                <Link :href="`/view-licence?slug=${licence.slug}`">
+                                <Link @click="redirect(licence)">
     
                                 <span class="text-success">{{ licence.trading_name ? licence.trading_name: '' }}</span></Link>
     
@@ -240,4 +248,4 @@ export default {
     
     
     </Layout>
-</template>../Renewals/useAlteration
+</template>

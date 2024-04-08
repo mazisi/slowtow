@@ -7,7 +7,7 @@
                 <div class="row">
                     <div class="col-lg-9 col-9">
                         <h5 class="mb-1">
-                            <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}
+                            <Link class="text-success" @click="redirect(licence)">{{ licence.trading_name ? licence.trading_name : '' }}
 
                             </Link> - New Application - {{ licence.licence_number ? licence.licence_number : '' }}</h5>
 
@@ -424,11 +424,21 @@ export default {
             return common.getProvinces();
         })
 
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
         const computedBoardRegions = computed(() => {
             return common.getBoardRegions();
         })
         return { submit, form , toast,
-            companyOptions,
+            companyOptions,redirect,
             peopleOptions,
             deleteLicence,
             computedProvinces,

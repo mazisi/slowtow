@@ -11,7 +11,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <h6 class="mb-1">
-                                <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name }}</Link>
+                                <Link @click="redirect(licence)" class="text-success">{{ licence.trading_name }}</Link>
                                 Wholesale Renewals</h6>
                         </div>
 
@@ -194,6 +194,16 @@ export default {
             return getBadgeStatus(status);
           }
 
+       const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
         onMounted(() => {
             if(props.success){
                 notifySuccess(props.success)
@@ -202,7 +212,7 @@ export default {
             }
         });
 
-        return { year,years,form, submit, deleteRenewal, limit,toast,getStatus }
+        return { year,years,form, redirect, submit, deleteRenewal, limit,toast,getStatus }
     },
     components: {
         Layout,

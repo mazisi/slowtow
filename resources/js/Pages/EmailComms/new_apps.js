@@ -110,7 +110,16 @@ export default {
         }
 
         
-        
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
       function resetFilter(){
         form.status = '';
         form.term = '';
@@ -126,6 +135,7 @@ export default {
           computedProvinces,
           form,
           term,
+          redirect,
           search,
           getUrlParam,
           statuses,

@@ -1,6 +1,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import Multiselect from '@vueform/multiselect';
+import { Inertia } from '@inertiajs/inertia';
 import { Link,useForm, Head } from '@inertiajs/inertia-vue3';
 import Banner from '../components/Banner.vue';
 
@@ -41,6 +42,16 @@ export default {
             })
         }
 
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
         function assignActiveValue(event){
             this.form.active = event
         }
@@ -56,6 +67,7 @@ export default {
         return {
             form,
             submit,
+            redirect,
             changeApplicant,
             company_options,
             people_options,
@@ -110,7 +122,7 @@ export default {
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row">
                     <div class="col-lg-6 col-7">
-                        <h5>New Whole Transfer for: <Link class="text-success" :href="`/view-licence?slug=${licence.slug}`">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h5>
+                        <h5>New Whole Transfer for: <Link class="text-success" @click="redirect(licence)">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h5>
                     </div>
                     <div class="col-lg-6 col-5 my-auto text-end"></div>
                 </div>

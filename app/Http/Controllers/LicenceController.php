@@ -149,6 +149,8 @@ class LicenceController extends Controller
      */
     public function show(Request $request)
     {
+        $duplicate_original_lic = null;
+        $original_lic_delivered = null;
 
         $licence = Licence::with('company', 'people', 'licence_documents')
             ->whereSlug($request->slug)
@@ -158,6 +160,23 @@ class LicenceController extends Controller
         ->where('document_type', 'Duplicate-Licence')
         ->latest()
         ->first();
+
+        //if duplicate original licence is not null then show it or else show duplicate_original_issued
+
+        if(is_null($duplicate_original_lic)){
+            $duplicate_original_lic = json_decode(getLicenceDocs($licence))->duplicate_original_issued;
+        }
+
+        
+
+            $duplicate_original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Duplicate-Original-Licence-Delivered')
+            ->latest()
+            ->first();
+
+        if(is_null($original_lic_delivered)){
+            $original_lic_delivered = json_decode(getLicenceDocs($licence))->original_licence_delivered;
+        }
 
 
         $original_lic = LicenceDocument::where('licence_id', $licence->id)
@@ -172,21 +191,20 @@ class LicenceController extends Controller
 
 
 
-        $original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
-            ->where('document_type', 'Original-Licence-Delivered')
-            ->latest()
-            ->first();
+            // $original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
+            // ->where('document_type', 'Original-Licence-Delivered')
+            // ->latest()
+            // ->first();
 
-        $licence_delivered = LicenceDocument::where('licence_id', $licence->id)
-            ->where('document_type', 'Licence Delivered')
-            ->latest()
-            ->first();
+        // $licence_delivered = LicenceDocument::where('licence_id', $licence->id)
+        //     ->where('document_type', 'Licence Delivered')
+        //     ->latest()
+        //     ->first();
 
-        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
-            ->where('document_type', 'Duplicate-Original-Licence-Delivered')
-            ->latest()
-            ->first();
+        
 
+            
+       
         $companies = Company::pluck('name', 'id');
         $people = People::pluck('full_name', 'id');
         $licence_dropdowns = LicenceType::orderBy('licence_type')->get();
@@ -209,7 +227,7 @@ class LicenceController extends Controller
             'licence_issued' => $licence_issued,
             'duplicate_original_lic' => $duplicate_original_lic,
             'original_lic_delivered' => $original_lic_delivered,
-            'licence_delivered' => $licence_delivered,
+            // 'licence_delivered' => $licence_delivered,
             'duplicate_original_lic_delivered' => $duplicate_original_lic_delivered
         ]);
     }

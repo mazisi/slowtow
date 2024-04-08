@@ -383,7 +383,7 @@
                                             <button  v-if="duplicate_original_lic" @click="deleteDocument(duplicate_original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                 <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
                                             </button>
-
+                                            <!-- 
                                             <label v-else for="Duplicate-Licence"
                                                 type="button" :class="{ 'd-none': originalLicenceForm.processing}"
                                                 class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
@@ -401,7 +401,7 @@
                                                         :colorFilled="'#4caf50'"
                                                         :animationDuration="'0.7s'">
                                                       </CircleProgressBar>
-                                                  </span>
+                                                  </span> -->
                                         </li>
                                     </ul>
                                     <hr class="vertical dark" />
@@ -412,7 +412,7 @@
                                         <template v-if="original_lic_delivered">
                                             <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
                                                 <div class="me-3" v-if="original_lic_delivered">
-                                                    <a v-if="original_lic_delivered" :href="`${$page.props.blob_file_path}${original_lic_delivered.document_file}`" target="_blank" >
+                                                    <a v-if="original_lic_delivered" :href="`${$page.props.blob_file_path}${original_lic_delivered.path}`" target="_blank" >
                                                         <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
                                                     </a>
                                                 </div>
@@ -424,11 +424,11 @@
                                                     <p v-if="file_has_apostrophe" class="mb-0 text-danger text-xs">File cannot contain apostrophes.</p>
                                                 </div>
 
-                                                <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+                                                <!-- <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                                </button>
+                                                </button> -->
 
-                                                <label v-else for="Original-Licence-Delivered"
+                                                <!-- <label v-else for="Original-Licence-Delivered"
                                                 type="button" :class="{ 'd-none': originalLicenceForm.processing}"
                                                 class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
                                                     <i class="fa fa-upload" aria-hidden="true"></i>
@@ -445,7 +445,7 @@
                                                         :colorFilled="'#4caf50'"
                                                         :animationDuration="'0.7s'">
                                                       </CircleProgressBar>
-                                                  </span>
+                                                  </span> -->
 
                                             </li>
                                         </template>

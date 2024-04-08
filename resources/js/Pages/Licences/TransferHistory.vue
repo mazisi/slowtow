@@ -8,7 +8,7 @@
       <div class="col-12">
       <div class="row">
   <div class="col-lg-9 col-9">
-   <h5>Transfers for: <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h5>
+   <h5>Transfers for: <Link @click="redirect(licence)" class="text-success">{{ licence.trading_name ? licence.trading_name : '' }}</Link></h5>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
     <div class="dropdown float-lg-end pe-4">
@@ -144,6 +144,15 @@ export default {
           return string.substring(0, limit)
         }
 
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
 
         function getStatus(statusParam) {
             return getBadgeStatus(statusParam);
@@ -160,7 +169,8 @@ export default {
     return {
       getStatus,
       limit,
-      toast
+      toast,
+      redirect
     }
   },
 

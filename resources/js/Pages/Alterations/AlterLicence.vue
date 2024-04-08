@@ -27,9 +27,19 @@ export default {
           form.post(`/submit-altered-licence/${props.licence.id}`, props.form)
      }
 
-     
+     const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+        
     return {
       submit,
+      redirect,
       options,
       form,showMenu
     };
@@ -78,7 +88,7 @@ export default {
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-12 col-12">
-   <h6>New Alteration for: <Link :href="`/view-licence?slug=${licence.slug}`"><span class="text-success">{{ licence.trading_name }}</span></Link></h6>
+   <h6>New Alteration for: <Link @click="redirect(licence)"><span class="text-success">{{ licence.trading_name }}</span></Link></h6>
   </div>
   <div class="col-lg-6 col-5 my-auto text-end"></div>
 </div>

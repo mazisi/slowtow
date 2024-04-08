@@ -10,7 +10,7 @@
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">Nominations For:  <Link :href="`/view-licence?slug=${licence.slug}`" class="text-success">
+<h6 class="mb-1">Nominations For:  <Link @click="redirect(licence)" class="text-success">
   {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
 </div>
 </div>
@@ -151,6 +151,16 @@ export default {
           Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true})
     })
 
+    const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
     function submit() {
       form.post('/submit-nomination', {
         onFinish: () => form.reset('password'),
@@ -177,7 +187,7 @@ export default {
           }
 
          });
-    return { year, years,form, submit,toast,getStatus}
+    return { year, years,form, redirect, submit,toast,getStatus}
   },
    components: {
     Layout,

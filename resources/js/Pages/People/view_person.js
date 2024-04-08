@@ -206,11 +206,19 @@ const form = useForm({
           window.open(url,'_blank');
          }
 
-
+         const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
 
      return{
         form,show_file_name,computeExpiryDate,deletePerson,checkingFileProgress,
-        assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,
+        assignActiveValue,updatePerson,deleteDocument,getDocType,submitDocument,redirect,
         show_doc_modal,uploadDoc,file_name,getFileName,file_has_apostrophe,previewPerson, hasFile
 
      }

@@ -81,18 +81,18 @@
                                     <tr v-if="licences.data?.length > 0" v-for="licence in licences.data" :key="licence.id">
                                         <!-- <td v-if="licence.is_licence_active == '1'"><i class="fa fa-check text-success" aria-hidden="true"></i></td>
                                         <td v-else><i class="fa fa-times text-danger" aria-hidden="true"></i></td> -->
-                                        <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.trading_name">{{ licence.trading_name }}</Link></td>
-                                        <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_number ? licence.licence_number : '' ">{{ licence.licence_number ? licence.licence_number : ''}}</Link></td>
-                                        <!-- <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_date">{{ licence.licence_date }}</Link></td> -->
-                                        <td><Link :href="`/view-licence?slug=${licence.slug}`" data-bs-placement="top" :title="licence.licence_type.licence_type">{{ licence.licence_type ? licence.licence_type.licence_type : '' }}</Link></td>
-                                        <!-- <td><Link :href="`/view-licence?slug=${licence.slug}`">{{ licence.belongs_to == 'Individual' ? licence.people.full_name :licence.company.name }}</Link></td> -->
+                                        <td><Link @click=redirect(licence) data-bs-placement="top" :title="licence.trading_name">{{ licence.trading_name }}</Link></td>
+                                        <td><Link @click=redirect(licence) data-bs-placement="top" :title="licence.licence_number ? licence.licence_number : '' ">{{ licence.licence_number ? licence.licence_number : ''}}</Link></td>
+                                        <!-- <td><Link @click=redirect(licence) data-bs-placement="top" :title="licence.licence_date">{{ licence.licence_date }}</Link></td> -->
+                                        <td><Link @click=redirect(licence) data-bs-placement="top" :title="licence.licence_type.licence_type">{{ licence.licence_type ? licence.licence_type.licence_type : '' }}</Link></td>
+                                        <!-- <td><Link @click=redirect(licence)>{{ licence.belongs_to == 'Individual' ? licence.people.full_name :licence.company.name }}</Link></td> -->
 
                                         <td class="align-middle text-center">
                                             <Link :href="`/email-comms/get-mail-template/${licence.slug}/new-apps`" class="text-secondary text-center font-weight-bold text-xs">
                                                 <i class="fa fa-envelope"></i> Send </Link>
 
 
-                                            <Link :href="`/view-licence?slug=${licence.slug}`" class="text-secondary text-center font-weight-bold text-xs">
+                                            <Link @click=redirect(licence) class="text-secondary text-center font-weight-bold text-xs">
                                                 <i class="fa fa-eye"></i> View </Link>
                                         </td>
 
