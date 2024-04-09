@@ -9,7 +9,7 @@
       <div class="card card-body mx-3 mx-md-4 mt-n6">
         <div class="row">
           <div class="col-lg-12 col-12">
-            <h6>Process New Application for: <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
+            <h6>Process New Application for: <Link @click="redirect(licence)" class="text-success">
               {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
             <p class="text-sm mb-0">Current Stage:
               <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
@@ -629,6 +629,36 @@
 
                       </div>
                       <hr>
+                    <template v-if="licence.province === 'North West'">
+                      <StageComponent
+                      :column=5
+                      :dbStatus="licence.status"
+                      :errors="errors"
+                      :error="error"
+                      :stageValue=510
+                      prevStage=500
+                      :licence_id="licence.slug"
+                      :stageTitle="'Premises Complete and Trading'"
+                      :success="success"
+                      @stage-value-changed="pushData"
+                  />
+                  <div class="col-md-1 columns"></div>
+
+                  <DateComponent
+                      :stage="'Premises Complete and Trading'"
+                      :licence="licence"
+                      :canSave="$page.props.auth.has_slowtow_admin_role"
+                      :errors="errors"
+                      :error="error"
+                      :column=5
+                      @date-value-changed="updateStageDate"
+                      :dated_at="getLicenceDate(licence.id, 'Premises Complete and Trading')"
+                      :success="success"
+                  />
+
+
+                  <hr>
+                    </template>
 
                       <StageComponent
                           :column=12
@@ -636,7 +666,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=600
-                          prevStage=500
+                          prevStage=510
                           licence_id="licence.slug"
                           :stageTitle="'Scanned Application'"
                           :success="success"
@@ -945,8 +975,8 @@
 
 
                       <!-- If its Mpumalanga , renamed this stage-->
-                      <template v-if="licence.province == 'Mpumalanga' || licence.province == 'North West' || licence.province == 'Limpopo'">
-
+                      <template v-if="licence.province == 'Mpumalanga' && licence.province == 'North West' && licence.province == 'Limpopo'">
+                      
                         <StageComponent
                             :dbStatus="licence.status"
                             :errors="errors"
@@ -992,7 +1022,8 @@
                       </template>
 
                       <!-- If its other provinces keep this stage-->
-                      <template v-if="licence.province !== 'Mpumalanga' || licence.province !== 'North West' || licence.province !== 'Limpopo'">
+                      <template v-if="licence.province !== 'Mpumalanga' && licence.province !== 'North West' && licence.province !== 'Limpopo'">
+                        
                         <StageComponent
                             :dbStatus="licence.status"
                             :errors="errors"
@@ -1057,48 +1088,48 @@
                         <hr/>
                       </template>
 
-
-                      <StageComponent
-                          :dbStatus="licence.status"
-                          :errors="errors"
-                          :error="error"
-                          :stageValue=1700
-                          prevStage=1600
-                          :licence_id="licence.slug"
-                          :stageTitle="'Initial Inspection'"
-                          :success="success"
-                          @stage-value-changed="pushData"
-                      />
-
-                      <div class="col-md-6">
-                        <DocComponent
-                            :documentModel="licence"
-                            @file-value-changed="submitDocument"
-                            @file-deleted="deleteDocument"
-                            :hasFile="hasFile('Initial Inspection')"
+                      <template v-if="licence.province != 'North West'">
+                        <StageComponent
+                            :dbStatus="licence.status"
                             :errors="errors"
                             :error="error"
-                            :orderByNumber=1700
-                            :docType="'Initial Inspection'"
+                            :stageValue=1700
+                            prevStage=1600
+                            :licence_id="licence.slug"
+                            :stageTitle="'Initial Inspection'"
+                            :success="success"
+                            @stage-value-changed="pushData"
+                        />
+
+                        <div class="col-md-6">
+                            <DocComponent
+                                :documentModel="licence"
+                                @file-value-changed="submitDocument"
+                                @file-deleted="deleteDocument"
+                                :hasFile="hasFile('Initial Inspection')"
+                                :errors="errors"
+                                :error="error"
+                                :orderByNumber=1700
+                                :docType="'Initial Inspection'"
+                                :success="success"
+                            />
+                        </div>
+
+
+                        <DateComponent
+                            :licence="licence"
+                            :stage="'Initial Inspection'"
+                            :canSave="$page.props.auth.has_slowtow_admin_role"
+                            :errors="errors"
+                            :error="error"
+                            :column=5
+                            @date-value-changed="updateStageDate"
+                            :dated_at="getLicenceDate(licence.id, 'Initial Inspection')"
                             :success="success"
                         />
-                      </div>
-
-
-                      <DateComponent
-                          :licence="licence"
-                          :stage="'Initial Inspection'"
-                          :canSave="$page.props.auth.has_slowtow_admin_role"
-                          :errors="errors"
-                          :error="error"
-                          :column=5
-                          @date-value-changed="updateStageDate"
-                          :dated_at="getLicenceDate(licence.id, 'Initial Inspection')"
-                          :success="success"
-                      />
-
-                      <hr/>
-
+                        
+                        <hr/>
+                    </template>
 
 
                       <StageComponent
@@ -1108,11 +1139,11 @@
                           :stageValue=1800
                           prevStage=1700
                           :licence_id="licence.slug"
-                          :stageTitle="'Final Inspection'"
+                          :stageTitle="'Liquor Board Inspection'" 
                           :success="success"
                           @stage-value-changed="pushData"
                       />
-
+                    <!-- Was renamed from Final Inspection to Liquor Board Inspection -->
                       <div class="col-md-6">
                         <DocComponent
                             :documentModel="licence"
@@ -1129,13 +1160,13 @@
 
                       <DateComponent
                           :licence="licence"
-                          :stage="'Final Inspection'"
+                          :stage="'Liquor Board Inspection'"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
                           @date-value-changed="updateStageDate"
-                          :dated_at="getLicenceDate(licence.id, 'Final Inspection')"
+                          :dated_at="getLicenceDate(licence.id, 'Liquor Board Inspection')"
                           :success="success"
                       />
 

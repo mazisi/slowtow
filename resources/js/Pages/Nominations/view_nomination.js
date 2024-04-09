@@ -249,7 +249,6 @@ export default{
             ];
 
               const allDocTypesPresent = baseDocs.every(docType => {
-                console.log('DocType',docType);
                 return props.nomination.nomination_documents.some(document => document.doc_type === docType);
               });
               console.log('All',allDocTypesPresent);

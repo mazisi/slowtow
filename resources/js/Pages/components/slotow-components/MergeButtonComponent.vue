@@ -1,6 +1,6 @@
 <template>
   <button 
-      :disabled="!allDocumentsUploaded"
+     :disabled="canMerge() < 27"
       @click="mergeDocs"
        type="button" 
        class="btn btn-success w-65">
@@ -27,14 +27,31 @@ export default{
       context.emit('stage-value-changed', event, props.stageValue);
     }
     let docCount =  props.licence.documents.filter(doc => doc.num !== null && doc.num !== '');
-    const allDocumentsUploaded = computed(() => {
-      return (
-        docCount ? docCount.length >= 26 : ''
-      );
-    })
+   
 
+    function canMerge() {
+            let baseDocs = [
+              "Newspaper Adverts", "GLB Application Forms", "Application Forms","Police Clearance","Tax Clearance","500m Affidavit",
+              "Company Documents","CIPC Documents", "ID Documents","LTA Certificate","Shareholding Info","Financial Interests",
+              "Government Gazette Adverts","Advert Affidavit","Proof of Occupation","Representations","Menu","Site Plans",
+              "Photographs","Municipal Consent Ltr","Zoning Certificate","Mapbook Plans","Google Map Plans","Description",
+              "Full Dimensioned Plans","Advert Photographs","Payment To The Liquor Board"
+            ];
+
+              const allDocTypesPresent = baseDocs.every(docType => {
+                return props.licence.documents.some(document => document.document_type == docType);
+              });
+              console.log('All',allDocTypesPresent);
+              if (allDocTypesPresent) {
+                return baseDocs.length;
+              } else {
+                return 0;
+              }
+
+          }
+          canMerge()
     return {
-      mergeDocs,allDocumentsUploaded
+      mergeDocs,canMerge
     }
   }
 }

@@ -12,6 +12,7 @@ function getPlainStatus(status_param) {
       '300': 'Deposit Paid',
       '400': 'Payment to the Liquor Board',
       '500': 'Prepare New Application',
+      '510': 'Premises Complete and Trading',//new status
       '600': 'Scanned Application',
       '700': 'Lodged with Municipality',
       '800': 'Municipal Comments',

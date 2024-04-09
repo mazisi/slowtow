@@ -15,6 +15,7 @@ import Layout from "../../Shared/Layout.vue";
   import MergeButtonComponent from '../components/slotow-components/MergeButtonComponent.vue';
   import useToaster from '../../store/useToaster';
   import useLicenceStatus from '../../store/useLicenceStatus';
+import licence from "../Licences/licence";
 
   export default {
     props: {
@@ -69,6 +70,17 @@ import Layout from "../../Shared/Layout.vue";
             updateRegistration();
 
         }
+
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+      
 
         function mergeDocs(){
           Inertia.post(`/merge-licence-docs/${props.licence.id}`, {
@@ -205,6 +217,7 @@ function getStatus(status_param) {
     return getPlainStatus(status_param);
 }
 
+       
       return {
         hasFile,
         form,getStatus,
@@ -215,7 +228,8 @@ function getStatus(status_param) {
         deleteRegistration,
         submitDocument,
         deleteDocument,
-        toast
+        toast,
+        redirect
        }
     },
      components: {

@@ -493,7 +493,9 @@ Duplicate Original Delivered on the main licence information page.~Dupliacte Ori
                                 </div>
                             </div>
                             <div>
-                                <button type="submit" class="btn btn-primary ms-2" :style="{float: 'right'}">Save</button>
+                                <button type="submit" class="btn btn-primary ms-2" :style="{float: 'right'}">
+                                    <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                    Save</button>
                             </div>
                         </form>
                         <hr>
