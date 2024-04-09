@@ -26,7 +26,7 @@ export default{
     function mergeDocs(event) {
       context.emit('stage-value-changed', event, props.stageValue);
     }
-    let docCount =  props.licence.documents.filter(doc => doc.num !== null && doc.num !== '');
+    // let docCount =  props.licence.documents.filter(doc => doc.num !== null && doc.num !== '');
    
 
     function canMerge() {
