@@ -624,7 +624,6 @@
                               :title="'Compile Application'"
                               :licence="licence"
                           />
-                          <!-- remember to bind disbaled this btn when all required files are not uploaded -->
                         </div>
 
                       </div>

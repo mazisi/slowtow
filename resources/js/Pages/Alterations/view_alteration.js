@@ -206,7 +206,7 @@ export default {
               }
         }
 
-        function mergeDocuments(){alert('Cool')
+        function mergeDocuments(){
             Inertia.post(`/merge-alteration-documents/${props.alteration.id}`, {
                     //
             })

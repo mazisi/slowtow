@@ -118,21 +118,21 @@ v-if="form.belongs_to == 'Company'"
   <div class="col-md-12" >
    <template v-if="licence.licence_documents">      
         <div v-for="doc in licence.licence_documents" :key="doc.id" class="mb-2">
-          <iframe v-if="doc.document_type === 'Original-Licence'" :src="`${$page.props.blob_file_path}${doc.document_name}`" 
+          <iframe v-if="doc.document_type === 'Original-Licence'" :src="`${$page.props.blob_file_path}${doc.document_file}`" 
           frameborder="0" width="100%" height="600px"></iframe>
 
-          <iframe v-if="doc.document_type === 'Duplicate-Licence'" :src="`${$page.props.blob_file_path}${doc.document_name}`" 
+          <iframe v-if="doc.document_type === 'Duplicate-Licence'" :src="`${$page.props.blob_file_path}${doc.document_file}`" 
           frameborder="0" width="100%" height="600px"></iframe>
 
           <iframe v-else-if="doc.document_type === 'Payment To The Liquor Board' && !hasOriginalLicence(licence.licence_documents)" 
-          :src="`${$page.props.blob_file_path}${doc.document_name}`" frameborder="0" width="100%" height="600px"></iframe>
+          :src="`${$page.props.blob_file_path}${doc.document_file}`" frameborder="0" width="100%" height="600px"></iframe>
 
           <!-- Latest Renewal -->
-          <iframe v-if="doc.document_type === 'Latest Renewal'" :src="`${$page.props.blob_file_path}${doc.document_name}`" 
+          <iframe v-if="doc.document_type === 'Latest Renewal'" :src="`${$page.props.blob_file_path}${doc.document_file}`" 
           frameborder="0" width="100%" height="600px"></iframe>
 
           <iframe v-else-if="doc.document_type === 'Payment To The Liquor Board'" 
-          :src="`${$page.props.blob_file_path}${doc.document_name}`" frameborder="0" width="100%" height="600px"></iframe>
+          :src="`${$page.props.blob_file_path}${doc.document_file}`" frameborder="0" width="100%" height="600px"></iframe>
 
           <!-- Latest appointment of managers(Noms) certificate issued -->
           <!-- <template v-if="licence.nominations" v-for="nom in licence.nominations">            

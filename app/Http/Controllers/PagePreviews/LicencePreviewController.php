@@ -16,6 +16,7 @@ class LicencePreviewController extends Controller
         $licence  = 
         Licence::with('licence_documents','company','people','nominations.nomination_documents','transfers','alterations.documents','licence_stage_dates')
         ->whereSlug($slug)->firstOrFail();
+       
         $transfer = LicenceTransfer::with('transfer_documents')->where('licence_id', $licence->id)->get();
         $licenceTypes = LicenceType::get();
         return Inertia::render('PagePreviews/Licences/LicencePreview', 

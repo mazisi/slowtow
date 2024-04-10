@@ -1,6 +1,6 @@
 <template>
   <button 
-     :disabled="canMerge() < 27"
+     :disabled="licence.documents?.length <27"
       @click="mergeDocs"
        type="button" 
        class="btn btn-success w-65">
@@ -26,7 +26,6 @@ export default{
     function mergeDocs(event) {
       context.emit('stage-value-changed', event, props.stageValue);
     }
-    // let docCount =  props.licence.documents.filter(doc => doc.num !== null && doc.num !== '');
    
 
     function canMerge() {
@@ -41,15 +40,25 @@ export default{
               const allDocTypesPresent = baseDocs.every(docType => {
                 return props.licence.documents.some(document => document.document_type == docType);
               });
-              console.log('All',allDocTypesPresent);
-              if (allDocTypesPresent) {
-                return baseDocs.length;
+
+              console.log('All', props.licence);
+
+              // if (allDocTypesPresent) {
+              //   console.log('Cooooooooooool');
+              //   return baseDocs.length;
+              // } else {
+              //   return 0;
+              // }
+
+              if (props.licence.documents?.length == 27) {
+                return true
               } else {
-                return 0;
+                return false;
               }
 
           }
-          canMerge()
+         
+
     return {
       mergeDocs,canMerge
     }
