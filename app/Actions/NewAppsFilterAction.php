@@ -441,6 +441,26 @@ class NewAppsFilterAction {
                     return $query->whereMonth('licence_date',request('licence_date'));                
                 })
 
+                ->when(!request('term') 
+                && !request('licence_date') 
+                && request('licence_type') 
+                && request('active_status') == 'Active'
+                && request('province'), 
+                function ($query){
+                    $query->where(function ($query) {
+                        $query->where('trading_name','LIKE','%'.request('term').'%')
+                        ->orWhere('old_licence_number','LIKE','%'.request('term').'%')
+                        ->orWhere('licence_number','LIKE','%'.request('term').'%');
+                    })
+                    ->where(function ($query) {
+                        $query->where('licence_type_id',request('licence_type'))
+                        ->where('province',request('province'))
+                        ->where('is_licence_active',1);
+
+                    });
+                })
+                
+
                     ->where(function ($query){ 
                         $query->where('status','100')
                             ->orWhere('status','200')
