@@ -33,7 +33,7 @@ $licence = Licence::find($request->licence_id);
             $fileModel = $this->createLicenceDocument($request, $fileName);
             $this->updateLicenceStatusAndFlags($request, $fileModel);
 
-            (new WholesaleController())->generateLicenceIssuedDocs($licence);
+            // (new WholesaleController())->generateLicenceIssuedDocs($licence);
 
             return back()->with('success', 'Document uploaded successfully.');
         } else {

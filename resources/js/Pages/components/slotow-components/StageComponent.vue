@@ -6,7 +6,6 @@
     @input="emitValue($event,stageValue,prevStage)"
     :checked="dbStatus >= stageValue"
     :value="stageValue"
-    :disabled="(stageValue === 2300 || stageValue === 2400) && canActivate === null"
     />
     <label :for="stageValue"
     class="form-check-label text-body text-truncate status-heading">{{ stageTitle }}</label>

@@ -585,7 +585,7 @@
                             :error="error"
                             :column=5
                             @date-value-changed="updateStageDate"
-                            :dated_at="view_transfer.payment_to_liquor_board_at"
+                            :dated_at="getTransferDate('Payment To The Liquor Board').dated_at"
                             :success="success"
                         />
 
@@ -656,7 +656,7 @@
         :error="error"
         :column=5
         @date-value-changed="updateStageDate"
-        :dated_at="view_transfer.lodged_at"
+        :dated_at="getTransferDate('Application Logded').dated_at"
         :success="success"
         />
 
@@ -698,7 +698,7 @@
         :error="error"
         :column=5
         @date-value-changed="updateStageDate"
-        :dated_at="view_transfer.activation_fee_paid_at"
+        :dated_at="getTransferDate('Activation Fee Paid').dated_at"
         :success="success"
         />
 
@@ -738,7 +738,7 @@
         :error="error"
         :column=5
         @date-value-changed="updateStageDate"
-        :dated_at="view_transfer.issued_at"
+        :dated_at="getTransferDate('Transfer Issued').dated_at"
         :success="success"
         />
  
@@ -779,7 +779,7 @@
         :error="error"
         :column=5
         @date-value-changed="updateStageDate"
-        :dated_at="view_transfer.delivered_at"
+        :dated_at="getTransferDate('Transfer Delivered').dated_at"
         :success="success"
         />
 

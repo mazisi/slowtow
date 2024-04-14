@@ -215,6 +215,28 @@ export default {
             return getPlainStatus(statusParam);
         }
 
+        function getTransferDate(stage){
+          if(! props.view_transfer.dates){
+            return {};
+          } else {
+            let transfer_dates = props.view_transfer.dates;
+
+            const dateFound = transfer_dates.find(date =>
+              date.transfer_id === props.view_transfer.id &&
+              date.stage === stage
+            );
+
+            if (dateFound) {
+              return {
+                dated_at: dateFound.dated_at
+              };
+            } else {
+              return {};
+            }
+          }
+
+        }
+
         function canMerge() {
           //find documents with num != null
           let docsNum = props.view_transfer.transfer_documents.filter((doc) => doc.num !== null);
@@ -226,6 +248,7 @@ export default {
       updateStageDate,
       getStatus,
       pushData,
+      getTransferDate,
       hasMergeFile,
       hasFile,
       mergeForm,

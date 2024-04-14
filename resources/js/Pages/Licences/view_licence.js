@@ -11,8 +11,7 @@ import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
 import { CircleProgressBar } from 'circle-progress.vue';
-// import vueFilePond from 'vue-filepond';
-// import "filepond/dist/filepond.min.css"
+import DuplicateOriginalLicence from './DuplicateOriginalLicence.vue'
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
@@ -297,6 +296,7 @@ export default {
     Banner,
     Paginate,
     Task,
+    DuplicateOriginalLicence,
     TextInputComponent,
     LicenceTypeDropDownComponent,
     CheckBoxInputComponent,

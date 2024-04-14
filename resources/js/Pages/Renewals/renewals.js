@@ -180,9 +180,10 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        console.log(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 },
             })
@@ -217,11 +218,27 @@ export default {
             return status;
         }
 
-        function getRenewalDate(licence_id, stage){
-
-            return { }
-
-        }
+        function getRenewalDate(stage){
+            if(! props.renewal.renewal_stage_dates){
+              return {};
+            } else {
+              let renewal_dates = props.renewal.renewal_stage_dates;
+  
+              const dateFound = renewal_dates.find(date =>
+                date.renewal_id === props.renewal.id &&
+                date.stage === stage
+              );
+  
+              if (dateFound) {
+                return {
+                  dated_at: dateFound.dated_at
+                };
+              } else {
+                return {};
+              }
+            }
+  
+          }
 
         return { year,form,
             updateRenewal,getStatus,

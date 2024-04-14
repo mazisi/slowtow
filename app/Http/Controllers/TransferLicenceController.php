@@ -98,7 +98,7 @@ class TransferLicenceController extends Controller
       public function viewTransferedLicence($slug){
         $view_transfer = LicenceTransfer::with('additionalDocs','old_person','new_person','old_company','new_company','licence','transfer_documents','dates')->whereSlug($slug)->first();
        $original_licence = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$view_transfer->licence_id)->first();
-
+       
         // $companies_dropdown = Company::pluck('name','id');
         $tasks = Task::where('model_type','Transfer')->where('model_id',$view_transfer->id)->latest()->paginate(4)->withQueryString();
 
@@ -124,7 +124,7 @@ class TransferLicenceController extends Controller
           'status' => $status
         ]);
         if ($update) {
-          return back()->with('success','Licence transfer updated successfully.');
+          return back()->with('success','Transfer updated successfully.');
         }
         return back()->with('error','Error updating transfered licence.');
       }
@@ -162,7 +162,7 @@ class TransferLicenceController extends Controller
       try {
         $licence = LicenceTransfer::whereSlug($slug)->first();
         if ($licence->delete()) {
-          return to_route('transfer_history',['slug' => $licence_slug])->with('success','Licence transfer deleted successfully.');
+          return to_route('transfer_history',['slug' => $licence_slug])->with('success','Transfer deleted successfully.');
         }
 
       } catch (\Throwable $th) {

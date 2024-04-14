@@ -174,6 +174,11 @@ class LicenceController extends Controller
             ->latest()
             ->first();
 
+            $original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
+            ->where('document_type', 'Original-Licence-Delivered')
+            ->latest()
+            ->first();
+
         if(is_null($original_lic_delivered)){
             $original_lic_delivered = json_decode(getLicenceDocs($licence))->original_licence_delivered;
         }
@@ -191,10 +196,7 @@ class LicenceController extends Controller
 
 
 
-            // $original_lic_delivered = LicenceDocument::where('licence_id', $licence->id)
-            // ->where('document_type', 'Original-Licence-Delivered')
-            // ->latest()
-            // ->first();
+           
 
         // $licence_delivered = LicenceDocument::where('licence_id', $licence->id)
         //     ->where('document_type', 'Licence Delivered')

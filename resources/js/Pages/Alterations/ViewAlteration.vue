@@ -109,9 +109,9 @@
 </div>
 
 <hr/>
-<div class="col-5 columns">
+<div class="col-6 columns">
 <StageComponent
-      :column=5
+      :column=6
       :dbStatus="alteration.status"
       :errors="errors"
       :error="error"
@@ -145,7 +145,7 @@
     :canSave="$page.props.auth.has_slowtow_admin_role"
     :errors="errors"
     :error="error"
-    :column=5
+    :column=4
     @date-value-changed="updateAlterationDate"
     :dated_at="getAlterationDate(alteration.id, 'Client Paid')"
     :success="success"
@@ -267,9 +267,9 @@
 </div>
 <hr>
 
-    <div class="col-5 columns">
+    <div class="col-6 columns">
       <StageComponent
-            :column=5
+            :column=6
             :dbStatus="alteration.status"
             :errors="errors"
             :error="error"
@@ -303,7 +303,7 @@
           :canSave="$page.props.auth.has_slowtow_admin_role"
           :errors="errors"
           :error="error"
-          :column=5
+          :column=4
           @date-value-changed="updateAlterationDate"
           :dated_at="getAlterationDate(alteration.id, 'Payment to the Liquor Board')"
           :success="success"
@@ -312,9 +312,9 @@
 
 
 
-      <div class="col-5 columns">
+      <div class="col-6 columns">
         <StageComponent
-              :column=5
+              :column=6
               :dbStatus="alteration.status"
               :errors="errors"
               :error="error"
@@ -348,7 +348,7 @@
             :canSave="$page.props.auth.has_slowtow_admin_role"
             :errors="errors"
             :error="error"
-            :column=5
+            :column=4
             @date-value-changed="updateAlterationDate"
             :dated_at="getAlterationDate(alteration.id, 'Alterations Lodged')"
             :success="success"
@@ -356,9 +356,9 @@
         <hr>
 
 
-        <div class="col-5 columns">
+        <div class="col-6 columns">
           <StageComponent
-                :column=5
+                :column=6
                 :dbStatus="alteration.status"
                 :errors="errors"
                 :error="error"
@@ -392,16 +392,16 @@
               :canSave="$page.props.auth.has_slowtow_admin_role"
               :errors="errors"
               :error="error"
-              :column=5
+              :column=4
               @date-value-changed="updateAlterationDate"
               :dated_at="getAlterationDate(alteration.id, 'Alterations Certificate Issued')"
               :success="success"
               /> 
           <hr>
 
-          <div class="col-5 columns">
+          <div class="col-6 columns">
             <StageComponent
-                  :column=5
+                  :column=6
                   :dbStatus="alteration.status"
                   :errors="errors"
                   :error="error"
@@ -435,7 +435,7 @@
                 :canSave="$page.props.auth.has_slowtow_admin_role"
                 :errors="errors"
                 :error="error"
-                :column=5
+                :column=4
                 @date-value-changed="updateAlterationDate"
                 :dated_at="getAlterationDate(alteration.id, 'Alterations Delivered')"
                 :success="success"

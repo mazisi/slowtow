@@ -4,6 +4,7 @@ import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue';
 import { defineAsyncComponent, ref, watch, computed } from 'vue';
 import  common from '../common-js/common.js';
+import useMonths from "@/store/useMonths";
 
 const Paginate = defineAsyncComponent(() =>
   import('../../Shared/Paginate.vue')
@@ -28,6 +29,7 @@ export default {
 
   setup(props) {
     const [search_query, status, licence_type, licence_date, province] = getUrlParam();
+    const { months } = useMonths();
 
     const term = search_query ? search_query : ref('');
     const licenceByProvince = ref([]);
@@ -111,6 +113,7 @@ export default {
     }
 
     return {
+      months,
       limit,
       computedProvinces,
       form,

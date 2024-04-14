@@ -308,190 +308,131 @@
                             </div>
 
                             <h6 class="text-center mt-4">Documents</h6>
-                            <div class="row mt-2">
-                                <div class="col-md-6 columns">
-                                    <ul class="list-group">
-                                        <template v-if="original_lic">
-                                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                <div class="me-3" v-if="original_lic">
-                                                    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
-                                                        <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-start flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">Original Licence</h6>
-                                                    <p v-if="original_lic" class="mb-0 text-xs">
-                                                        {{ original_lic.document_name ? removeFilePath(original_lic.document_name) : '' }}</p>
-                                                    <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-                                                </div>
-                                                <button  v-if="original_lic" @click="deleteDocument(original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                                </button>
+                            <div class="row">
+<div class="col-md-6 columns">
+<ul class="list-group">
+  <template v-if="original_lic">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="original_lic">
+    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence</h6>
+      <p v-if="original_lic" class="mb-0 text-xs">
+        {{ original_lic.document_name ? removeFilePath(original_lic.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button  v-if="original_lic" @click="deleteDocument(original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
 
-                                                <label v-else for="Original-Licence"
-                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}"
-                                                class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                    <i class="fa fa-upload" aria-hidden="true"></i>
-                                                    <input type="file" @change="upload($event,'Original-Licence')" accept=".pdf" hidden id="Original-Licence">
-                                                </label>
+    <button v-else @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-upload" aria-hidden="true"></i>
+    </button>
+  </li>
+</template>
 
-                                                <span v-if="originalLicenceForm.progress" >
-                                                    <CircleProgressBar
-                                                        :value="originalLicenceForm.progress.percentage"
-                                                        :max="100"
-                                                        percentage
-                                                        rounded
-                                                        :size="30"
-                                                        :colorFilled="'#4caf50'"
-                                                        :animationDuration="'0.7s'">
-                                                      </CircleProgressBar>
-                                                  </span>
+<template v-else-if="licence_issued">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="licence_issued">
+    <a :href="`${$page.props.blob_file_path}${licence_issued.document_file}`" 
+    target="_blank" >
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
 
-                                            </li>
-                                        </template>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence</h6>
+      <p v-if="licence_issued" class="mb-0 text-xs">
+        {{ licence_issued.document_name ? removeFilePath(licence_issued.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+  </li>
+</template>
 
-                                        <template v-else-if="licence_issued">
-                                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                <div class="me-3" v-if="licence_issued">
-                                                    <a :href="`${$page.props.blob_file_path}${licence_issued.document_file}`"
-                                                       target="_blank" >
-                                                        <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-                                                    </a>
-                                                </div>
+  <DuplicateOriginalLicence
+   :duplicate_original_lic="duplicate_original_lic"
+   :doc_model="duplicate_original_lic"
+   :doc_type="'Duplicate-Licence'"
+   doc_title="Duplicate Original Licence"
+   :licence="licence"
+   :errors="errors"
+   :error="error"
+   :success="success"
+  />
 
-                                                <div class="d-flex align-items-start flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">Original Licence</h6>
-                                                    <p v-if="licence_issued" class="mb-0 text-xs">
-                                                        {{ licence_issued.document_name ? removeFilePath(licence_issued.document_name) : '' }}</p>
-                                                    <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-                                                </div>
-                                            </li>
-                                        </template>
+</ul>
+<hr class="vertical dark" />
+</div>
 
-                                        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                            <div class="me-3" v-if="duplicate_original_lic">
-                                                <a v-if="duplicate_original_lic" :href="`${$page.props.blob_file_path}${duplicate_original_lic.document_file}`" target="_blank">
-                                                    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-                                                </a>
-                                            </div>
-                                            <div class="d-flex align-items-start flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Duplicate Original</h6>
-                                                <p v-if="duplicate_original_lic" class="mb-0 text-xs">
-                                                    {{ duplicate_original_lic.document_name ? removeFilePath(duplicate_original_lic.document_name) : '' }}</p>
-                                                <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-                                            </div>
-                                            <button  v-if="duplicate_original_lic" @click="deleteDocument(duplicate_original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                            </button>
-                                            <!-- 
-                                            <label v-else for="Duplicate-Licence"
-                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}"
-                                                class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                    <i class="fa fa-upload" aria-hidden="true"></i>
-                                                    <input type="file" @change="upload($event,'Duplicate-Licence')" accept=".pdf" hidden id="Duplicate-Licence">
-                                                </label>
+<div class="col-md-6 columns">
+<ul class="list-group">
+    
 
-                                                <span v-if="originalLicenceForm.progress" >
-                                                    <CircleProgressBar
-                                                        :value="originalLicenceForm.progress.percentage"
-                                                        :max="100"
-                                                        percentage
-                                                        rounded
-                                                        :size="30"
-                                                        :colorFilled="'#4caf50'"
-                                                        :animationDuration="'0.7s'">
-                                                      </CircleProgressBar>
-                                                  </span> -->
-                                        </li>
-                                    </ul>
-                                    <hr class="vertical dark" />
-                                </div>
+    <DuplicateOriginalLicence
+   :duplicate_original_lic="original_lic_delivered"
+   :doc_model="original_lic_delivered"
+   :doc_type="'Original-Licence-Delivered'"
+   doc_title="Original Licence Delivered"
+   :licence="licence"
+   :errors="errors"
+   :error="error"
+   :success="success"
+  />
 
-                                <div class="col-md-6 columns">
-                                    <ul class="list-group">
-                                        <template v-if="original_lic_delivered">
-                                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                <div class="me-3" v-if="original_lic_delivered">
-                                                    <a v-if="original_lic_delivered" :href="`${$page.props.blob_file_path}${original_lic_delivered.path}`" target="_blank" >
-                                                        <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-                                                    </a>
-                                                </div>
 
-                                                <div class="d-flex align-items-start flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
-                                                    <p v-if="original_lic_delivered" class="mb-0 text-xs">{{ original_lic_delivered.document_name ? removeFilePath(original_lic_delivered.document_name) : '' }}</p>
-                                                    <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-                                                    <p v-if="file_has_apostrophe" class="mb-0 text-danger text-xs">File cannot contain apostrophes.</p>
-                                                </div>
+<template v-if="licence_delivered">
+  <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="licence_delivered">
+    <a v-if="licence_delivered" :href="`${$page.props.blob_file_path}${licence_delivered.document_file}`" 
+    target="_blank" >
 
-                                                <!-- <button  v-if="original_lic_delivered" @click="deleteDocument(original_lic_delivered.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-                                                </button> -->
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
+      <p v-if="licence_delivered" class="mb-0 text-xs">
+        {{ licence_delivered.document_name ? removeFilePath(licence_delivered.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+  </li>
+</template>
 
-                                                <!-- <label v-else for="Original-Licence-Delivered"
-                                                type="button" :class="{ 'd-none': originalLicenceForm.processing}"
-                                                class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-                                                    <i class="fa fa-upload" aria-hidden="true"></i>
-                                                    <input type="file" @change="upload($event,'Original-Licence-Delivered')" accept=".pdf" hidden id="Original-Licence-Delivered">
-                                                </label>
-
-                                                <span v-if="originalLicenceForm.progress" >
-                                                    <CircleProgressBar
-                                                        :value="originalLicenceForm.progress.percentage"
-                                                        :max="100"
-                                                        percentage
-                                                        rounded
-                                                        :size="30"
-                                                        :colorFilled="'#4caf50'"
-                                                        :animationDuration="'0.7s'">
-                                                      </CircleProgressBar>
-                                                  </span> -->
-
-                                            </li>
-                                        </template>
-
-                                        <template v-else-if="licence_delivered">
-                                            <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                                <div class="me-3" v-if="licence_delivered">
-                                                    <a v-if="licence_delivered" :href="`${$page.props.blob_file_path}${licence_delivered.document_file}`"
-                                                       target="_blank" >
-
-                                                        <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-                                                    </a>
-                                                </div>
-                                                <div class="d-flex align-items-start flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">Original Licence Delivered</h6>
-                                                    <p v-if="licence_delivered" class="mb-0 text-xs">
-                                                        {{ licence_delivered.document_name ? removeFilePath(licence_delivered.document_name) : '' }}</p>
-                                                    <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-                                                </div>
-                                            </li>
-                                        </template>
-
-<!-- This document uploaded under this stage must automatically link as the
-Duplicate Original Delivered on the main licence information page.~Dupliacte Original Docs Table~
- -->
-                                        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-                                            <div class="me-3" v-if="duplicate_original_lic_delivered">
-                                                <a v-if="duplicate_original_lic_delivered" :href="`${$page.props.blob_file_path}${duplicate_original_lic_delivered.path}`"
-                                                   target="_blank" >
-
-                                                    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-                                                </a>
-                                            </div>
-                                            <div class="d-flex align-items-start flex-column justify-content-center">
-                                                <h6 class="mb-0 text-sm">Duplicate Original Delivered</h6>
-                                                <p v-if="duplicate_original_lic_delivered" class="mb-0 text-xs">
-                                                    {{ duplicate_original_lic_delivered.document_name ? removeFilePath(duplicate_original_lic_delivered.document_name) : '' }}</p>
-                                                <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-                                            </div>
-                                        </li>
+<DuplicateOriginalLicence
+   :duplicate_original_lic="duplicate_original_lic"
+   :licence="licence"
+   :doc_model="duplicate_original_lic_delivered"
+   :doc_type="'Duplicate-Original-Licence-Delivered'"
+   doc_title="Duplicate Original Licence Delivered"
+   :errors="errors"
+   :error="error"
+   :success="success"
+  />
+   
 
 
 
-                                    </ul>
-                                </div>
-                            </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</ul>
+</div>
+</div>
                             <div>
                                 <button type="submit" class="btn btn-primary ms-2" :style="{float: 'right'}">
                                     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>

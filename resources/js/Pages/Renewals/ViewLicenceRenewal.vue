@@ -106,7 +106,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.client_paid_at"
+                          :dated_at="getRenewalDate('Client Paid').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -146,7 +146,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.payment_to_liquor_board_at"
+                          :dated_at="getRenewalDate('Payment To The Liquor Board').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
 
@@ -187,7 +187,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.renewal_issued_at"
+                          :dated_at="getRenewalDate('Renewal Issued').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -226,7 +226,7 @@
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="renewal.renewal_delivered_at"
+                          :dated_at="getRenewalDate('Renewal Delivered').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
