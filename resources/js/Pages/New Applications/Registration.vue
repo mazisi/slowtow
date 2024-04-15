@@ -57,7 +57,7 @@
 
                       <hr>
 
-                      <stage-component
+                      <Stagecomponent
                           :column=12
                           :dbStatus="licence.status"
                           :errors="errors"

@@ -107,14 +107,14 @@ export default {
       <!-- <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p> -->
 
     <label :for="doc_type"
-    type="button" :class="{ 'd-none': originalLicenceForm.processing}" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    type="button" :class="{ 'invisible': originalLicenceForm.processing}" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
         <i class="fa fa-upload" aria-hidden="true"></i>
         <input type="file" @change="upload($event,doc_type)" accept=".pdf" hidden :id="doc_type">
     </label>
 
     
 
-    <span v-if="originalLicenceForm.progress" >
+    <span v-if="originalLicenceForm.progress" class="float-end">
         <CircleProgressBar
             :value="originalLicenceForm.progress.percentage"
             :max="100"

@@ -55,12 +55,14 @@ export default {
       form.get(`/licences`, {
         replace: true,
         preserveState: true,
-        onSuccess: () => {},
+        onSuccess: () => {
+          filterLicenceTypes();
+        },
       });
     }
 
     function filterLicenceTypes() {
-      console.log(form.province, 'test this');
+      
       licenceByProvince.value = props.all_licence_types
         .filter(obj => obj.province === form.province);
 

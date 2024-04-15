@@ -29,7 +29,7 @@
 
                         <div class="col-md-3 col-xl-3 col-lg-3 filters">
                             <div class="input-group input-group-outline null is-filled">
-                                <select @change="filterLicenceTypes" v-model="form.province" class="form-control form-control-default centered-select" >
+                                <select @change="search" v-model="form.province" class="form-control form-control-default centered-select" >
                                     <option :value="''" disabled selected>Province</option>
                                     <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
                                 </select>

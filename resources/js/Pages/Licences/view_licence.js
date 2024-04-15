@@ -37,7 +37,7 @@ export default {
   
   
   setup (props) {
-    console.log(props.duplicate_original_lic);
+    console.log(props.licence_dropdowns);
         let showMenu = false;
         let companyOptions = props.companies;
         let peopleOptions = props.people;
@@ -94,7 +94,7 @@ export default {
       .filter(obj => obj.province === form.province); 
       console.log(filteredLicenses);
       all_licences.value = filteredLicenses; 
-      console.log(all_licences.value);
+      console.log('all_licences',all_licences.value);
                     
     }
 
