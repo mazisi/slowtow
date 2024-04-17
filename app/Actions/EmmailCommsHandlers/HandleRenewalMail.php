@@ -32,24 +32,27 @@ class HandleRenewalMail {
 
         $renewal_stage = '';  
 
-        
-        switch ($renewal->status) {            
-            case '100':
-                $renewal_stage = 'Client Quoted';                
-                break;
-            case '200':
-                $renewal_stage = 'Client Invoiced';
-                break;
-            case '300':
-                $renewal_stage = 'Client Paid';
-                break;
-            case '500':
-                $renewal_stage = 'Renewal Issued';
-                break;
-            default:
-            return back()->with('error','Could not send email.');
-                break;
-        }
+        if($renewal->licence->type == 'retail'){
+                switch ($renewal->status) {            
+                    case '100':
+                        $renewal_stage = 'Client Quoted';                
+                        break;
+                    case '200':
+                        $renewal_stage = 'Client Invoiced';
+                        break;
+                    case '300':
+                        $renewal_stage = 'Client Paid';
+                        break;
+                    case '500':
+                        $renewal_stage = 'Renewal Issued';
+                        break;
+                    default:
+                    return back()->with('error','Could not send email.');
+                        break;
+                }
+    }else{
+        $this->getWholesaleStages($renewal);
+    }
 
         $get_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type',$renewal_stage)->first();
        
@@ -85,6 +88,62 @@ class HandleRenewalMail {
         $this->emailPerson($renewal, $full_document_path);
     }
     
+  }
+
+  function getWholesaleStages($renewal){
+    $renewal_stage = ''; 
+    switch ($renewal->status) {    
+        case '100':
+            $renewal_stage = 'Renewal Notice Received';                
+            break;
+        case '200':
+            $renewal_stage = 'Turnover Information Requested';
+            break;
+        case '300':
+            $renewal_stage = 'Turnover Information Received';
+            break;
+        case '400':
+            $renewal_stage = 'Annual Return Submited';
+            break;
+        case '500':
+            $renewal_stage = 'Client Invoiced';
+            break;
+        case '600':
+            $renewal_stage = 'Client Paid';
+            break;
+        case '700':
+            $renewal_stage = 'Payment to the National Liquor Authority';
+            break;
+        case '800':
+            $renewal_stage = 'Renewal Forms Sent';
+            break;
+        case '900':
+            $renewal_stage = 'Renewal Forms Received';
+            break;
+
+        case '1000':
+            $renewal_stage = 'Renewal Forms Preparation';
+            break;
+        case '1100':
+            $renewal_stage = 'Renewal Submitted';
+            break;
+        case '1200':
+            $renewal_stage = 'Additional Documents/Information Requested';
+            break;
+        case '1300':
+            $renewal_stage = 'Renewal Pending QA';
+            break;
+        case '1400':
+            $renewal_stage = 'Renewal Awaiting Sign Off';
+            break;
+        case '1500':
+            $renewal_stage = 'Renewal Approved';
+            break;
+        default:
+        return back()->with('error','Could not send email.');
+            break;
+    }
+    return $renewal_stage;
   }
 
   function emailPerson($renewal, $full_document_path) {

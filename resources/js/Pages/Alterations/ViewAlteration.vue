@@ -50,8 +50,7 @@
       :errors="errors"
       :error="error"
       :stageValue=100
-      prevStage=0
-      :prevStage='0'
+       prevStage=0
       :licence_id="alteration.slug"
       :stageTitle="'Client Quoted'"
       :success="success"
@@ -328,8 +327,8 @@
         
         
             <DocComponent
-            @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+                @file-value-changed="submitDocument"
+               @file-deleted="deleteDocument"
                 :documentModel="alteration"
                 :hasFile="hasFile('Alterations Lodged')"
                 :errors="errors"
@@ -372,8 +371,8 @@
           
           
               <DocComponent
-              @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+                 @file-value-changed="submitDocument"
+                 @file-deleted="deleteDocument"
                   :documentModel="alteration"
                   :hasFile="hasFile('Alterations Certificate Issued')"
                   :errors="errors"

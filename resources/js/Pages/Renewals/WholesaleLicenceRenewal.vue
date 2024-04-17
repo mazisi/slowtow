@@ -307,7 +307,7 @@
                       />
 
                       <hr>
-                      <!--      tetetetetete-->
+             
                       <StageComponent
                           :column=12
                           :dbStatus="renewal.status"

@@ -2,6 +2,7 @@
 
 use App\Models\People;
 use App\Models\Company;
+use App\Models\LicenceType;
 
 /**
  * Retrieves the name of the licence holder based on the provided licence.
@@ -18,4 +19,14 @@ function getLicenceHolder($licence){
         return $individual->full_name;
     }
     return '';
+}
+
+/**
+ * Retrieves the IDs of LicenceType records based on the provided province(s).
+ *
+ * @return array An array of LicenceType IDs.
+ */
+function getLicenceTypeByProvince(){
+     $provinces = explode(',',request('province'));
+     return LicenceType::whereIn('province', $provinces)->get(['id'])->pluck('id')->toArray();
 }

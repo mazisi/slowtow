@@ -8,7 +8,7 @@ class AlterationFilter{
 
 
  function filter($request){
-
+    
   return DB::table('alterations')
         ->selectRaw("alterations.id, licences.trading_name, licences.belongs_to, licences.licence_number, licences.province, 
        licences.board_region,licence_type_id,alterations.date, licences.company_id,licences.people_id,
@@ -49,7 +49,7 @@ class AlterationFilter{
                $query->whereYear('logded_at', request('year'));
            })
           ->when(request('licence_types'), function ($query) {
-              $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+              $query->whereIn('licence_type_id',getLicenceTypeByProvince());
            })
 
           

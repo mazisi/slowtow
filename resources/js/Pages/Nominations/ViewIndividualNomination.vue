@@ -104,7 +104,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 :stageValue=300
-                                                :prevStage=null
+                                                prevStage=200
                                                 :licence_id=null
                                                 :stageTitle="'Client Paid'"
                                                 :success="success"
@@ -144,7 +144,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 :stageValue=400
-                                                :prevStage=300
+                                                prevStage=300
                                                 :licence_id=null
                                                 :stageTitle="'Payment To The Liquor Board'"
                                                 :success="success"

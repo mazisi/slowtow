@@ -460,17 +460,13 @@ class NewAppsFilterAction {
                     });
                 })
                 
+                ->orWhere(function ($query){ 
+                    // $query->whereIn('status',['100','200','400','1500','1700','1800','2000','2200','2300'])
+                    $query->where('type','wholesale');               
+                 })
 
-                    ->where(function ($query){ 
-                        $query->where('status','100')
-                            ->orWhere('status','200')
-                            ->orWhere('status','400')
-                            ->orWhere('status','1500')
-                            ->orWhere('status','1700')
-                            ->orWhere('status','1800')
-                            ->orWhere('status','2000')
-                            ->orWhere('status','2200')
-                            ->orWhere('status','2300');               
+                    ->orWhere(function ($query){ 
+                        $query->whereIn('status',['100','200','400','1500','1700','1800','2000','2200','2300']);               
                 })
                 ->whereNull('deleted_at')
                 ->where('is_new_app',1)

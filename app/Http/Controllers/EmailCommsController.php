@@ -20,7 +20,7 @@ use App\Actions\TemporalLicenceEmailTemplate;
 class EmailCommsController extends Controller
 {
    public function index(Request $request){
-
+           
             $renewals = (new RenewalEmailTemplate)->getView($request);
 
         return Inertia::render('EmailComms/EmailComm',['renewals' => $renewals]);
@@ -31,7 +31,8 @@ class EmailCommsController extends Controller
     public function getMailTemplate($slug,$comm_variation){         
         switch ($comm_variation) {            
             case 'renewals': 
-                $licence = LicenceRenewal::with('licence')->whereSlug($slug)->firstOrFail();   
+                $licence = LicenceRenewal::with('licence')->whereSlug($slug)->firstOrFail(); 
+                
                 $template = (new RenewalEmailTemplate)->getMailTemplate($licence);            
                 return Inertia::render('EmailComms/MailTemplate',['licence' => $licence,'template' => $template]);
                 break;

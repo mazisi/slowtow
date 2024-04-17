@@ -32,13 +32,12 @@ class TransferEmailCommsController extends Controller
           ->when(!empty(request('stage')), function ($query) use ($request) {
             $query->where('status',$request->stage);
         });
-        })->where(function($query){
-            $query->where('status',100)
-            ->orWhere('status',200)
-            ->orWhere('status',500)
-            ->orWhere('status',600)
-            ->orWhere('status',700)
-            ->orWhere('status',800);
+        })
+        ->orWhereHas('licence', function ($query) {
+            $query->where('type', 'wholesale');
+        })
+        ->orWhere(function($query){
+            $query->whereIn('status',[100,200,500,600,700,800]);
         })->whereNull('deleted_at')
         ->orderBy('status','asc')
            ->paginate(20)->withQueryString();

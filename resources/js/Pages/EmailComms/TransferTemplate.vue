@@ -85,8 +85,7 @@ export default {
     return {
       sendMail,
       mailForm,
-      toast,
-      notify
+      toast
     }
   },
    components: {

@@ -42,7 +42,7 @@ class TransferReportFilter {
         })
 
         ->when(request('licence_types'), function ($query)  {
-            $query->where('licence_type_id',request('licence_types'));
+            $query->where('licence_type_id',getLicenceTypeByProvince());
         })
 
         ->when(request('is_licence_complete') === 'Pending', function ($query)  {

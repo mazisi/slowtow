@@ -1,7 +1,7 @@
 <?php
 
 //Licence keys for retail Licence
-function retail() {
+function licence() {
     return[
         100 => 'Client Quoted',
         200 => 'Client Invoice',
@@ -31,24 +31,43 @@ function retail() {
     ];
 }
 
-function wholesale() {
+function alterations() {
     return[
         100 => 'Client Quoted',
         200 => 'Deposit Invoiced',
         300 => 'Deposit Paid',
-        400 => 'Prepare New Application',
-        500 => 'Application Submitted',
-        600 => 'Initial Application Fee',
-        700 => 'Application Lodged',
-        800 => 'Additional Documents Request',           
-        900 => 'NLA 6 Proposed',
-        1000 => 'NLA 7 Submitted',
-        1100 => 'NLA 8 Issued',       //Only if its Limpopo & North West
-        1200 => 'Activation Fee',              //Only if its Limpopo & North West
-        1300 => 'NLA 9 Issued',                //Only if its Limpopo & North West
-        1400 => 'Original Licence',
-        1500 => 'Original Licence Delivered'
+        400 => 'Prepare Alterations Application',
+        500 => 'Payment to the Liquor Board',
+        600 => 'Alterations Lodged',
+        700 => 'Alterations Certificate Issued',
+        800 => 'Alterations Delivered'
     ];
 }
+    function renewals() {
+        return[
+            100 => 'Client Quoted',
+            200 => 'Deposit Invoiced',
+            300 => 'Deposit Paid',
+            400 => 'Payment To The Liquor Board',
+            500 => 'Renewal Issued',
+            600 => 'Renewal Delivered'
+        ];
 
+        
+}
 
+function nominations() {
+    return[
+        100 => 'Client Quoted',
+        200 => 'Deposit Invoiced',
+        300 => 'Deposit Paid',
+        400 => 'Payment To The Liquor Board',
+        500 => 'Select Person(s) To Nominate',
+        600 => 'Prepare Nomination Application',
+        700 => 'Scanned Application',
+        800 => 'Application Lodged',
+        900 => 'Nomination Issued',
+        1000 => 'Nomination Delivered',
+        
+    ];
+}

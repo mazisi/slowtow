@@ -40,7 +40,7 @@ class TransferMailTemplate{
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($licence->licence->licence_date)->format('d/m').'</p>
       <p dir="ltr">Please see attached proof of lodgement in respect of the transfer application. Please ensure that this is on display until the application has been approved.</p>
       <p dir="ltr">Many thanks,</p><p>&nbsp;</p>';
-  }elseif ($licence->status == '8') {//Activation Fee Paid 
+  }elseif ($licence->status == '800') {//Activation Fee Paid 
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($licence->licence->licence_date)->format('d/m').'</p>
@@ -55,6 +55,8 @@ class TransferMailTemplate{
       <p dir="ltr">We are happy to advise you that the transfer application has been approved! Please see attached copy of the transfer certificate.</p>
       <p dir="ltr">The original will be delivered in due course.</p>
       <p dir="ltr">Many thanks,</p>'; 
+  }else{
+    $template = 'This transfer may belong to wholesale...And we dont have wholesale templates yet';
   }
   return $template;         
   }

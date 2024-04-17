@@ -43,7 +43,7 @@ class ExistingLicenceReportFilter{
                 $query->where('belongs_to',request('applicant'));
             })
             ->when(request('licence_types'), function ($query) {
-                $query->whereIn('licence_type_id',array_values(explode(",",request('licence_types'))));
+                $query->whereIn('licence_type_id',getLicenceTypeByProvince());
             })
             
             ->when(request('year') && request('year') !== 'null', function ($query) {
