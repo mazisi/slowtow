@@ -141,20 +141,20 @@
                           :stageValue=400
                           :prevStage=300
                           :licence_id=null
-                          :stageTitle="'Annual Return Submited'"
+                          :stageTitle="'Annual Return Submitted'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Annual Return Submited'"
+                          :stage="'Annual Return Submitted'"
                           :model="renewal"
                           :licence="annual_return_submited_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="getRenewalDate('Annual Return Submited').dated_at"
+                          :dated_at="getRenewalDate('Annual Return Submitted').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
 

@@ -3,12 +3,22 @@
 namespace App\Actions;
 
 use Carbon\Carbon;
+use App\Actions\Wholesale\WholesaleRenewalTemplate;
+use App\Actions\Wholesale\WholesaleNewApplicationTemplate;
 
 class NewAppsMailTemplate implements HasEmailTemplateInterface  {
 
 
   function getMailTemplate($licence){
+
     $template = '';
+
+    if($licence->type=='wholesale'){ 
+
+      return $template = (new WholesaleRenewalTemplate)->getMailTemplate($licence);
+    }
+    
+    
 
      if($licence->status == '100'){//quoted
       $template = 'Good day,<br><br>                   

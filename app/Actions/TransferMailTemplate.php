@@ -3,11 +3,17 @@
 namespace App\Actions;
 
 use Carbon\Carbon;
+use App\Actions\WholesaleTransferTemplate;
 
 class TransferMailTemplate{
 
   function getMailTemplate($licence){
     $template = '';
+
+    if($licence->licence->type=='wholesale'){
+      //return $template = (new WholesaleTransferTemplate)->getMailTemplate($licence);
+    }
+    
     if($licence->status == '100'){//quoted
       $template = '<p dir="ltr">Good Day '.$licence->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$licence->licence->licence_number.'.</p>

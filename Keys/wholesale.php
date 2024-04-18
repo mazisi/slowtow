@@ -72,3 +72,17 @@ function renewals() {
 }
 
 
+
+    function alterations() {
+        return[
+           '100' => 'quoted',
+           '200' => 'Client Invoiced',
+           '300' => 'Client Paid',
+           '400' => 'Prepare NLA 14 Application',
+           '500' => 'Payment to the National Liquor Authority',
+           '600' => 'NLA 14 Application Lodged',
+           '700' => 'Additional Documents Requested',
+           '800' => 'NLA 15 Certificate Issued',
+           '900' => 'NLA 15 Certificate Delivered'
+        ];
+    }

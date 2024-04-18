@@ -438,8 +438,8 @@
                           :dbStatus="alteration.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=600
-                          :prevStage=500
+                          :stageValue=700
+                          :prevStage=600
                           :licence_id="alteration.slug"
                           :stageTitle="'Additional Documents Requested'"
                           :success="success"
@@ -462,8 +462,8 @@
                             :dbStatus="alteration.status"
                             :errors="errors"
                             :error="error"
-                            :stageValue=700
-                            :prevStage=600
+                            :stageValue=800
+                            :prevStage=700
                             :licence_id="alteration.slug"
                             :stageTitle="'NLA 15 Certificate Issued'"
                             :success="success"
@@ -478,8 +478,8 @@
                             :hasFile="hasFile('NLA 15 Certificate Issued')"
                             :errors="errors"
                             :error="error"
-                            :orderByNumber=700
-                            stage="700"
+                            :orderByNumber=800
+                            stage="800"
                             :docType="'NLA 15 Certificate Issued'"
                             :success="success"
                         />
@@ -505,8 +505,8 @@
                             :dbStatus="alteration.status"
                             :errors="errors"
                             :error="error"
-                            :stageValue=800
-                            :prevStage=700
+                            :stageValue=900
+                            :prevStage=800
                             :licence_id="alteration.slug"
                             :stageTitle="'NLA 15 Certificate Delivered'"
                             :success="success"
@@ -521,8 +521,8 @@
                             :hasFile="hasFile('NLA 15 Certificate Delivered')"
                             :errors="errors"
                             :error="error"
-                            :orderByNumber=800
-                            stage="800"
+                            :orderByNumber=900
+                            stage="900"
                             :docType="'NLA 15 Certificate Delivered'"
                             :success="success"
                         />

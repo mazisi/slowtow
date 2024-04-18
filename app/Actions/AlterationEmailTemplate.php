@@ -3,12 +3,18 @@
 namespace App\Actions;
 
 use Carbon\Carbon;
+use App\Actions\Wholesale\WholesaleAlterationTemplate;
 
 class AlterationEmailTemplate implements HasEmailTemplateInterface  {
 
 
   function getMailTemplate($renewal){
     $template = '';
+
+    if($renewal->licence->type =='wholesale'){
+      return (new WholesaleAlterationTemplate)->getMailTemplate($renewal);
+    }
+    
 
      if($renewal->status == '100'){//quoted
       $template = '<p>Good day,</p>
@@ -54,7 +60,7 @@ class AlterationEmailTemplate implements HasEmailTemplateInterface  {
       <p>Many thanks,</p>'; 
 
   }else{
-    return back()->with('error','No template found for this stage.');      
+    //return back()->with('error','No template found for this stage.');      
   }  
 
   return $template;

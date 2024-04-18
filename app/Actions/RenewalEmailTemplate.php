@@ -5,6 +5,7 @@ namespace App\Actions;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
+use App\Actions\Wholesale\WholesaleRenewalTemplate;
 
 class RenewalEmailTemplate implements HasEmailTemplateInterface  {
 
@@ -36,7 +37,13 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
     }
  
   function getMailTemplate($renewal){
+
     $template = '';
+
+    if($renewal->licence->type == 'wholesale'){
+      return $template = (new WholesaleRenewalTemplate)->getMailTemplate($renewal);
+    }
+    
 
      if($renewal->status == '100'){//quoted
       $template = 'Good Day '.$renewal->licence->trading_name.'.<br><br>                   
