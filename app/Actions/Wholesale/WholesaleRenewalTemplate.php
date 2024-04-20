@@ -149,7 +149,7 @@ class WholesaleRenewalTemplate  {
       <br><div>The original will be delivered in due course.</div><br><br><div>Many thanks,</div></div>';
       
   }else{
-      return back()->with('error','An unknown error ocurred');
+    return $template;
   }  
 
   return $template;

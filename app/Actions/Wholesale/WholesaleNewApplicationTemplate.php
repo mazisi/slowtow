@@ -191,7 +191,7 @@ class WholesaleNewApplicationTemplate  {
                     
             Many thanks,';           
   }else{
-      return back()->with('error','Error! Please check licence stages');
+    return $template;
   }  
 
   return $template;

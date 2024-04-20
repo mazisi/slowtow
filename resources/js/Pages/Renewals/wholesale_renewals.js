@@ -75,6 +75,16 @@ export default {
 
 
 
+        const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
+
         function deleteDocument(id){
             if(confirm('Document will be deleted...Continue ??')){
                 Inertia.delete(`/delete-renewal-document/${id}`, {
@@ -284,7 +294,7 @@ export default {
             deleteRenewal,
             getRenewalDate,
             limit,toast,viewFile,checkingFileProgress,
-            hasFile,
+            hasFile,redirect,
             updateDate
         }
     },

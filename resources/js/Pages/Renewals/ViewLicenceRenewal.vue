@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-lg-9 col-9">
             <h6>Process Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
-              <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
+              <Link @click="redirect(renewal.licence)" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
             <p class="text-sm mb-0">Current Stage:
 
               <span class="font-weight-bold ms-1">{{ getStatus(renewal.status)}}</span>
@@ -64,7 +64,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=200
-                          :prevStage=null
+                          :prevStage=100
                           :licence_id=null
                           :stageTitle="'Client Invoiced'"
                           :success="success"
@@ -91,7 +91,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=300
-                          :prevStage=null
+                          :prevStage=200
                           :licence_id=null
                           :stageTitle="'Client Paid'"
                           :success="success"
@@ -131,7 +131,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=400
-                          :prevStage=null
+                          :prevStage=300
                           :licence_id=null
                           :stageTitle="'Payment To The Liquor Board'"
                           :success="success"
@@ -173,7 +173,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=500
-                          :prevStage=null
+                          :prevStage=400
                           :licence_id=null
                           :stageTitle="'Renewal Issued'"
                           :success="success"
@@ -212,7 +212,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=600
-                          :prevStage=null
+                          :prevStage=500
                           :licence_id=null
                           :stageTitle="'Renewal Delivered'"
                           :success="success"

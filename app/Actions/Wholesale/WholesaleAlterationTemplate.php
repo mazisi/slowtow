@@ -8,7 +8,7 @@ class WholesaleAlterationTemplate  {
 
 
   function getMailTemplate($renewal){
-    $template = '';
+    $template = 'NULL';
 
 
      if($renewal->status == '100'){//quoted
@@ -73,6 +73,7 @@ class WholesaleAlterationTemplate  {
       <p>The original will be delivered in due course. Please ensure you have this
       certificate on display once received.</p>
       <p>Many thanks,</p>';
+
     }elseif ($renewal->status == '800') {//NLA 15 Certificate Issued
      
       $template = '<p>Good day,</p>
@@ -94,7 +95,7 @@ class WholesaleAlterationTemplate  {
       <p>Many thanks,</p>'; 
     
   }else{
-   return back();      
+   return $template;     
   }  
 
   return $template;

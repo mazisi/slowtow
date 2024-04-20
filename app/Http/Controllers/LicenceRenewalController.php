@@ -75,7 +75,7 @@ class LicenceRenewalController extends Controller
        $request->validate([
         'renewal_id' => 'required'
        ]);
-
+       
        $ren = LicenceRenewal::find($request->renewal_id);
        $status = null;
         if($request->status){

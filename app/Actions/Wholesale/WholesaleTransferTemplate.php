@@ -91,7 +91,7 @@ class WholesaleTransferTemplate{
     <p dir="ltr">The original will be delivered in due course.</p>
     <p dir="ltr">Many thanks,</p>';
   }else{
-    $template = 'This transfer may belong to wholesale...And we dont have wholesale templates yet';
+    return $template;
   }
   return $template;         
   }

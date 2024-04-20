@@ -36,6 +36,7 @@ export default {
             year: props.renewal.date,
             licence_id: props.renewal.licence_id,
             status: [],
+            prevStage: null,
             unChecked: false,
             client_paid_at: props.renewal.client_paid_at,
             payment_to_liquor_board_at: props.renewal.payment_to_liquor_board_at,
@@ -68,7 +69,15 @@ export default {
             }
         }
 
-
+        const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
 
         function deleteDocument(id){
             if(confirm('Document will be deleted...Continue ??')){
@@ -135,6 +144,7 @@ export default {
 
 
         function pushData(e,status_value, prevStage){
+            form.prevStage=prevStage;
             if (e.target.checked) {
                 form.status[0] = status_value;
                 form.unChecked = false;
@@ -245,7 +255,7 @@ export default {
             getRenewalYear, pushData, submitDocument,
             deleteDocument,
             deleteRenewal,
-            getRenewalDate,
+            getRenewalDate,redirect,
             limit,toast,viewFile,checkingFileProgress,
             hasFile,
             updateDate
