@@ -57,7 +57,7 @@
 
                       <hr>
 
-                      <Stagecomponent
+                      <StageComponent
                           :column=12
                           :dbStatus="licence.status"
                           :errors="errors"
@@ -93,6 +93,7 @@
                           prevStage=200
                           :licence_id="licence.slug"
                           :stageTitle="'Deposit Paid'"
+                          :docType="'Deposit Paid'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
@@ -1390,8 +1391,8 @@
 
                       <div>
                         <!-- If its issued stage -->
-                        <div v-if="form.status >= 2300" class="text-xs text-danger d-flex">Please note that this licence will no longer be a
-                          new application and this action is irreversible once saved.</div>
+                        <!-- <div v-if="form.status >= 2300" class="text-xs text-danger d-flex">Please note that this licence will no longer be a
+                          new application and this action is irreversible once saved.</div> -->
                       </div>
                     </div>
                   </form>

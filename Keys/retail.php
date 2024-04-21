@@ -70,4 +70,19 @@ function nominations() {
         1000 => 'Nomination Delivered',
         
     ];
+
+    function transfers() {
+        return[
+            100 => 'Client Quoted',
+            200 => 'Deposit Invoiced',
+            300 => 'Client Paid',
+            400 => 'Prepare Transfer Application',
+            500 => 'Payment To The Liquor Board',
+            600 => 'Scanned Application',
+            700 => 'Application Lodged',
+            800 => 'Activation Fee Paid',
+            900 => 'Transfer Issued',
+            1000 => 'Transfer Delivered'
+        ];
+    }
 }

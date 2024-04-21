@@ -307,7 +307,7 @@
 
                             </div>
 
-                            <h6 class="text-center mt-4">Documents</h6>
+                            <h6 class="text-center mt-4 mb-4">Documents</h6>
                             <div class="row">
 <div class="col-md-6 columns">
 <ul class="list-group">

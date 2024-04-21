@@ -85,4 +85,19 @@ function renewals() {
            '800' => 'NLA 15 Certificate Issued',
            '900' => 'NLA 15 Certificate Delivered'
         ];
-    }
+
+        function transfers() {
+            return[
+                100 => 'Client Quoted',
+                200 => 'Deposit Invoiced',
+                300 => 'Client Paid',
+                400 => 'Transfer Documents Preparation',
+                500 => 'Proof of Payment to the National Liquor Authority',
+                600 => 'Scanned Application',
+                700 => 'Application Lodged',
+                800 => 'Additional Documents Requested',
+                900 => 'Transfer Certificate Issued',
+                1000 => 'Transfer Certificate  Delivered'
+            ];
+        }
+}
