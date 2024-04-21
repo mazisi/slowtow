@@ -1064,8 +1064,7 @@
                       <hr/>
 
                       <!-- this stage must appear once licence lodged is ticked -->
-                      <template>
-
+                     
                         <StageComponent
                             :dbStatus="licence.status"
                             :errors="errors"
@@ -1083,10 +1082,11 @@
                             :licence_id="licence.id"
                             :additional_docs="licence.additional_docs"
                             :success="success"
+                            modelable_type="Licence"
                             :errors="errors"
                             :error="error"/>
                         <hr/>
-                      </template>
+                     
 
                       <template v-if="licence.province != 'North West'">
                         <StageComponent

@@ -462,6 +462,7 @@
     :additional_docs="licence.additional_docs"
     :success="success"
     :errors="errors"
+    modelable_type="Licence"
     :error="error"/>
 
   <hr/>
