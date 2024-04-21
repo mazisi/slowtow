@@ -22,7 +22,7 @@ class AdditionalDocsController extends Controller
             "modelable_type" => "required",
             ]);
 
-if($request->hasFile('document')){$this->handleDocUpload($request);}
+if($request->hasFile('document')){$this->handleDocUpload($request); return;}
     $model = "";
     switch ($request->modelable_type) {
         case 'Licence':
