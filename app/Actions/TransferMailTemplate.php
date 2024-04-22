@@ -3,7 +3,7 @@
 namespace App\Actions;
 
 use Carbon\Carbon;
-use App\Actions\WholesaleTransferTemplate;
+use App\Actions\Wholesale\WholesaleTransferTemplate;
 
 class TransferMailTemplate{
 
@@ -11,7 +11,7 @@ class TransferMailTemplate{
     $template = '';
 
     if($licence->licence->type=='wholesale'){
-      //return $template = (new WholesaleTransferTemplate)->getMailTemplate($licence);
+      return $template = (new WholesaleTransferTemplate)->getMailTemplate($licence);
     }
     
     if($licence->status == '100'){//quoted

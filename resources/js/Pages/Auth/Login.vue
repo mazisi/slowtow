@@ -42,13 +42,13 @@
   
   <button :disabled="form.processing" type="submit" class="btn mb-0 bg-gradient-success btn-md w-100 null my-4 mb-2 d-flex justify-content-center"> 
 
-  <span class="mr-5" v-if="form.processing">
+  <!-- <span class="mr-5" v-if="form.processing">
   <div class="half-circle-spinner">
   <div class="circle circle-1"></div>
   <div class="circle circle-2"></div>
 </div>
-</span>
- Sign In
+</span> -->
+ {{ form.processing ? 'Authenticating...' : 'Sign In' }}
   </button>
 
   <div v-if="$page.message" class="alert text-white alert-danger alert-dismissible fade show font-weight-light" role="alert">

@@ -168,6 +168,16 @@ import Layout from "../../../Shared/Layout.vue";
 
         }
 
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
         function hasFile(doc_type) {
           if (!props.licence.documents) {
             return {}; // Return an empty object if props.licence.documents doesn't exist
@@ -205,7 +215,7 @@ function getStatus(statusParam) {
         form,getStatus,
         updateRegistration,
         updateStageDate,
-        pushData,
+        pushData,redirect,
         getLicenceDate,
         mergeDocs,
         deleteRegistration,

@@ -197,7 +197,7 @@
           :aria-controls="''"
           :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_licence'}"
-          @click="popModal()"
+          @click="popModal('create-licence')"
           data-bs-toggle="modal" data-bs-target="#select-licence-type"
           navText="Existing Licence"
           collapseRef="#!"
@@ -215,7 +215,7 @@
           :aria-controls="''"
           :collapse="false"
           :class="{ active:  $page.props.currentRoute == 'create_new_app'}"
-          @click="popModal()"
+          @click="popModal('create-new-app')"
           data-bs-toggle="modal" data-bs-target="#select-licence-type"
           navText="New Application"
         >
@@ -400,6 +400,7 @@ export default {
   data() {
     return {
       showModal: false,
+      url: '',
       title: "NavBar",
       controls: "dashboardsExamples",
       isActive: "active"
@@ -413,15 +414,17 @@ export default {
     RetailWholesaleModal
   },
   methods: {
-
-    redirectToCreateLicence(type) {
-      let url = type == 'retail' ? 'create-licence' : 'create-new-app';
-      Inertia.get(`/${url}?type=${type}`)
-    },
-
-    popModal(){
+    
+    popModal(url){
+      this.url= url
       this.showModal=true;
     },
+
+    redirectToCreateLicence(type) {
+      Inertia.get(`/${this.url}?type=${type}`)
+    },
+
+    
     goBack(){
       history.back()
 

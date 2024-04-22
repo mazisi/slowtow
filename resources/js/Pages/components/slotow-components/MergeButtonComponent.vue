@@ -1,7 +1,7 @@
 <template>
   <button 
-     :disabled="licence.documents?.length <27"
-      @click="mergeDocs"
+     :disabled="licence.documents?.length < 27"
+      @click="mergeDocs()"
        type="button" 
        class="btn btn-success w-65">
        {{ title }}

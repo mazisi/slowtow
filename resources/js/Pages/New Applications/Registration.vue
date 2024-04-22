@@ -620,7 +620,7 @@
 
                         <br><br>
 
-                        <div class="d-flex ">
+                        <div class="d-flex">
                           <MergeButtonComponent
                               :title="'Compile Application'"
                               :licence="licence"

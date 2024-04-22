@@ -9,7 +9,7 @@
         <div class="card card-body mx-3 mx-md-4 mt-n6">
           <div class="row">
       <div class="col-lg-12 col-12">
-       <h6>Process New Wholesale Application - <Link :href="`/view-licence/?slug=${licence.slug}`" class="text-success">
+       <h6>Process New Wholesale Application - <Link @click="redirect(licence.slug)" class="text-success">
         {{ licence.trading_name ? licence.trading_name : '' }} - {{ licence?.licence_number }}</Link></h6>
        <p class="text-sm mb-0">Current Stage:
         <span class="font-weight-bold ms-1">{{ getStatus(licence.status) }}</span>
@@ -731,8 +731,8 @@
 
     <div>
       <!-- If its issued stage -->
-      <div v-if="form.status >= 2300" class="text-xs text-danger d-flex">Please note that this licence will no longer be a
-        new application and this action is irreversible once saved.</div>
+     <!-- <div v-if="form.status >= 2300" class="text-xs text-danger d-flex">Please note that this licence will no longer be a
+        new application and this action is irreversible once saved.</div>-->
     </div>
     </div>
     </form>
