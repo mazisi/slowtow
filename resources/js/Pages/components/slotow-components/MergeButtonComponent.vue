@@ -24,7 +24,7 @@ export default{
   },
   setup(props, context){
     function mergeDocs(event) {
-      context.emit('stage-value-changed', event, props.stageValue);
+      context.emit('ready-to-compile', event, props.stageValue);
     }
    
 

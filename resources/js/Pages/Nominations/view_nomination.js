@@ -239,7 +239,10 @@ export default{
         }
 
         function getMomentDate(date){
-            return moment(date).format('YYYY-MM-DD');
+            if(date){
+                return moment(date, 'DD-MM-YYYY').format('YYYY-MM-DD');
+            }
+            return '';
           }
 
         function canMerge() {

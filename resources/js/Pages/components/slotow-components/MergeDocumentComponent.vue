@@ -24,7 +24,7 @@
     </span>
 
     <a v-if="hasFile.id" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
-    <i class="fa fa-file-pdf h5 upload-icon mx-1"></i></a>
+    <i class="fa fa-file-pdf cursor-pointer h5 upload-icon mx-1"></i></a>
     <i v-if="hasFile.id" @click="deleteDocument(hasFile.id)" class="fa fa-trash h5 text-danger upload-icon mx-1" ></i>
    
   </div>
@@ -43,7 +43,6 @@ export default{
     errors: Object,
     success: String,
     error: String,
-    errors: Object,
     docType: String,
     docTitle: String,
     docModel: String,
@@ -59,6 +58,7 @@ export default{
       licence_id: props.docModel.id,
       doc_type: props.docType,
       document_file: null,
+      stage: props.stage,
       num: props.mergeNum
     })
 

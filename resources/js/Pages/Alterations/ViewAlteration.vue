@@ -63,7 +63,7 @@
     <div class="col-9 columns">
       <DocComponent
       @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+      @file-deleted="deleteDocument"
       :documentModel="alteration"
       :hasFile="hasFile('Client Quoted')"
       :errors="errors"

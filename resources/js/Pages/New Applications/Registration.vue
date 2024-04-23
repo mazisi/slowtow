@@ -624,6 +624,7 @@
                           <MergeButtonComponent
                               :title="'Compile Application'"
                               :licence="licence"
+                              @ready-to-compile="mergeDocs"
                           />
                         </div>
 

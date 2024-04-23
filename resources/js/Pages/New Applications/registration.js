@@ -88,13 +88,13 @@ import licence from "../Licences/licence";
           onStart: () => {
                   checkingFileProgress('This operation can take a while depending on number of files...')
               },
-          onSuccess: () => {
-                        if(props.success){
-                            notifySuccess(props.success)
-                         }else if(props.error){
-                           notifyError(props.error)
-                         }
-                      },
+        onSuccess: () => {
+          if(props.success){
+              notifySuccess(props.success)
+            }else if(props.error){
+              notifyError(props.error)
+            }
+        },
         })
         }
 
