@@ -8,7 +8,6 @@ use App\Models\People;
 use App\Models\Licence;
 use App\Models\LicenceType;
 use App\Models\Company;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\LicenceDocument;
 use App\Http\Controllers\Controller;
@@ -100,16 +99,15 @@ class WholesaleController extends Controller
             $fileName = 'Original-Licence'.$licence->id;
              
             $exist = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->first();
-
-                if($exist){
+    
+                if(!is_null($exist)){
                     //$exist->delete();
                     return;
                 }else{
 
            $merger = PDFMerger::init();
- 
              foreach ($docs as $doc) {
-               $merger->addPDF(env('BLOB_FILE_PATH').$doc->document, 'all');
+               $merger->addPDF(env('BLOB_FILE_PATH').$doc->document_file, 'all');
              }
  
              
@@ -117,11 +115,11 @@ class WholesaleController extends Controller
                  'licence_id' => $licence->id,
                  'document_type' => 'Original-Licence',
                  'document_name' => $fileName,
-                 'document_file' => env('AZURE_STORAGE_CONTAINER') . '/' . $fileName.'.pdf'
+                 'document_file' => $fileName.'.pdf'
              ]);
             Licence::whereId($licence->id)->update(['merged_document' => $fileName]);
             $merger->merge();
-            $merger->save(storage_path('/app/public/'.$fileName));
+            $merger->save(storage_path('/app/public/'.$fileName.'.pdf'));
  
               return back()->with('success','Document merged successfully.');
           
