@@ -33,7 +33,8 @@ class LicenceDocsController extends Controller
             $fileModel = $this->createLicenceDocument($request, $fileName);
             $this->updateLicenceStatusAndFlags($request, $fileModel);
          if($licence->type == 'wholesale'){   
-            return (new WholesaleController())->generateLicenceIssuedDocs($licence);
+            (new WholesaleController())->generateLicenceIssuedDocs($licence);
+            return back()->with('success', 'Document uploaded successfully.');
          }
             return back()->with('success', 'Document uploaded successfully.');
         } else {
