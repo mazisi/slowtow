@@ -1,19 +1,16 @@
 <?php
 
-use App\Models\User;
+use App\Http\Controllers\Reports\AllReportsController;
+use App\Mail\ReportMailer;
+use App\Models\Report;
+use Illuminate\Support\Facades\Mail;
 
-class CronJob{
+ function db_backup() : void {
+  $report = Report::where('type','All')->latest()->first();
 
-  static function db_backup() : void {
-    // Artisan::call('backup:run --only-db');
-    //return route('/db-auto-backup');
-
-    // User::create([
-    //   'name' => 'CronJob',
-    //   'password' => '12345',
-    //   'email' => 'cron@ex.com'
-    // ]);
+  AllReportsController::exportAll(request(), $report);
+  Mail::to('info@goverify.co.za')->send(new ReportMailer($report));
+   App\Models\Report::where('status','0')->update(['status' => '1']);
   }
 
-}
-CronJob::db_backup();
+db_backup();

@@ -6,9 +6,14 @@
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a> -->
 
-       <a class="cursor-pointer" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+      <a v-if="is_merged_original_licence" class="cursor-pointer" :href="`/storage/app/public/${hasFile.docPath}`" target="_blank">
         <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a> 
+
+       <a v-else class="cursor-pointer" :href="`${$page.props.blob_file_path}${hasFile.docPath}`" target="_blank">
+        <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
+        </a>
+        
       </div>
      
      <div class=" d-flex align-items-start flex-column justify-content-center">
@@ -78,7 +83,8 @@ export default{
     orderByNumber: Number,
     stage: Number,
     docType: String,
-    success: Object
+    success: Object,
+    is_merged_original_licence: Boolean  //This is a merged document , merged from LNA 6,7,8.So it has to have a local path
   },
   setup(props, context){
    

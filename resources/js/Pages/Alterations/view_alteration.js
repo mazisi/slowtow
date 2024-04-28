@@ -56,7 +56,7 @@ export default {
                     if (props.success) {
                         notifySuccess(props.success);
                     } else if (props.error) {
-                        notifySuccess(props.error);
+                        notifyError(props.error);
                     }
                 },
             });

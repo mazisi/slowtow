@@ -673,8 +673,9 @@
       <div class="col-md-6" >
       <DocComponent
       @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+      @file-deleted="deleteDocument"
       :documentModel="licence"
+      :is_merged_original_licence=true
       :hasFile="hasFile('Original-Licence')"
       :errors="errors"
       :error="error"

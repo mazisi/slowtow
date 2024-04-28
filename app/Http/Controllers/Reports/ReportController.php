@@ -21,6 +21,7 @@ use App\Http\Controllers\Reports\TransferExportController;
 use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
 use App\Http\Controllers\Reports\ExistingLicenceExportController;
+use App\Models\Report;
 
 class ReportController extends Controller
 {
@@ -79,7 +80,12 @@ class ReportController extends Controller
       public function export(Request $request){
         switch ($request->variation) {
           case 'All':
-            AllReportsController::exportAll($request); 
+            Report::create([
+              'variation' => $request->variation,
+              'status' => 0,
+            ]);
+            // AllReportsController::exportAll($request);
+            return back()->with('success','Report is being generated. Please check your email');
             break;
             case 'Renewals':
               RenewalExportController::export($request); 

@@ -6,7 +6,8 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import Banner from '../../components/Banner.vue';
 import { ref, computed } from 'vue';
 import  common from '../../common-js/common.js';
-import stages from './stages.js'
+import stages from './stages.js';
+import useToaster from '../../../store/useToaster';
 
 export default {
   props: {
@@ -23,6 +24,8 @@ export default {
 
   setup(props) {
      const months = months;
+      const { notifySuccess, notifyError } = useToaster();
+
      let years = props.years;                 
      let licenceTypes = props.licenceTypes;
      console.log(licenceTypes);
@@ -120,6 +123,22 @@ export default {
        form.selectedDates.splice(index, 1)
    }
 
+   const exportAll = () => {
+    form.get(`/export-report?variation=${form.variation}`, {
+            preserveScroll: true,
+            onSuccess: () => {
+              if (props.success) {
+                notifySuccess(props.success);
+            } else if (props.error) {
+                notifyError(props.error);
+            }
+              resetFilters();
+            },
+            replace: true,
+            preserveState: true
+            })
+   }
+
    const exportReport = () => {
     let url =
     `/export-report?variation=${form.variation}&month_from=${form.month_from}
@@ -191,6 +210,7 @@ return{
   licenceTypes,
   handleDate,
   removeDate,
+  exportAll,
   exportReport,
   people,
   companies,

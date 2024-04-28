@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Reports;
 
 
+use App\Models\Report;
 use App\Actions\ExportNotes;
+use Illuminate\Http\Request;
 use App\Actions\LicenceStatus;
 use App\Http\Controllers\Controller;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -23,7 +25,7 @@ use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 
 class AllReportsController extends Controller
 {
-    public static function exportAll($request){
+    public static function exportAll($request, Report $report){
 
         $alterationData = array(
             array(                
@@ -485,11 +487,11 @@ class AllReportsController extends Controller
          ->getAlignment()->setWrapText(true);
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="All_Apps_'.now()->format('d_m_y').'.xlsx"');
+        header('Content-Disposition: attachment;filename="All_Apps.xlsx"');
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save('php://output');
+        $writer->save(storage_path('All_Apps'.$report->id.'.Xlsx'));
         die;
       
     }
