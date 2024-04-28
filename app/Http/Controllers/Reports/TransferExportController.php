@@ -9,6 +9,7 @@ use App\Actions\ReportShouldHaveStatusInterface;
 use App\Http\Controllers\Reports\ReportFilters\TransferReportFilter;
 use App\Models\Company;
 use App\Models\People;
+use App\Models\TransferDate;
 use App\Models\TransferDocument;
 
 class TransferExportController extends Controller implements ReportShouldHaveStatusInterface
@@ -38,20 +39,21 @@ public static function export($request){
                 $status = (new TransferExportController)->getStatus($arr_of_transfers[$i]->status);
                        
   
-             $data = [         
-                       $arr_of_transfers[$i]->trading_name, 
-                       $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
-                       request('boardRegion') ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
-                       '',
-                       '',
-                       $arr_of_transfers[$i]->lodged_at,
-                       (new TransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
-                       '',
-                       $arr_of_transfers[$i]->payment_to_liquor_board_at,
-                       $arr_of_transfers[$i]->issued_at,
-                       $status,
-                       ExportNotes::getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
-                    ];
+                $data = [         
+                    $arr_of_transfers[$i]->trading_name,
+                    (new TransferExportController)->getTransferHolder($arr_of_transfers[$i]->transfered_to, $arr_of_transfers[$i]),
+                    $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
+                    request('boardRegion') ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
+                    '',
+                    '',
+                    self::getDate($arr_of_transfers[$i]->id,'Transfer Logded'),
+                    (new TransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
+                    '',
+                    self::getDate($arr_of_transfers[$i]->id,'Payment To The Liquor Board'),
+                    self::getDate($arr_of_transfers[$i]->id,'Transfer Issued'),
+                    (new TransferExportController)->getStatus($arr_of_transfers[$i]->status),
+                    ExportNotes::getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
+                 ];
 
             $arrayData[] = $data;
 
@@ -121,6 +123,11 @@ function getTransferHolder($currentHolder, $transfer) {
        $person  = People::find($transfer->people_id);
        return $person->full_name;
     
+}
+
+public static function getDate($transfer_id,$stage){
+    $getDate = TransferDate::where('transfer_id',$transfer_id)->where('stage',$stage)->first();
+    return $getDate ? $getDate->dated_at : '';
 }
 
 }

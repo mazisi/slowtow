@@ -20,9 +20,12 @@ use App\Http\Controllers\SlotowDashboardController;
 
 use App\Http\Controllers\Auth\PasswordResetController;
 use App\Http\Controllers\AdditionalDocsController;
-
+use Illuminate\Support\Facades\Artisan;
 
 Route::get('/test',function(){
+    Artisan::call('cache:clear');
+    Artisan::call('config:clear');
+    Artisan::call('route:clear');
     return view('emails.ecomms.mail_base_template');
 });
 
@@ -79,6 +82,9 @@ Route::group(['middleware' => ['guest']], function () {
         //Reports
 
         Route::get('/reports',[ReportController::class,'index'])->name('reports');
+
+
+        Route::get('/cronjob',[ReportController::class,'dispatchCronjob'])->name('cronjob');
 
         Route::get('/export-report',[ReportController::class,'export'])->name('export');
 

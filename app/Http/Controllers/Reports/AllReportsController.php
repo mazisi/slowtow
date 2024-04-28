@@ -331,12 +331,12 @@ class AllReportsController extends Controller
                         '',
                         (new RenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'TRUE' : 'FALSE',
                         $arr_of_renewals[$i]->is_quote_sent ? 'TRUE' : 'FALSE',
-                        $arr_of_renewals[$i]->client_paid_at,
+                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Client Paid'),
                         '',
-                        $arr_of_renewals[$i]->payment_to_liquor_board_at,
-                        $arr_of_renewals[$i]->renewal_issued_at,
-                        $arr_of_renewals[$i]->renewal_delivered_at,
-                        $arr_of_renewals[$i]->renewal_delivered_at ? 'TRUE' : 'FALSE',
+                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Payment To The Liquor Board'),
+                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Issued'),
+                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Delivered'),
+                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Delivered') ? 'TRUE' : 'FALSE',
                         ExportNotes::getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal') 
                      ];
 
@@ -456,11 +456,11 @@ class AllReportsController extends Controller
                             request('boardRegion') ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
                             '',
                             '',
-                            $arr_of_transfers[$i]->lodged_at,
+                            TransferExportController::getDate($arr_of_transfers[$i]->id,'Transfer Logded'),
                             (new TransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
                             '',
-                            $arr_of_transfers[$i]->payment_to_liquor_board_at,
-                            $arr_of_transfers[$i]->issued_at,
+                            TransferExportController::getDate($arr_of_transfers[$i]->id,'Payment To The Liquor Board'),
+                            TransferExportController::getDate($arr_of_transfers[$i]->id,'Transfer Issued'),
                             (new TransferExportController)->getStatus($arr_of_transfers[$i]->status),
                             ExportNotes::getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
                          ];
@@ -491,7 +491,7 @@ class AllReportsController extends Controller
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save(storage_path('All_Apps'.$report->id.'.Xlsx'));
+        $writer->save(storage_path('app/public/All_Apps'.$report->id.'.Xlsx'));
         die;
       
     }

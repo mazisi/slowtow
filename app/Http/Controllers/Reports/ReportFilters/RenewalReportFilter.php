@@ -8,8 +8,7 @@ class RenewalReportFilter {
 
   function filter($request){
    return DB::table('licence_renewals')
-   ->selectRaw("licence_renewals.id, is_licence_active, trading_name,licences.company_id, licences.people_id, licences.belongs_to, board_region,licence_number, licences.licence_date, 
-                licence_renewals.client_paid_at,licence_renewals.status, payment_to_liquor_board_at, renewal_issued_at, renewal_delivered_at,
+   ->selectRaw("licence_renewals.id, is_licence_active, trading_name,licences.company_id, licences.people_id, licences.belongs_to, board_region,licence_number, licences.licence_date,licence_renewals.status,
                 is_quote_sent, licence_renewals.date")
 
    ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')

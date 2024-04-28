@@ -8,7 +8,7 @@ use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
-
+use App\Models\RenewalDate;
 
 class RenewalExportController extends Controller
 {
@@ -41,23 +41,23 @@ class RenewalExportController extends Controller
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
                              
                 
-                    $data = [ 
-                            $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
-                            $arr_of_renewals[$i]->trading_name, 
-                            getLicenceHolder($arr_of_renewals[$i]),
-                            $arr_of_renewals[$i]->licence_number,
-                            $arr_of_renewals[$i]->date,
-                            '',
-                            (new RenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'TRUE' : 'FALSE',
-                            $arr_of_renewals[$i]->is_quote_sent ? 'TRUE' : 'FALSE',
-                            $arr_of_renewals[$i]->client_paid_at,
-                            '',
-                            $arr_of_renewals[$i]->payment_to_liquor_board_at,
-                            $arr_of_renewals[$i]->renewal_issued_at,
-                            $arr_of_renewals[$i]->renewal_delivered_at,
-                            $arr_of_renewals[$i]->renewal_delivered_at ? 'TRUE' : 'FALSE',
-                            ExportNotes::getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal')
-                            ];
+                $data = [ 
+                    $arr_of_renewals[$i]->is_licence_active ? 'A' : 'D',
+                    $arr_of_renewals[$i]->trading_name,
+                    getLicenceHolder($arr_of_renewals[$i]), 
+                    $arr_of_renewals[$i]->licence_number,
+                    $arr_of_renewals[$i]->date,
+                    '',
+                    (new RenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'TRUE' : 'FALSE',
+                    $arr_of_renewals[$i]->is_quote_sent ? 'TRUE' : 'FALSE',
+                    self::getDate($arr_of_renewals[$i]->id,'Client Paid'),
+                    '',
+                    self::getDate($arr_of_renewals[$i]->id,'Payment To The Liquor Board'),
+                    self::getDate($arr_of_renewals[$i]->id,'Renewal Issued'),
+                    self::getDate($arr_of_renewals[$i]->id,'Renewal Delivered'),
+                    self::getDate($arr_of_renewals[$i]->id,'Renewal Delivered') ? 'TRUE' : 'FALSE',
+                    ExportNotes::getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal') 
+                 ];
 
                     $arrayData[] = $data;
 
@@ -74,5 +74,10 @@ class RenewalExportController extends Controller
    function is_client_quoted($renewal_id){
     return RenewalDocument::where('licence_renewal_id',$renewal_id)->where('doc_type','Client Quoted')->first(['id']);
    }
+
+ public static function getDate($renewal_id,$stage){
+    $getDate = RenewalDate::where('renewal_id',$renewal_id)->where('stage',$stage)->first();
+    return $getDate ? $getDate->dated_at : '';
+}
 
 }

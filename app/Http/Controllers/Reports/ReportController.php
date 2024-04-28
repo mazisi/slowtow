@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers\Reports;
 
+use App\Models\User;
 use Inertia\Inertia;
 use App\Models\Email;
 use App\Models\People;
+use App\Models\Report;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Mail\ReportMailer;
 use App\Models\LicenceType;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use App\Models\LicenceRenewal;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Reports\AllReportsController;
 use App\Http\Controllers\Reports\NewAppExportController;
 use App\Http\Controllers\Reports\RenewalExportController;
@@ -21,7 +25,6 @@ use App\Http\Controllers\Reports\TransferExportController;
 use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
 use App\Http\Controllers\Reports\ExistingLicenceExportController;
-use App\Models\Report;
 
 class ReportController extends Controller
 {
@@ -119,4 +122,14 @@ class ReportController extends Controller
             break;
         }
       }
+
+
+ function dispatchCronjob(){
+$report = Report::where('variation','All')->latest()->first();
+if(!is_null($report)){
+  AllReportsController::exportAll(request(), $report);
+  Mail::to('info@goverify.co.za')->send(new ReportMailer($report));
+  Report::where('status','0')->update(['status' => '1']);
+  }
+}
 }
