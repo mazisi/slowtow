@@ -32,10 +32,10 @@ class ExportAllData extends Command
      */
     public function handle() {
         $report = Report::where('variation','All')->latest()->first();
-            if(true){
+            if(!is_null($report)){
             AllReportsController::exportAll(request());
-            //Mail::to('info@goverify.co.za')->send(new ReportMailer($report));
-            //Report::whereId($report->id)->where('status','0')->update(['status' => '1']);
+            Mail::to('info@goverify.co.za')->send(new ReportMailer($report));
+            Report::whereId($report->id)->where('status','0')->update(['status' => '1']);
             }
     }
 }
