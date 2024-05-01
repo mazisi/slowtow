@@ -493,7 +493,7 @@ class AllReportsController extends Controller
         header('Cache-Control: max-age=0');        
         $writer = new Xlsx($spreadsheet);
         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save(storage_path('app/public/All_Apps'.$report->id.'.Xlsx'));
+        $writer->save(storage_path('app/public/All_Apps.Xlsx'));
         die;
       
     }

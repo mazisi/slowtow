@@ -5,12 +5,7 @@ namespace App\Mail;
 use App\Models\Report;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
-use Illuminate\Mail\Mailables\Address;
-use Illuminate\Mail\Mailables\Content;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Mail\Mailables\Envelope;
-use Illuminate\Mail\Mailables\Attachment;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 class ReportMailer extends Mailable
 {
@@ -32,35 +27,21 @@ class ReportMailer extends Mailable
      *
      * @return \Illuminate\Mail\Mailables\Envelope
      */
-    public function envelope()
-    {
-        return new Envelope(
-            from: new Address('MAIL_FROM_ADDRESS', 'All Reports'),
-            subject: 'Report Mailer',
-        );
+     
+      public function build(){
+        try {
+            
+        return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
+                    ->replyTo('info@slotow.co.za')
+                    ->subject('Liquor Licence')
+                    ->markdown('emails.report')
+                    ->attach(storage_path('app/public/All_Apps.Xlsx'));
+                    
+                } catch (\Throwable $th) {
+                    return back()->with('error','Error sending mail.');
+                }
     }
-
-    /**
-     * Get the message content definition.
-     *
-     * @return \Illuminate\Mail\Mailables\Content
-     */
-    public function content()
-    {
-        return new Content(
-            markdown: 'emails.report',
-        );
-    }
-
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array
-     */
-    public function attachments()
-    {
-        return [
-            Attachment::fromPath(storage_path('app/public/All_Apps_'.$this->report->id.'.xlsx')),
-        ];
-    }
+    
+    
+  
 }
