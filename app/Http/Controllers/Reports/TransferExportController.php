@@ -36,7 +36,6 @@ public static function export($request){
             $arr_of_transfers = (new TransferReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_transfers); $i++ ){
-                $status = (new TransferExportController)->getStatus($arr_of_transfers[$i]->status);
                        
   
                 $data = [         
@@ -118,10 +117,16 @@ function getProofOfLodgiment($licence_transfer_id){
 function getTransferHolder($currentHolder, $transfer) {
     if($currentHolder == 'Company'){
         $company = Company::find($transfer->company_id);
-        return $company->name;
+        if(!is_null($company)){
+            return $company->name;
+        }
+        return '';
     }
        $person  = People::find($transfer->people_id);
-       return $person->full_name;
+       if(!is_null($person)){
+           return $person->full_name;
+       }
+       return '';
     
 }
 

@@ -26,7 +26,7 @@ use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 class AllReportsController extends Controller
 {
     
-    public static function exportAll($request, Report $report){
+    public static function exportAll($request){
         ini_set('memory_limit', '-1');
         $alterationData = array(
             array(                
@@ -488,13 +488,13 @@ class AllReportsController extends Controller
          $spreadsheet->setActiveSheetIndex(6)->getStyle('A1:L1')
          ->getAlignment()->setWrapText(true);
 
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="All_Apps.xlsx"');
-        header('Cache-Control: max-age=0');        
-        $writer = new Xlsx($spreadsheet);
-        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        $writer->save(storage_path('app/public/All_Apps.Xlsx'));
-        die;
+         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+         header('Content-Disposition: attachment;filename="All_Apps_'.now()->format('d_m_y').'.xlsx"');
+         header('Cache-Control: max-age=0');        
+         $writer = new Xlsx($spreadsheet);
+         $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+         $writer->save('php://output');
+         die;
       
     }
 }

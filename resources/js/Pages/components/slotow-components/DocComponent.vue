@@ -6,7 +6,7 @@
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a> -->
 
-      <a v-if="is_merged_original_licence" class="cursor-pointer" :href="`/storage/app/public/${hasFile.docPath}`" target="_blank">
+      <a v-if="is_merged_original_licence" class="cursor-pointer" :href="`/storage/app/public/${removeFilePath(hasFile.docPath)}`" target="_blank">
         <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a> 
 
@@ -114,8 +114,14 @@ export default{
         context.emit('file-deleted', id);
       }
     
+     function localFilePath(file_name){
+        if(file_name){
+          return file_name.replace('/docs/', '/');
+      }
+    }
+
     return {
-      uploadDoc,upload,max,value,
+      uploadDoc,upload,max,value,localFilePath,
       file_has_apostrophe,deleteDocument
     }
   },
