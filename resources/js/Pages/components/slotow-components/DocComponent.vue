@@ -6,7 +6,7 @@
       <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
       </a> -->
 
-      <a v-if="is_merged_original_licence" class="cursor-pointer" :href="`/storage/app/public/${removeFilePath(hasFile.docPath)}`" target="_blank">
+      <a v-if="is_merged_original_licence" class="cursor-pointer" :href="`/storage/app/public/${localFilePath(hasFile.docPath)}`" target="_blank">
         <i class="fa fa-file-pdf text-lg text-danger" aria-hidden="true"></i>
         </a> 
 

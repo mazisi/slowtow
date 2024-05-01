@@ -6,17 +6,7 @@
 // use Illuminate\Support\Facades\Mail;
 
  function db_backup() : void {
-//   $report = App\Models\Report::where('variation','All')->latest()->first();
-// if(!is_null($report)){
-//     App\Models\User::create([
-//         'email' => 'test@example.com',
-//         'password' => '12345',
-//         'name' => 'Msebele M'
-//         ]);
-//   App\Http\Controllers\Reports\AllReportsController::exportAll(request(), $report);
-//   Illuminate\Support\Facades\Mail::to('info@goverify.co.za')->send(new App\Mail\ReportMailer($report));
-//    App\Models\Report::where('status','0')->update(['status' => '1']);
-//   }
+//   $report = '/usr/local/bin/ea-php82 /home/goverogz/demo.goverify.co.za/artisan schedule:run >> /dev/null 2>&1';
 }
 
 db_backup();
