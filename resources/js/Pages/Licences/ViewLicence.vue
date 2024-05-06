@@ -30,6 +30,12 @@
 
                                 <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
 
+                                <li v-if="$page.props.auth.has_slowtow_admin_role">
+                                 <Link @click="abandonLicence" class="dropdown-item border-radius-md"> 
+                                    {{ licence.is_licence_active == '1' ? 'Abandon' : 'Activate' }}
+                                </Link>
+                                </li>
+
                                 <li><hr class="text-danger"></li>
                                 <li v-if="$page.props.auth.has_slowtow_admin_role" ><button
                                     @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
@@ -260,11 +266,21 @@
                                     <div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
                                 </div>
 
+                                <TextInputComponent
+                                    v-model="form.coordinates"
+                                    :column="'col-12'"
+                                    :label="'Coordinates'"
+                                    :value="form.coordinates"
+                                    :errors="errors.coordinates"
+                                    :input_id="coordinates"
+                                    :inputType="'text'"
+                                />
+
 
 
                                 <div  class="col-md-12 columns">
                                     <div class="input-group input-group-outline null is-filled">
-                                        <label class="form-label">Licence Type *     </label>
+                                        <label class="form-label">Licence Type * </label>
                                         <select v-model="form.licence_type" class="form-control form-control-default">
                                             <option :value="''" disabled selected>Licence Type</option>
                                             <option v-for='licence_dropdown in all_licences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
@@ -281,7 +297,6 @@
                                         <select class="form-control form-control-default" v-model="form.board_region" >
                                             <option :value="''" disabled selected >Select Board Region</option>
                                             <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
-
                                         </select>
                                     </div>
                                     <div v-if="errors.board_region" class="text-danger">{{ errors.board_region }}</div>

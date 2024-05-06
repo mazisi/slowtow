@@ -68,6 +68,7 @@
             company: '',
             person: '',
             board_region: '',
+            coordinates: '',
             import_export: '',
             type: props.type
       })

@@ -24,6 +24,12 @@
 
                                     {{ licenceVariable.name }}</Link></li>
 
+                                    <li v-if="$page.props.auth.has_slowtow_admin_role">
+                                        <Link @click="abandonLicence" class="dropdown-item border-radius-md"> 
+                                           {{ licence.is_licence_active == '1' ? 'Abandon' : 'Activate' }}
+                                       </Link>
+                                   </li>
+
 
                                 <li><hr class="text-danger"></li>
                                 <li><button v-if="$page.props.auth.has_slowtow_admin_role" @click="deleteLicence" class="dropdown-item border-radius-md text-danger" >
@@ -176,6 +182,7 @@
                                             </div>
 
 
+
                                             <div class="col-4 columns" v-if="licence.status >= 3500">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Latest Renewal</label>
@@ -186,12 +193,7 @@
 
 
 
-                                            <div class="col-4 columns">
-                                                <div class="input-group input-group-outline null is-filled">
-                                                    <label class="form-label">Address Line 3</label>
-                                                    <input type="text" class="form-control form-control-default" v-model="form.address3">
-                                                </div>
-                                            </div>
+                    
 
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
@@ -212,6 +214,24 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            
+                                            <div class="col-4 columns">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Postal Code</label>
+                                                    <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
+                                                </div>
+                                            </div>
+                                            <div class="col-4 columns"></div>
+                                            <div class="col-4 columns">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Coordinates</label>
+                                                    <input type="text" class="form-control form-control-default" v-model="form.coordinates">
+                                                </div>
+                                            </div>
+
+                                            
+                                            
+                                            
                                             <div class="col-4 columns" v-if="licence.type === 'retail'">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Renewal Amount</label>
@@ -239,14 +259,20 @@
                                                     </select>
                                                 </div>
                                             </div>
-
-
-                                            <div class="col-4 columns">
+                                            <div class="col-4 columns" v-if="licence.type == 'wholesale'">
                                                 <div class="input-group input-group-outline null is-filled">
-                                                    <label class="form-label">Postal Code</label>
-                                                    <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
+                                                    <label class="form-label">Import/Export</label>
+                                                    <select v-model="form.import_export" class="form-control form-control-default" required>
+                                                        <option :value="''" disabled selected>Choose...</option>
+                                                        <option value="Yes">Yes</option>
+                                                        <option value="No">No</option>
+                                                    </select>
                                                 </div>
+                                                <div v-if="errors.import_export" class="text-danger">{{ errors.import_export }}</div>
                                             </div>
+
+
+                                            
 
                                         </div>
                                         <div>
@@ -367,6 +393,8 @@ export default {
             address: props.licence.address,
             address2: props.licence.address2,
             address3: props.licence.address3,
+            import_export: props.licence.import_export,
+            coordinates: props.licence.coordinates,
             province: props.licence.province,
             client_number: props.licence.client_number,
             company:  props.licence.company !== null ? props.licence.company.name : '',
@@ -386,7 +414,12 @@ export default {
         function submit() {
             form.patch(`/update-new-app/${props.licence.slug}`, {
                 onSuccess: () => {
-                    notifySuccess(props.success)
+                    if(props.success){
+                        notifySuccess(props.success)
+                    }else{
+                        notifyError(props.error)
+                    }
+                    
                 },
                 preserveScroll: true,
             })
@@ -434,6 +467,19 @@ export default {
           Inertia.get(url);
         }
 
+        function abandonLicence() {
+                form.patch(`/abandon-licence/${props.licence.slug}`, {
+                preserveScroll: true,
+                onSuccess: () => { 
+                    if(props.success){
+                        notifySuccess(props.success)
+                        }else if(props.error){
+                        notifyError(props.error)
+                    }
+                }
+                })    
+                }
+
         const computedBoardRegions = computed(() => {
             return common.getBoardRegions();
         })
@@ -441,6 +487,7 @@ export default {
             companyOptions,redirect,
             peopleOptions,
             deleteLicence,
+            abandonLicence,
             computedProvinces,
             computedBoardRegions,
             selectApplicant,

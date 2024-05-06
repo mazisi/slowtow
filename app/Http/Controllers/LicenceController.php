@@ -32,6 +32,17 @@ class LicenceController extends Controller
         ]);
     }
 
+    public function abandonLicence($slug){
+        $lic = Licence::whereSlug($slug)->first();
+        if ($lic->is_licence_active) {
+            $lic->update(['is_licence_active' => 0]);
+        } else {
+            $lic->update(['is_licence_active' => 1]);
+        }
+
+        return back()->with('success', 'Saved.');
+    }
+
     /**
      * Render the form for creating a new licence with variations (company or individual).
      *
@@ -127,6 +138,7 @@ class LicenceController extends Controller
                 'address3' => $request->address3,
                 'province' => $request->province,
                 'board_region' => $request->board_region,
+                'coordinates' => $request->coordinates,
                 'postal_code' => $request->postal_code,
                 'slug' => sha1(time())
             ]);
@@ -270,7 +282,8 @@ class LicenceController extends Controller
                 'postal_code' => $request->postal_code,
                 'company_id' => $company_var,
                 'renewal_amount' => $request->renewal_amount,
-                'latest_renewal' => $request->latest_renewal
+                'latest_renewal' => $request->latest_renewal,
+                'coordinates' => $request->coordinates,
             ]);
 
             if ($update) {

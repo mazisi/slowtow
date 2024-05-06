@@ -18,5 +18,7 @@ use App\Http\Controllers\Wholesale\WholesaleController;
         Route::delete('/delete-licence/{slug}',[LicenceController::class,'destroy'])->name('delete_licence');
 
         Route::patch('/update-licence-active-status/{slug}',[LicenceController::class,'updateActiveStatus']);
+
+        Route::patch('/abandon-licence/{slug}',[LicenceController::class,'abandonLicence']);
         
         Route::get('/preview-licence/{slug}',[LicencePreviewController::class,'preview']);

@@ -119,7 +119,6 @@
 
 </style>
 <script>
-import Breadcrumbs from "../Breadcrumbs.vue";
 import { mapMutations, mapState } from "vuex";
 import { Inertia } from '@inertiajs/inertia'
 
@@ -174,7 +173,6 @@ Inertia.visit('/update-my-password', {
     },
   },
   components: {
-    Breadcrumbs,
     Inertia
   },
   computed: {

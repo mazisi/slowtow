@@ -263,7 +263,9 @@
 
                 <TextInputComponent :inputType="'number'" v-model="form.postal_code" :value="form.postal_code" :column="'col-12'" :label="'Postal Code'" :errors="errors.postal_code" :input_id="postal_code" />
 
-
+                <TextInputComponent :inputType="'text'" v-model="form.coordinates" :value="form.coordinates" :column="'col-12'" :label="'Coordinates'" :errors="errors.coordinates" :input_id="coordinates" />
+               
+              </div>
 
               </div>
 
@@ -360,7 +362,8 @@ export default {
       person: '', //person id
       postal_code: '',
       belongs_to: '',
-      value: ''
+      value: '',
+      coordinates: ''
     })
 
     let licence_types = ref(null);

@@ -12,14 +12,6 @@
       offline-class="offline"
       @detected-condition="setConnected"
     >
-    <!-- <template v-if="connected">
-    <div class="text-center bg-success">Connected</div>
-    </template>
-
-    <template v-if="!connected">
-    
-    <div class="text-center bg-danger">Not connected</div>
-  </template> -->
     </v-offline>
    
 

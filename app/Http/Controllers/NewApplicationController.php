@@ -90,6 +90,7 @@ class NewApplicationController extends Controller
                 'address' => $request->address,
                 'address2' => $request->address2,
                 'is_licence_active' => true,
+                'coordinates' => $request->coordinates,
                 'address3' => $request->address3,
                 'province' => $request->province,
                 'slug' => sha1(now())
@@ -135,6 +136,7 @@ class NewApplicationController extends Controller
                 'licence_number' => $request->licence_number,
                 'client_number' => $request->client_number,
                 'latest_renewal' => $request->latest_renewal,
+                'coordinates' => $request->coordinates,
                 'licence_date' => $request->licence_date,
                 'licence_issued_at' => $request->licence_date,
                 'postal_code' => $request->postal_code,
@@ -286,7 +288,7 @@ class NewApplicationController extends Controller
             if($licence){
                 $licence->update(['dated_at' => $request->dated_at]);
                 if($request->stage == 'NLA 9 Issued'){
-                    $licence->licence()->update(['licence_date' => $request->dated_at]);
+                    $licence->licence->update(['licence_date' => $request->dated_at]);
                 }
             }else{
                 LicenceDate::create([

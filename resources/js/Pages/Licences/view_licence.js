@@ -75,6 +75,7 @@ export default {
          board_region: props.licence.board_region,
          renewal_amount: props.licence.renewal_amount,
          latest_renewal: props.licence.latest_renewal,
+         coordinates: props.licence.coordinates,
          company: props.licence.belongs_to === 'Company' ? props.licence.company.name : '',
          person: props.licence.belongs_to === 'Individual' ? props.licence.people.full_name : '',
          company_id: props.licence.belongs_to === 'Company' ? props.licence.company.id : '',
@@ -87,7 +88,20 @@ export default {
     .filter(obj => obj.province === form.province); 
 
 
-    
+    function abandonLicence() {
+      form.patch(`/abandon-licence/${props.licence.slug}`, {
+       preserveScroll: true,
+       onSuccess: () => { 
+         if(props.success){
+                notifySuccess(props.success)
+                 }else if(props.error){
+                   notifyError(props.error)
+                 }
+      }
+     })    
+     }
+
+
     //list licence types based on province selected
      function  selectedProvince(){ 
       const filteredLicenses = props.licence_dropdowns
@@ -265,6 +279,7 @@ export default {
       originalLicenceForm,
       getDocType,
       deleteDocument,
+      abandonLicence,
       selectedProvince,
       all_licences,
       campanyMenuOptions

@@ -223,6 +223,17 @@
                                     </div>
                                     <div v-if="errors.import_export" class="text-danger">{{ errors.import_export }}</div>
                                 </div>
+
+                               <TextInputComponent 
+                               :inputType="'text'" 
+                               v-model="form.coordinates" 
+                               :value="form.coordinates" 
+                               :column="'col-12'" 
+                               :label="'Coordinates'" 
+                               :errors="errors.coordinates"
+                               :input_id="coordinates" />
+
+
                                 <div>
                                     <button :disabled="form.processing || filterForm.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
                                         <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
