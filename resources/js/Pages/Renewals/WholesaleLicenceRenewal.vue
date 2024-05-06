@@ -305,6 +305,18 @@
                           @date-value-changed="updateDate"
                           :success="success"
                       />
+                      <DocComponent
+                      :documentModel="renewal"
+                      @file-value-changed="submitDocument"
+                      @file-deleted="deleteDocument"
+                      :hasFile="hasFile('Renewal Forms Received')"
+                      :errors="errors"
+                      :error="error"
+                      :orderByNumber=500
+                      :docType="'Renewal Forms Received'"
+                      :success="success"
+                      :stage="900"
+                  />
 
                       <hr>
              

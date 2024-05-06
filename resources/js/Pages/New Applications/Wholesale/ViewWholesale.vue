@@ -60,7 +60,7 @@
         :stageValue=200
         prevStage=100
         :licence_id="licence.slug"
-        :stageTitle="'Deposit Invoiced'"
+        :stageTitle="'Client Invoiced'"
         :success="success"
         @stage-value-changed="pushData"
       />
@@ -264,9 +264,32 @@
     :hasFile="hasFile('Photographs')"
     />
 
+    <!--const wholesaleLicences =  [
+      {
+          "id": 102,
+          "licence_type": "Distribution and Manufacturing Liquor Licence",
+          "province": "Wholesale",
+          "created_at": "2024-01-16T20:07:23.000000Z",
+          "updated_at": "2024-01-16T20:07:23.000000Z"
+      },
+      {
+          "id": 103,
+          "licence_type": "Distribution Liquor Licence",
+          "province": "Wholesale",
+          "created_at": "2024-01-16T20:08:17.000000Z",
+          "updated_at": "2024-01-16T20:08:17.000000Z"
+      },
+      {
+          "id": 104,
+          "licence_type": "Manufacturing Liquor Licence",
+          "province": "Wholesale",
+          "created_at": "2024-01-16T20:08:17.000000Z",
+          "updated_at": "2024-01-16T20:08:17.000000Z"
+      }
+  ];-->
 
     <!-- This stage must only appear if  manufacturing -->
-    <MergeDocumentComponent v-if="licence.licence_type === 'Manufacturing' && licence.licence_type !== 'Manufacturing and Distributing' "
+    <MergeDocumentComponent v-if="licence.licence_type_id === '102' && licence.licence_type_id !== '104' "
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
     :success="success"
@@ -282,7 +305,7 @@
     :hasFile="hasFile('Product Analysis Certificate')"
     />
 
-    <MergeDocumentComponent v-if="licence.import_export =='yes'"
+    <MergeDocumentComponent v-if="licence.import_export =='Yes'"
     @file-value-changed="submitDocument"
      @file-deleted="deleteDocument"
     :success="success"
@@ -290,7 +313,7 @@
     :errors="errors"
     :column=6
     :model_id="licence"
-    :docTitle="'Import/Export'"
+    :docTitle="'Import/Export Certificate'"
     :docType="'Import/Export'"
     :docModel="licence"
     :stage=400
@@ -343,6 +366,21 @@
     :docModel="licence"
     :stage="400"
     :hasFile="hasFile('Signed POA & RES')"
+    />
+
+    <MergeDocumentComponent v-if="licence.licence_type_id =='102' || licence.licence_type_id == '104'"
+    @file-value-changed="submitDocument"
+     @file-deleted="deleteDocument"
+    :success="success"
+    :error="error"
+    :errors="errors"
+    :column=6
+    :model_id="licence"
+    :docTitle="'Product Analysis Certificate'"
+    :docType="'Product Analysis Certificate'"
+    :docModel="licence"
+    :stage=400
+    :hasFile="hasFile('Product Analysis Certificate')"
     />
 
 

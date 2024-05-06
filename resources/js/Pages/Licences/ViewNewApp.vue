@@ -81,7 +81,7 @@
                                                         <option value="Individual">Individual</option>
                                                     </select>
                                                 </div>
-                                                <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+                                                <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
                                             </div>
 
 
@@ -200,7 +200,7 @@
                                                     <label class="form-label">Licence Type</label>
                                                     <select v-model="form.licence_type" class="form-control form-control-default" required>
                                                         <option :value="''" disabled selected>Select Licence Type</option>
-                                                        <option v-for='licence_dropdown in licence_dropdowns' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                                        <option v-for='licence_dropdown in wholesaleLicences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -372,6 +372,30 @@ export default {
             ];
         }
 
+        const wholesaleLicences =  [
+        {
+            "id": 102,
+            "licence_type": "Distribution and Manufacturing Liquor Licence",
+            "province": "Wholesale",
+            "created_at": "2024-01-16T20:07:23.000000Z",
+            "updated_at": "2024-01-16T20:07:23.000000Z"
+        },
+        {
+            "id": 103,
+            "licence_type": "Distribution Liquor Licence",
+            "province": "Wholesale",
+            "created_at": "2024-01-16T20:08:17.000000Z",
+            "updated_at": "2024-01-16T20:08:17.000000Z"
+        },
+        {
+            "id": 104,
+            "licence_type": "Manufacturing Liquor Licence",
+            "province": "Wholesale",
+            "created_at": "2024-01-16T20:08:17.000000Z",
+            "updated_at": "2024-01-16T20:08:17.000000Z"
+        }
+    ];
+
      Inertia.on('navigate', (event) => {
         if (event.detail.page.url.includes("view-licence")) {
        
@@ -491,7 +515,8 @@ export default {
             computedProvinces,
             computedBoardRegions,
             selectApplicant,
-            licenceVariables
+            licenceVariables,
+            wholesaleLicences
         }
     },
     components: {

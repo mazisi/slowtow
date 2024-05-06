@@ -58,35 +58,35 @@ export default {
     <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Volume of Beer</label>
-            <input v-model="form.volume_of_beer" type="text" class="form-control form-control-default">
+            <input v-model="form.volume_of_beer" type="number" class="form-control form-control-default">
         </div>
     </div>
 
     <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Volume of Wine</label>
-            <input v-model="form.volume_of_wine" type="text" class="form-control form-control-default">
+            <input v-model="form.volume_of_wine" type="number" class="form-control form-control-default">
         </div>
     </div>
 
     <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Volume of Spirit/Other</label>
-            <input v-model="form.volume_of_spirit" type="text" class="form-control form-control-default">
+            <input v-model="form.volume_of_spirit" type="number" class="form-control form-control-default">
         </div>
     </div>
 
     <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Exact Turnover Amount</label>
-            <input v-model="form.exact_turnover_amount" type="text" class="form-control form-control-default">
+            <input v-model="form.exact_turnover_amount" type="number" class="form-control form-control-default">
         </div>
     </div>
 
     <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Number of Employees</label>
-            <input v-model="form.number_of_employees" type="text" class="form-control form-control-default">
+            <input v-model="form.number_of_employees" type="number" class="form-control form-control-default">
         </div>
     </div>
 

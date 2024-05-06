@@ -57,7 +57,7 @@ export default {
       {id: 3, name: 'Transfers', endpoint: 'my-transfer-history'},
       {id: 4, name: 'Nominations', endpoint: 'my-nominations'},
       {id: 5, name: 'Alterations', endpoint: 'my-alterations'}
-  ];
+    ];
 
     const form = useForm({
          trading_name: props.licence.trading_name,
@@ -244,7 +244,18 @@ export default {
 
       
   
-
+function abandonLicence() {
+      form.patch(`/abandon-licence/${props.licence.slug}`, {
+       preserveScroll: true,
+       onSuccess: () => { 
+         if(props.success){
+                notifySuccess(props.success)
+                 }else if(props.error){
+                   notifyError(props.error)
+                 }
+      }
+     })    
+     }
       function removeFilePath(file_name){
         if(file_name.includes('mrnlabs')){
           let getFileName = file_name.split('/');

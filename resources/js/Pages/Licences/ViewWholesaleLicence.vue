@@ -29,6 +29,11 @@
                                 <li v-if="licence.type !== 'wholesale'"><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
 
                                 <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
+                                <li v-if="$page.props.auth.has_slowtow_admin_role">
+                                    <Link @click="abandonLicence" class="dropdown-item border-radius-md"> 
+                                       {{ licence.is_licence_active == '1' ? 'Abandon' : 'Activate' }}
+                                   </Link>
+                                   </li>
 
                                 <li><hr class="text-danger"></li>
                                 <li v-if="$page.props.auth.has_slowtow_admin_role" ><button
@@ -74,7 +79,7 @@
                                                         <option value="Individual">Individual</option>
                                                     </select>
                                                 </div>
-                                                <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+                                                <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
                                             </div>
 
 
@@ -252,10 +257,10 @@
 
                                 <div  class="col-md-12 columns">
                                     <div class="input-group input-group-outline null is-filled">
-                                        <label class="form-label">Licence Type *     </label>
+                                        <label class="form-label">Licence Type *</label>
                                         <select v-model="form.licence_type" class="form-control form-control-default">
                                             <option :value="''" disabled selected>Licence Type</option>
-                                            <option v-for='licence_dropdown in all_licences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                            <option v-for='licence_dropdown in wholesaleLicences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
