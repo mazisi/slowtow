@@ -1405,7 +1405,7 @@
           </div>
 
         </div>
-        <hr>
+      
 
         <Task
             v-if="licence.status >= 2300"

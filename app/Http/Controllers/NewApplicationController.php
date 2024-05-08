@@ -243,7 +243,7 @@ class NewApplicationController extends Controller
                 }
             }
 
-            if ($status >= 2300) {
+            if ($status >= 2300 && $licence->type == 'retail' && !$request->unChecked) {
                 $nom = Nomination::where('year', now()->format('Y'))->where('licence_id', $licence->id)->first();
 
                 if (is_null($nom)) {
@@ -255,6 +255,20 @@ class NewApplicationController extends Controller
                 }
 
                 $licence->update(['is_new_app' => false]);
+
+            }else if($status >= 1300 && $licence->type == 'wholesale' && !$request->unChecked){
+                $nom = Nomination::where('year', now()->format('Y'))->where('licence_id', $licence->id)->first();
+
+                if (is_null($nom)) {
+                    Nomination::create([
+                        'licence_id' => $licence->id,
+                        'year' => now()->format('Y'),
+                        'slug' => sha1(now())
+                    ]);
+                }
+
+                $licence->update(['is_new_app' => false]);
+
             }
 
             $licence->update([
@@ -288,7 +302,7 @@ class NewApplicationController extends Controller
             if($licence){
                 $licence->update(['dated_at' => $request->dated_at]);
                 if($request->stage == 'NLA 9 Issued'){
-                    $licence->licence->update(['licence_date' => $request->dated_at]);
+                    $licence->licence->update(['licence_date' => $request->dated_at, 'is_new_app' => 0]);
                 }
             }else{
                 LicenceDate::create([
@@ -320,7 +334,7 @@ class NewApplicationController extends Controller
      * @return void
      */
     function updateLicenceDate($request) {
-        if ($request->stage === 'Licence Issued' || $request->stage === 'NLA 8 Issued') {
+        if ($request->stage === 'Licence Issued' || $request->stage === 'NLA 9 Issued') {
             Licence::whereId($request->licence_id)->update(['is_new_app' => false, 'licence_date' => $request->dated_at]);
         }
     }

@@ -233,6 +233,16 @@
                                 />
 
                                 <TextInputComponent
+                                    v-model="form.coordinates"
+                                    :column="'col-12'"
+                                    :label="'Coordinates'"
+                                    :value="form.coordinates"
+                                    :errors="errors.coordinates"
+                                    :input_id="coordinates"
+                                    :inputType="'text'"
+                                />
+
+                                <TextInputComponent
                                     v-model="form.postal_code"
                                     :column="'col-12'"
                                     :label="'Postal Code'"
@@ -260,7 +270,7 @@
                                         <label class="form-label">Licence Type *</label>
                                         <select v-model="form.licence_type" class="form-control form-control-default">
                                             <option :value="''" disabled selected>Licence Type</option>
-                                            <option v-for='licence_dropdown in wholesaleLicences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                            <option v-for='licence_dropdown in wholesaleLicenceTypes' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>

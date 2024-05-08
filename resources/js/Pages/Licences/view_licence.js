@@ -59,6 +59,30 @@ export default {
       {id: 5, name: 'Alterations', endpoint: 'my-alterations'}
     ];
 
+    const wholesaleLicenceTypes =  [
+      {
+          "id": 102,
+          "licence_type": "Distribution and Manufacturing Liquor Licence",
+          "province": "Wholesale",
+          "created_at": "2024-01-16T20:07:23.000000Z",
+          "updated_at": "2024-01-16T20:07:23.000000Z"
+      },
+      {
+          "id": 103,
+          "licence_type": "Distribution Liquor Licence",
+          "province": "Wholesale",
+          "created_at": "2024-01-16T20:08:17.000000Z",
+          "updated_at": "2024-01-16T20:08:17.000000Z"
+      },
+      {
+          "id": 104,
+          "licence_type": "Manufacturing Liquor Licence",
+          "province": "Wholesale",
+          "created_at": "2024-01-16T20:08:17.000000Z",
+          "updated_at": "2024-01-16T20:08:17.000000Z"
+      }
+  ];
+
     const form = useForm({
          trading_name: props.licence.trading_name,
          licence_type: props.licence.licence_type_id,
@@ -293,6 +317,7 @@ function abandonLicence() {
       abandonLicence,
       selectedProvince,
       all_licences,
+      wholesaleLicenceTypes,
       campanyMenuOptions
     }
   },

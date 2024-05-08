@@ -131,7 +131,7 @@ function checkStatus(licenseType, status, licence) {
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">settings_suggest</i>
         </div>
-        <span class="nav-link-text ms-1">{{ $page.props.viewed_licence?.type == 'wholesale' ? 'Additional Depot' : 'Alterations' }}</span>
+        <span class="nav-link-text ms-1">{{ $page.props.viewed_licence?.type == 'wholesale' ? 'Additional Depot/Relocation' : 'Alterations' }}</span>
         
         </Link>
       </li>

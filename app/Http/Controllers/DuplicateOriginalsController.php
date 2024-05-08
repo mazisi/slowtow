@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\Licence;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LicenceDocument;
 use App\Models\DuplicateOriginal;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -79,12 +80,13 @@ class DuplicateOriginalsController extends Controller
     
     function uploadDocument(Request $request) {
         try {
-            $request->validate([
-                'licence_id' => 'required|exists:duplicate_originals,id',
-                'document_file' => 'required',
-                'doc_type' => 'required'
-            ]);
-            $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
+                $request->validate([
+                    'licence_id' => 'required|exists:duplicate_originals,id',
+                    'document_file' => 'required',
+                    'doc_type' => 'required'
+                ]);
+                
+                $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
                 $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
                 $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
 
@@ -94,7 +96,12 @@ class DuplicateOriginalsController extends Controller
                         $fileModel->duplicate_original_id = $request->licence_id;
                         $fileModel->doc_type = $request->doc_type;
                         $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;        
-                        $fileModel->save();
+                        if($fileModel->save()){
+                            if($request->doc_type == 'Duplicate Original Issued' || $request->doc_type == 'Duplicate-Original-Licence-Delivered'){
+                               $this->storeLicenceDocs($request);
+                            }
+                        }
+
                 }else{
                     return back()->with('error','Azure storage could not be reached.Please try again.');
                   }
@@ -105,6 +112,30 @@ class DuplicateOriginalsController extends Controller
             return back()->with('error', 'An error occurred while uploading.');
         }
         
+    }
+
+    function storeLicencedocs($request) {
+        
+            $doc_type = $request->doc_type == 'Duplicate Original Issued' ? 'Duplicate-Licence' : 'Duplicate-Original-Licence-Delivered';
+
+            $get_licence = DuplicateOriginal::whereId($request->licence_id)->first();
+            $fileModel = new LicenceDocument;
+            $fileModel->document_name = $request->document_file->getClientOriginalName();
+            $fileModel->licence_id = $get_licence->licence_id;
+            $fileModel->document_type = $doc_type;
+            $fileModel->num = $request->num ? $request->num : null;
+            $fileModel->document_file = env('AZURE_STORAGE_CONTAINER') . '/' . $this->generateFileName($request->document_file);
+            $fileModel->save();
+        
+        
+    }
+
+    private function generateFileName($documentFile)
+    {
+        $removeSpace = str_replace(' ', '_', $documentFile->getClientOriginalName());
+        $fileName = Str::limit(sha1(now()), 3) . str_replace('-', '_', $removeSpace);
+
+        return $fileName;
     }
 
     public function updateDate(Request $request){

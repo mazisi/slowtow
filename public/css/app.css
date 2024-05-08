@@ -790,9 +790,6 @@ select {
 .-mt-px {
   margin-top: -1px;
 }
-.mb-0 {
-  margin-bottom: 0px;
-}
 .-mr-0\.5 {
   margin-right: -0.125rem;
 }
@@ -810,6 +807,9 @@ select {
 }
 .mb-4 {
   margin-bottom: 1rem;
+}
+.mb-0 {
+  margin-bottom: 0px;
 }
 .mb-2 {
   margin-bottom: 0.5rem;
@@ -1069,10 +1069,6 @@ select {
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 }
-.px-0 {
-  padding-left: 0px;
-  padding-right: 0px;
-}
 .px-3 {
   padding-left: 0.75rem;
   padding-right: 0.75rem;
@@ -1089,18 +1085,16 @@ select {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
+.px-0 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
 }
 .pt-8 {
   padding-top: 2rem;
-}
-.pt-1 {
-  padding-top: 0.25rem;
-}
-.pb-0 {
-  padding-bottom: 0px;
 }
 .pt-2 {
   padding-top: 0.5rem;
@@ -1119,6 +1113,12 @@ select {
 }
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+.pt-1 {
+  padding-top: 0.25rem;
+}
+.pb-0 {
+  padding-bottom: 0px;
 }
 .pl-5 {
   padding-left: 1.25rem;
@@ -1222,11 +1222,11 @@ select {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-.opacity-5 {
-  opacity: 0.05;
-}
 .opacity-10 {
   opacity: 0.1;
+}
+.opacity-5 {
+  opacity: 0.05;
 }
 .shadow-sm {
   --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);

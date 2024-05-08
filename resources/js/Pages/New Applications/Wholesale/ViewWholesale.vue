@@ -783,10 +783,10 @@
     </div>
 
     </div>
-    <hr>
+   
 
     <Task
-    v-if="licence.status >= 1100"
+    v-if="licence.status >= 1300"
     :tasks="tasks"
     :model_id="licence.id"
     :success="success"
