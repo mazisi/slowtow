@@ -231,8 +231,6 @@
   import { toast } from 'vue3-toastify';
    import 'vue3-toastify/dist/index.css';
    import moment from 'moment';
-   import { Swiper,SwiperSlide  } from 'swiper/vue';
-   import 'swiper/css';
    import useToaster from "@/store/useToaster";
 
   export default {
@@ -343,15 +341,12 @@
           }
 
 
-        const onSwiper = (swiper) => {
-        console.log(swiper);
-      };
+     
       const onSlideChange = () => {
         console.log('slide change');
       };
 
       return {
-        onSwiper,
         onSlideChange,
         toast,
         form,
@@ -373,9 +368,7 @@
       Link,
       Head,
       Banner,
-      Paginate,
-      Swiper,
-      SwiperSlide
+      Paginate
 
     },
 
