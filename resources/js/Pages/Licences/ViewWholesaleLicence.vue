@@ -26,9 +26,8 @@
 
                                 <li><Link :href="`/transfer-history?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
 
-                                <li v-if="licence.type !== 'wholesale'"><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
 
-                                <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
+                                <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Additional Depot/Relocation</Link></li>
                                 <li v-if="$page.props.auth.has_slowtow_admin_role">
                                     <Link @click="abandonLicence" class="dropdown-item border-radius-md"> 
                                        {{ licence.is_licence_active == '1' ? 'Abandon' : 'Activate' }}
@@ -255,7 +254,7 @@
                                 <div class="col-12 columns">
                                     <div class="input-group input-group-outline null is-filled">
                                         <label class="form-label">Province</label>
-                                        <select class="form-control form-control-default" v-model="form.province" @change="selectedProvince()" >
+                                        <select class="form-control form-control-default" v-model="form.province"  >
                                             <option :value="''" disabled selected >Select Province</option>
                                             <option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
                                         </select>

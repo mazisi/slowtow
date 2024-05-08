@@ -16,7 +16,7 @@ function checkStatus(licenseType, status, licence) {
   } else if (licenseType === 'retail') {
     return status >= 2300 ? true : false;
   } else {
-    return status >= 1100 ? true : false;
+    return status >= 1300 ? true : false;
   }
 }
     return{
