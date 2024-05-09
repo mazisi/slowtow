@@ -143,7 +143,6 @@
    import { ref } from 'vue'
    import { useForm,Link, Head } from '@inertiajs/inertia-vue3';
    import PreviewTextComponent from '../components/PreviewTextComponent.vue';
-   import Vue3Html2pdf from 'vue3-html2pdf'
 
    export default {
     name: 'PeoplePreview',
@@ -180,7 +179,7 @@
         html2canvas: {}, // Optional
         jsPDF: {} // Optional
       };
-      html2Pdf.download()
+     
             }
 
             const checkDocType = (doc_type) => {
@@ -210,13 +209,12 @@
             }
             }
 
-           return {form,mergeAndDownload,checkDocType,html2Pdf}
+           return {form,mergeAndDownload,checkDocType}
        },
 
        components: {
            Layout,
            PreviewTextComponent,
-           Vue3Html2pdf
        }
    }
 </script>

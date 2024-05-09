@@ -19,17 +19,25 @@ class WholesaleController extends Controller
     public function view_licence(Request $request)
     {
 
-        $licence = Licence::with('company', 'people', 'licence_documents','duplicate_originals.duplicate_documents')
-            ->whereSlug($request->slug)
-            ->first();
+        // $licence = Licence::with('company', 'people', 'licence_documents','duplicate_originals.duplicate_documents')
+        //     ->whereSlug($request->slug)
+        //     ->first();
+
+
+            
+        $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
+
+        $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->latest()->first();
+        $licence_issued = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Licence Issued')->latest()->first();
+
+        $duplicate_original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Licence')->latest()->first();
+
+        $original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence-Delivered')->latest()->first();
+        $licence_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Licence Delivered')->latest()->first();
+
+        $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->latest()->first();
         
        
-         
-
-// $original_lic_delivered now contains the desired document if found
-
-        $duplicate_original_issued = json_decode(getLicenceDocs($licence))->duplicate_original_issued;
-        $original_lic_delivered = json_decode(getLicenceDocs($licence))->original_licence_delivered;
    
 
         $companies = Company::pluck('name', 'id');
@@ -42,7 +50,7 @@ class WholesaleController extends Controller
             ->withQueryString();
 
 
-        $view = (is_null($licence->is_new_app)||$licence->is_new_app==1)? 'ViewNewApp' : 'ViewWholesaleLicence';
+        $view = (is_null($licence->is_new_app) || $licence->is_new_app==1)? 'ViewNewApp' : 'ViewWholesaleLicence';
         
         return Inertia::render('Licences/' . $view, [
             'licence' => $licence,
@@ -50,8 +58,13 @@ class WholesaleController extends Controller
             'tasks' => $tasks,
             'companies' => $companies,
             'people' => $people,
-            'duplicate_original_lic' => $duplicate_original_issued,
+            'people' => $people,
+            'original_lic' => $original_lic,
+            'licence_issued' => $licence_issued,
+            'duplicate_original_lic' => $duplicate_original_lic,
             'original_lic_delivered' => $original_lic_delivered,
+            'licence_delivered' => $licence_delivered,
+            'duplicate_original_lic_delivered' => $duplicate_original_lic_delivered
         ]);
     }
 

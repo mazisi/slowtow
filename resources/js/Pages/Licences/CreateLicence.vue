@@ -35,6 +35,8 @@
 
             <form class="row" @submit.prevent="submit">
 
+             
+              
               <div class="col-8 col-md-8 col-xl-8 position-relative">
 
                 <div class="card card-plain h-100">
@@ -222,8 +224,6 @@
 
               </div>
 
-
-
               <div class="col-4 col-md-4 col-xl-4" style="margin-top: 3.4rem;">
 
 
@@ -267,8 +267,6 @@
                
               </div>
 
-              </div>
-
               <div>
 
                 <button :disabled="form.processing" :style="{float: 'right'}" class="btn btn-sm btn-secondary ms-2" type="submit">
@@ -278,6 +276,10 @@
                   <span class="visually-hidden">Loading...</span> Submit</button>
 
               </div>
+
+
+            
+
 
             </form>
 

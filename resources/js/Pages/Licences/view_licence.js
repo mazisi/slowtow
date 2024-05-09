@@ -47,7 +47,7 @@ export default {
         let file_name = ref(''); 
         let file_has_apostrophe = ref();
         let all_licences = ref([]);
-        
+        console.log('Fuckit',props.original_lic)
       
     const { notifySuccess, notifyError } = useToaster();
       //These are only for  company admin menu
