@@ -10,6 +10,10 @@ import { InertiaProgress } from '@inertiajs/progress';
 import { Link } from '@inertiajs/inertia-vue3';
 import Vue3Toasity from 'vue3-toastify';
 
+import PrimeVue from 'primevue/config';
+import 'primevue/resources/themes/aura-light-green/theme.css'
+
+
 
 
 import Datepicker from '@vuepic/vue-datepicker';
@@ -25,6 +29,9 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(store)
+            .use(PrimeVue, {
+    unstyled: true
+})
             .use(Vue3Toasity,{
                 autoClose: 3000,
                 multiple: false,
