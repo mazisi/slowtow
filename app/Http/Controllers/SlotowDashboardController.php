@@ -3,19 +3,18 @@
 namespace App\Http\Controllers;
 
 use Inertia\Inertia;
-use App\Models\People;
-use App\Models\Company;
 use App\Models\Licence;
 use App\Models\LicenceRenewal;
-use Illuminate\Http\Request;
 use App\Models\TemporalLicence;
 use Illuminate\Support\Facades\DB;
 
 class SlotowDashboardController extends Controller
 {
+
+
     public function index(){
         $years = DB::table('years')->orderBy('year', 'DESC')->get()->pluck('year');
-
+   
         return Inertia::render('Dashboard',[
         'licences' => $this->newLicences(),
         'renewals' => $this->renewals(),
@@ -29,7 +28,19 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
+        // ->whereIn(DB::raw('MONTH(licence_date)'), $request->month)
+        ->when(request('year'), function ($query) {
+            $query->whereYear('created_at', request('year'));
+        })
+        ->when(request('month'), function ($query) {
+            $query->whereMonth('created_at', request('month'));
+        })
+        ->when(request('province'), function ($query) {
+            $query->where('province', request('province'));
+        })
         ->groupBy(DB::raw('MONTH(created_at)'))
+        //
+
         ->pluck('count', 'month');
         
         // Initialize an array with all months set to 0
@@ -47,6 +58,13 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
+        
+        ->when(request('year'), function ($query) {
+            $query->whereYear('created_at', request('year'));
+        })
+        ->when(request('month'), function ($query) {
+            $query->whereMonth('created_at', request('month'));
+        })
         ->groupBy(DB::raw('MONTH(created_at)'))
         ->pluck('count', 'month');
         
@@ -55,16 +73,23 @@ class SlotowDashboardController extends Controller
         
         // Fill the monthly counts with actual data
         foreach ($renewalsByMonth as $month => $count) {
-            $monthlyLicenceCounts[$month] = $count;
+            $monthlyRenewalCounts[$month] = $count;
         }
         return $monthlyRenewalCounts;
     }
 
     function tempLicences() {        
-        $tempLicencesByMonth = LicenceRenewal::select(
+        $tempLicences = TemporalLicence::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
+        
+        ->when(request('year'), function ($query) {
+            $query->whereYear('created_at', request('year'));
+        })
+        ->when(request('month'), function ($query) {
+            $query->whereMonth('created_at', request('month'));
+        })
         ->groupBy(DB::raw('MONTH(created_at)'))
         ->pluck('count', 'month');
         
@@ -72,8 +97,8 @@ class SlotowDashboardController extends Controller
         $monthlyTempLicenceCounts = array_fill(1, 12, 0);
         
         // Fill the monthly counts with actual data
-        foreach ($tempLicencesByMonth as $month => $count) {
-            $monthlyLicenceCounts[$month] = $count;
+        foreach ($tempLicences as $month => $count) {
+            $monthlyTempLicenceCounts[$month] = $count;
         }
         return $monthlyTempLicenceCounts;
     }

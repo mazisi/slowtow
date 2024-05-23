@@ -1,15 +1,14 @@
 import Layout from "../../Shared/Layout.vue";
-import { Link, Head } from '@inertiajs/inertia-vue3';
+import { Link, Head, useForm } from '@inertiajs/inertia-vue3';
 import Chart from 'primevue/chart';
 import Steps from "primevue/steps";
 import common from "../common-js/common";
 import Multiselect from '@vueform/multiselect';
 import 'primevue/resources/themes/aura-light-green/theme.css'
 import { ref, onMounted, computed } from "vue";
-import useMonths from "@/store/useMonths";
+import { Inertia } from "@inertiajs/inertia";
 export default {
-  name: "dashboard",
-
+  name: "Dashboard",
   
   props: {
     years: Object,
@@ -18,7 +17,26 @@ export default {
     tempLicences: Object
   },
   setup(props) {
-    const { months } = useMonths();
+    const months = [
+        {id:1, name:'January'},
+        {id:2, name:'February'},
+        {id:3, name:'March'},
+        {id:4, name:'April'},
+        {id:5, name:'May'},
+        {id:6, name:'June'},
+        {id:7, name:'July'},
+        {id:8, name:'August'},
+        {id:9, name:'September'},
+        {id:10, name:'October'},
+        {id:11, name:'November'},
+        {id:12, name:'December'},
+    ]
+
+    const form = useForm({
+      year: '',
+      month: '',
+      province: 'Gauteng'
+    })
 
     
     const chartData = ref();
@@ -32,6 +50,31 @@ export default {
     const computedProvinces = computed(() => {
         return common.getProvinces();
       })
+
+      const filter = () => {
+        Inertia.get('/slotow-admin-dashboard', {
+            province: form.province,
+            year: form.year,
+            month: form.month
+        },{
+          replace: true,
+          preserveState: true,
+          onSuccess: () => {
+            chartData.value = setChartData();
+            chartOptions.value = setChartOptions();
+          }
+        })
+      }
+
+      const resetFilter = () => {
+        form.year = ''
+        form.month = ''
+        form.province = ''
+        Inertia.get('/slotow-admin-dashboard', {
+          
+        })
+
+      }
   
   const setChartData = () => {
     const documentStyle = getComputedStyle(document.documentElement);
@@ -109,7 +152,10 @@ const setChartOptions = () => {
       chartOptions,
       setChartData,
       computedProvinces,
-      months
+      months,
+      form,
+      filter,
+      resetFilter
     };
   },
 

@@ -88,8 +88,7 @@
       />
     </div>
  <div v-if="errors.year" class="text-danger">{{ errors.year }}</div>
-
-
+ 
 <button class="btn btn-sm btn-secondary mt-3 float-end justify-content-center" type="submit" >
   <span v-if="form.processing" class="spinner-border mt-1 spinner-border-sm" role="status" aria-hidden="true"></span>
   Submit

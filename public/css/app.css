@@ -805,20 +805,20 @@ select {
 .mt-6 {
   margin-top: 1.5rem;
 }
-.mb-4 {
-  margin-bottom: 1rem;
-}
-.mb-0 {
-  margin-bottom: 0px;
+.mt-0 {
+  margin-top: 0px;
 }
 .mb-2 {
   margin-bottom: 0.5rem;
 }
+.mb-4 {
+  margin-bottom: 1rem;
+}
 .mt-1 {
   margin-top: 0.25rem;
 }
-.mt-0 {
-  margin-top: 0px;
+.mb-0 {
+  margin-bottom: 0px;
 }
 .mb-1 {
   margin-bottom: 0.25rem;
@@ -1036,14 +1036,14 @@ select {
 .p-2 {
   padding: 0.5rem;
 }
-.p-4 {
-  padding: 1rem;
-}
 .p-0 {
   padding: 0px;
 }
 .p-3 {
   padding: 0.75rem;
+}
+.p-4 {
+  padding: 1rem;
 }
 .px-4 {
   padding-left: 1rem;

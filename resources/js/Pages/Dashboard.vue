@@ -3,36 +3,41 @@
       <Head title="Dashboard" />
       <div class="py-5 container-fluid">
        <div class="row">
-        <div class="col-4">
+        <div class="col-3">
           <div class="input-group input-group-outline null is-filled">
           <Multiselect                
           :options="computedProvinces"
-           
+           v-model="form.province"
+           @select="filter"
           :taggable="true"
           placeholder="Filter By Province"/>
           </div>
 
         </div>
 
-        <div class="col-4">
+        <div class="col-3">
           <div class="input-group input-group-outline null is-filled">
           <Multiselect                
           :options="years"
-           
+           v-model="form.year"
+           @select="filter"
           :taggable="true"
           placeholder="Filter By Year"/>
           </div>
 
         </div>
 
-        <div class="col-4">
+        <div class="col-3">
           <div class="input-group input-group-outline null is-filled">
-          <Multiselect                
-          :options="months"
-           
-          :taggable="true"
-          placeholder="Filter By Month"/>
+          <select @change="filter" class="form-control form-control-default is-filled" v-model="form.month">
+            <option :value="''" disabled :selected="true">Filter By Month</option>
+            <option v-for="month in months" :key="month.id" :value="month.id">{{ month.name }}</option>
+          </select>
           </div>
+
+        </div>
+        <div class="col-3">
+          <button class="btn btn-sm btn-primary" type="button" @click="resetFilter">Reset</button>
 
         </div>
 
@@ -44,21 +49,7 @@
                 <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" style="height: 574px;"/>
               </div>
             </div>
-            <!-- <Link :href="`/companies`"  class="col-xl-4 col-lg-4">
-              <div class="card l-bg-blue-dark">
-                <Chart type="bar" :data="chartData" :options="chartOptions" />
-              </div>
-            </Link>
-          <Link :href="`/people`" class="col-xl-4 col-lg-4">
-              <div class="card l-bg-green-dark">
-                <Chart type="bar" :data="chartData" :options="chartOptions" />
-              </div>
-            </Link>
-          <Link :href="`/temp-licences`" class="col-xl-4 col-lg-4">
-              <div class="card l-bg-orange-dark">
-                <Chart type="bar" :data="chartData" :options="chartOptions" />
-              </div>
-            </Link> -->
+          
       </div>
       </div>
       </Layout>
