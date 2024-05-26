@@ -12,10 +12,11 @@ import 'vue3-toastify/dist/index.css';
 import useToaster from '../../store/useToaster';
 import { CircleProgressBar } from 'circle-progress.vue';
 import DuplicateOriginalLicence from './DuplicateOriginalLicence.vue'
+import OriginalLicenceUpload from './OriginalLicenceUpload.vue'
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
- 
+
 // const FilePond = new vueFilePond();
 export default {
  props: {
@@ -294,7 +295,7 @@ function abandonLicence() {
       }
 
 
-    
+  
 
     return {
       upload,
@@ -348,6 +349,7 @@ function abandonLicence() {
     Paginate,
     Task,
     DuplicateOriginalLicence,
+    OriginalLicenceUpload,
     TextInputComponent,
     LicenceTypeDropDownComponent,
     CheckBoxInputComponent,

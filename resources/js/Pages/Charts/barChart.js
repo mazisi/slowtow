@@ -33,8 +33,8 @@ export default {
     ]
 
     const form = useForm({
-      year: '',
-      month: '',
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
       province: 'Gauteng'
     })
 
@@ -137,7 +137,7 @@ const setChartOptions = () => {
             y: {
                 ticks: {
                     color: textColorSecondary,
-                    stepSize: 100,
+                    // stepSize: 100,
                 },
                 grid: {
                     color: surfaceBorder

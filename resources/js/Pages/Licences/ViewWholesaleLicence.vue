@@ -302,26 +302,24 @@
     <div class="col-md-6 columns">
     <ul class="list-group">
       <template v-if="original_lic">
-      <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
-        <div class="me-3" v-if="original_lic">
-        <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
-        <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
-        </a>    
-        </div>
-        <div class="d-flex align-items-start flex-column justify-content-center">
-          <h6 class="mb-0 text-sm">Original Licence</h6>
-          <p v-if="original_lic" class="mb-0 text-xs">
-            {{ original_lic.document_name ? removeFilePath(original_lic.document_name) : '' }}</p>
-          <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
-        </div>
-        <button  @click="deleteDocument(original_lic.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-        <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
-        </button>
-    
-        <button @click="getDocType('Original-Licence')" type="button" data-bs-toggle="modal" data-bs-target="#licence-docs" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-        <i class="fa fa-upload" aria-hidden="true"></i>
-        </button>
-      </li>
+        <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
+    <div class="me-3" v-if="original_lic">
+    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
+    <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
+    </a>    
+    </div>
+    <div class="d-flex align-items-start flex-column justify-content-center">
+      <h6 class="mb-0 text-sm">Original Licence</h6>
+      <p v-if="original_lic" class="mb-0 text-xs">
+        {{ original_lic.document_name ? removeFilePath(original_lic.document_name) : '' }}</p>
+      <p v-else class="mb-0 text-xs text-danger fst-italic">Document Not Uploaded.</p>
+    </div>
+    <button @click="deleteDocument(original_lic.id)" type="button" 
+    class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+    <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+    </button>
+  </li>
+        
     </template>
     
     <template v-else-if="licence_issued">
@@ -341,6 +339,20 @@
         </div>
       </li>
     </template>
+    <template v-else>
+        <OriginalLicenceUpload
+            :original_lic="original_lic"
+            :licence="licence"
+            :doc_model="original_lic"
+            :doc_type="'Original-Licence'"
+            doc_title="Original Licence"
+            :errors="errors"
+            :error="error"
+            :success="success"
+  />
+    </template> 
+    
+    
     
       <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
         <div class="me-3" v-if="duplicate_original_lic">
@@ -410,6 +422,18 @@
         </div>
       </li>
     </template>
+    <template v-else>
+        <OriginalLicenceUpload
+            :original_lic="original_lic_delivered"
+            :licence="licence"
+            :doc_model="original_lic_delivered"
+            :doc_type="'Original-Licence-Delivered'"
+            doc_title="Original Licence Delivered"
+            :errors="errors"
+            :error="error"
+            :success="success"
+        />
+    </template> 
     
     
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">

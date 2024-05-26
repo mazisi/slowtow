@@ -23,83 +23,106 @@ class SlotowDashboardController extends Controller
         ]);
     }
 
-    function newLicences() {        
+    function newLicences() {
+        $currentYear = now()->year;
+        $currentMonth = now()->month;    
+        $defaultProvince = 'Gauteng';
+
         $licencesByMonth = Licence::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        // ->whereIn(DB::raw('MONTH(licence_date)'), $request->month)
-        ->when(request('year'), function ($query) {
-            $query->whereYear('created_at', request('year'));
+        ->when(request('year', $currentYear), function ($query, $year) {
+            $query->whereYear('created_at', $year);
         })
-        ->when(request('month'), function ($query) {
-            $query->whereMonth('created_at', request('month'));
+        ->when(request('month', $currentMonth), function ($query, $month) {
+            $query->whereMonth('created_at', $month);
         })
-        ->when(request('province'), function ($query) {
-            $query->where('province', request('province'));
+        ->when(request('province', $defaultProvince), function ($query, $province) {
+            $query->where('province', $province);
         })
         ->groupBy(DB::raw('MONTH(created_at)'))
-        //
-
         ->pluck('count', 'month');
-        
+    
         // Initialize an array with all months set to 0
         $monthlyLicenceCounts = array_fill(1, 12, 0);
-        
+    
         // Fill the monthly counts with actual data
         foreach ($licencesByMonth as $month => $count) {
             $monthlyLicenceCounts[$month] = $count;
         }
+    
         return $monthlyLicenceCounts;
     }
+    
+    
 
-    function renewals() {        
+    function renewals() {  
+
+        $currentYear = now()->year;
+        $currentMonth = now()->month;    
+        $defaultProvince = 'Gauteng';
+        
         $renewalsByMonth = LicenceRenewal::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        
-        ->when(request('year'), function ($query) {
-            $query->whereYear('created_at', request('year'));
+        ->when(request('year', $currentYear), function ($query, $year) {
+            $query->whereYear('created_at', $year);
         })
-        ->when(request('month'), function ($query) {
-            $query->whereMonth('created_at', request('month'));
+        ->when(request('month', $currentMonth), function ($query, $month) {
+            $query->whereMonth('created_at', $month);
+        })
+
+        ->when(request('province', $defaultProvince), function ($query, $province) {
+            $query->whereHas('licence', function ($query) use ($province) {
+                $query->where('province', $province);
+            });
         })
         ->groupBy(DB::raw('MONTH(created_at)'))
         ->pluck('count', 'month');
-        
+    
         // Initialize an array with all months set to 0
         $monthlyRenewalCounts = array_fill(1, 12, 0);
-        
+    
         // Fill the monthly counts with actual data
         foreach ($renewalsByMonth as $month => $count) {
             $monthlyRenewalCounts[$month] = $count;
         }
+    
         return $monthlyRenewalCounts;
     }
 
-    function tempLicences() {        
+    function tempLicences() { 
+        
+        $currentYear = now()->year;
+        $currentMonth = now()->month;    
+        $defaultProvince = 'Gauteng';
+        
         $tempLicences = TemporalLicence::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        
-        ->when(request('year'), function ($query) {
-            $query->whereYear('created_at', request('year'));
+        ->when(request('year', $currentYear), function ($query, $year) {
+            $query->whereYear('created_at', $year);
         })
-        ->when(request('month'), function ($query) {
-            $query->whereMonth('created_at', request('month'));
+        ->when(request('month', $currentMonth), function ($query, $month) {
+            $query->whereMonth('created_at', $month);
         })
         ->groupBy(DB::raw('MONTH(created_at)'))
         ->pluck('count', 'month');
-        
+    
         // Initialize an array with all months set to 0
         $monthlyTempLicenceCounts = array_fill(1, 12, 0);
-        
+    
         // Fill the monthly counts with actual data
         foreach ($tempLicences as $month => $count) {
             $monthlyTempLicenceCounts[$month] = $count;
         }
+    
         return $monthlyTempLicenceCounts;
+
+
+        
     }
 }

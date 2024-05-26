@@ -88,7 +88,7 @@
 
 
   </swiper> -->
-              <div class="col-lg-4" v-for="user in users.data" :key="user.id">
+              <div class="col-lg-6" v-for="user in users.data" :key="user.id">
                   <div class="text-center card-box">
                       <div class="member-card pt-2 pb-2">
                           <div class="thumb-lg member-thumb mx-auto">
@@ -170,7 +170,6 @@
                           <option :value="''">Select Role..</option>
                           <option value="slowtow-admin">Super Admin</option>
                           <option value="slowtow-user">Admin</option>
-                          <option value="client">Client</option>
                         </select>
                         </div>
                         <div v-if="errors.role" class="text-danger">{{ errors.role }}</div>

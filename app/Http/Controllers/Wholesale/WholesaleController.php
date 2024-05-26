@@ -37,7 +37,7 @@ class WholesaleController extends Controller
 
         $duplicate_original_lic_delivered = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Duplicate-Original-Licence-Delivered')->latest()->first();
         
-       
+  
    
 
         $companies = Company::pluck('name', 'id');
