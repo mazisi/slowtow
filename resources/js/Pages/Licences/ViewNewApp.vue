@@ -193,9 +193,37 @@
 
 
 
-                    
+                                            <div class="col-4 columns" v-if="licence.type == 'retail'">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Province</label>
+                                                    <select @change="selectedProvince()" required class="form-control form-control-default" v-model="form.province" >
+                                                        <option :value="''" disabled selected>Select Province</option>
+                                                        <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
 
-                                            <div class="col-4 columns">
+                                            <div class="col-4 columns" v-if="licence.type == 'wholesale'">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Province</label>
+                                                    <select required class="form-control form-control-default" v-model="form.province" >
+                                                        <option :value="''" disabled selected>Select Province</option>
+                                                        <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                         
+                                            <div class="col-4 columns" v-if="licence.type === 'retail'">
+                                                <div class="input-group input-group-outline null is-filled">
+                                                    <label class="form-label">Licence Type</label>
+                                                    <select v-model="form.licence_type" class="form-control form-control-default" required>
+                                                        <option :value="''" disabled selected>Select Licence Type</option>
+                                                        <option v-for='licence_dropdown in all_licences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4 columns" v-if="licence.type === 'wholesale'">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Licence Type</label>
                                                     <select v-model="form.licence_type" class="form-control form-control-default" required>
@@ -205,15 +233,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-4 columns">
-                                                <div class="input-group input-group-outline null is-filled">
-                                                    <label class="form-label">Province</label>
-                                                    <select required class="form-control form-control-default" v-model="form.province" >
-                                                        <option :value="''" disabled selected>Select Province</option>
-                                                        <option v-for="province in computedProvinces" :key="province" :value=province>{{ province }}</option>
-                                                    </select>
-                                                </div>
-                                            </div>
+                                           
                                             
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
@@ -221,7 +241,7 @@
                                                     <input  type="text" class="form-control form-control-default" v-model="form.postal_code">
                                                 </div>
                                             </div>
-                                            <div class="col-4 columns"></div>
+                                            
                                             <div class="col-4 columns">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Coordinates</label>
@@ -333,7 +353,7 @@ import { Inertia } from '@inertiajs/inertia';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import common from '../common-js/common.js';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import Task from "../Tasks/Task.vue";
 import useToaster from '../../store/useToaster'
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
@@ -352,9 +372,35 @@ export default {
 
 
     setup (props) {
+
+        const form = useForm({
+            trading_name: props.licence.trading_name,
+            licence_type: props.licence.licence_type_id,
+            belongs_to: props.licence.belongs_to,
+            address: props.licence.address,
+            address2: props.licence.address2,
+            address3: props.licence.address3,
+            import_export: props.licence.import_export,
+            coordinates: props.licence.coordinates,
+            province: props.licence.province,
+            client_number: props.licence.client_number,
+            company:  props.licence.company !== null ? props.licence.company.name : '',
+            person: props.licence.people !== null ? props.licence.people.full_name : '',
+            board_region: props.licence.board_region,
+            licence_number: props.licence.licence_number,
+            licence_date: props.licence.licence_date,
+            renewal_amount: props.licence.renewal_amount,
+            postal_code: props.licence.postal_code,
+            id_number: props.licence.people ? props.licence.people.id_or_passport : '',
+            reg_number: props.licence.company ? props.licence.company.reg_number : '',
+            company_id: props.licence.belongs_to == 'Company' ? props.licence.company.id : '',
+            person_id: props.licence.belongs_to == 'Individual' ? props.licence.people.id : '',
+
+        })
+        
         let companyOptions = props.companies;
         let peopleOptions = props.people;
-
+        let all_licences = ref([]);
         let licenceVariables;
 
         if(props.licence.type === 'retail'){
@@ -395,6 +441,18 @@ export default {
             "updated_at": "2024-01-16T20:08:17.000000Z"
         }
     ];
+    all_licences.value =  props.licence_dropdowns
+    .filter(obj => obj.province === form.province); 
+
+    function  selectedProvince(){ 
+      const filteredLicenses = props.licence_dropdowns
+      .filter(obj => obj.province === form.province); 
+      console.log(filteredLicenses);
+      all_licences.value = filteredLicenses; 
+      console.log('all_licences',all_licences.value);
+                    
+    }
+
 
      Inertia.on('navigate', (event) => {
         if (event.detail.page.url.includes("view-licence")) {
@@ -410,30 +468,7 @@ export default {
         const { notifySuccess, notifyError } = useToaster();
 
 
-        const form = useForm({
-            trading_name: props.licence.trading_name,
-            licence_type: props.licence.licence_type_id,
-            belongs_to: props.licence.belongs_to,
-            address: props.licence.address,
-            address2: props.licence.address2,
-            address3: props.licence.address3,
-            import_export: props.licence.import_export,
-            coordinates: props.licence.coordinates,
-            province: props.licence.province,
-            client_number: props.licence.client_number,
-            company:  props.licence.company !== null ? props.licence.company.name : '',
-            person: props.licence.people !== null ? props.licence.people.full_name : '',
-            board_region: props.licence.board_region,
-            licence_number: props.licence.licence_number,
-            licence_date: props.licence.licence_date,
-            renewal_amount: props.licence.renewal_amount,
-            postal_code: props.licence.postal_code,
-            id_number: props.licence.people ? props.licence.people.id_or_passport : '',
-            reg_number: props.licence.company ? props.licence.company.reg_number : '',
-            company_id: props.licence.belongs_to == 'Company' ? props.licence.company.id : '',
-            person_id: props.licence.belongs_to == 'Individual' ? props.licence.people.id : '',
-
-        })
+        
 
         function submit() {
             form.patch(`/update-new-app/${props.licence.slug}`, {
@@ -516,7 +551,9 @@ export default {
             computedBoardRegions,
             selectApplicant,
             licenceVariables,
-            wholesaleLicences
+            wholesaleLicences,
+            all_licences,
+            selectedProvince
         }
     },
     components: {

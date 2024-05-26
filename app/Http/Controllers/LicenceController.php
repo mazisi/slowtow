@@ -187,7 +187,7 @@ class LicenceController extends Controller
             ->withQueryString();
 
 
-        $view = is_null($licence->is_new_app) ? 'ViewNewApp' : 'ViewLicence';
+        $view = $licence->is_new_app == 1 ? 'ViewNewApp' : 'ViewLicence';
         
         return Inertia::render('Licences/' . $view, [
             'licence' => $licence,

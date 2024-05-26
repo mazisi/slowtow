@@ -8,7 +8,9 @@ export default {
   },
 
   setup(){
+
 function checkStatus(licenseType, status, licence) {
+console.log(licence)
   if(licence == null){
     return false;
   }else if(licence.is_new_app == 0 || licence.is_new_app == null){
