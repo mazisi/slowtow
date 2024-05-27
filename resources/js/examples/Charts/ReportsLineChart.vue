@@ -1,10 +1,12 @@
 <template>
     <div class="chart">
-      <canvas :id="id" class="chart-canvas" :height="height"></canvas>
+      <canvas :id="id" width="400" height="150"></canvas>
     </div>
   </template>
   <script>
   import Chart from "chart.js/auto";
+  import { Inertia } from "@inertiajs/inertia";
+  import { onMounted } from 'vue'
   
   export default {
     name: "ReportsLineChart",
@@ -15,7 +17,7 @@
       },
       height: {
         type: [Number, String],
-        default: "170",
+        default: "570",
       },
       chart: {
         type: Object,
@@ -28,117 +30,89 @@
         },
       },
     },
-    mounted() {
-      var ctx = document.getElementById(this.id).getContext("2d");
-  
-      let chartStatus = Chart.getChart(this.id);
-      if (chartStatus != undefined) {
-        chartStatus.destroy();
-      }
-  
-      new Chart(ctx, {
-        type: "line",
-        data: {
-          labels: this.chart.labels,
-          datasets: [
-            {
-              label: this.chart.datasets.label,
-              tension: 0,
-              borderWidth: 0,
-              pointRadius: 5,
-              pointBackgroundColor: "rgba(255, 255, 255, .8)",
-              pointBorderColor: "transparent",
-              borderColor: "rgba(255, 255, 255, .8)",
-              // eslint-disable-next-line no-dupe-keys
-              borderColor: "rgba(255, 255, 255, .8)",
-              // eslint-disable-next-line no-dupe-keys
-              borderWidth: 4,
-              backgroundColor: "transparent",
-              fill: true,
-              data: this.chart.datasets.data,
-              maxBarThickness: 6,
-            },
-          ],
 
-          datasets: [
-            {
-              label: this.chart.datasets.label,
-              tension: 0,
-              borderWidth: 0,
-              pointRadius: 5,
-              pointBackgroundColor: "rgba(255, 255, 255, .8)",
-              pointBorderColor: "transparent",
-              borderColor: "rgba(255, 255, 255, .8)",
-              // eslint-disable-next-line no-dupe-keys
-              borderColor: "rgba(255, 255, 255, .8)",
-              // eslint-disable-next-line no-dupe-keys
-              borderWidth: 4,
-              backgroundColor: "transparent",
-              fill: true,
-              data: this.chart.datasets.data,
-              maxBarThickness: 6,
-            },
-          ],
+    setup(props) {
+
+      Inertia.on('success', (event) => {
+        console.log(`Inertia props: ${event.detail}`)
+      })
+
+      onMounted(() => {
+        alert('hello')
+        var ctx = document.getElementById(props.id).getContext("2d");
+  
+  let chartStatus = Chart.getChart(props.id);
+  if (chartStatus != undefined) {
+    chartStatus.destroy();
+  }
+  console.log('props', props)
+  const licences = Object.values(props.chart.datasets.licences);
+  const renewals = Object.values(props.chart.datasets.renewals);
+  const tempLicences = Object.values(props.chart.datasets.tempLicences);
+  console.log('licences', props.chart.datasets.licences)
+  console.log('renewals', props.chart.datasets.renewals)
+  console.log('Temps', props.chart.datasets.tempLicences)
+ 
+    new Chart(ctx, {
+      
+        type: 'line',
+        data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            
+            datasets: [
+                {
+                    label: 'New Licences',
+                    data: licences,
+                    borderColor: 'rgba(255, 255, 255, .8)',
+                    borderWidth: 2,
+                    pointRadius: 4,
+                    fill: true,
+                    tension: 0.4
+                },
+                {
+                    label: 'Temporal Licences',
+                    data: tempLicences,
+                    borderColor: 'rgb(255, 25, 192)',
+                    borderWidth: 2,
+                    fill: false
+                },
+                {
+                    label: 'Renewals',
+                    color: 'white',
+                    data: renewals,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }
+            ]
         },
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: {
-              display: false,
-            },
-          },
-          interaction: {
-            intersect: false,
-            mode: "index",
-          },
-          scales: {
-            y: {
-              grid: {
-                drawBorder: false,
-                display: true,
-                drawOnChartArea: true,
-                drawTicks: false,
-                borderDash: [5, 5],
-                color: "rgba(255, 255, 255, .2)",
-              },
-              ticks: {
-                display: true,
-                color: "#f8f9fa",
-                padding: 10,
-                font: {
-                  size: 14,
-                  weight: 300,
-                  family: "Roboto",
-                  style: "normal",
-                  lineHeight: 2,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        color: 'white',
+                        stepSize: 10, // Adjust the step size as needed
+                        max: 150     // Adjust the max value as needed
+                    }
                 },
-              },
-            },
-            x: {
-              grid: {
-                drawBorder: false,
-                display: false,
-                drawOnChartArea: false,
-                drawTicks: false,
-                borderDash: [5, 5],
-              },
-              ticks: {
-                display: true,
-                color: "#f8f9fa",
-                padding: 10,
-                font: {
-                  size: 14,
-                  weight: 300,
-                  family: "Roboto",
-                  style: "normal",
-                  lineHeight: 2,
-                },
-              },
-            },
-          },
-        },
-      });
-    },
+                x: {
+                    ticks: {
+                        color: 'white'
+                    }
+                }
+            }
+        }
+    });
+        });
+
+
+
+
+      
+    return{
+
+    }
+  }
   };
   </script>

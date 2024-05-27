@@ -355,11 +355,12 @@
     </ul>
   <ul class="navbar-nav mt-3 ">
     <li class="nav-item">
-      <div class="fixed-profile p-3 mx-4 mb-2 bg-secondary-subtle rounded mt-3">
+      <div class="fixed-profile p-3 mx-2 mb-2 bg-secondary-subtle rounded mt-3">
   <div class="hstack gap-3">
     <div class="john-img">
-      <img v-if="$page.props.auth.user.picture" :src="`${$page.props.blob_file_path}${$page.props.auth.user.picture}`" class="rounded-circle" width="40" height="40" alt="">
-      <img v-else :src="`https://eu.ui-avatars.com/api/?background=random&amp;name=${$page.props.auth.user.name}`" class="rounded-circle" width="40" height="40" alt="">
+      <img 
+      :src=" $page.props.auth.user.picture ? `${$page.props.blob_file_path}${$page.props.auth.user.picture}` : `https://eu.ui-avatars.com/api/?background=random&amp;name=${$page.props.auth.user.name}`" class="rounded-circle" width="40" height="40" alt="">
+
     </div>
     <div class="john-title">
       <p class="ms-1 text-white"> {{ $page.props.auth.user.name }}</p>
@@ -370,7 +371,7 @@
       <span>
         <Link href="/logout" class="border-0 bg-transparent text-primary ms-auto" tabindex="0"
     type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
-      <i class="fa fa-power-off"></i>
+      <i class="fa fa-power-off" title="Logout"></i>
     </Link></span>
      </div>
     </div>

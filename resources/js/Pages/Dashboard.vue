@@ -5,65 +5,48 @@
       <div class="row mb-4">
         <div class="col-lg-12 position-relative z-index-2">
           <div class="row">
-            <Link :href="`/licences`" class="col-lg-3 col-md-6 col-sm-6">
-              <mini-statistics-card
-                :title="{ text: 'Licences', value: licences }"
-                :icon="{
-                  name: 'wine_bar',
-                  color: 'text-white',
-                  background: 'dark',
-                }"
-              />
-            </Link>
-            <Link :href="`/companies`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
-              <mini-statistics-card
-                :title="{ text: 'Companies', value: companies }"
-                :icon="{
-                  name: 'store',
-                  color: 'text-white',
-                  background: 'primary',
-                }"
-              />
-            </Link>
-            <Link :href="`/people`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
-              <mini-statistics-card
-                :title="{ text: 'People', value: people }"
-                :icon="{
-                  name: 'groups',
-                  color: 'text-white',
-                  background: 'success',
-                }"
-              />
-              </Link>
-            <Link :href="`/temp-licences`" class="col-lg-3 col-md-6 col-sm-6 mt-lg-0 mt-4">
-              <mini-statistics-card
-                :title="{ text: 'Temporary Licences', value: temp_licences }"
-                :icon="{
-                  name: 'schedule',
-                  color: 'text-white',
-                  background: 'info',
-                }"
-              />
-              </Link>
-          </div>
+            <div class="col-3">
+              <div class="input-group input-group-outline null is-filled">
+              <Multiselect                
+              :options="computedProvinces"
+               v-model="form.province"
+               @select="filter"
+              :taggable="true"
+              placeholder="Filter By Province"/>
+              </div>
+    
+            </div>
+    
+            <div class="col-3">
+              <div class="input-group input-group-outline null is-filled">
+              <Multiselect                
+              :options="years"
+               v-model="form.year"
+               @select="filter"
+              :taggable="true"
+              placeholder="Filter By Year"/>
+              </div>
+    
+            </div>
+    
+            <div class="col-3">
+              <div class="input-group input-group-outline null is-filled">
+              <select @change="filter" class="form-control form-control-default is-filled" v-model="form.month">
+                <option :value="''" disabled :selected="true">Filter By Month</option>
+                <option v-for="month in months" :key="month.id" :value="month.id">{{ month.name }}</option>
+              </select>
+              </div>
+    
+            </div>
+            <div class="col-3">
+              <button class="btn btn-sm btn-primary" type="button" @click="resetFilter">Reset</button>
+    
+            </div>
+    
+           </div>
         
           <div class=" row mt-4">
-            <div class="d-none col-lg-6 col-md-6 mt-4">
-              <chart-holder-card
-                title="Licences"
-              >
-                <reports-bar-chart
-                  :chart="{
-                    labels: month,
-                    datasets: {
-                      label: 'Licences',
-                      data: [50, 80, 20, 10, 22, 50, 10, 40, 55, 70, 65, 15, 25],
-                    },
-                  }"
-                />
-              </chart-holder-card>
-            </div>
-            <div class="invisible col-12 col-12 mt-4">
+            <div class="col-12 col-12 mt-4">
               <chart-holder-card
                 title="Licences"
                 color="success"
@@ -86,7 +69,10 @@
                     ],
                     datasets: {
                       label: 'Licences',
-                      data: [jan, feb,mar,apr,may,jun,jul,aug,sep,oct,nov,dec],
+                      licences: licences,
+                      tempLicences: tempLicences,
+                      renewals: renewals,
+                      data: licences,
                     },
                   }"
                 />
@@ -106,32 +92,81 @@
   import ReportsBarChart from "@/examples/Charts/ReportsBarChart.vue";
   import ReportsLineChart from "@/examples/Charts/ReportsLineChart.vue";
   import MiniStatisticsCard from "./components/MiniStatisticsCard.vue";
-  import { Link, Head } from '@inertiajs/inertia-vue3';
+  import { Link, Head,useForm } from '@inertiajs/inertia-vue3';
+  import { ref, onMounted, computed, reactive } from "vue";
+  import Multiselect from '@vueform/multiselect';
+  import common from "./common-js/common";
+  import { Inertia } from "@inertiajs/inertia";
+ 
   
   export default {
     name: "dashboard",
     props: {
-      licences: Number,
-      companies: Number,
-      people: Number,
-      temp_licences: Number,
-      count_group_licences: Object,
-      jan: Number,
-      feb: Number,
-      mar: Number,
-      apr: Number,
-      may: Number,
-      jun: Number,
-      jul: Number,
-      aug: Number,
-      sep: Number,
-      oct: Number,
-      nov:Number,
-      dec: Number
+      years: Array,
+      licences: Array,
+      renewals: Array,
+      tempLicences: Array
     },
-    data() {
+    setup(props) {
+
+      const months = [
+        {id:1, name:'January'},
+        {id:2, name:'February'},
+        {id:3, name:'March'},
+        {id:4, name:'April'},
+        {id:5, name:'May'},
+        {id:6, name:'June'},
+        {id:7, name:'July'},
+        {id:8, name:'August'},
+        {id:9, name:'September'},
+        {id:10, name:'October'},
+        {id:11, name:'November'},
+        {id:12, name:'December'},
+    ]
+
+    const form = useForm({
+      year: new Date().getFullYear(),
+      month: new Date().getMonth() + 1,
+      province: 'Gauteng'
+    })
+
+
+        const resetFilter = () => {
+        form.year = ''
+        form.month = ''
+        form.province = ''
+        Inertia.get('/slotow-admin-dashboard', {
+          
+        })
+
+      }
+
+      const computedProvinces = computed(() => {
+        return common.getProvinces();
+      })
+
+
+      
+      const filter = () => {
+        Inertia.get('/slotow-admin-dashboard', {
+            province: form.province,
+            year: form.year,
+            month: form.month
+        },{
+          replace: true,
+          preserveState: true,
+          onSuccess: () => {
+            // console.log('Props changed:', props);
+          }
+        })
+      }
+
       return {
-       
+        months,
+        form,
+        computedProvinces,
+        resetFilter,
+        filter
       };
     },
   
@@ -142,7 +177,9 @@
       MiniStatisticsCard,
       Layout,
       Link,
+      Multiselect,
       Head
   },
   };
   </script>
+      <style src="@vueform/multiselect/themes/default.css"></style>
