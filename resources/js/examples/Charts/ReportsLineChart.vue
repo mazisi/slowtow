@@ -38,7 +38,6 @@
       })
 
       onMounted(() => {
-        alert('hello')
         var ctx = document.getElementById(props.id).getContext("2d");
   
   let chartStatus = Chart.getChart(props.id);

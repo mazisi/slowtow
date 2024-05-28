@@ -24,8 +24,7 @@ class SlotowDashboardController extends Controller
     }
 
     function newLicences() {
-        $currentYear = now()->year;
-        $currentMonth = now()->month;    
+        $currentYear = now()->year;  
         $defaultProvince = 'Gauteng';
 
         $licencesByMonth = Licence::select(
@@ -34,9 +33,6 @@ class SlotowDashboardController extends Controller
         )
         ->when(request('year', $currentYear), function ($query, $year) {
             $query->whereYear('created_at', $year);
-        })
-        ->when(request('month', $currentMonth), function ($query, $month) {
-            $query->whereMonth('created_at', $month);
         })
         ->when(request('province', $defaultProvince), function ($query, $province) {
             $query->where('province', $province);
@@ -60,8 +56,7 @@ class SlotowDashboardController extends Controller
 
     function renewals() {  
 
-        $currentYear = now()->year;
-        $currentMonth = now()->month;    
+        $currentYear = now()->year; 
         $defaultProvince = 'Gauteng';
         
         $renewalsByMonth = LicenceRenewal::select(
@@ -71,10 +66,6 @@ class SlotowDashboardController extends Controller
         ->when(request('year', $currentYear), function ($query, $year) {
             $query->whereYear('created_at', $year);
         })
-        ->when(request('month', $currentMonth), function ($query, $month) {
-            $query->whereMonth('created_at', $month);
-        })
-
         ->when(request('province', $defaultProvince), function ($query, $province) {
             $query->whereHas('licence', function ($query) use ($province) {
                 $query->where('province', $province);
@@ -96,9 +87,7 @@ class SlotowDashboardController extends Controller
 
     function tempLicences() { 
         
-        $currentYear = now()->year;
-        $currentMonth = now()->month;    
-        $defaultProvince = 'Gauteng';
+        $currentYear = now()->year; 
         
         $tempLicences = TemporalLicence::select(
             DB::raw('MONTH(created_at) as month'),
@@ -106,9 +95,6 @@ class SlotowDashboardController extends Controller
         )
         ->when(request('year', $currentYear), function ($query, $year) {
             $query->whereYear('created_at', $year);
-        })
-        ->when(request('month', $currentMonth), function ($query, $month) {
-            $query->whereMonth('created_at', $month);
         })
         ->groupBy(DB::raw('MONTH(created_at)'))
         ->pluck('count', 'month');
