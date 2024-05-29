@@ -29,6 +29,7 @@ Route::get('/test',function(){
     return view('emails.ecomms.mail_base_template');
 });
 
+Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');
 Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
 Route::get('/insert-years',[InsertTypesController::class,'insert_years']);
 
@@ -57,8 +58,6 @@ Route::group(['middleware' => ['guest']], function () {
                 //update password
 
         Route::get('/settings',[PasswordResetController::class,'index'])->name('settings');
-
-        Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');
 
         Route::group([], __DIR__.'/company.php');
 

@@ -137,16 +137,11 @@
       },
     
       methods: {
-        initTypeIt(){
-          new TypeIt(".licences", {
-            strings: "Licences",
-            waitUntilVisible: true,
-          }).go();
-            }
+       
       },
     
       mounted() {
-        this.initTypeIt();
+        
       },
       components: {
         ChartHolderCard,

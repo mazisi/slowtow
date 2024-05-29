@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
+import { Inertia } from '@inertiajs/inertia'
 
-export default createStore({
+export default createStore({  
   state: {
     hideConfigButton: false,
     isPinned: true,
@@ -21,10 +22,12 @@ export default createStore({
     absolute: "position-absolute px-4 mx-0 w-100 z-index-2",
   },
   mutations: {
+    
     toggleConfigurator(state) {
       state.showConfig = !state.showConfig;
     },
     navbarMinimize(state) {
+      console.log('STATE',state);
       const sidenav_show = document.querySelector(".g-sidenav-show");
 
       if (sidenav_show.classList.contains("g-sidenav-pinned")) {

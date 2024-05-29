@@ -27,7 +27,7 @@ export default {
     setup(props) {
         let showMenu = false;
 
-        const { getBadgeStatus } = useAlteration();
+        const { getWholesaleBadgeStatus } = useAlteration();
         const { notifySuccess, notifyError } = useToaster();
 
         const form = useForm({
@@ -40,7 +40,7 @@ export default {
 
 
         function getStatus(status) {
-            return getBadgeStatus(status);
+            return getWholesaleBadgeStatus(status);
         }
 
 

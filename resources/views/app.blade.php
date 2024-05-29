@@ -202,6 +202,12 @@ main{
         .circle-progress__content .circle-progress__percentage {
           font-size: 10px !important;
         }
+
+        @media screen and (max-width: 600px) {
+          .mobile-copyright-width{
+            width: 84%;
+          }
+        }
    </style>
 
     </head>

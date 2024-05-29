@@ -5,8 +5,8 @@ function getBadgeStatus(status) {
         '200': '<span class="badge bg-info text-default">Client Invoiced</span>',
         '300': '<span class="badge bg-light text-dark">Client Paid</span>',
         '400': '<span class="badge bg-warning text-default">Prepare Alterations Application</span>',
-        '500': '<span class="badge bg-secondary text-default">Payment to the Liquor Board</span>',
-        '600': '<span class="badge bg-secondary text-default">Alterations Lodged</span>',
+        '500': '<span class="badge bg-danger text-default">Payment to the Liquor Board</span>',
+        '600': '<span class="badge bg-info text-default">Alterations Lodged</span>',
         '700': '<span class="badge bg-secondary text-default">Alterations Certificate Issued</span>',
         '800': '<span class="badge bg-success text-default">Alterations Delivered</span>',
     };
@@ -14,6 +14,26 @@ function getBadgeStatus(status) {
     const defaultStatus = '<span class="badge bg-default text-default">Not Set</span>';
 
     return statusMap[status] || defaultStatus;
+}
+
+
+function getWholesaleBadgeStatus(status) {
+  const statusMap = {
+
+      '100': '<span class="badge bg-dark text-default">Client Quoted</span>',
+      '200': '<span class="badge bg-info text-default">Client Invoiced</span>',
+      '300': '<span class="badge bg-danger text-dark">Client Paid</span>',
+      '400': '<span class="badge bg-warning text-default">Prepare NLA 14 Application</span>',
+      '500': '<span class="badge bg-secondary text-default">Payment to the National Liquor Authority</span>',
+      '600': '<span class="badge bg-primary text-default">NLA 14 Application Lodged</span>',
+      '700': '<span class="badge bg-info text-default">Additional Documents Requested</span>',
+      '800': '<span class="badge bg-info text-default">NLA 15 Certificate Issued</span>',
+      '900': '<span class="badge bg-success text-default">NLA 15 Certificate Delivered</span>'
+  };
+
+  const defaultStatus = '<span class="badge bg-default text-default">Not Set</span>';
+
+  return statusMap[status] || defaultStatus;
 }
 
 function getStatus(status){
@@ -48,7 +68,8 @@ function getStatus(status){
 
     return {
         getBadgeStatus,
-        getStatus
+        getStatus,
+        getWholesaleBadgeStatus
     }
     
 }

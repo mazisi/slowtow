@@ -433,10 +433,9 @@ export default {
 
     let distictProvinces = computed(
         //exclude Wholesale provinces
-        () => [...new Set(props.licence_dropdowns.map((province) => province.province).filter(province => province !== 'Wholesale'))]
+        () => [...new Set(props.licence_dropdowns.map((province) => province.province).filter(province => province !== 'Wholesale' && province !== ''))]
 
     );
-
 
 
 

@@ -79,13 +79,102 @@
         
         </Link>
       </li>
+
+
+      <div v-if="show_modal" class="modal fade" id="edit-password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Update Your Password</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times text-danger"></i></button>
+            </div>
+            <form @submit.prevent="updatePassword">        
+            <div class="modal-body">      
+              <div class="row">
+                <div class="col-12 columns">
+                  <div class="input-group input-group-outline null is-filled ">
+                  <label class="form-label">New Password</label>
+                  <input type="password" required class="form-control form-control-default" v-model="form.password" >
+                  </div>
+                    <div v-if="errors" class="text-danger">{{ errors.password }}</div>
+                  </div>
+    
+                  <div class="col-12 columns">
+                    <div class="input-group input-group-outline null is-filled ">
+                    <label class="form-label">Confirm Password</label>
+                    <input type="password" required class="form-control form-control-default" v-model="form.password_confirmation" >
+                    </div>
+                    </div>     
+               </div>
+            </div>
+        
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-sm btn-primary" :disabled="form.processing">
+               <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+               Update</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
 </template>
 <script>
-import { Link } from '@inertiajs/inertia-vue3';
+import { computed,ref } from 'vue';
+import { usePage,useForm,Link } from '@inertiajs/inertia-vue3';
+import useToaster from '../../store/useToaster';
 
 export default{
+
+  props:{
+        success: String,
+        error: String,
+        errors: Object
+      },
+    setup(props) {
+      let show_modal = ref(true);
+      const { notifySuccess, notifyError } = useToaster();
+
+      const form = useForm({
+         password: '',
+         password_confirmation: ''      
+      });
+
+      const toggleModal = () => {
+        show_modal = true
+      }
+
+      const updatePassword = () => {
+        if(form.password != form.password_confirmation){
+          notifyError('Passwords do not match')
+          return;
+        }
+        form.post('/update-my-password', {
+        onSuccess: () => {
+            show_modal = false
+            document.querySelector('.modal-backdrop').remove()
+            notifySuccess('Password Updated Successfully')
+         },
+      })
+
+    }
+
+
+    const user = computed(() => usePage().props.value.auth.user)
+    return { user, form,updatePassword,show_modal,toggleModal }
+  },
     components: {
         Link
     }
 }
 </script>
+
+<style scoped>
+.columns{
+  margin-bottom: 1rem;
+}
+#active-checkbox{
+  margin-left: 3px;
+}
+
+</style>

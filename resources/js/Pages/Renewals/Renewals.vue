@@ -48,7 +48,7 @@
 
                                                 <td class="align-middle text-center text-sm">
                                                     <Link :href="`/view-licence-renewal/${renewal.slug}`">
-                                                        <span class="badge text-default" v-html="getStatus(renewal.status)"></span>
+                                                        <span class="badge text-default" v-html="getStatus(renewal.status,renewal.licence.type)"></span>
                                                     </Link>
                                                 </td>
                                                 <td class="align-middle text-end" >
@@ -141,7 +141,7 @@ export default {
         const year = ref(new Date().getFullYear());
         let years = props.years;
         const { notifySuccess, notifyError } = useToaster();
-        const { getBadgeStatus } = useRenewals();
+        const { getBadgeStatus, getWholesaleBadgeStatus } = useRenewals();
 
 
         const form = useForm({
@@ -199,7 +199,10 @@ export default {
             }
         }
 
-        function getStatus(status) {
+        function getStatus(status, type) {
+            if(type == 'wholesale'){
+                return getWholesaleBadgeStatus(status);
+            }
             return getBadgeStatus(status);
           }
 
