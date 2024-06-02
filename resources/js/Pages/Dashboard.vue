@@ -238,7 +238,7 @@ const createLineChart = () => {
         {
           label: 'Renewals',
           color: 'white',
-         // data: Object.values(props.renewals),
+         data: Object.values(props.renewals),
           borderColor: 'rgba(233, 30, 99, 1)',
           borderWidth: 2,
           tension: 0.4,
