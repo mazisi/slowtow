@@ -32,7 +32,7 @@
     
             
             <div class="col-3">
-              <button class="btn btn-sm btn-primary" type="button" @click="resetFilter">Reset</button>
+              <button style="float: right" class="btn btn-sm btn-primary" type="button" @click="resetFilter">Reset</button>
     
             </div>
     
@@ -61,6 +61,7 @@
               <div class="chart">
                 <canvas id="barGraph" width="400" height="170"></canvas>
               </div>
+              <p class="text-center text-default">Renewals</p>
               </chart-holder-card>
             </div>
 
@@ -72,6 +73,7 @@
               <div class="chart">
                 <canvas id="polarArea" width="400" height="170"></canvas>
               </div>
+              <p class="text-center text-default">New Apps</p>
               </chart-holder-card>
             </div>
           </div>
@@ -191,23 +193,18 @@
           borderWidth: 1
         }]
     },
-    // options: {
-    //   scales: {
-    //     y: {
-    //       beginAtZero: true,
-    //       ticks: {
-    //         color: 'white',
-    //         stepSize: 10, // Adjust the step size as needed
-    //         max: 150     // Adjust the max value as needed
-    //       }
-    //     },
-    //     x: {
-    //       ticks: {
-    //         color: 'white'
-    //       }
-    //     }
-    //   }
-    // }
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    filter: function(item) {
+                        // Hide the label 'Renewals'
+                        return item.text !== 'Renewals';
+                    }
+                }
+            }
+        },
+      }
   });
        };
 
@@ -285,7 +282,17 @@ const createPolarChart = () => {
               ]
         }]
     },
-    // options: {}
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    filter: function(item) {
+                        return item.text !== 'New Apps';
+                    }
+                }
+            }
+        },
+      }
   });
        };
 
