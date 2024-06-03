@@ -248,14 +248,14 @@ const createLineChart = () => {
         y: {
           beginAtZero: true,
           ticks: {
-            color: 'white',
+            // color: 'black',
             stepSize: 10, // Adjust the step size as needed
             max: 150     // Adjust the max value as needed
           }
         },
         x: {
           ticks: {
-            color: 'white'
+            // color: 'black'
           }
         }
       }
