@@ -35,7 +35,7 @@ class ExportAllData extends Command
             if(!is_null($report)){
              Report::whereId($report->id)->where('status','0')->update(['status' => '1']);
             AllReportsController::exportAll(request());
-            Mail::to('info@goverify.co.za')->send(new ReportMailer($report));
+            Mail::to(auth()->user()->email)->cc('info@goverify.co.za')->send(new ReportMailer($report));
             }
     }
 }
