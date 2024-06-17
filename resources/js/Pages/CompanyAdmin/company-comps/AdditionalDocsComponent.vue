@@ -46,7 +46,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr v-if="additional_docs.length > 0" v-for="additional_doc in additional_docs" :key="additional_doc.id">
+    <tr v-if="additional_docs?.length > 0" v-for="additional_doc in additional_docs" :key="additional_doc.id">
       <th>{{ additional_doc.description }}</th>
       <td>{{ additional_doc.uploaded_at }}</td>
       <td>

@@ -44,6 +44,30 @@
                                                 <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
                                             </div>
 
+                                          <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
+                                                <Multiselect
+                                                    v-model="form.company"
+                                                    placeholder="Search company"
+                                                    :options="companies"
+                                                    :searchable="true"
+                                                    @select="selectApplicant"
+                                                    
+                                                />
+                                                <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
+                                            </div>
+
+                                            <div class="col-12 columns" v-if="form.belongs_to ==='Individual'">
+                                                <Multiselect
+                                                    v-model="form.person"
+                                                    placeholder="Search Individual"
+                                                    :options="persons"
+                                                    :searchable="true"
+                                                    @select="selectApplicant"
+                                                    
+                                                />
+                                                <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
+                                            </div>
+
                                             <ProvinceSelectDropdownComponent
                                                v-if="form.type == 'retail'"
                                                 :provinceList="computedProvinces"
@@ -70,29 +94,7 @@
                                                 @change="filterLicenceTypes()"
                                             />
 
-                                            <div class="col-12 columns" v-if="form.belongs_to ==='Company'">
-                                                <Multiselect
-                                                    v-model="form.company"
-                                                    placeholder="Search company"
-                                                    :options="companies"
-                                                    :searchable="true"
-                                                    @select="selectApplicant"
-                                                    style="margin-top: 1rem;"
-                                                />
-                                                <div v-if="errors.company" class="text-danger">{{ errors.company }}</div>
-                                            </div>
-
-                                            <div class="col-12 columns" v-if="form.belongs_to ==='Individual'">
-                                                <Multiselect
-                                                    v-model="form.person"
-                                                    placeholder="Search Individual"
-                                                    :options="persons"
-                                                    :searchable="true"
-                                                    @select="selectApplicant"
-                                                    style="margin-top: 1rem;"
-                                                />
-                                                <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
-                                            </div>
+                                           
 
 
 
@@ -117,7 +119,7 @@
                                                                 :errors="errors.trading_name "
                                                                 input_id="belongs-to-company"
                                             />
-
+                                           
 
                                             <LicenceTypeDropDownComponent
                                                 v-if="form.province !== '' && form.type == 'retail'"
@@ -160,7 +162,15 @@
                                                 :required="false"
                                                 v-if="form.province !== '' && form.province === 'Gauteng' && form.type == 'retail'"
                                             />
-
+                                            <TextInputComponent
+                                                :inputType="'text'"
+                                                v-model="form.licence_number"
+                                                :value="form.licence_number"
+                                                :column="'col-12'"
+                                                :required="false"
+                                                :label="'Licence Number'"
+                                                :errors="errors.licence_number"
+                                                :input_id="licence_number" />
 
 
                                         </div>

@@ -105,31 +105,12 @@
                                      :options="people_options"
                                      :searchable="true"
                                      :required="true"
-                                     @select="onSelectApplicant($event)" style="margin:top: 1rem;" />
+                                     @select="onSelectApplicant($event)" style="margin-top: 1rem;" />
 
                         <div v-if="errors.person" class="text-danger">{{ errors.person }}</div>
 
                       </div>
 
-                      <!-- Province Trigger Licence Type+ -->
-
-                      <div class="col-6 columns">
-
-                        <div class="input-group input-group-outline null is-filled">
-
-                          <label class="form-label">Province</label>
-
-                          <select class="form-control form-control-default" v-model="form.province" required @change="selectedProvince()">
-
-                            <option :value="''" disabled selected>Select Province</option>
-
-                            <option v-for="province in distictProvinces" :key="province" :value=province>{{ province }}</option>
-
-                          </select>
-
-                        </div>
-
-                      </div>
 
 
 
@@ -145,10 +126,20 @@
                           :errors="errors.licence_type"
                           :input_id="licence_type"
                           :required="true" v-if="form.province !== ''" />
+                          <LicenceTypeDropDownComponent
+                          :dropdownList="wholesaleLicences"
+                          :label="'Licence Type *'"
+                          :column="'col-6'"
+                          :value="form.licence_type"
+                          v-model="form.licence_type"
+                          :defaultDisabledText="'Select Licence Type...'"
+                          :errors="errors.licence_type"
+                          :input_id="licence_type"
+                          :required="true" />
 
 
 
-                      <LiquorBoardRegionComponent
+                      <LiquorBoardRegionComponent 
                           :dropdownList="computedBoardRegions"
                           :label="'Liquor Board Region*'"
                           :defaultDisabledText="'Select Liquor Board Region'"
@@ -157,7 +148,7 @@
                           v-model="form.board_region"
                           :errors="errors.board_region"
                           :input_id="board_region"
-                          v-if="form.province !== '' && form.province == 'Gauteng'"
+                          v-if="form.province !== '' && form.province == 'Gauteng' && type != 'wholesale'"
                       />
 
 
@@ -257,6 +248,33 @@
 
 
 
+                
+                      <!-- Province Trigger Licence Type+ -->
+
+                      <div class="col-12 columns" v-if="type=='wholesale'">
+                        <div class="input-group input-group-outline null is-filled">
+                          <label class="form-label">Province</label>
+                          <select class="form-control form-control-default" v-model="form.province" required >
+                            <option :value="''" disabled selected>Select Province</option>
+                              <option v-for="province in computedBoardProvinces" :key="province" :value=province>{{ province }}</option>
+
+                          </select>
+
+                        </div>
+
+                        </div>
+                        <div class="col-12 columns" v-if="type=='retail'">
+                        <div class="input-group input-group-outline null is-filled">
+                          <label class="form-label">Province</label>
+                          <select class="form-control form-control-default" v-model="form.province" required @change="selectedProvince()">
+                            <option :value="''" disabled selected>Select Province</option>
+                              <option v-for="province in distictProvinces" :key="province" :value=province>{{ province }}</option>
+
+                          </select>
+
+                        </div>
+
+                        </div>
 
 
 
@@ -346,6 +364,24 @@ export default {
     let people_options = props.people;
     const { notifyError } = useToaster();
 
+    const wholesaleLicences =  [
+        {
+            "id": 102,
+            "licence_type": "Distribution and Manufacturing Liquor Licence",
+            "province": "Wholesale"
+        },
+        {
+            "id": 103,
+            "licence_type": "Distribution Liquor Licence",
+            "province": "Wholesale",
+        },
+        {
+            "id": 104,
+            "licence_type": "Manufacturing Liquor Licence",
+            "province": "Wholesale",
+        }
+    ]
+
     const form = useForm({
       trading_name: '',
       licence_type: '',
@@ -374,6 +410,7 @@ export default {
     function selectedProvince() {
       this.licence_types = props.licence_dropdowns
           .filter(obj => obj.province === form.province);
+      
     }
 
     const filterForm = useForm({
@@ -424,12 +461,18 @@ export default {
       }
 
     }
+
+    const computedBoardProvinces = computed(() => {
+      return common.getProvinces();
+    })
+
+
     //return Unique provinces from licence_dropdowns
-
-
     const computedBoardRegions = computed(() => {
       return common.getGautengProvinces();
     })
+
+    
 
     let distictProvinces = computed(
         //exclude Wholesale provinces
@@ -446,10 +489,12 @@ export default {
       onApplicantChange,
       people_options,
       form,
+      computedBoardProvinces,
       computedBoardRegions,
       distictProvinces,
       selectedProvince,
-      licence_types
+      licence_types,
+      wholesaleLicences
     }
   },
 

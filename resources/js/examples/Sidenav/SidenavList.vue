@@ -187,7 +187,10 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences'
+      <li v-if="($page.props.currentRoute == 'licences'
+      || $page.props.currentRoute == 'create_licence'
+      || $page.props.currentRoute == 'create_new_app'
+      )
               && ($page.props.auth.has_slowtow_admin_role
               || $page.props.auth.has_slowtow_user_role)
 
@@ -208,7 +211,10 @@
         </sidenav-collapse>
       </li>
 
-      <li v-if="$page.props.currentRoute == 'licences' && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
+      <li v-if="($page.props.currentRoute == 'licences'
+         || $page.props.currentRoute == 'create_licence'
+         || $page.props.currentRoute == 'create_new_app'
+      ) && ($page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role)
       " class="nav-item">
         <sidenav-collapse
           url="#"

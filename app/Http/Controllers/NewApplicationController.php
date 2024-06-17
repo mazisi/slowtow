@@ -80,6 +80,7 @@ class NewApplicationController extends Controller
             $licence = Licence::create([
                 'trading_name' => $request->trading_name,
                 'licence_type_id' => $request->licence_type,
+                'licence_number' => $request->licence_number,
                 'type' => $request->type,
                 'belongs_to' => $request->belongs_to,
                 'company_id' => $request->belongs_to === 'Company' ? $request->company : null,
@@ -100,7 +101,7 @@ class NewApplicationController extends Controller
                 return redirect()->route('view_registration', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
             }
 
-            return redirect()->route('view_wholesale_licence', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
+            return redirect()->route('view_wholesale', ['slug' => $licence->slug])->with('success', 'New App created successfully.');
             
         } catch (\Throwable $th) {throw $th;
            // return back()->with('error', 'An error occurred. Please try again.');

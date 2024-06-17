@@ -70,6 +70,22 @@ import Layout from "../../../Shared/Layout.vue";
 
 
       function pushData(e,status_value, prevStage,stageTitle){
+        if(e.target.checked){
+            if(stageTitle == 'NLA 9 Issued'){
+            const nlaDateInput = document.getElementById('NLA 9 Issued');
+            if (!nlaDateInput.value) {
+              notifyError('Update NLA 9 date first');
+              return;
+            }
+          }
+          if(stageTitle == 'Original Licence Delivered'){
+            const nlaDateInput = document.getElementById('Original Licence Delivered');
+            if (!nlaDateInput.value) {
+              notifyError('Update Original Licence Delivered date first');
+              return;
+            }
+          }
+        }
        
            if (e.target.checked) {
               form.status[0] = status_value;

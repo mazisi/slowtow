@@ -117,7 +117,6 @@ class LicenceController extends Controller
             'province' => 'required',
             'licence_date' => 'required',
             'licence_number' => 'nullable|unique:licences,licence_number'
-
         ]);
 
         try {

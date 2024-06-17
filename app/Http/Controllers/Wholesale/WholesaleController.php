@@ -74,7 +74,7 @@ class WholesaleController extends Controller
       
         $tasks = Task::where('model_type','Licence')->where('model_id',$licence->id)->latest()->paginate(4)->withQueryString(); 
 
-        return Inertia::render('Wholesale/ViewWholesale',[
+        return Inertia::render('New Applications/Wholesale/ViewWholesale',[
             'licence' => $licence,
             'tasks' => $tasks]);
     }

@@ -58,6 +58,7 @@
       const form = useForm({
             trading_name: '',
             licence_type: '',
+            licence_number: '',
             belongs_to: '',
             reg_number: '',
             id_number: '',
