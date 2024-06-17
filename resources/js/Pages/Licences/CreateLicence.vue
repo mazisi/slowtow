@@ -125,8 +125,9 @@
                           :defaultDisabledText="'Select Licence Type...'"
                           :errors="errors.licence_type"
                           :input_id="licence_type"
-                          :required="true" v-if="form.province !== ''" />
+                          :required="true" v-if="form.province !== '' && type == 'retail'" />
                           <LicenceTypeDropDownComponent
+                          v-if="type =='wholesale'"
                           :dropdownList="wholesaleLicences"
                           :label="'Licence Type *'"
                           :column="'col-6'"
@@ -178,7 +179,8 @@
                             v-model="form.licence_date" 
                             :value="form.licence_date" 
                             :column="'col-6'" 
-                            :label="'Licence Date'" 
+                            :label="'Licence Date'"
+                            :required="true"
                             :errors="errors.licence_date"
                             :input_id="licence_date"
                           />
@@ -251,19 +253,16 @@
                 
                       <!-- Province Trigger Licence Type+ -->
 
-                      <div class="col-12 columns" v-if="type=='wholesale'">
+                      <div class="col-12 columns" v-if="type =='wholesale'">
                         <div class="input-group input-group-outline null is-filled">
                           <label class="form-label">Province</label>
                           <select class="form-control form-control-default" v-model="form.province" required >
                             <option :value="''" disabled selected>Select Province</option>
                               <option v-for="province in computedBoardProvinces" :key="province" :value=province>{{ province }}</option>
-
                           </select>
-
                         </div>
-
                         </div>
-                        <div class="col-12 columns" v-if="type=='retail'">
+                        <div class="col-12 columns" v-if="type == 'retail'">
                         <div class="input-group input-group-outline null is-filled">
                           <label class="form-label">Province</label>
                           <select class="form-control form-control-default" v-model="form.province" required @change="selectedProvince()">
@@ -408,9 +407,9 @@ export default {
 
     //list licence types based on province selected
     function selectedProvince() {
+      if(props.type == 'wholesale'){return}
       this.licence_types = props.licence_dropdowns
-          .filter(obj => obj.province === form.province);
-      
+          .filter(obj => obj.province === form.province);      
     }
 
     const filterForm = useForm({

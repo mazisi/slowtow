@@ -48,7 +48,6 @@ export default {
         let file_name = ref(''); 
         let file_has_apostrophe = ref();
         let all_licences = ref([]);
-        console.log('Fuckit',props.original_lic)
       
     const { notifySuccess, notifyError } = useToaster();
       //These are only for  company admin menu
@@ -86,6 +85,7 @@ export default {
 
     const form = useForm({
          trading_name: props.licence.trading_name,
+         type: props.licence.type,
          licence_type: props.licence.licence_type_id,
          belongs_to: props.licence.belongs_to,
          is_licence_active: props.licence.is_licence_active,

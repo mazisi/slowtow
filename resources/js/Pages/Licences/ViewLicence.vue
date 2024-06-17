@@ -80,7 +80,7 @@
                                                         <option value="Individual">Individual</option>
                                                     </select>
                                                 </div>
-                                                <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+                                                <div v-if="errors.belongs_to" class="text-danger">{{ errors.belongs_to }}</div>
                                             </div>
 
 
@@ -132,7 +132,7 @@
 
 
                                             <TextInputComponent
-                                                v-if="licence.type == 'retail' && licence.status >= 2300"
+                                                v-if="licence.type == 'retail'"
                                                 v-model="licence.licence_date"
                                                 :disabled="true"
                                                 :column="'col-md-12'"
@@ -144,7 +144,7 @@
                                             />
 
                                             <TextInputComponent
-                                                v-if="licence.type == 'wholesale' && licence.status >= 1100"
+                                                v-if="licence.type == 'wholesale'"
                                                 v-model="licence.licence_date"
                                                 :disabled="true"
                                                 :column="'col-md-12'"
@@ -278,7 +278,18 @@
 
 
 
-                                <div  class="col-md-12 columns">
+                                <div  class="col-md-12 columns" v-if="form.type == 'wholesale'">
+                                    <div class="input-group input-group-outline null is-filled">
+                                        <label class="form-label">Licence Type * </label>
+                                        <select v-model="form.licence_type" class="form-control form-control-default">
+                                            <option :value="''" disabled selected>Licence Type</option>
+                                            <option v-for='licence_dropdown in wholesaleLicenceTypes' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                        </select>
+                                    </div>
+                                    <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
+                                </div>
+
+                                <div  class="col-md-12 columns" v-if="form.type == 'retail'">
                                     <div class="input-group input-group-outline null is-filled">
                                         <label class="form-label">Licence Type * </label>
                                         <select v-model="form.licence_type" class="form-control form-control-default">
@@ -288,6 +299,8 @@
                                     </div>
                                     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
                                 </div>
+
+                                
 
 
 

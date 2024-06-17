@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use App\Models\People;
 use App\Models\Company;
 use App\Models\Licence;
+use App\Models\LicenceDate;
 use App\Models\LicenceType;
 use Illuminate\Http\Request;
 use App\Events\LogUserActivity;
@@ -141,7 +142,13 @@ class LicenceController extends Controller
                 'postal_code' => $request->postal_code,
                 'slug' => sha1(time())
             ]);
-
+            if($request->type == 'wholesale'){
+                LicenceDate::create([
+                    'licence_id' => $licence->id,
+                    'stage' => 'NLA 9 Issued',
+                    'dated_at' => $request->licence_date
+                ]);
+            }
             $activity = 'Licence created By: ' . $licence->trading_name . ', ' . $licence->licence_number;
             event(new LogUserActivity(auth()->user(), $activity));
 
