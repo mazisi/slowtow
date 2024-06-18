@@ -8,7 +8,6 @@ import { ref,onMounted } from "vue";
 import LiquorBoardRequest from "../components/LiquorBoardRequest.vue";
 import Banner from '../components/Banner.vue';
 import Task from "../Tasks/Task.vue";
-import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
 import StageComponent from "@/Pages/components/slotow-components/StageComponent.vue";
 import DocComponent from "@/Pages/components/slotow-components/DocComponent.vue";
@@ -17,6 +16,7 @@ import DateComponent from "@/Pages/components/DateComponent.vue";
 import MergeNominationDocs from './MergeNominationDocs.vue'
 import moment from 'moment';
 import useNomination from './useNomination.js';
+import useNotify from "@/store/useToaster";
 
 export default{
     props:{
@@ -37,6 +37,7 @@ export default{
         let show_file_name = ref(false);
         let file_name = ref('');
         const { getPlainStatus } = useNomination();
+        const { notifySuccess, notifyError } = useNotify();
 
         const updateForm = useForm({
             nomination_year: props.nomination.year,
@@ -94,9 +95,9 @@ export default{
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 },
             })
@@ -107,9 +108,9 @@ export default{
                 Inertia.delete(`/delete-nomination-document/${id}`, {
                     onSuccess: () => {
                         if(props.success){
-                            notify(props.success)
+                            notifySuccess(props.success)
                         }else if(props.error){
-                            notify(props.error)
+                            notifyError(props.error)
                         }
                     }
                 })
@@ -128,9 +129,9 @@ export default{
                     this.show_modal = false;
                     document.querySelector('.modal-backdrop').remove();
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
 
                     nomineeForm.reset();
@@ -143,9 +144,9 @@ export default{
             Inertia.post(`/detach-nominee/${props.nomination.id}/${nominee_id}`,{
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 },
             })
@@ -156,9 +157,9 @@ export default{
             updateForm.patch(`/update-nominee`,{
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 },
             })
@@ -195,9 +196,9 @@ export default{
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 },
             })
@@ -211,26 +212,7 @@ export default{
             this.file_has_apostrophe = this.file_name.includes("'");
         }
 
-        const notify = (message) => {
-            if(props.success){
-                toast.success(message, {
-                    autoClose: 2000,
-                });
-            }else if(props.error){
-                toast.error(message, {
-                    autoClose: 2000,
-                });
-            }
-
-        }
-
-        function checkingFileProgress(message){
-            setTimeout(() => {
-                toast.remove();
-
-            }, 3000);
-            toast.loading(message);
-        }
+      
 
 
 
@@ -268,7 +250,7 @@ export default{
             options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,nomineeForm,
-            uploadDoc,updateForm,file_name,getFileName,notify,checkingFileProgress,
+            uploadDoc,updateForm,file_name,getFileName,
             deleteNomination,mergeDocument,hasFile,getStatus
 
 

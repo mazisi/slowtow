@@ -328,7 +328,7 @@
                           :stageValue=1000
                           :prevStage=900
                           :licence_id=null
-                          :stageTitle="'Renewal Forms Preparation'"
+                          :stageTitle="'Renewal Documents Preparation'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
@@ -446,19 +446,19 @@
                           :stageValue=1100
                           :prevStage=1000
                           :licence_id=null
-                          :stageTitle="'Renewal Submitted'"
+                          :stageTitle="'Renewal Submitted – Processing'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal Submitted'"
+                          :stage="'Renewal Submitted – Processing'"
                           :model="renewal"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
                           :errors="errors"
                           :error="error"
                           :column=5
-                          :dated_at="getRenewalDate('Renewal Submitted').dated_at"
+                          :dated_at="getRenewalDate('Renewal Submitted – Processing').dated_at"
                           @date-value-changed="updateDate"
                           :success="success"
                       />
@@ -497,13 +497,13 @@
                           :stageValue=1300
                           :prevStage=1200
                           :licence_id=null
-                          :stageTitle="'Renewal Pending QA'"
+                          :stageTitle="'Renewal - Pending QA'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal Pending QA'"
+                          :stage="'Renewal - Pending QA'"
                           :model="renewal"
                           :licence="renewal_pending_qa_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -524,13 +524,13 @@
                           :stageValue=1400
                           :prevStage=1300
                           :licence_id=null
-                          :stageTitle="'Renewal Awaiting Sign Off'"
+                          :stageTitle="'Renewal - Awaiting Sign Off'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />
 
                       <DateComponent
-                          :stage="'Renewal Awaiting Sign Off'"
+                          :stage="'Renewal - Awaiting Sign Off'"
                           :model="renewal"
                           :licence="renewal_awaiting_sign_off_at"
                           :canSave="$page.props.auth.has_slowtow_admin_role"
@@ -553,7 +553,7 @@
                           :stageValue=1500
                           :prevStage=1400
                           :licence_id=null
-                          :stageTitle="'Renewal Approved'"
+                          :stageTitle="'Renewal - Approved'"
                           :success="success"
                           @stage-value-changed="pushData"
                       />

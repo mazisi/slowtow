@@ -220,9 +220,9 @@ export default {
                 preserveScroll: true,
                 onSuccess: () => {
                     if(props.success){
-                        notify(props.success)
+                        notifySuccess(props.success)
                     }else if(props.error){
-                        notify(props.error)
+                        notifyError(props.error)
                     }
                 },
             })
