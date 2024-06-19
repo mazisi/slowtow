@@ -26,7 +26,7 @@
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row">
                     <div class="col-lg-10 col-10">
-                        <h6>Transfer Wholesale Info for: <Link :href="`/view-licence?slug=${view_transfer.licence.slug}`" class="text-success">
+                        <h6>Transfer Wholesale Info for: <Link @click="redirect(view_transfer.licence)" href="#!" class="text-success">
                             {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h6>
                         <p class="text-sm mb-0">Current Stage:
                             {{ getStatus(view_transfer.status) }}

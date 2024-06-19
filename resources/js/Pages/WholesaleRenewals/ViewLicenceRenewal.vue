@@ -7,7 +7,7 @@
         <div class="row">
           <div class="col-lg-9 col-9">
             <h6>Process Renewal for: {{ renewal.date  }}/{{ getRenewalYear(renewal.date)  }}
-              <Link :href="`/view-licence?slug=${renewal.licence.slug}`" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
+              <Link @click="redirect(renewal.licence)" href="#!" class="text-success">: {{ renewal.licence.trading_name }}</Link></h6>
             <p class="text-sm mb-0">Current Stage:
 
               <span class="font-weight-bold ms-1">{{ getStatus(renewal.status)}}</span>

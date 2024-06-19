@@ -25,7 +25,7 @@
       <div class="row">
   <div class="col-lg-9 col-9">
    <h6> Alteration Info for: 
-    <Link :href="`/view-licence?slug=${alteration.licence.slug}`">
+    <Link @click="redirect(alteration.licence)" href="#!">
       <span class="text-success">{{ alteration.licence.trading_name }}</span></Link></h6>
       <p class="text-sm mb-0">Current Stage: 
           <span v-html="getStatus(alteration.status)"></span>

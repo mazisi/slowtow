@@ -6,7 +6,7 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-lg-6 col-7">
-                            <h5>Nominees for: <Link :href="`/view-licence?slug=${nominations[0].licence.slug}`" class="text-success" v-if="nominations.length > 0">
+                            <h5>Nominees for: <Link @click="redirect(nominations[0].licence)" href="#!" class="text-success" v-if="nominations.length > 0">
                                 {{ nominations[0].licence.trading_name ? nominations[0].licence.trading_name : '' }}</Link></h5>
                         </div>
                         <div class="col-lg-6 col-5 my-auto text-end">
@@ -111,10 +111,26 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue'
 export default {
     name: "dashboard-default",
     props: ['nominations'],
+
+    setup() {
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+        return{
+            redirect
+        }
+    },
 
     components: {
         Layout,

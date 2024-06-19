@@ -222,11 +222,20 @@ export default {
             return { }
 
         }
+        const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
 
         return { year,form,
             updateRenewal,getStatus,
             getRenewalYear, pushData, submitDocument,
-            deleteDocument,
+            deleteDocument,redirect,
             deleteRenewal,
             getRenewalDate,
             limit,toast,viewFile,checkingFileProgress,

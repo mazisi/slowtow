@@ -5,7 +5,7 @@
 <div class="card card-body mx-3 mx-md-4 mt-n6">
 <div class="row">
 <div class="col-lg-6 col-7">
-<h6 class="mb-1">Licence Info: <Link :href="`/view-licence?slug=${licence.licence.slug}`" class="text-success">
+<h6 class="mb-1">Licence Info: <Link @click="redirect(licence.licence)" href="#!" class="text-success">
   {{ licence.licence.trading_name ? licence.licence.trading_name : '' }}</Link></h6>
 </div>
 
@@ -49,6 +49,7 @@
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia';
 import Banner from '../components/Banner.vue';
 import Editor from '@tinymce/tinymce-vue';
 import { toast } from 'vue3-toastify';
@@ -86,12 +87,21 @@ export default {
     }
 
 
-
+    const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
     
 
     return {
       sendMail,
       mailForm,
+      redirect,
       toast
     }
   },

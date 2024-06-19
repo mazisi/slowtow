@@ -2,7 +2,7 @@
 <Layout>
 <div class="container-fluid">
 <h6 class="mb-1">
-  <Link :href="`/view-licence?slug=${licence.licence.slug}`" class="text-success">Licence Info: {{ licence.licence.trading_name ? licence.licence.trading_name : ''}}
+  <Link @click="redirect(licence.licence)" href="#!" class="text-success">Licence Info: {{ licence.licence.trading_name ? licence.licence.trading_name : ''}}
   </Link></h6>
 
 <Banner/>
@@ -50,6 +50,7 @@ Send
 <script>
 import Layout from "../../Shared/Layout.vue";
 import { Link,useForm } from '@inertiajs/inertia-vue3';
+import { Inertia } from '@inertiajs/inertia'
 import Editor from '@tinymce/tinymce-vue';
 import Banner from '../components/Banner.vue';
 import { toast } from 'vue3-toastify';
@@ -88,10 +89,21 @@ export default {
         })
     }
 
+    const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
 
     return {
       sendMail,
-      mailForm
+      mailForm,
+      redirect
     }
   },
    components: {

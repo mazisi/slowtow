@@ -248,6 +248,16 @@ export default {
             }
 
         }
+        
+        const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
 
         return {
             canMerge,
@@ -257,6 +267,7 @@ export default {
             hasMergeFile,
             hasFile,
             mergeForm,
+            redirect,
             mergeDocuments,
             submitDocument,
             form,

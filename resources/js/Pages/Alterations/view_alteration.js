@@ -211,13 +211,23 @@ export default {
                     //
             })
           }
+
+          const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
         
         return {
             form,hasAllMergeDocs,
             updateAlterationDate,
             showMenu,mergeDocuments,
             updateDate,
-            update,
+            update,redirect,
             pushData,
             hasFile,
             getAlterationDate,
