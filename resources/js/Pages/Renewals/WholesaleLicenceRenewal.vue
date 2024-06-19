@@ -446,6 +446,33 @@
                           :stageValue=1100
                           :prevStage=1000
                           :licence_id=null
+                          :stageTitle="'Annual Return Submitted'"
+                          :success="success"
+                          @stage-value-changed="pushData"
+                      />
+
+                      <DateComponent
+                          :stage="'Annual Return Submitted'"
+                          :model="renewal"
+                          :canSave="$page.props.auth.has_slowtow_admin_role"
+                          :errors="errors"
+                          :error="error"
+                          :column=5
+                          :dated_at="getRenewalDate('Annual Return Submitted').dated_at"
+                          @date-value-changed="updateDate"
+                          :success="success"
+                      />
+
+                      <hr>
+
+                      <StageComponent
+                          :column=6
+                          :dbStatus="renewal.status"
+                          :errors="errors"
+                          :error="error"
+                          :stageValue=1200
+                          :prevStage=1100
+                          :licence_id=null
                           :stageTitle="'Renewal Submitted – Processing'"
                           :success="success"
                           @stage-value-changed="pushData"
@@ -470,8 +497,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=1200
-                          :prevStage=1100
+                          :stageValue=1300
+                          :prevStage=1200
                           :licence_id=null
                           :stageTitle="'Additional Documents/Information Requested'"
                           :success="success"
@@ -494,8 +521,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=1300
-                          :prevStage=1200
+                          :stageValue=1400
+                          :prevStage=1300
                           :licence_id=null
                           :stageTitle="'Renewal - Pending QA'"
                           :success="success"
@@ -521,8 +548,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=1400
-                          :prevStage=1300
+                          :stageValue=1500
+                          :prevStage=1400
                           :licence_id=null
                           :stageTitle="'Renewal - Awaiting Sign Off'"
                           :success="success"
@@ -550,8 +577,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=1500
-                          :prevStage=1400
+                          :stageValue=1600
+                          :prevStage=1500
                           :licence_id=null
                           :stageTitle="'Renewal - Approved'"
                           :success="success"
@@ -590,8 +617,8 @@
                           :dbStatus="renewal.status"
                           :errors="errors"
                           :error="error"
-                          :stageValue=1600
-                          :prevStage=1500
+                          :stageValue=1700
+                          :prevStage=1600
                           :licence_id=null
                           :stageTitle="'NLA 33 Delivered'"
                           :success="success"

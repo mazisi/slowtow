@@ -196,7 +196,10 @@ export default {
 
 
         function hasAllMergeDocs(){
-            let baseDocs = ['Application Form','Smoking Affidavit','POA & RES','Payment To The Liquor Board','Fully Dimensional Plans']
+            let baseDocs = ['NLA 14 Form','Proof of Payment','Annual Turnover Sheet','ID Documents','Police Clearance Certicates',
+                'Contribution Certificate','Tax Clearance Certificates','BEE Certificate','CIPC Certificate','Zoning and LAA Certificate',
+                'Latest NLA 33 Certificate'
+            ]
             const allDocTypesPresent = baseDocs.every(docType => {
                 return props.alteration.documents.some(document => document.doc_type === docType);
             });
@@ -208,10 +211,18 @@ export default {
             }
         }
 
-        function mergeDocuments(){alert('Cool')
-            Inertia.post(`/merge-alteration-documents/${props.alteration.id}`, {
-                //
+        function mergeDocuments(){
+
+            Inertia.post(`/merge-wholesale-alteration-documents/${props.alteration.id}`, {
+                onSuccess: () => {
+                    if(props.success){
+                        notifySuccess(props.success)
+                    }else if(props.error){
+                        notifyError(props.error)
+                    }
+                },
             })
+            
         }
 
         const redirect = (licence) => {
