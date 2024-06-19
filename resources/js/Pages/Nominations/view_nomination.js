@@ -244,13 +244,21 @@ export default{
               }
 
           }
-
+          const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
 
         return{getMomentDate,
             options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,nomineeForm,
-            uploadDoc,updateForm,file_name,getFileName,
+            uploadDoc,updateForm,file_name,getFileName,redirect,
             deleteNomination,mergeDocument,hasFile,getStatus
 
 

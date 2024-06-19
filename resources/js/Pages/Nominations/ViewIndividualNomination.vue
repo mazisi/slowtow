@@ -20,7 +20,7 @@
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row">
                     <div class="col-lg-10 col-10">
-                        <h6><Link :href="`/view-licence/?slug=${nomination.licence.slug}`" class="text-success">
+                        <h6><Link @click="redirect(nomination.licence)" href="#!" class="text-success">
                             {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
                         
                         <p class="text-sm mb-0">Current Stage:

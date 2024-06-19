@@ -1,6 +1,6 @@
 <template>
     <Layout>
-      <Head title="Preview Temporary Licence" />
+      <Head title="Preview Licence" />
      
     <div class="container-fluid mt-6">
     <!-- <Banner/> -->
@@ -116,65 +116,22 @@ v-if="form.belongs_to == 'Company'"
         
 
   <div class="col-md-12" >
-   <template v-if="licence.licence_documents">      
-        <div v-for="doc in licence.licence_documents" :key="doc.id" class="mb-2">
-          <iframe v-if="doc.document_type === 'Original-Licence'" :src="`${$page.props.blob_file_path}${doc.document_file}`" 
-          frameborder="0" width="100%" height="600px"></iframe>
+   <div class="mb-2">
+      <iframe v-if="original_licence" :src="`${$page.props.blob_file_path}${original_licence.document_file}`" 
+      frameborder="0" width="100%" height="600px"></iframe>
 
-          <iframe v-if="doc.document_type === 'Duplicate-Licence'" :src="`${$page.props.blob_file_path}${doc.document_file}`" 
-          frameborder="0" width="100%" height="600px"></iframe>
+      <iframe v-if="duplicate_original_licence" :src="`${$page.props.blob_file_path}${duplicate_original_licence.document_file}`" 
+      frameborder="0" width="100%" height="600px"></iframe>
 
-          <iframe v-else-if="doc.document_type === 'Payment To The Liquor Board' && !hasOriginalLicence(licence.licence_documents)" 
-          :src="`${$page.props.blob_file_path}${doc.document_file}`" frameborder="0" width="100%" height="600px"></iframe>
+      <iframe v-if="latest_renewal && licence.type == 'retail'" :src="`${$page.props.blob_file_path}${latest_renewal.document}`" 
+      frameborder="0" width="100%" height="600px"></iframe>
 
-          <!-- Latest Renewal -->
-          <iframe v-if="doc.document_type === 'Latest Renewal'" :src="`${$page.props.blob_file_path}${doc.document_file}`" 
-          frameborder="0" width="100%" height="600px"></iframe>
+      <iframe v-if="transfer_certificate_issued" :src="`${$page.props.blob_file_path}${transfer_certificate_issued.document}`" 
+      frameborder="0" width="100%" height="600px"></iframe>
 
-          <iframe v-else-if="doc.document_type === 'Payment To The Liquor Board'" 
-          :src="`${$page.props.blob_file_path}${doc.document_file}`" frameborder="0" width="100%" height="600px"></iframe>
-
-          <!-- Latest appointment of managers(Noms) certificate issued -->
-          <!-- <template v-if="licence.nominations" v-for="nom in licence.nominations">            
-            <div v-if="nom.nomination_documents" v-for="nomDoc in nom.nomination_documents" :key="nomDoc.id">
-
-            
-            <iframe v-if="doc.document_type === 'Latest Renewal'" :src="`${$page.props.blob_file_path}${doc.document}`" 
-            frameborder="0" width="100%" height="600px"></iframe>
-
-            <iframe v-else-if="doc.document_type === 'Application Lodged'" 
-            :src="`${$page.props.blob_file_path}${doc.document_name}`" frameborder="0" width="100%" height="600px"></iframe>
-         </div>
-         </template> -->
-
-
-         <!-- Transfers -->
-         <template v-if="transfer" v-for="transDoc in transfer?.transfer_documents" :key="transDoc.id"> 
-            
-            <iframe v-if="transDoc.doc_type === 'Transfer Issued'" :src="`${$page.props.blob_file_path}${transDoc.document}`" 
-            frameborder="0" width="100%" height="600px"></iframe>
-
-            <iframe v-else-if="transDoc.doc_type === 'Transfer Logded'" 
-            :src="`${$page.props.blob_file_path}${transDoc.document}`" frameborder="0" width="100%" height="600px"></iframe>
-        
-         </template>
-
-         <!-- Alterations -->
-         <template v-if="licence?.alterations" v-for="alteration in licence.alterations">            
-            <div v-if="alteration?.documents" v-for="altDoc in alteration.documents" :key="altDoc.id">
-
-            
-            <iframe v-if="altDoc.doc_type === 'Alterations Certificate Issued'" :src="`${$page.props.blob_file_path}${altDoc.path}`" 
-            frameborder="0" width="100%" height="600px"></iframe>
-
-            <iframe v-else-if="altDoc.doc_type === 'Alterations Lodged'" 
-            :src="`${$page.props.blob_file_path}${altDoc.path}`" frameborder="0" width="100%" height="600px"></iframe>
-         </div>
-         </template>
-
-        </div>
-      
-    </template>
+      <iframe v-if="alteration_document" :src="`${$page.props.blob_file_path}${alteration_document.path}`" 
+      frameborder="0" width="100%" height="600px"></iframe>
+   </div>
   </div> 
 </div>
         
@@ -208,6 +165,11 @@ export default {
     licence: Object,
     transfer: Object,
     licenceTypes: Object,
+   original_licence : Object,
+   duplicate_original_licence : Object,
+   latest_renewal : Object,
+   transfer_certificate_issued: Object,
+   alteration_document: Object,
   },
   setup(props) {
 
@@ -246,25 +208,16 @@ export default {
           window.open(endpoint,'_blank');
         }
 
-const getLicenceTye = computed(() => {
-  return props.licenceTypes.find(licenceType => licenceType.id === props.licence.licence_type_id) 
-})
 
+        const getLicenceTye = computed(() => {
+            return props.licenceTypes.find(licenceType => licenceType.id === props.licence.licence_type_id) 
+            })
 
-const filterDocs = (docs) => {
-   return docs.filter(doc =>doc.document_type === 'Original-Licence' || doc.document_type === 'Duplicate-Licence' || doc.document_type === 'Payment To The Liquor Board'
-   );
-   
-}
-const hasOriginalLicence = (docs) => {
-      return docs.some(doc => doc.document_type === 'Original-Licence');
-    }
 
     return {
-      getLicenceTye,
       showMenu,previewTemp,
-      form,filterDocs,
-      hasOriginalLicence
+      form,getLicenceTye
+      
     }
   },
   

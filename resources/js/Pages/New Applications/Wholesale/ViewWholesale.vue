@@ -264,29 +264,7 @@
     :hasFile="hasFile('Photographs')"
     />
 
-    <!--const wholesaleLicences =  [
-      {
-          "id": 102,
-          "licence_type": "Distribution and Manufacturing Liquor Licence",
-          "province": "Wholesale",
-          "created_at": "2024-01-16T20:07:23.000000Z",
-          "updated_at": "2024-01-16T20:07:23.000000Z"
-      },
-      {
-          "id": 103,
-          "licence_type": "Distribution Liquor Licence",
-          "province": "Wholesale",
-          "created_at": "2024-01-16T20:08:17.000000Z",
-          "updated_at": "2024-01-16T20:08:17.000000Z"
-      },
-      {
-          "id": 104,
-          "licence_type": "Manufacturing Liquor Licence",
-          "province": "Wholesale",
-          "created_at": "2024-01-16T20:08:17.000000Z",
-          "updated_at": "2024-01-16T20:08:17.000000Z"
-      }
-  ];-->
+ 
 
     <!-- This stage must only appear if  manufacturing -->
     <MergeDocumentComponent v-if="licence.licence_type_id === '102' && licence.licence_type_id !== '104' "
@@ -558,7 +536,7 @@
   <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+    @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('NLA 7 Submitted')"
     :errors="errors"

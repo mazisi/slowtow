@@ -13,7 +13,7 @@ class NominationMailTemplate implements HasEmailTemplateInterface{
       $template = '<p dir="ltr">Good Day '.$nomination->licence->trading_name.',</p>
       <p>Licence Number:&nbsp; '.$nomination->licence->licence_number.'.</p>
       <p>Licence Date:&nbsp; &nbsp; &nbsp; &nbsp; '.Carbon::parse($nomination->licence->licence_date)->format('d/m').'</p>
-      <p dir="ltr">Please see attached quotation along with the basic requirements for an appointment of managers application.</p>
+      <p dir="ltr">Please see attached quotation along with the basic requirements for an appointment of  application.</p>
       <p dir="ltr">Note that the Liquor Board is currently running at a delay due to COVID-19 and applications may take anywhere from 6 to 12 months to be approved. Once the application has been lodged, please ensure the necessary documents are on display in the interim to avoid any problems with inspectors.&nbsp;</p>
       <p dir="ltr"><strong>&nbsp;</strong></p>
       <p dir="ltr">Many thanks,</p>

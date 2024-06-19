@@ -237,6 +237,16 @@ export default {
 
         }
 
+        const redirect = (licence) => {
+          let url = '';
+        if(licence.type == 'retail'){
+           url = `/view-licence?slug=${licence.slug}`
+        }else{
+           url = `/view-wholesale-licence?slug=${licence.slug}`
+        }
+          Inertia.get(url);
+        }
+
         function canMerge() {
           //find documents with num != null
           let docsNum = props.view_transfer.transfer_documents.filter((doc) => doc.num !== null);
@@ -248,6 +258,7 @@ export default {
       updateStageDate,
       getStatus,
       pushData,
+      redirect,
       getTransferDate,
       hasMergeFile,
       hasFile,
