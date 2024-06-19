@@ -402,19 +402,7 @@
                                               />
                                                 <button type="button" class="w-30 px-3 mb-2 btn bg-gradient-success ms-2">Zoning Certificate and LAA</button>
 
-                                                <PrepareTransferApplicationComponent
-                                                    @file-value-changed="submitDocument"
-                                                    @file-deleted="deleteDocument"
-                                                    :documentModel="view_transfer"
-                                                    :hasFile="hasMergeFile('Zoning Certificate and LAA','Current Licence Holder')"
-                                                    :errors="errors"
-                                                    :error="error"
-                                                    stage="400"
-                                                    belongsTo="Current Licence Holder"
-                                                    :docType="'Zoning Certificate and LAA'"
-                                                    :orderByNumber='1400'
-                                                    :success="success"
-                                                />
+                                                <NoneUploadComponent/>
 
                                             </div>
 

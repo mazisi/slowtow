@@ -220,7 +220,7 @@ export default {
         function canMerge() {
             //find documents with num != null
             let docsNum = props.view_transfer.transfer_documents.filter((doc) => doc.num !== null);
-            return docsNum?.length >= 19 ? true : false;
+            return docsNum?.length >= 18 ? true : false;
         }
 
         function getDate(transfer_id, stage){

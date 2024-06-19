@@ -10,6 +10,7 @@ import DocComponent from "../components/slotow-components/DocComponent.vue";
 import StageComponent from "../components/slotow-components/StageComponent.vue";
 import MergeDocumentComponent from "../components/slotow-components/MergeDocumentComponent.vue";
 import DateComponent from "../components/slotow-components/DateComponent.vue";
+import LinkComponent from "../New Applications/LinkComponent.vue";
 import useAlteration from "./composables/useAlteration.js";
 import useToaster from '../../store/useToaster';
 import AdditionalDocsComponent from "../components/slotow-components/AdditionalDocsComponent.vue";
@@ -213,8 +214,19 @@ export default {
             })
         }
 
+        const redirect = (licence) => {
+            let url = '';
+          if(licence.type == 'retail'){
+             url = `/view-licence?slug=${licence.slug}`
+          }else{
+             url = `/view-wholesale-licence?slug=${licence.slug}`
+          }
+            Inertia.get(url);
+          }
+
         return {
             form,hasAllMergeDocs,
+            redirect,
             updateAlterationDate,
             showMenu,mergeDocuments,
             updateDate,
@@ -240,6 +252,7 @@ export default {
         MergeDocumentComponent,
         DateComponent,
         AdditionalDocsComponent,
+        LinkComponent,
         Task,
     },
     beforeUnmount() {

@@ -25,7 +25,7 @@ export default {
     },
 
     data() {
-        const { getBadgeStatus } = useAlteration();
+        const { getBadgeStatus,getWholesaleBadgeStatus } = useAlteration();
 
         Inertia.on('navigate', (event) => {
           Inertia.visit(`${event.detail.page.url}`,{ preserveState: true, preserveScroll: true})
@@ -38,6 +38,7 @@ export default {
             },
             showMenu: false,
             getBadgeStatus,
+            getWholesaleBadgeStatus
             
         };
     },
@@ -112,7 +113,7 @@ export default {
     
                         <div class="col-lg-10 col-10">
     
-                            <h6 class="mb-1">Alterations for:
+                            <h6 class="mb-1">{{ licence.type == 'retail' ? 'Alterations' : 'Additional Depot/Relocation' }} for:
     
                                 <Link @click="redirect(licence)">
     
@@ -124,7 +125,7 @@ export default {
     
                         <div class="col-lg-2 col-2 my-auto text-end">
     
-                            <Link :href="`/new-alteration?slug=${licence.slug }`" class="btn btn-sm btn-secondary"> New Alteration</Link>
+                            <Link :href="`/new-alteration?slug=${licence.slug }`" class="btn btn-sm btn-secondary"> New {{ licence.type == 'retail' ? 'Alteration' : 'Depot/Relocation' }}</Link>
     
                         </div>
     
@@ -156,7 +157,8 @@ export default {
     
                                                 <tr>
     
-                                                    <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Alteration Date</th>
+                                                    <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                                        {{ licence.type == 'retail' ? 'Alteration' : 'Additional Depot/Relocation'}} Date</th>
     
                                                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Stage</th>
     
@@ -189,7 +191,7 @@ export default {
     
     
     
-                                                        <div v-html="getStatus(alter.status)"></div>
+                                                        <div v-html="licence.type == 'wholesale' ? getWholesaleBadgeStatus(alter.status) : getStatus(alter.status)"></div>
     
     
     
@@ -201,8 +203,7 @@ export default {
     
                                                     <td class="text-sm text-center">
     
-                                                        <Link :href="`/view-alteration/${alter.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link>
-    
+                                                        <Link :href="`/view-alteration/${alter.slug}`"><i class="fa fa-eye px-1 text-secondary" aria-hidden="true"></i></Link> 
     
     
                                                     </td>
@@ -210,7 +211,7 @@ export default {
                                                 </tr>
 
                                                 <tr v-else>
-                                                    <td colspan="6" class="text-center text-danger">No alterations Found.</td>
+                                                    <td colspan="6" class="text-center text-danger">No {{ licence.type == 'retail' ? 'alterations' : 'Additional Depot/Relocation' }} Found.</td>
                                                 </tr>
     
                                             </tbody>

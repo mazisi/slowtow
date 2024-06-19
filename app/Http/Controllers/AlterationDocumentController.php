@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Alteration;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Models\LicenceDocument;
 use App\Models\AlterationDocument;
 use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
 
@@ -17,7 +18,7 @@ class AlterationDocumentController extends Controller
             "licence_id"=> "required|exists:alterations,id"
             ]);
             
-
+            
             $removeSpace = str_replace(' ', '_',$request->document_file->getClientOriginalName());
             $fileName = Str::limit(sha1(now()),3).str_replace('-', '_',$removeSpace);
             $request->file('document_file')->storeAs('/', $fileName, env('FILESYSTEM_DISK'));
@@ -32,14 +33,31 @@ class AlterationDocumentController extends Controller
               $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;
   
               if($fileModel->save()){
+                if($request->doc_type == 'NLA 15 Certificate Issued' || $request->doc_type == 'NLA 15 Certificate Delivered'){
+                  $this->createLicenceDocument($request, $fileName);                  
+                }
                 Alteration::whereId($fileModel->alteration_id)->update(['status' => $request->stage]);
                 return back()->with('success','Document uploaded successfully.');
               }
             }else{
               return back()->with('error','Azure storage could not be reached.Please try again.');              
-            }
-           
+            }           
     
+    }
+    
+    private function createLicenceDocument($request, $fileName)
+    {
+      $alteration = Alteration::find($request->licence_id);
+    
+        $fileModel = new LicenceDocument;
+        $fileModel->document_name = $request->document_file->getClientOriginalName();
+        $fileModel->licence_id = $alteration->licence->id;
+        $fileModel->document_type = $request->doc_type == 'NLA 15 Certificate Issued' ? 'Duplicate-Licence' : 'Duplicate-Original-Licence-Delivered';
+        $fileModel->num = $request->num;
+        $fileModel->document_file = env('AZURE_STORAGE_CONTAINER') . '/' . $fileName;
+        $fileModel->save();
+
+        return $fileModel;
     }
     public function destroy($id)
     {
