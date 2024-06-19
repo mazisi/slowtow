@@ -17,3 +17,5 @@ public/mix-manifest.json
 public/js/app.js.LICENSE.txt
 public/js/app.js
 public/css/app.css
+/storage/app
+*.js
