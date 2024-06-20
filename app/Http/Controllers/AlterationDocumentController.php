@@ -78,7 +78,7 @@ class AlterationDocumentController extends Controller
           $exist =  Alteration::whereId($request->alteration_id)->whereNotNull('merged_document')->first(['id','merged_document']); 
         $merger = PDFMerger::init();           
           if (! is_null($exist)) {
-            unlink(public_path('app/public/').$exist->merged_document);
+            // unlink(storage_path('app/public/').$exist->merged_document);
             $exist->update(['merged_document' => null]);
           }
                 
@@ -93,7 +93,7 @@ class AlterationDocumentController extends Controller
 
           $model->update(['merged_document' => $fileName]);
 
-          $merger->save(public_path('/app/public/'.$fileName));
+          $merger->save(storage_path('/app/public/'.$fileName));
           
           return back()->with('success','Document merged successfully.');
         } catch (\Throwable $th) {

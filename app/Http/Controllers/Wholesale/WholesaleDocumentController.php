@@ -17,7 +17,7 @@ class WholesaleDocumentController extends Controller
           $exist =  Alteration::whereId($id)->whereNotNull('merged_document')->first(['id','merged_document']); 
                   
           if (! is_null($exist)) {
-            unlink(public_path('app/public/').$exist->merged_document);
+            // unlink(public_path('app/public/').$exist->merged_document);
             $exist->update(['merged_document' => null]);
           }
           $arr = ['NLA 14 Form','Proof of Payment','Annual Turnover Sheet','ID Documents','Police Clearance Certicates',
@@ -40,7 +40,7 @@ class WholesaleDocumentController extends Controller
 
           $model->update(['merged_document' => $fileName]);
 
-          $merger->save(public_path('/app/public/'.$fileName));
+          $merger->save(storage_path('/app/public/'.$fileName));
           
           return back()->with('success','Document merged successfully.');
         } catch (\Throwable $th) {

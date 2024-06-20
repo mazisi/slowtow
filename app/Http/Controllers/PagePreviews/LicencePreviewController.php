@@ -34,22 +34,22 @@ class LicencePreviewController extends Controller
             $duplicate_original_licence = $payment_to_the_liquor_board;
         }
 
-        $latest_renewal = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Latest Renewal/Licence')->latest()->first();
-        $latest_renewal_alt = NominationDocument::where('nomination_id',$nom->id)->where('doc_type','Payment To The Liquor Board')->latest()->first();
+        $latest_renewal = NominationDocument::where('nomination_id',$nom?->id)->where('doc_type','Latest Renewal/Licence')->latest()->first();
+        $latest_renewal_alt = NominationDocument::where('nomination_id',$nom?->id)->where('doc_type','Payment To The Liquor Board')->latest()->first();
         if(!$latest_renewal) {
             $latest_renewal = $latest_renewal_alt;
         }
         
         $transfer = LicenceTransfer::where('licence_id', $licence->id)->latest()->first(['id']);
-        $transfer_certificate_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id', $transfer->id)->latest()->first();
-        $transfer_certificate_lodged = TransferDocument::where('doc_type','Transfer LogdedTransfer Issued')->where('licence_transfer_id', $transfer->id)->latest()->first();
+        $transfer_certificate_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id', $transfer?->id)->latest()->first();
+        $transfer_certificate_lodged = TransferDocument::where('doc_type','Transfer LogdedTransfer Issued')->where('licence_transfer_id', $transfer?->id)->latest()->first();
         if(!$transfer_certificate_issued) {
             $transfer_certificate_issued = $transfer_certificate_lodged;
         }
 
         $alteration = Alteration::where('licence_id', $licence->id)->first(['id']); 
-        $alteration_document = AlterationDocument::where('alteration_id', $alteration->id)->where('doc_type','Alterations Certificate Issued')->latest()->first();    
-        $alteration_document_alt = AlterationDocument::where('alteration_id', $alteration->id)->where('doc_type','Alterations Lodged')->latest()->first();    
+        $alteration_document = AlterationDocument::where('alteration_id', $alteration?->id)->where('doc_type','Alterations Certificate Issued')->latest()->first();    
+        $alteration_document_alt = AlterationDocument::where('alteration_id', $alteration?->id)->where('doc_type','Alterations Lodged')->latest()->first();    
         if(!$alteration_document) {
             $alteration_document = $alteration_document_alt;
         }
