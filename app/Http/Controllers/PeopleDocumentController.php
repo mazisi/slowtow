@@ -12,7 +12,7 @@ class PeopleDocumentController extends Controller
         $request->validate([
             'document_file' => 'mimes:jpeg,jpg,png,pdf',
             "licence_id" => "required|exists:people,id", // person_id
-            "doc_type" => "required|in:Work Permit,Passport,Police Clearance,ID Document,Fingerprints"
+            "doc_type" => "required|in:Work Permit,Passport,National Police Clearance,Suitability Clearance,ID Document,Fingerprints"
             ]);
 
 

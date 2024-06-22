@@ -139,10 +139,10 @@
                                   :documentModel="person"
                                   @file-value-changed="submitDocument"
                                   @file-deleted="deleteDocument"
-                                  :hasFile="hasFile('Police Clearance')"
+                                  :hasFile="hasFile('Suitability Clearance')"
                                   :errors="errors"
                                   :error="error"
-                                  :docType="'Police Clearance'"
+                                  :docType="'Suitability Clearance'"
                                   :success="success"
                               />
                         </div>
@@ -184,6 +184,18 @@
                                   :errors="errors"
                                   :error="error"
                                   :docType="'Valid Fingerprints'"
+                                  :success="success"
+                              />
+                        </div>
+                        <div class="col-4">
+                              <PeopleDocComponent
+                                  :documentModel="person"
+                                  @file-value-changed="submitDocument"
+                                  @file-deleted="deleteDocument"
+                                  :hasFile="hasFile('National Police Clearance')"
+                                  :errors="errors"
+                                  :error="error"
+                                  :docType="'National Police Clearance'"
                                   :success="success"
                               />
                         </div>
