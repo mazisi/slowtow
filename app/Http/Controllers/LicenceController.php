@@ -10,10 +10,12 @@ use App\Models\Licence;
 use App\Models\LicenceDate;
 use App\Models\LicenceType;
 use Illuminate\Http\Request;
+use App\Models\LicenceRenewal;
 use App\Events\LogUserActivity;
 use App\Models\LicenceDocument;
 use Illuminate\Validation\Rule;
 use App\Actions\LicenceFilterAction;
+use App\Models\RenewalDate;
 
 class LicenceController extends Controller
 {
@@ -167,8 +169,15 @@ class LicenceController extends Controller
      */
     public function show(Request $request)
     {
+        $latest_renewal = null;
         $licence = Licence::with('company','people','licence_documents')->whereSlug($request->slug)->first();
-
+        //Get the latest renewal(Issued Stage) for the licence.If not get renewal year
+        $renewal = LicenceRenewal::where('licence_id',$licence->id)->latest()->first(['id','date']);
+     
+        if($renewal){
+            $latest_renewal= RenewalDate::where('renewal_id',$renewal->id)->where('stage','Renewal Issued')->first();
+        }
+      
         $original_lic = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Original-Licence')->latest()->first();
         $licence_issued = LicenceDocument::where('licence_id',$licence->id)->where('document_type','Licence Issued')->latest()->first();
 
@@ -199,6 +208,8 @@ class LicenceController extends Controller
             'licence' => $licence,
             'licence_dropdowns' => $licence_dropdowns,
             'tasks' => $tasks,
+            'renewal' => $renewal,
+            'latest_renewal' => $latest_renewal,
             'companies' => $companies,
             'people' => $people,
             'original_lic' => $original_lic,

@@ -111,7 +111,7 @@
                           :success="success"
                       />
 
-                      <DocComponent
+                      <!-- <DocComponent
                           :documentModel="renewal"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -122,7 +122,7 @@
                           :docType="'Client Paid'"
                           :success="success"
                           :stage="300"
-                      />
+                      /> -->
 
                       <hr>
                       <StageComponent

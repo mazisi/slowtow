@@ -63,10 +63,10 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('year', $currentYear), function ($query, $year) {
+        ->when(request('year'), function ($query, $year) {
             $query->whereYear('created_at', $year);
         })
-        ->when(request('province', $defaultProvince), function ($query, $province) {
+        ->when(request('province'), function ($query, $province) {
             $query->whereHas('licence', function ($query) use ($province) {
                 $query->where('province', $province);
             });
@@ -93,7 +93,7 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('year', $currentYear), function ($query, $year) {
+        ->when(request('year'), function ($query, $year) {
             $query->whereYear('created_at', $year);
         })
         ->groupBy(DB::raw('MONTH(created_at)'))

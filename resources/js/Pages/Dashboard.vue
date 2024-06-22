@@ -38,22 +38,23 @@
     
            </div>
         
+         
+
+
           <div class=" row mt-4">
-            <div class="col-12 col-12 mt-4">
+            <div class="col-md-12 col-12 mt-4">
               <chart-holder-card
-                title="Licences"
+                title="New Licences"
                 color="">
 
               <div class="chart">
-                <canvas id="lineChart" width="400" height="100"></canvas>
+                <canvas id="newAppsGraph" width="400" height="170"></canvas>
               </div>
+              <p class="text-center text-default">New Licences</p>
               </chart-holder-card>
             </div>
-          </div>
 
-
-          <div class=" row mt-4">
-            <div class="col-md-6 col-6 mt-4">
+            <div class="col-md-12 col-12 mt-4">
               <chart-holder-card
                 title="Renewals"
                 color="">
@@ -65,7 +66,7 @@
               </chart-holder-card>
             </div>
 
-            <div class="col-md-6 col-6 mt-4">
+            <div class="col-md-12 col-12 mt-4">
               <chart-holder-card
                 title="New Apps"
                 color="">
@@ -73,7 +74,7 @@
               <div class="chart">
                 <canvas id="polarArea" width="400" height="170"></canvas>
               </div>
-              <p class="text-center text-default">New Apps</p>
+              <p class="text-center text-default">Temporal Licences</p>
               </chart-holder-card>
             </div>
           </div>
@@ -159,11 +160,56 @@
 
 
 
-      const lineChartInstance = ref(null);
       const barGraphInstance = ref(null);
       const polarGraphInstance = ref(null);
+      const newAppsGraphInstance = ref(null);
 
-      const createBarChart = () => {
+      const createNewAppsGraph = () => {
+        const ctx = document.getElementById('newAppsGraph').getContext('2d');
+        barGraphInstance.value = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+            datasets: [{
+          label: 'Renewals',
+          data: Object.values(props.licences),
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+            'rgba(255, 205, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(201, 203, 207, 0.2)'
+          ],
+          borderColor: [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(201, 203, 207)'
+          ],
+          borderWidth: 1
+        }]
+    },
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    filter: function(item) {
+                        // Hide the label 'Renewals'
+                        return item.text !== 'Renewals';
+                    }
+                }
+            }
+        },
+      }
+  });
+       };
+
+       const createBarChart = () => {
         const ctx = document.getElementById('barGraph').getContext('2d');
         barGraphInstance.value = new Chart(ctx, {
           type: 'bar',
@@ -208,60 +254,6 @@
   });
        };
 
-const createLineChart = () => {
-  const ctx = document.getElementById('lineChart').getContext('2d');
-  lineChartInstance.value = new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-      datasets: [
-        {
-          label: 'New Licences',
-          data: Object.values(props.licences),
-          borderColor: 'rgba(76, 175, 80)',
-          borderWidth: 2,
-          pointRadius: 4,
-          fill: true,
-          tension: 0.4
-        },
-        {
-          label: 'Temporal Licences',
-          data: Object.values(props.tempLicences),
-          borderColor: 'rgb(75, 192, 192)',
-          borderWidth: 2,
-          tension: 0.4,
-          fill: false
-        },
-        {
-          label: 'Renewals',
-          color: 'white',
-         data: Object.values(props.renewals),
-          borderColor: 'rgba(233, 30, 99, 1)',
-          borderWidth: 2,
-          tension: 0.4,
-          fill: false
-        }
-      ]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true,
-          ticks: {
-            // color: 'black',
-            stepSize: 10, // Adjust the step size as needed
-            max: 150     // Adjust the max value as needed
-          }
-        },
-        x: {
-          ticks: {
-            // color: 'black'
-          }
-        }
-      }
-    }
-  });
-};
 
 
 const createPolarChart = () => {
@@ -272,7 +264,7 @@ const createPolarChart = () => {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             datasets: [{
               label: 'New Apps',
-              data: Object.values(props.licences),
+              data: Object.values(props.tempLicences),
               backgroundColor: [
                 'rgb(255, 99, 132)',
                 'rgb(75, 192, 192)',
@@ -297,27 +289,28 @@ const createPolarChart = () => {
        };
 
 onMounted(() => {
-  createLineChart();
   createBarChart();
   createPolarChart();
+  createNewAppsGraph();
 });
 
 onUnmounted(() => {
-  if (lineChartInstance.value) {
-    lineChartInstance.value.destroy();
+  if (newAppsGraphInstance.value) {
     barGraphInstance.value.destroy();
+    polarGraphInstance.value.destroy();
+    newAppsGraphInstance.value.destroy();
   }
 });
 
 watch(() => [props.licences, props.tempLicences, props.renewals], () => {
-    if (lineChartInstance.value) {
-      lineChartInstance.value.destroy();
+    if (newAppsGraphInstance.value) {
       barGraphInstance.value.destroy();
       polarGraphInstance.value.destroy();
+      newAppsGraphInstance.value.destroy();
     }
-    createLineChart();
     createBarChart();
     createPolarChart();
+    createNewAppsGraph();
   },
   { deep: true }
 );

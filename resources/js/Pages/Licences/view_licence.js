@@ -23,6 +23,8 @@ export default {
     errors: Object,
     licence_dropdowns: Object,
     licence: Object,
+    latest_renewal: Object,//renewal issued files if not renewal year
+    renewal: Object,
     success: String,
     error: String,
     tasks: Object,
@@ -99,7 +101,7 @@ export default {
          province: props.licence.province,
          board_region: props.licence.board_region,
          renewal_amount: props.licence.renewal_amount,
-         latest_renewal: props.licence.latest_renewal,
+         latest_renewal: props.latest_renewal ? props.latest_renewal?.dated_at : props.renewal?.date,
          coordinates: props.licence.coordinates,
          company: props.licence.belongs_to === 'Company' ? props.licence.company.name : '',
          person: props.licence.belongs_to === 'Individual' ? props.licence.people.full_name : '',

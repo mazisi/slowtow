@@ -325,6 +325,7 @@
                                     :errors="errors.latest_renewal"
                                     :input_id="latest_renewal"
                                     :inputType="'text'"
+                                    :disabled="true"
                                 />
 
                                 <div class="input-group-custom mb-2" v-if="licence.status >= 2300 && licence.type === 'retail'">

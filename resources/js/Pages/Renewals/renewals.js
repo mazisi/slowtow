@@ -35,7 +35,7 @@ export default {
         const form = useForm({
             year: props.renewal.date,
             licence_id: props.renewal.licence_id,
-            status: [],
+            status: '',
             prevStage: null,
             unChecked: false,
             client_paid_at: props.renewal.client_paid_at,
@@ -146,11 +146,11 @@ export default {
         function pushData(e,status_value, prevStage){
             form.prevStage=prevStage;
             if (e.target.checked) {
-                form.status[0] = status_value;
+                form.status = status_value;
                 form.unChecked = false;
             }else if(!e.target.checked){
                 form.unChecked = true
-                form.status[0] = status_value;
+                form.status = status_value;
             }
             updateRenewal();
         }
