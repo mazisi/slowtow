@@ -121,12 +121,20 @@
 
     const form = useForm({
       year: new Date().getFullYear(),
-      type: 0,
-      province: 'Gauteng'
+      province: 'All Provinces',
+      type: ''
     })
 
 
-        const resetFilter = () => {
+        const resetFilter = (type) => {
+          switch (type) {
+            case 'new-apps':
+              
+              break;
+          
+            default:
+              break;
+          }
         form.year = ''
         form.type = ''
         form.province = ''

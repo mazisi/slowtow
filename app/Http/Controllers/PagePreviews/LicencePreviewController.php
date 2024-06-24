@@ -39,6 +39,14 @@ class LicencePreviewController extends Controller
         if(!$latest_renewal) {
             $latest_renewal = $latest_renewal_alt;
         }
+        $appointment_of_managers = null;
+       if($licence->type == 'retail'){
+        $appointment_of_managers = NominationDocument::where('nomination_id',$nom?->id)->where('doc_type','Nomination Issued')->latest()->first();
+        $appointment_of_managers_alt = NominationDocument::where('nomination_id',$nom?->id)->where('doc_type','Nomination Lodged')->latest()->first();
+        if(!$appointment_of_managers) {
+            $appointment_of_managers = $appointment_of_managers_alt;
+        }
+       }
         
         $transfer = LicenceTransfer::where('licence_id', $licence->id)->latest()->first(['id']);
         $transfer_certificate_issued = TransferDocument::where('doc_type','Transfer Issued')->where('licence_transfer_id', $transfer?->id)->latest()->first();
@@ -63,6 +71,7 @@ class LicencePreviewController extends Controller
             'latest_renewal' => $latest_renewal,
             'transfer_certificate_issued' => $transfer_certificate_issued,
             'alteration_document' => $alteration_document,
+            'appointment_of_managers' => $appointment_of_managers,
             'licenceTypes' => $licenceTypes
     ]);
     }

@@ -55,7 +55,7 @@ class SlotowDashboardController extends Controller
     
 
     function renewals() {  
-
+       
         $currentYear = now()->year; 
         $defaultProvince = 'Gauteng';
         
@@ -63,12 +63,12 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('year'), function ($query, $year) {
-            $query->whereYear('created_at', $year);
+        ->when(request('year'), function ($query) {
+            $query->where('date', request('year'));
         })
-        ->when(request('province'), function ($query, $province) {
-            $query->whereHas('licence', function ($query) use ($province) {
-                $query->where('province', $province);
+        ->when(request('province'), function ($query) {
+            $query->whereHas('licence', function ($query) {
+                $query->where('province', request('province'));
             });
         })
         ->groupBy(DB::raw('MONTH(created_at)'))

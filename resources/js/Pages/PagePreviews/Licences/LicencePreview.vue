@@ -126,7 +126,12 @@ v-if="form.belongs_to == 'Company'"
       <iframe v-if="latest_renewal && licence.type == 'retail'" :src="`${$page.props.blob_file_path}${latest_renewal.document}`" 
       frameborder="0" width="100%" height="600px"></iframe>
 
-      <iframe v-if="transfer_certificate_issued" :src="`${$page.props.blob_file_path}${transfer_certificate_issued.document}`" 
+      <iframe v-if="latest_renewal && licence.type == 'retail'" :src="`${$page.props.blob_file_path}${latest_renewal.document}`" 
+      frameborder="0" width="100%" height="600px"></iframe>
+      
+
+      <iframe v-if="appointment_of_managers && licence.type == 'retail'" 
+      :src="`${$page.props.blob_file_path}${appointment_of_managers.document}`" 
       frameborder="0" width="100%" height="600px"></iframe>
 
       <iframe v-if="alteration_document" :src="`${$page.props.blob_file_path}${alteration_document.path}`" 
@@ -170,6 +175,7 @@ export default {
    latest_renewal : Object,
    transfer_certificate_issued: Object,
    alteration_document: Object,
+   appointment_of_managers: Object,
   },
   setup(props) {
 
