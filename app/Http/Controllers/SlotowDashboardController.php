@@ -13,6 +13,7 @@ class SlotowDashboardController extends Controller
 
 
     public function index(){
+      
         $years = DB::table('years')->orderBy('year', 'DESC')->get()->pluck('year');
    
         return Inertia::render('Dashboard',[
@@ -31,11 +32,13 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('year', $currentYear), function ($query, $year) {
-            $query->whereYear('created_at', $year);
-        })
-        ->when(request('province', $defaultProvince), function ($query, $province) {
-            $query->where('province', $province);
+        ->when(request('type') == 'New-Apps', function ($query) {
+            $query->when(request('year'), function ($query) {
+                $query->whereYear('created_at', request('year'));
+            })
+            ->when(request('province'), function ($query) {
+                $query->where('province', request('province'));
+            });
         })
         ->where('is_new_app', 1)
         ->groupBy(DB::raw('MONTH(created_at)'))

@@ -12,7 +12,7 @@
                 </div>
                 <div class="row">
                     <div class="mt-3 ">
-                        <form class="row" >
+                        <form class="row" @submit.prevent="submit('company')" >
                             <div class="col-sm-6 col-md-8 col-lg-8 col-xl-8 position-relative">
                                 <div class="card card-plain h-100">
                                     <div class="p-3 card-body">
@@ -46,9 +46,9 @@
                                                 :errors="errors.email_address_1"
                                                 :input_id="email_address_1"
                                             />
-
+                                           
                                             <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 columns">
-                                                <div class="input-group input-group-outline null is-filled ">
+                                                <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Company Type </label>
                                                     <select class="form-control form-control-default" v-model="form.company_type">
                                                         <option :value="''" disabled>Select Type</option>
@@ -357,10 +357,10 @@
                             </div>
 
 
-                            <div v-if="$page.props.auth.has_slowtow_admin_role">
+                            <div>
                                 <button type="submit" class="btn btn-secondary ms-2"  :disabled="form.processing" :style="{float: 'right'}">
                                     <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                    Save</button>
+                                    Update</button>
                             </div>
 
                         </form>

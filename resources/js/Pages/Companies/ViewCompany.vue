@@ -26,7 +26,7 @@
                 </div>
                 <div class="row">
                     <div class="mt-3 ">
-                        <form class="row" @submit.prevent="submit">
+                        <form class="row" @submit.prevent="submit('slotow')">
                             <input type="hidden" v-model="form.slug">
                             <div class="col-8 col-md-8 col-xl-8 position-relative">
                                 <div class="card card-plain h-100">

@@ -41,6 +41,7 @@ export default {
     let file_name = ref('');
 
     const form = useForm({
+            type: '',
             company_name: props.company.name,
             company_type: props.company.company_type,
             reg_number: props.company.reg_number,
@@ -220,8 +221,25 @@ export default {
           }
         }
 
-    function submit() {//Update company details
-      form.post('/update-company', {
+    function submit(type) {//Update company details
+      if(type == 'company'){
+        update();
+        return
+      }      
+        form.post('/update-company', {
+          preserveScroll: true,
+          onSuccess: () => {
+                 if(props.success){
+                  notifySuccess(props.success)
+                      }else if(props.error){
+                        notifyError(props.error)
+                      }
+               }
+        })
+    }
+
+    function update(){
+      form.post('/company/update-my-company', {
         preserveScroll: true,
         onSuccess: () => {
                if(props.success){
@@ -231,9 +249,7 @@ export default {
                     }
              }
       })
-
     }
-
 
 
       function unlinkPerson(full_name,id){

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CompanyDocsController;
+use App\Http\Controllers\Auth\ProfileController;
+use App\Http\Controllers\CompanyAdmin\PeopleController;
 use App\Http\Controllers\CompanyAdmin\CompanyController;
 use App\Http\Controllers\CompanyAdmin\LicenceController;
 use App\Http\Controllers\CompanyAdmin\DashboardController;
@@ -10,13 +12,14 @@ use App\Http\Controllers\CompanyAdmin\NominationController;
 use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
-use App\Http\Controllers\CompanyAdmin\PeopleController;
 
   Route::group(['middleware' => ['auth','role:company-admin']], function () {
       
       Route::prefix('company')->group(function () {
 
         Route::get('/dashboard',[DashboardController::class,'index'])->name('company_dashboard');
+
+        Route::post('/update-my-profile',[ProfileController::class,'update']);
 
         Route::get('/licences',[LicenceController::class,'index'])->name('company_admin_licences');
 
@@ -32,6 +35,8 @@ use App\Http\Controllers\CompanyAdmin\PeopleController;
         Route::get('/my-companies',[CompanyController::class,'index'])->name('my_companies');
 
         Route::get('/view-my-company/{slug}',[CompanyController::class,'show'])->name('view_my_company');
+
+        Route::post('/update-my-company',[CompanyController::class,'update'])->name('company.update');
 
         Route::post('/submit-company-documents',[CompanyDocsController::class,'store']);
 

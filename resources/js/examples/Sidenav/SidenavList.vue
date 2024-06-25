@@ -143,6 +143,23 @@
         </sidenav-collapse>
   </li>
 
+  <li class="nav-item" v-if="$page.props.auth.has_company_admin_role
+ || $page.props.auth.has_slowtow_user_role">
+        <sidenav-collapse
+          url="#"
+          :aria-controls="''"
+          :collapse="false"
+          :class="{ active:  $page.props.currentRoute == 'people'}"
+          data-bs-toggle="modal" data-bs-target="#update-details"
+          navText="Profile">
+          <template v-slot:icon>
+            <i class="material-icons-round opacity-10 fs-5"
+              >account_circle</i
+            >
+          </template>
+        </sidenav-collapse>
+  </li>
+
 
     <hr>
       <li v-if="$page.props.auth.has_slowtow_admin_role || $page.props.auth.has_slowtow_user_role

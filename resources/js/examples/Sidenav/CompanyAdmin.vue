@@ -81,6 +81,52 @@
       </li>
 
 
+      <div v-if="show_modal" class="modal fade" id="update-details" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Update Your Details</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i class="fa fa-times text-danger"></i></button>
+            </div>
+            <form @submit.prevent="updateMyDetails">        
+            <div class="modal-body">      
+              <div class="row">
+                <div class="col-12 columns">
+                  <div class="input-group input-group-outline null is-filled ">
+                  <label class="form-label">Full Name</label>
+                  <input type="text" required class="form-control form-control-default" v-model="formDetails.name" >
+                  </div>
+                    <div v-if="errors" class="text-danger">{{ errors.name }}</div>
+                  </div>
+    
+                  <div class="col-12 columns">
+                    <div class="input-group input-group-outline null is-filled ">
+                    <label class="form-label">Email</label>
+                    <input type="email" required class="form-control form-control-default" v-model="formDetails.email" >
+                    </div>
+                  </div>
+                  <div class="col-12 columns">
+                    <div class="input-group input-group-outline null is-filled ">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" required class="form-control form-control-default" v-model="formDetails.contact" >
+                    </div>
+                  </div>
+
+               </div>
+            </div>
+        
+            <div class="modal-footer">
+              <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-sm btn-primary" :disabled="formDetails.processing">
+               <span v-if="formDetails.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+               Update</button>
+            </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+
       <div v-if="show_modal" class="modal fade" id="edit-password" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
           <div class="modal-content">
@@ -134,6 +180,13 @@ export default{
     setup(props) {
       let show_modal = ref(true);
       const { notifySuccess, notifyError } = useToaster();
+      const user = computed(() => usePage().props.value.auth.user)
+
+      const formDetails = useForm({
+        name: user.value.name,
+        email: user.value.email,
+        contact: user.value.contact,
+      })
 
       const form = useForm({
          password: '',
@@ -151,17 +204,24 @@ export default{
         }
         form.post('/update-my-password', {
         onSuccess: () => {
-            show_modal = false
+            show_modal.value = false
             document.querySelector('.modal-backdrop').remove()
             notifySuccess('Password Updated Successfully')
          },
       })
-
     }
 
-
-    const user = computed(() => usePage().props.value.auth.user)
-    return { user, form,updatePassword,show_modal,toggleModal }
+    const updateMyDetails = () => {
+        formDetails.post('/company/update-my-profile', {
+        onSuccess: () => {
+            show_modal.value = false
+            document.querySelector('.modal-backdrop').remove()
+            notifySuccess('Profile details updated successfully')
+         },
+      })
+    }
+    
+    return { user, form,updatePassword,show_modal,toggleModal,formDetails,updateMyDetails }
   },
     components: {
         Link

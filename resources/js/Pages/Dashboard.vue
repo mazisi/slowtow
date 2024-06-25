@@ -10,8 +10,8 @@
               <div class="input-group input-group-outline null is-filled">
               <Multiselect                
               :options="computedProvinces"
-               v-model="form.province"
-               @select="filter"
+               v-model="newAppsForm.province"
+               @select="filter('New-Apps')"
               :taggable="true"
               placeholder="Filter By Province"/>
               </div>
@@ -22,8 +22,8 @@
               <div class="input-group input-group-outline null is-filled">
               <Multiselect                
               :options="years"
-               v-model="form.year"
-               @select="filter"
+               v-model="newAppsForm.year"
+               @select="filter('New-Apps')"
               :taggable="true"
               placeholder="Filter By Year"/>
               </div>
@@ -32,7 +32,7 @@
     
             
             <div class="col-3">
-              <button style="float: right" class="btn btn-sm btn-primary" type="button" @click="resetFilter">Reset</button>
+              <button style="float: right" class="btn btn-sm btn-primary" type="button" @click="resetFilter('New-Apps')">Reset</button>
     
             </div>
     
@@ -48,11 +48,44 @@
                 color="">
 
               <div class="chart">
-                <canvas id="newAppsGraph" width="400" height="170"></canvas>
+                <canvas id="newAppsGraph" width="400" height="120"></canvas>
               </div>
               <p class="text-center text-default">New Licences</p>
               </chart-holder-card>
             </div>
+
+            <div class="row mt-4">
+
+              <div class="col-3">
+                <div class="input-group input-group-outline null is-filled">
+                <Multiselect                
+                :options="computedProvinces"
+                 v-model="renewalForm.province"
+                 @select="filter('Renewals')"
+                :taggable="true"
+                placeholder="Filter By Province"/>
+                </div>
+      
+              </div>
+      
+              <div class="col-3">
+                <div class="input-group input-group-outline null is-filled">
+                <Multiselect                
+                :options="years"
+                 v-model="renewalForm.year"
+                 @select="filter('Renewals')"
+                :taggable="true"
+                placeholder="Filter By Year"/>
+                </div>
+      
+              </div>
+      
+              
+              <div class="col-3">
+                <button style="float: right" class="btn btn-sm btn-primary" type="button" @click="resetFilter('Renewals')">Reset</button>      
+              </div>
+      
+             </div>
 
             <div class="col-md-12 col-12 mt-4">
               <chart-holder-card
@@ -60,19 +93,39 @@
                 color="">
 
               <div class="chart">
-                <canvas id="barGraph" width="400" height="170"></canvas>
+                <canvas id="barGraph" width="400" height="120"></canvas>
               </div>
               <p class="text-center text-default">Renewals</p>
               </chart-holder-card>
             </div>
 
             <div class="col-md-12 col-12 mt-4">
+              <div class="row mt-4">        
+                <div class="col-9">
+                  <div class="input-group input-group-outline null is-filled">
+                  <Multiselect                
+                  :options="years"
+                   v-model="tempLicenceForm.year"
+                   @select="filter('Temp')"
+                  :taggable="true"
+                  placeholder="Filter By Year"/>
+                  </div>
+        
+                </div>
+        
+                
+                <div class="col-3">
+                  <button style="float: right" class="btn btn-sm btn-primary" type="button" @click="resetFilter('Temp')">Reset</button>
+        
+                </div>
+        
+               </div>
               <chart-holder-card
                 title="New Apps"
                 color="">
 
               <div class="chart">
-                <canvas id="polarArea" width="400" height="170"></canvas>
+                <canvas id="polarArea" width="400" height="120"></canvas>
               </div>
               <p class="text-center text-default">Temporal Licences</p>
               </chart-holder-card>
@@ -110,51 +163,44 @@
       renewals: Array,
       tempLicences: Array
     },
-    setup(props) {
+setup(props) {
 
       const types = [
         {id:0, name:'All'},
         {id:1, name:'New Licences'},
         {id:2, name:'Renewals'},
         {id:3, name:'Temporal Licence'},
-    ]
+      ]
 
-    const form = useForm({
-      year: new Date().getFullYear(),
+    const newAppsForm = useForm({
+      year: '',
       province: 'All Provinces',
-      type: ''
+      type: 'New-Apps'
     })
 
+    const renewalForm = useForm({
+      year: '',
+      province: 'All Provinces',
+      type: 'New-Apps'
+    })
 
-        const resetFilter = (type) => {
-          switch (type) {
-            case 'new-apps':
-              
-              break;
-          
-            default:
-              break;
-          }
-        form.year = ''
-        form.type = ''
-        form.province = ''
-        Inertia.get('/slotow-admin-dashboard', {
-          
-        })
-
-      }
-
-      const computedProvinces = computed(() => {
-        return common.getProvinces();
-      })
-
+    const tempLicenceForm = useForm({
+      year: '',
+      type: 'New-Apps'
+    })
 
       
-      const filter = () => {
-        Inertia.get('/slotow-admin-dashboard', {
-            province: form.province,
-            year: form.year,
-            type: form.type
+      const filter = (type) => {
+
+        switch (type) {
+            case 'New-Apps':
+              newAppsForm.year = ''
+              newAppsForm.type = 'New-Apps'
+              newAppsForm.province = ''
+              Inertia.get('/slotow-admin-dashboard', {
+            province: newAppsForm.province,
+            year: newAppsForm.year,
+            type: newAppsForm.type
         },{
           replace: true,
           preserveState: true,
@@ -162,9 +208,80 @@
             // console.log('Props changed:', props);
           }
         })
+              break;
+            case 'Renewals':
+              renewalForm.year = ''
+              renewalForm.type = 'Renewals'
+              renewalForm.province = ''
+
+              Inertia.get('/slotow-admin-dashboard', {
+              province: renewalForm.province,
+              year: renewalForm.year,
+              type: 'Renewals'
+              },{
+                replace: true,
+                preserveState: true,
+                onSuccess: () => {
+                  // console.log('Props changed:', props);
+                }
+              })
+
+              break;
+            case 'Temp':
+              tempLicenceForm.year = ''
+              tempLicenceForm.type = ''
+              tempLicenceForm.province = ''
+
+              Inertia.get('/slotow-admin-dashboard', {
+                year: newAppsForm.year,
+                type: 'Temp'
+                },{
+                  replace: true,
+                  preserveState: true,
+                  onSuccess: () => {
+                    // console.log('Props changed:', props);
+                  }
+                })
+                
+              break;
+          
+            default:
+              break;
+          }
+
+        
       }
 
+      const resetFilter = (type) => {
+          switch (type) {
+            case 'New-Apps':
+              newAppsForm.year = ''
+              newAppsForm.type = ''
+              newAppsForm.province = ''
+              break;
+            case 'Renewals':
+              renewalForm.year = ''
+              renewalForm.type = ''
+              renewalForm.province = ''
+              break;
+            case 'Temp':
+              tempLicenceForm.year = ''
+              tempLicenceForm.type = ''
+              tempLicenceForm.province = ''
+              break;
+          
+            default:
+              break;
+          }
+        // Inertia.get('/slotow-admin-dashboard', {
+          
+        // })
 
+      }
+
+      const computedProvinces = computed(() => {
+        return common.getProvinces();
+      })
 
 
 
@@ -325,7 +442,9 @@ watch(() => [props.licences, props.tempLicences, props.renewals], () => {
 
       return {
         types,
-        form,
+        newAppsForm,
+        renewalForm,
+        tempLicenceForm,
         computedProvinces,
         resetFilter,
         filter
