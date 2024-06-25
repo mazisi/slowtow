@@ -9,6 +9,7 @@ use App\Http\Controllers\CompanyAdmin\LicenceController;
 use App\Http\Controllers\CompanyAdmin\DashboardController;
 use App\Http\Controllers\CompanyAdmin\AlterationController;
 use App\Http\Controllers\CompanyAdmin\NominationController;
+use App\Http\Controllers\PagePreviews\PreviewCompanyController;
 use App\Http\Controllers\CompanyAdmin\LicenceTransferController;
 use App\Http\Controllers\CompanyAdmin\TemporalLicenceController;
 use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
@@ -25,6 +26,8 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
         Route::get('/view-my-licences/{slug}',[LicenceController::class,'show'])->name('view_my_licences');
 
+        Route::get('/view-my-wholesale-licences/{slug}',[LicenceController::class,'show'])->name('view_my_licences');
+
         Route::get('/my-people',[PeopleController::class,'index'])->name('my_people');
 
         Route::get('/view-my-person/{id}',[PeopleController::class,'show'])->name('view_my_person');
@@ -33,6 +36,8 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
 
         Route::get('/my-companies',[CompanyController::class,'index'])->name('my_companies');
+
+        Route::get('/preview-company/{slug}',[PreviewCompanyController::class,'preview'])->name('preview_company');
 
         Route::get('/view-my-company/{slug}',[CompanyController::class,'show'])->name('view_my_company');
 

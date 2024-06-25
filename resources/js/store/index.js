@@ -1,5 +1,4 @@
 import { createStore } from "vuex";
-import { Inertia } from '@inertiajs/inertia'
 
 export default createStore({  
   state: {
@@ -27,7 +26,6 @@ export default createStore({
       state.showConfig = !state.showConfig;
     },
     navbarMinimize(state) {
-      console.log('STATE',state);
       const sidenav_show = document.querySelector(".g-sidenav-show");
 
       if (sidenav_show.classList.contains("g-sidenav-pinned")) {

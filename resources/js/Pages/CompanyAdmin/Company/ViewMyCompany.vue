@@ -8,7 +8,12 @@
                     <div class="col-lg-9 col-9">
                         <h6 class="mb-1">Company Info: {{ company.name }}</h6>
                     </div>
-                    
+                    <div class="col-lg-3 col-3 my-auto text-end">
+
+                        <button @click="preview('company')" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
+                            Preview
+                          </button>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="mt-3 ">

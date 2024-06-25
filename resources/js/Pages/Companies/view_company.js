@@ -267,8 +267,8 @@ export default {
       }
 
 
-      const preview = () => {
-        let url = `/preview-company/${props.company.slug}`
+      const preview = (type) => {
+        let url = type == 'company' ? `/company/preview-company/${props.company.slug}` : `/preview-company/${props.company.slug}`
         window.open(url,'_blank');
       }
 

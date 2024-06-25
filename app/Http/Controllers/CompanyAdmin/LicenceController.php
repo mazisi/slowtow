@@ -125,7 +125,7 @@ class LicenceController extends Controller
                 })
 
             ->whereIn('company_id',$get_company_ids)
-            ->get();
+            ->paginate(10);
         $all_licence_types = LicenceType::get();
 
         return Inertia::render('CompanyAdmin/Licences/Licence',['licences' => $licences,'all_licence_types' => $all_licence_types]);
