@@ -34,7 +34,7 @@ class AlterationFilter{
               $query->whereIn('province',array_values(explode(",",request('province'))));
           })
           
-          ->when(request('boardRegion'), function ($query) {
+          ->when(request('boardRegion') && request('report_type') == 'retail', function ($query) {
               $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
           })
           
@@ -53,15 +53,28 @@ class AlterationFilter{
            })
 
           
-          ->when(request('is_licence_complete') === 'Pending' , function ($query){
+          ->when(request('is_licence_complete') === 'Pending' && request('report_type') == 'retail' , function ($query){
                   $query->where(function ($query) {
                       $query->where('alterations.status','<', 700);
                   });
               
               })
 
-          ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+
+              ->when(request('is_licence_complete') === 'Pending' && request('report_type') == 'wholesale' , function ($query){
+                $query->where(function ($query) {
+                    $query->where('alterations.status','<', 800);
+                });
+            
+            })
+
+
+          ->when(request('is_licence_complete') === 'Complete' && request('report_type') == 'retail' , function ($query)  {
               $query->where('alterations.status', '>=', 700);
+          })
+
+          ->when(request('is_licence_complete') === 'Complete' && request('report_type') == 'wholesale' , function ($query)  {
+            $query->where('alterations.status', '>=', 800);
           });
 
       })

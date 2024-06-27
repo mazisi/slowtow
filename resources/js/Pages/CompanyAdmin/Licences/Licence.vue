@@ -72,14 +72,13 @@ export default {
 
   const redirect = (licence) => {
     let url = '';
-  if(licence.type == 'retail'){
+    if(licence.type == 'retail'){
      url = `/company/view-my-licences/${licence.slug}`
-  }else{
-     url = `/company/view-my-wholesale-licences/${licence.slug}`;
-  }
+    }else{
+     url = `/company/view-my-wholesale-licences/${licence.slug}?company=1`;
+    }
     Inertia.get(url);
   }
-
 
     watch(term, _.debounce(function (value) {
       Inertia.get('/licences', {

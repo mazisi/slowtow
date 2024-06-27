@@ -25,7 +25,8 @@
           </div>
 
           <div class="col-4">
-            <button @click="getType($event,'Alterations')" type="button" class=" btn btn-success w-50">Alterations</button>
+            <button @click="getType($event,report_type == 'retail' ? 'Alterations' : 'Additional Depot/Relocation')" 
+            type="button" class=" btn btn-success w-50">{{ report_type == 'retail' ? 'Alterations' : 'Additional Depot/Relocation' }}</button>
           </div>
 
           <div class="col-4">
@@ -37,7 +38,7 @@
             <button @click="getType($event,'New Applications')" type="button" class=" btn btn-success w-50">New Applications</button>
           </div>
 
-          <div class="col-4">
+          <div class="col-4" v-if="report_type == 'retail'">
             <button @click="getType($event,'Nominations')" type="button" class=" btn btn-success w-50">Nominations</button>
           </div>
           
@@ -89,24 +90,38 @@
   </div>
 
   <div v-if="form.variation === 'Renewals'" class="col-6 columns" >
-    <Multiselect
+    <Multiselect v-if="report_type == 'retail'"
         v-model="form.renewal_stages"           
         :options="computedRenewalStages"
+          mode="tags"
+        :taggable="true"
+        placeholder="Filter By Stage"/>
+
+        <Multiselect v-if="report_type == 'wholesale'"
+        v-model="form.renewal_stages"           
+        :options="computedWholesaleRenewalStages"
           mode="tags"
         :taggable="true"
         placeholder="Filter By Stage"/>
   </div>
 
   <div v-if="form.variation === 'Transfers'" class="col-6 columns" >
-    <Multiselect
+    <Multiselect v-if="report_type == 'retail'"
         v-model="form.transfer_stages"           
         :options="computedTransferStages"
           mode="tags"
         :taggable="true"
         placeholder="Filter By Stage"/>
+
+        <Multiselect v-if="report_type == 'wholesale'"
+        v-model="form.transfer_stages"           
+        :options="computedWholesaleTransferStages"
+          mode="tags"
+        :taggable="true"
+        placeholder="Filter By Stage"/>
   </div>
 
-  <div v-if="form.variation === 'Nominations'" class="col-6 columns" >
+  <div v-if="form.variation === 'Nominations' && report_type == 'retail'" class="col-6 columns" >
     <Multiselect
         v-model="form.nomination_stages"           
         :options="computedNominationStages"
@@ -116,9 +131,16 @@
   </div>
 
   <div v-if="form.variation === 'New Applications' || form.variation === 'All'" class="col-6 columns" >
-    <Multiselect
+    <Multiselect v-if="report_type == 'retail'"
     v-model="form.new_app_stages"           
     :options="computedNewAppStages"
+     mode="tags"
+    :taggable="true"
+    placeholder="Filter By Stage"/>
+
+    <Multiselect v-if="report_type == 'wholesale'"
+    v-model="form.new_app_stages"           
+    :options="computedWholesaleNewAppStages"
      mode="tags"
     :taggable="true"
     placeholder="Filter By Stage"/>
@@ -143,9 +165,16 @@
   </div>
 
   <div v-if="form.variation === 'Existing Licences'" class="col-6 columns">
-    <Multiselect
+    <Multiselect v-if="report_type == 'retail'"
     v-model="form.new_app_stages"           
     :options="computedNewAppStages"
+     mode="tags"
+    :taggable="true"
+    placeholder="Filter By Stage"/>
+    
+    <Multiselect v-if="report_type == 'wholesale'"
+    v-model="form.new_app_stages"           
+    :options="computedWholesaleNewAppStages"
      mode="tags"
     :taggable="true"
     placeholder="Filter By Stage"/>
@@ -170,7 +199,7 @@
 
       <div class="col-6 columns" >
         <Multiselect
-         v-model="form.year" 
+        v-model="form.year" 
          :options="years"
         :searchable="true"
         placeholder="Select Year"
@@ -178,7 +207,7 @@
       </div>
   
   
-  <div v-if="form.variation !== 'Temporary Licences'" class="col-6">
+  <div v-if="form.variation !== 'Temporary Licences' && report_type == 'retail'" class="col-6">
     <div class="input-group input-group-outline null is-filled">
       <Multiselect
       v-model="form.boardRegion"           
@@ -193,7 +222,16 @@
   
   <div v-if="form.variation !== 'Temporary Licences'" class="col-6 ">
     <div class="input-group input-group-outline null is-filled">
-      <Multiselect
+      <Multiselect v-if="report_type == 'retail'"
+      v-model="form.licence_types"           
+      :options="licenceTypes"
+       mode="tags"
+       :searchable="true"
+      :taggable="true"
+      @select="fetchNewAppWithStages"
+      placeholder="Licence Type"/>
+
+      <Multiselect v-if="report_type == 'wholesale'"
       v-model="form.licence_types"           
       :options="licenceTypes"
        mode="tags"

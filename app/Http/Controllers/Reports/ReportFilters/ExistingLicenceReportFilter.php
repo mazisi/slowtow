@@ -33,7 +33,7 @@ class ExistingLicenceReportFilter{
             ->when(request('province'), function ($query) {
                 $query->whereIn('licences.province',array_values(explode(",",request('province'))));
             })
-            ->when(request('boardRegion'), function ($query) {
+            ->when(request('boardRegion') && request('report_type') !== 'retail', function ($query) {
                 $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
             })
             ->when(request('new_app_stages'), function ($query) {
@@ -53,6 +53,28 @@ class ExistingLicenceReportFilter{
            // ->when(request('selectedDates'), function ($query) {
                 //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
              //})
+
+              ->when(request('report_type') == 'retail', function ($query) {
+                $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                    $query->where('status','<', 2300)
+                    ->orWhereNull('status');
+                })
+    
+                ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                    $query->where('status','>=', 2300);
+                });
+             })
+
+             ->when(request('report_type') == 'wholesale', function ($query) {
+                $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                    $query->where('status','<', 1300)
+                    ->orWhereNull('status');
+                })
+    
+                ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                    $query->where('status','>=', 1300);
+                });
+             })
 
              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                 $query->where('status','<', 2300)

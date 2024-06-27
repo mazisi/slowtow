@@ -24,11 +24,20 @@ use App\Http\Controllers\Reports\TemporaLExportController;
 use App\Http\Controllers\Reports\TransferExportController;
 use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
+use App\Http\Controllers\Reports\AllWholesaleReportController;
 use App\Http\Controllers\Reports\ExistingLicenceExportController;
+use App\Http\Controllers\Reports\Wholesale\WholesaleRenewalExportController;
+use App\Http\Controllers\Reports\Wholesale\WholesaleTransferExportController;
+use App\Http\Controllers\Reports\Wholesale\WholesaleAlterationExportController;
 
 class ReportController extends Controller
 {
     public function index(Request $request){
+      // if($request->type == 'wholesale'){
+      //   return WholesaleReportController::index($request);
+      // }
+        $licenceTypes = null;
+        $report_type = $request->type;
         $years = DB::table('years')->orderBy('year', 'DESC')->get()->pluck('year');
           $renewals = LicenceRenewal::with(['licence','renewal_documents' => function ($query){
               $query ->where('doc_type','Client Quoted');            
@@ -38,8 +47,18 @@ class ReportController extends Controller
             $emails = Email::with(['licence_renewals.licence' => function ($query){
               // $query ->where('doc_type','Client Quoted');            
             }])->where('model_type','Renewal')->get();
-          
-          $licenceTypes = LicenceType::with('licence')->pluck('licence_type')->unique();
+
+            if($request->type == 'wholesale'){
+              $licenceTypes = [
+                102 => "Distribution and Manufacturing Liquor Licence",
+                103 => "Distribution Liquor Licence",
+                104 => "Manufacturing Liquor Licence"
+              ];
+
+              }else{
+                $licenceTypes = LicenceType::with('licence')->pluck('licence_type')->unique();
+              }
+
           $companies = Company::pluck('name','id');        
           $people = People::pluck('full_name','id');
           $sortedStatus = Arr::sort($request->new_app_stages);
@@ -74,6 +93,7 @@ class ReportController extends Controller
           return Inertia::render('Reporting/Report',[
                'licenceTypes' => $licenceTypes,
                'companies' => $companies,
+               'report_type' => $report_type,
                'people' => $people,
                 'new_applications' => $new_applications,
                'years' => $years
@@ -87,14 +107,28 @@ class ReportController extends Controller
               'variation' => $request->variation,
               'status' =>'0'
             ]);
-            // AllReportsController::exportAll($request);
+
+            if($request->report_type == 'wholesale'){
+              AllWholesaleReportsController::exportAll($request);
+            }else{
+              AllReportsController::exportAll($request);
+            }
             return back()->with('success','Report is being generated. Please check your email');
             break;
             case 'Renewals':
-              RenewalExportController::export($request); 
+              if($request->report_type == 'wholesale'){
+                WholesaleRenewalExportController::export($request);
+              }else{
+                RenewalExportController::export($request);
+              }
               break;            
           case 'Transfers':
-            TransferExportController::export($request);          
+            if($request->report_type == 'wholesale'){
+              WholesaleTransferExportController::export($request);
+            }else{
+              TransferExportController::export($request);
+            }
+                      
             break;
           case 'Nominations':
             NominationExportController::export($request);          
@@ -111,10 +145,20 @@ class ReportController extends Controller
             break;
   
             case 'Alterations':
-              AlterationExportController::export($request);          
+              if($request->report_type == 'wholesale'){
+                WholesaleAlterationExportController::export($request); 
+              }else{
+                AlterationExportController::export($request); 
+              }
+                       
               break;     
           case 'Upcoming Renewals':
-            RenewalExportController::export($request);          
+            if($request->report_type == 'wholesale'){
+              WholesaleRenewalExportController::export($request); 
+            }else{
+              RenewalExportController::export($request); 
+            }
+                      
             break;         
           
           default:

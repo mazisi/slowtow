@@ -34,7 +34,7 @@ class RenewalReportFilter {
                $query->where('is_licence_active', 1);
            })
 
-           ->when(request('boardRegion'), function ($query)  {
+           ->when(request('boardRegion') && request('report_type') == 'retail', function ($query)  {
                $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
            })
            ->when(request('applicant'), function ($query)  {
@@ -50,14 +50,34 @@ class RenewalReportFilter {
            ->when(request('licence_types'), function ($query)  {
                $query->whereIn('licence_type_id',getLicenceTypeByProvince());
            })
-           ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-               $query->where('licence_renewals.status','<', 500)
-               ->orWhereNull('licence_renewals.status');
-           })
+           
 
-           ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-               $query->where('licence_renewals.status','>=', 500);
-           });
+           ->when(request('report_type') == 'retail', function ($query)  {
+              $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                $query->where('licence_renewals.status','<', 500)
+                ->orWhereNull('licence_renewals.status');
+            })
+ 
+            ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                $query->where('licence_renewals.status','>=', 500);
+            });
+
+            })
+
+
+            ->when(request('report_type') == 'wholesale', function ($query)  {
+                $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
+                  $query->where('licence_renewals.status','<', 1500)
+                  ->orWhereNull('licence_renewals.status');
+              })
+   
+              ->when(request('is_licence_complete') === 'Complete', function ($query)  {
+                  $query->where('licence_renewals.status','>=', 1500);
+              });
+  
+              });
+
+
 
            })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
            ->orderBy('trading_name')

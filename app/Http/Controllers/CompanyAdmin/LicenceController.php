@@ -134,7 +134,6 @@ class LicenceController extends Controller
     
     public function show(Request $request, $slug)
     {
-
         $licence = Licence::with('company', 'people', 'licence_documents')
             ->whereSlug($slug)
             ->first();

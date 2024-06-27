@@ -26,7 +26,7 @@ use App\Http\Controllers\CompanyAdmin\CompanyRegistrationController;
 
         Route::get('/view-my-licences/{slug}',[LicenceController::class,'show'])->name('view_my_licences');
 
-        Route::get('/view-my-wholesale-licences/{slug}',[LicenceController::class,'show'])->name('view_my_licences');
+        Route::get('/view-my-wholesale-licences/{slug}',[LicenceController::class,'show'])->name('view_my_wholesale_licences');
 
         Route::get('/my-people',[PeopleController::class,'index'])->name('my_people');
 

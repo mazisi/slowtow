@@ -33,7 +33,7 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
             ->orWhere('status',400)
             ->orWhere('status',500);
         })
-        ->whereNull('deleted_at')->paginate(20)->withQueryString();
+        ->whereNull('deleted_at')->latest()->paginate(20)->withQueryString();
     }
  
   function getMailTemplate($renewal){
@@ -41,7 +41,8 @@ class RenewalEmailTemplate implements HasEmailTemplateInterface  {
     $template = '';
 
     if($renewal->licence->type == 'wholesale'){
-      return $template = (new WholesaleRenewalTemplate)->getMailTemplate($renewal);
+        return $template;
+    //   return $template = (new WholesaleRenewalTemplate)->getMailTemplate($renewal);
     }
     
 

@@ -25,7 +25,7 @@ class TransferReportFilter {
         ->when(request('province'), function ($query)  {
             $query->whereIn('licences.province',array_values(explode(",",request('province'))));
         })
-        ->when(request('boardRegion'), function ($query)  {
+        ->when(request('boardRegion') && request('report_type') == 'retail', function ($query)  {
             $query->whereIn('licences.board_region',array_values(explode(",",request('boardRegion'))));
         })
         

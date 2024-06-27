@@ -7,6 +7,7 @@ import Banner from '../../components/Banner.vue';
 import { ref, computed } from 'vue';
 import  common from '../../common-js/common.js';
 import stages from './stages.js';
+import wholesaleStages from './wholesaleStages.js';
 import useToaster from '../../../store/useToaster';
 
 export default {
@@ -15,6 +16,8 @@ export default {
     companies: Object,
     new_applications: Object,
     years: Object,
+    report_type: String,
+    wholesaleLicenceTypes: Object,
     people: Object,
     emails: Object,
     success: String,
@@ -54,7 +57,8 @@ export default {
       nomination_stages: [],
       alteration_stages: [],
       temp_licence_stages: [],
-      temp_licence_region: []
+      temp_licence_region: [],
+      report_type : props.report_type
     })
     
 
@@ -71,12 +75,34 @@ export default {
       return stages.getRenewalStages();
     })
 
+    
     const computedNewAppStages = computed(() => {
       return stages.getNewAppStages();
     })
+
+    
+    // if licence is wholesale
+    const computedWholesaleNewAppStages = computed(() => {
+      return wholesaleStages.getNewAppStages();
+    })
+
+    const computedWholesaleRenewalStages = computed(() => {
+      return wholesaleStages.getWholesaleRenewalStages();
+    })
+
+
+    const computedWholesaleLicenceTypes = computed(() => {
+      return wholesaleStages.getWholesaleLicenceTypes();
+    })
+
     const computedTransferStages = computed(() => {
       return stages.getTransferStages();
     })
+
+    const computedWholesaleTransferStages = computed(() => {
+      return wholesaleStages.getTransferStages();
+    })
+
     const computedNominationStages = computed(() => {
       return stages.getNominationStages();
     })
@@ -139,6 +165,8 @@ export default {
             })
    }
 
+  
+
    const exportReport = () => {
     let url =
     `/export-report?variation=${form.variation}&month_from=${form.month_from}
@@ -149,7 +177,7 @@ export default {
     &renewal_stages=${form.renewal_stages}&transfer_stages=${form.transfer_stages}
     &nomination_stages=${form.nomination_stages}&alteration_stages=${form.alteration_stages}
     &temp_licence_stages=${form.temp_licence_stages}&temp_licence_region=${form.temp_licence_region}
-    &activeStatus=${form.activeStatus}&is_licence_complete=${form.is_license_complete}`
+    &activeStatus=${form.activeStatus}&is_licence_complete=${form.is_license_complete}&report_type=${form.report_type}`
     
     window.open(url,'_blank');
      
@@ -223,7 +251,13 @@ return{
   computedNominationStages,
   computedAlterationStages,
   computedTempLicenceStages,
-  computedMonths
+  computedMonths,
+
+  // if licence is wholesale
+  computedWholesaleNewAppStages,
+  computedWholesaleLicenceTypes,
+  computedWholesaleRenewalStages,
+  computedWholesaleTransferStages
 }
 },
  components: {
