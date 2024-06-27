@@ -85,31 +85,32 @@ class SlotowDashboardController extends Controller
         return $monthlyRenewalCounts;
     }
 
-    function tempLicences() { 
-        
-        $currentYear = now()->year; 
-        
-        $tempLicences = TemporalLicence::select(
-            DB::raw('MONTH(created_at) as month'),
-            DB::raw('COUNT(*) as count')
-        )
-        ->when(request('year') && request('type') == 'temps', function ($query, $year) {
-            $query->whereYear('created_at', $year);
-        })
-        ->groupBy(DB::raw('MONTH(created_at)'))
-        ->pluck('count', 'month');
-    
-        // Initialize an array with all months set to 0
-        $monthlyTempLicenceCounts = array_fill(1, 12, 0);
-    
-        // Fill the monthly counts with actual data
-        foreach ($tempLicences as $month => $count) {
-            $monthlyTempLicenceCounts[$month] = $count;
-        }
-    
-        return $monthlyTempLicenceCounts;
 
 
-        
+function tempLicences() { 
+    $currentYear = now()->year; 
+    $year = request('year') ? request('year') : $currentYear;
+    $type = request('type');
+
+    $tempLicences = TemporalLicence::select(
+        DB::raw('MONTH(created_at) as month'),
+        DB::raw('COUNT(*) as count')
+    )
+    ->when($type == 'temps', function ($query) use ($year) {
+        $query->whereYear('created_at', $year);
+    })
+    ->groupBy(DB::raw('MONTH(created_at)'))
+    ->pluck('count', 'month');
+
+    // Initialize an array with all months set to 0
+    $monthlyTempLicenceCounts = array_fill(1, 12, 0);
+
+    // Fill the monthly counts with actual data
+    foreach ($tempLicences as $month => $count) {
+        $monthlyTempLicenceCounts[$month] = $count;
     }
+
+    return $monthlyTempLicenceCounts;
+}
+
 }

@@ -96,10 +96,10 @@
                         <hr>
                         <h6 class="text-center">Documents</h6>
   
-                         <div class="row mt-4">
+                        <div class="row mt-4">
                           <div class="col-4">
                                   <PeopleDocComponent
-                                      :documentModel="person.person"
+                                      :documentModel="person"
                                       @file-value-changed="submitDocument"
                                       @file-deleted="deleteDocument"
                                       :hasFile="hasFile('ID Document')"
@@ -112,20 +112,20 @@
   
                           <div class="col-4">
                                 <PeopleDocComponent
-                                    :documentModel="person.person"
+                                    :documentModel="person"
                                     @file-value-changed="submitDocument"
                                     @file-deleted="deleteDocument"
-                                    :hasFile="hasFile('Police Clearance')"
+                                    :hasFile="hasFile('Suitability Clearance')"
                                     :errors="errors"
                                     :error="error"
-                                    :docType="'Police Clearance'"
+                                    :docType="'Suitability Clearance'"
                                     :success="success"
                                 />
                           </div>
   
                           <div class="col-4">
                                 <PeopleDocComponent
-                                    :documentModel="person.person"
+                                    :documentModel="person"
                                     @file-value-changed="submitDocument"
                                     @file-deleted="deleteDocument"
                                     :hasFile="hasFile('Passport')"
@@ -140,7 +140,7 @@
   
                           <div class="col-4">
                                 <PeopleDocComponent
-                                    :documentModel="person.person"
+                                    :documentModel="person"
                                     @file-value-changed="submitDocument"
                                     @file-deleted="deleteDocument"
                                     :hasFile="hasFile('Work Permit')"
@@ -153,12 +153,25 @@
   
                           <div class="col-4">
                                 <PeopleDocComponent                              
-                                    :documentModel="person.person"
+                                    :documentModel="person"
                                     @file-value-changed="submitDocument"
+                                    @file-deleted="deleteDocument"
                                     :hasFile="hasFile('Valid Fingerprints')"
                                     :errors="errors"
                                     :error="error"
                                     :docType="'Valid Fingerprints'"
+                                    :success="success"
+                                />
+                          </div>
+                          <div class="col-4">
+                                <PeopleDocComponent
+                                    :documentModel="person"
+                                    @file-value-changed="submitDocument"
+                                    @file-deleted="deleteDocument"
+                                    :hasFile="hasFile('National Police Clearance')"
+                                    :errors="errors"
+                                    :error="error"
+                                    :docType="'National Police Clearance'"
                                     :success="success"
                                 />
                           </div>

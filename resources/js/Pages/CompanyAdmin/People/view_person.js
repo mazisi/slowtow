@@ -36,20 +36,20 @@ setup (props) {
   const { notifySuccess, notifyError } = useToaster();
 
 const form = useForm({
-       name: props.person.name,
-        date_of_birth: props.person.person.date_of_birth,
-        id_or_passport: props.person.person.id_or_passport,
-        email_address_1: props.person.person.email_address_1,
-        email_address_2: props.person.person.email_address_2,
-        cell_number: props.person.person.cell_number,
-        telephone: props.person.person.telephone,
-        valid_saps_clearance: props.person.person.valid_saps_clearance,
-        saps_clearance_valid_until: props.person.person.saps_clearance_valid_until,
-        passport_valid_until: props.person.person.passport_valid_until,
-        valid_fingerprint: props.person.person.valid_fingerprint,
-        fingerprint_valid_until: props.person.person.fingerprint_valid_until,
-        active: props.person.person.active,
-        slug: props.person.person.slug,
+       name: props.person.full_name,
+        date_of_birth: props.person.date_of_birth,
+        id_or_passport: props.person.id_or_passport,
+        email_address_1: props.person.email_address_1,
+        email_address_2: props.person.email_address_2,
+        cell_number: props.person.cell_number,
+        telephone: props.person.telephone,
+        valid_saps_clearance: props.person.valid_saps_clearance,
+        saps_clearance_valid_until: props.person.saps_clearance_valid_until,
+        passport_valid_until: props.person.passport_valid_until,
+        valid_fingerprint: props.person.valid_fingerprint,
+        fingerprint_valid_until: props.person.fingerprint_valid_until,
+        active: props.person.active,
+        slug: props.person.slug,
 });
 
 
@@ -64,9 +64,9 @@ const form = useForm({
 
 
     function hasFile(doc_type) {
-        if (props.person.person.people_documents) {
-            const foundDocument = props.person.person.people_documents.find(doc =>
-                doc.people_id === props.person.person.id &&
+        if (props.person.people_documents) {
+            const foundDocument = props.person.people_documents.find(doc =>
+                doc.people_id === props.person.id &&
                 doc.doc_type === doc_type &&
                 doc.document_name &&
                 doc.path &&

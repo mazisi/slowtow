@@ -16,12 +16,12 @@
 <div class="col-12">
 
 <div class="row mb-4">
-<div class="col-9">
+<div class="col-12">
 <div class="input-group input-group-outline null is-filled">
 <input v-model="term" type="text" class="form-control form-control-default" placeholder="Search Person">
 </div>
 </div>
-<div class="col-2">
+<div class="col-2 d-none">
 <div class="input-group input-group-outline null is-filled">
 <select @change="search"  v-model="form.active_status" class="form-control form-control-default">
   <option :value="``" disabled selected>Filter Options</option>
@@ -48,7 +48,7 @@
 </thead>
 <tbody>
 
-<tr v-if="company.data[0]?.users?.length > 0" v-for="person in company.data[0].users" :key="person.id">
+<tr v-if="people?.length > 0" v-for="person in people" :key="person.id">
 <td>
 <div class="avatar-group ">
 <i class="fa fa-check text-success" aria-hidden="true"></i>
@@ -56,10 +56,9 @@
 </td>
 <td class="align-middle text-center text-sm">
 <Link :href="`/company/view-my-person/${person.id}`">
-<h6 class="mb-0 text-sm">{{ person.name }}</h6></Link>
+<h6 class="mb-0 text-sm">{{ person.full_name }}</h6></Link>
 <p v-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_1?.toLowerCase() }} </p>
-<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_2?.toLowerCase() }} </p>
-<p v-else-if="person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_3?.toLowerCase() }} </p>
+<p v-else-if="!person.email_address_1" class="text-xs text-secondary mb-0"> {{ person.email_address_2?.toLowerCase() }} </p>
 </td>
 <td class="align-middle d-flex justify-content-center">
 <Link :href="`/company/view-my-person/${person.id}`" class="px-0 nav-link font-weight-bold lh-1 text-body" href="">

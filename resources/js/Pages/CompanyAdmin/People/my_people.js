@@ -14,6 +14,7 @@ export default {
     success: String,
     error: String,
     company: Object,
+    people: Array,
     linked_companies: Object,
     links: Array,
   },

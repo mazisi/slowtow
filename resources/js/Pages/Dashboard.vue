@@ -179,6 +179,7 @@ export default {
     };
 
     const resetFilter = (type) => {
+      
       switch (type) {
         case 'New-Apps':
           newAppsForm.year = '';

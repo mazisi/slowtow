@@ -17,13 +17,13 @@
             <p v-if="file_has_apostrophe" class="mb-0 text-danger text-xs">File cannot contain apostrophes.</p>
           </div>
       
-          <button v-if="hasFile.docPath " @click="deleteDocument(hasFile.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-          <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+          <button v-if="hasFile.docPath" @click="deleteDocument(hasFile.id)" type="button" class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
+          <i v-if="$page.props.auth.has_slowtow_admin_role" class="fa fa-trash-o text-danger" aria-hidden="true"></i>
           </button>
       
-          <label v-else :for="uploadDoc.doc_type" :class="{ 'd-none': uploadDoc.processing || $page.props.auth.has_company_admin_role}"
+          <label v-else :for="uploadDoc.doc_type" :class="{ 'd-none': uploadDoc.processing || $page.props.auth.has_slowtow_admin_role}"
           class="mb-0 btn btn-link pe-3 ps-0 ms-auto">
-          <i class="fa fa-upload" aria-hidden="true"></i>
+          <i v-if="!$page.props.auth.has_company_admin_role" class="fa fa-upload" aria-hidden="true"></i>
           <input type="file" @change="upload($event)" accept=".pdf" hidden :id="uploadDoc.doc_type">
           </label>
           
