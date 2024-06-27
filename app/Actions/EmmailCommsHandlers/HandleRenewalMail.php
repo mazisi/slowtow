@@ -31,6 +31,7 @@ class HandleRenewalMail {
          }
 
         $renewal_stage = '';  
+        $get_doc = '';  
 
         if($renewal->licence->type == 'retail'){
                 switch ($renewal->status) {            
@@ -50,11 +51,12 @@ class HandleRenewalMail {
                     return back()->with('error','Could not send email.');
                         break;
                 }
+                $get_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type',$renewal_stage)->first();
     }else{
-        $this->getWholesaleStages($renewal);
+        $get_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type',$this->getWholesaleStages($renewal))->first();
     }
 
-        $get_doc = RenewalDocument::where('licence_renewal_id',$renewal->id)->where('doc_type',$renewal_stage)->first();
+        
        
         if(is_null($get_doc)){              
             return back()->with('error','Mail NOT SENT!.Document is not uploaded.');

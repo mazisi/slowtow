@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Inertia\Inertia;
 use App\Models\Licence;
 use App\Models\LicenceRenewal;
@@ -13,9 +14,8 @@ class SlotowDashboardController extends Controller
 
 
     public function index(){
-      
         $years = DB::table('years')->orderBy('year', 'DESC')->get()->pluck('year');
-   
+        
         return Inertia::render('Dashboard',[
         'licences' => $this->newLicences(),
         'renewals' => $this->renewals(),
@@ -25,9 +25,6 @@ class SlotowDashboardController extends Controller
     }
 
     function newLicences() {
-        $currentYear = now()->year;  
-        $defaultProvince = 'Gauteng';
-
         $licencesByMonth = Licence::select(
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
@@ -46,35 +43,35 @@ class SlotowDashboardController extends Controller
     
         // Initialize an array with all months set to 0
         $monthlyLicenceCounts = array_fill(1, 12, 0);
-    
+        
         // Fill the monthly counts with actual data
         foreach ($licencesByMonth as $month => $count) {
             $monthlyLicenceCounts[$month] = $count;
         }
-    
+        //dd( $monthlyLicenceCounts,$licencesByMonth);
         return $monthlyLicenceCounts;
     }
     
     
 
     function renewals() {  
-       
-        $currentYear = now()->year; 
-        $defaultProvince = 'Gauteng';
-        
+        $year = request('year') ? request('year') : Carbon::now()->year;
+        $type = request('type');
+    // dd(request('province'));
         $renewalsByMonth = LicenceRenewal::select(
-            DB::raw('MONTH(created_at) as month'),
+            DB::raw('MONTH(licences.licence_date) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('year'), function ($query) {
-            $query->where('date', request('year'));
+        ->join('licences', 'licences.id', '=', 'licence_renewals.licence_id')
+        ->when($type == 'renewals', function ($query) use ($year) {
+            $query->where('date', $year);
         })
         ->when(request('province'), function ($query) {
             $query->whereHas('licence', function ($query) {
                 $query->where('province', request('province'));
             });
         })
-        ->groupBy(DB::raw('MONTH(created_at)'))
+        ->groupBy(DB::raw('MONTH(licences.licence_date)'))
         ->pluck('count', 'month');
     
         // Initialize an array with all months set to 0
@@ -96,7 +93,7 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('year'), function ($query, $year) {
+        ->when(request('year') && request('type') == 'temps', function ($query, $year) {
             $query->whereYear('created_at', $year);
         })
         ->groupBy(DB::raw('MONTH(created_at)'))

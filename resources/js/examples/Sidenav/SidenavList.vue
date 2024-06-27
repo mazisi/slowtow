@@ -301,7 +301,7 @@
 
 
 
-      <CompanyAdmin v-if="$page.props.auth.has_company_admin_role"/>  
+      <!-- <CompanyAdmin v-if="$page.props.auth.has_company_admin_role"/>   -->
 
 
 

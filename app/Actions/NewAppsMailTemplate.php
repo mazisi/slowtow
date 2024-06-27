@@ -14,8 +14,8 @@ class NewAppsMailTemplate implements HasEmailTemplateInterface  {
     $template = '';
 
     if($licence->type=='wholesale'){ 
-
-      return $template = (new WholesaleRenewalTemplate)->getMailTemplate($licence);
+      return $template;
+      // return $template = (new WholesaleRenewalTemplate)->getMailTemplate($licence);
     }
     
     

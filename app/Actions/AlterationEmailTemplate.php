@@ -12,7 +12,8 @@ class AlterationEmailTemplate  {
     $template = '';
 
     if($renewal->licence->type =='wholesale'){
-      return (new WholesaleAlterationTemplate)->getMailTemplate($renewal);
+        return $template;
+      // return (new WholesaleAlterationTemplate)->getMailTemplate($renewal);
     }
     
 

@@ -11,7 +11,8 @@ class TransferMailTemplate{
     $template = '';
 
     if($licence->licence->type=='wholesale'){
-      return $template = (new WholesaleTransferTemplate)->getMailTemplate($licence);
+        return $template;
+      // return $template = (new WholesaleTransferTemplate)->getMailTemplate($licence);
     }
     
     if($licence->status == '100'){//quoted
