@@ -8,6 +8,7 @@ use App\Mail\ReportMailer;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Reports\AllReportsController;
+use App\Http\Controllers\Reports\AllWholesaleReportsController;
 
 class ExportAllData extends Command
 {
@@ -33,9 +34,15 @@ class ExportAllData extends Command
     public function handle() {
         $report = Report::where('variation','All')->where('status','0')->latest()->first();
             if(!is_null($report)){
-             Report::whereId($report->id)->where('status','0')->update(['status' => '1']);
-            AllReportsController::exportAll(request());
-            Mail::to(auth()->user()->email)->cc('info@goverify.co.za')->send(new ReportMailer($report));
+                if($report->type == 'retail'){
+                    Report::whereId($report->id)->where('status','0')->where('type','retail')->update(['status' => '1']);
+                    AllReportsController::exportAll(request());
+                }elseif($report->type == 'wholesale'){
+                    Report::whereId($report->id)->where('status','0')->where('type','wholesale')->update(['status' => '1']);
+                    AllWholesaleReportsController::exportAll(request());
+                }
+             
+            Mail::to($report->email)->cc('info@goverify.co.za')->send(new ReportMailer($report));
             }
     }
 }
