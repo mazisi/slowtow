@@ -1,6 +1,6 @@
 import Layout from "../../../Shared/Layout.vue";
 import { useForm ,Link, Head } from '@inertiajs/inertia-vue3';
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch, onMounted, computed } from 'vue';
 import { Inertia } from '@inertiajs/inertia';
 import Banner from '../../components/Banner.vue'
 import Paginate from "@/Shared/Paginate.vue";
@@ -19,6 +19,7 @@ export default {
     links: Array,
   },
   setup(props){
+
     const { notifySuccess, notifyError } = useToaster();
 //   console.log(props.company.data[0].users)
     const [search_query, active_status] = getUrlParam();
@@ -32,6 +33,17 @@ export default {
 
     const term = search_query ? search_query : ref('');
 
+   let searchTerm = ref('');
+
+    const filteredPeople = computed(() => {
+      console.log(searchTerm.value)
+      if (!searchTerm.value) return props.people;
+   
+      return props.people.filter(person => 
+        person.full_name.toLowerCase().includes(searchTerm.value.toLowerCase())
+      );
+    });
+
     const form = useForm({
           term: term,
           active_status: ''
@@ -42,15 +54,11 @@ export default {
     })
 
     function search(){
-      form.get(`/people`, {
-            replace: true,
-            preserveState: true
-            
-        })
+      // return props.people = props.people.filter(obj => obj.full_name.toLowerCase().includes(form.term.toLowerCase()))     
     }
-    watch(term, _.debounce(function (value) {
-          Inertia.get('/people', { term: value, active_status: form.active_status }, { preserveState: true, replace: true });
-        }, 2000));
+    // watch(form.term, _.debounce(function (value) {
+    //    Inertia.get('/people', { term: value, active_status: form.active_status }, { preserveState: true, replace: true });
+    //     }, 2000));
 
 
         onMounted(() => {
@@ -63,9 +71,10 @@ export default {
 
     return{
       getUrlParam,
-      term,
+      searchTerm,
       search,
       form,
+      filteredPeople,
       toast
     }
   },

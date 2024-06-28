@@ -20,9 +20,6 @@
                           </div>
                           
                       </div>
-                      <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                          <div class="progress-bar l-bg-cyan" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
-                      </div>
                   </div>
               </div>
             </Link>
@@ -40,13 +37,10 @@
                               </h2>
                           </div>
                       </div>
-                      <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                          <div class="progress-bar l-bg-green" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
-                      </div>
                   </div>
               </div>
             </Link>
-          <Link :href="`/people`" class="col-xl-3 col-lg-3">
+          <Link :href="`/company/my-people`" class="col-xl-3 col-lg-3">
               <div class="card l-bg-green-dark">
                   <div class="card-statistic-3 p-4">
                       <div class="card-icon card-icon-large"><i class="fas fa-users"></i></div>
@@ -63,7 +57,7 @@
                   </div>
               </div>
             </Link>
-          <Link :href="`/temp-licences`" class="col-xl-3 col-lg-3">
+          <Link :href="`/company/my-temp-licences`" class="col-xl-3 col-lg-3">
               <div class="card l-bg-orange-dark">
                   <div class="card-statistic-3 p-4">
                       <div class="card-icon card-icon-large"><i class="fas fa-clock"></i></div>
@@ -76,12 +70,6 @@
                                   {{ temp_licences }}
                               </h2>
                           </div>
-                          <div class="col-4 text-right">
-                              <span>2.5% <i class="fa fa-arrow-up"></i></span>
-                          </div>
-                      </div>
-                      <div class="progress mt-1 " data-height="8" style="height: 8px;">
-                          <div class="progress-bar l-bg-cyan" role="progressbar" data-width="25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%;"></div>
                       </div>
                   </div>
               </div>

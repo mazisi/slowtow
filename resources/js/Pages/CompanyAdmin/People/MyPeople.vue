@@ -18,7 +18,7 @@
 <div class="row mb-4">
 <div class="col-12">
 <div class="input-group input-group-outline null is-filled">
-<input v-model="term" type="text" class="form-control form-control-default" placeholder="Search Person">
+<input v-model="searchTerm" type="text" class="form-control form-control-default" placeholder="Search Person">
 </div>
 </div>
 <div class="col-2 d-none">
@@ -48,7 +48,7 @@
 </thead>
 <tbody>
 
-<tr v-if="people?.length > 0" v-for="person in people" :key="person.id">
+<tr v-if="filteredPeople?.length > 0" v-for="person in filteredPeople" :key="person.id">
 <td>
 <div class="avatar-group ">
 <i class="fa fa-check text-success" aria-hidden="true"></i>

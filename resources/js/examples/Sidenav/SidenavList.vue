@@ -143,8 +143,7 @@
         </sidenav-collapse>
   </li>
 
-  <li class="nav-item" v-if="$page.props.auth.has_company_admin_role
- || $page.props.auth.has_slowtow_user_role">
+  <li class="nav-item" v-if="$page.props.auth.has_company_admin_role">
         <sidenav-collapse
           url="#"
           :aria-controls="''"
@@ -301,7 +300,7 @@
 
 
 
-      <!-- <CompanyAdmin v-if="$page.props.auth.has_company_admin_role"/>   -->
+       <CompanyAdmin v-if="$page.props.auth.has_company_admin_role"/> 
 
 
 

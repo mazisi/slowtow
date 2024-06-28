@@ -1,5 +1,5 @@
-<template>
-    <li class="nav-item" v-if="$page.props.currentRoute == 'view_my_licences' || $page.props.currentRoute == 'company_registration'">
+ <template>
+   <!-- <li class="nav-item" v-if="$page.props.currentRoute == 'view_my_licences' || $page.props.currentRoute == 'company_registration'">
         <Link data-bs-toggle="" aria-controls="" aria-expanded="false" class="nav-link" 
          :class="{ active:  $page.props.currentRoute == 'company_registration'}"
          :href="`/company/registration?slug=${$page.props.slug}`">
@@ -78,7 +78,7 @@
         <span class="nav-link-text ms-1">Alterations</span>
         
         </Link>
-      </li>
+      </li> -->
 
 
       <div v-if="show_modal" class="modal fade" id="update-details" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
