@@ -107,7 +107,7 @@ console.log(licence)
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">group</i>
         </div>
-        <span class="nav-link-text ms-1">Nominations</span>
+        <span class="nav-link-text ms-1">Appointment Of Managers</span>
         
         </Link>
       </li>

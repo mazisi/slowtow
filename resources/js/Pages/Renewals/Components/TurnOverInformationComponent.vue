@@ -3,7 +3,7 @@ import { useForm } from '@inertiajs/inertia-vue3';
 import useToaster from '../../../store/useToaster';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
-import { ref } from 'vue';
+import InputNumber from 'primevue/inputnumber';
 
 export default {
 
@@ -11,6 +11,10 @@ export default {
     renewal: Object,
     success: String,
     error: String
+    },
+
+    components: {
+        InputNumber
     },
 
     setup(props) {
@@ -35,55 +39,7 @@ export default {
             {id: 5, name: 'More than R1 Billion'},
             {id: 6, name: 'Dormant'}
         ];
-        const formatToCurrency = (event) => {
-            
-	var dollars = document.getElementById('exact_turnover_amount').value;
-
-	// kick out on arrow keys
-	if ([37, 38, 39, 40].indexOf(event.which) > -1) {
-		return;
-	}
-	
-	// aaalife.utils.formatDollars
-    form.exact_turnover_amount = formatDollars(dollars);
-	dollars = formatDollars(dollars);
-    
-	
-	if (event.type === 'blur') {
-		dollars = dollars.split('.')[0];
-	}
-    dollars = dollars;
-    let cool = document.getElementById('exact_turnover_amount').value = Number(dollars);
-    console.log('cool',typeof cool)
-}
-
-// Following function should go in utils and 
-// be used as aaalife.utils.formatDollars
-
-/**
- * formatDollars - formats a number by adding $ and separators
- * @param {number} dollars - dollar value to format
- * @param {=string} separator - (optional) defaults to comma
- * @return {string} - formatted dollar string
- */
-function formatDollars(dollars, separator) {
-    console.log('dollars',dollars)
-	var parts = dollars.toString().split('.');
-	var separator = separator || ',';
-	
-	parts[0] = parts[0]
-				.toString() // make it a string
-				.replace(/\D*/g, '') // replace non-numbers
-				.replace(/\B(?=(\d{3})+(?!\d))/g, separator); // insert commas
-	
-	dollars = 'ZAR ' + parts.join('.');
-    // document.getElementById('exact_turnover_amount').value = dollars;
-	console.log('Fuckit',form.exact_turnover_amount)
-   
-    document.getElementById('exact_turnover_amount').value = dollars;
-   
-	return dollars;
-}
+       
 
         const submit = () => {
             form.post(route('submit_turn_over_information', props.renewal.id), {
@@ -96,7 +52,7 @@ function formatDollars(dollars, separator) {
             }
         })
         }
-        return{ options, form, submit,toast,formatToCurrency}
+        return{ options, form, submit,toast}
     }
 }
 
@@ -125,12 +81,18 @@ function formatDollars(dollars, separator) {
         </div>
     </div>
 
-    <div class="col-md-6 columns mb-4">
+    <!-- <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
             <label class="form-label">Exact Turnover Amount</label>
             <input  @blur="formatToCurrency"  id="exact_turnover_amount" type="number" class="form-control form-control-default">
         </div>
+    </div> -->
+    <div class="col-md-6 columns mb-4">
+    <div class=" card flex justify-center">
+        <InputNumber v-model="form.exact_turnover_amount" inputId="zar-us"  mode="currency" currency="ZAR" locale="en-US" fluid 
+        style="border: 1px solid #4caf50 !important;" />
     </div>
+</div>
 
     <div class="col-md-6 columns mb-4">
         <div class="input-group input-group-outline null is-filled">
@@ -158,5 +120,7 @@ function formatDollars(dollars, separator) {
 </template>
 
 <style scoped>
-
+.p-inputtext {
+    border-radius: 1px !important;
+}
 </style>

@@ -279,7 +279,7 @@ class NewApplicationController extends Controller
             return back()->with('success', 'Status updated successfully');
         } catch (\Throwable $th) {
             throw $th;
-            return back()->with('error', 'An error occurred while updating.');
+            //return back()->with('error', 'An error occurred while updating.');
         }
     }
 

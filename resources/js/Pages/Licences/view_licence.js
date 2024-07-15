@@ -3,7 +3,7 @@ import Multiselect from '@vueform/multiselect';
 import { Head,Link,useForm } from '@inertiajs/inertia-vue3';
 import { Inertia } from '@inertiajs/inertia'
 import Banner from '../components/Banner.vue'
-import { ref,onMounted } from 'vue';
+import { ref } from 'vue';
 import Paginate from "../../Shared/Paginate.vue";
 import Task from "../Tasks/Task.vue";
 import common from '../common-js/common.js';
@@ -16,6 +16,7 @@ import OriginalLicenceUpload from './OriginalLicenceUpload.vue'
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
+import InputNumber from "primevue/inputnumber";
 
 // const FilePond = new vueFilePond();
 export default {
@@ -343,6 +344,7 @@ function abandonLicence() {
    components: {
     CircleProgressBar,
     // FilePond,
+    InputNumber,
     Layout,
     Link,
     Head,

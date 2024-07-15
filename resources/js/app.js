@@ -11,6 +11,7 @@ import { Link } from '@inertiajs/inertia-vue3';
 import Vue3Toasity from 'vue3-toastify';
 
 import PrimeVue from 'primevue/config';
+import Aura from '@primevue/themes/aura';
 import 'primevue/resources/themes/aura-light-green/theme.css'
 
 
@@ -30,8 +31,10 @@ createInertiaApp({
             .use(plugin)
             .use(store)
             .use(PrimeVue, {
-    unstyled: true
-})
+                theme: {
+                    preset: Aura
+                }
+            })
             .use(Vue3Toasity,{
                 autoClose: 3000,
                 multiple: false,

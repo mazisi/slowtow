@@ -8,7 +8,7 @@
     :value="stageValue"
     />
     <label :for="stageValue"
-    class="form-check-label text-body text-truncate status-heading">{{ stageTitle }}</label>
+    class="form-check-label text-body status-heading">{{ stageTitle }}</label>
     </div>
   </div>
 </template>

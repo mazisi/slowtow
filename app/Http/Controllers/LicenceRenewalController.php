@@ -212,6 +212,7 @@ class LicenceRenewalController extends Controller
    public function submitTurnOverInformation(Request $request,$id){
        try {
         $renewal = LicenceRenewal::find($id);
+       
         $renewal->update([
             'exact_turnover' => $request->exact_turnover_amount,
             'volume_beer' => $request->volume_of_beer,

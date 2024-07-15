@@ -111,7 +111,7 @@
                       </div>
 
                       <hr/>
-                      <div class="col-5 columns">
+                      <div class="col-6 columns">
                         <StageComponent
                             :column=5
                             :dbStatus="alteration.status"
@@ -175,7 +175,7 @@
                               :hasFile="hasFile('NLA 14 Form')"
                           />
 
-                          <MergeDocumentComponent
+                          <!-- <MergeDocumentComponent
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
                               :success="success"
@@ -188,6 +188,13 @@
                               :stage=400
                               :mergeNum="2"
                               :hasFile="hasFile('Proof of Payment')"
+                          /> -->
+                     
+
+  <LinkComponent
+                             :hasFile="hasFile('Payment to the National Liquor Authority')"
+                             :docTitle="'Payment to the National Liquor Authority'"
+                              :docType="'Payment to the National Liquor Authority'"
                           />
 
 
@@ -345,7 +352,7 @@
                       </div>
                       <hr>
 
-                      <div class="col-5 columns">
+                      <div class="col-6 columns">
                         <StageComponent
                             :column=5
                             :dbStatus="alteration.status"
@@ -390,7 +397,7 @@
 
 
 
-                      <div class="col-5 columns">
+                      <div class="col-6 columns">
                         <StageComponent
                             :column=5
                             :dbStatus="alteration.status"
@@ -456,7 +463,7 @@
                             :error="error"
                             />
                       <hr>
-                      <div class="col-5 columns">
+                      <div class="col-6 columns">
                         <StageComponent
                             :column=5
                             :dbStatus="alteration.status"
@@ -499,7 +506,7 @@
                       />
                       <hr>
 
-                      <div class="col-5 columns">
+                      <div class="col-6 columns">
                         <StageComponent
                             :column=5
                             :dbStatus="alteration.status"

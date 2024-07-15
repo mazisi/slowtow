@@ -115,10 +115,10 @@
                                     :documentModel="person"
                                     @file-value-changed="submitDocument"
                                     @file-deleted="deleteDocument"
-                                    :hasFile="hasFile('Suitability Clearance')"
+                                    :hasFile="hasFile('Suitability Certificate')"
                                     :errors="errors"
                                     :error="error"
-                                    :docType="'Suitability Clearance'"
+                                    :docType="'Suitability Certificate'"
                                     :success="success"
                                 />
                           </div>

@@ -63,7 +63,7 @@
                                 <table class="table table-striped table-hover" style="font-size:85%; width: 100%">
                                     <thead>
                                     <tr class="text" style="font-size: 16px">
-                                        <th class="w-10">Act</th>
+                                        <th style="width: 50px;">Act</th>
                                         <th class="ps-2 text-center">Trading Name</th>
                                         <th class="ps-2 text-center">Licence Number</th>
                                         <th class="ps-2 text-center">Licence Date</th>
