@@ -81,7 +81,7 @@ class AlterLicenceController extends Controller
             'stage' => $request->stage,
         ]);
         if($request->stage == 'Alterations Lodged'){
-          $alter->update(['logded_at' => $request->dated_at]);
+          $alter->alteration->update(['logded_at' => $request->dated_at]);
         }
         return back()->with('success','Date updated succesfully.');
 

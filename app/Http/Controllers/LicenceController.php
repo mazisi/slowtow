@@ -37,11 +37,13 @@ class LicenceController extends Controller
 
     public function abandonLicence($slug){
         $lic = Licence::whereSlug($slug)->first();
-        if ($lic->is_licence_active) {
-            $lic->update(['is_licence_active' => 0]);
-        } else {
-            $lic->update(['is_licence_active' => 1]);
-        }
+        Task::create([
+            'user_id' => auth()->id(),
+            'model_type'=> 'Licence',
+            'model_id' => $lic->id,
+            'body' => 'THIS LICENCE HAS BEEN ABANDONED.',
+            'is_abandoned' => 1
+        ]);        
 
         return back()->with('success', 'Saved.');
     }

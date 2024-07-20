@@ -48,6 +48,8 @@
          :orderByNumber=100
          :docType="'Client Quoted'"
          :success="success"
+         stage=100
+         prevStage=0
          />
 
     <hr>
@@ -74,6 +76,8 @@
       :orderByNumber=200
       :docType="'Client Invoiced'"
       :success="success"
+      stage=200
+      prevStage=100
       />
 
       <hr>
@@ -409,7 +413,7 @@
    <div class="col-md-6">
     <DocComponent
     @file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+     @file-deleted="deleteDocument"
     :documentModel="licence"
     :hasFile="hasFile('Initial Application Fee')"
     :errors="errors"
@@ -417,6 +421,8 @@
     :orderByNumber=600
     :docType="'Initial Application Fee'"
     :success="success"
+    stage=600
+    prevStage=500
   />
   </div>
   <DateComponent
@@ -505,6 +511,8 @@
     :orderByNumber=900
     :docType="'NLA 6 Proposed'"
     :success="success"
+    stage=900
+    prevStage=800
     />
     </div>
 
@@ -544,6 +552,8 @@
     :orderByNumber=1000
     :docType="'NLA 7 Submitted'"
     :success="success"
+    stage=1000
+    prevStage=900
     />
     </div>
     <DateComponent
@@ -583,6 +593,8 @@
     :orderByNumber=1100
     :docType="'NLA 8 Issued'"
     :success="success"
+    stage=1100
+    prevStage=1000
     />
     </div>
     <DateComponent
@@ -621,6 +633,8 @@
     :orderByNumber=1200
     :docType="'Activation Fee'"
     :success="success"
+    stage=1200
+    prevStage=1100
     />
     </div>
     <DateComponent
@@ -660,6 +674,8 @@
     :orderByNumber=1300
     :docType="'NLA 9 Issued'"
     :success="success"
+    stage=1300
+    prevStage=1200
     />
     </div>
     <DateComponent
@@ -698,6 +714,8 @@
       :orderByNumber=1400
       :docType="'Original-Licence'"
       :success="success"
+      stage=1400
+      prevStage=1300
       />
       </div>
 
@@ -727,6 +745,8 @@
     :orderByNumber=1500
     :docType="'Duplicate-Original-Licence-Delivered'"
     :success="success"
+    stage=1500
+    prevStage=1400
    />
   </div>
     <DateComponent

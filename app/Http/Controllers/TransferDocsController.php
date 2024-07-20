@@ -101,12 +101,16 @@ class TransferDocsController extends Controller
  
      }
 
-    public function destroy($id){
+    public function destroy($id, $prevStage){
            try {
             $model = TransferDocument::find($id);
+            $transfer = LicenceTransfer::whereId($model->licence_transfer_id)->first();
+            $transfer->update(['status' => $prevStage]);
+            $transfer->update(['status' => $prevStage]);
             $model->delete();
             return back()->with('success','Document removed successfully.');
            } catch (\Throwable $th) {
+            // throw $th;
             return back()->with('error', 'Error deleting file.');
            }
       

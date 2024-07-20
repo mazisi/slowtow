@@ -35,7 +35,7 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=100
-                          :prevStage=null
+                          :prevStage=0
                           :licence_id=null
                           :stageTitle="'Client Quoted'"
                           :success="success"
@@ -53,6 +53,7 @@
                           :docType="'Client Quoted'"
                           :success="success"
                           :stage="100"
+                          prevStage="0"
                       />
 
                       <hr>
@@ -82,6 +83,7 @@
                           :docType="'Client Invoiced'"
                           :success="success"
                           :stage="200"
+                          prevStage="100"
                       />
                       <hr>
 
@@ -162,6 +164,7 @@
                           :docType="'Payment To The Liquor Board'"
                           :success="success"
                           :stage="400"
+                          prevStage="300"
                       />
 
 
@@ -202,6 +205,7 @@
                           :docType="'Renewal Issued'"
                           :success="success"
                           :stage="500"
+                          prevStage="400"
                       />
 
 
@@ -241,6 +245,7 @@
                           :docType="'Renewal Delivered'"
                           :success="success"
                           :stage="600"
+                          prevStage="500"
                       />
 
                     </div>

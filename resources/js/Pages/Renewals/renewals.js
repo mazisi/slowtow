@@ -79,9 +79,9 @@ export default {
             Inertia.get(url);
           }
 
-        function deleteDocument(id){
+        function deleteDocument(id, prevStage){
             if(confirm('Document will be deleted...Continue ??')){
-                Inertia.delete(`/delete-renewal-document/${id}`, {
+                Inertia.delete(`/delete-renewal-document/${id}/${prevStage}`, {
                     onSuccess: () => {
                         if(props.success){
                             notifySuccess(props.success)

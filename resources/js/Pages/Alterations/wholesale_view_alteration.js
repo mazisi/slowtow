@@ -178,9 +178,9 @@ export default {
             })
         }
 
-        function deleteDocument(id){
+        function deleteDocument(id,prevStage){
             if(confirm('Document will be deleted...Continue ??')){
-                Inertia.delete(`/delete-alteration-document/${id}`, {
+                Inertia.delete(`/delete-alteration-document/${id}/${prevStage}`, {
                     onSuccess: () => {
                         if(props.success){
                             notifySuccess(props.success)

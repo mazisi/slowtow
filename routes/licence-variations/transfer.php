@@ -22,4 +22,4 @@ Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::
 
         Route::post('/transfer-documents-merge',[TransferDocsController::class,'merge']);
 
-        Route::delete('/delete-transfer-document/{document_id}',[TransferDocsController::class,'destroy']);
+        Route::delete('/delete-transfer-document/{document_id}/{prevStage}',[TransferDocsController::class,'destroy']);

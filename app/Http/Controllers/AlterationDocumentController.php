@@ -59,10 +59,12 @@ class AlterationDocumentController extends Controller
 
         return $fileModel;
     }
-    public function destroy($id)
+    public function destroy($id,$prevStage)
     {
         try {
-           AlterationDocument::find($id)->delete();
+           $alt = AlterationDocument::find($id);
+           $alt->alteration->update(['status' => $prevStage]);
+           $alt->delete();
            return back()->with('success','Document deleted successfully.');
         } catch (\Throwable $th) {
             //throw $th;

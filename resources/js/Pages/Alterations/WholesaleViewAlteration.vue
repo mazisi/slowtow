@@ -52,7 +52,6 @@
                           :errors="errors"
                           :error="error"
                           :stageValue=100
-                          prevStage=0
                           :prevStage='0'
                           :licence_id="alteration.slug"
                           :stageTitle="'Client Quoted'"
@@ -72,7 +71,8 @@
                             :errors="errors"
                             :error="error"
                             :orderByNumber=100
-                            stage="100"
+                             stage="100"
+                             prevStage="0"
                             :docType="'Client Quoted'"
                             :success="success"
                         />
@@ -105,6 +105,7 @@
                             :error="error"
                             :orderByNumber=200
                             stage="200"
+                            prevStage="100"
                             :docType="'Client Invoiced'"
                             :success="success"
                         />
@@ -376,6 +377,7 @@
                             :error="error"
                             :orderByNumber=500
                             stage="500"
+                            prevStage="400"
                             :docType="'Payment to the National Liquor Authority'"
                             :success="success"
                         />
@@ -421,6 +423,7 @@
                             :error="error"
                             :orderByNumber=600
                             stage="600"
+                            prevStage="500"
                             :docType="'NLA 14 Application Lodged'"
                             :success="success"
                         />
@@ -487,6 +490,7 @@
                             :error="error"
                             :orderByNumber=800
                             stage="800"
+                            prevStage="700"
                             :docType="'NLA 15 Certificate Issued'"
                             :success="success"
                         />
@@ -530,6 +534,7 @@
                             :error="error"
                             :orderByNumber=900
                             stage="900"
+                            prevStage="800"
                             :docType="'NLA 15 Certificate Delivered'"
                             :success="success"
                         />

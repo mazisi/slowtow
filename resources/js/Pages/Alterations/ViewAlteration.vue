@@ -70,6 +70,7 @@
       :error="error"
       :orderByNumber=100
       stage="100"
+      prevStage="0"
       :docType="'Client Quoted'"
       :success="success"
       />
@@ -94,14 +95,15 @@
 <div class="col-9 columns">
 
 <DocComponent
-@file-value-changed="submitDocument"
-          @file-deleted="deleteDocument"
+      @file-value-changed="submitDocument"
+      @file-deleted="deleteDocument"
       :documentModel="alteration"
       :hasFile="hasFile('Client Invoiced')"
       :errors="errors"
       :error="error"
       :orderByNumber=200
       stage="200"
+      prevStage="100"
       :docType="'Client Invoiced'"
       :success="success"
       />
@@ -132,6 +134,7 @@
         :error="error"
         :orderByNumber=300
         stage="300"
+        prevStage="200"
         :docType="'Client Paid'"
         :success="success"
         />
@@ -290,6 +293,7 @@
               :error="error"
               :orderByNumber=500
               stage="500"
+              prevStage="400"
               :docType="'Payment to the Liquor Board'"
               :success="success"
               />
@@ -335,6 +339,7 @@
                 :error="error"
                 :orderByNumber=600
                 stage="600"
+                prevStage="500"
                 :docType="'Alterations Lodged'"
                 :success="success"
                 />
@@ -379,6 +384,7 @@
                   :error="error"
                   :orderByNumber=700
                   stage="700"
+                  prevStage="600"
                   :docType="'Alterations Certificate Issued'"
                   :success="success"
                   />
@@ -422,6 +428,7 @@
                     :error="error"
                     :orderByNumber=800
                     stage="800"
+                    prevStage="700"
                     :docType="'Alterations Delivered'"
                     :success="success"
                     />

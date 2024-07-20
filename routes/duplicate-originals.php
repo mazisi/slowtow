@@ -13,7 +13,7 @@ use App\Http\Controllers\DuplicateOriginalsController;
 
         Route::post('/submit-duplicate_original-document',[DuplicateOriginalsController::class,'uploadDocument']);
 
-        Route::delete('/delete-duplicate_original-document/{id}',[DuplicateOriginalsController::class,'deleteDocument']);
+        Route::delete('/delete-duplicate_original-document/{id}/{prevStage}',[DuplicateOriginalsController::class,'deleteDocument']);
 
         Route::patch('/update-duplicate_original-date/{id}',[DuplicateOriginalsController::class,'updateDate']);
 

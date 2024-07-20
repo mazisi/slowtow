@@ -22,7 +22,7 @@ Route::post('/detach-nominee/{nomination_id}/{nominee_id}',[NominationController
 
 Route::post('/submit-nomination-document',[NominationController::class,'uploadDocument']);
 
-Route::delete('/delete-nomination-document/{id}',[NominationController::class,'deleteDocument']);
+Route::delete('/delete-nomination-document/{id}/{prevStage}',[NominationController::class,'deleteDocument']);
 
 Route::delete('/delete-nomination/{licence_slug}/{slug}',[NominationController::class,'destroy']);
 

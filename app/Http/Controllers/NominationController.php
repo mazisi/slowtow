@@ -219,10 +219,12 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
 
     }
 
-    public function deleteDocument($id){
+    public function deleteDocument($id,$prevStage){
        try {
         $model = NominationDocument::find($id);
         if(!is_null($model->document)){
+            $nom = Nomination::find($model->nomination_id);
+            $nom->update(['status' => $prevStage]);
             $model->delete();
             return back()->with('success','Document removed successfully.');
         }

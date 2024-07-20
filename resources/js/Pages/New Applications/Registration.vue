@@ -44,6 +44,8 @@
                       />
                       <hr/>
                       <DocComponent
+                          stage="100"
+                          prevStage="0"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -70,6 +72,8 @@
                           @stage-value-changed="pushData"
                       />
                       <DocComponent
+                          stage="200"
+                          prevStage="100"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -148,6 +152,8 @@
 
 
                       <DocComponent
+                          stage="400"
+                          prevStage="300"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -676,6 +682,8 @@
 
                       <div class="col-md-6">
                         <DocComponent
+                           stage="600"
+                           prevStage="510"
                             :documentModel="licence"
                             @file-value-changed="submitDocument"
                             @file-deleted="deleteDocument"
@@ -719,6 +727,8 @@
 
                         <div class="col-md-6">
                           <DocComponent
+                              stage="700"
+                              prevStage="600"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -758,6 +768,8 @@
 
                         <div class="col-md-6">
                           <DocComponent
+                              stage="800"
+                              prevStage="700"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -797,6 +809,8 @@
 
                         <div class="col-md-6">
                           <DocComponent
+                              stage="900"
+                              prevStage="800"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -824,6 +838,8 @@
 
                         <div class="col-md-6" >
                           <DocComponent
+                              stage="1000"
+                              prevStage="900"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -870,6 +886,8 @@
 
                         <div class="col-md-6">
                           <DocComponent
+                              stage="1100"
+                              prevStage="1000"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -909,6 +927,8 @@
 
                         <div class="col-md-6">
                           <DocComponent
+                              stage="1200"
+                              prevStage="1100"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -948,6 +968,8 @@
 
                         <div class="col-md-6" >
                           <DocComponent
+                              stage="1300"
+                              prevStage="1200"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -991,6 +1013,8 @@
                         />
                         <div class="col-md-6" >
                           <DocComponent
+                              stage="1400"
+                              prevStage="1300"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -1039,6 +1063,8 @@
 
                         <div class="col-md-6">
                           <DocComponent
+                              stage="1500"
+                              prevStage="1400"
                               :documentModel="licence"
                               @file-value-changed="submitDocument"
                               @file-deleted="deleteDocument"
@@ -1104,6 +1130,8 @@
 
                         <div class="col-md-6">
                             <DocComponent
+                            stage="1700"
+                            prevStage="1600"
                                 :documentModel="licence"
                                 @file-value-changed="submitDocument"
                                 @file-deleted="deleteDocument"
@@ -1147,6 +1175,8 @@
                     <!-- Was renamed from Final Inspection to Liquor Board Inspection -->
                       <div class="col-md-6">
                         <DocComponent
+                           stage="1800"
+                           prevStage="1700"
                             :documentModel="licence"
                             @file-value-changed="submitDocument"
                             @file-deleted="deleteDocument"
@@ -1221,6 +1251,8 @@
                       />
 
                       <DocComponent
+                           stage="2000"
+                           prevStage="1900"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -1295,6 +1327,8 @@
 
 
                       <DocComponent
+                         stage="2200"
+                         prevStage="2100"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -1339,6 +1373,8 @@
 
 
                       <DocComponent
+                          stage="2300"
+                          prevStage="2200"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"
@@ -1378,6 +1414,8 @@
                       />
 
                       <DocComponent
+                          stage="2400"
+                          prevStage="2300"
                           :documentModel="licence"
                           @file-value-changed="submitDocument"
                           @file-deleted="deleteDocument"

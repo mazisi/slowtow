@@ -195,11 +195,12 @@ class LicenceRenewalController extends Controller
         }
     }
 
-    public function deleteDocument($id){
+    public function deleteDocument($id, $prevStage){
             try {
                 $model = RenewalDocument::find($id);
                 $activity = 'Deleted Licence Renewal Document: ' . $model->document_name;
                 event(new LogUserActivity(auth()->user(), $activity));
+                $model->licence_renewal->update(['status' => $prevStage]);
                 if($model->delete()){
                     return back()->with('success','Document removed successfully.');
                 }

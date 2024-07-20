@@ -103,9 +103,9 @@ export default{
             })
         }
 
-        function deleteDocument(id){
+        function deleteDocument(id,prevStage){
             if(confirm('Document will be deleted permanently...Continue ??')){
-                Inertia.delete(`/delete-nomination-document/${id}`, {
+                Inertia.delete(`/delete-nomination-document/${id}/${prevStage}`, {
                     onSuccess: () => {
                         if(props.success){
                             notifySuccess(props.success)

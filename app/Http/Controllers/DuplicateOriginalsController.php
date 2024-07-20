@@ -97,6 +97,9 @@ class DuplicateOriginalsController extends Controller
                         $fileModel->doc_type = $request->doc_type;
                         $fileModel->path = env('AZURE_STORAGE_CONTAINER').'/'.$fileName;        
                         if($fileModel->save()){
+                            //Now update the status of the duplicate original
+                            $duplicateOriginal = DuplicateOriginal::whereId($request->licence_id)->first();
+                            $duplicateOriginal->update(['status' => $request->stage]);
                             if($request->doc_type == 'Duplicate Original Issued' || $request->doc_type == 'Duplicate-Original-Licence-Delivered'){
                                $this->storeLicenceDocs($request);
                             }
@@ -181,9 +184,10 @@ class DuplicateOriginalsController extends Controller
      }
 
     //Delete document
-    function deleteDocument($id) {
+    function deleteDocument($id,$prevStage) {
         try {
             $document = DuplicateOriginalDoc::findOrFail($id);
+            $document->duplicate_original->update(['status' => $prevStage]);
             $document->delete();
             return back()->with('success', 'Document deleted successfully');
         } catch (\Throwable $th) {

@@ -4,12 +4,12 @@
     <div class="col-8">
     <div class="row">
     <div v-for="task in tasks.data" :key="task.id" class="mb-4 col-xl-12 col-md-12 mb-xl-0 animate__animated animate__fadeInLeft">
-    <div class="alert text-white alert-success alert-dismissible fade show font-weight-light" role="alert">
+    <div :class="task.is_abandoned == 1 ? 'alert alert-danger' : 'alert alert-success'" class="text-white alert-dismissible fade show font-weight-light" role="alert">
     <span class="alert-icon"><i class=""></i></span>
     <span class="alert-text">
     <span class="text-sm">{{ task.body }}</span>
     </span>
-    <a @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
+    <a v-if="task.is_abandoned != 1" @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
       <i class="fa fa-trash-o text-white"></i>
     </a>
     <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ getMomentDate(task.created_at) }}</p>

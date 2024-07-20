@@ -61,6 +61,8 @@
     
     <div class="col-9 columns">
       <DocComponent
+      stage="100"
+      prevStage="0"
       @file-value-changed="submitDocument"
       @file-deleted="deleteDocument"
       :documentModel="duplicate_original"
@@ -92,7 +94,9 @@
 <div class="col-9 columns">
 
 <DocComponent
-@file-value-changed="submitDocument"
+      stage="200"
+      prevStage="100"
+      @file-value-changed="submitDocument"
           @file-deleted="deleteDocument"
       :documentModel="duplicate_original"
       :hasFile="hasFile('Client Invoiced')"
@@ -167,6 +171,8 @@
   />
 <div class="col-md-6 columns"> 
   <DocComponent
+       stage="400"
+        prevStage="300"
         @file-value-changed="submitDocument"
         @file-deleted="deleteDocument"
         :documentModel="duplicate_original"
@@ -202,6 +208,8 @@
   
 <div class="col-md-6 columns"> 
   <DocComponent
+        stage="500"
+        prevStage="400"
         @file-value-changed="submitDocument"
         @file-deleted="deleteDocument"
         :documentModel="duplicate_original"
@@ -232,6 +240,8 @@
       
       
           <DocComponent
+            stage="600"
+            prevStage="500"
           @file-value-changed="submitDocument"
           @file-deleted="deleteDocument"
               :documentModel="duplicate_original"
@@ -263,6 +273,8 @@
         
         
             <DocComponent
+                stage="700"
+                prevStage="600"
                 @file-value-changed="submitDocument"
                 @file-deleted="deleteDocument"
                 :documentModel="duplicate_original"
@@ -306,6 +318,8 @@
           
           
               <DocComponent
+                  stage="800"
+                  prevStage="700"
                   @file-value-changed="submitDocument"
                   @file-deleted="deleteDocument"
                   :documentModel="duplicate_original"
@@ -348,6 +362,8 @@
             
             
                 <DocComponent
+                stage="900"
+                prevStage="800"
                 @file-value-changed="submitDocument"
                       @file-deleted="deleteDocument"
                     :documentModel="duplicate_original"

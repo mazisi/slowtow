@@ -68,6 +68,7 @@
                                                 :error="error"
                                                 orderByNumber=''
                                                 stage='100'
+                                                prevStage='0'
                                                 :docType="'Client Quoted'"
                                                 :success="success"
                                             />
@@ -94,6 +95,7 @@
                                                 :errors="errors"
                                                 :error="error"
                                                 stage='200'
+                                                prevStage='100'
                                                 :docType="'Client Invoiced'"
                                                 :success="success"
                                             />
@@ -547,6 +549,7 @@
                                                     :error="error"
                                                     :orderByNumber=null
                                                     stage='500'
+                                                    prevStage="400"
                                                     :docType="'Payment To The Liquor Board'"
                                                     :success="success"
                                                 />
@@ -587,6 +590,7 @@
                                                 :error="error"
                                                 orderByNumber=''
                                                 stage='600'
+                                                prevStage="500"
                                                 :docType="'Scanned Application'"
                                                 :success="success"
                                             />
@@ -615,6 +619,7 @@
                                                     :error="error"
                                                     :orderByNumber=null
                                                     stage='700'
+                                                    prevStage="600"
                                                     :docType="'Application Lodged'"
                                                     :success="success"
                                                 />
@@ -679,6 +684,7 @@
                                                     :error="error"
                                                     :orderByNumber=null
                                                     stage='900'
+                                                    prevStage="800"
                                                     :docType="'Transfer Issued'"
                                                     :success="success"
                                                 />
@@ -720,6 +726,7 @@
                                                     :error="error"
                                                     :orderByNumber=null
                                                     stage='1000'
+                                                    prevStage="900"
                                                     :docType="'Transfer Delivered'"
                                                     :success="success"
                                                 />

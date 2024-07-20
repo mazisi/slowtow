@@ -82,6 +82,7 @@ export default{
     errors: Object,
     orderByNumber: Number,
     stage: Number,
+    prevStage: Number,
     docType: String,
     success: Object,
     is_merged_original_licence: Boolean  //This is a merged document , merged from LNA 6,7,8.So it has to have a local path
@@ -97,6 +98,7 @@ export default{
       licence_id: props.documentModel.id,
       doc_type: props.docType,
       stage: props.stage,
+      prevStage:props.prevStage,
       document_file: null
     })
     function upload(e){
@@ -111,7 +113,7 @@ export default{
       }
 
       function deleteDocument(id){
-        context.emit('file-deleted', id);
+        context.emit('file-deleted', id,props.prevStage);
       }
     
      function localFilePath(file_name){

@@ -198,9 +198,10 @@ import licence from "../Licences/licence";
           })
         }
 
-        function deleteDocument(id){
+        function deleteDocument(id,prevStage){
+          console.log(id,prevStage)
           if(confirm('Document will be deleted...Continue ??')){
-            Inertia.delete(`/delete-licence-document/${id}`, {
+            Inertia.delete(`/delete-licence-document/${id}/${prevStage}`, {
               onSuccess: () => {
                         if(props.success){
                             notifySuccess(props.success)

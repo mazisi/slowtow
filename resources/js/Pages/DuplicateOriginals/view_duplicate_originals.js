@@ -66,7 +66,7 @@ export default {
         }
 
         function updateDate(form_data) {
-            form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
+              form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     if (props.success) {
@@ -81,6 +81,21 @@ export default {
        
 
         function pushData(e, status_value,prevStage) {
+            let issuedDate = document.getElementById("Duplicate Original Issued").value;
+            let deliveredDate = document.getElementById("Duplicate Original Delivered").value;
+            console.log(status_value,e)
+            if(status_value == 800){
+                if(issuedDate == '' && e.target.checked == true){
+                    notifyError('Duplicate Original Issued Date is required');
+                    return
+                }
+            }
+            if(status_value == 900){
+                if(deliveredDate == '' && e.target.checked == true){
+                    notifyError('Duplicate Original Issued Date is required');
+                    return
+                }
+            }
             if (e.target.checked) {
                 form.status[0] = status_value;
                 form.unChecked = false;
@@ -135,9 +150,9 @@ export default {
             })
           }
 
-      function deleteDocument(id){
+      function deleteDocument(id, prevStage){
           if(confirm('Document will be deleted...Continue ??')){
-            Inertia.delete(`/delete-duplicate_original-document/${id}`, {
+            Inertia.delete(`/delete-duplicate_original-document/${id}/${prevStage}`, {
               onSuccess: () => { 
                if(props.success){
                 notifySuccess(props.success)

@@ -118,9 +118,9 @@ export default {
 
     
 
-      function deleteDocument(id){
+      function deleteDocument(id,prevStage){
         if(confirm('Document will be deleted permanently...Continue ??')){
-          Inertia.delete(`/delete-transfer-document/${id}`, {
+          Inertia.delete(`/delete-transfer-document/${id}/${prevStage}`, {
             onSuccess: () => { 
             if(props.success){
               notifySuccess(props.success)

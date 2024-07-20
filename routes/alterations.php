@@ -19,7 +19,7 @@ Route::patch('/update-alteration',[AlterLicenceController::class,'update'])->nam
 
 Route::post('/submit-alteration-document',[AlterationDocumentController::class,'store']);
 
-Route::delete('/delete-alteration-document/{id}',[AlterationDocumentController::class,'destroy']);
+Route::delete('/delete-alteration-document/{id}/{prevStage}',[AlterationDocumentController::class,'destroy']);
 
 Route::post('/merge-alteration-documents/{alteration_id}',[AlterationDocumentController::class,'merge']);
 

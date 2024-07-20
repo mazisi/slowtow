@@ -68,6 +68,7 @@
                                                 :docType="'Client Quoted'"
                                                 :success="success"
                                                 :stage="100"
+                                                prevStage="0"
                                             />
 
                                             <hr>
@@ -95,6 +96,7 @@
                                                 :docType="'Client Invoiced'"
                                                 :success="success"
                                                 :stage="200"
+                                                prevStage="100"
                                             />
                                             <hr>
                                             <!-- Client Paid -->
@@ -132,7 +134,8 @@
                                                 :orderByNumber=300
                                                 :docType="'Client Paid'"
                                                 :success="success"
-                                                :stage="100"
+                                                :stage="300"
+                                                prevStage="200"
                                             />
 
                                             <hr>
@@ -172,7 +175,8 @@
                                                 :orderByNumber=400
                                                 :docType="'Payment To The Liquor Board'"
                                                 :success="success"
-                                                :stage="100"
+                                                :stage="400"
+                                                prevStage="300"
                                             />
 
                                             <hr>
@@ -390,6 +394,7 @@
                                                 :docType="'Scanned Application'"
                                                 :success="success"
                                                 :stage="700"
+                                                prevStage="600"
                                             />
                                             <hr/>
 
@@ -428,7 +433,8 @@
                                                 :orderByNumber=800
                                                 :docType="'Nomination Lodged'"
                                                 :success="success"
-                                                :stage="100"
+                                                :stage="800"
+                                                prevStage="700"
                                             />
 
                                             <hr>
@@ -469,6 +475,7 @@
                                                 :docType="'Nomination Issued'"
                                                 :success="success"
                                                 :stage="900"
+                                                prevStage="800"
                                             />
 
                                             <hr>
@@ -507,7 +514,8 @@
                                                 :orderByNumber=1000
                                                 :docType="'Nomination Delivered'"
                                                 :success="success"
-                                                :stage="100"
+                                                :stage="1000"
+                                                prevStage="900"
                                             />
 
 

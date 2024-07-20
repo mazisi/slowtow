@@ -97,6 +97,7 @@
             </div>
           </div>
           <Paginate
+            v-if="transfers.data?.length > 0"
             :modelName="transfers"
             :modelType="Transfers"
             />
@@ -184,15 +185,5 @@ export default {
 
 };
 
-//The following are status keys
-// 1 => Client Quoted
-// 2 => Client Invoiced
-// 3 => Client Paid
-// 4 => Collate Transfer Documents
-// 5 => Payment To The Liquor Board
-// 6 => Transfer Logded
-// 7 => Activation Fee Paid
-// 8 => Transfer Issued
-// 9 => Transfer Delivered
 </script>
 

@@ -26,7 +26,7 @@
     <div class="card card-body mx-3 mx-md-4 mt-n6">
       <div class="row">
   <div class="col-lg-10 col-10">
-  <h6>Transfer Info for: <Link @="redirect(view_transfer.licence)" href="#!" class="text-success">
+  <h6>Transfer Info for: <Link @click="redirect(view_transfer.licence)" href="#!" class="text-success">
     {{ view_transfer.licence.trading_name ? view_transfer.licence.trading_name : '' }}</Link></h6>
   <p class="text-sm mb-0">Current Stage: 
     {{ getStatus(view_transfer.status) }}
@@ -68,6 +68,7 @@
     :error="error"
     orderByNumber=''
     stage='100'
+    prevStage=0
     :docType="'Client Quoted'"
     :success="success"
     />
@@ -94,6 +95,7 @@
     :errors="errors"
     :error="error"
     stage='200'
+    prevStage=100
     :docType="'Client Invoiced'"
     :success="success"
     />
@@ -573,6 +575,7 @@
                               :error="error"
                               :orderByNumber=null
                               stage='500'
+                              prevStage=400
                               :docType="'Payment To The Liquor Board'"
                               :success="success"
                           />
@@ -616,6 +619,7 @@
       :error="error"
       orderByNumber=''
       stage='600'
+      prevStage=500
       :docType="'Scanned Application'"
       :success="success"
       /> 
@@ -644,6 +648,7 @@
           :error="error"
           :orderByNumber=null
           stage='700'
+          prevStage=600
           :docType="'Transfer Logded'"
           :success="success"
         />
@@ -686,6 +691,7 @@
           :error="error"
           :orderByNumber=null
           stage='800'
+          prevStage=700
           :docType="'Activation Fee Paid'"
           :success="success"
         />
@@ -726,6 +732,7 @@
           :error="error"
           :orderByNumber=null
           stage='900'
+          prevStage=800
           :docType="'Transfer Issued'"
           :success="success"
         />
@@ -767,6 +774,7 @@
           :error="error"
           :orderByNumber=null
           stage='1000'
+          prevStage=900
           :docType="'Transfer Delivered'"
           :success="success"
         />

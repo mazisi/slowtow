@@ -48,7 +48,7 @@ class LicenceDocsController extends Controller
      * @param int $id The ID of the document to be removed.
      * @return \Illuminate\Http\RedirectResponse The response with success or error message.
      */
-    public function destroy($id)
+    public function destroy($id,$prevStage)
     {
         $model = LicenceDocument::find($id);
         $updateLicence = Licence::find($model->licence_id);
@@ -56,6 +56,9 @@ class LicenceDocsController extends Controller
         $this->updateLicenceStatusAndFlags($model, $updateLicence);
 
         if (!is_null($model->document_file)) {
+            if ($prevStage) {
+                $model->licence->update(['status' => $prevStage]);
+            }
             $model->delete();
             return back()->with('success', 'Document removed successfully.');
         }
@@ -152,12 +155,12 @@ class LicenceDocsController extends Controller
      */
     private function updateLicenceStatusAndFlags($request, $licence)
     {
-        if ($request instanceof Request && $request->stage && intval($request->stage) >= 3500) {
-            $licence->update(['is_new_app' => false]);
+        if ($request->stage && intval($request->stage) >= 3500) {
+            $licence->licence->update(['is_new_app' => false]);
         }
 
-        if ($request instanceof Request && $request->stage) {
-            $licence->update(['status' => $request->stage]);
+        if ($request->stage) {
+            $licence->licence->update(['status' => $request->stage]);
         }
     }
 

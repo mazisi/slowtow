@@ -13,7 +13,7 @@ Route::patch('/update-renewal',[LicenceRenewalController::class,'update'])->name
 
 Route::post('/submit-renewal-documents',[LicenceRenewalController::class,'uploadDocuments']);
 
-Route::delete('/delete-renewal-document/{id}',[LicenceRenewalController::class,'deleteDocument']);
+Route::delete('/delete-renewal-document/{id}/{prevStage}',[LicenceRenewalController::class,'deleteDocument']);
 
 Route::patch('/update-renewal-date/{slug}',[LicenceRenewalController::class,'updateDates']);
 

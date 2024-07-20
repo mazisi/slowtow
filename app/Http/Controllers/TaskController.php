@@ -24,7 +24,8 @@ class TaskController extends Controller
             'user_id' => auth()->id(),
             'model_type'=> $request->model_type,
             'model_id' => $request->model_id,
-            'body' => $request->body
+            'body' => $request->body,
+            'is_abandoned' => 1
         ]);
         if($add_task){
             return back()->with('success','Note added successfully');
