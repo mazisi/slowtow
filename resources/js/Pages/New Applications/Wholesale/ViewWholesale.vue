@@ -739,11 +739,11 @@
     @file-value-changed="submitDocument"
           @file-deleted="deleteDocument"
     :documentModel="licence"
-    :hasFile="hasFile('Duplicate-Original-Licence-Delivered')"
+    :hasFile="hasFile('Original-Licence-Delivered')"
     :errors="errors"
     :error="error"
     :orderByNumber=1500
-    :docType="'Duplicate-Original-Licence-Delivered'"
+    :docType="'Original-Licence-Delivered'"
     :success="success"
     stage=1500
     prevStage=1400
