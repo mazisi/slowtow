@@ -29,6 +29,10 @@ Route::get('/test',function(){
     return view('emails.ecomms.mail_base_template');
 });
 
+Route::get('/pdf',function(){
+    return view('pdfs.html_to_pdf');
+});
+
 Route::post('/update-my-password',[PasswordResetController::class,'updatePassword'])->name('update_my_password');
 Route::get('/insert-licence-type',[InsertTypesController::class,'insert']);
 Route::get('/insert-years',[InsertTypesController::class,'insert_years']);
