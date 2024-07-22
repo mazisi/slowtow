@@ -30,7 +30,16 @@ class PreviewCompanyController extends Controller
     public function mergeDocuments($company){
         $merger = PDFMerger::init();
         try {
-            $documents = collect();
+            $documents = collect(); 
+
+
+            // $companyLicence = Licence::with(['licence_documents' => function($query) {
+            //     $query->where('document_type', 'Original-Licence')
+            //           ->orWhere('document_type', 'Duplicate-Licence');
+            // }])->where('company_id', $company->id)->get();
+            // dd($companyLicence->licence_documents);
+
+
             $companyLicence = Licence::where('company_id', $company->id)->get();
             
             foreach ($companyLicence as $licence) {
