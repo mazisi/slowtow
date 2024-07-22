@@ -33,5 +33,5 @@ use App\Http\Controllers\Slowtowdmin\AddCompanyAdminController;
         Route::patch('/update-company-active-status/{slug}',[CompanyController::class,'updateActiveStatus']);
 
 
-        Route::get('/preview-company/{slug}',[PreviewCompanyController::class,'preview'])->name('preview_company');
+        Route::post('/preview-company/{slug}',[PreviewCompanyController::class,'preview'])->name('preview_company');
         Route::delete('/unlink-person/{id}',[CompanyController::class,'unlinkPerson'])->name('unlink_person');

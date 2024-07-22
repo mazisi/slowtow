@@ -268,8 +268,17 @@ export default {
 
 
       const preview = (type) => {
-        let url = type == 'company' ? `/company/preview-company/${props.company.slug}` : `/preview-company/${props.company.slug}`
-        window.open(url,'_blank');
+        let url = type == 'company' ? `/company/preview-company/${props.company.slug}` : `/preview-company/${props.company.slug}`;
+        Inertia.post(url, {
+          onSuccess: () => {
+               if(props.success){
+                notifySuccess(props.success)
+                    }else if(props.error){
+                      notifyError(props.error)
+                    }
+             }
+        })
+        // window.open(url,'_blank');
       }
 
 
