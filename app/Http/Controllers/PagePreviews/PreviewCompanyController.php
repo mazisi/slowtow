@@ -31,6 +31,7 @@ class PreviewCompanyController extends Controller
         $merger = PDFMerger::init();
         try {
             $documents = collect(); 
+            $i=0;
 
 
             // $companyLicence = Licence::with(['licence_documents' => function($query) {
@@ -54,13 +55,13 @@ class PreviewCompanyController extends Controller
                 $documents = $documents->merge($originals)->merge($duplicates); // Merge the collections
             }
     
-            // dd($documents);
+           //dd($documents);
             Log::info('Total documents to merge: ' . count($documents));
     
             foreach ($documents as $doc) {
+                $i=$i+1;
                 $filePath = env('BLOB_FILE_PATH') . $doc->document_file;
-                Log::info('Adding PDF to merger: ' . $filePath);
-    
+                Log::info('Adding PDF to merger: ' . $filePath);    
                 $merger->addPDF($filePath, 'all');
             }
             
