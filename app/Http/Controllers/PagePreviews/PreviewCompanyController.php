@@ -18,7 +18,7 @@ class PreviewCompanyController extends Controller
 
         $html= view('pdfs.company', ['company' => Company::whereSlug($slug)->firstOrFail()])->render();
         //  dd($html);
-        $company = Company::whereSlug($slug)->with('licences.licence_documents')->firstOrFail();
+        $company = Company::whereSlug($slug)->firstOrFail();
         Pdf::loadHTML($html)->save(storage_path('app/public/').''.trim($company->name).'.pdf');
         $this->mergeDocuments($company);
         // return view('pdfs.company', ['company' => $company]);
@@ -33,14 +33,6 @@ class PreviewCompanyController extends Controller
             $documents = collect(); 
             $i=0;
 
-
-            // $companyLicence = Licence::with(['licence_documents' => function($query) {
-            //     $query->where('document_type', 'Original-Licence')
-            //           ->orWhere('document_type', 'Duplicate-Licence');
-            // }])->where('company_id', $company->id)->get();
-            // dd($companyLicence->licence_documents);
-
-
             $companyLicence = Licence::where('company_id', $company->id)->get();
             
             foreach ($companyLicence as $licence) {
@@ -54,8 +46,9 @@ class PreviewCompanyController extends Controller
     
                 $documents = $documents->merge($originals)->merge($duplicates); // Merge the collections
             }
-    
-           //dd($documents);
+            
+            // dd($documents);
+        
             Log::info('Total documents to merge: ' . count($documents));
     
             foreach ($documents as $doc) {
@@ -64,14 +57,17 @@ class PreviewCompanyController extends Controller
                 Log::info('Adding PDF to merger: ' . $filePath);    
                 $merger->addPDF($filePath, 'all');
             }
+
+            $merger->addPDF(storage_path('/app/public/').trim($company->name).'.pdf', 'all');
             
             $fileName = $company->name . time() . '.pdf';
             Log::info('Merging documents into: ' . $fileName);
     
             $merger->merge();
+            Log::info('Documents merged successfully.');
             $merger->save(storage_path('/app/public/' . $fileName));
             
-            Log::info('Documents merged successfully.');
+            Log::info('Documents saved successfully.');
     
         } catch (\Throwable $th) {
             Log::error('Error during document merging: ' . $th->getMessage());

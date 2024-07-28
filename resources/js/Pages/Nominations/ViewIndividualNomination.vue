@@ -347,6 +347,7 @@
 
                                             <div class="col-md-4 columns">
                                                         <MergeNominationDocsComponent
+                                                        v-if="hasFile('Latest Renewal/Licence')?.id"
                                                             :documentModel="nomination"
                                                             @file-value-changed="submitDocument"
                                                             @file-deleted="deleteDocument"
@@ -358,6 +359,19 @@
                                                             :success="success"
                                                             :stage="600"
                                                         />
+
+                            <a v-else-if="latest_renewal_licence_doc !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto d-flex" 
+                            :href="`${$page.props.blob_file_path}${latest_renewal_licence_doc.document_file}`" target="_blank">
+                            <h6 class="mb-0 text-sm">Latest Renewal/Licence</h6>
+                            <i class="fa fa-link h5 mx-6" aria-hidden="true"></i>
+                            </a>
+
+                            <a v-else-if="licence_issued !== null" class="mb-0 btn btn-link pe-3 ps-0 ms-auto" 
+                            :href="`${$page.props.blob_file_path}${licence_issued.document_file}`" target="_blank">
+                            <h6 class="mb-0 text-sm">Latest Renewal/Licence</h6>
+                            <i class="fa fa-link h5 mx-6" aria-hidden="true"></i>
+                            </a>
+
                                             </div>
 
                                             <div class="text-end">

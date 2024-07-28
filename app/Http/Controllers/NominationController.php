@@ -64,14 +64,21 @@ class NominationController extends Controller
      * Vue nominee.
      */
     public function viewIndividualNomination($slug){
+        $latest_renewal_licence_doc = null;
         $nomination = Nomination::with('licence','people','merged_document','nomination_documents')->whereSlug($slug)->first();
         $liqour_board_requests = LiquorBoardRequest::where('model_type','Nomination')->where('model_id',$nomination->id)->get();
+        $latest_renewal_licence_doc = LicenceDocument::where('document_type','Original-Licence')->where('licence_id',$nomination->licence_id)->first(['document_file']);
+        //if there is no original licence doc, get the licence issued
+        if(is_null($latest_renewal_licence_doc)){
+            $latest_renewal_licence_doc = LicenceDocument::where('document_type','Licence Issued')->where('licence_id',$nomination->licence_id)->first(['document_file']);
+        }
         $nominees = People::pluck('full_name','id');
         $tasks = Task::where('model_type','Nomination')->where('model_id',$nomination->id)->latest()->paginate(4)->withQueryString();
 
 
 return Inertia::render('Nominations/ViewIndividualNomination',[
         'nomination' => $nomination,
+        'latest_renewal_licence_doc' => $latest_renewal_licence_doc,
         'nominees' => $nominees,
         'tasks' => $tasks,
         'liqour_board_requests' => $liqour_board_requests
