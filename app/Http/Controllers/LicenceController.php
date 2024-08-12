@@ -37,6 +37,10 @@ class LicenceController extends Controller
 
     public function abandonLicence($slug){
         $lic = Licence::whereSlug($slug)->first();
+        $abandoned = Task::where('model_id', $lic->id)->where('body', 'THIS LICENCE HAS BEEN ABANDONED.')->first();
+        if($abandoned){
+            return back()->with('error', 'Licence already been marked as abandoned.');
+        }
         Task::create([
             'user_id' => auth()->id(),
             'model_type'=> 'Licence',

@@ -1,6 +1,6 @@
 <template>
 <Layout>
-  <Head title="Nominations" />
+  <Head title="Appoinment Of Managers" />
 <div class="container-fluid">
 <Banner/>
 <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -10,7 +10,7 @@
 </div>
 <div class="row">
 <div class="col-lg-12">
-<h6 class="mb-1">Nominations For:  <Link @click="redirect(licence)" class="text-success">
+<h6 class="mb-1">Appoinment Of Managers For:  <Link @click="redirect(licence)" class="text-success">
   {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
 </div>
 </div>

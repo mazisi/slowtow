@@ -29,11 +29,11 @@ class SlotowDashboardController extends Controller
             DB::raw('MONTH(created_at) as month'),
             DB::raw('COUNT(*) as count')
         )
-        ->when(request('type') == 'New-Apps', function ($query) {
+        ->when(request('year') && request('type') == 'New-Apps', function ($query) {
             $query->when(request('year'), function ($query) {
                 $query->whereYear('created_at', request('year'));
             })
-            ->when(request('province'), function ($query) {
+            ->when(request('province') && request('type') == 'New-Apps', function ($query) {
                 $query->where('province', request('province'));
             });
         })
@@ -57,16 +57,16 @@ class SlotowDashboardController extends Controller
     function renewals() {  
         $year = request('year') ? request('year') : Carbon::now()->year;
         $type = request('type');
-    // dd(request('province'));
+
         $renewalsByMonth = LicenceRenewal::select(
             DB::raw('MONTH(licences.licence_date) as month'),
             DB::raw('COUNT(*) as count')
         )
         ->join('licences', 'licences.id', '=', 'licence_renewals.licence_id')
-        ->when($type == 'renewals', function ($query) use ($year) {
+        ->when(request('year') && $type == 'renewals', function ($query) use ($year) {
             $query->where('date', $year);
         })
-        ->when(request('province'), function ($query) {
+        ->when(request('province') && $type == 'renewals', function ($query) {
             $query->whereHas('licence', function ($query) {
                 $query->where('province', request('province'));
             });
@@ -81,6 +81,8 @@ class SlotowDashboardController extends Controller
         foreach ($renewalsByMonth as $month => $count) {
             $monthlyRenewalCounts[$month] = $count;
         }
+  
+        
     
         return $monthlyRenewalCounts;
     }
@@ -92,23 +94,27 @@ function tempLicences() {
     $year = request('year') ? request('year') : $currentYear;
     $type = request('type');
 
-    $tempLicences = TemporalLicence::select(
-        DB::raw('MONTH(created_at) as month'),
-        DB::raw('COUNT(*) as count')
-    )
-    ->when($type == 'temps', function ($query) use ($year) {
-        $query->whereYear('created_at', $year);
-    })
-    ->groupBy(DB::raw('MONTH(created_at)'))
-    ->pluck('count', 'month');
+    
+        $tempLicences = TemporalLicence::select(
+            DB::raw('MONTH(created_at) as month'),
+            DB::raw('COUNT(*) as count')
+        )
+        ->when(request('year') && $type == 'temps', function ($query) use ($year) {
+            $query->whereYear('created_at', $year);
+        })
+        ->groupBy(DB::raw('MONTH(created_at)'))
+        ->pluck('count', 'month');
+    
+        // Initialize an array with all months set to 0
+        $monthlyTempLicenceCounts = array_fill(1, 12, 0);
+    
+        // Fill the monthly counts with actual data
+        foreach ($tempLicences as $month => $count) {
+            $monthlyTempLicenceCounts[$month] = $count;
+        }
+    
 
-    // Initialize an array with all months set to 0
-    $monthlyTempLicenceCounts = array_fill(1, 12, 0);
-
-    // Fill the monthly counts with actual data
-    foreach ($tempLicences as $month => $count) {
-        $monthlyTempLicenceCounts[$month] = $count;
-    }
+    
 
     return $monthlyTempLicenceCounts;
 }

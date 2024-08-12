@@ -335,7 +335,7 @@
                                 </div> -->
 
                                 <div class=" card flex justify-center">
-                                    <label class="form-label">Latest Renewal</label>
+                                    <label class="form-label"> Renewal Amount</label>
                                     <InputNumber v-model="form.renewal_amount" inputId="zar-us"  mode="currency" currency="ZAR" locale="en-US" fluid 
                                     style="border: 1px solid #4caf50 !important;" />
                                 </div>
