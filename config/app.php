@@ -166,6 +166,7 @@ return [
         Spatie\Permission\PermissionServiceProvider::class,
         Webklex\PDFMerger\Providers\PDFMergerServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
+        LynX39\LaraPdfMerger\PdfMergerServiceProvider::class,
         
 
 
@@ -198,6 +199,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         'PDFMerger' => Webklex\PDFMerger\Facades\PDFMergerFacade::class,
         'PDF' => Barryvdh\DomPDF\Facade\Pdf::class,
+        'PdfMerger' => LynX39\LaraPdfMerger\Facades\PdfMerger::class,
     ])->toArray(),
 
 ];

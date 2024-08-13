@@ -10,8 +10,8 @@ use App\Models\LicenceDocument;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
-use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
-
+// use Webklex\PDFMerger\Facades\PDFMergerFacade as PDFMerger;
+use LynX39\LaraPdfMerger\Facades\PdfMerger;
 class PreviewCompanyController extends Controller
 {
     function preview($slug) {
@@ -28,7 +28,7 @@ class PreviewCompanyController extends Controller
     }
 
     public function mergeDocuments($company){
-        $merger = PDFMerger::init();
+        // $merger = PDFMerger::init();
         try {
             $documents = collect(); 
             $i=0;
@@ -46,28 +46,43 @@ class PreviewCompanyController extends Controller
     
                 $documents = $documents->merge($originals)->merge($duplicates); // Merge the collections
             }
+
+            $pdf = PDFMerger::init(); 
+
             
-            // dd($documents);
-        
+                 $pdf->addPDF("https://s29.q4cdn.com/175625835/files/doc_downloads/test.pdf", 'all');
+                 $pdf->addPDF("https://s29.q4cdn.com/175625835/files/doc_downloads/test.pdf", 'all');
+
+            //  foreach ($documents as $doc) {
+            //     $filePath = env('BLOB_FILE_PATH') . $doc->document_file;
+            //     Log::info('Adding PDF to merger: ' . $filePath);    
+            //     $pdf->addPDF($filePath, 'all');
+            //   }
+              $pdf->addPDF(storage_path('/app/public/').trim($company->name).'.pdf', 'all');
+                $pdf->merge();
+                $pdf->save(storage_path("fuckit.pdf"));
+
+           dd("done");
             Log::info('Total documents to merge: ' . count($documents));
     
-            foreach ($documents as $doc) {
-                $i=$i+1;
-                $filePath = env('BLOB_FILE_PATH') . $doc->document_file;
-                Log::info('Adding PDF to merger: ' . $filePath);    
-                $merger->addPDF($filePath, 'all');
-            }
+            // foreach ($documents as $doc) {
+            //     $i=$i+1;
+            //     $filePath = env('BLOB_FILE_PATH') . $doc->document_file;
+            //     Log::info('Adding PDF to merger: ' . $filePath);    
+            //     $merger->addPDF($filePath, 'all');
+            // }
 
-            $merger->addPDF(storage_path('/app/public/').trim($company->name).'.pdf', 'all');
-            
-            $fileName = $company->name . time() . '.pdf';
-            Log::info('Merging documents into: ' . $fileName);
+            // $merger->addPDF(storage_path('/app/public/').trim($company->name).'.pdf', 'all');
+            // // dd($merger); 
+            // $fileName = 'fuckitt.pdf';
+            // // $fileName = $company->name . time() . '.pdf';
+            // Log::info('Merging documents into: ' . $fileName);
     
-            $merger->merge();
-            Log::info('Documents merged successfully.');
-            $merger->save(storage_path('/app/public/' . $fileName));
+            // $merger->merge();
+            // Log::info('Documents merged successfully.');
+            // $merger->save(storage_path('/app/public/' . $fileName));
             
-            Log::info('Documents saved successfully.');
+            // Log::info('Documents saved successfully.');
     
         } catch (\Throwable $th) {
             Log::error('Error during document merging: ' . $th->getMessage());
