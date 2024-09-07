@@ -64,7 +64,7 @@ export default {
     if(e){
         //toast.success('Connected')
       }else{
-        toast.warning('It looks like you are offline',{autoClose: 5000})
+        //toast.warning('It looks like you are offline',{autoClose: 5000})
       }
 
 

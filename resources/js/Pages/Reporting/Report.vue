@@ -39,7 +39,7 @@
           </div>
 
           <div class="col-4" v-if="report_type == 'retail'">
-            <button @click="getType($event,'Nominations')" type="button" class=" btn btn-success w-50">Nominations</button>
+            <button @click="getType($event,'Nominations')" type="button" class=" btn btn-success w-50">Appointment of managers</button>
           </div>
           
           <div class="col-4">

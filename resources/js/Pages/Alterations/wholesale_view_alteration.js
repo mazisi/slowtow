@@ -75,6 +75,13 @@ export default {
             }
         }
 
+        function abandon(slug) {
+            if (confirm("Are you sure you want to abandon this additional depot/relocation?")) {
+                Inertia.post(`/abandon-alteration/${slug}`);
+                notifySuccess('Additional depot/relocation abandoned successfully');
+            }
+        }
+
         function updateDate() {
             form.patch(`/update-alteration-date/${props.alteration.slug}`, {
                 preserveScroll: true,
@@ -242,6 +249,7 @@ export default {
             showMenu,mergeDocuments,
             updateDate,
             update,
+            abandon,
             pushData,
             hasFile,
             getAlterationDate,

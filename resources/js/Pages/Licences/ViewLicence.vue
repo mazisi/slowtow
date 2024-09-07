@@ -26,7 +26,7 @@
 
                                 <li><Link :href="`/transfer-history?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Transfers</Link></li>
 
-                                <li v-if="licence.type !== 'wholesale'"><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Nominations</Link></li>
+                                <li v-if="licence.type !== 'wholesale'"><Link :href="`/nominations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Appointment of managers</Link></li>
 
                                 <li><Link :href="`/alterations?slug=${licence.slug }`" class="dropdown-item border-radius-md"> Alterations</Link></li>
 

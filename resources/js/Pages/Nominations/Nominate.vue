@@ -26,7 +26,7 @@
                 <thead>
                   <tr>
                     <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                      Nomination Year
+                      Appointment of managers Year
                     </th>
                     <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                     Current Status
@@ -61,7 +61,7 @@
                   </tr>
                 
                   <tr v-else>
-                    <td colspan="6" class="text-center text-danger">No nominations found.</td>
+                    <td colspan="6" class="text-center text-danger">No Appointment of managers found.</td>
                 </tr>
                   </tbody>
               </table>

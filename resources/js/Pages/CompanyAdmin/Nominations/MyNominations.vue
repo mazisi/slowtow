@@ -1,6 +1,6 @@
 <template>
     <Layout>
-      <Head title="Nominations" />
+      <Head title="Appointment of managers" />
     <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -10,7 +10,7 @@
     </div>
     <div class="row">
     <div class="col-lg-12">
-    <h6 class="mb-1">Nominations For:  <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">
+    <h6 class="mb-1">Appointment of managers For:  <Link :href="`/company/view-my-licences/${licence.slug}`" class="text-success">
       {{ licence.trading_name ? licence.trading_name : '' }}</Link></h6>
     </div>
     </div>
@@ -26,7 +26,7 @@
                     <thead>
                       <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                          Nomination Year
+                          Appointment of managers Year
                         </th>
                         <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                         Current Status
@@ -61,7 +61,7 @@
                       </tr>
                     
                       <tr v-else>
-                        <td colspan="6" class="text-center text-danger">No nominations found.</td>
+                        <td colspan="6" class="text-center text-danger">No Appointment of managers found.</td>
                     </tr>
                       </tbody>
                   </table>

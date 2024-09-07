@@ -33,8 +33,17 @@
                         </p>
                     </div>
                     <div class="col-lg-2 col-2 my-auto text-end">
-                        <button v-if="$page.props.auth.has_slowtow_admin_role"
-                                @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
+                        <div class="dropdown float-lg-end pe-4">
+                    
+                            <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                                <li class="text-center"><button @click="abandonTransfer(view_transfer.slug)" type="button" class="btn btn-sm btn-warning "> Abandon</button></li>
+                                <li class="text-center"><button v-if="$page.props.auth.has_slowtow_admin_role"
+                                    @click="deleteTransfer" type="button" class="btn btn-sm btn-danger"> Delete</button></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

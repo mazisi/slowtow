@@ -203,4 +203,21 @@ class DuplicateOriginalsController extends Controller
             return back()->with('error', 'An error occurred while deleting the duplicate original.');
         }
     }
+
+    public function abandon($slug){
+        $lic = DuplicateOriginal::whereSlug($slug)->first();
+        $abandoned = Task::where('model_id', $lic->id)->where('body', 'THIS DUPLICATE ORIGINAL HAS BEEN ABANDONED.')->first();
+        if($abandoned){
+            return back()->with('error', 'This duplicate original has already been marked as abandoned.');
+        }
+        Task::create([
+            'user_id' => auth()->id(),
+            'model_type'=> 'Duplicate-Originals',
+            'model_id' => $lic->id,
+            'body' => 'THIS DUPLICATE ORIGINAL HAS BEEN ABANDONED.',
+            'is_abandoned' => 1
+        ]);        
+
+        return back()->with('success', 'Saved.');
+    }
 }

@@ -31,9 +31,23 @@
 </p>
   </div>
   <div class="col-lg-3 col-3 my-auto text-end">
+    <div class="dropdown float-lg-end pe-4">
+
+        <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+        </a>
+        <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+            <li class="text-center"><button @click="abandonDuplicateOriginal(duplicate_original.slug)" type="button" class="btn btn-sm btn-info "> Abandon</button></li>
+            <li class="text-center"><button v-if="$page.props.auth.has_slowtow_admin_role" 
+              @click="deleteDuplicateOriginal(duplicate_original.slug)" type="button" class="btn btn-sm btn-danger "> Delete</button></li>
+        </ul>
+    </div>
+</div>
+
+  <!-- <div class="col-lg-3 col-3 my-auto text-end">
     <button v-if="$page.props.auth.has_slowtow_admin_role" 
     @click="deleteDuplicateOriginal(duplicate_original.slug)" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
-  </div>
+  </div> -->
 </div>
       <div class="row">
         <div class="mt-3 row">

@@ -170,4 +170,21 @@ class TransferLicenceController extends Controller
         return back()->with('error','Error deleting  licence transfer.');
       }
       }
+
+      public function abandon($slug){
+        $lic = LicenceTransfer::whereSlug($slug)->first();
+        $abandoned = Task::where('model_id', $lic->id)->where('body', 'THIS TRANSFER HAS BEEN ABANDONED.')->first();
+        if($abandoned){
+            return back()->with('error', 'This transfer has already been marked as abandoned.');
+        }
+        Task::create([
+            'user_id' => auth()->id(),
+            'model_type'=> 'Transfer',
+            'model_id' => $lic->id,
+            'body' => 'THIS TRANSFER HAS BEEN ABANDONED.',
+            'is_abandoned' => 1
+        ]);        
+
+        return back()->with('success', 'Saved.');
+    }
 }

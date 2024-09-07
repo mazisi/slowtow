@@ -37,8 +37,8 @@ export default {
       { name: 'Client Quoted With Requirements', value: 100 },
       { name: 'Client Invoiced', value: 200 },
       { name: 'Payment To The Liquor Board', value: 400 },
-      { name: 'Nomination Lodged', value: 800 },
-      { name: 'Nomination Issued', value: 900 },
+      { name: 'Appointment of managers Lodged', value: 800 },
+      { name: 'Appointment of managers Issued', value: 900 },
 
     ]
     return {
@@ -113,7 +113,7 @@ methods: {
 }</style>
 <template>
 <Layout>
-  <Head title="EmailComms - Nominations" />
+  <Head title="EmailComms - Appointment of managers" />
   <div class="container-fluid">
     <Banner/>
     <div class="card card-body mx-3 mx-md-4 mt-n6">
@@ -152,7 +152,7 @@ methods: {
 </div>
 </div>
 </div>
-  <h5 class="text-center"> Nominations</h5>
+  <h5 class="text-center"> Appointment of managers</h5>
   <div class="table-responsive p-0">
   <table class="table align-items-center mb-0">
     <thead>
@@ -191,7 +191,7 @@ methods: {
         </td>
       </tr>
       <tr v-else>
-        <td colspan="6" class="text-center text-danger">No Nominations Found.</td>
+        <td colspan="6" class="text-center text-danger">No Appointment of managers Found.</td>
     </tr>
    
     </tbody>

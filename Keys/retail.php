@@ -63,11 +63,11 @@ function nominations() {
         300 => 'Deposit Paid',
         400 => 'Payment To The Liquor Board',
         500 => 'Select Person(s) To Nominate',
-        600 => 'Prepare Nomination Application',
+        600 => 'Prepare Appointment of managers Application',
         700 => 'Scanned Application',
         800 => 'Application Lodged',
-        900 => 'Nomination Issued',
-        1000 => 'Nomination Delivered',
+        900 => 'Appointment of managers Issued',
+        1000 => 'Appointment of managers Delivered',
         
     ];
 

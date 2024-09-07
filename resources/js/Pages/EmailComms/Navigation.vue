@@ -22,7 +22,7 @@
           :class="$page.props.currentRoute == 'get_nominations' ? 'btn-success' : 'btn-secondary'" 
           class="nav-link btn text-white" id="Nominations" 
           data-bs-toggle="pill" data-bs-target="#nominations" 
-          type="button" role="tab" aria-controls="nominations" aria-selected="false">Nominations</button>
+          type="button" role="tab" aria-controls="nominations" aria-selected="false">Appointment of managers</button>
         </li>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       
         <li class="nav-item" role="presentation">

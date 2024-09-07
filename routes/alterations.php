@@ -25,3 +25,5 @@ Route::post('/merge-alteration-documents/{alteration_id}',[AlterationDocumentCon
 
 Route::patch('/update-alteration-date/{slug}',[AlterLicenceController::class,'updateAlterationDate']);
 
+Route::post('/abandon-alteration/{slug}',[AlterLicenceController::class,'abandon']);
+

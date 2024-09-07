@@ -53,7 +53,7 @@ console.log(licence)
          :class="{ active:  $page.props.currentRoute == 'new-application'}"
          :href="`/duplicate-originals?slug=${$page.props.slug}`">
         <div class="text-center d-flex align-items-center justify-content-center me-2">
-        <i class="material-icons-round opacity-10 fs-5">app_registration</i>
+        <i class="material-icons-round opacity-10 fs-5">content_copy</i>
         </div>
         <span class="nav-link-text ms-1">Duplicate Originals</span>
         
@@ -120,7 +120,7 @@ console.log(licence)
         <div class="text-center d-flex align-items-center justify-content-center me-2">
         <i class="material-icons-round opacity-10 fs-5">person_add</i>
         </div>
-        <span class="nav-link-text ms-1">New Nomination</span>
+        <span class="nav-link-text ms-1">New Appointment of managers</span>
         
         </Link>
       </li>

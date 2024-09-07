@@ -65,6 +65,13 @@ export default {
             }
         }
 
+        function abandonDuplicateOriginal(slug) {
+            if (confirm("Are you sure you want to abandon this duplicate original?")) {
+                Inertia.post(`/abandon-duplicate-original/${slug}`);
+                notifySuccess('Duplicate original abandoned successfully');
+            }
+        }
+
         function updateDate(form_data) {
               form_data.patch(`/update-duplicate_original-date/${props.duplicate_original.slug}`, {
                 preserveScroll: true,
@@ -192,7 +199,7 @@ export default {
             pushData,
             hasFile,
             getCurrentStatus,
-            toast,
+            toast,abandonDuplicateOriginal,
             deleteDuplicateOriginal,
             submitDocument,
             deleteDocument

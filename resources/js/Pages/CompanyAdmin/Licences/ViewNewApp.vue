@@ -318,7 +318,7 @@ export default {
         const licenceVariables = [
             {id: 1, name: 'Renewals', url: '/renew-licence'},
             {id: 2, name: 'Transfers', url: '/transfer-history'},
-            {id: 3, name: 'Nominations', url: '/nominations'},
+            {id: 3, name: 'Appointment of managers', url: '/nominations'},
             {id: 4, name: 'Alterations', url: '/alterations'},
         ];
 

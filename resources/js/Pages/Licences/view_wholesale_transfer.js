@@ -119,6 +119,12 @@ export default {
         }
 
 
+        function abandonTransfer(slug) {
+            if (confirm("Are you sure you want to abandon this transfer?")) {
+                Inertia.post(`/abandon-transfer/${slug}`);
+                notifySuccess('Transfer abandoned successfully');
+            }
+        }
 
         function deleteDocument(id,prevStage){
             if(confirm('Document will be deleted permanently...Continue ??')){
@@ -264,6 +270,7 @@ export default {
             updateStageDate,
             getStatus,
             pushData,
+            abandonTransfer,
             hasMergeFile,
             hasFile,
             mergeForm,

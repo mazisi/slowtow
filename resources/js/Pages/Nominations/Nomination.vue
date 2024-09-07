@@ -6,12 +6,12 @@
                 <div class="col-12">
                     <div class="row">
                         <div class="col-lg-6 col-7">
-                            <h5>Nominees for: <Link @click="redirect(nominations[0].licence)" href="#!" class="text-success" v-if="nominations.length > 0">
+                            <h5>Appointment of managers for: <Link @click="redirect(nominations[0].licence)" href="#!" class="text-success" v-if="nominations.length > 0">
                                 {{ nominations[0].licence.trading_name ? nominations[0].licence.trading_name : '' }}</Link></h5>
                         </div>
                         <div class="col-lg-6 col-5 my-auto text-end">
                             <div class="dropdown float-lg-end pe-4">
-                                <Link :href="`/nominate?slug=${$page.props.slug}`" class="btn btn-sm btn-secondary">New Nomination</Link>
+                                <Link :href="`/nominate?slug=${$page.props.slug}`" class="btn btn-sm btn-secondary">New Appointment of managers</Link>
                             </div>
                         </div>
                     </div>
@@ -93,7 +93,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td>No nominations found</td>
+                                <td>No Appointment of managers found</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

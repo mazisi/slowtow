@@ -20,6 +20,8 @@ Route::patch('/update-transfer-date/{slug}',[TransferLicenceController::class,'u
 
 Route::post('/submit-transfer-documents/{transfer_id}',[TransferDocsController::class,'store'])->name('transfer_licence_docs');
 
-        Route::post('/transfer-documents-merge',[TransferDocsController::class,'merge']);
+Route::post('/transfer-documents-merge',[TransferDocsController::class,'merge']);
 
-        Route::delete('/delete-transfer-document/{document_id}/{prevStage}',[TransferDocsController::class,'destroy']);
+Route::delete('/delete-transfer-document/{document_id}/{prevStage}',[TransferDocsController::class,'destroy']);
+
+Route::post('/abandon-transfer/{slug}',[TransferLicenceController::class,'abandon']);

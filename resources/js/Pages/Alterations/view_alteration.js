@@ -86,6 +86,13 @@ export default {
             });
         }
 
+
+        function abandon(slug) {
+            if (confirm("Are you sure you want to abandon this additional depot/relocation?")) {
+                Inertia.post(`/abandon-alteration/${slug}`);
+                notifySuccess('Additional depot/relocation abandoned successfully');
+            }
+        }
         
 
         function pushData(e, status_value,prevStage) {
@@ -230,6 +237,7 @@ export default {
             update,redirect,
             pushData,
             hasFile,
+            abandon,
             getAlterationDate,
             deleteAlteration,
             getStatus,

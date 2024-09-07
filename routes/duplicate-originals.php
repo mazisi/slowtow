@@ -18,3 +18,5 @@ use App\Http\Controllers\DuplicateOriginalsController;
         Route::patch('/update-duplicate_original-date/{id}',[DuplicateOriginalsController::class,'updateDate']);
 
         Route::delete('/delete-duplicate-original/{slug}',[DuplicateOriginalsController::class,'destroy']);
+
+        Route::post('/abandon-duplicate-original/{slug}',[DuplicateOriginalsController::class,'abandon']);

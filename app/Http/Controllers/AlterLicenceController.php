@@ -95,4 +95,21 @@ class AlterLicenceController extends Controller
       }
       return to_route('alterations', ['slug' => $licence_slug])->with('error','An error occured while deleting alteration.');
     }
+
+    public function abandon($slug){
+      $lic = Alteration::whereSlug($slug)->first();
+      $abandoned = Task::where('model_id', $lic->id)->where('body', 'THIS ADDITIONAL DEPOT/RELOCATION HAS BEEN ABANDONED.')->first();
+      if($abandoned){
+          return back()->with('error', 'This Additional Depot/Relocation has already been marked as abandoned.');
+      }
+      Task::create([
+          'user_id' => auth()->id(),
+          'model_type'=> 'Alteration',
+          'model_id' => $lic->id,
+          'body' => 'THIS ADDITIONAL DEPOT/RELOCATION HAS BEEN ABANDONED.',
+          'is_abandoned' => 1
+      ]);        
+
+      return back()->with('success', 'Saved.');
+  }
 }

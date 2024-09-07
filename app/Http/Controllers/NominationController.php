@@ -47,9 +47,9 @@ class NominationController extends Controller
         ]);
 
         if($nom){
-           return to_route('view_nomination',['slug' => $nom->slug])->with('success','Nomination created successfully.');
+           return to_route('view_nomination',['slug' => $nom->slug])->with('success','Appointment of managers created successfully.');
          }
-         return to_route('view_nomination',['slug' => $nom->slug])->with('error','Error creating nomination.');
+         return to_route('view_nomination',['slug' => $nom->slug])->with('error','Error creating Appointment of managers.');
     }
     /**
      * Get all nominations belonging to a certain licence.
@@ -118,12 +118,12 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
             "status" => $status <= 0 ? NULL : $status,
 
         ]);
-             return back()->with('success','Nomination updated succesfully.');
+             return back()->with('success','Appointment of managers updated succesfully.');
 
 
         } catch (\Throwable $th) {
             //throw $th;
-            return back()->with('error','Error updating nomination.');
+            return back()->with('error','Error updating Appointment of managers.');
         }
     }
 
@@ -243,7 +243,7 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
     public function destroy($licence_slug, $slug){
         try {
             Nomination::whereSlug($slug)->delete();
-            return to_route('nominations',['slug' => $licence_slug])->with('success','Nomination deleted successfully.');
+            return to_route('nominations',['slug' => $licence_slug])->with('success','Appointment of managers deleted successfully.');
         } catch (\Throwable $th) {
             //throw $th;
             return back()->with('error','An unknown error occured.');

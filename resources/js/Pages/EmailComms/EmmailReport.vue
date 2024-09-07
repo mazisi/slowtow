@@ -77,7 +77,7 @@ export default {
          <option :value="''" disabled selected>All</option>
          <option value="renewals">Renewals</option>
          <option value="transfers">Transfers</option>
-         <option value="nominations">Nominations</option>
+         <option value="nominations">Appointment of managers</option>
          <!-- <option value="5">Temporary Licences</option> -->
          
          
