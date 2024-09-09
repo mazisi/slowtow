@@ -132,7 +132,7 @@ class WholesaleController extends Controller
              ]);
             Licence::whereId($licence->id)->update(['merged_document' => $fileName]);
             $merger->merge();
-            $merger->save(storage_path('/app/public/docs/'.$fileName.'.pdf'));
+            $merger->save(storage_path('app/public/docs/'.$fileName.'.pdf'));
  
               return back()->with('success','Document merged successfully.');
           

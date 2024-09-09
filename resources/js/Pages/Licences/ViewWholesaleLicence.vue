@@ -304,7 +304,7 @@
       <template v-if="original_lic">
         <li class="px-0 mb-2 border-0 list-group-item d-flex align-items-center">
     <div class="me-3" v-if="original_lic">
-    <a v-if="original_lic" :href="`${$page.props.blob_file_path}${original_lic.document_file}`" target="_blank">
+    <a v-if="original_lic" :href="`/storage/app/public/docs/${original_lic.document_file}`" target="_blank">
     <i class="fa fa-file-pdf text-lg text-danger me-1 " aria-hidden="true"></i><br>
     </a>    
     </div>

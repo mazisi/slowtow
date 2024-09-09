@@ -9,7 +9,7 @@
     <span class="alert-text">
     <span class="text-sm">{{ task.body }}</span>
     </span>
-    <a v-if="task.is_abandoned != 1" @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
+    <a @click="deleteNote(task.id)" href="#!" class="btn btn-sm btn-danger float-end">
       <i class="fa fa-trash-o text-white"></i>
     </a>
     <p style=" font-size: 12px"><i class="fa fa-clock-o" ></i> {{ getMomentDate(task.created_at) }}</p>
