@@ -11,9 +11,9 @@
           <div class="col-lg-6 col-5 my-auto text-end">
 
 
-            <button @click="previewPerson" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
+            <!-- <button @click="previewPerson" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
               Preview
-            </button>
+            </button> -->
 
             <button @click="deletePerson(person.full_name)" type="button" class="btn btn-sm btn-danger">
               <i class="fa fa-trash-alt text-md"></i> Delete

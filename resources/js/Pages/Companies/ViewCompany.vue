@@ -10,7 +10,7 @@
                     </div>
                     <div class="col-lg-3 col-3 my-auto text-end">
 
-                        <i @click="preview('slotow')" class="fa fa-file-o mx-4 text-secondary cursor-pointer" aria-hidden="true"></i>
+                        <!-- <i @click="preview('slotow')" class="fa fa-file-o mx-4 text-secondary cursor-pointer" aria-hidden="true"></i> -->
 
                         <div v-if="$page.props.auth.has_slowtow_admin_role" class="dropdown float-lg-end pe-4">
                             <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">

@@ -10,9 +10,9 @@
                     </div>
                     <div class="col-lg-3 col-3 my-auto text-end">
 
-                        <button @click="preview('company')" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
+                        <!-- <button @click="preview('company')" type="button" class="btn btn-sm btn-dark mx-2"> <i class="fa fa-file-o text-md"></i>
                             Preview
-                          </button>
+                          </button> -->
                     </div>
                 </div>
                 <div class="row">
