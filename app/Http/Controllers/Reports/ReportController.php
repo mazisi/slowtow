@@ -110,11 +110,11 @@ class ReportController extends Controller
               'email' => auth()->user()->email
             ]);
 
-            // if($request->report_type == 'wholesale'){
-            //   AllWholesaleReportsController::exportAll($request);
-            // }else{
-            //   AllReportsController::exportAll($request);
-            // }
+            if($request->report_type == 'wholesale'){
+              AllWholesaleReportsController::exportAll($request);
+            }else{
+              AllReportsController::exportAll($request);
+            }
             return back()->with('success','Report is being generated. Please check your email');
             break;
             case 'Renewals':
