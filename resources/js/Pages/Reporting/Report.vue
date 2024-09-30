@@ -64,7 +64,7 @@
  <div class="row" v-if="form.variation">
   
 
-  <h5 class="text-center">{{ form.variation }}</h5>   
+  <h5 class="text-center">{{ form.variation == 'Nominations' ? 'Appointment of managers' : form.variation }}</h5>   
 
  
 

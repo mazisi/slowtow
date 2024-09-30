@@ -33,7 +33,7 @@ class ReportMailer extends Mailable
             
         return $this->from(env("MAIL_FROM_ADDRESS"), 'Leon Slotow Associates')
                     ->replyTo('info@slotow.co.za')
-                    ->subject('Please Find Attached ALL ApplicationsReport')
+                    ->subject('Please Find Attached ALL Applications Report')
                     ->markdown('emails.report')
                     ->attach(storage_path('app/public/All_Apps.Xlsx'));
                     
