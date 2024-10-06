@@ -27,10 +27,12 @@ class AlterLicenceController extends Controller
     }
 
     public function store(AlterationRequest $request,$licence_id){
+      $licence = Licence::find($request->licence_id);//for reporting purposes
           $alter = Alteration::create([
             'licence_id' => $licence_id,
             'logded_at'    => $request->alteration_date,
             'status'  => last($request->status),
+            'report_type' => $licence->type,
             'slug' => sha1(time()),
           ]);
           if($alter){

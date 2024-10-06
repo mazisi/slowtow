@@ -31,6 +31,7 @@ class TransferLicenceController extends Controller
     }
 
     public function store(Request $request,$slug){
+      $licence = Licence::find($request->licence_id);//for reporting purposes
       if($request->belongs_to === 'Individual'){
           $request->validate([
             "new_person" => "required|exists:people,id",
@@ -56,6 +57,7 @@ class TransferLicenceController extends Controller
         'company_id'=> $request->new_company,
         'people_id'=> $request->new_person,
         'status' => last($sorted_statuses),
+        'report_type' => $licence->type,
         'slug' => sha1(time())
        ]);
 

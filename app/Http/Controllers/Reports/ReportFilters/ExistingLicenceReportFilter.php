@@ -65,17 +65,6 @@ class ExistingLicenceReportFilter{
                 });
              })
 
-             ->when(request('report_type') == 'wholesale', function ($query) {
-                $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                    $query->where('status','<', 1300)
-                    ->orWhereNull('status');
-                })
-    
-                ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                    $query->where('status','>=', 1300);
-                });
-             })
-
              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                 $query->where('status','<', 2300)
                 ->orWhereNull('status');
@@ -92,6 +81,7 @@ class ExistingLicenceReportFilter{
                 $query->whereNull('is_new_app')
                 ->orWhere('is_new_app',0);
             })
+            ->where('type','retail')
             ->orderBy('trading_name')
             ->get();
   }

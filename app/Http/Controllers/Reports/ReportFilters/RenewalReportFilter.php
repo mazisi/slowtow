@@ -8,7 +8,7 @@ class RenewalReportFilter {
 
   function filter($request){
    return DB::table('licence_renewals')
-   ->selectRaw("licence_renewals.id, is_licence_active, trading_name,licences.company_id, licences.people_id, licences.belongs_to, board_region,licence_number, licences.licence_date,licence_renewals.status,
+   ->selectRaw("licence_renewals.id,report_type, is_licence_active, trading_name,licences.company_id, licences.people_id, licences.belongs_to, board_region,licence_number, licences.licence_date,licence_renewals.status,
                 is_quote_sent, licence_renewals.date")
 
    ->join('licences', 'licences.id' , '=', 'licence_renewals.licence_id')
@@ -62,24 +62,12 @@ class RenewalReportFilter {
                 $query->where('licence_renewals.status','>=', 500);
             });
 
-            })
-
-
-            ->when(request('report_type') == 'wholesale', function ($query)  {
-                $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                  $query->where('licence_renewals.status','<', 1500)
-                  ->orWhereNull('licence_renewals.status');
-              })
-   
-              ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                  $query->where('licence_renewals.status','>=', 1500);
-              });
-  
-              });
+            });
 
 
 
            })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
+           ->where('report_type','retail')
            ->orderBy('trading_name')
            ->get();
   }

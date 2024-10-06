@@ -284,7 +284,7 @@
   
   
 
-      <button v-if="form.variation == 'All'" @click="exportAll" :disabled="form.processing || !form.variation" 
+      <button v-if="!form.variation == 'All'" @click="exportAll" :disabled="form.processing || !form.variation" 
       type="button" class="btn btn-success float-end">
       <span v-if="form.processing" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
       Generate All Reports</button>

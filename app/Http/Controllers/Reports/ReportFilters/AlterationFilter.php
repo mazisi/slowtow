@@ -10,7 +10,7 @@ class AlterationFilter{
  function filter($request){
     
   return DB::table('alterations')
-        ->selectRaw("alterations.id, licences.trading_name, licences.belongs_to, licences.licence_number, licences.province, 
+        ->selectRaw("alterations.id,report_type, licences.trading_name, licences.belongs_to, licences.licence_number, licences.province, 
        licences.board_region,licence_type_id,alterations.date, licences.company_id,licences.people_id,
         alterations.status, licence_date, is_licence_active")
         ->join('licences', 'licences.id' , '=', 'alterations.licence_id' )
@@ -80,6 +80,8 @@ class AlterationFilter{
       })
       ->whereNull('alterations.deleted_at')
       ->orderBy('trading_name')
+      ->where('report_type', 'retail')
        ->get();
+
  }
 }

@@ -39,10 +39,11 @@ class NominationController extends Controller
         // if (!is_null($exist)) {
         //    return back()->with('error', 'Sorry...Nomination for '.$request->year.' already exist.');
         // }
-
+        $licence = Licence::find($request->licence_id);//for reporting purposes
         $nom = Nomination::create([
             "year" => $request->year,
             "licence_id" => $request->licence_id,
+            'report_type' => $licence->type,
             "slug" => sha1(time())
         ]);
 

@@ -60,6 +60,7 @@ class TransferReportFilter {
               $query->whereIn('licence_transfers.status', array_values(explode(",",request('transfer_stages'))));
           })
           ->whereNull('licences.deleted_at')->whereNull('licence_transfers.deleted_at')
+          ->where('report_type','retail')
           ->orderBy('trading_name')->get();
   }
 }

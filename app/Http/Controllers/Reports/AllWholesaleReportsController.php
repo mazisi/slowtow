@@ -8,6 +8,7 @@ use App\Actions\ExportNotes;
 use Illuminate\Http\Request;
 use App\Actions\LicenceStatus;
 use App\Http\Controllers\Controller;
+use App\Actions\WholesaLeLicenceStatus;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use App\Http\Controllers\Reports\RenewalExportController;
@@ -17,10 +18,15 @@ use App\Http\Controllers\Reports\ReportFilters\AlterationFilter;
 use App\Http\Controllers\Reports\ExistingLicenceExportController;
 use App\Http\Controllers\Reports\ReportFilters\NewAppReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\TransferReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\NominationReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\TemporalExportReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
+use App\Http\Controllers\Reports\Wholesale\WholesaleNewAppExportController;
+use App\Http\Controllers\Reports\Wholesale\WholesaleRenewalExportController;
+use App\Http\Controllers\Reports\ReportFilters\WholesaleTransferReportFilter;
+use App\Http\Controllers\Reports\Wholesale\WholesaleTransferExportController;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleAlterationFilter;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleRenewalReportFilter;
 
 class AllWholesaleReportsController extends Controller
 {
@@ -41,12 +47,12 @@ class AllWholesaleReportsController extends Controller
             )
         );
       
-               $arr_of_alterations = (new AlterationFilter)->filter($request)->toArray(); 
+               $arr_of_alterations = (new WholesaleAlterationFilter)->filter($request)->toArray(); 
                
 
                 for($i = 0; $i < count($arr_of_alterations); $i++ ){
                                             
-                        $proof_of_lodgiment = (new AlterationExportController)->getProofOfLodgiment($arr_of_alterations[$i]->id);
+                        $proof_of_lodgiment = (new WholesaleAlterationExportController)->getProofOfLodgiment($arr_of_alterations[$i]->id);
                         //get alteration notes
                                                  
                         
@@ -55,10 +61,10 @@ class AllWholesaleReportsController extends Controller
                             getLicenceHolder($arr_of_alterations[$i]),
                             $arr_of_alterations[$i]->licence_number, 
                             request('boardRegion') ? $arr_of_alterations[$i]->province.'-'.$arr_of_alterations[$i]->board_region : $arr_of_alterations[$i]->province,
-                            AlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Lodged'),
+                            WholesaleAlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Lodged'),
                             $proof_of_lodgiment ? 'TRUE' : 'FALSE',
-                            AlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Certificate Issued'),
-                            (new AlterationExportController)->getStatus($arr_of_alterations[$i]->status), 
+                            WholesaleAlterationExportController::getDate($arr_of_alterations[$i]->id,'Alterations Certificate Issued'),
+                            (new WholesaleAlterationExportController)->getStatus($arr_of_alterations[$i]->status), 
                             ExportNotes::getNoteExports($arr_of_alterations[$i]->id, 'Alteration')
                             ];
 
@@ -190,14 +196,14 @@ class AllWholesaleReportsController extends Controller
                 $arr_of_new_apps_licences[$i]->licence_number,
                 request('boardRegion') ? $arr_of_new_apps_licences[$i]->province.' - '.$arr_of_new_apps_licences[$i]->board_region : $arr_of_new_apps_licences[$i]->province,
                 '',
-                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
-                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged'))) : '',
-                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged') ? 'TRUE': 'FALSE',
-                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Activation Fee Requested') ? NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Activation Fee Requested'): '',
+                WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
+                WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged'))) : '',
+                WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Application Lodged') ? 'TRUE': 'FALSE',
+                WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Activation Fee Requested') ? WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Activation Fee Requested'): '',
                  '',
-                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Finalisation Paid'))) : '',
-                NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Licence Issued') ? date('d M Y', strtotime(NewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Licence Issued'))) : '',
-                LicenceStatus::getLicenceStatus($arr_of_new_apps_licences[$i]->status),
+                WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Finalisation Paid'))) : '',
+                WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Licence Issued') ? date('d M Y', strtotime(WholesaleNewAppExportController::getDate($arr_of_new_apps_licences[$i]->id,'Licence Issued'))) : '',
+                WholesaLeLicenceStatus::getLicenceStatus($arr_of_new_apps_licences[$i]->status),
                 '',
                 ExportNotes::getNoteExports($arr_of_new_apps_licences[$i]->id, 'Licence')
              ];
@@ -219,77 +225,6 @@ class AllWholesaleReportsController extends Controller
         $spreadsheet->setActiveSheetIndex(2)->getStyle('A1:O1')->getFont()->setBold(true);
         $spreadsheet->setActiveSheetIndex(2)->getStyle('A1:O1')->getAlignment()->setWrapText(true);
 
-
-
-
-
-
-
-//  <==============================================Start OF Nomination Export===============================================================->
-
-        $nominations = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'Nominations');
-        $spreadsheet->addSheet($nominations, 3);
-
-
-
-
-        $arrayNominationData = array(
-            array(
-                'TRADING NAME',
-                'LICENCE HOLDER',
-                'Client Name',
-                'LICENCE NUMBER',
-                'PROVINCE/REGION',
-                'INVOICE NUMBER',
-                'PAYMENT DATE',
-                'DATE LODGED',
-                'PROOF OF LODGEMENT',
-                'DATE GRANTED',
-                'CURRENT STATUS',
-                'COMMENTS'
-            )
-        );
-          
-          $arr_of_nominations = (new NominationReportFilter)->filter($request)->toArray(); 
-    
-    for($i = 0; $i < count($arr_of_nominations); $i++ ){
-      
-        // $is_client_paid = NominationDocument::where('nomination_id',$arr_of_nominations[$i]->id)->where('doc_type','Payment To The Liquor Board')->first();
-
-               $data = [ 
-                $arr_of_nominations[$i]->trading_name, 
-                getLicenceHolder($arr_of_nominations[$i]),
-                $arr_of_nominations[$i]->full_name, 
-                $arr_of_nominations[$i]->licence_number, 
-                request('boardRegion') ? $arr_of_nominations[$i]->province.' - '.$arr_of_nominations[$i]->board_region : $arr_of_nominations[$i]->province,
-                '',
-                $arr_of_nominations[$i]->payment_to_liquor_board_at,
-                $arr_of_nominations[$i]->nomination_lodged_at,
-                (new NominationExportController)->getProofOfLodgiment($arr_of_nominations[$i]->id) ? 'TRUE' : 'FALSE',
-                $arr_of_nominations[$i]->nomination_issued_at,
-                (new NominationExportController)->getStatus($arr_of_nominations[$i]->status),
-                ExportNotes::getNoteExports($arr_of_nominations[$i]->id, 'Nomination') 
-             ];
-
-               $arrayNominationData[] = $data;
-
-        }
-
-        $spreadsheet->setActiveSheetIndex(3)
-         ->fromArray(
-         $arrayNominationData,
-         NULL,
-         'A1'
-         );
-
-         foreach ($spreadsheet->setActiveSheetIndex(3)->getColumnIterator() as $column) {
-            $spreadsheet->setActiveSheetIndex(3)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
-        }
-
-        $spreadsheet->setActiveSheetIndex(3)->getStyle('A1:O1')->getFont()->setBold(true);
-        $spreadsheet->setActiveSheetIndex(3)->getStyle('A1:O1')->getAlignment()->setWrapText(true);
-
-        //  <=================================================End OF Nomination Export=====================================================->
 
 
 
@@ -319,7 +254,7 @@ class AllWholesaleReportsController extends Controller
             )
         );
         
-            $arr_of_renewals = (new RenewalReportFilter)->filter($request)->toArray(); 
+            $arr_of_renewals = (new WholesaleRenewalReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 
@@ -330,14 +265,14 @@ class AllWholesaleReportsController extends Controller
                         $arr_of_renewals[$i]->licence_number,
                         $arr_of_renewals[$i]->date,
                         '',
-                        (new RenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'TRUE' : 'FALSE',
+                        (new WholesaleRenewalExportController)->is_client_quoted($arr_of_renewals[$i]->id) ? 'TRUE' : 'FALSE',
                         $arr_of_renewals[$i]->is_quote_sent ? 'TRUE' : 'FALSE',
-                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Client Paid'),
+                        WholesaleRenewalExportController::getDate($arr_of_renewals[$i]->id,'Client Paid'),
                         '',
-                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Payment To The Liquor Board'),
-                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Issued'),
-                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Delivered'),
-                        RenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Delivered') ? 'TRUE' : 'FALSE',
+                        WholesaleRenewalExportController::getDate($arr_of_renewals[$i]->id,'Payment To The Liquor Board'),
+                        WholesaleRenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Issued'),
+                        WholesaleRenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Delivered'),
+                        WholesaleRenewalExportController::getDate($arr_of_renewals[$i]->id,'Renewal Delivered') ? 'TRUE' : 'FALSE',
                         ExportNotes::getNoteExports($arr_of_renewals[$i]->id, 'Licence Renewal') 
                      ];
 
@@ -446,23 +381,23 @@ class AllWholesaleReportsController extends Controller
             )
         );             
                 
-                $arr_of_transfers = (new TransferReportFilter)->filter($request)->toArray(); 
+                $arr_of_transfers = (new WholesaleTransferReportFilter)->filter($request)->toArray(); 
     
                 for($i = 0; $i < count($arr_of_transfers); $i++ ){                               
 
                         $data = [         
                             $arr_of_transfers[$i]->trading_name,
-                            (new TransferExportController)->getTransferHolder($arr_of_transfers[$i]->transfered_to, $arr_of_transfers[$i]),
+                            (new WholesaleTransferExportController)->getTransferHolder($arr_of_transfers[$i]->transfered_to, $arr_of_transfers[$i]),
                             $arr_of_transfers[$i]->province == 'Gauteng' ? $arr_of_transfers[$i]->licence_number : '',
                             request('boardRegion') ? $arr_of_transfers[$i]->province.' - '.$arr_of_transfers[$i]->board_region : $arr_of_transfers[$i]->province,
                             '',
                             '',
-                            TransferExportController::getDate($arr_of_transfers[$i]->id,'Transfer Logded'),
-                            (new TransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
+                            WholesaleTransferExportController::getDate($arr_of_transfers[$i]->id,'Transfer Logded'),
+                            (new WholesaleTransferExportController)->getProofOfLodgiment($arr_of_transfers[$i]->id) ? 'TRUE' : 'FALSE',
                             '',
-                            TransferExportController::getDate($arr_of_transfers[$i]->id,'Payment To The Liquor Board'),
-                            TransferExportController::getDate($arr_of_transfers[$i]->id,'Transfer Issued'),
-                            (new TransferExportController)->getStatus($arr_of_transfers[$i]->status),
+                            WholesaleTransferExportController::getDate($arr_of_transfers[$i]->id,'Payment To The Liquor Board'),
+                            WholesaleTransferExportController::getDate($arr_of_transfers[$i]->id,'Transfer Issued'),
+                            (new WholesaleTransferExportController)->getStatus($arr_of_transfers[$i]->status),
                             ExportNotes::getNoteExports($arr_of_transfers[$i]->id, 'Transfer')
                          ];
     
@@ -494,6 +429,6 @@ class AllWholesaleReportsController extends Controller
          $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
         //  $writer->save('php://output');
         //  die;
-        $writer->save(storage_path('app/public/All_Apps.Xlsx'));
+        $writer->save(storage_path('app/public/Wholesale_All_Apps.Xlsx'));
     }
 }

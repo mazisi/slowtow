@@ -39,10 +39,11 @@ class LicenceRenewalController extends Controller
         if (!is_null($check_renewal)) {
            return back()->with('error', 'Licence already renewed for '.$request->year);
         }
-
+        $licence = Licence::find($request->licence_id);//for reporting purposes
         $renew = LicenceRenewal::create([
             'licence_id' => $request->licence_id,
             'date' => $request->year,
+            'report_type' => $licence->type,
             'slug' => sha1(time())
         ]);
         if($renew){
