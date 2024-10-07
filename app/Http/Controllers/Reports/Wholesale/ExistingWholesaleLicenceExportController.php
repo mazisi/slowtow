@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Reports\Wholesale;
 use App\Actions\ExportNotes;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
-use App\Actions\LicenceStatus;
+use App\Actions\WholesaleLicenceStatus;
 use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 use App\Models\LicenceDate;
 use App\Models\LicenceDocument;
@@ -54,7 +54,7 @@ class ExistingWholesaleLicenceExportController extends Controller
                 '',
                 // self::getDate($arr_of_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(self::getDate($arr_of_licences[$i]->id,'Finalisation Paid'))) : '',
                 self::getDate($arr_of_licences[$i]->id,'NLA 9 Issued') ? date('d M Y', strtotime(self::getDate($arr_of_licences[$i]->id,'NLA 9 Issued'))) : '',
-                LicenceStatus::getLicenceStatus($arr_of_licences[$i]->status),
+                WholesaleLicenceStatus::getLicenceStatus($arr_of_licences[$i]->status),
                 '',
                 ExportNotes::getNoteExports($arr_of_licences[$i]->id, 'Licence')
                 ];

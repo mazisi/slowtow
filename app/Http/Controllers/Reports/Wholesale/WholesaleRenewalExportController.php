@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\Reports\Wholesale;
 
+use App\Models\RenewalDate;
 use App\Actions\ExportNotes;
-use App\Models\RenewalDocument;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
-use App\Models\RenewalDate;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleRenewalReportFilter;
 
 class WholesaleRenewalExportController extends Controller
 {
@@ -36,7 +34,7 @@ class WholesaleRenewalExportController extends Controller
         );
         $arr_of_renewals = [];
                     
-            $arr_of_renewals = (new RenewalReportFilter)->filter($request)->toArray(); 
+            $arr_of_renewals = (new WholesaleRenewalReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_renewals); $i++ ){
 

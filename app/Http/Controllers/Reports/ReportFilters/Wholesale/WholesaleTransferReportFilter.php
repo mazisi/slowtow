@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Reports\ReportFilters;
+namespace App\Http\Controllers\Reports\ReportFilters\Wholesale;
 
 use Illuminate\Support\Facades\DB;
 

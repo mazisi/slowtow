@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reports\ReportFilters;
+namespace App\Http\Controllers\Reports\ReportFilters\Wholesale;
 
 use Illuminate\Support\Facades\DB;
 
@@ -65,12 +65,7 @@ class WholesaleExistingLicenceReportFilter{
                     $query->where('status','>=', 1300);
                 });
              })
-
-             ->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                $query->where('status','<', 2300)
-                ->orWhereNull('status');
-            })
-
+             
             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
                 $query->where('status','>=', 2300);
             });

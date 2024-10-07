@@ -10,7 +10,7 @@ use App\Models\TransferDocument;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
-use App\Http\Controllers\Reports\ReportFilters\WholesaleTransferReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleTransferReportFilter;
 
 class WholesaleTransferExportController extends Controller implements ReportShouldHaveStatusInterface
 {

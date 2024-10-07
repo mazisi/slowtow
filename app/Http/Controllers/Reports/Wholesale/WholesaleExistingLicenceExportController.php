@@ -6,7 +6,7 @@ use App\Actions\ExportNotes;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\LicenceStatus;
-use App\Http\Controllers\Reports\ReportFilters\WholesaleExistingLicenceReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleExistingLicenceReportFilter;
 use App\Models\LicenceDate;
 use App\Models\LicenceDocument;
 

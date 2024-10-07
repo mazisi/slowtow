@@ -7,7 +7,7 @@ import Banner from '../../components/Banner.vue';
 import { ref, computed } from 'vue';
 import  common from '../../common-js/common.js';
 import stages from './stages.js';
-// import wholesaleStages from './wholesaleStages.js';
+import wholesaleStages from './wholesaleStages.js';
 import useToaster from '../../../store/useToaster';
 
 export default {

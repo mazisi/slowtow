@@ -26,9 +26,11 @@ use App\Http\Controllers\Reports\AlterationExportController;
 use App\Http\Controllers\Reports\NominationExportController;
 use App\Http\Controllers\Reports\AllWholesaleReportController;
 use App\Http\Controllers\Reports\ExistingLicenceExportController;
+use App\Http\Controllers\Reports\Wholesale\WholesaleNewAppExportController;
 use App\Http\Controllers\Reports\Wholesale\WholesaleRenewalExportController;
 use App\Http\Controllers\Reports\Wholesale\WholesaleTransferExportController;
 use App\Http\Controllers\Reports\Wholesale\WholesaleAlterationExportController;
+use App\Http\Controllers\Reports\Wholesale\WholesaleExistingLicenceExportController;
 
 class ReportController extends Controller
 {
@@ -124,36 +126,43 @@ class ReportController extends Controller
                 RenewalExportController::export($request);
               }
               break;            
-          case 'Transfers':
-            if($request->report_type == 'wholesale'){
-              WholesaleTransferExportController::export($request);
-            }else{
-              TransferExportController::export($request);
-            }
+              case 'Transfers':
+                if($request->report_type == 'wholesale'){
+                  WholesaleTransferExportController::export($request);
+                }else{
+                  TransferExportController::export($request);
+                }
                       
             break;
           case 'Nominations':
             NominationExportController::export($request);          
             break;
           case 'New Applications':
-            NewAppExportController::export($request);
+            if($request->report_type == 'wholesale'){
+              WholesaleNewAppExportController::export($request);
+            }else{
+              NewAppExportController::export($request);
+            }
             break;
   
           case 'Existing Licences':
-            ExistingLicenceExportController::export($request);
+            if($request->report_type == 'wholesale'){
+              WholesaleExistingLicenceExportController::export($request);
+            }else{
+              ExistingLicenceExportController::export($request);
+            }
             break;
           case 'Temporary Licences':
             TemporaLExportController::export($request);          
             break;
   
-            case 'Alterations':
-              if($request->report_type == 'wholesale'){
-                WholesaleAlterationExportController::export($request); 
-              }else{
-                AlterationExportController::export($request); 
-              }
-                       
-              break;     
+            case 'Additional Depot/Relocation':
+                WholesaleAlterationExportController::export($request);                        
+              break; 
+              
+              case 'Alterations':
+                  AlterationExportController::export($request);                          
+                break; 
           case 'Upcoming Renewals':
             if($request->report_type == 'wholesale'){
               WholesaleRenewalExportController::export($request); 
@@ -170,7 +179,7 @@ class ReportController extends Controller
       }
 
 
- function dispatchCronjob(){
+ function dispatchCronjob(){//No longer working
 $report = Report::where('variation','All')->latest()->first();
 if(!is_null($report)){
   AllReportsController::exportAll(request(), $report);

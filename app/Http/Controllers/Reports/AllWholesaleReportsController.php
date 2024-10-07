@@ -11,22 +11,17 @@ use App\Http\Controllers\Controller;
 use App\Actions\WholesaLeLicenceStatus;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use App\Http\Controllers\Reports\RenewalExportController;
-use App\Http\Controllers\Reports\TransferExportController;
-use App\Http\Controllers\Reports\NominationExportController;
-use App\Http\Controllers\Reports\ReportFilters\AlterationFilter;
-use App\Http\Controllers\Reports\ExistingLicenceExportController;
 use App\Http\Controllers\Reports\ReportFilters\NewAppReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\RenewalReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\NominationReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\TemporalExportReportFilter;
-use App\Http\Controllers\Reports\ReportFilters\ExistingLicenceReportFilter;
 use App\Http\Controllers\Reports\Wholesale\WholesaleNewAppExportController;
 use App\Http\Controllers\Reports\Wholesale\WholesaleRenewalExportController;
-use App\Http\Controllers\Reports\ReportFilters\WholesaleTransferReportFilter;
 use App\Http\Controllers\Reports\Wholesale\WholesaleTransferExportController;
 use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleAlterationFilter;
+use App\Http\Controllers\Reports\Wholesale\WholesaleExistingLicenceExportController;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleNewAppReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleRenewalReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleTransferReportFilter;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleExistingLicenceReportFilter;
 
 class AllWholesaleReportsController extends Controller
 {
@@ -114,7 +109,7 @@ class AllWholesaleReportsController extends Controller
             )
         );
             
-            $arr_of_existing_licences = (new ExistingLicenceReportFilter)->filter($request)->toArray(); 
+            $arr_of_existing_licences = (new WholesaleExistingLicenceReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_existing_licences); $i++ ){
                 
@@ -125,14 +120,14 @@ class AllWholesaleReportsController extends Controller
                         $arr_of_existing_licences[$i]->licence_number,
                         request('boardRegion') ? $arr_of_existing_licences[$i]->province.' - '.$arr_of_existing_licences[$i]->board_region : $arr_of_existing_licences[$i]->province,
                         '',
-                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested')?ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested'): '',
-                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
-                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Application Lodged'))) : '',
-                        (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_existing_licences[$i]->id) ? 'TRUE': 'FALSE',
-                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested')?ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested'): '',
+                        WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested')?WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested'): '',
+                        WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
+                        WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Application Lodged'))) : '',
+                        (new WholesaleExistingLicenceExportController)->getProofOfLodgiment($arr_of_existing_licences[$i]->id) ? 'TRUE': 'FALSE',
+                        WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested')?WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Activation Fee Requested'): '',
                         '',
-                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Finalisation Paid'))) : '',
-                        ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Licence Issued') ? date('d M Y', strtotime(ExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Licence Issued'))) : '',
+                        WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Finalisation Paid') ? date('d M Y', strtotime(WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Finalisation Paid'))) : '',
+                        WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Licence Issued') ? date('d M Y', strtotime(WholesaleExistingLicenceExportController::getDate($arr_of_existing_licences[$i]->id,'Licence Issued'))) : '',
                         LicenceStatus::getLicenceStatus($arr_of_existing_licences[$i]->status),
                         '',
                         ExportNotes::getNoteExports($arr_of_existing_licences[$i]->id, 'Licence')
@@ -184,7 +179,7 @@ class AllWholesaleReportsController extends Controller
         );
         
 
-        $arr_of_new_apps_licences = (new NewAppReportFilter)->filter($request)->toArray(); 
+        $arr_of_new_apps_licences = (new WholesaleNewAppReportFilter)->filter($request)->toArray(); 
    
     for($i = 0; $i < count($arr_of_new_apps_licences); $i++ ){
        
@@ -280,19 +275,19 @@ class AllWholesaleReportsController extends Controller
 
                 }
                 
-                $spreadsheet->setActiveSheetIndex(4)
+                $spreadsheet->setActiveSheetIndex(3)
                     ->fromArray(
                     $arrayRenewalData,
                     NULL,
                     'A1'
                     );
 
-                foreach ($spreadsheet->setActiveSheetIndex(4)->getColumnIterator() as $column) {
-                    $spreadsheet->setActiveSheetIndex(4)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+                foreach ($spreadsheet->setActiveSheetIndex(3)->getColumnIterator() as $column) {
+                    $spreadsheet->setActiveSheetIndex(3)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
                 }
 
-                    $spreadsheet->setActiveSheetIndex(4)->getStyle('A1:L1')->getFont()->setBold(true);
-                    $spreadsheet->setActiveSheetIndex(4)->getStyle('A1:L1')->getAlignment()->setWrapText(true);
+                    $spreadsheet->setActiveSheetIndex(3)->getStyle('A1:L1')->getFont()->setBold(true);
+                    $spreadsheet->setActiveSheetIndex(3)->getStyle('A1:L1')->getAlignment()->setWrapText(true);
 // <=================================End OF Renewals Export===============================================================>
 
 
@@ -344,19 +339,19 @@ class AllWholesaleReportsController extends Controller
 
         }
         
-            $spreadsheet->setActiveSheetIndex(5)
+            $spreadsheet->setActiveSheetIndex(4)
              ->fromArray(
              $arrayTempData,   // The data to set
              NULL,        // Array values with this value will not be set
              'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
              );
 
-             foreach ($spreadsheet->setActiveSheetIndex(5)->getColumnIterator() as $column) {
-                $spreadsheet->setActiveSheetIndex(5)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+             foreach ($spreadsheet->setActiveSheetIndex(4)->getColumnIterator() as $column) {
+                $spreadsheet->setActiveSheetIndex(4)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
             }
 
-                $spreadsheet->setActiveSheetIndex(5)->getStyle('A1:L1')->getFont()->setBold(true);
-                $spreadsheet->setActiveSheetIndex(5)->getStyle('A1:L1')->getAlignment()->setWrapText(true);
+                $spreadsheet->setActiveSheetIndex(4)->getStyle('A1:L1')->getFont()->setBold(true);
+                $spreadsheet->setActiveSheetIndex(4)->getStyle('A1:L1')->getAlignment()->setWrapText(true);
 // <=================================End OF Temp Export===============================================================>
         
 
@@ -406,29 +401,29 @@ class AllWholesaleReportsController extends Controller
                     }
     
            
-                $spreadsheet->setActiveSheetIndex(6)
+                $spreadsheet->setActiveSheetIndex(5)
                  ->fromArray(
                  $arrayTransferData,   // The data to set
                  NULL,        // Array values with this value will not be set
                  'A1'         // Top left coordinate of the worksheet range where        //    we want to set these values (default is A1)
                  );
      
-        foreach ($spreadsheet->setActiveSheetIndex(6)->getColumnIterator() as $column) {
-                     $spreadsheet->setActiveSheetIndex(6)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
+        foreach ($spreadsheet->setActiveSheetIndex(5)->getColumnIterator() as $column) {
+                     $spreadsheet->setActiveSheetIndex(5)->getColumnDimension($column->getColumnIndex())->setAutoSize(true);
                      
                   }
          
-         $spreadsheet->setActiveSheetIndex(6)->getStyle('A1:L1')->getFont()->setBold(true);
-         $spreadsheet->setActiveSheetIndex(6)->getStyle('A1:L1')
+         $spreadsheet->setActiveSheetIndex(5)->getStyle('A1:L1')->getFont()->setBold(true);
+         $spreadsheet->setActiveSheetIndex(5)->getStyle('A1:L1')
          ->getAlignment()->setWrapText(true);
 
          header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-         header('Content-Disposition: attachment;filename="All_Apps.xlsx"');
+         header('Content-Disposition: attachment;filename="Wholesale_All_Apps.xlsx"');
          header('Cache-Control: max-age=0');        
          $writer = new Xlsx($spreadsheet);
          $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
-        //  $writer->save('php://output');
-        //  die;
-        $writer->save(storage_path('app/public/Wholesale_All_Apps.Xlsx'));
+         $writer->save('php://output');
+         die;
+        // $writer->save(storage_path('app/public/Wholesale_All_Apps.Xlsx'));
     }
 }

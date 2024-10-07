@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Reports\Wholesale;
 
 use App\Actions\ExportNotes;
+use App\Models\AlterationDate;
 use App\Models\AlterationDocument;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
 use App\Actions\ReportShouldHaveStatusInterface;
 use App\Http\Controllers\Reports\ReportFilters\AlterationFilter;
-use App\Models\AlterationDate;
+use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleAlterationFilter;
 
 class WholesaleAlterationExportController extends Controller implements ReportShouldHaveStatusInterface
 {
@@ -26,7 +27,7 @@ class WholesaleAlterationExportController extends Controller implements ReportSh
                 'COMMENT IF APPLICABLE'
             )
         );
-               $arr_of_alterations = (new AlterationFilter)->filter($request)->toArray(); 
+               $arr_of_alterations = (new WholesaleAlterationFilter)->filter($request)->toArray(); 
 
                 for($i = 0; $i < count($arr_of_alterations); $i++ ){
                     $status = (new WholesaleAlterationExportController)->getStatus($arr_of_alterations[$i]->status);

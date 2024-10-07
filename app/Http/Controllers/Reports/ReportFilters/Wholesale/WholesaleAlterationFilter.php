@@ -52,26 +52,12 @@ class WholesaleAlterationFilter {
               $query->whereIn('licence_type_id',getLicenceTypeByProvince());
            })
 
-          
-          ->when(request('is_licence_complete') === 'Pending' && request('report_type') == 'retail' , function ($query){
-                  $query->where(function ($query) {
-                      $query->where('alterations.status','<', 700);
-                  });
-              
-              })
-
-
               ->when(request('is_licence_complete') === 'Pending' && request('report_type') == 'wholesale' , function ($query){
                 $query->where(function ($query) {
                     $query->where('alterations.status','<', 800);
                 });
             
             })
-
-
-          ->when(request('is_licence_complete') === 'Complete' && request('report_type') == 'retail' , function ($query)  {
-              $query->where('alterations.status', '>=', 700);
-          })
 
           ->when(request('is_licence_complete') === 'Complete' && request('report_type') == 'wholesale' , function ($query)  {
             $query->where('alterations.status', '>=', 800);

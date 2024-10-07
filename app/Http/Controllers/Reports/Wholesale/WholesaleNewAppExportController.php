@@ -7,7 +7,6 @@ use App\Actions\ExportNotes;
 use App\Actions\WholesaleLicenceStatus;
 use App\Actions\ExportToSpreadsheet;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Reports\ReportFilters\NewAppReportFilter;
 use App\Http\Controllers\Reports\ReportFilters\Wholesale\WholesaleNewAppReportFilter;
 
 class WholesaleNewAppExportController extends Controller
