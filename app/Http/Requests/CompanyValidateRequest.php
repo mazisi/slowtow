@@ -26,7 +26,7 @@ class CompanyValidateRequest extends FormRequest
         return [
                 'company_name' => ['required'],
                 'company_type' => ['required'],
-                'reg_number' => [''],
+                'reg_number' => ['required'],
                 'vat_number' => [''],
                 'email_address_1' => [''],
                 'email_address_2' => [''],

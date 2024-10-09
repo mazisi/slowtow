@@ -159,6 +159,7 @@ export default {
         :label="'Registration Number'" 
         :errors="errors.reg_number"
         :input_id="reg_number"
+        :required="true"
       />
 
       <TextInputComponent 

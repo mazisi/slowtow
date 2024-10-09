@@ -33,7 +33,7 @@ class ExistingLicenceExportController extends Controller
             'COMMENTS'
             )
         );
-                    
+            
             $arr_of_licences = (new ExistingLicenceReportFilter)->filter($request)->toArray(); 
 
             for($i = 0; $i < count($arr_of_licences); $i++ ){
@@ -47,7 +47,7 @@ class ExistingLicenceExportController extends Controller
                 '',
                 self::getDate($arr_of_licences[$i]->id,'Activation Fee Requested')? self::getDate($arr_of_licences[$i]->id,'Activation Fee Requested'): '',
                 self::getDate($arr_of_licences[$i]->id,'Deposit Paid') ? 'TRUE': 'FALSE',
-                self::getDate($arr_of_licences[$i]->id,'Application Lodged') ? date('Y/m/d', strtotime(self::getDate($arr_of_licences[$i]->id,'Application Lodged'))) : '',
+                self::getDate($arr_of_licences[$i]->id,'Application Lodged (Proof of Lodgement)') ? date('Y/m/d', strtotime(self::getDate($arr_of_licences[$i]->id,'Application Lodged (Proof of Lodgement)'))) : '',
                 (new ExistingLicenceExportController)->getProofOfLodgiment($arr_of_licences[$i]->id) ? 'TRUE': 'FALSE',
                 self::getDate($arr_of_licences[$i]->id,'Activation Fee Requested')? self::getDate($arr_of_licences[$i]->id,'Activation Fee Requested'): '',
                 '',

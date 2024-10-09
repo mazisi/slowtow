@@ -61,7 +61,7 @@
                           {{ transfer.status >= 900 ? limit(transfer.new_company.name) : limit(transfer.old_company.name) }}
                         </h6>    
                           </Link>  
-                          <Link class="ml-1" v-if="transfer.transfered_to === 'Person'" :href="`/view-transfered-licence/${transfer.slug}`">
+                          <Link class="ml-1" v-if="transfer.transfered_to === 'Individual'" :href="`/view-transfered-licence/${transfer.slug}`">
                             <h6 class="text-sm">
                             {{ transfer.status >= 900 ? limit(transfer.old_company.name) : limit(transfer.new_person.full_name) }}
                           </h6>    

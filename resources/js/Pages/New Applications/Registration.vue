@@ -1042,10 +1042,10 @@
                         />
 
 
-                        <hr/>
+                        
 
                       </template>
-
+                      <hr/>
                       <!-- If its other provinces keep this stage-->
                       <template v-if="licence.province !== 'Mpumalanga' && licence.province !== 'North West' && licence.province !== 'Limpopo'">
                         

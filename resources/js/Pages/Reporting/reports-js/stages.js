@@ -79,18 +79,18 @@ const RENEWAL_STAGES = {
 }
 
 const MONTHS = {
-  "100": "January",
-  "200" : "February",
-  "300" : "March",
-  "400":   "April",
-  "500": "May",
-  "600": "June",
-  "700": "July",
-  "800": "August",
-  "900": "September",
-  "1000": "October",
-  "1100": "November",
-  "1200": "December",
+  "1": "January",
+  "2" : "February",
+  "3" : "March",
+  "4":   "April",
+  "5": "May",
+  "6": "June",
+  "7": "July",
+  "8": "August",
+  "9": "September",
+  "10": "October",
+  "11": "November",
+  "12": "December",
 }
 export default{
   getRenewalStages() {

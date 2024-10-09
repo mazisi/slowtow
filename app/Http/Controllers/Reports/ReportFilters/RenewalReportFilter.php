@@ -34,7 +34,7 @@ class RenewalReportFilter {
                $query->where('is_licence_active', 1);
            })
 
-           ->when(request('boardRegion') && request('report_type') == 'retail', function ($query)  {
+           ->when(request('boardRegion'), function ($query)  {
                $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
            })
            ->when(request('applicant'), function ($query)  {
@@ -50,10 +50,7 @@ class RenewalReportFilter {
            ->when(request('licence_types'), function ($query)  {
                $query->whereIn('licence_type_id',getLicenceTypeByProvince());
            })
-           
-
-           ->when(request('report_type') == 'retail', function ($query)  {
-              $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
+           ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                 $query->where('licence_renewals.status','<', 500)
                 ->orWhereNull('licence_renewals.status');
             })
@@ -61,10 +58,6 @@ class RenewalReportFilter {
             ->when(request('is_licence_complete') === 'Complete', function ($query)  {
                 $query->where('licence_renewals.status','>=', 500);
             });
-
-            });
-
-
 
            })->whereNull('licences.deleted_at')->whereNull('licence_renewals.deleted_at')
            ->where('report_type','retail')

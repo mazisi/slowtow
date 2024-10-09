@@ -18,7 +18,7 @@ class ExistingLicenceReportFilter{
             $query->when(request('month_from') && request('month_to'), function($query){
                 $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
              })
-   
+
              ->when(request('month_from') && !request('month_to'), function ($query){
                 $query->whereMonth('licence_date', request('month_from'));
             })
@@ -53,17 +53,6 @@ class ExistingLicenceReportFilter{
            // ->when(request('selectedDates'), function ($query) {
                 //$query->where(DB::raw('YEAR(licence_date)'),$request->selectedDates);
              //})
-
-              ->when(request('report_type') == 'retail', function ($query) {
-                $query->when(request('is_licence_complete') === 'Pending', function ($query)  {
-                    $query->where('status','<', 2300)
-                    ->orWhereNull('status');
-                })
-    
-                ->when(request('is_licence_complete') === 'Complete', function ($query)  {
-                    $query->where('status','>=', 2300);
-                });
-             })
 
              ->when(request('is_licence_complete') === 'Pending', function ($query)  {
                 $query->where('status','<', 2300)
