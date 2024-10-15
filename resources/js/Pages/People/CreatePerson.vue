@@ -59,7 +59,7 @@
                   <div class="col-md-4 columns">            
                     <div class="input-group input-group-outline null is-filled">
                     <label class="form-label">ID/Passport Number</label>
-                    <input @keyup="getDateOfBirth" @paste="getDateOfBirth" required type="text"
+                    <input @keyup="getDateOfBirth" @paste="getDateOfBirth($event)" required type="text"
                       class="form-control form-control-default" v-model="form.id_or_passport"
                       max="11" />
                       </div>
@@ -70,7 +70,7 @@
                    <div class="col-md-4 columns">            
                     <div class="input-group input-group-outline null is-filled">
                     <label class="form-label">Date of Birth</label>
-                    <input
+                    <input type="date"
                       class="form-control form-control-default" v-model="form.date_of_birth"
                       max="11" />
                       </div>
@@ -185,12 +185,12 @@ export default {
           form.post(`/submit-person`)
         }
 
-        function getDateOfBirth(){//needs refactoring
-          
-          if(this.form.id_or_passport.length === 13){
-            let year = this.form.id_or_passport.substring(0,2);
-            let month = this.form.id_or_passport.substring(2,4);
-            let day = this.form.id_or_passport.substring(4,6);
+        function getDateOfBirth(e){//needs refactoring
+          const value = e.target.value;
+          if(value.length === 13){
+            let year = value.substring(0,2);
+            let month = value.substring(2,4);
+            let day = value.substring(4,6);
             let century = '';
             if(year > 20){
               century = '19';

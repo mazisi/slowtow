@@ -269,7 +269,7 @@
 
 
 
-                                            {{ form.board_region }}
+                                            
                                             <div class="col-4 columns" v-if="licence.type === 'retail'">
                                                 <div class="input-group input-group-outline null is-filled">
                                                     <label class="form-label">Liquor Board Region</label>

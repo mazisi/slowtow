@@ -41,7 +41,7 @@
         <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
             <li class="text-center"><button @click="abandonTransfer(view_transfer.slug)" type="button" class="btn btn-sm btn-warning"> Abandon</button></li>
             <li class="text-center"><button v-if="$page.props.auth.has_slowtow_admin_role"
-              @click="deleteTransfer" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button></li>
+              @click="deleteTransfer" type="button" class="btn btn-sm btn-danger pe-4"> Delete</button></li>
         </ul>
     </div>
 </div>

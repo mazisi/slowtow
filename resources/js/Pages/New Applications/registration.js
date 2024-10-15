@@ -199,7 +199,7 @@ import licence from "../Licences/licence";
         }
 
         function deleteDocument(id,prevStage){
-          console.log(id,prevStage)
+          // console.log(id,prevStage)
           if(confirm('Document will be deleted...Continue ??')){
             Inertia.delete(`/delete-licence-document/${id}/${prevStage}`, {
               onSuccess: () => {

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\PeopleFilterAction;
 use App\Models\Task;
 use Inertia\Inertia;
 use App\Models\People;
-use Illuminate\Http\Request;
-use App\Http\Requests\ValidatePeople;
 use App\Models\Company;
 use App\Models\Licence;
-use App\Models\LicenceTransfer;
+use Illuminate\Http\Request;
 use App\Models\PeopleDocument;
+use App\Models\LicenceTransfer;
+use Illuminate\Validation\Rule;
+use App\Actions\PeopleFilterAction;
+use App\Http\Requests\ValidatePeople;
 
 class PersonController extends Controller
 {
@@ -28,7 +29,11 @@ class PersonController extends Controller
     public function store(Request $request){
         $request->validate([
             'name' => 'required|string|max:200',
-            'id_or_passport' => 'required|unique:people,id_or_passport'
+            'id_or_passport' => [
+                'required',
+                'string',
+                Rule::unique('people', 'id_or_passport')->whereNull('deleted_at'),
+            ],
         ]);
        try {
         $person = People::create([

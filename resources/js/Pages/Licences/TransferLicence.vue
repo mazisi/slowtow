@@ -236,7 +236,7 @@ export default {
 <div class="col-md-12 columns">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="app-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="700">
-<label for="app-logded" class="form-check-label text-body text-truncate status-heading">Application Logded</label>
+<label for="app-logded" class="form-check-label text-body text-truncate status-heading">Application Lodged</label>
 </div>
 </div>  
 <hr>
@@ -268,15 +268,15 @@ export default {
 
 
 
-<div class="col-md-12 columns">
+<div class="col-md-12 columns d-none">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="tranfer-logded" class="active-checkbox" v-model="form.status" type="checkbox" value="1100">
-<label for="tranfer-logded" class="form-check-label text-body text-truncate status-heading"> Transfer Logded</label>
+<label for="tranfer-logded" class="form-check-label text-body text-truncate status-heading"> Transfer Lodged</label>
 </div>
 </div> 
 
 
-<div class="col-md-12 columns">
+<div class="col-md-12 columns d-none">
 <div class=" form-switch d-flex ps-0 ms-0  is-filled">
 <input id="cert-received" class="active-checkbox" v-model="form.status" type="checkbox" value="1200">
 <label for="cert-received" class="form-check-label text-body text-truncate status-heading"> Certificate Received</label>

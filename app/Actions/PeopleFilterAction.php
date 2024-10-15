@@ -14,7 +14,8 @@ class PeopleFilterAction{
         ->where(function ($query) {
             $query->where('full_name','LIKE','%'.request('term').'%')
             ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-            ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+            ->orWhere('email_address_2','LIKE','%'.request('term').'%')
+            ->orWhere('id_or_passport','LIKE','%'.request('term').'%');
         });
     
     })
@@ -26,7 +27,8 @@ class PeopleFilterAction{
                   ->where(function ($query) {
                     $query->where('full_name','LIKE','%'.request('term').'%')
                     ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                    ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+                    ->orWhere('email_address_2','LIKE','%'.request('term').'%')
+                    ->orWhere('id_or_passport','LIKE','%'.request('term').'%');
                 });
         
         })
@@ -35,7 +37,8 @@ class PeopleFilterAction{
             function ($query){ 
                     $query->where('full_name','LIKE','%'.request('term').'%')
                           ->orWhere('email_address_1','LIKE','%'.request('term').'%')
-                          ->orWhere('email_address_2','LIKE','%'.request('term').'%');
+                          ->orWhere('email_address_2','LIKE','%'.request('term').'%')
+                          ->orWhere('id_or_passport','LIKE','%'.request('term').'%');
                 
             
             })
@@ -50,6 +53,7 @@ class PeopleFilterAction{
             function ($query){
                 return $query->where('active','1');                
             })
+           
     ->latest()->paginate(20)->withQueryString();
   }
 }

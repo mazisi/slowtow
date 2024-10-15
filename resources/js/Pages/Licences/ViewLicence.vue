@@ -260,7 +260,7 @@
                                         <label class="form-label">Province</label>
                                         <select class="form-control form-control-default" v-model="form.province" @change="selectedProvince()" >
                                             <option :value="''" disabled selected >Select Province</option>
-                                            <option v-for='province in computedProvinces' :key="province" :value=province> {{ province }}</option>
+                                            <option v-for='province in computedProvinces' :key="province" :value="province"> {{ province }}</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.province" class="text-danger">{{ errors.province }}</div>
@@ -283,7 +283,7 @@
                                         <label class="form-label">Licence Type * </label>
                                         <select v-model="form.licence_type" class="form-control form-control-default">
                                             <option :value="''" disabled selected>Licence Type</option>
-                                            <option v-for='licence_dropdown in wholesaleLicenceTypes' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                            <option v-for='licence_dropdown in wholesaleLicenceTypes' :value="licence_dropdown.id"> {{ licence_dropdown.licence_type }}</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
@@ -294,7 +294,7 @@
                                         <label class="form-label">Licence Type * </label>
                                         <select v-model="form.licence_type" class="form-control form-control-default">
                                             <option :value="''" disabled selected>Licence Type</option>
-                                            <option v-for='licence_dropdown in all_licences' :value=licence_dropdown.id> {{ licence_dropdown.licence_type }}</option>
+                                            <option v-for='licence_dropdown in all_licences' :value="licence_dropdown.id"> {{ licence_dropdown.licence_type }}</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.licence_type" class="text-danger">{{ errors.licence_type }}</div>
@@ -309,7 +309,7 @@
                                         <label class="form-label">Liquor Board Region</label>
                                         <select class="form-control form-control-default" v-model="form.board_region" >
                                             <option :value="''" disabled selected >Select Board Region</option>
-                                            <option v-for='board_region in computedBoardRegions' :key="board_region" :value=board_region > {{ board_region }}</option>
+                                            <option v-for='board_region in computedBoardRegions' :key="board_region" :value="board_region" > {{ board_region }}</option>
                                         </select>
                                     </div>
                                     <div v-if="errors.board_region" class="text-danger">{{ errors.board_region }}</div>
@@ -336,7 +336,7 @@
 
                                 <div class=" card flex justify-center">
                                     <label class="form-label"> Renewal Amount</label>
-                                    <InputNumber v-model="form.renewal_amount" inputId="zar-us"  mode="currency" currency="ZAR" locale="en-US" fluid 
+                                    <InputNumber v-model="form.renewal_amount" inputId="zar-us"  mode="currency" currency="R" locale="en-US" fluid 
                                     style="border: 1px solid #4caf50 !important;" />
                                 </div>
 

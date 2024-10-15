@@ -35,7 +35,7 @@ class ExistingLicenceExportController extends Controller
         );
             
             $arr_of_licences = (new ExistingLicenceReportFilter)->filter($request)->toArray(); 
-
+dd((new ExistingLicenceReportFilter)->filter($request));
             for($i = 0; $i < count($arr_of_licences); $i++ ){
                        
         $data = [ 

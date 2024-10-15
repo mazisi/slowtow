@@ -89,7 +89,7 @@ export default {
     </div> -->
     <div class="col-md-6 columns mb-4">
     <div class=" card flex justify-center">
-        <InputNumber v-model="form.exact_turnover_amount" inputId="zar-us"  mode="currency" currency="ZAR" locale="en-US" fluid 
+        <InputNumber v-model="form.exact_turnover_amount" inputId="zar-us"  mode="currency" currency="R" locale="en-US" fluid 
         style="border: 1px solid #4caf50 !important;" />
     </div>
 </div>

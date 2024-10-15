@@ -53,6 +53,7 @@ export default{
   setup(props, context){
 
     let file_has_apostrophe = ref(false);
+    const stage = props.stage;
 
     const uploadDoc = useForm({
       licence_id: props.docModel.id,
@@ -76,7 +77,7 @@ export default{
 
 
       function deleteDocument(id){
-        context.emit('file-deleted', id);
+        context.emit('file-deleted', id,stage);
         }
 
     return {

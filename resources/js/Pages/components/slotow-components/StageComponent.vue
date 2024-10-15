@@ -4,7 +4,7 @@
     <input class="active-checkbox"
     :id="stageValue" type="checkbox"
     @input="emitValue($event,stageValue,prevStage)"
-    :checked="dbStatus >= stageValue"
+    :checked="Number(dbStatus) >= Number(stageValue)"
     :value="stageValue"
     />
     <label :for="stageValue"
