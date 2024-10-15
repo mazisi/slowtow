@@ -277,7 +277,6 @@
                                 />
 
 
-
                                 <div  class="col-md-12 columns" v-if="form.type == 'wholesale'">
                                     <div class="input-group input-group-outline null is-filled">
                                         <label class="form-label">Licence Type * </label>
