@@ -241,6 +241,23 @@ return Inertia::render('Nominations/ViewIndividualNomination',[
        }
     }
 
+    public function abandon($slug){
+        $lic = Nomination::whereSlug($slug)->first();
+        $abandoned = Task::where('model_id', $lic->id)->where('body', 'THIS APOINTMENT OF MANAGERS HAS BEEN ABANDONED')->first();
+        if($abandoned){
+            return back()->with('error', 'This Appoinment Of Manager has already been marked as abandoned.');
+        }
+        Task::create([
+            'user_id' => auth()->id(),
+            'model_type'=> 'Nomination',
+            'model_id' => $lic->id,
+            'body' => 'THIS APOINTMENT OF MANAGERS HAS BEEN ABANDONED.',
+            'is_abandoned' => 1
+        ]);        
+  
+        return back()->with('success', 'Saved.');
+    }
+
     public function destroy($licence_slug, $slug){
         try {
             Nomination::whereSlug($slug)->delete();

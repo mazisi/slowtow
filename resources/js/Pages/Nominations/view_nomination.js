@@ -254,11 +254,18 @@ export default{
             Inertia.get(url);
           }
 
+          function abandon(slug) {
+            if (confirm("Are you sure you want to abandon this Appoinment Of Manager?")) {
+                Inertia.post(`/abandon-nomination/${slug}`);
+                notifySuccess('Additional depot/relocation abandoned successfully');
+            }
+        }
+
         return{getMomentDate,
             options,pushData,updateNomination,updateDate,canMerge,
             removeSelectedNominee,saveNominneesToDatabase,show_modal,file_has_apostrophe,
             computeDocumentDate,deleteDocument,submitDocument,show_file_name,nomineeForm,
-            uploadDoc,updateForm,file_name,getFileName,redirect,
+            uploadDoc,updateForm,file_name,getFileName,redirect,abandon,
             deleteNomination,mergeDocument,hasFile,getStatus
 
 

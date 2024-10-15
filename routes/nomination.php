@@ -28,4 +28,6 @@ Route::delete('/delete-nomination/{licence_slug}/{slug}',[NominationController::
 
 Route::patch('/update-nomination-date/{slug}',[NominationController::class,'updateDate']);
 
-Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');      
+Route::get('/merge-document/{id}',[MergeDocumentController::class,'merge'])->name('merge');
+
+Route::post('/abandon-nomination/{slug}',[NominationController::class,'abandon']);  

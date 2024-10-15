@@ -19,7 +19,7 @@
             <Banner/>
             <div class="card card-body mx-3 mx-md-4 mt-n6">
                 <div class="row">
-                    <div class="col-lg-10 col-10">
+                    <div class="col-lg-9 col-9">
                         <h6><Link @click="redirect(nomination.licence)" href="#!" class="text-success">
                             {{ nomination.licence.trading_name ? nomination.licence.trading_name : '' }}</Link> - {{ nomination.year }} </h6>
                         
@@ -28,10 +28,21 @@
                         </p>
 
                     </div>
-                    <div class="col-lg-2 col-2 my-auto text-end">
-                        <button v-if="$page.props.auth.has_slowtow_admin_role"
-                                @click="deleteNomination" type="button" class="btn btn-sm btn-danger float-lg-end pe-4"> Delete</button>
 
+                    <div class="col-lg-3 col-3 my-auto text-end">
+                        <div class="dropdown float-lg-end pe-4">
+                    
+                            <a class="cursor-pointer" id="dropdownTable" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-ellipsis-v text-secondary" aria-hidden="true"></i>
+                            </a>
+                            <ul class="dropdown-menu px-2 py-3 ms-sm-n4 ms-n5" aria-labelledby="dropdownTable">
+                                <li class="text-center"><button @click="abandon(nomination.slug)" type="button" class="btn btn-sm btn-warning"> Abandon</button></li>
+                                <li class="text-center">
+                                  <button v-if="$page.props.auth.has_slowtow_admin_role"
+                                @click="deleteNomination" type="button" class="btn btn-sm btn-danger pe-4"> Delete</button>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
 
                 </div>

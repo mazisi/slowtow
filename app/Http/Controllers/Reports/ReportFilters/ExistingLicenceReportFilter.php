@@ -15,34 +15,34 @@ class ExistingLicenceReportFilter{
       ->join('licence_types', 'licences.licence_type_id' , '=', 'licence_types.id')
 
          ->when($request,function($query){
-            $query->when(request('month_from') && request('month_to'), function($query){dd('month_to');
+            $query->when(request('month_from') && request('month_to'), function($query){
                 $query->whereBetween(DB::raw('MONTH(licence_date)'),[request('month_from'), request('month_to')]);
              })
 
-             ->when(request('month_from') && !request('month_to'), function ($query){dd('month_from');
+             ->when(request('month_from') && !request('month_to'), function ($query){
                 $query->whereMonth('licence_date', request('month_from'));
             })
 
-            ->when(request('activeStatus') === 'Active', function ($query) {dd('Active');
+            ->when(request('activeStatus') === 'Active', function ($query) {
                 $query->where('is_licence_active',1);
             })
-            ->when(request('activeStatus') === 'Inactive', function ($query) {dd('Inactive');
+            ->when(request('activeStatus') === 'Inactive', function ($query) {
                 $query->where('is_licence_active',0);
             })
 
-            ->when(request('province'), function ($query) {dd('province');
+            ->when(request('province'), function ($query) {
                 $query->whereIn('licences.province',array_values(explode(",",request('province'))));
             })
-            ->when(request('boardRegion') && request('report_type') !== 'retail', function ($query) {dd('boardRegion');
+            ->when(request('boardRegion') && request('report_type') !== 'retail', function ($query) {
                 $query->whereIn('board_region',array_values(explode(",",request('boardRegion'))));
             })
-            ->when(request('new_app_stages'), function ($query) {dd('new_app_stages');
+            ->when(request('new_app_stages'), function ($query) {
                 $query->whereIn('status', array_values(explode(",",request('new_app_stages'))));
             })
-            ->when(request('applicant'), function ($query) {dd('applicant');
+            ->when(request('applicant'), function ($query) {
                 $query->where('belongs_to',request('applicant'));
             })
-            ->when(request('licence_types'), function ($query) {dd('licence_types');
+            ->when(request('licence_types'), function ($query) {
                 $query->whereIn('licence_type_id',getLicenceTypeByProvince());
             })
             
