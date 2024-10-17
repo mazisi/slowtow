@@ -15,7 +15,7 @@
                             </div>
                         </div>
 
-                        <div class="col-md-3 col-xl-3 col-lg-3 filters">
+                        <div class="col-md-2 col-xl-2 col-lg-2 filters">
                             <div class="input-group input-group-outline null is-filled">
                                 <select @change="search" v-model="form.active_status" class="form-control form-control-default centered-select">
                                     <option :value="''" disabled selected>Active/Inactive Status</option>
@@ -53,6 +53,9 @@
                                     
                                 </select>
                             </div>
+                        </div>
+                        <div class="col-md-1 col-xl-1 col-lg-1 filters">
+                            <button @click="resetFilters" type="button" class="btn btn-sm btn-secondary">Reset</button>
                         </div>
 
                     </div>

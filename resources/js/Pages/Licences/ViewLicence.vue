@@ -327,17 +327,10 @@
                                     :disabled="true"
                                 />
 
-                                <!-- <div class="input-group-custom mb-2" v-if="licence.status >= 2300 && licence.type === 'retail'">
-                                    <div class="add-on">R</div>
-                                    <InputNumber v-model="value1" inputId="currency-us" mode="currency" currency="USD" locale="en-US" fluid />
-                                    <input type="number" class="input-field form-control-default" v-model="form.renewal_amount" placeholder="Renewal amount">
-                                </div> -->
-
-                                <div class=" card flex justify-center">
-                                    <label class="form-label"> Renewal Amount</label>
-                                    <InputNumber v-model="form.renewal_amount" inputId="zar-us"  mode="currency" currency="ZAR" locale="en-US" fluid 
-                                    style="border: 1px solid #4caf50 !important;" />
-                                </div>
+                           
+                         
+                                    <CurrencyInput v-model="form.renewal_amount" label="Renewal Amount" />
+                              
 
 
                             </div>

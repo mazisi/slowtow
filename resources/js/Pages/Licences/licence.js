@@ -114,6 +114,10 @@ export default {
       ];
     }
 
+    const resetFilters = () => {
+      Inertia.get('/licences', {}, { preserveState: true, replace: true });
+    }
+
     return {
       months,
       limit,
@@ -123,6 +127,7 @@ export default {
       search,
       redirect,
       getUrlParam,
+      resetFilters,
       filterLicenceTypes,
       licenceByProvince,
     }

@@ -16,7 +16,7 @@ import OriginalLicenceUpload from './OriginalLicenceUpload.vue'
 import TextInputComponent from '../components/input-components/TextInputComponent.vue';
 import LicenceTypeDropDownComponent from '../components/input-components/LicenceTypeDropDownComponent.vue';
 import CheckBoxInputComponent from '../components/input-components/CheckBoxInputComponent.vue';
-import InputNumber from "primevue/inputnumber";
+import CurrencyInput from './licence-components/CurrencyInput.vue';
 
 // const FilePond = new vueFilePond();
 export default {
@@ -298,10 +298,20 @@ function abandonLicence() {
       }
 
 
+const getLicenceDate = (stageParam) => {
+  let getDate = props.licence?.licence_stage_dates.filter(obj => obj.stage == stageParam);
+
+  if(getDate?.length > 0){
+    return getDate[0].dated_at;
+  }else{
+    return null;
+  }
+}
   
 
     return {
       upload,
+      getLicenceDate,
       preview,
       showMenu,
       file_name,
@@ -344,7 +354,7 @@ function abandonLicence() {
    components: {
     CircleProgressBar,
     // FilePond,
-    InputNumber,
+    CurrencyInput,
     Layout,
     Link,
     Head,
